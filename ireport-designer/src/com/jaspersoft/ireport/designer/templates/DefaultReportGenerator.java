@@ -34,7 +34,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.design.JRDesignBand;
@@ -77,18 +77,18 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
 
     public FileObject generateReport(WizardDescriptor wizard) {
         
-        Misc.msg("Inside generateReport");
+        Misc.log("Inside generateReport");
         
         try {
             // 1. Load the selected template...
-            Misc.msg("Generating design ...");
+            Misc.log("Generating design ...");
             
             JasperDesign jasperDesign = generateDesign(wizard);
             
-            Misc.msg("Generating design OK ...");
+            Misc.log("Generating design OK ...");
             File f = getFile(wizard);
-            Misc.msg("get the file ...");
-            Misc.msg("The file store the generated report is " + f);
+            Misc.log("get the file ...");
+            Misc.log("The file store the generated report is " + f);
             
             if (!f.exists()) {
                f.createNewFile();
@@ -118,7 +118,7 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
             return FileUtil.toFileObject(f);
         
         } catch (Exception ex) {
-           Misc.msg("Exception generating the file ...",ex);
+           Misc.log("Exception generating the file ...",ex);
             //ex.printStackTrace();
             //Misc.showErrorMessage("An error has occurred generating the report:\n" + ex.getMessage(), "Error", ex);
             return null;
@@ -288,23 +288,24 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
                   group.setName(groupFields.get(i).getName());
                   group.setExpression(Misc.createExpression("java.lang.Object", "$F{" + groupFields.get(i).getName() + "}"));
                   // find the two elements having as expression: G1Label and G1Field
-                  if (group.getGroupHeader() != null)
+                  if (group.getGroupHeaderSection() != null && group.getGroupHeaderSection().getBands()[0] != null)
                   {
-                        JRDesignStaticText st = findStaticTextElement(group.getGroupHeader(), "G"+(i+1)+"Label");
-                        if (st == null) st = findStaticTextElement(group.getGroupHeader(), "GroupLabel");
-                        if (st == null) st = findStaticTextElement(group.getGroupHeader(), "Group Label");
-                        if (st == null) st = findStaticTextElement(group.getGroupHeader(), "Label");
-                        if (st == null) st = findStaticTextElement(group.getGroupHeader(), "Group name");
+                        JRBand groupHeaderSection = group.getGroupHeaderSection().getBands()[0];
+                        JRDesignStaticText st = findStaticTextElement(groupHeaderSection, "G"+(i+1)+"Label");
+                        if (st == null) st = findStaticTextElement(groupHeaderSection, "GroupLabel");
+                        if (st == null) st = findStaticTextElement(groupHeaderSection, "Group Label");
+                        if (st == null) st = findStaticTextElement(groupHeaderSection, "Label");
+                        if (st == null) st = findStaticTextElement(groupHeaderSection, "Group name");
 
                         if (st != null)
                         {
                             st.setText(groupFields.get(i).getName());
                         }
 
-                        JRDesignTextField tf = findTextFieldElement(group.getGroupHeader(), "G"+(i+1)+"Field");
-                        if (tf == null) tf = findTextFieldElement(group.getGroupHeader(), "GroupField");
-                        if (tf == null) tf = findTextFieldElement(group.getGroupHeader(), "Group Field");
-                        if (tf == null) tf = findTextFieldElement(group.getGroupHeader(), "Field");
+                        JRDesignTextField tf = findTextFieldElement(groupHeaderSection, "G"+(i+1)+"Field");
+                        if (tf == null) tf = findTextFieldElement(groupHeaderSection, "GroupField");
+                        if (tf == null) tf = findTextFieldElement(groupHeaderSection, "Group Field");
+                        if (tf == null) tf = findTextFieldElement(groupHeaderSection, "Field");
 
 
                         if (tf != null)
@@ -332,7 +333,8 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
             {
                 // Add the labels to the column header..
                 JRElementGroup columnHeaderBand = (JRDesignBand)jasperDesign.getColumnHeader();
-                JRElementGroup detailBand = (JRDesignBand)jasperDesign.getDetail();
+                JRElementGroup detailBand = jasperDesign.getDetailSection().getBands()[0];
+
                 // Find the label template...
                 JRDesignStaticText labelElement = findStaticTextElement(columnHeaderBand, "DetailLabel" );
                 if (labelElement == null) labelElement = findStaticTextElement(columnHeaderBand, "Label");
@@ -346,12 +348,12 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
 
                 if (labelElement != null)
                 {
-                    columnHeaderBand = (JRElementGroup)labelElement.getElementGroup();
+                    columnHeaderBand = labelElement.getElementGroup();
                     removeElement(columnHeaderBand, labelElement);
                 }
                 if (fieldElement != null)
                 {
-                    detailBand = (JRElementGroup)fieldElement.getElementGroup();
+                    detailBand = fieldElement.getElementGroup();
                     removeElement(detailBand, fieldElement);
                 }
                 
@@ -396,8 +398,8 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
             else if (!noLayoutChanges && reportType != null && reportType.equals("columnar"))
             {
                 // Add the labels to the column header..
-                JRElementGroup detailBand = (JRDesignBand)jasperDesign.getDetail();
-                JRElementGroup detailBandField = (JRDesignBand)jasperDesign.getDetail();
+                JRElementGroup detailBand = (JRDesignBand)jasperDesign.getDetailSection().getBands()[0];
+                JRElementGroup detailBandField = (JRDesignBand)jasperDesign.getDetailSection().getBands()[0];
                 // Find the label template...
                 JRDesignStaticText labelElement = findStaticTextElement(detailBand, "DetailLabel" );
                 if (labelElement == null) labelElement = findStaticTextElement(detailBand, "Label");
@@ -408,13 +410,13 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
 
                 if (labelElement != null)
                 {
-                    detailBand = (JRElementGroup)labelElement.getElementGroup();
+                    detailBand = labelElement.getElementGroup();
                     removeElement(detailBand, labelElement);
                 }
 
                 if (fieldElement != null)
                 {
-                    detailBandField = (JRElementGroup)fieldElement.getElementGroup();
+                    detailBandField = fieldElement.getElementGroup();
                     removeElement(detailBandField, fieldElement);
                 }
                 

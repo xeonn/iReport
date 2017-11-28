@@ -39,6 +39,10 @@ public class ElementValidationItem {
     private String resourceName = null;
     
     private String parentFolder = null;
+
+    private boolean storeAsLink = false;
+
+    private String referenceUri = null;
     
     private JRDesignElement reportElement = null;
     
@@ -60,7 +64,8 @@ public class ElementValidationItem {
     
     public String toString()
     {
-        return this.getReportElement().toString();
+        if (getResourceName() != null) return this.getReportElement().toString();
+        return "";
     }
 
     public String getProposedExpression() {
@@ -85,6 +90,34 @@ public class ElementValidationItem {
 
     public void setParentFolder(String parentFolder) {
         this.parentFolder = parentFolder;
+    }
+
+    /**
+     * @return the storeAsLink
+     */
+    public boolean isStoreAsLink() {
+        return storeAsLink;
+    }
+
+    /**
+     * @param storeAsLink the storeAsLink to set
+     */
+    public void setStoreAsLink(boolean storeAsLink) {
+        this.storeAsLink = storeAsLink;
+    }
+
+    /**
+     * @return the referenceUri
+     */
+    public String getReferenceUri() {
+        return referenceUri;
+    }
+
+    /**
+     * @param referenceUri the referenceUri to set
+     */
+    public void setReferenceUri(String referenceUri) {
+        this.referenceUri = referenceUri;
     }
     
 }

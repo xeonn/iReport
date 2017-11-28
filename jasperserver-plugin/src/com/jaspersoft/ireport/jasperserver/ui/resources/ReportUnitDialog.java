@@ -52,6 +52,8 @@ public class ReportUnitDialog extends javax.swing.JDialog {
     
     private ResourceDescriptor newResourceDescriptor = null;
     private ResourceDescriptor dataSourceDescriptor = null;
+
+    private ResourceDescriptor currentDataSourceDescriptor = null; // used to remove the datasource just in case...
     private RepositoryReportUnit resource = null;
     
     private boolean controlsSupportActive = false;
@@ -111,7 +113,7 @@ public class ReportUnitDialog extends javax.swing.JDialog {
 
         jTextFieldName.requestFocusInWindow();
         jRadioButtonRepo.setSelected(true);
-        jRadioButtonLocal.setSelected(false);
+        jRadioButtonLocalDataSource.setSelected(false);
         
         this.setControlsSupportActive(false);
         this.setResourcesSupportActive(false);
@@ -156,7 +158,7 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         jButtonPickResource.setText( JasperServerManager.getString("reportUnitDialog.buttonBrowse","Browse"));
         jLabelResourceFile.setText( JasperServerManager.getString("reportUnitDialog.labelMainJRXML","Main JRXML"));
         jLabelResourceType1.setText( JasperServerManager.getString("reportUnitDialog.labelDatasource","Datasource"));
-        jRadioButtonLocal.setText( JasperServerManager.getString("reportUnitDialog.radioLocal","Locally Defined"));
+        jRadioButtonLocalDataSource.setText( JasperServerManager.getString("reportUnitDialog.radioLocal","Locally Defined"));
         jRadioButtonLocal1.setText( JasperServerManager.getString("reportUnitDialog.radioLocal","Locally Defined"));
         jRadioButtonRepo.setText( JasperServerManager.getString("reportUnitDialog.radioRepo","From the repository"));
         jRadioButtonRepo1.setText( JasperServerManager.getString("reportUnitDialog.radioRepo","From the repository"));
@@ -226,8 +228,9 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         jRadioButtonRepo = new javax.swing.JRadioButton();
         jComboBoxDatasources = new javax.swing.JComboBox();
         jButtonPickResource = new javax.swing.JButton();
-        jRadioButtonLocal = new javax.swing.JRadioButton();
+        jRadioButtonLocalDataSource = new javax.swing.JRadioButton();
         jButtonEditLocalDataSource = new javax.swing.JButton();
+        jRadioButtonNoDataSource = new javax.swing.JRadioButton();
         jPanel9 = new javax.swing.JPanel();
         jPanelOther = new javax.swing.JPanel();
         jLabelInputControlRenderingView = new javax.swing.JLabel();
@@ -402,7 +405,6 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         jPanelMainReport.add(jPanel6, gridBagConstraints);
 
         buttonGroup2.add(jRadioButtonLocal1);
-        jRadioButtonLocal1.setSelected(true);
         jRadioButtonLocal1.setText("Locally Defined");
         jRadioButtonLocal1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         jRadioButtonLocal1.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -513,14 +515,14 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 8);
         jPanel3.add(jButtonPickResource, gridBagConstraints);
 
-        buttonGroup1.add(jRadioButtonLocal);
-        jRadioButtonLocal.setSelected(true);
-        jRadioButtonLocal.setText("Locally Defined");
-        jRadioButtonLocal.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        jRadioButtonLocal.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jRadioButtonLocal.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(jRadioButtonLocalDataSource);
+        jRadioButtonLocalDataSource.setSelected(true);
+        jRadioButtonLocalDataSource.setText("Locally Defined");
+        jRadioButtonLocalDataSource.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        jRadioButtonLocalDataSource.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jRadioButtonLocalDataSource.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonLocalActionPerformed(evt);
+                jRadioButtonLocalDataSourceActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -529,7 +531,7 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(8, 8, 4, 4);
-        jPanel3.add(jRadioButtonLocal, gridBagConstraints);
+        jPanel3.add(jRadioButtonLocalDataSource, gridBagConstraints);
 
         jButtonEditLocalDataSource.setText("Edit local datasource");
         jButtonEditLocalDataSource.addActionListener(new java.awt.event.ActionListener() {
@@ -541,7 +543,7 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 4, 0);
         jPanel3.add(jButtonEditLocalDataSource, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -549,6 +551,23 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         jPanelMainReport.add(jPanel3, gridBagConstraints);
+
+        buttonGroup1.add(jRadioButtonNoDataSource);
+        jRadioButtonNoDataSource.setText("Don't use any data source");
+        jRadioButtonNoDataSource.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        jRadioButtonNoDataSource.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jRadioButtonNoDataSource.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonNoDataSourcejRadioButtonLocalActionPerformed1(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(8, 8, 4, 4);
+        jPanelMainReport.add(jRadioButtonNoDataSource, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.weighty = 1.0;
@@ -729,9 +748,9 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         
     }//GEN-LAST:event_jButtonEditLocalDataSourceActionPerformed
 
-    private void jRadioButtonLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonLocalActionPerformed
+    private void jRadioButtonLocalDataSourceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonLocalDataSourceActionPerformed
         updateResourceFromType();
-    }//GEN-LAST:event_jRadioButtonLocalActionPerformed
+}//GEN-LAST:event_jRadioButtonLocalDataSourceActionPerformed
 
     private void jButtonPickResourceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPickResourceActionPerformed
         ResourceChooser rc = new ResourceChooser();
@@ -792,7 +811,7 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         // Add the datasource resource...
         if (JasperServerManager.getMainInstance().getBrandingProperties().getProperty("ireport.manage.datasources.enabled", "true").equals("true"))
         {
-            ResourceDescriptor tmpDataSourceDescriptor;
+            ResourceDescriptor tmpDataSourceDescriptor = null;
             if (jRadioButtonRepo.isSelected())
             {
                 tmpDataSourceDescriptor = new ResourceDescriptor();
@@ -800,7 +819,7 @@ public class ReportUnitDialog extends javax.swing.JDialog {
                 tmpDataSourceDescriptor.setReferenceUri( jComboBoxDatasources.getSelectedItem()+"");
                 tmpDataSourceDescriptor.setIsReference(true);
             }
-            else
+            else if (jRadioButtonLocalDataSource.isSelected())
             {
                 if (dataSourceDescriptor == null)
                 {
@@ -811,8 +830,11 @@ public class ReportUnitDialog extends javax.swing.JDialog {
                 tmpDataSourceDescriptor = dataSourceDescriptor;
                 tmpDataSourceDescriptor.setIsReference(false);
             }
-            
-            rd.getChildren().add( tmpDataSourceDescriptor );
+            if (tmpDataSourceDescriptor != null)
+            {
+                tmpDataSourceDescriptor.setName("report_datasource");
+                rd.getChildren().add( tmpDataSourceDescriptor );
+            }
         }
         
         // Add the jrxml resource...
@@ -854,12 +876,29 @@ public class ReportUnitDialog extends javax.swing.JDialog {
             validate(rd);
             newResourceDescriptor = getServer().getWSClient().addOrModifyResource(rd, resourceFile);
             setDialogResult(JOptionPane.OK_OPTION);
-            
+
+            // Data source deletion not yet supported...
+
+//            if (JasperServerManager.getMainInstance().getBrandingProperties().getProperty("ireport.manage.datasources.enabled", "true").equals("true"))
+//            {
+//                // Look if we have a datasource...
+//                if (jRadioButtonNoDataSource.isSelected() && currentDataSourceDescriptor != null)
+//                {
+//                    System.out.println("Deleting resource: " + currentDataSourceDescriptor.getUriString());
+//                    System.out.flush();
+//                    getServer().getWSClient().delete(currentDataSourceDescriptor, newResourceDescriptor.getUriString());
+//                }
+//            }
+
             if (resource != null && newResourceDescriptor != null)
             {
                 resource.setDescriptor(newResourceDescriptor);
             }
-            
+
+
+
+
+
             this.setVisible(false);
             this.dispose();
         } catch (Exception ex) {
@@ -893,6 +932,10 @@ public class ReportUnitDialog extends javax.swing.JDialog {
             updateSaveButton();
         }
     }//GEN-LAST:event_jButtonBrowseActionPerformed1
+
+    private void jRadioButtonNoDataSourcejRadioButtonLocalActionPerformed1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonNoDataSourcejRadioButtonLocalActionPerformed1
+        updateResourceFromType();
+}//GEN-LAST:event_jRadioButtonNoDataSourcejRadioButtonLocalActionPerformed1
     
     /**
      * @param args the command line arguments
@@ -990,8 +1033,9 @@ public class ReportUnitDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanelCommon;
     private javax.swing.JPanel jPanelMainReport;
     private javax.swing.JPanel jPanelOther;
-    private javax.swing.JRadioButton jRadioButtonLocal;
     private javax.swing.JRadioButton jRadioButtonLocal1;
+    private javax.swing.JRadioButton jRadioButtonLocalDataSource;
+    private javax.swing.JRadioButton jRadioButtonNoDataSource;
     private javax.swing.JRadioButton jRadioButtonRepo;
     private javax.swing.JRadioButton jRadioButtonRepo1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -1015,7 +1059,7 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         jComboBoxDatasources.setEnabled( jRadioButtonRepo.isSelected() );
         jButtonPickResource.setEnabled( jRadioButtonRepo.isSelected() );
         
-        jButtonEditLocalDataSource.setEnabled( jRadioButtonLocal.isSelected() );
+        jButtonEditLocalDataSource.setEnabled( jRadioButtonLocalDataSource.isSelected() );
     }
     
     public void updateJrxmlFromType()
@@ -1044,8 +1088,6 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         }
         jTextFieldName.setEditable(false);
         jTextFieldName.setOpaque(false);
-        
-        jButtonSave.setText("Save Report Unit");
     }
     
     /**
@@ -1098,6 +1140,8 @@ public class ReportUnitDialog extends javax.swing.JDialog {
                 ex.printStackTrace();
             }
         //}
+
+        jRadioButtonNoDataSource.setSelected(true);
         
         for (int i=0; i<descriptor.getChildren().size(); ++i)
         {
@@ -1111,14 +1155,16 @@ public class ReportUnitDialog extends javax.swing.JDialog {
             {
                 jComboBoxDatasources.setSelectedItem( rd.getReferenceUri() );
                 jRadioButtonRepo.setSelected(true);
-                jRadioButtonLocal.setSelected(false);
+                jRadioButtonLocalDataSource.setSelected(false);
+                currentDataSourceDescriptor = rd;
             }
             else if ( RepositoryFolder.isDataSource( rd))
             {
                 System.out.println("Setting URI: "  + rd.getReferenceUri());
                 dataSourceDescriptor = rd;
-                jRadioButtonLocal.setSelected(true);
+                jRadioButtonLocalDataSource.setSelected(true);
                 jRadioButtonRepo.setSelected(false);
+                currentDataSourceDescriptor = rd;
             }
             else if ( rd.getWsType().equals(ResourceDescriptor.TYPE_JRXML) &&
                       rd.isMainReport())
@@ -1142,6 +1188,11 @@ public class ReportUnitDialog extends javax.swing.JDialog {
             }
             updateResourceFromType();
             updateJrxmlFromType();
+        }
+
+        if (!jRadioButtonNoDataSource.isSelected())
+        {
+            jRadioButtonNoDataSource.setEnabled(false);
         }
     }
 

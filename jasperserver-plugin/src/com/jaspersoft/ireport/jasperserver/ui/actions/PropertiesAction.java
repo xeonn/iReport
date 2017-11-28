@@ -135,12 +135,12 @@ public final class PropertiesAction extends NodeAction {
                 } catch (Exception ex)
                 {
 
-                   JOptionPane.showMessageDialog(Misc.getMainFrame(),
-                           JasperServerManager.getFormattedString("repositoryExplorer.message.errorListingDatasources", "Error getting the list of available datasources:\n{0}", new Object[] {ex.getMessage()}));
-                   ex.printStackTrace();
+                   //JOptionPane.showMessageDialog(Misc.getMainFrame(),
+                   //        JasperServerManager.getFormattedString("repositoryExplorer.message.errorListingDatasources", "Error getting the list of available datasources:\n{0}", new Object[] {ex.getMessage()}));
+                   //ex.printStackTrace();
                 }
              }
-
+             
              rrd.setResource(rru);
              rrd.setVisible( true );
              

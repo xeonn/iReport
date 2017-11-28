@@ -23,8 +23,15 @@
  */
 package com.jaspersoft.ireport;
 
-import net.sf.jasperreports.engine.util.JRProperties;
+import java.io.IOException;
+import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileStateInvalidException;
+import org.openide.filesystems.FileSystem;
+import org.openide.filesystems.FileUtil;
+import org.openide.filesystems.Repository;
 import org.openide.modules.ModuleInstall;
+import org.openide.util.Exceptions;
+import org.openide.windows.WindowManager;
 
 /**
  * Manages a module's lifecycle. Remember that an installer is optional and
@@ -35,6 +42,7 @@ public class Installer extends ModuleInstall {
     @Override
     public void restored() {
 
+        /*
         if (System.getProperty("javax.xml.parsers.SAXParserFactory") == null)
         {
             System.setProperty("javax.xml.parsers.SAXParserFactory","com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl");
@@ -49,8 +57,49 @@ public class Installer extends ModuleInstall {
         {
             System.setProperty("javax.xml.datatype.DatatypeFactory","com.sun.org.apache.xerces.internal.jaxp.datatype.DatatypeFactoryImpl");
         }
-
+        */
         
+
+        /*
+        WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+
+            public void dump(String f)
+            {
+               
+                FileObject nodeFP = Repository.getDefault().getDefaultFileSystem().getRoot().getFileObject(f);
+                System.out.println(" Dumping " + f + " -----------------------------");
+                if (nodeFP != null)
+                {
+                    try {
+                        System.out.println("URL: " + nodeFP.getURL());
+                    } catch (FileStateInvalidException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+
+                    try {
+                        FileUtil.copy(nodeFP.getInputStream(), System.out);
+                    } catch (IOException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+
+                    System.out.println(f + " END -----------------------------");
+                    System.out.flush();
+                }
+                else
+                {
+                    System.out.println(f + " NOT FOND -----------------------------");
+                }
+            }
+            public void run() {
+
+                dump("Windows2Local/WindowManager.wswmgr");
+                dump("Windows2/WindowManager.wswmgr");
+                dump("Windows2Local/Modes/explorer/runtime.wstcref");
+                dump("Windows2/Modes/explorer/runtime.wstcref");
+            }
+        });
+
+         */
 
 
     }

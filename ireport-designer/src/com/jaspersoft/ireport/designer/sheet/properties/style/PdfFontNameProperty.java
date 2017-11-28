@@ -70,6 +70,11 @@ final public class PdfFontNameProperty extends PropertySupport.ReadWrite {
     }
 
     @Override
+    public String getHtmlDisplayName() {
+        return "<html><s>" + getDisplayName();
+    }
+
+    @Override
     public boolean isDefaultValue() {
         return style.getOwnPdfFontName() == null;
     }

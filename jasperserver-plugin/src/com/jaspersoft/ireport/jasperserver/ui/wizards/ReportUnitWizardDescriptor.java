@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.jasperserver.ui.wizards;
 
+import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
@@ -182,22 +183,24 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
                     // Add the datasource resource...
                     if (JasperServerManager.getMainInstance().getBrandingProperties().getProperty("ireport.manage.datasources.enabled", "true").equals("true"))
                     {
-                        ResourceDescriptor tmpDataSourceDescriptor;
-                        if (((String)getProperty("datasource_is_local")).equals("false")) 
+                        ResourceDescriptor tmpDataSourceDescriptor = null;
+                        if (getProperty("datasource_present") != null &&
+                            getProperty("datasource_present").equals("true"))
                         {
-                            tmpDataSourceDescriptor = new ResourceDescriptor();
-                            tmpDataSourceDescriptor.setWsType( ResourceDescriptor.TYPE_DATASOURCE );
-                            tmpDataSourceDescriptor.setReferenceUri( (String)getProperty("datasource_uri"));
-                            tmpDataSourceDescriptor.setIsReference(true);
+                            if (((String)getProperty("datasource_is_local")).equals("false"))
+                            {
+                                tmpDataSourceDescriptor = new ResourceDescriptor();
+                                tmpDataSourceDescriptor.setWsType( ResourceDescriptor.TYPE_DATASOURCE );
+                                tmpDataSourceDescriptor.setReferenceUri( (String)getProperty("datasource_uri"));
+                                tmpDataSourceDescriptor.setIsReference(true);
+                            }
+                            else
+                            {
+                                tmpDataSourceDescriptor = (ResourceDescriptor)getProperty("datasource_descriptor");
+                                tmpDataSourceDescriptor.setIsReference(false);
+                            }
+                            rd.getChildren().add( tmpDataSourceDescriptor );
                         }
-                        else
-                        {
-                            tmpDataSourceDescriptor = (ResourceDescriptor)getProperty("datasource_descriptor");
-                            tmpDataSourceDescriptor.setIsReference(false);
-                        }
-
-                        rd.getChildren().add( tmpDataSourceDescriptor );
-
                     }
 
 
@@ -253,55 +256,83 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
     }
 
 
-    public static void addRequiredResources(JServer server, File resourceFile, ResourceDescriptor rd) throws java.lang.Exception {
+    /**
+     * Update the resources for the main jrxml...
+     * 
+     * @param server
+     * @param resourceFile
+     * @param reportUnitDescriptor
+     * @throws java.lang.Exception
+     */
+    public static void addRequiredResources(JServer server, File resourceFile, ResourceDescriptor reportUnitDescriptor) throws java.lang.Exception {
+        addRequiredResources(server, resourceFile, null, reportUnitDescriptor, null);
+    }
 
-        JasperDesign report = JRXmlLoader.load(resourceFile);
-        List children = RepositoryJrxmlFile.identifyElementValidationItems(report, rd, resourceFile.getParent());
 
+    /**
+     * Update the resources for the jrxml file described in jrxmlDescriptor.
+     * If jrxmlDescriptor is null, the main jrxml is updated.
+     *
+     * @param server
+     * @param resourceFile
+     * @param model If the model is provided, the resource file is updated without using a temporary file.
+     * @param reportUnitDescriptor
+     * @param jrxmlDescriptor
+     * @throws java.lang.Exception
+     */
+    public static void addRequiredResources(JServer server, File resourceFile, JasperDesign report, ResourceDescriptor reportUnitDescriptor, ResourceDescriptor jrxmlDescriptor) throws java.lang.Exception {
+
+        boolean useTemporaryFile = report == null;
+
+        if (report == null) report = JRXmlLoader.load(resourceFile);
+        List children = RepositoryJrxmlFile.identifyElementValidationItems(report, reportUnitDescriptor, resourceFile.getParent());
 
         if (children.size() > 0)
         {
+            JrxmlVisualView view = null;
             // We will create a temporary file somewhere else...
-            String tmpFileName = JasperServerManager.createTmpFileName("newfile",".jrxml");
-            JRXmlWriter.writeReport(report, new java.io.FileOutputStream(tmpFileName), "UTF-8");
-            resourceFile = new File(tmpFileName);
-            long modified = resourceFile.lastModified();
+            if (useTemporaryFile)
+            {
+                String tmpFileName = JasperServerManager.createTmpFileName("newfile",".jrxml");
+                JRXmlWriter.writeReport(report, new java.io.FileOutputStream(tmpFileName), "UTF-8");
+                resourceFile = new File(tmpFileName);
+            }
+            else
+            {
+                view = Misc.getViewForFile(resourceFile);
+            }
 
-            System.out.println("Temporary file: " + resourceFile + " " + resourceFile.lastModified() + " " + resourceFile.exists());
-            System.out.flush();
+            long modified = resourceFile.lastModified();
 
             JrxmlValidationDialog jvd = new JrxmlValidationDialog(Misc.getMainFrame(),true);
             jvd.setElementVelidationItems( children );
             jvd.setServer( server );
-            jvd.setFileName(tmpFileName);
-            jvd.setReportUnit( new RepositoryReportUnit(server, rd) );
+            jvd.setVisualView( view );
+            jvd.setFileName(resourceFile.getPath());
+            jvd.setReportUnit( new RepositoryReportUnit(server, reportUnitDescriptor) );
             jvd.setReport( report );
             jvd.setVisible(true);
+
             if (jvd.getDialogResult() != JOptionPane.CANCEL_OPTION)
             {
                 // Save the report in a new temporary file and store it....
                 // Look for the main jrxml...
                 if (modified != resourceFile.lastModified())
                 {
-                    System.out.println("Jrxml modified....");
-                    System.out.flush();
-                    for (int i=0; i<rd.getChildren().size(); ++i)
+                    for (int i=0; i<reportUnitDescriptor.getChildren().size(); ++i)
                     {
-                        ResourceDescriptor rdMainJrxml = (ResourceDescriptor)rd.getChildren().get(i);
-                        if (rdMainJrxml.getWsType().equals(rdMainJrxml.TYPE_JRXML) && rdMainJrxml.isMainReport())
+                        ResourceDescriptor rdJrxml = (ResourceDescriptor)reportUnitDescriptor.getChildren().get(i);
+                        if ( (jrxmlDescriptor != null && rdJrxml.getUriString().equals(jrxmlDescriptor.getUriString())) ||
+                             (jrxmlDescriptor == null && rdJrxml.getWsType().equals(rdJrxml.TYPE_JRXML) && rdJrxml.isMainReport()))
                         {
-
-                            rdMainJrxml.setIsNew(false);
-                            rdMainJrxml.setHasData(true);
-                            rdMainJrxml = server.getWSClient().modifyReportUnitResource(rd.getUriString(), rdMainJrxml, new File(tmpFileName) );
+                            rdJrxml.setIsNew(false);
+                            rdJrxml.setHasData(true);
+                            rdJrxml = server.getWSClient().modifyReportUnitResource(reportUnitDescriptor.getUriString(), rdJrxml, resourceFile );
                             // Refresh reportUnitResourceDescriptor....
-                            rd.getChildren().set(i, rdMainJrxml);
+                            reportUnitDescriptor.getChildren().set(i, rdJrxml);
                             break;
                         }
                     }
-
-                    // At this point, if the file is open we should reload it...
-                    
                 }
                 else
                 {

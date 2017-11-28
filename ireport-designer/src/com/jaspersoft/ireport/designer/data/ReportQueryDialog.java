@@ -44,6 +44,7 @@ import java.util.*;
 import bsh.Interpreter;
 import com.jaspersoft.ireport.designer.connection.JRCSVDataSourceConnection;
 import com.jaspersoft.ireport.designer.connection.JRDataSourceProviderConnection;
+import com.jaspersoft.ireport.designer.connection.JRXlsDataSourceConnection;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.editor.ExpressionEditor;
 import com.jaspersoft.ireport.designer.sheet.Tag;
@@ -735,6 +736,8 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         jButton2 = new javax.swing.JButton();
         jPanel15 = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
+        jPanel17 = new javax.swing.JPanel();
+        jButton5 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -843,7 +846,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         jScrollPane1.setPreferredSize(new java.awt.Dimension(661, 340));
 
         jEditorPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jEditorPane1.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
+        jEditorPane1.setFont(new java.awt.Font("Courier New", 0, 12));
         jEditorPane1.setMinimumSize(new java.awt.Dimension(50, 200));
         jEditorPane1.setPreferredSize(new java.awt.Dimension(661, 340));
         jScrollPane1.setViewportView(jEditorPane1);
@@ -1006,6 +1009,16 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         jPanel15.add(jButton3);
 
         jTabbedPane1.addTab("CSV Datasource", jPanel15);
+
+        jButton5.setText("Get fields from datasource");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5jButton2ActionPerformed1(evt);
+            }
+        });
+        jPanel17.add(jButton5);
+
+        jTabbedPane1.addTab("Excel Datasource", jPanel17);
 
         jPanel1.add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
@@ -1262,7 +1275,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
                 try {
 
                     // We have to set the query executer class...
-                    net.sf.jasperreports.engine.util.JRProperties.setProperty("net.sf.jasperreports.query.executer.factory." + language, qed.getClassName());
+                    IReportManager.getInstance().setJRProperty("net.sf.jasperreports.query.executer.factory." + language, qed.getClassName());
                     setFieldsProvider( (FieldsProvider)Class.forName( qed.getFieldsProvider(),true,IReportManager.getInstance().getReportClassLoader()).newInstance() );
                 } catch (Throwable t)
                 {
@@ -1385,7 +1398,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
                     String fieldName = ""+names.elementAt(nd);
                     JRDesignField field = new JRDesignField();
                     field.setName(fieldName);
-                    field.setDescription("java.lang.String");
+                    field.setValueClassName("java.lang.String");
                     field.setDescription(""); //Field returned by " +methods[i].getName() + " (real type: "+ returnType +")");
                     
                     Vector row = new Vector();
@@ -1650,6 +1663,42 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
         setVisible(false);
         dispose();
     }//GEN-LAST:event_closeDialog
+
+    private void jButton5jButton2ActionPerformed1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5jButton2ActionPerformed1
+        IReportConnection conn = IReportManager.getInstance().getDefaultConnection();
+        if (conn == null || !(conn instanceof JRXlsDataSourceConnection)) {
+            setColumnsError( I18n.getString("ReportQueryDialog.Message.Error.NoXlsConnection") );
+            return;
+        }
+        else
+        {
+            JRXlsDataSourceConnection ic = (JRXlsDataSourceConnection)conn;
+            try {
+                List<String> names = ic.getColumnNames();
+                DefaultTableModel dtm = (DefaultTableModel)jTableFields.getModel();
+                dtm.setRowCount(0);
+
+                for (int nd =0; nd < names.size(); ++nd) {
+                    String fieldName = ""+names.get(nd);
+                    JRDesignField field = new JRDesignField();
+                    field.setName(fieldName);
+                    field.setValueClassName("java.lang.String");
+                    field.setDescription(""); //Field returned by " +methods[i].getName() + " (real type: "+ returnType +")");
+
+                    Vector row = new Vector();
+                    row.addElement(field);
+                    row.addElement(field.getValueClassName());
+                    row.addElement(field.getDescription());
+                    dtm.addRow(row);
+                }
+                jTableFields.setRowSelectionInterval(0, names.size()-1);
+            } catch (Exception ex)
+            {
+                setColumnsError( "" + ex.getMessage() );
+
+            }
+        }
+    }//GEN-LAST:event_jButton5jButton2ActionPerformed1
     
     /**
      * @param args the command line arguments
@@ -1760,6 +1809,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButtonLoadQuery;
     private javax.swing.JButton jButtonOpenDesigner;
     private javax.swing.JButton jButtonReadBeanAttributes3;
@@ -1774,6 +1824,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

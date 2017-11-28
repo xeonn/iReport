@@ -46,7 +46,8 @@ public class FolderChildren extends Index.KeysChildren implements PropertyChange
     private RepositoryFolder folder = null;
     private Lookup doLkp = null;
     private AbstractNode parentNode = null;
-       
+    private boolean calculating = false;
+
     public FolderChildren(RepositoryFolder folder, Lookup doLkp) {
         super(new ArrayList());
         this.folder = folder;
@@ -100,7 +101,9 @@ public class FolderChildren extends Index.KeysChildren implements PropertyChange
     
     @SuppressWarnings("unchecked")
     public void recalculateKeys(final boolean refresh) {
-        
+        if (isCalculating()) return;
+        setCalculating(true);
+
         final List l = (List)lock();
         l.clear();
         List params = null;
@@ -123,6 +126,7 @@ public class FolderChildren extends Index.KeysChildren implements PropertyChange
                     public void run() {
                            update();
                            ((FolderNode)getNode()).setLoading(false);
+                           setCalculating(false);
                         }
                     });
                 }
@@ -130,6 +134,7 @@ public class FolderChildren extends Index.KeysChildren implements PropertyChange
                 {
                     folder.setLoaded(false);
                     ((FolderNode)getNode()).setLoading(false);
+                    setCalculating(false);
                 }
             }
         };
@@ -159,5 +164,19 @@ public class FolderChildren extends Index.KeysChildren implements PropertyChange
 
     public void setFolder(RepositoryFolder folder) {
         this.folder = folder;
+    }
+
+    /**
+     * @return the calculating
+     */
+    public boolean isCalculating() {
+        return calculating;
+    }
+
+    /**
+     * @param calculating the calculating to set
+     */
+    public void setCalculating(boolean calculating) {
+        this.calculating = calculating;
     }
 }

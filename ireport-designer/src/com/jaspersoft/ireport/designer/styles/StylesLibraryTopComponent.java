@@ -31,24 +31,22 @@ import java.awt.event.WindowListener;
 import java.io.Serializable;
 import java.util.logging.Logger;
 import javax.swing.ActionMap;
-import javax.swing.JScrollPane;
 import javax.swing.text.DefaultEditorKit;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateWriter;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
-import org.openide.explorer.view.BeanTreeView;
 import org.openide.filesystems.FileLock;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.Repository;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
+import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
-import org.openide.util.Utilities;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.util.lookup.ProxyLookup;
@@ -103,13 +101,13 @@ final class StylesLibraryTopComponent extends TopComponent implements ExplorerMa
 
         setName(NbBundle.getMessage(StylesLibraryTopComponent.class, "CTL_StylesLibraryTopComponent"));
         setToolTipText(NbBundle.getMessage(StylesLibraryTopComponent.class, "HINT_StylesLibraryTopComponent"));
-        setIcon(Utilities.loadImage(ICON_PATH, true));
+        setIcon(ImageUtilities.loadImage(ICON_PATH, true));
 
         this.ic = new InstanceContent();
         this.lookup = new AbstractLookup(ic);
 
         noReportNode = new AbstractNode(Children.LEAF);
-        noReportNode.setDisplayName("No Chart Theme available");
+        noReportNode.setDisplayName("");
 
         ActionMap map = getActionMap();
         map.put(DefaultEditorKit.copyAction, ExplorerUtils.actionCopy(manager));

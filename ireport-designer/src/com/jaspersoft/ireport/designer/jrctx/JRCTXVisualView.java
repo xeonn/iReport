@@ -67,16 +67,16 @@ import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
+import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 import org.openide.util.Mutex;
 import org.openide.util.NbBundle;
 import org.openide.util.RequestProcessor;
-import org.openide.windows.TopComponent;
-import org.openide.util.Utilities;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.util.lookup.ProxyLookup;
 import org.openide.windows.Mode;
+import org.openide.windows.TopComponent;
 import org.openide.windows.TopComponentGroup;
 import org.openide.windows.WindowManager;
 
@@ -310,7 +310,7 @@ final class JRCTXVisualView extends TopComponent
                     initComponents();
                     setName(NbBundle.getMessage(JRCTXVisualView.class, "CTL_JRCTXVisualEditorTopComponent"));
                     setToolTipText(NbBundle.getMessage(JRCTXVisualView.class, "HINT_JRCTXVisualEditorTopComponent"));
-                    setIcon(Utilities.loadImage(ICON_PATH, true));
+                    setIcon(ImageUtilities.loadImage(ICON_PATH, true));
 
                     previewPanel = new JRViewerPanel(viewerContext);
                     add(previewPanel,BorderLayout.CENTER);

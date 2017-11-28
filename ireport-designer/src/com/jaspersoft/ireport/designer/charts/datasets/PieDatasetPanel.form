@@ -306,7 +306,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabelMinPercentage">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Min slice percentace"/>
+            <Property name="text" type="java.lang.String" value="Min slice percentage"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

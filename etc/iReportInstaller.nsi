@@ -17,7 +17,7 @@
 !include fileassoc.nsh
 
 ; set execution level for Windows Vista
-RequestExecutionLevel user
+; RequestExecutionLevel user
 
 ; MUI Settings
 !define MUI_ABORTWARNING
@@ -62,6 +62,8 @@ ShowInstDetails show
 ShowUnInstDetails show
 
 Section "${PRODUCT_NAME}" SEC01
+
+  SetShellVarContext all
   SetOutPath "$INSTDIR"
   SetOverwrite try
   File /r /x src "..\dist\${PRODUCT_NAME}-${PRODUCT_VERSION}-windows-installer\*.*"
@@ -88,6 +90,7 @@ SectionEnd
 ;SectionEnd
 
 Section -AdditionalIcons
+  SetShellVarContext all
   SetOutPath $INSTDIR
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   
@@ -128,6 +131,9 @@ Function un.onInit
 FunctionEnd
 
 Section Uninstall
+
+  SetShellVarContext all
+
   !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
   StrCmp $ICONS_GROUP "" NO_SHORTCUTS
   RMDir /r /REBOOTOK $INSTDIR

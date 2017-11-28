@@ -48,4 +48,9 @@
             </folder>
         </folder>
     </folder>
+    <folder name="ireport">
+        <folder name="SubreportOpenerProviders">
+            <file name="com-jaspersoft-ireport-jasperserver-JSSubreportOpenerProvider.instance"/>
+        </folder>
+    </folder>
 </filesystem>

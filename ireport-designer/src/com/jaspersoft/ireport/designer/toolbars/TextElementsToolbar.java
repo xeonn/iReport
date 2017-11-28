@@ -24,21 +24,28 @@
 package com.jaspersoft.ireport.designer.toolbars;
 
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.ReportClassLoader;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
+import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.tools.JNumberComboBox;
 import com.jaspersoft.ireport.designer.tools.ValueChangedEvent;
 import com.jaspersoft.ireport.designer.tools.ValueChangedListener;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import com.jaspersoft.ireport.designer.utils.Misc;
-import com.jaspersoft.ireport.locale.I18n;
+import java.awt.GraphicsEnvironment;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JToggleButton;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextElement;
+import net.sf.jasperreports.engine.util.JRFontUtil;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
@@ -48,7 +55,7 @@ import org.openide.util.Utilities;
  *
  * @author  gtoffoli
  */
-public class TextElementsToolbar extends javax.swing.JPanel implements LookupListener, PropertyChangeListener {
+public class TextElementsToolbar extends javax.swing.JPanel implements LookupListener, PropertyChangeListener, PreferenceChangeListener {
     
     private final Lookup.Result <ElementNode> result;
     private List<JRDesignTextElement> selectedTextElements = new ArrayList<JRDesignTextElement>();
@@ -71,31 +78,97 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
         
         setInit(true);
         initComponents();
-         jComboBoxFontName.removeAllItems();
-        String[] fontFamilies = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-        for (int i=0; i<fontFamilies.length; ++i)
-        {
-            jComboBoxFontName.addItem(fontFamilies[i]); 
-        }
-        ((JNumberComboBox)jComboBoxFontSize).setMinValue(1);
-        
-        for (int i=0; i<predefinedFontSizes.length; ++i)
-        {
-            ((JNumberComboBox)jComboBoxFontSize).addEntry(predefinedFontSizes[i]+"", predefinedFontSizes[i].doubleValue());
-        }
-        
+
+        updateFonts();
+
         ((JNumberComboBox)jComboBoxFontSize).addValueChangedListener(new ValueChangedListener() {
 
             public void valueChanged(ValueChangedEvent evt) {
+
+                if (isInit()) return;
                 fontSizeSelected();
             }
         });
+
+        jComboBoxFontName.setRenderer(new FontListCellRenderer());
+
         setInit(false);
+
+        IReportManager.getPreferences().addPreferenceChangeListener(this);
         
         result = Utilities.actionsGlobalContext().lookup(new Lookup.Template(ElementNode.class));
         result.addLookupListener(this);
         result.allItems();
         resultChanged(null);
+    }
+
+
+    public void updateFonts()
+    {
+        init = true;
+        String selectedFont = null;
+
+        if (jComboBoxFontName.getSelectedItem() != null)
+        {
+            if (jComboBoxFontName.getSelectedItem() instanceof Tag)
+            {
+                selectedFont = (String)((Tag)jComboBoxFontName.getSelectedItem()).getValue();
+            }
+            else
+            {
+                selectedFont = ""+jComboBoxFontName.getSelectedItem();
+            }
+        }
+
+
+        jComboBoxFontName.removeAllItems();
+
+
+        List<Tag> classes = new ArrayList<Tag>();
+
+        ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(new ReportClassLoader(IReportManager.getReportClassLoader()));
+
+        Collection extensionFonts = JRFontUtil.getFontFamilyNames();
+        for(Iterator it = extensionFonts.iterator(); it.hasNext();)
+        {
+            String fname = (String)it.next();
+            classes.add(new Tag(fname));
+        }
+
+        Thread.currentThread().setContextClassLoader(oldCL);
+
+        classes.add(new Tag(null, "--"));
+
+        if (IReportManager.getPreferences().getBoolean("showSystemFonts", true))
+        {
+
+            String[] names = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+            //classes.add(new Tag("sansserif","SansSerif"));
+
+            for (int i = 0; i < names.length; i++) {
+                    String name = names[i];
+                    classes.add(new Tag(name));
+            }
+
+        }
+
+         jComboBoxFontName.setModel(new DefaultComboBoxModel(classes.toArray()));
+
+         if (selectedFont != null)
+         {
+             Misc.setComboboxSelectedTagValue(jComboBoxFontName, selectedFont);
+         }
+
+         init = false;
+    }
+
+    public void preferenceChange(PreferenceChangeEvent evt) {
+        if (evt == null || evt.getKey() == null || evt.getKey().equals( IReportManager.IREPORT_CLASSPATH))
+        {
+            // Refresh the array...
+            updateFonts();
+        }
     }
     
     /** This method is called from within the constructor to
@@ -110,7 +183,7 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
         buttonGroupHorizontalAlign = new javax.swing.ButtonGroup();
         buttonGroupVerticalAlign = new javax.swing.ButtonGroup();
         jToolBar1 = new javax.swing.JToolBar();
-        jComboBoxFontName = new javax.swing.JComboBox();
+        jComboBoxFontName = new WideComboBox();
         jComboBoxFontSize = new JNumberComboBox();
         jButtonIncreaseFont = new javax.swing.JButton();
         jButtonDecreaseFont = new javax.swing.JButton();
@@ -140,7 +213,8 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
         jToolBar1.setOpaque(false);
         jToolBar1.setPreferredSize(new java.awt.Dimension(700, 25));
 
-        jComboBoxFontName.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxFontName.setEditable(true);
+        jComboBoxFontName.setMaximumRowCount(20);
         jComboBoxFontName.setMaximumSize(new java.awt.Dimension(140, 22));
         jComboBoxFontName.setMinimumSize(new java.awt.Dimension(140, 22));
         jComboBoxFontName.setPreferredSize(new java.awt.Dimension(170, 22));
@@ -162,7 +236,7 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
         jToolBar1.add(jComboBoxFontSize);
 
         jButtonIncreaseFont.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/increase_font_size.png"))); // NOI18N
-        jButtonIncreaseFont.setText(I18n.getString("TextElementsToolbar.jButtonIncreaseFont.text")); // NOI18N
+        jButtonIncreaseFont.setText(org.openide.util.NbBundle.getMessage(TextElementsToolbar.class, "TextElementsToolbar.jButtonIncreaseFont.text")); // NOI18N
         jButtonIncreaseFont.setBorderPainted(false);
         jButtonIncreaseFont.setFocusable(false);
         jButtonIncreaseFont.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -179,7 +253,7 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
         jToolBar1.add(jButtonIncreaseFont);
 
         jButtonDecreaseFont.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/decrease_font_size.png"))); // NOI18N
-        jButtonDecreaseFont.setText(I18n.getString("TextElementsToolbar.jButtonDecreaseFont.text")); // NOI18N
+        jButtonDecreaseFont.setText(org.openide.util.NbBundle.getMessage(TextElementsToolbar.class, "TextElementsToolbar.jButtonDecreaseFont.text")); // NOI18N
         jButtonDecreaseFont.setBorderPainted(false);
         jButtonDecreaseFont.setFocusable(false);
         jButtonDecreaseFont.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -197,8 +271,8 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
         jToolBar1.add(jSeparator1);
 
         jToggleButtonBold.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/bold.png"))); // NOI18N
-        jToggleButtonBold.setText(I18n.getString("TextElementsToolbar.jToggleButtonBold.text")); // NOI18N
-        jToggleButtonBold.setActionCommand(I18n.getString("TextElementsToolbar.jToggleButtonBold.actionCommand")); // NOI18N
+        jToggleButtonBold.setText(org.openide.util.NbBundle.getMessage(TextElementsToolbar.class, "TextElementsToolbar.jToggleButtonBold.text")); // NOI18N
+        jToggleButtonBold.setActionCommand(org.openide.util.NbBundle.getMessage(TextElementsToolbar.class, "TextElementsToolbar.jToggleButtonBold.actionCommand")); // NOI18N
         jToggleButtonBold.setFocusable(false);
         jToggleButtonBold.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jToggleButtonBold.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -210,7 +284,7 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
         jToolBar1.add(jToggleButtonBold);
 
         jToggleButtonItalic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/italic.png"))); // NOI18N
-        jToggleButtonItalic.setText(I18n.getString("TextElementsToolbar.jToggleButtonItalic.text")); // NOI18N
+        jToggleButtonItalic.setText(org.openide.util.NbBundle.getMessage(TextElementsToolbar.class, "TextElementsToolbar.jToggleButtonItalic.text")); // NOI18N
         jToggleButtonItalic.setBorderPainted(false);
         jToggleButtonItalic.setFocusable(false);
         jToggleButtonItalic.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -227,7 +301,7 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
         jToolBar1.add(jToggleButtonItalic);
 
         jToggleButtonUnderline.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/underline.png"))); // NOI18N
-        jToggleButtonUnderline.setText(I18n.getString("TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
+        jToggleButtonUnderline.setText(org.openide.util.NbBundle.getMessage(TextElementsToolbar.class, "TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
         jToggleButtonUnderline.setBorderPainted(false);
         jToggleButtonUnderline.setFocusable(false);
         jToggleButtonUnderline.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -244,7 +318,7 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
         jToolBar1.add(jToggleButtonUnderline);
 
         jToggleButtonStriketrought.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/strikethrought.png"))); // NOI18N
-        jToggleButtonStriketrought.setText(I18n.getString("TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
+        jToggleButtonStriketrought.setText(org.openide.util.NbBundle.getMessage(TextElementsToolbar.class, "TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
         jToggleButtonStriketrought.setBorderPainted(false);
         jToggleButtonStriketrought.setFocusable(false);
         jToggleButtonStriketrought.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -262,7 +336,7 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
 
         buttonGroupHorizontalAlign.add(jToggleButtonAlignLeft);
         jToggleButtonAlignLeft.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/align_left.png"))); // NOI18N
-        jToggleButtonAlignLeft.setText(I18n.getString("TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
+        jToggleButtonAlignLeft.setText(org.openide.util.NbBundle.getMessage(TextElementsToolbar.class, "TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
         jToggleButtonAlignLeft.setBorderPainted(false);
         jToggleButtonAlignLeft.setFocusable(false);
         jToggleButtonAlignLeft.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -280,7 +354,7 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
 
         buttonGroupHorizontalAlign.add(jToggleButtonAlignJustify);
         jToggleButtonAlignJustify.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/align_justified.png"))); // NOI18N
-        jToggleButtonAlignJustify.setText(I18n.getString("TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
+        jToggleButtonAlignJustify.setText(org.openide.util.NbBundle.getMessage(TextElementsToolbar.class, "TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
         jToggleButtonAlignJustify.setBorderPainted(false);
         jToggleButtonAlignJustify.setFocusable(false);
         jToggleButtonAlignJustify.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -298,7 +372,7 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
 
         buttonGroupHorizontalAlign.add(jToggleButtonAlignCenter);
         jToggleButtonAlignCenter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/align_center.png"))); // NOI18N
-        jToggleButtonAlignCenter.setText(I18n.getString("TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
+        jToggleButtonAlignCenter.setText(org.openide.util.NbBundle.getMessage(TextElementsToolbar.class, "TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
         jToggleButtonAlignCenter.setBorderPainted(false);
         jToggleButtonAlignCenter.setFocusable(false);
         jToggleButtonAlignCenter.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -316,7 +390,7 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
 
         buttonGroupHorizontalAlign.add(jToggleButtonAlignRight);
         jToggleButtonAlignRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/align_right.png"))); // NOI18N
-        jToggleButtonAlignRight.setText(I18n.getString("TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
+        jToggleButtonAlignRight.setText(org.openide.util.NbBundle.getMessage(TextElementsToolbar.class, "TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
         jToggleButtonAlignRight.setBorderPainted(false);
         jToggleButtonAlignRight.setFocusable(false);
         jToggleButtonAlignRight.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -334,7 +408,7 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
 
         buttonGroupVerticalAlign.add(jToggleButtonAlignTop);
         jToggleButtonAlignTop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/align_top.png"))); // NOI18N
-        jToggleButtonAlignTop.setText(I18n.getString("TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
+        jToggleButtonAlignTop.setText(org.openide.util.NbBundle.getMessage(TextElementsToolbar.class, "TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
         jToggleButtonAlignTop.setBorderPainted(false);
         jToggleButtonAlignTop.setFocusable(false);
         jToggleButtonAlignTop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -352,7 +426,7 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
 
         buttonGroupVerticalAlign.add(jToggleButtonAlignMiddle);
         jToggleButtonAlignMiddle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/align_middle.png"))); // NOI18N
-        jToggleButtonAlignMiddle.setText(I18n.getString("TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
+        jToggleButtonAlignMiddle.setText(org.openide.util.NbBundle.getMessage(TextElementsToolbar.class, "TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
         jToggleButtonAlignMiddle.setBorderPainted(false);
         jToggleButtonAlignMiddle.setFocusable(false);
         jToggleButtonAlignMiddle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -370,7 +444,7 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
 
         buttonGroupVerticalAlign.add(jToggleButtonAlignBottom);
         jToggleButtonAlignBottom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/align_bottom.png"))); // NOI18N
-        jToggleButtonAlignBottom.setText(I18n.getString("TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
+        jToggleButtonAlignBottom.setText(org.openide.util.NbBundle.getMessage(TextElementsToolbar.class, "TextElementsToolbar.jToggleButtonUnderline.text")); // NOI18N
         jToggleButtonAlignBottom.setBorderPainted(false);
         jToggleButtonAlignBottom.setFocusable(false);
         jToggleButtonAlignBottom.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -402,7 +476,21 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
         boolean isFirstUndo = true;
         if (getSelectedTextElements().size() > 0)
         {
-            String newFontName = (String)jComboBoxFontName.getSelectedItem();
+            String newFontName = null;
+            if (jComboBoxFontName.getSelectedItem() instanceof Tag)
+            {
+                newFontName = (String)((Tag)jComboBoxFontName.getSelectedItem()).getValue();
+                if (((Tag)jComboBoxFontName.getSelectedItem()).getName().equals("--"))
+                {
+                    resultChanged(null);
+                    return;
+                }
+            }
+            else
+            {
+                newFontName = ""+jComboBoxFontName.getSelectedItem();
+            }
+
             if (newFontName != null && newFontName.length() > 0)
             {
                 for (JRDesignTextElement element : getSelectedTextElements())
@@ -796,7 +884,7 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
                 
                 for (JRDesignTextElement element : getSelectedTextElements())
                 {
-                    if (sameFontName) sameFontName = Misc.setComboBoxText(isFirstElement, element.getFontName(), jComboBoxFontName);
+                    if (sameFontName) sameFontName = Misc.setComboBoxTag(isFirstElement, element.getFontName(), jComboBoxFontName);
                     if (sameFontSize) sameFontSize = Misc.setElementComboNumber(isFirstElement, element.getFontSize(), (JNumberComboBox)jComboBoxFontSize);
                     
                     if (sameBold) sameBold = setToggleButton(isFirstElement, element.isBold(), jToggleButtonBold);

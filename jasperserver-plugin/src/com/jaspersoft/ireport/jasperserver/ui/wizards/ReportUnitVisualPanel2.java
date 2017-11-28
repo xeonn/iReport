@@ -39,7 +39,9 @@ import org.openide.filesystems.FileUtil;
 public final class ReportUnitVisualPanel2 extends JPanel {
 
     private ReportUnitWizardPanel2 wizardPanel = null;
-    
+    private String currentOpenedFile = null;
+
+
     public ReportUnitWizardPanel2 getWizardPanel() {
         return wizardPanel;
     }
@@ -308,6 +310,7 @@ public final class ReportUnitVisualPanel2 extends JPanel {
             if (dobject != null)
             {
                 jTextFieldFile.setText(  FileUtil.toFile( dobject.getPrimaryFile() ) +"" );
+                currentOpenedFile = jTextFieldFile.getText();
             }
         }
 
@@ -319,6 +322,15 @@ public final class ReportUnitVisualPanel2 extends JPanel {
         wizardDescriptor.putProperty("jrxml_is_local", jRadioButtonLocal1.isSelected()+"");
         wizardDescriptor.putProperty("jrxml_file", 
                 (jRadioButtonRepo1.isSelected()) ? jTextFieldFileRepo.getText() : jTextFieldFile.getText());
+
+        if (!jRadioButtonRepo1.isSelected() && currentOpenedFile != null && currentOpenedFile.equals(jTextFieldFile.getText()))
+        {
+            wizardDescriptor.putProperty("currentlyOpenedFileSelected","true");
+        }
+        else
+        {
+            wizardDescriptor.putProperty("currentlyOpenedFileSelected","false");
+        }
     }
     
     public void updateJrxmlFromType()

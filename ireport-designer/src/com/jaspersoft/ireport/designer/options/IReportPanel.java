@@ -23,12 +23,17 @@
  */
 package com.jaspersoft.ireport.designer.options;
 
+import com.jaspersoft.ireport.designer.fonts.SimpleFontFamilyEx;
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ReportClassLoader;
 import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
 import com.jaspersoft.ireport.designer.editor.ExpressionEditor;
 import com.jaspersoft.ireport.designer.fonts.CheckBoxListEntry;
+import com.jaspersoft.ireport.designer.fonts.EditFontPanel;
+import com.jaspersoft.ireport.designer.fonts.OptionsFontListCellRenderer;
+import com.jaspersoft.ireport.designer.fonts.IRFontUtils;
+import com.jaspersoft.ireport.designer.fonts.InstallFontWizardDescriptor;
 import com.jaspersoft.ireport.designer.options.export.ExportOptionsPanel;
 import com.jaspersoft.ireport.designer.options.jasperreports.JROptionsPanel;
 import com.jaspersoft.ireport.designer.sheet.Tag;
@@ -44,6 +49,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -66,6 +73,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.charts.ChartThemeBundle;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.fonts.SimpleFontFamily;
+import net.sf.jasperreports.engine.util.JRFontUtil;
 import net.sf.jasperreports.engine.util.JRProperties;
 import net.sf.jasperreports.extensions.ExtensionsEnvironment;
 
@@ -234,6 +243,7 @@ final class IReportPanel extends javax.swing.JPanel {
         //jTabbedPane1.remove(5);
 
         jComboBoxCompatibility.addItem(new Tag("", "Last version"));
+        jComboBoxCompatibility.addItem(new Tag("3_6_0", "JasperReports 3.6.0"));
         jComboBoxCompatibility.addItem(new Tag("3_5_2", "JasperReports 3.5.2-3.5.3"));
         jComboBoxCompatibility.addItem(new Tag("3_5_1", "JasperReports 3.5.1"));
         jComboBoxCompatibility.addItem(new Tag("3_5_0", "JasperReports 3.5.0"));
@@ -247,6 +257,10 @@ final class IReportPanel extends javax.swing.JPanel {
         jComboBoxCompatibility.addItem(new Tag("2_0_4", "JasperReports 2.0.4"));
         jComboBoxCompatibility.addItem(new Tag("2_0_3", "JasperReports 2.0.3"));
         jComboBoxCompatibility.addItem(new Tag("2_0_2", "JasperReports 2.0.2"));
+
+
+        jListFonts.setCellRenderer(new OptionsFontListCellRenderer());
+        jListFonts.setModel(new DefaultListModel());
 
     }
 
@@ -321,44 +335,44 @@ final class IReportPanel extends javax.swing.JPanel {
         jLabelFontspath = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jListFontspath = new com.jaspersoft.ireport.designer.fonts.CheckBoxList();
-        jPanel8 = new javax.swing.JPanel();
+        jLabelFontspath1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jListFonts = new javax.swing.JList();
+        jButtonInstallFont = new javax.swing.JButton();
+        jButtonEditFont = new javax.swing.JButton();
+        jButtonRemoveFont = new javax.swing.JButton();
+        jButtonExportFonts = new javax.swing.JButton();
         jButtonSelectAllFonts = new javax.swing.JButton();
         jButtonDeselectAllFonts = new javax.swing.JButton();
-        jPanel9 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         jPanel29 = new javax.swing.JPanel();
         jTextFieldExternalEditor = new javax.swing.JTextField();
         jButtonPDFViewer1 = new javax.swing.JButton();
         jPanel30 = new javax.swing.JPanel();
-        jPanel11 = new javax.swing.JPanel();
         jLabelPDFViewer = new javax.swing.JLabel();
         jTextFieldPDFViewer = new javax.swing.JTextField();
         jButtonPDFViewer = new javax.swing.JButton();
-        jPanel12 = new javax.swing.JPanel();
         jLabelHTMLViewer = new javax.swing.JLabel();
         jTextFieldHTMLViewer = new javax.swing.JTextField();
         jButtonHTMLViewer = new javax.swing.JButton();
-        jPanel13 = new javax.swing.JPanel();
         jLabelXLSViewer = new javax.swing.JLabel();
         jTextFieldXLSViewer = new javax.swing.JTextField();
         jButtonXLSViewer = new javax.swing.JButton();
-        jPanel14 = new javax.swing.JPanel();
         jLabelCSVViewer = new javax.swing.JLabel();
         jTextFieldCSVViewer = new javax.swing.JTextField();
         jButtonCSVViewer = new javax.swing.JButton();
-        jPanel15 = new javax.swing.JPanel();
         jLabelTXTViewer = new javax.swing.JLabel();
         jTextFieldTXTViewer = new javax.swing.JTextField();
         jButtonTXTViewer = new javax.swing.JButton();
-        jPanel16 = new javax.swing.JPanel();
         jLabelRTFViewer = new javax.swing.JLabel();
         jTextFieldRTFViewer = new javax.swing.JTextField();
         jButtonRTFViewer = new javax.swing.JButton();
-        jPanel17 = new javax.swing.JPanel();
         jLabelODFViewer = new javax.swing.JLabel();
         jTextFieldODFViewer = new javax.swing.JTextField();
         jButtonODFViewer = new javax.swing.JButton();
-        jPanel28 = new javax.swing.JPanel();
+        jLabelODSViewer = new javax.swing.JLabel();
+        jTextFieldODSViewer = new javax.swing.JTextField();
+        jButtonODSViewer = new javax.swing.JButton();
         jLabelDOCXViewer = new javax.swing.JLabel();
         jTextFieldDOCXViewer = new javax.swing.JTextField();
         jButtonDOCXViewer = new javax.swing.JButton();
@@ -442,7 +456,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jComboBoxUnits, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 72, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(18, 18, 18)
                 .add(jCheckBoxMagneticGuideLines)
-                .addContainerGap(428, Short.MAX_VALUE))
+                .addContainerGap(270, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -485,7 +499,7 @@ final class IReportPanel extends javax.swing.JPanel {
                     .add(jPanel24Layout.createSequentialGroup()
                         .add(jLabelTimeZone2)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jComboBoxTheme, 0, 672, Short.MAX_VALUE)))
+                        .add(jComboBoxTheme, 0, 514, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel24Layout.setVerticalGroup(
@@ -499,7 +513,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jPanel24Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabelTimeZone2)
                     .add(jComboBoxTheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(254, Short.MAX_VALUE))
+                .addContainerGap(200, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Report defaults", jPanel24);
@@ -551,7 +565,7 @@ final class IReportPanel extends javax.swing.JPanel {
                     .add(jCheckBoxShowBackgroundAsSeparatedDocument)
                     .add(jCheckBoxAskConfirmationOnDelete)
                     .add(jCheckBoxDebugMode))
-                .addContainerGap(393, Short.MAX_VALUE))
+                .addContainerGap(235, Short.MAX_VALUE))
         );
         jPanel26Layout.setVerticalGroup(
             jPanel26Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -566,7 +580,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jCheckBoxAskConfirmationOnDelete)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxDebugMode)
-                .addContainerGap(189, Short.MAX_VALUE))
+                .addContainerGap(135, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Designer", jPanel26);
@@ -648,9 +662,9 @@ final class IReportPanel extends javax.swing.JPanel {
             .add(jPanel22Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel22Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabelExpressions, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+                    .add(jLabelExpressions, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel22Layout.createSequentialGroup()
-                        .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
+                        .add(jScrollPane6)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel22Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
                             .add(jButtonAddExpression, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -674,7 +688,7 @@ final class IReportPanel extends javax.swing.JPanel {
                         .add(jButtonRemoveExpression, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonRestoreExpressions))
-                    .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE))
+                    .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -699,7 +713,7 @@ final class IReportPanel extends javax.swing.JPanel {
                     .add(jComboBoxCompatibility, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 397, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 418, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jCheckBoxShowCompatibilityWarning))
-                .addContainerGap(328, Short.MAX_VALUE))
+                .addContainerGap(170, Short.MAX_VALUE))
         );
         jPanelCompatibilityLayout.setVerticalGroup(
             jPanelCompatibilityLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -710,7 +724,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jComboBoxCompatibility, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(18, 18, 18)
                 .add(jCheckBoxShowCompatibilityWarning)
-                .addContainerGap(200, Short.MAX_VALUE))
+                .addContainerGap(146, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Compatibility", jPanelCompatibility);
@@ -722,7 +736,7 @@ final class IReportPanel extends javax.swing.JPanel {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jTabbedPane3)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jTabbedPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -732,7 +746,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jTabbedPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
+                .add(jTabbedPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -859,12 +873,12 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
+                        .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 122, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .add(jPanel4Layout.createSequentialGroup()
-                        .add(jLabelClasspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
+                        .add(jLabelClasspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
                         .add(387, 387, 387))))
         );
         jPanel4Layout.setVerticalGroup(
@@ -874,15 +888,15 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelClasspath)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
-                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE))
+                    .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab("Classpath", jPanel4);
 
         jLabelFontspath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelFontspath, "Fonts path");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelFontspath, "PDF fonts path (Deprecated, Install True Type fonts instead)");
 
         jListFontspath.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -891,9 +905,56 @@ final class IReportPanel extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(jListFontspath);
 
-        jPanel8.setMinimumSize(new java.awt.Dimension(120, 10));
-        jPanel8.setPreferredSize(new java.awt.Dimension(120, 10));
-        jPanel8.setLayout(new java.awt.GridBagLayout());
+        jLabelFontspath1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelFontspath1, "Fonts");
+
+        jListFonts.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jListFonts.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jListFontsMouseClicked(evt);
+            }
+        });
+        jListFonts.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jListFontsValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jListFonts);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonInstallFont, "Install Font");
+        jButtonInstallFont.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonInstallFontActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonEditFont, "Edit Font");
+        jButtonEditFont.setEnabled(false);
+        jButtonEditFont.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditFontActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonRemoveFont, "Remove Font");
+        jButtonRemoveFont.setEnabled(false);
+        jButtonRemoveFont.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRemoveFontActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonExportFonts, "Export as extension");
+        jButtonExportFonts.setEnabled(false);
+        jButtonExportFonts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExportFontsActionPerformed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jButtonSelectAllFonts, "Select all");
         jButtonSelectAllFonts.setMaximumSize(new java.awt.Dimension(200, 26));
@@ -904,11 +965,6 @@ final class IReportPanel extends javax.swing.JPanel {
                 jButtonSelectAllFontsActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
-        jPanel8.add(jButtonSelectAllFonts, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButtonDeselectAllFonts, "Deselect all");
         jButtonDeselectAllFonts.setMaximumSize(new java.awt.Dimension(200, 26));
@@ -919,16 +975,6 @@ final class IReportPanel extends javax.swing.JPanel {
                 jButtonDeselectAllFontsActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
-        jPanel8.add(jButtonDeselectAllFonts, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.weighty = 1.0;
-        jPanel8.add(jPanel9, gridBagConstraints);
 
         org.jdesktop.layout.GroupLayout jPanel7Layout = new org.jdesktop.layout.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -938,25 +984,57 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel7Layout.createSequentialGroup()
-                        .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 635, Short.MAX_VALUE)
+                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jLabelFontspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabelFontspath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jPanel8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
-                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE))
+                        .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                                .add(jButtonEditFont)
+                                .add(jButtonRemoveFont)
+                                .add(jButtonInstallFont))
+                            .add(jButtonExportFonts)))
+                    .add(jLabelFontspath1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, jLabelFontspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                            .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                            .add(jButtonDeselectAllFonts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 129, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(jButtonSelectAllFonts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 129, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Fontpath", jPanel7);
+        jPanel7Layout.linkSize(new java.awt.Component[] {jButtonEditFont, jButtonExportFonts, jButtonInstallFont, jButtonRemoveFont}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jLabelFontspath1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel7Layout.createSequentialGroup()
+                        .add(jButtonInstallFont)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButtonEditFont)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButtonRemoveFont)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButtonExportFonts))
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 196, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jLabelFontspath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(4, 4, 4)
+                .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jScrollPane2, 0, 0, Short.MAX_VALUE)
+                    .add(jPanel7Layout.createSequentialGroup()
+                        .add(jButtonSelectAllFonts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(4, 4, 4)
+                        .add(jButtonDeselectAllFonts, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Fonts", jPanel7);
 
         jPanel10.setLayout(new java.awt.GridBagLayout());
 
@@ -991,22 +1069,19 @@ final class IReportPanel extends javax.swing.JPanel {
         jPanel30.setBorder(javax.swing.BorderFactory.createTitledBorder("Report Viewers"));
         jPanel30.setLayout(new java.awt.GridBagLayout());
 
-        jPanel11.setLayout(new java.awt.GridBagLayout());
-
+        jLabelPDFViewer.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         org.openide.awt.Mnemonics.setLocalizedText(jLabelPDFViewer, "PDF Viewer");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
-        jPanel11.add(jLabelPDFViewer, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jLabelPDFViewer, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
-        jPanel11.add(jTextFieldPDFViewer, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jTextFieldPDFViewer, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButtonPDFViewer, "Browse");
         jButtonPDFViewer.addActionListener(new java.awt.event.ActionListener() {
@@ -1015,32 +1090,23 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
-        jPanel11.add(jButtonPDFViewer, gridBagConstraints);
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel30.add(jButtonPDFViewer, gridBagConstraints);
 
+        jLabelHTMLViewer.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelHTMLViewer, "HTML Viewer");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        jPanel30.add(jPanel11, gridBagConstraints);
-
-        jPanel12.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelHTMLViewer, "HTML Viewer");
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jLabelHTMLViewer, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
-        jPanel12.add(jLabelHTMLViewer, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
-        jPanel12.add(jTextFieldHTMLViewer, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jTextFieldHTMLViewer, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButtonHTMLViewer, "Browse");
         jButtonHTMLViewer.addActionListener(new java.awt.event.ActionListener() {
@@ -1049,32 +1115,23 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
-        jPanel12.add(jButtonHTMLViewer, gridBagConstraints);
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel30.add(jButtonHTMLViewer, gridBagConstraints);
 
+        jLabelXLSViewer.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelXLSViewer, "XLS Viewer");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        jPanel30.add(jPanel12, gridBagConstraints);
-
-        jPanel13.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelXLSViewer, "XLS Viewer");
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jLabelXLSViewer, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
-        jPanel13.add(jLabelXLSViewer, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
-        jPanel13.add(jTextFieldXLSViewer, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jTextFieldXLSViewer, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButtonXLSViewer, "Browse");
         jButtonXLSViewer.addActionListener(new java.awt.event.ActionListener() {
@@ -1083,32 +1140,23 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
-        jPanel13.add(jButtonXLSViewer, gridBagConstraints);
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel30.add(jButtonXLSViewer, gridBagConstraints);
 
+        jLabelCSVViewer.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelCSVViewer, "CSV Viewer");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        jPanel30.add(jPanel13, gridBagConstraints);
-
-        jPanel14.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelCSVViewer, "CSV Viewer");
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jLabelCSVViewer, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
-        jPanel14.add(jLabelCSVViewer, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
-        jPanel14.add(jTextFieldCSVViewer, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jTextFieldCSVViewer, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButtonCSVViewer, "Browse");
         jButtonCSVViewer.addActionListener(new java.awt.event.ActionListener() {
@@ -1117,32 +1165,23 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
-        jPanel14.add(jButtonCSVViewer, gridBagConstraints);
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel30.add(jButtonCSVViewer, gridBagConstraints);
 
+        jLabelTXTViewer.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelTXTViewer, "TXT Viewer");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        jPanel30.add(jPanel14, gridBagConstraints);
-
-        jPanel15.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelTXTViewer, "TXT Viewer");
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jLabelTXTViewer, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
-        jPanel15.add(jLabelTXTViewer, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
-        jPanel15.add(jTextFieldTXTViewer, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jTextFieldTXTViewer, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButtonTXTViewer, "Browse");
         jButtonTXTViewer.addActionListener(new java.awt.event.ActionListener() {
@@ -1151,32 +1190,23 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
-        jPanel15.add(jButtonTXTViewer, gridBagConstraints);
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel30.add(jButtonTXTViewer, gridBagConstraints);
 
+        jLabelRTFViewer.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelRTFViewer, "RTF Viewer");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        jPanel30.add(jPanel15, gridBagConstraints);
-
-        jPanel16.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelRTFViewer, "RTF Viewer");
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jLabelRTFViewer, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
-        jPanel16.add(jLabelRTFViewer, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
-        jPanel16.add(jTextFieldRTFViewer, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jTextFieldRTFViewer, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButtonRTFViewer, "Browse");
         jButtonRTFViewer.addActionListener(new java.awt.event.ActionListener() {
@@ -1185,32 +1215,23 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
-        jPanel16.add(jButtonRTFViewer, gridBagConstraints);
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel30.add(jButtonRTFViewer, gridBagConstraints);
 
+        jLabelODFViewer.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelODFViewer, "OpenDocument (ODF) Viewer");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        jPanel30.add(jPanel16, gridBagConstraints);
-
-        jPanel17.setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelODFViewer, "OpenOffice (ODF) Viewer");
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jLabelODFViewer, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
-        jPanel17.add(jLabelODFViewer, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
-        jPanel17.add(jTextFieldODFViewer, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jTextFieldODFViewer, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButtonODFViewer, "Browse");
         jButtonODFViewer.addActionListener(new java.awt.event.ActionListener() {
@@ -1219,33 +1240,48 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
-        jPanel17.add(jButtonODFViewer, gridBagConstraints);
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel30.add(jButtonODFViewer, gridBagConstraints);
 
+        jLabelODSViewer.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelODSViewer, "OpenDocument Spreedsheet (ODS) Viewer");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jLabelODSViewer, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        jPanel30.add(jPanel17, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jTextFieldODSViewer, gridBagConstraints);
 
-        jPanel28.setLayout(new java.awt.GridBagLayout());
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonODSViewer, "Browse");
+        jButtonODSViewer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonODSViewerActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel30.add(jButtonODSViewer, gridBagConstraints);
 
+        jLabelDOCXViewer.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         org.openide.awt.Mnemonics.setLocalizedText(jLabelDOCXViewer, "Microsoft Word (DOCX) Viewer");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
-        jPanel28.add(jLabelDOCXViewer, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jLabelDOCXViewer, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
-        jPanel28.add(jTextFieldDOCXViewer, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jTextFieldDOCXViewer, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButtonDOCXViewer, "Browse");
         jButtonDOCXViewer.addActionListener(new java.awt.event.ActionListener() {
@@ -1254,16 +1290,9 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
-        jPanel28.add(jButtonDOCXViewer, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        jPanel30.add(jPanel28, gridBagConstraints);
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel30.add(jButtonDOCXViewer, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1373,9 +1402,9 @@ final class IReportPanel extends javax.swing.JPanel {
             .add(jPanel18Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabelClasspath1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE)
+                    .add(jLabelClasspath1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel18Layout.createSequentialGroup()
-                        .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
+                        .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel19, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 122, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -1387,8 +1416,8 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelClasspath1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel19, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
-                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE))
+                    .add(jPanel19, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -1437,11 +1466,11 @@ final class IReportPanel extends javax.swing.JPanel {
                         .addContainerGap())
                     .add(jPanel27Layout.createSequentialGroup()
                         .add(jPanel27Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jCheckBoxUseReportDirectoryToCompile, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
+                            .add(jCheckBoxUseReportDirectoryToCompile, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
                             .add(jPanel27Layout.createSequentialGroup()
                                 .add(jLabelCompilationDirectory)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(jTextFieldCompilationDirectory, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)))
+                                .add(jTextFieldCompilationDirectory, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonCompilationDirectory))))
         );
@@ -1547,7 +1576,7 @@ final class IReportPanel extends javax.swing.JPanel {
                             .add(370, 370, 370))
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jPanel2Layout.createSequentialGroup()
-                                .add(jCheckBoxLimitRecordNumber, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
+                                .add(jCheckBoxLimitRecordNumber, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
                                 .add(311, 311, 311))
                             .add(jPanel2Layout.createSequentialGroup()
                                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1558,8 +1587,8 @@ final class IReportPanel extends javax.swing.JPanel {
                                             .add(jLabelReportLocale))
                                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldReportLocale, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
-                                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldTimeZone, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE))
+                                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldReportLocale, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldTimeZone, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE))
                                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                             .add(jButtonReportLocale)
@@ -1589,7 +1618,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jCheckBoxIgnorePagination)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jCheckBoxVirtualizer)
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Execution options", jPanel2);
@@ -1637,7 +1666,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelReportVirtualizerMinGrowCount)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jSpinnerVirtualizerGrownCount, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(306, Short.MAX_VALUE))
+                .addContainerGap(148, Short.MAX_VALUE))
         );
         jPanel23Layout.setVerticalGroup(
             jPanel23Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1687,10 +1716,10 @@ final class IReportPanel extends javax.swing.JPanel {
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel23, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jLabelReportVirtualizerDirectory)
                     .add(jPanelVirtualizerLayout.createSequentialGroup()
-                        .add(jTextFieldVirtualizerDir, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 687, Short.MAX_VALUE)
+                        .add(jTextFieldVirtualizerDir, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonVirtualizerDirBrowse))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jComboBoxVirtualizer, 0, 736, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jComboBoxVirtualizer, 0, 578, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel2)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jLabelReportVirtualizerSize, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 578, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jSpinnerVirtualizerSize, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
@@ -1715,7 +1744,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jSpinnerVirtualizerSize, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(0, 0, 0)
                 .add(jPanel23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Virtualizer", jPanelVirtualizer);
@@ -1728,7 +1757,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel21Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel27, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel21Layout.setVerticalGroup(
@@ -1737,7 +1766,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel27, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+                .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1815,9 +1844,9 @@ final class IReportPanel extends javax.swing.JPanel {
             .add(jPanel25Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel25Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabelQueryExecuters, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE)
+                    .add(jLabelQueryExecuters, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel25Layout.createSequentialGroup()
-                        .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 635, Short.MAX_VALUE)
+                        .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel25Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                             .add(jButtonAddQueryExecuter, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1838,7 +1867,7 @@ final class IReportPanel extends javax.swing.JPanel {
                         .add(jButtonModifyQueryExecuter, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonRemoveQueryExecuter, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE))
+                    .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -1848,13 +1877,11 @@ final class IReportPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPane1)
+            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .add(jTabbedPane1)
-                .addContainerGap())
+            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 399, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
         );
 
         jTabbedPane1.getAccessibleContext().setAccessibleName("General");
@@ -2573,6 +2600,109 @@ private void jButtonPDFViewer1ActionPerformed(java.awt.event.ActionEvent evt) {/
             jTextFieldExternalEditor.setText( jfc.getSelectedFile().getPath());
         }
 }//GEN-LAST:event_jButtonPDFViewer1ActionPerformed
+
+private void jButtonODSViewerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonODSViewerActionPerformed
+     javax.swing.JFileChooser jfc = new javax.swing.JFileChooser();
+
+            jfc.setDialogTitle("Choose an ODS viewer...");
+	    jfc.setMultiSelectionEnabled(false);
+	    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+		    jTextFieldODSViewer.setText( jfc.getSelectedFile().getPath());
+            }
+}//GEN-LAST:event_jButtonODSViewerActionPerformed
+
+private void jButtonInstallFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstallFontActionPerformed
+        InstallFontWizardDescriptor wizardDescriptor = new InstallFontWizardDescriptor();
+        if (wizardDescriptor.runWizard())
+        {
+            // update fonts list...
+            updateFontsList();
+        }
+}//GEN-LAST:event_jButtonInstallFontActionPerformed
+
+private void jListFontsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListFontsValueChanged
+
+    boolean enabled =  jListFonts.getSelectedValue() != null && jListFonts.getSelectedValue() instanceof SimpleFontFamilyEx;
+    jButtonEditFont.setEnabled(enabled);
+    jButtonRemoveFont.setEnabled(enabled);
+    jButtonExportFonts.setEnabled(enabled);
+
+}//GEN-LAST:event_jListFontsValueChanged
+
+private void jButtonRemoveFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveFontActionPerformed
+
+    DefaultListModel model = (DefaultListModel)jListFonts.getModel();
+    int[] selectedIndexes = jListFonts.getSelectedIndices();
+
+    for (int i=selectedIndexes.length -1; i>=0; --i)
+    {
+     int idx = selectedIndexes[i];
+
+     if (model.getElementAt(idx) instanceof SimpleFontFamily)
+     {
+         model.removeElementAt(idx);
+     }
+    }
+
+    List<SimpleFontFamilyEx> fonts = new ArrayList<SimpleFontFamilyEx>();
+
+    for (int i=0; i<model.size(); ++i)
+    {
+        if (model.get(i) instanceof SimpleFontFamilyEx)
+        {
+            fonts.add((SimpleFontFamilyEx)model.get(i));
+        }
+    }
+
+    IRFontUtils.saveFonts(fonts);
+    updateFontsList();
+
+}//GEN-LAST:event_jButtonRemoveFontActionPerformed
+
+private void jButtonEditFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditFontActionPerformed
+
+    if (jListFonts.getSelectedValue() == null) return;
+
+    if (jListFonts.getSelectedValue() instanceof SimpleFontFamilyEx)
+    {
+        int index = jListFonts.getSelectedIndex();
+        DefaultListModel model = (DefaultListModel)jListFonts.getModel();
+        SimpleFontFamilyEx font = (SimpleFontFamilyEx)model.getElementAt(index);
+        EditFontPanel pan = new EditFontPanel();
+        pan.setFontFamily(font);
+        if (pan.showDialog(this, true) == JOptionPane.OK_OPTION)
+        {
+            model.setElementAt(pan.getFontFamily(), index);
+            updateUI();
+
+            // Save fonts.xml...
+            List<SimpleFontFamilyEx> fonts = new ArrayList<SimpleFontFamilyEx>();
+
+            for (int i=0; i<model.size(); ++i)
+            {
+                if (model.get(i) instanceof SimpleFontFamilyEx)
+                {
+                    fonts.add((SimpleFontFamilyEx)model.get(i));
+                }
+            }
+
+            IRFontUtils.saveFonts(fonts);
+        }
+    }
+}//GEN-LAST:event_jButtonEditFontActionPerformed
+
+private void jListFontsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListFontsMouseClicked
+    if (SwingUtilities.isLeftMouseButton(evt) && evt.getClickCount() == 2)
+    {
+        jButtonEditFontActionPerformed(null);
+    }
+}//GEN-LAST:event_jListFontsMouseClicked
+
+private void jButtonExportFontsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExportFontsActionPerformed
+
+        IRFontUtils.export(jListFonts.getSelectedValues());
+
+}//GEN-LAST:event_jButtonExportFontsActionPerformed
     
             
     void load() {
@@ -2673,6 +2803,7 @@ private void jButtonPDFViewer1ActionPerformed(java.awt.event.ActionEvent evt) {/
         jTextFieldXLSViewer.setText(pref.get("ExternalXLSViewer", ""));
         jTextFieldRTFViewer.setText(pref.get("ExternalRTFViewer", ""));
         jTextFieldODFViewer.setText(pref.get("ExternalODFViewer", ""));
+        jTextFieldODSViewer.setText(pref.get("ExternalODSViewer", ""));
         jTextFieldTXTViewer.setText(pref.get("ExternalTXTViewer", ""));
         jTextFieldHTMLViewer.setText(pref.get("ExternalHTMLViewer", ""));
         jTextFieldDOCXViewer.setText(pref.get("ExternalDOCXViewer", ""));
@@ -2744,8 +2875,85 @@ private void jButtonPDFViewer1ActionPerformed(java.awt.event.ActionEvent evt) {/
 
         exportOptionsPanel.load();
         jrOptionsPanel.load();
-        
+
+
+        updateFontsList();
+
+
         setInit(false);
+
+    }
+
+
+    public void updateFontsList()
+    {
+
+        List<Object> fonts = new ArrayList<Object>();
+        List<String> names = new ArrayList<String>();
+
+
+        ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+        List<SimpleFontFamilyEx> editableFonts = IRFontUtils.loadFonts();
+        for(SimpleFontFamilyEx sff : editableFonts)
+        {
+            fonts.add(sff);
+            String fname = sff.getName();
+            names.add(fname);
+        }
+
+
+        try {
+            ((DefaultListModel)jListFonts.getModel()).removeAllElements();
+            Thread.currentThread().setContextClassLoader(new ReportClassLoader(IReportManager.getReportClassLoader()));
+
+            Collection extensionFonts = JRFontUtil.getFontFamilyNames();
+            for(Iterator it = extensionFonts.iterator(); it.hasNext();)
+            {
+                String fname = (String)it.next();
+                if (!names.contains(fname))
+                {
+                    fonts.add(fname);
+                }
+            }
+        } finally {
+            Thread.currentThread().setContextClassLoader(oldCL);
+        }
+
+
+
+        Object[] objs = fonts.toArray();
+
+        Arrays.sort(objs, new Comparator() {
+
+            public int compare(Object o1, Object o2) {
+
+                String s1 = null;
+                String s2 = null;
+
+                if (o1 instanceof String) s1 = (String)o1;
+                if (o1 instanceof SimpleFontFamilyEx)
+                {
+                    s1 = " " + ((SimpleFontFamilyEx)o1).getName();
+                }
+
+                if (o2 instanceof String) s2 = (String)o2;
+                if (o2 instanceof SimpleFontFamilyEx)
+                {
+                    s2 = " " + ((SimpleFontFamilyEx)o2).getName();
+                }
+
+                if (s1 != null && s2 != null)
+                {
+                    return s1.compareTo(s2);
+                }
+                return 0;
+            }
+        });
+
+        for (Object obj : objs)
+        {
+            ((DefaultListModel)jListFonts.getModel()).addElement(obj);
+        }
 
     }
 
@@ -2809,6 +3017,9 @@ private void jButtonPDFViewer1ActionPerformed(java.awt.event.ActionEvent evt) {/
 
         if (jTextFieldODFViewer.getText().length() > 0) pref.put("ExternalODFViewer", jTextFieldODFViewer.getText());
         else pref.remove("ExternalODFViewer");
+
+        if (jTextFieldODSViewer.getText().length() > 0) pref.put("ExternalODSViewer", jTextFieldODSViewer.getText());
+        else pref.remove("ExternalODSViewer");
 
         if (jTextFieldRTFViewer.getText().length() > 0) pref.put("ExternalRTFViewer", jTextFieldRTFViewer.getText());
         else pref.remove("ExternalRTFViewer");
@@ -2922,7 +3133,10 @@ private void jButtonPDFViewer1ActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JButton jButtonCompilationDirectory;
     private javax.swing.JButton jButtonDOCXViewer;
     private javax.swing.JButton jButtonDeselectAllFonts;
+    private javax.swing.JButton jButtonEditFont;
+    private javax.swing.JButton jButtonExportFonts;
     private javax.swing.JButton jButtonHTMLViewer;
+    private javax.swing.JButton jButtonInstallFont;
     private javax.swing.JButton jButtonModifyExpression;
     private javax.swing.JButton jButtonModifyQueryExecuter;
     private javax.swing.JButton jButtonMoveDownClasspathItem;
@@ -2930,11 +3144,13 @@ private void jButtonPDFViewer1ActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JButton jButtonMoveUpClasspathItem;
     private javax.swing.JButton jButtonMoveUpTemplate;
     private javax.swing.JButton jButtonODFViewer;
+    private javax.swing.JButton jButtonODSViewer;
     private javax.swing.JButton jButtonPDFViewer;
     private javax.swing.JButton jButtonPDFViewer1;
     private javax.swing.JButton jButtonRTFViewer;
     private javax.swing.JButton jButtonRemoveClasspathItem;
     private javax.swing.JButton jButtonRemoveExpression;
+    private javax.swing.JButton jButtonRemoveFont;
     private javax.swing.JButton jButtonRemoveQueryExecuter;
     private javax.swing.JButton jButtonRemoveTemplate;
     private javax.swing.JButton jButtonReportLocale;
@@ -2971,9 +3187,11 @@ private void jButtonPDFViewer1ActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JLabel jLabelDOCXViewer;
     private javax.swing.JLabel jLabelExpressions;
     private javax.swing.JLabel jLabelFontspath;
+    private javax.swing.JLabel jLabelFontspath1;
     private javax.swing.JLabel jLabelHTMLViewer;
     private javax.swing.JLabel jLabelMaxNumber;
     private javax.swing.JLabel jLabelODFViewer;
+    private javax.swing.JLabel jLabelODSViewer;
     private javax.swing.JLabel jLabelPDFViewer;
     private javax.swing.JLabel jLabelQueryExecuters;
     private javax.swing.JLabel jLabelRTFViewer;
@@ -2987,17 +3205,11 @@ private void jButtonPDFViewer1ActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JLabel jLabelTimeZone1;
     private javax.swing.JLabel jLabelTimeZone2;
     private javax.swing.JLabel jLabelXLSViewer;
+    private javax.swing.JList jListFonts;
     private com.jaspersoft.ireport.designer.fonts.CheckBoxList jListFontspath;
     private javax.swing.JList jListTemplates;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
-    private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel14;
-    private javax.swing.JPanel jPanel15;
-    private javax.swing.JPanel jPanel16;
-    private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
@@ -3009,7 +3221,6 @@ private void jButtonPDFViewer1ActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JPanel jPanel25;
     private javax.swing.JPanel jPanel26;
     private javax.swing.JPanel jPanel27;
-    private javax.swing.JPanel jPanel28;
     private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel30;
@@ -3017,10 +3228,9 @@ private void jButtonPDFViewer1ActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JPanel jPanelCompatibility;
     private javax.swing.JPanel jPanelVirtualizer;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -3042,6 +3252,7 @@ private void jButtonPDFViewer1ActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JTextField jTextFieldExternalEditor;
     private javax.swing.JTextField jTextFieldHTMLViewer;
     private javax.swing.JTextField jTextFieldODFViewer;
+    private javax.swing.JTextField jTextFieldODSViewer;
     private javax.swing.JTextField jTextFieldPDFViewer;
     private javax.swing.JTextField jTextFieldRTFViewer;
     private javax.swing.JTextField jTextFieldReportLocale;
@@ -3144,5 +3355,6 @@ private void jButtonPDFViewer1ActionPerformed(java.awt.event.ActionEvent evt) {/
     private void classpathChanged()
     {
         setFontspath(getFontspath(), getClasspath(true));
+        updateFontsList();
     }
 }

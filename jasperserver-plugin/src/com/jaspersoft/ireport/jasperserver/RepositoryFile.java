@@ -77,6 +77,13 @@ public class RepositoryFile extends RepositoryFolder {
     
     public String getExtension()
     {
+        String name = getDescriptor().getName();
+        String ext = null;
+        if (name.lastIndexOf(".") >= 0)
+        {
+            ext = name.substring(name.lastIndexOf(".")+1);
+        }
+        if (ext != null && ext.length() > 0) return ext;
         return null;
     }
     /**

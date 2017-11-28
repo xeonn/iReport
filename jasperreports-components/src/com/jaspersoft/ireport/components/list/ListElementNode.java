@@ -26,6 +26,8 @@ package com.jaspersoft.ireport.components.list;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementPasteType;
+import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
@@ -132,6 +134,9 @@ public class ListElementNode extends ElementNode {
         set.setDisplayName(I18n.getString("List"));
         DesignListContents contents = (DesignListContents) ((StandardListComponent)((JRDesignComponentElement)this.getElement()).getComponent()).getContents();
         set.put(new ListContentsHeightProperty(contents));
+        set.put(new ListContentsWidthProperty(contents));
+        set.put(new PrintOrderProperty((StandardListComponent)((JRDesignComponentElement)this.getElement()).getComponent()));
+
         sheet.put( set);
         
         return sheet;
@@ -144,11 +149,82 @@ public class ListElementNode extends ElementNode {
         {
             firePropertyChange("LC" + DesignListContents.PROPERTY_HEIGHT, null, null);
         }
+
+        if (evt != null &&
+            JRDesignElement.PROPERTY_WIDTH.equals(evt.getPropertyName()))
+        {
+            firePropertyChange("LC" + DesignListContents.PROPERTY_WIDTH, null, null);
+        }
         super.propertyChange(evt);
     }
 
+}
 
 
+/**
+ *  Class to manage the JasperDesign.PROPERTY_ORIENTATION property
+ */
+class PrintOrderProperty extends ByteProperty
+{
+        private final StandardListComponent element;
 
+        @SuppressWarnings("unchecked")
+        public PrintOrderProperty(StandardListComponent element)
+        {
+            super(element);
+            this.element = element;
+        }
+
+        @Override
+        public String getName()
+        {
+            return StandardListComponent.PROPERTY_PRINT_ORDER;
+        }
+
+        @Override
+        public String getDisplayName()
+        {
+            return I18n.getString("StandardListComponent.Property.PrintOrder");
+        }
+
+        @Override
+        public String getShortDescription()
+        {
+            return I18n.getString("StandardListComponent.Property.PrintOrder.detail");
+        }
+
+        @Override
+        public List getTagList()
+        {
+            List tags = new java.util.ArrayList();
+            tags.add(new Tag(new Byte(JasperDesign.PRINT_ORDER_VERTICAL), I18n.getString("ReportNode.Property.Vertical")));
+            tags.add(new Tag(new Byte(JasperDesign.PRINT_ORDER_HORIZONTAL), I18n.getString("ReportNode.Property.Horizontal")));
+
+            return tags;
+        }
+
+        @Override
+        public Byte getByte()
+        {
+            return element.getPrintOrder();
+        }
+
+        @Override
+        public Byte getOwnByte()
+        {
+            return element.getPrintOrder();
+        }
+
+        @Override
+        public Byte getDefaultByte()
+        {
+            return null;
+        }
+
+        @Override
+        public void setByte(Byte orderType)
+        {
+            element.setPrintOrder(orderType);
+        }
 
 }

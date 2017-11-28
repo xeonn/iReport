@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.1//EN" "http://www.netbeans.org/dtds/filesystem-1_1.dtd">
 <filesystem>
+    <attr name="Menu\Format\position" intvalue="350"/>
+    <attr name="Menu\Help\Separator1.instance\position" intvalue="200"/>
+    <attr name="Menu\Help\master-help.xml\position" intvalue="400"/>
+    <attr name="Menu\Help\org-netbeans-core-actions-AboutAction.instance\position" intvalue="600"/>
+    <attr name="Menu\Help\org-netbeans-modules-autoupdate-ui-actions-CheckForUpdatesAction.shadow\position" intvalue="500"/>
     <attr name="Menu\Help\position" intvalue="1200"/>
+    <attr name="Menu\Tools\PaletteManager\position" intvalue="-100"/>
+    <attr name="Menu\Tools\com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow\position" intvalue="0"/>
+    <attr name="Menu\Tools\org-openide-actions-ToolsAction.instance\position" intvalue="443"/>
     <attr name="Menu\Window\position" intvalue="1100"/>
     <attr name="Menu\Tools\position" intvalue="1000"/>
     <attr name="Menu\View\position" intvalue="400"/>
@@ -54,7 +62,7 @@
 
         
         <folder name="Edit">
-            <attr name="position" intvalue="300"/>
+            <attr name="position" intvalue="290"/>
             <file name="Separator2.instance_hidden"/>
             <file name="SeparatorAfterFindPrevious.instance_hidden"/>
             <file name="SeparatorAfterProjectsSearch.instance_hidden"/>
@@ -73,6 +81,8 @@
         </folder>
         <folder name="File">
             <attr name="position" intvalue="200"/>
+            <file name="SeparatorNew.instance_hidden"/>
+            <file name="SeparatorOpen.instance_hidden"/>
             <file name="com-jaspersoft-ireport-designer-standalone-actions-RecentFilesAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Menu/com-jaspersoft-ireport-designer-standalone-actions-RecentFileAction.instance"/>
                 <attr name="position" intvalue="1450"/>
@@ -95,7 +105,7 @@
             </file> -->
             <file name="com-jaspersoft-ireport-designer-standalone-menu-OpenFileAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Menu/com-jaspersoft-ireport-designer-standalone-menu-OpenFileAction.instance"/>
-                <attr name="position" intvalue="1400"/>
+                <attr name="position" intvalue="1401"/>
             </file>
             <!-- <file name="org-netbeans-modules-openfile-RecentFileAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Menu/org-netbeans-modules-openfile-RecentFileAction.instance"/>
@@ -106,26 +116,40 @@
                 <attr name="position" intvalue="1550"/>
             </file>
             <file name="org-netbeans-modules-openfile-OpenFileAction.instance_hidden"/>
+            <file name="org-netbeans-modules-openfile-OpenFileAction.shadow_hidden"/>
             <file name="org-netbeans-modules-openfile-RecentFileAction.instance_hidden"/>
+            <file name="org-netbeans-modules-project-ui-CloseProject.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-CustomizeProject.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-NewFile.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-NewProject.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-OpenProject.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-RecentProjects.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-groups-GroupsMenu.shadow_hidden"/>
             <file name="org-openide-actions-SaveAsAction.shadow_hidden"/>
         </folder>
         <file name="GoTo_hidden"/>
         <file name="Refactoring_hidden"/>
+        <file name="RunProject_hidden"/>
         <file name="Source_hidden"/>
         <folder name="Help">
-            <attr name="com-jaspersoft-ireport-designer-standalone-menu-GoToBugsAction.shadow/master-help.xml" boolvalue="true"/>
             <file name="com-jaspersoft-ireport-designer-standalone-menu-GoToBugsAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Designer/com-jaspersoft-ireport-designer-standalone-menu-GoToBugsAction.instance"/>
+                <attr name="position" intvalue="100"/>
             </file>
-            <file name="iReport.url" url="nbresloc:/com/jaspersoft/ireport/designer/standalone/ireport.url"/>
+            <file name="iReport.url" url="nbresloc:/com/jaspersoft/ireport/designer/standalone/ireport.url">
+                <attr name="position" intvalue="150"/>
+            </file>
             <file name="netbeans-kb.url_hidden"/>
             <file name="shortcuts.xml_hidden"/>
+        </folder>
+        <folder name="Tools">
+            <file name="ServerManagerAction3.instance_hidden"/>
         </folder>
         <folder name="Window">
             <attr name="position" intvalue="700"/>
             <file name="FormattingToolsAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-formatting-FormattingToolsAction.instance"/>
-                <attr name="position" intvalue="100"/>
+                <attr name="position" intvalue="101"/>
             </file>
             <file name="OutlineAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-outline-OutlineAction.instance"/>
@@ -142,7 +166,7 @@
             </file>
             <file name="JRViewerAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-jasperserver-ui-JRViewerAction.instance"/>
-                <attr name="position" intvalue="350"/>
+                <attr name="position" intvalue="348"/>
             </file>
             
 
@@ -165,6 +189,8 @@
                 <attr name="position" intvalue="352"/>
             </file>
 
+            <file name="org-netbeans-modules-project-ui-logical-tab-action.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-physical-tab-action.shadow_hidden"/>
         </folder>
     </folder>
     <folder name="Templates">
@@ -176,11 +202,32 @@
             </file>
         </folder>
     </folder>
+    <folder name="Toolbars">
+        <file name="Build_hidden"/>
+        <folder name="File">
+            <file name="org-netbeans-modules-project-ui-NewFile.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-NewProject.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-OpenProject.shadow_hidden"/>
+        </folder>
+        <file name="Standard.xml" url="Standard.xml"/>
+    </folder>
     <folder name="Windows2">
+        <folder name="Components">
+            <file name="projectTabLogical_tc.settings_hidden"/>
+            <file name="projectTab_tc.settings_hidden"/>
+        </folder>
         <folder name="Modes">
+            <folder name="runtime">
+                <file name="runtime.wstcref" url="runtimeWstcref.xml"/>
+            </folder>
             <folder name="explorer">
+                <file name="projectTabLogical_tc.wstcref_hidden"/>
+                <file name="projectTab_tc.wstcref_hidden"/>
                 <file name="runtime.wstcref_hidden"/>
             </folder>
+            <file name="explorer.wsmode" url="explorerWsmode.xml"/>
+            <file name="runtime.wsmode" url="runtimeWsmode.xml"/>
         </folder>
+        <file name="WindowManager.wswmgr" url="WindowManager.wswmgr"/>
     </folder>
 </filesystem>

@@ -500,14 +500,20 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
 
                     lastSaveContributor = contributor;
 
+                    ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
                     try
                     {
+                            Thread.currentThread().setContextClassLoader(IReportManager.getJRExtensionsClassLoader());
                             contributor.save(getViewerContext().getJasperPrint(), file);
                     }
                     catch (JRException e)
                     {
                             e.printStackTrace();
                             JOptionPane.showMessageDialog(this, getViewerContext().getBundleString(I18n.getString("JrxmlPreviewToolbar.Message.Warning")));
+                    }
+                    finally
+                    {
+                        Thread.currentThread().setContextClassLoader(oldClassLoader);
                     }
             }
 }//GEN-LAST:event_btnSaveActionPerformed

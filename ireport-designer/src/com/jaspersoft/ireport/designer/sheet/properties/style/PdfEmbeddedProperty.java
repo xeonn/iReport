@@ -60,6 +60,11 @@ public final class PdfEmbeddedProperty extends PropertySupport.ReadWrite {
     }
 
     @Override
+    public String getHtmlDisplayName() {
+        return "<html><s>" + getDisplayName();
+    }
+
+    @Override
     public boolean isDefaultValue() {
         return style.isOwnPdfEmbedded() == null;
     }

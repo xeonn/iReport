@@ -45,6 +45,9 @@ public class ExpressionInterpreter {
     Interpreter interpreter = null;
     JasperDesign jasperDesign = null;
 
+
+    private boolean convertNullParams = false;
+
     public ExpressionInterpreter(JRDesignDataset dataset, ClassLoader classLoader)
     {
         this(dataset, classLoader, null);
@@ -87,7 +90,11 @@ public class ExpressionInterpreter {
                     // evaluate the Default expression value
                     
                     // Integer expID = (Integer)parameterNameToExpressionID.get(parameter.getName());
-                    
+
+                    int ip1 = expression.indexOf(p1);
+
+                    if (ip1 < 0) continue;
+
                     Object defValue;
                     if(  parameter.getDefaultValueExpression() != null &&  !parameter.getDefaultValueExpression().equals("") ) {
                         String expText = "";
@@ -100,23 +107,32 @@ public class ExpressionInterpreter {
                     } else {
                         // this param does not have a default value.
                         defValue = null;
+                        if (isConvertNullParams())
+                        {
+                            if (parameter.getValueClassName().equals("java.lang.String"))
+                            {
+                                defValue = "";
+                            }
+                        }
                     }
 
 
-                    int ip1 = expression.indexOf(p1);
+                    
                     while( ip1 != -1 ) {
-                        // String replacement, Altering the SQL statement.
-                        if( defValue==null ) {
-                            return null;
-                        }
+                        // String replacement...
+                        //if( defValue==null ) {
+                        //    return null;
+                        //}
 
                         String before = expression.substring(0, ip1);
                         String after = expression.substring(ip1+p1.length());
                         
                         String param_name_literal = "param_" + net.sf.jasperreports.engine.util.JRStringUtil.getLiteral(parameter.getName()); 
-                
-                                
+
                         expression = before + param_name_literal + after;
+                        // set the value...
+                        interpreter.set(param_name_literal, defValue);
+
                         /*
                         if (parameter.getValueClassName().equals("java.lang.String"))
                         {
@@ -148,6 +164,7 @@ public class ExpressionInterpreter {
                 }
                 
                 //System.out.println("Evaluating exp: " + expression);
+
              return interpreter.eval(expression);
         
         } catch (EvalError error)
@@ -269,5 +286,19 @@ public class ExpressionInterpreter {
             return res;
         }
         return null;
+    }
+
+    /**
+     * @return the convertNullParams
+     */
+    public boolean isConvertNullParams() {
+        return convertNullParams;
+    }
+
+    /**
+     * @param convertNullParams the convertNullParams to set
+     */
+    public void setConvertNullParams(boolean convertNullParams) {
+        this.convertNullParams = convertNullParams;
     }
 }

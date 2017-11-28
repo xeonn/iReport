@@ -53,7 +53,7 @@ import org.openide.windows.WindowManager;
 /**
  * Top component which displays something.
  */
-final class RepositoryTopComponent extends TopComponent implements ExplorerManager.Provider {
+final public class RepositoryTopComponent extends TopComponent implements ExplorerManager.Provider {
 
     private static RepositoryTopComponent instance;
     /** path to the icon used by the component and its open action */

@@ -25,6 +25,7 @@ package com.jaspersoft.ireport.jasperserver.validation;
 
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
+import com.jaspersoft.ireport.jasperserver.RepoImageCache;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 
 import java.util.List;
@@ -33,6 +34,7 @@ import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
+import net.sf.jasperreports.engine.util.JRExpressionUtil;
 
 /**
  *
@@ -94,32 +96,48 @@ public class UploadResourcesDialog extends javax.swing.JDialog implements Runnab
                 newDescriptor.setName( evi.getResourceName() );
                 newDescriptor.setLabel( evi.getResourceName() );
                 newDescriptor.setIsNew(true);
-                newDescriptor.setHasData(true);
-                    
-                if (evi instanceof ImageElementValidationItem)
+
+                if (evi.isStoreAsLink())
                 {
-                    ImageElementValidationItem iev = (ImageElementValidationItem)evi;
-                    //Image img = ((ImageReportElement)iev.getReportElement()).getImg();
-                    JRDesignExpression exp = (JRDesignExpression)((JRDesignImage)iev.getReportElement()).getExpression();
-                    exp.setText("\"" + iev.getProposedExpression() + "\"");
-                    
-                    // TODO:
-                    // Add the image to the FileResolver so it can be found by the visual
-                    // components at design time...
-                    //((ImageReportElement) iev.getReportElement()).setImg( img );
-                    
-                    jProgressBar1.setValue(20);
-                    newDescriptor.setWsType(  ResourceDescriptor.TYPE_IMAGE );
-                    //newDescriptor.setParentFolder( (vd.getReportUnit() != null) ? vd.getReportUnit().getDescriptor().getUriString() : "/");
+                     newDescriptor.setHasData(true);
+                     newDescriptor.setIsReference(true);
+                     newDescriptor.setReferenceUri( evi.getReferenceUri()  );
+                     newDescriptor.setWsType(  ResourceDescriptor.TYPE_REFERENCE);
                 }
-                else if (evi instanceof SubReportElementValidationItem)
+                else
                 {
-                    SubReportElementValidationItem iev = (SubReportElementValidationItem)evi;
-                    JRDesignExpression exp = (JRDesignExpression)((JRDesignSubreport)iev.getReportElement()).getExpression();
-                    exp.setText("\"" + iev.getProposedExpression() + "\"");
-                    newDescriptor.setWsType(  ResourceDescriptor.TYPE_JRXML );
+                    newDescriptor.setHasData(true);
+
+                    if (evi instanceof ImageElementValidationItem)
+                    {
+                        ImageElementValidationItem iev = (ImageElementValidationItem)evi;
+                        //Image img = ((ImageReportElement)iev.getReportElement()).getImg();
+                        JRDesignExpression exp = (JRDesignExpression)((JRDesignImage)iev.getReportElement()).getExpression();
+                        exp.setText(iev.getProposedExpression());
+
+                        // Add the image to the FileResolver so it can be found by the visual
+                        // components at design time...
+                        RepoImageCache.getInstance().put(JRExpressionUtil.getSimpleExpressionText(exp), iev.getOriginalFileName());
+
+                        jProgressBar1.setValue(20);
+                        newDescriptor.setWsType(  ResourceDescriptor.TYPE_IMAGE );
+                        //newDescriptor.setParentFolder( (vd.getReportUnit() != null) ? vd.getReportUnit().getDescriptor().getUriString() : "/");
+                    }
+                    else if (evi instanceof SubReportElementValidationItem)
+                    {
+                        SubReportElementValidationItem iev = (SubReportElementValidationItem)evi;
+                        JRDesignExpression exp = (JRDesignExpression)((JRDesignSubreport)iev.getReportElement()).getExpression();
+                        exp.setText(iev.getProposedExpression());
+                        newDescriptor.setWsType(  ResourceDescriptor.TYPE_JRXML );
+                    }
+                    else if (evi instanceof TemplateElementValidationItem)
+                    {
+                        TemplateElementValidationItem iev = (TemplateElementValidationItem)evi;
+                        JRDesignExpression exp = (JRDesignExpression)(iev.getTemplate().getSourceExpression());
+                        exp.setText(iev.getProposedExpression());
+                        newDescriptor.setWsType(  ResourceDescriptor.TYPE_STYLE_TEMPLATE );
+                    }
                 }
-                    
                 jLabel.setText(
                         JasperServerManager.getFormattedString("uploadResourcesDialog.uploadingResource","Uploading {0}",new Object[]{evi.getOriginalFileName().getName()}));
                 
@@ -143,7 +161,7 @@ public class UploadResourcesDialog extends javax.swing.JDialog implements Runnab
                 {
                     vd.getServer().getWSClient().modifyReportUnitResource(
                                 (vd.getReportUnit() != null) ? vd.getReportUnit().getDescriptor().getUriString() : null,
-                                newDescriptor, evi.getOriginalFileName());
+                                newDescriptor, (evi.isStoreAsLink()) ? null : evi.getOriginalFileName());
                 }
                 jProgressBar1.setValue( (int)(100.0/(double)i));
             }

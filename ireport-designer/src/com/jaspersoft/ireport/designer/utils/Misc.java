@@ -25,6 +25,8 @@ package com.jaspersoft.ireport.designer.utils;
 
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.JrxmlEditorSupport;
+import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.tools.JNumberComboBox;
 import com.jaspersoft.ireport.locale.I18n;
@@ -33,18 +35,18 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.Window;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.text.MessageFormat;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,10 +72,9 @@ import org.openide.filesystems.Repository;
 import org.openide.loaders.DataFolder;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
-import org.openide.util.Exceptions;
+import org.openide.modules.InstalledFileLocator;
 import org.openide.util.Lookup;
 import org.openide.util.Mutex;
-import org.openide.util.actions.NodeAction;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import org.w3c.dom.Node;
@@ -159,8 +160,15 @@ public class Misc {
     {
         if (mainFrame == null)
         {
-            WindowManager w = Lookup.getDefault().lookup( WindowManager.class );
-            mainFrame =  (w == null) ? null : w.getMainWindow();
+            Runnable run = new Runnable() {
+
+                public void run() {
+                     WindowManager w = Lookup.getDefault().lookup( WindowManager.class );
+                     mainFrame =  (w == null) ? null : w.getMainWindow();
+                }
+            };
+
+            Mutex.EVENT.readAccess(run);
         }
         return mainFrame;
     }
@@ -203,15 +211,15 @@ public class Misc {
                 return null;
         }
 
-    public static void msg(String string) {
-        Logger.global.log(Level.INFO, string );
-        java.util.logging.Handler[] handlres = Logger.global.getHandlers();
+    public static void log(String string) {
+        Logger.getLogger( Misc.class.getName() ).log(Level.INFO, string );
+        java.util.logging.Handler[] handlres = Logger.getLogger( Misc.class.getName() ).getHandlers();
         for (int i=0; i<handlres.length; ++i) handlres[i].flush();
     }
     
-    public static void msg(String string, Throwable t) {
-        Logger.global.log(Level.SEVERE, string, t);
-        java.util.logging.Handler[] handlres = Logger.global.getHandlers();
+    public static void log(String string, Throwable t) {
+       Logger.getLogger( Misc.class.getName() ).log(Level.SEVERE, string, t);
+        java.util.logging.Handler[] handlres = Logger.getLogger( Misc.class.getName() ).getHandlers();
         for (int i=0; i<handlres.length; ++i) handlres[i].flush();
     }
 
@@ -827,7 +835,7 @@ public class Misc {
         try {
             org.openide.nodes.Node[] nodes = TopComponent.getRegistry().getActivatedNodes();
             for (int i = 0; i < nodes.length; i++) {
-                DataObject d = (DataObject) nodes[i].getCookie(DataObject.class);
+                DataObject d = nodes[i].getCookie(DataObject.class);
                 if (d != null) {
                     File f = FileUtil.toFile(d.getPrimaryFile());
                     if (f != null) {
@@ -893,6 +901,42 @@ public class Misc {
             }
         }
         return true;
+    }
+
+
+    public static boolean setComboBoxTag( boolean firstTime, Object value, javax.swing.JComboBox comboField ) {
+
+        if (firstTime)
+        {
+            Misc.setComboboxSelectedTagValue(comboField, value);
+            return true;
+        }
+
+        String selectedFont = null;
+
+        if (comboField.getSelectedItem() != null)
+        {
+            if (comboField.getSelectedItem() instanceof Tag)
+            {
+                selectedFont = (String)((Tag)comboField.getSelectedItem()).getValue();
+            }
+            else
+            {
+                selectedFont = ""+comboField.getSelectedItem();
+            }
+        }
+
+        if (selectedFont != null && selectedFont.equals(value))
+        {
+            return true;
+        }
+
+        if (comboField.isEditable())
+        {
+            comboField.setSelectedItem("");
+        }
+        
+        return false;
     }
         
    public static boolean setElementComboNumber( boolean firstTime, double value, JNumberComboBox numberField ) {
@@ -1099,5 +1143,117 @@ public class Misc {
         return false;
     }
    
-   
+
+    public static JrxmlVisualView getViewForFile(File file)
+    {
+        Set<TopComponent> components = WindowManager.getDefault().getRegistry().getOpened();
+
+        for (TopComponent t : components)
+        {
+            JrxmlEditorSupport jrxmlEditorSupport = t.getLookup().lookup(JrxmlEditorSupport.class);
+
+            if (jrxmlEditorSupport != null && jrxmlEditorSupport.getDataObject().getPrimaryFile() != null)
+            {
+                File f = FileUtil.toFile(jrxmlEditorSupport.getDataObject().getPrimaryFile());
+                if (f.equals(file))
+                {
+                    return (JrxmlVisualView)(jrxmlEditorSupport.getDescriptions()[0]);
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * This is the fonts directory...
+     * 
+     * @return
+     */
+    public static File getFontsDirectory()
+    {
+        File fontsDir = InstalledFileLocator.getDefault().locate("fonts", null, false);
+        if (fontsDir != null && fontsDir.exists() && fontsDir.isDirectory())
+        {
+            return fontsDir;
+        }
+
+        return null;
+    }
+
+
+    /**
+     * convert a single char to its equivalent XML entity. Ordinary chars are not changed. 160 -> &nbsp;  weird chars
+     * -> &#nnn; form
+     *
+     * @param c Char to convert
+     *
+     * @return equivalent string e.g. &amp;, null means leave char as is.
+     */
+    public static String escapeXMLEntity( String s )
+    {
+
+        StringBuffer buf = new StringBuffer("");
+        for (int i=0; i<s.length(); ++i)
+        {
+            char c = s.charAt(i);
+            switch ( c )
+            {
+            default:
+                if ( c < 127 )
+                    {
+                    // leave alone as equivalent string.
+                    buf.append(c);
+                    break;
+                    // faster than String.valueOf( c ).intern();
+                    }
+                else
+                    {
+                    // use the &#nnn; form
+                    buf.append("&#" + Integer.toString( c ) + ";");
+                    break;
+                    }
+
+                // don NOT modify the following code. It is not generated.
+
+            case 34:
+                buf.append("&quot;")/* &#x22; quotation mark */;
+                break;
+            case 38:
+                buf.append("&amp;");/* &#x26; ampersand */;
+                break;
+            //            case 39:    // don't use apos, to make more compatible with HTML
+            //                return "&apos;"/* &#x27; apos */
+            case 60:
+                buf.append("&lt;");/* &#x3c; less-than sign */;
+                break;
+            case 62:
+                buf.append("&gt;");/* &#x3e; greater-than sign */;
+                break;
+            case 160:
+                buf.append("&nbsp;"); /* &#x01; nbsp */
+                break;
+            }// end switch
+
+        // can't fall out bottom
+        }// end charToXMLEntity
+
+        return buf.toString();
+    }
+
+
+    public static void copyFile(File from, File to) throws java.io.IOException
+    {
+        FileInputStream fis = new FileInputStream(from);
+        FileOutputStream fos = new FileOutputStream(to);
+        FileUtil.copy(fis,fos);
+        fis.close();
+        fos.close();
+    }
+
+    public static void copyFile(String from, String to) throws java.io.IOException
+    {
+        copyFile(new File(from), new File(to));
+    }
 }
+
+

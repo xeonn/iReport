@@ -57,7 +57,7 @@ public class FontNameProperty extends PropertySupport.ReadWrite implements Prefe
     {
         super(JRBaseStyle.PROPERTY_FONT_NAME, String.class,
               I18n.getString("Global.Property.Fontname"),
-              I18n.getString("Global.Property.Fontname"));
+              I18n.getString("Global.Property.FontnameDetails"));
         this.font = font;
 
         setValue("canEditAsText",true);
@@ -121,14 +121,23 @@ public class FontNameProperty extends PropertySupport.ReadWrite implements Prefe
             classes.add(new Tag(fname));
         }
 
-        String[] names = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-        classes.add(new Tag("sansserif","SansSerif"));
-        for (int i = 0; i < names.length; i++) {
-                String name = names[i];
-                classes.add(new Tag(name));
-        }
-
         Thread.currentThread().setContextClassLoader(oldCL);
+
+
+        if (IReportManager.getPreferences().getBoolean("showSystemFonts", true))
+        {
+
+            String[] names = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+            //classes.add(new Tag("sansserif","SansSerif"));
+
+            classes.add(new Tag(null,"__________"));
+
+            for (int i = 0; i < names.length; i++) {
+                    String name = names[i];
+                    classes.add(new Tag(name));
+            }
+
+        }
 
         if (editor == null)
         {

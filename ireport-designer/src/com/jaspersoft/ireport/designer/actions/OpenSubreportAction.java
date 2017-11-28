@@ -24,13 +24,17 @@
 package com.jaspersoft.ireport.designer.actions;
 
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.JrxmlEditorSupport;
 import com.jaspersoft.ireport.designer.JrxmlVisualView;
+import com.jaspersoft.ireport.designer.SubreportOpenerProvider;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.utils.ExpressionInterpreter;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Collection;
+import java.util.Iterator;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
@@ -40,7 +44,9 @@ import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
 import org.openide.util.HelpCtx;
+import org.openide.util.Lookup;
 import org.openide.util.actions.NodeAction;
+import org.openide.util.lookup.Lookups;
 
 /**
  *
@@ -95,10 +101,16 @@ public final class OpenSubreportAction extends NodeAction {
         JRDesignDataset dataset =  jasperDesign.getMainDesignDataset();
         ClassLoader classLoader = IReportManager.getReportClassLoader();
 
+        File fileToOpen = null;
+        JrxmlEditorSupport es = IReportManager.getInstance().getActiveVisualView().getEditorSupport();
+
+
+        String error = null;
         try {
 
             // Try to process the expression...
             ExpressionInterpreter interpreter = new ExpressionInterpreter(dataset, classLoader);
+            interpreter.setConvertNullParams(true);
 
             Object ret = interpreter.interpretExpression( subreport.getExpression().getText() );
 
@@ -136,7 +148,8 @@ public final class OpenSubreportAction extends NodeAction {
                         urls = new URL[]{ reportFolder.toURI().toURL()};
                     }
                     URLClassLoader urlClassLoader = new URLClassLoader(urls, classLoader);
-                    URL url = urlClassLoader.findResource(resourceName);
+                    while (resourceName.startsWith("/")) resourceName = resourceName.substring(1);
+                    URL url = urlClassLoader.getResource(resourceName);
                     if (url == null)
                     {
                         throw new Exception(resourceName + " not found.");
@@ -145,7 +158,7 @@ public final class OpenSubreportAction extends NodeAction {
                     f = new File(url.getPath());
                     if (f.exists())
                     {
-                        openFile(f);
+                        fileToOpen = f;
                     }
                     else
                     {
@@ -154,23 +167,71 @@ public final class OpenSubreportAction extends NodeAction {
                 }
                 else
                 {
-                    openFile(f);
+                    fileToOpen = f;
                 }
 
              }
             else
             {
-                subreportNotFound("The subreport expression returned null. I'm unable to locate the subreport jrxml :-(");
+                throw new Exception();
             }
         } catch (Throwable ex) {
 
-            subreportNotFound(ex.getMessage());
+            fileToOpen = null;
+            error = ex.getMessage();
             ex.printStackTrace();
         }
 
         
+        fileToOpen = notifySubreportProviders(es, subreport, fileToOpen);
+        
+        if (fileToOpen != null)
+        {
+            try {
+                openFile(fileToOpen);
+            } catch (Throwable ex) {
+                error = ex.getMessage();
+                subreportNotFound(error);
+                ex.printStackTrace();
+            }
+        }
+        else
+        {
+            if (error == null)
+            {
+                error = "The subreport expression returned null. I'm unable to locate the subreport jrxml :-(";
+            }
+            subreportNotFound(error);
+        }
     }
 
+    protected File notifySubreportProviders(JrxmlEditorSupport ed, JRDesignSubreport subreportElement, File file)
+    {
+
+        Lookup lookup = Lookups.forPath("ireport/SubreportOpenerProviders"); // NOI18N
+        Collection<? extends SubreportOpenerProvider> subreportProviders = lookup.lookupAll(SubreportOpenerProvider.class);
+
+        Iterator<? extends SubreportOpenerProvider> it = subreportProviders.iterator();
+        while (it.hasNext ()) {
+
+            SubreportOpenerProvider subreportOpenerProvider = it.next();
+
+            try {
+                File f = subreportOpenerProvider.openingSubreport(ed, subreportElement, file);
+                if (f!=null)
+                {
+                    file = f;
+                }
+
+            } catch (Throwable t)
+            {
+                t.printStackTrace();
+            }
+        }
+
+        return file;
+
+    }
     
      
      

@@ -1,3 +1,44 @@
+2009-10-28 Version 3.6.1 released
+_______________________________________________________________________________
+- New command line option (-N) to disable the use of a network
+- New font combo box on the text toolbar
+- Moved to the NetBeans platform 6.5.1
+- Added the SubreportOpenerProvider interface to plug custom subreport opening logic
+- New XLS (Excel) datasource
+- New OpenDocument Spreadsheet exporter added (ODS)
+- New XLSX exporter
+- New TrueType font management
+- Wizard to import TrueType Fonts
+- Wizard to create JasperReports font extensions
+- Improved JasperReports properties internal management
+- Full support for JasperReports 3.6.1
+- Support for horizontal filling of the List components (printOrder property)
+- Support for the new isSummaryWithPageHeaderAndFooter property in the report properties
+- Fixed Bug 16524 Styles library not working.
+- Fixed bug 14773 JS Plug-in should handle creation of links to images in the repository already
+- Fixed bug 15629 Would like dialog to move style references to repo: as for images
+- Fixed bug 15960 Can not delete server entry from Repository Navigator
+- Fixed bug 15962 Incorrect visual crosstab formatting in iReport 3.5.0+
+- Fixed bug 16565 Chart Details UI - Percentage spelled incorrectly
+- Fixed bug 16566 Sort Options shows arrows in the wrong direction
+- Fixed bug 14473 weird behaviour - fields are all set to transparent
+- Fixed bug 14456 handling of resource bundles with JS plugin incomplete
+- Fixed bug 15915 groupFooter deleted by iReport / compatibility settings
+- Fixed bug 16470 iReport JasperServer plugin must allow a report unit to have no data source
+- Fixed bug 0004044: Crosstab "column total" header has drag-drop and display bug
+- Fixed bug 0004020 wrong barcode type added when using barcode4j Code128
+- Fixed bug 0004301 $X Clause Not Recognized in iReport 3.6.0
+- Fixed bug 0004044 Crosstab "column total" header has drag-drop and display bug
+- Fixed bug 0004045 iReport does not remember previously-used integer and collection prompt-for-value report parameters
+- Fixed bug 0000943 Make mouse wheel work in SQL edit dialog
+- Fixed bug 0003785 Right-click OPEN SUBREPORT does nothing
+- Fixed bug 0004342 New barcode4j Code128 barcode converts to Codabar
+- Fixed bug 0004349 "System" calculation type in a "return value" variable
+- Fixed bug 0003776 [Patches] Fix for problem when no language in a WizardFieldsProvider
+- Fixed bug 0003909: Property values (selectable) dont show on Mac OS X
+- Fixed bug 0003768: Unable to start iReport-NB from network share
+
+
 2009-09-02 Version 3.6.0 released
 _______________________________________________________________________________
 - Fixed bug 0003991 ClassPath Library for JasperReports netBeans plugin missing files.

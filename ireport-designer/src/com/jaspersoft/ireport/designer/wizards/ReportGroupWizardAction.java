@@ -33,6 +33,7 @@ import javax.swing.JComponent;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.DialogDisplayer;
 import org.openide.WizardDescriptor;
@@ -82,9 +83,7 @@ public final class ReportGroupWizardAction extends CallableSystemAction {
                     {
                         JRDesignBand b = new JRDesignBand();
                         b.setHeight(50);
-                        grp.setGroupHeader(b);
-                        System.out.println("Band origin: " + b.getOrigin());
-                        System.out.flush();
+                        ((JRDesignSection)grp.getGroupHeaderSection()).addBand(b);
                     }
                     
                     if (wizardDescriptor.getProperty("footer") != null &&
@@ -92,9 +91,7 @@ public final class ReportGroupWizardAction extends CallableSystemAction {
                     {
                         JRDesignBand b = new JRDesignBand();
                         b.setHeight(50);
-                        grp.setGroupFooter(b);
-                        System.out.println("Band origin: " + b.getOrigin());
-                        System.out.flush();
+                        ((JRDesignSection)grp.getGroupFooterSection()).addBand(b);
                     }
                     
                     jd.addGroup(grp);

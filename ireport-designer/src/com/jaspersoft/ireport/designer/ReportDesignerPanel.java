@@ -472,7 +472,7 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
 
         buttonGroup1.add(jToggleButtonMain);
         jToggleButtonMain.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/report-16.png"))); // NOI18N
-        jToggleButtonMain.setText(I18n.getString( "ReportDesignerPanel.jToggleButtonMain.text")); // NOI18N
+        jToggleButtonMain.setText(org.openide.util.NbBundle.getMessage(ReportDesignerPanel.class, "ReportDesignerPanel.jToggleButtonMain.text")); // NOI18N
         jToggleButtonMain.setFocusable(false);
         jToggleButtonMain.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         jToggleButtonMain.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);

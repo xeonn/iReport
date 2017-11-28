@@ -475,6 +475,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
     /**
      *  Class to manage the JasperDesign.PROPERTY_IGNORE_PAGINATION property
      */
+    @SuppressWarnings("deprecation")
     private final class SplitAllowedProperty extends PropertySupport
     {
             private final JRDesignBand band;

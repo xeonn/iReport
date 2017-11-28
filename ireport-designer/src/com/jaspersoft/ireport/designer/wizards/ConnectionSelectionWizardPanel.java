@@ -75,6 +75,7 @@ public class ConnectionSelectionWizardPanel implements WizardDescriptor.Asynchro
         
         IReportConnection con = component.getConnection();
         if (con instanceof WizardFieldsProvider &&
+            component.isUseQuery() &&
             component.getQuery().trim().length() == 0)
         {
             getWizard().putProperty("WizardPanel_errorMessage", I18n.getString("Wizards.Property.Invalidquery"));

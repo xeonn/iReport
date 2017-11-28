@@ -26,10 +26,10 @@ package com.jaspersoft.ireport.designer.errorhandler;
 import java.awt.BorderLayout;
 import java.io.Serializable;
 import java.util.logging.Logger;
+import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
-import org.openide.util.Utilities;
 
 /**
  * Top component which displays something.
@@ -49,7 +49,7 @@ final public class ErrorHandlerTopComponent extends TopComponent {
         initComponents();
         setName(NbBundle.getMessage(ErrorHandlerTopComponent.class, "CTL_ErrorHandlerTopComponent"));
         setToolTipText(NbBundle.getMessage(ErrorHandlerTopComponent.class, "HINT_ErrorHandlerTopComponent"));
-        setIcon(Utilities.loadImage(ICON_PATH, true));
+        setIcon(ImageUtilities.loadImage(ICON_PATH, true));
         
         errorHandlerPanel = new ErrorHandlerPanel();
         add(errorHandlerPanel, BorderLayout.CENTER);

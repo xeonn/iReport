@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer.welcome;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.locale.I18n;
 import java.io.IOException;
 import java.net.URL;
@@ -49,7 +50,15 @@ public class WebContentPanel extends javax.swing.JPanel {
 
         jEditorPane1.setContentType("text/html");
         URL img_url = this.getClass().getResource("/com/jaspersoft/ireport/designer/welcome/loader.gif");
-        jEditorPane1.setText("<html><body><br><br><img src=\"" + img_url + "\"><br><br></body></html>");
+        
+        if (IReportManager.getInstance().isNoNetwork())
+        {
+            jEditorPane1.setText("<html><body><br><br><font color=\"#AAAAAA\">Network disabled</font><br><br></body></html>");
+        }
+        else
+        {
+            jEditorPane1.setText("<html><body><br><br><img src=\"" + img_url + "\"><br><br></body></html>");
+        }
 
         jEditorPane1.addHyperlinkListener(new HyperlinkListener() {
 
@@ -75,21 +84,25 @@ public class WebContentPanel extends javax.swing.JPanel {
             }
         });
 
-        new Thread(new Runnable() {
+        if (!IReportManager.getInstance().isNoNetwork())
+        {
+            new Thread(new Runnable() {
 
-            public void run() {
-                try {
-                    jEditorPane1.setPage(url);
-                } catch (Throwable ex) {
-                    SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    try {
 
-                        public void run() {
-                            jEditorPane1.setText("<html><body><br><br><font face=\"Arial\" size=\"-1\" color=\"888888\">" + I18n.getString("error.loading.web.resource") + "</font><br><br></body></html>");
-                        }
-                    });
+                        jEditorPane1.setPage(url);
+                    } catch (Throwable ex) {
+                        SwingUtilities.invokeLater(new Runnable() {
+
+                            public void run() {
+                                jEditorPane1.setText("<html><body><br><br><font face=\"Arial\" size=\"-1\" color=\"888888\">" + I18n.getString("error.loading.web.resource") + "</font><br><br></body></html>");
+                            }
+                        });
+                    }
                 }
-            }
-        }).start();
+            }).start();
+        }
 
         jEditorPane1.getDocument().addDocumentListener(new DocumentListener() {
 

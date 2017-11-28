@@ -23,10 +23,14 @@
  */
 package com.jaspersoft.ireport.jasperserver.validation;
 
+import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
+import com.jaspersoft.ireport.jasperserver.RepoImageCache;
 import com.jaspersoft.ireport.jasperserver.RepositoryReportUnit;
+import com.jaspersoft.ireport.jasperserver.ui.ResourceChooser;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.text.NumberFormat;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -41,6 +45,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRExpressionUtil;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
 /**
@@ -54,6 +59,7 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
     private java.util.List elementVelidationItems = null;
     private JasperDesign report = null;
     private String fileName = null;
+    private JrxmlVisualView view = null;
     
     private int dialogResult = JOptionPane.CANCEL_OPTION;
     
@@ -110,7 +116,7 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
         jButtonSkip.setText( JasperServerManager.getString("jrxmlValidationDialog.buttonSkip","Skip this step"));
         jCheckBoxDoNotShowAgain.setText( JasperServerManager.getString("jrxmlValidationDialog.checkDoNotShowAgain","Do not show this window again"));
     
-        jLabel1.setText(JasperServerManager.getString("jrxmlValidationDialog.message","<html>JasperServer Plugin has detected some locally referenced images in your report.<br>\n"+
+        jLabel1.setText(JasperServerManager.getString("jrxmlValidationDialog.message","<html>JasperServer Plugin has detected some locally referenced resources in your report.<br>\n"+
                             "You can choose to attach these images to the Report Unit importing them into the repository "+
                             "and replace the relative image expressions with an url like \"repo:myImage.jpg\".<br>" +
                             "<b>Please check the images you want attach to this Report Unit</b>.</html>"));
@@ -122,6 +128,10 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
         jTable1.getColumn("File size").setHeaderValue( JasperServerManager.getString("jrxmlValidationDialog.table.fileSize","File size") );
         } catch (Exception ex) {}
         jTable1.updateUI();
+    }
+
+    public void setVisualView(JrxmlVisualView view) {
+        this.view = view;
     }
 
     
@@ -178,6 +188,9 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        jMenuItemSelectLink = new javax.swing.JMenuItem();
+        jMenuItemImportAsLocalResource = new javax.swing.JMenuItem();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -190,6 +203,22 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
         jButtonOk = new javax.swing.JButton();
         jButtonSkip = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
+
+        jMenuItemSelectLink.setText("Select a resource in the repository");
+        jMenuItemSelectLink.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSelectLinkActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItemSelectLink);
+
+        jMenuItemImportAsLocalResource.setText("Import as local resource");
+        jMenuItemImportAsLocalResource.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemImportAsLocalResourceActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItemImportAsLocalResource);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("JRXML validation");
@@ -229,6 +258,7 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.setComponentPopupMenu(jPopupMenu1);
         jScrollPane2.setViewportView(jTable1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -373,6 +403,8 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
              urd.setValidationDialog( this );
              urd.setVisible(true);
 
+             // Expressions are been already replaced...
+             /*
              JasperDesign jd = getReport();
              for (int i=0; i<selectedItems.size(); ++i)
              {
@@ -383,12 +415,14 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
                  if (element instanceof JRDesignImage)
                  {
                      ((JRDesignImage)element).setExpression(Misc.createExpression("java.lang.String", iev.getProposedExpression()));
+                     
                  }
                  else if (element instanceof JRDesignSubreport)
                  {
                      ((JRDesignSubreport)element).setExpression(Misc.createExpression("java.lang.String", iev.getProposedExpression()));
                  }
              }
+             */
              saveReport();
              return;
         }
@@ -456,6 +490,44 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
         jTable1.updateUI();
         
     }//GEN-LAST:event_jButtonSelectAllActionPerformed
+
+    private void jMenuItemSelectLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectLinkActionPerformed
+        if (jTable1.getSelectedRow() >= 0)
+        {
+            ResourceChooser rc = new ResourceChooser();
+            rc.setServer(server);
+            if (rc.showDialog(this, null) == JOptionPane.OK_OPTION)
+            {
+                ResourceDescriptor rd = rc.getSelectedDescriptor();
+                if (rd != null)
+                {
+                    DefaultTableModel dtm = (DefaultTableModel)jTable1.getModel();
+                    ElementValidationItem iev = (ElementValidationItem)dtm.getValueAt(jTable1.getSelectedRow(),1);
+                    iev.setProposedExpression("\"repo:" + rd.getUriString()+ "\"");
+                    iev.setStoreAsLink(true);
+                    iev.setReferenceUri(rd.getUriString());
+                    dtm.setValueAt(iev.getProposedExpression(), jTable1.getSelectedRow(),3);
+                    jTable1.updateUI();
+                }
+            }
+
+
+
+
+        }
+    }//GEN-LAST:event_jMenuItemSelectLinkActionPerformed
+
+    private void jMenuItemImportAsLocalResourceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemImportAsLocalResourceActionPerformed
+        if (jTable1.getSelectedRow() >= 0)
+        {
+            DefaultTableModel dtm = (DefaultTableModel)jTable1.getModel();
+            ElementValidationItem iev = (ElementValidationItem)dtm.getValueAt(jTable1.getSelectedRow(),1);
+            iev.setProposedExpression("\"repo:" + iev.getResourceName() + "\"");
+            dtm.setValueAt(iev.getProposedExpression(), jTable1.getSelectedRow(),3);
+            iev.setStoreAsLink(false);
+            jTable1.updateUI();
+        }
+    }//GEN-LAST:event_jMenuItemImportAsLocalResourceActionPerformed
     
     /**
      * @param args the command line arguments
@@ -508,8 +580,11 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
     private javax.swing.JButton jButtonSkip;
     private javax.swing.JCheckBox jCheckBoxDoNotShowAgain;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenuItem jMenuItemImportAsLocalResource;
+    private javax.swing.JMenuItem jMenuItemSelectLink;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
@@ -526,9 +601,15 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
     public void saveReport()
     {
         try {
-            
-            JRXmlWriter.writeReport(getReport(), new java.io.FileOutputStream(getFileName()), "UTF-8");
-            
+
+            if (view != null)
+            {
+                view.getEditorSupport().saveDocument();
+            }
+            else
+            {
+                JRXmlWriter.writeReport(getReport(), new java.io.FileOutputStream(getFileName()), "UTF-8");
+            }
         } catch (Exception ex)
         {
             ex.printStackTrace();

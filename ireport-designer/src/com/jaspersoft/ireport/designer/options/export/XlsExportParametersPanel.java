@@ -451,7 +451,7 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
         jCheckBoxAutoDetectCellType.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
         jCheckBoxFontSizeFixEnabled.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
         jCheckBoxIgnoreCellBorder.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
-        jCheckBoxIgnoreGraphics.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
+        jCheckBoxIgnoreGraphics.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS)));
         jCheckBoxImageBorderFixEnabled.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
         jCheckBoxOnePagePerSheet.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
         jCheckBoxRemoveEmptySpaceBetweenColumns.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
@@ -478,7 +478,7 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
         pref.putBoolean(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE,  jCheckBoxAutoDetectCellType.isSelected() );
         pref.putBoolean(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED,  jCheckBoxFontSizeFixEnabled.isSelected() );
         pref.putBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER,  jCheckBoxIgnoreCellBorder.isSelected() );
-        pref.putBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS,  jCheckBoxCollapseRowSpan.isSelected() );
+        pref.putBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS,  jCheckBoxIgnoreGraphics.isSelected() );
         pref.putBoolean(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED,  jCheckBoxImageBorderFixEnabled.isSelected() );
         pref.putBoolean(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET,  jCheckBoxOnePagePerSheet.isSelected() );
         pref.putBoolean(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS,  jCheckBoxRemoveEmptySpaceBetweenColumns.isSelected() );

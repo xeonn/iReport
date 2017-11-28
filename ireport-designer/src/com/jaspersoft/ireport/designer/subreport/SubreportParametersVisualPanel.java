@@ -116,8 +116,10 @@ public final class SubreportParametersVisualPanel extends JPanel {
         DefaultTableModel dtm = (DefaultTableModel)jTable1.getModel();
         for (int i=0; i<expressions.length; ++i)
         {
-            if (dtm.getRowCount() > i);
-            dtm.setValueAt(expressions[i], i, 1);
+            if (dtm.getRowCount() > i)
+            {
+                dtm.setValueAt(expressions[i], i, 1);
+            }
         }
     }
     

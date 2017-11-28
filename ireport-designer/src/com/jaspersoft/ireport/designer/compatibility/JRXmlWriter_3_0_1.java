@@ -158,6 +158,7 @@ import org.jfree.data.time.Day;
  * @author Minor enhancements by Barry Klawans (bklawans@users.sourceforge.net)
  * @version $Id: JRXmlWriter.java 2237 2008-07-22 11:11:07Z teodord $
  */
+@SuppressWarnings("deprecation")
 public class JRXmlWriter_3_0_1 extends JRXmlWriter
 {
 

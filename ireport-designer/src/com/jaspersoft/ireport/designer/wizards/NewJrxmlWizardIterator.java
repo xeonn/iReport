@@ -169,7 +169,7 @@ public final class NewJrxmlWizardIterator implements TemplateWizard.Iterator {
                        StackTraceElement[] ees = t.getStackTrace();
                        for (int i=0; i<ees.length; ++i)
                        {
-                           Misc.msg(""+ees[i]);
+                           Misc.log(""+ees[i]);
                        }
                     }
                     
@@ -182,13 +182,13 @@ public final class NewJrxmlWizardIterator implements TemplateWizard.Iterator {
         t2.start();
 
         
-        Logger.global.log(Level.INFO, "Instancing the report generator");
+        Misc.log("Instancing the report generator");
         DefaultReportGenerator reportGenerator = new DefaultReportGenerator();
-        Logger.global.log(Level.INFO, "Report generator instanced");
+        Misc.log("Report generator instanced");
 
         FileObject createdFile = reportGenerator.generateReport(wizard);
 
-        Logger.global.log(Level.INFO, "Report generated");
+        Misc.log("Report generated");
 
         if (createdFile == null) {
             throw new IOException("Unable to create the report.");
@@ -229,7 +229,7 @@ public final class NewJrxmlWizardIterator implements TemplateWizard.Iterator {
             Runnable r = new Runnable() {
 
                 public void run() {
-                    Logger.global.log(Level.INFO, "Opening report");
+                    Misc.log("Opening report");
                     if (getCreatedDataObject() != null)
                     {
                         OpenCookie cookie = getCreatedDataObject().getCookie(OpenCookie.class);
@@ -238,7 +238,7 @@ public final class NewJrxmlWizardIterator implements TemplateWizard.Iterator {
                             cookie.open();
                         }
                     }
-                    Logger.global.log(Level.INFO, "Report opened...");
+                    Misc.log( "Report opened...");
                 }
             };
             

@@ -31,7 +31,9 @@ import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
@@ -238,6 +240,7 @@ public class JROptionsPanel extends javax.swing.JPanel implements OptionsPanel{
             int modelIndex = ((JXTable)jTable1).convertRowIndexToModel(selectedRows[i]);
 
             String key = (String)((DefaultTableModel)jTable1.getModel()).getValueAt(modelIndex, 0);
+
             if (IReportManager.getInstance().getDefaultJasperReportsProperties().containsKey(key))
             {
                 JOptionPane.showMessageDialog(this, "The property \n" + key + "\ncan not be deleted since it is set by default by JasperReports.", "System property",JOptionPane.INFORMATION_MESSAGE );
@@ -347,20 +350,14 @@ public class JROptionsPanel extends javax.swing.JPanel implements OptionsPanel{
         DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
         dtm.setRowCount(0);
 
-        List props = JRProperties.getProperties("");
+        Properties props = IReportManager.getInstance().getPersistentJRProperties();
 
-        String[] propNames = new String[props.size()];
+        Enumeration propNames = props.propertyNames();
 
-        for (int i=0; i<props.size(); ++i)
+        while (propNames.hasMoreElements())
         {
-            propNames[i] = ((PropertySuffix)props.get(i)).getKey();
-        }
-
-        //Arrays.sort(propNames);
-
-        for (int i=0;i<propNames.length; ++i)
-        {
-            dtm.addRow(new Object[]{propNames[i], Misc.addSlashesString(JRProperties.getProperty(propNames[i]))});
+            String propName = (String) propNames.nextElement();
+            dtm.addRow(new Object[]{propName, Misc.addSlashesString(props.getProperty(propName) )});
         }
 
         jTable1.updateUI();
@@ -414,6 +411,7 @@ public class JROptionsPanel extends javax.swing.JPanel implements OptionsPanel{
                     // it is not a predefined property
                     // To remove this property a restart is suggested...
                     IReportManager.getPreferences().remove(IReportManager.PROPERTY_JRPROPERTY_PREFIX + oldKey);
+                    JRProperties.removePropertyValue(oldKey);
                 }
             }
         }

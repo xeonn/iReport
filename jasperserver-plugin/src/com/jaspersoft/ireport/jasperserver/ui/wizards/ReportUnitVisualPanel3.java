@@ -115,6 +115,7 @@ public final class ReportUnitVisualPanel3 extends JPanel {
         jButtonPickResource = new javax.swing.JButton();
         jRadioButtonLocal = new javax.swing.JRadioButton();
         jButtonEditLocalDataSource = new javax.swing.JButton();
+        jRadioButtonNoDataSource = new javax.swing.JRadioButton();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -199,6 +200,23 @@ public final class ReportUnitVisualPanel3 extends JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
         jPanel2.add(jButtonEditLocalDataSource, gridBagConstraints);
 
+        buttonGroup1.add(jRadioButtonNoDataSource);
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButtonNoDataSource, "Don't use any data source");
+        jRadioButtonNoDataSource.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        jRadioButtonNoDataSource.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jRadioButtonNoDataSource.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonNoDataSourcejRadioButtonLocalActionPerformed1(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(12, 8, 4, 4);
+        jPanel2.add(jRadioButtonNoDataSource, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -255,6 +273,10 @@ public final class ReportUnitVisualPanel3 extends JPanel {
         
     }//GEN-LAST:event_jButtonEditLocalDataSourceActionPerformed
 
+    private void jRadioButtonNoDataSourcejRadioButtonLocalActionPerformed1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonNoDataSourcejRadioButtonLocalActionPerformed1
+        updateResourceFromType();
+}//GEN-LAST:event_jRadioButtonNoDataSourcejRadioButtonLocalActionPerformed1
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonEditLocalDataSource;
@@ -263,6 +285,7 @@ public final class ReportUnitVisualPanel3 extends JPanel {
     private javax.swing.JLabel jLabelResourceFile1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JRadioButton jRadioButtonLocal;
+    private javax.swing.JRadioButton jRadioButtonNoDataSource;
     private javax.swing.JRadioButton jRadioButtonRepo;
     // End of variables declaration//GEN-END:variables
 
@@ -273,7 +296,8 @@ public final class ReportUnitVisualPanel3 extends JPanel {
             // No datasource required...
             return;
         }
-        
+
+        wizardDescriptor.putProperty("datasource_present", !jRadioButtonNoDataSource.isSelected()+"");
         wizardDescriptor.putProperty("datasource_is_local", jRadioButtonLocal.isSelected()+"");
         if (jRadioButtonLocal.isSelected())
         {

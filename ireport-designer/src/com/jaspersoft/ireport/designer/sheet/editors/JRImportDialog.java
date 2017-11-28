@@ -85,7 +85,7 @@ public class JRImportDialog extends javax.swing.JDialog {
         jLabel2.setText(" ");
 
 
-        if (text.trim().length() == 0 || !text.matches("(\\p{Alpha}\\p{Alnum}*\\.)*(\\p{Alpha}\\p{Alnum}*)(\\.\\*)?"))
+        if (text.trim().length() == 0 || !text.matches("(\\p{Alpha}\\p{Alnum}*\\_*\\.)*(\\p{Alpha}\\p{Alnum}*\\_*)(\\.\\*)?"))
         {
             jLabel2.setText(I18n.getString("JRImportDialog.invalidImport"));
             jButtonOK.setEnabled(false);

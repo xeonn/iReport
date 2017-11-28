@@ -27,6 +27,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -45,6 +46,19 @@ import org.openide.util.NbPreferences;
  * @author gtoffoli
  */
 public class JasperServerManager {
+
+    private List<FileResourceUpdatingListener> resourceReplacingListeners = new ArrayList<FileResourceUpdatingListener>();
+
+    public void addFileResourceUpdatingListener(FileResourceUpdatingListener listener)
+    {
+        resourceReplacingListeners.add(listener);
+    }
+
+    public void removeFileResourceUpdatingListener(FileResourceUpdatingListener listener)
+    {
+        resourceReplacingListeners.remove(listener);
+    }
+    
 
     private static JasperServerManager mainInstance = null;
     public static JasperServerManager getMainInstance() {
@@ -105,6 +119,8 @@ public class JasperServerManager {
         applyProxySettings();
         
         pluginLocale = Locale.getDefault();
+
+        ActiveEditorTopComponentListener.getDefaultInstance().startListening();
     }
     
     
@@ -456,5 +472,21 @@ public class JasperServerManager {
     public void setDataProvidersMap(java.util.HashMap<String, JSDataProvider> dataProvidersMap) {
         this.dataProvidersMap = dataProvidersMap;
     }
-    
+
+    public void fireResourceReplacing_resourceWillBeUpdated(RepositoryFile repositoryFile, RepositoryReportUnit reportUnit,File file) throws Exception
+    {
+        for (FileResourceUpdatingListener listener :  resourceReplacingListeners)
+        {
+            listener.resourceWillBeUpdated(repositoryFile, reportUnit, file);
+        }
+    }
+
+    public void fireResourceReplacing_resourceUpdated(RepositoryFile repositoryFile, RepositoryReportUnit reportUnit,File file) throws Exception
+    {
+        for (FileResourceUpdatingListener listener :  resourceReplacingListeners)
+        {
+            listener.resourceUpdated(repositoryFile, reportUnit, file);
+        }
+    }
+   
 }

@@ -39,7 +39,10 @@ public class AlignedTableCellRenderer extends DefaultTableCellRenderer {
     private int alignment = JLabel.RIGHT;
     static ImageIcon imageIcon;
     static ImageIcon subreportIcon;
-    
+    static ImageIcon unknownIcon;
+    static ImageIcon linkIcon;
+    static ImageIcon templateIcon;
+
     /** Creates a new instance of AlignedTableCellRenderer */
     public AlignedTableCellRenderer() {
         this(JLabel.RIGHT);
@@ -50,6 +53,10 @@ public class AlignedTableCellRenderer extends DefaultTableCellRenderer {
         super();
         if (subreportIcon == null) subreportIcon = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/jasperserver/ui/resources/subreport-16.png"));
         if (imageIcon == null) imageIcon = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/jasperserver/ui/resources/image-16.png"));
+        if (templateIcon == null) templateIcon = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/jasperserver/res/style-16.png"));
+        if (unknownIcon == null) unknownIcon = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/jasperserver/res/unknow.png"));
+        if (linkIcon == null) linkIcon = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/jasperserver/res/link.png"));
+
         this.alignment = alignment;
     }
     
@@ -59,7 +66,13 @@ public class AlignedTableCellRenderer extends DefaultTableCellRenderer {
                 if (c instanceof JLabel)
                 {
                     ((JLabel)c).setHorizontalAlignment( getAlignment());
-                    if (value instanceof ImageElementValidationItem)
+
+                    if (value instanceof ElementValidationItem && ((ElementValidationItem)value).isStoreAsLink())
+                    {
+                        ((JLabel)c).setIcon( linkIcon );
+                        ((JLabel)c).setText( "Linked resource" );
+                    }
+                    else if (value instanceof ImageElementValidationItem)
                     {
                          ((JLabel)c).setIcon( imageIcon );
                          ((JLabel)c).setText( "Image" );
@@ -69,6 +82,17 @@ public class AlignedTableCellRenderer extends DefaultTableCellRenderer {
                          ((JLabel)c).setIcon( subreportIcon );
                          ((JLabel)c).setText( "Subreport" );
                     }
+                    else if (value instanceof TemplateElementValidationItem)
+                    {
+                         ((JLabel)c).setIcon( templateIcon );
+                         ((JLabel)c).setText( "Template" );
+                    }
+                    else if (value instanceof ElementValidationItem)
+                    {
+                         ((JLabel)c).setIcon( unknownIcon );
+                         ((JLabel)c).setText( "Other resource type" );
+                    }
+
                 }
                 
                 return c;

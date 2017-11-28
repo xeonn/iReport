@@ -45,6 +45,7 @@ public class JRXmlWriterHelper {
 
     static {
 
+        writers.put("3_6_0", JRXmlWriter_3_6_0.class);
         writers.put("3_5_2", JRXmlWriter_3_5_2.class);
         writers.put("3_5_1", JRXmlWriter_3_5_1.class);
         writers.put("3_5_0", JRXmlWriter_3_5_0.class);

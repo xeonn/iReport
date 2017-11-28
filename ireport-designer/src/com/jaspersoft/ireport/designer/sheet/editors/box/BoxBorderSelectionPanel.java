@@ -360,7 +360,6 @@ public class BoxBorderSelectionPanel extends javax.swing.JPanel {
      * 
      * @param pen
      * @return
-     * @deprecated Replaced by {@link JRPenUtil#getStroke(JRPen, int)}
      */
     public static Stroke createStroke(JRPen pen)
     {

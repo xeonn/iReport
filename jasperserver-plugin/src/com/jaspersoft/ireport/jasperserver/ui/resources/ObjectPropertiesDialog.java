@@ -468,6 +468,16 @@ public class ObjectPropertiesDialog extends javax.swing.JDialog {
                     return "Java Archive *.jar";
                 }
             });
+        } else if (resType.equals( ResourceDescriptor.TYPE_STYLE_TEMPLATE)) {
+            jfc.setFileFilter( new javax.swing.filechooser.FileFilter() {
+                public boolean accept(java.io.File file) {
+                    String filename = file.getName();
+                    return (filename.toLowerCase().endsWith(".jrtx") || file.isDirectory() || filename.toLowerCase().endsWith(".jrtx")) ;
+                }
+                public String getDescription() {
+                    return "Style Template *.jrtx";
+                }
+            });
         }
         
         jfc.setMultiSelectionEnabled(false);
@@ -542,6 +552,16 @@ public class ObjectPropertiesDialog extends javax.swing.JDialog {
                 }
                 public String getDescription() {
                     return "Java Archive *.jar";
+                }
+            });
+        } else if (resType.equals( ResourceDescriptor.TYPE_STYLE_TEMPLATE)) {
+            jfc.setFileFilter( new javax.swing.filechooser.FileFilter() {
+                public boolean accept(java.io.File file) {
+                    String filename = file.getName();
+                    return (filename.toLowerCase().endsWith(".jrtx") || file.isDirectory() || filename.toLowerCase().endsWith(".jrtx")) ;
+                }
+                public String getDescription() {
+                    return "Style Template *.jrtx";
                 }
             });
         }
@@ -755,7 +775,8 @@ public class ObjectPropertiesDialog extends javax.swing.JDialog {
             resourceDescriptor.getWsType().equals(resourceDescriptor.TYPE_JRXML) ||
             resourceDescriptor.getWsType().equals(resourceDescriptor.TYPE_CLASS_JAR) ||
             resourceDescriptor.getWsType().equals(resourceDescriptor.TYPE_FONT) ||
-            resourceDescriptor.getWsType().equals(resourceDescriptor.TYPE_RESOURCE_BUNDLE))
+            resourceDescriptor.getWsType().equals(resourceDescriptor.TYPE_RESOURCE_BUNDLE) ||
+            resourceDescriptor.getWsType().equals(resourceDescriptor.TYPE_STYLE_TEMPLATE))
         {
             jTabbedPane1.add("Resource", jPanelResourceFile);
             jTabbedPane1.setTitleAt(1, JasperServerManager.getString("objectPropertiesDialog.tabResource","Resource"));

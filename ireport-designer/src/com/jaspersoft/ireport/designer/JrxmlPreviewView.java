@@ -30,6 +30,7 @@ import com.jaspersoft.ireport.designer.menu.RunReportAction;
 import com.jaspersoft.ireport.designer.tools.JrxmlPreviewToolbar;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.BorderLayout;
+import java.awt.Graphics2D;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -38,7 +39,10 @@ import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JRGraphics2DExporter;
 import net.sf.jasperreports.swing.JRViewerController;
 import net.sf.jasperreports.swing.JRViewerPanel;
 import org.netbeans.core.spi.multiview.CloseOperationState;
@@ -139,9 +143,28 @@ public class JrxmlPreviewView extends TopComponent
         
                 if (print != null)
                 {
-                    JRViewerPanel viewerPanel = new JRViewerPanel(viewerContext);
+                    JRViewerPanel viewerPanel = 
+                        new JRViewerPanel(viewerContext)
+                        {
+                            protected void paintPage(Graphics2D grx) 
+                            {
+                                ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader(); 
+                                try
+                                {
+                                    Thread.currentThread().setContextClassLoader(IReportManager.getJRExtensionsClassLoader());
+                                    super.paintPage(grx);
+                                }
+                                finally
+                                {
+                                    Thread.currentThread().setContextClassLoader(oldClassLoader);
+                                }
+                            }
+                    	};
+
                     add(viewerPanel, BorderLayout.CENTER);
+
                     viewerContext.loadReport(print);
+                                        
                     viewerToolbar.init();
                     viewerContext.refreshPage();
                     viewerPanel.updateUI();

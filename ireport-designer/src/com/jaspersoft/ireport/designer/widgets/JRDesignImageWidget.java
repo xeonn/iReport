@@ -104,24 +104,27 @@ public class JRDesignImageWidget extends JRDesignElementWidget implements Runnab
             ProxyFileResolver fileResolver = new ProxyFileResolver(IReportManager.getInstance().getFileResolvers());
             //fileResolver.addResolver(new SimpleFileResolver(reportFolder));//FIXMETD can we keep the parent folder somewhere? in the draw visitor maybe?
 
-            if (resolver == null)
+            if (visualView != null && visualView.getModel() != null && visualView.getModel().getJasperDesign() != null)
             {
-                resolver = new ImageExpressionFileResolver((JRDesignImage)getElement(), reportFolder+"",  visualView.getModel().getJasperDesign());
-            }
-            else
-            {
-                // check if something is changed...
-                try {
-                    resolver.setImageElement((JRDesignImage)getElement());
-                    resolver.setJasperDesign(visualView.getModel().getJasperDesign());
-                    resolver.setReportFolder(reportFolder+"");
-                } catch (Exception ex)
+                if (resolver == null)
                 {
-                   ex.printStackTrace();
+                    resolver = new ImageExpressionFileResolver((JRDesignImage)getElement(), reportFolder+"",  visualView.getModel().getJasperDesign());
                 }
-            }
+                else
+                {
+                    // check if something is changed...
+                    try {
+                        resolver.setImageElement((JRDesignImage)getElement());
+                        resolver.setJasperDesign(visualView.getModel().getJasperDesign());
+                        resolver.setReportFolder(reportFolder+"");
+                    } catch (Exception ex)
+                    {
+                       ex.printStackTrace();
+                    }
+                }
 
-            fileResolver.addResolver(resolver);
+                fileResolver.addResolver(resolver);
+            }
             JRResourcesUtil.setThreadFileResolver(fileResolver);
 
             try

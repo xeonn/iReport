@@ -165,7 +165,7 @@ public class JRLinkParameterDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 3, 3, 3);
         jPanel2.add(jTextFieldName, gridBagConstraints);
 
-        jLabel4.setText("Value expression");
+        jLabel4.setText("Parameter Class Name");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;

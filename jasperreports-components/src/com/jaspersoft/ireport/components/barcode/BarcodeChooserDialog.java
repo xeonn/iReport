@@ -126,7 +126,7 @@ public class BarcodeChooserDialog extends javax.swing.JDialog {
                 componentImpl = new Code128Component();
                 component.setComponentKey(new ComponentKey(
                                         "http://jasperreports.sourceforge.net/jasperreports/components",
-                                        "jr", "Codabar"));
+                                        "jr", "Code128"));
 
             }
             else if (barcodeName.equals("DataMatrix"))

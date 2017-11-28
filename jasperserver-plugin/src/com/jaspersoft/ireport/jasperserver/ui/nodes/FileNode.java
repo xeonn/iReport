@@ -72,7 +72,7 @@ public class FileNode extends IRAbstractNode implements ResourceNode {
     static ImageIcon unknowIcon;
     static ImageIcon queryIcon;
     static ImageIcon waitingIcon;
-    
+    static ImageIcon styleTemplateIcon;
     static ImageIcon reportOptionsResourceIcon;
     
     static 
@@ -82,7 +82,8 @@ public class FileNode extends IRAbstractNode implements ResourceNode {
         if (datasourceJdbcIcon == null) datasourceJdbcIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/datasource_jdbc.png"));
         if (imageIcon == null) imageIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/picture.png"));
         if (jrxmlIcon == null) jrxmlIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/jrxml_file.png"));
-        
+        if (styleTemplateIcon == null) styleTemplateIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/style-16.png"));
+
         if (refIcon == null) refIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/link.png"));
         if (bundleIcon == null) bundleIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/bundle.png"));
         if (fontIcon == null) fontIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/font.png"));
@@ -145,6 +146,7 @@ public class FileNode extends IRAbstractNode implements ResourceNode {
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATA_TYPE)) return datatypeIcon;
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_LOV)) return lovIcon;
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_QUERY)) return queryIcon;
+        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE)) return styleTemplateIcon;
         else if (resource.getWsType().equals("ReportOptionsResource")) return reportOptionsResourceIcon;
         return unknowIcon;
         
@@ -167,10 +169,7 @@ public class FileNode extends IRAbstractNode implements ResourceNode {
         List<Action> actions = new ArrayList<Action>();
         
         actions.add(SystemAction.get( OpenFileAction.class));
-        if (getFile().getDescriptor().getWsType().equals(ResourceDescriptor.TYPE_JRXML))
-        {
-            actions.add(SystemAction.get( ReplaceFileAction.class));
-        }
+        actions.add(SystemAction.get( ReplaceFileAction.class));
         
         if (ReportUnitNode.getParentReportUnit(this) == null)
         {

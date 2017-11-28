@@ -71,7 +71,6 @@ public class ShapeStroke implements Stroke {
 				points[0] = moveX;
 				points[1] = moveY;
 				// Fall into....
-
 			case PathIterator.SEG_LINETO:
 				thisX = points[0];
 				thisY = points[1];

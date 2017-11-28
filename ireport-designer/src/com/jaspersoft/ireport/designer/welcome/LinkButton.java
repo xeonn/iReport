@@ -46,7 +46,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
-import org.openide.util.Utilities;
+import org.openide.util.ImageUtilities;
 
 /**
  *
@@ -68,7 +68,7 @@ public abstract class LinkButton extends JButton
 
     private boolean underline = false;
 
-    final ImageIcon BULLET_ICON = new ImageIcon( Utilities.loadImage( BULLET_IMAGE ) );
+    final ImageIcon BULLET_ICON = new ImageIcon( ImageUtilities.loadImage( BULLET_IMAGE ) );
 
     public LinkButton( String label, boolean showBullet ) {
         super( label );

@@ -75,7 +75,6 @@ import net.sf.jasperreports.charts.util.JRMeterInterval;
 import net.sf.jasperreports.charts.xml.JRChartAxisFactory;
 import net.sf.jasperreports.charts.xml.JRMeterPlotFactory;
 import net.sf.jasperreports.charts.xml.JRThermometerPlotFactory;
-import net.sf.jasperreports.components.ComponentsXmlHandler;
 import net.sf.jasperreports.crosstabs.JRCellContents;
 import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.JRCrosstabBucket;
@@ -156,7 +155,6 @@ import net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory;
 import net.sf.jasperreports.engine.util.JRXmlWriteHelper;
 import net.sf.jasperreports.engine.util.XmlNamespace;
 
-import net.sf.jasperreports.engine.xml.JRXmlBaseWriter;
 import net.sf.jasperreports.engine.xml.JRXmlConstants;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
 import net.sf.jasperreports.engine.xml.XmlWriterVisitor;
@@ -171,6 +169,7 @@ import org.jfree.data.time.Day;
  * @author Minor enhancements by Barry Klawans (bklawans@users.sourceforge.net)
  * @version $Id: JRXmlWriter.java 2748 2009-04-28 11:39:35Z teodord $
  */
+@SuppressWarnings("deprecation")
 public class JRXmlWriter_3_5_1 extends JRXmlWriter
 {
 

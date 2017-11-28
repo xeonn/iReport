@@ -52,6 +52,7 @@ public class CreateListAction extends CreateReportElementAction {
         StandardListComponent componentImpl = new StandardListComponent();
         DesignListContents contents = new DesignListContents();
         contents.setHeight(50);
+        contents.setWidth(0);
         componentImpl.setContents(contents);
 
         JRDesignDataset newDataset = new JRDesignDataset(false);

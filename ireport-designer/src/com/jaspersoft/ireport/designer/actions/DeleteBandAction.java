@@ -115,7 +115,7 @@ public final class DeleteBandAction extends NodeAction {
                     else if (band.getOrigin().getBandType() == JROrigin.GROUP_FOOTER)
                     {
                         JRDesignGroup group = ((JRDesignGroup)jd.getGroupsMap().get(band.getOrigin().getGroupName()));
-                        JRDesignSection section = (JRDesignSection)group.getGroupHeaderSection();
+                        JRDesignSection section = (JRDesignSection)group.getGroupFooterSection();
                         section.removeBand(band);
                         //  JRDesignGroup g = (JRDesignGroup)jd.getGroupsMap().get( band.getOrigin().getGroupName());
                         //  g.setGroupFooter(null);

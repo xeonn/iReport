@@ -198,6 +198,7 @@ public class FolderNode extends IRIndexedNode implements ResourceNode {
     }
 
     public void refreshChildrens(boolean reload) {
+
         Object children = getChildren();
         if (children instanceof FolderChildren)
         {

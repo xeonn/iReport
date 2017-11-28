@@ -26,18 +26,29 @@ package com.jaspersoft.ireport.jasperserver.ui.actions;
 import com.jaspersoft.ireport.JrxmlDataObject;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlVisualView;
+import com.jaspersoft.ireport.designer.jrtx.JRTXEditorSupport;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.jasperserver.ActiveEditorTopComponentListener;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.RepositoryFile;
+import com.jaspersoft.ireport.jasperserver.RepositoryReportUnit;
+import com.jaspersoft.ireport.jasperserver.ui.nodes.ReportUnitNode;
 import com.jaspersoft.ireport.jasperserver.ui.nodes.ResourceNode;
+import com.jaspersoft.ireport.jasperserver.ui.wizards.ReportUnitWizardDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.io.File;
+import java.util.Set;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import org.openide.filesystems.FileUtil;
+import org.openide.loaders.DataObject;
+import org.openide.text.DataEditorSupport;
 import org.openide.util.HelpCtx;
 import org.openide.util.Mutex;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.NodeAction;
+import org.openide.windows.TopComponent;
+import org.openide.windows.WindowManager;
 
 public final class ReplaceFileAction extends NodeAction {
 
@@ -70,56 +81,176 @@ public final class ReplaceFileAction extends NodeAction {
         if (((ResourceNode)activatedNodes[0]).getRepositoryObject() instanceof RepositoryFile)
         {
             final RepositoryFile rf = (RepositoryFile)((ResourceNode)activatedNodes[0]).getRepositoryObject();
+            ReportUnitNode reportUnitNode = null;
 
             // Check if we are inside a report unit...
-            String reportUnitUri = null;
+            RepositoryReportUnit reportUnit = null;
+
+            String reportUnitUri;
             if (activatedNodes[0].getParentNode() instanceof ResourceNode &&
                 ((ResourceNode)activatedNodes[0].getParentNode()).getResourceDescriptor().getWsType().equals( ResourceDescriptor.TYPE_REPORTUNIT))
             {
-                reportUnitUri = ((ResourceNode)activatedNodes[0].getParentNode()).getResourceDescriptor().getUriString();
-            }
-            
-            // Get the current file...
-            JrxmlVisualView view = IReportManager.getInstance().getActiveVisualView();
-            if (view != null && view.getLookup() != null)
-            {
-                JrxmlDataObject dobject = view.getLookup().lookup(JrxmlDataObject.class);
-                if (dobject != null)
+                if ( ((ResourceNode)activatedNodes[0].getParentNode()).getRepositoryObject() instanceof RepositoryReportUnit)
                 {
-                    final String fileName = FileUtil.toFile(dobject.getPrimaryFile()).getPath();
-                    final String ruUri = reportUnitUri;
+                    reportUnit = (RepositoryReportUnit)((ResourceNode)activatedNodes[0].getParentNode()).getRepositoryObject();
+                    if (activatedNodes[0].getParentNode() instanceof ReportUnitNode)
+                    {
+                        reportUnitNode = (ReportUnitNode)activatedNodes[0].getParentNode();
+                    }
+                    else if (activatedNodes[0].getParentNode().getParentNode() instanceof ReportUnitNode)
+                    {
+                        reportUnitNode = (ReportUnitNode)activatedNodes[0].getParentNode().getParentNode();
+                    }
+                }
+            }
+
+            final RepositoryReportUnit finalReportUnit = reportUnit;
+            final ReportUnitNode finalReportUnitNode = reportUnitNode;
+
+            if (rf.getDescriptor().getWsType() != null &&
+                rf.getDescriptor().getWsType().equals(ResourceDescriptor.TYPE_JRXML))
+            {
+                // Get the current file...
+                final JrxmlVisualView view = IReportManager.getInstance().getActiveVisualView();
+                if (view != null && view.getLookup() != null)
+                {
+                    JrxmlDataObject dobject = view.getLookup().lookup(JrxmlDataObject.class);
+                    if (dobject != null)
+                    {
+                        final String fileName = FileUtil.toFile(dobject.getPrimaryFile()).getPath();
+                        
+
+                        Thread t = new Thread(new Runnable() {
+
+                            public void run() {
+                                try {
+
+                                    File file = new File(fileName);
+
+                                    String ruUri = null;
+
+                                    JasperServerManager.getMainInstance().fireResourceReplacing_resourceWillBeUpdated(rf, finalReportUnit, file);
+
+                                    if (finalReportUnit != null)
+                                    {
+                                        // Add extra resources...
+                                        ruUri = finalReportUnit.getDescriptor().getUriString();
+                                        ReportUnitWizardDescriptor.addRequiredResources(rf.getServer(), file, view.getEditorSupport().getCurrentModel(), finalReportUnit.getDescriptor(), rf.getDescriptor());
+                                    }
+
+                                    rf.getServer().getWSClient().modifyReportUnitResource(ruUri, rf.getDescriptor(),file);
+
+                                    JasperServerManager.getMainInstance().fireResourceReplacing_resourceUpdated(rf, finalReportUnit, file);
+
+                                    Mutex.EVENT.readAccess(new Runnable() {
+
+                                        public void run() {
+                                            JOptionPane.showMessageDialog(Misc.getMainFrame(),
+                                            JasperServerManager.getString("repositoryExplorer.message.fileUpdated", "File succesfully updated."),
+                                            JasperServerManager.getString("repositoryExplorer.message.operationResult", "Operation result"), JOptionPane.INFORMATION_MESSAGE);
+                                        }
+                                    });
+
+                                    if (finalReportUnitNode != null)
+                                    {
+                                        SwingUtilities.invokeAndWait(new Runnable() {
+
+                                            public void run() {
+                                                    finalReportUnitNode.updateDisplayName();
+                                                    finalReportUnitNode.refreshChildrens(true);
+                                                }
+                                            });
+                                    }
+
+                                } catch (Exception ex)
+                                {
+                                    final String msg = ex.getMessage();
+                                    Mutex.EVENT.readAccess(new Runnable() {
+
+                                        public void run() {
+                                             JOptionPane.showMessageDialog(Misc.getMainFrame(),JasperServerManager.getFormattedString("messages.error.3", "Error:\n {0}", new Object[] {msg}),"Operation result", JOptionPane.ERROR_MESSAGE);
+                                        }
+                                    });
+                                    ex.printStackTrace();
+                                }
+
+                            }
+                        });
+
+                        t.start();
+                    }
+                }
+            }
+            else
+            {
+                TopComponent tc = ActiveEditorTopComponentListener.getDefaultInstance().getActiveEditorTopComponent();
+
+                DataObject dobj = tc.getLookup().lookup(DataObject.class);
+                if (dobj == null) return;
+
+                final File file = FileUtil.toFile(dobj.getPrimaryFile());
+                if (file.exists())
+                {
                     Thread t = new Thread(new Runnable() {
 
-                        public void run() {
-                            try {
-                                rf.getServer().getWSClient().modifyReportUnitResource(ruUri, rf.getDescriptor(), new File(fileName));
-                            
-                                Mutex.EVENT.readAccess(new Runnable() {
+                            public void run() {
+                                try {
 
-                                    public void run() {
-                                        JOptionPane.showMessageDialog(Misc.getMainFrame(),
-                                        JasperServerManager.getString("repositoryExplorer.message.fileUpdated", "File succesfully updated."),
-                                        JasperServerManager.getString("repositoryExplorer.message.operationResult", "Operation result"), JOptionPane.INFORMATION_MESSAGE);
-                           
-                                    }
-                                }); 
-                            } catch (Exception ex)
-                            {
-                                final String msg = ex.getMessage();
-                                Mutex.EVENT.readAccess(new Runnable() {
+                                    String ruUri = null;
 
-                                    public void run() {
-                                         JOptionPane.showMessageDialog(Misc.getMainFrame(),JasperServerManager.getFormattedString("messages.error.3", "Error:\n {0}", new Object[] {msg}),"Operation result", JOptionPane.ERROR_MESSAGE);
+                                    // Avoid to notify this type of resource update...
+                                    // JasperServerManager.getMainInstance().fireResourceReplacing_resourceWillBeUpdated(rf, finalReportUnit, jrtxFile);
+
+                                    if (finalReportUnit != null)
+                                    {
+                                        // Add extra resources...
+                                        ruUri = finalReportUnit.getDescriptor().getUriString();
                                     }
-                                });
-                                ex.printStackTrace();
+
+                                    rf.getServer().getWSClient().modifyReportUnitResource(ruUri, rf.getDescriptor(),file);
+
+                                    //JasperServerManager.getMainInstance().fireResourceReplacing_resourceUpdated(rf, finalReportUnit, file);
+
+                                    Mutex.EVENT.readAccess(new Runnable() {
+
+                                        public void run() {
+                                            JOptionPane.showMessageDialog(Misc.getMainFrame(),
+                                            JasperServerManager.getString("repositoryExplorer.message.fileUpdated", "File succesfully updated."),
+                                            JasperServerManager.getString("repositoryExplorer.message.operationResult", "Operation result"), JOptionPane.INFORMATION_MESSAGE);
+                                        }
+                                    });
+
+                                    if (finalReportUnitNode != null)
+                                    {
+                                        SwingUtilities.invokeAndWait(new Runnable() {
+
+                                            public void run() {
+                                                    finalReportUnitNode.updateDisplayName();
+                                                    finalReportUnitNode.refreshChildrens(true);
+                                                }
+                                            });
+                                    }
+
+                                } catch (Exception ex)
+                                {
+                                    final String msg = ex.getMessage();
+                                    Mutex.EVENT.readAccess(new Runnable() {
+
+                                        public void run() {
+                                             JOptionPane.showMessageDialog(Misc.getMainFrame(),JasperServerManager.getFormattedString("messages.error.3", "Error:\n {0}", new Object[] {msg}),"Operation result", JOptionPane.ERROR_MESSAGE);
+                                        }
+                                    });
+                                    ex.printStackTrace();
+                                }
+
                             }
+                        });
 
-                        }
-                    });
-                    
-                    t.start();
+                        t.start();
                 }
+
+
+
             }
         }
     }
@@ -140,6 +271,14 @@ public final class ReplaceFileAction extends NodeAction {
                 }
             }
         }
+        if ( activatedNodes[0] instanceof ResourceNode &&
+             ((ResourceNode)activatedNodes[0]).getRepositoryObject() instanceof RepositoryFile)
+        {
+            // Get the active document...
+            TopComponent tc = ActiveEditorTopComponentListener.getDefaultInstance().getActiveEditorTopComponent();
+            if (tc != null) return true;
+        }
         return false;
     }
+
 }

@@ -93,6 +93,11 @@ public class DefaultExporterFactory implements ExporterFactory {
           exporter = new  net.sf.jasperreports.engine.export.JExcelApiExporter();
           configureXlsExporter(exporter);
        }
+       else if (format.equalsIgnoreCase("xlsx"))
+       {
+          exporter = new  net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter();
+          //configureXlsExporter(exporter);
+       }
        else if (format.equalsIgnoreCase("java2D"))
        {
           // no exporter will be returned.
@@ -109,6 +114,10 @@ public class DefaultExporterFactory implements ExporterFactory {
        else if (format.equalsIgnoreCase("odf"))
        {
           exporter = new  net.sf.jasperreports.engine.export.oasis.JROdtExporter();
+       }
+       else if (format.equalsIgnoreCase("ods"))
+       {
+          exporter = new  net.sf.jasperreports.engine.export.oasis.JROdsExporter();
        }
        else if (format.equalsIgnoreCase("docx"))
        {
@@ -140,11 +149,9 @@ public class DefaultExporterFactory implements ExporterFactory {
        {
           return Misc.nvl( IReportManager.getInstance().getProperty("ExternalHTMLViewer"), "");
        }
-       else if (format.equalsIgnoreCase("xls"))
-       {
-          return Misc.nvl( IReportManager.getInstance().getProperty("ExternalXLSViewer"), "");
-        }
-       else if (format.equalsIgnoreCase("xls2"))
+       else if (format.equalsIgnoreCase("xls") ||
+                format.equalsIgnoreCase("xls2") ||
+                format.equalsIgnoreCase("xlsx"))
        {
             return Misc.nvl( IReportManager.getInstance().getProperty("ExternalXLSViewer"), "");
        }
@@ -164,10 +171,15 @@ public class DefaultExporterFactory implements ExporterFactory {
        {
           return Misc.nvl( IReportManager.getInstance().getProperty("ExternalODFViewer"), "");
        }
+       else if (format.equalsIgnoreCase("ods"))
+       {
+          return Misc.nvl( IReportManager.getInstance().getProperty("ExternalODSViewer"), "");
+       }
        else if (format.equalsIgnoreCase("docx"))
        {
           return Misc.nvl( IReportManager.getInstance().getProperty("ExternalDOCXViewer"), "");
        }
+
        return null;
     }
     

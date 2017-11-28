@@ -165,6 +165,14 @@ public class RepositoryFolder {
         {
             rf = new RepositoryJrxmlFile(srv, rd );
         }
+        else if (rd.getWsType().equals( ResourceDescriptor.TYPE_STYLE_TEMPLATE)  )
+        {
+            rf = new RepositoryJrtxFile(srv, rd );
+        }
+        else if (rd.getWsType().equals( ResourceDescriptor.TYPE_RESOURCE_BUNDLE)  )
+        {
+            rf = new RepositoryBundleFile(srv, rd );
+        }
         else
         {
             rf = new RepositoryFile(srv, rd );

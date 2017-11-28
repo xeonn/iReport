@@ -139,6 +139,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
 
    private String javaFile = "";
    static private StringBuffer outputBuffer = new StringBuffer();
+
    
    /**
     * This is used to enable the preview tab when the report is ready...
@@ -1245,7 +1246,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                    }
                    //getLogTextArea().logOnConsole("Finished...\n");
                 }
-                else
+                else if (format == null || (!format.equalsIgnoreCase("") && !format.equalsIgnoreCase("java2D")))
                 {
                     getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\">" +
                               "No external viewer specified for this type of print. Set it in the options frame!" +
@@ -1457,7 +1458,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                     URL[] urls = new URL[]{};
                     if (reportFolder != null)
                     {
-                        urls = new URL[]{ reportFolder.toURL()};
+                        urls = new URL[]{ reportFolder.toURI().toURL()};
                     }
                     URLClassLoader urlClassLoader = new URLClassLoader(urls, cl);
                     URL url = urlClassLoader.findResource(resourceName);
@@ -1755,10 +1756,10 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
             if (executingReport == 0)
             {
               System.setProperty("java.class.path", systemCpBackup);
-              JRProperties.backupProperties();
+              // Unuseful expensive operation... IReportManager.getInstance().reloadJasperReportsProperties();
             }
         }
-        JRProperties.restoreProperties();
+
         getLogTextArea().setTitle("Finished" + constTabTitle);
         getLogTextArea().setRemovable(true);
         
@@ -1771,7 +1772,6 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
           if (executingReport == 1)
           {
               this.systemCpBackup = System.getProperty("java.class.path");
-              JRProperties.backupProperties();
           }
       }
       this.thread = new Thread(this);

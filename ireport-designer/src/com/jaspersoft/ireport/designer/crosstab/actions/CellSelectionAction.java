@@ -28,6 +28,7 @@ import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
 import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
 import java.awt.event.MouseEvent;
+import javax.swing.SwingUtilities;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -53,13 +54,20 @@ public class CellSelectionAction extends WidgetAction.Adapter {
             {
                     JRDesignCellContents cellContent = ModelUtils.getCellAt(crosstab, event.getPoint());
                     // If the cell is null, the document root is selected.
-                    Node node = IReportManager.getInstance().findNodeOf(cellContent == null ? crosstab : cellContent, OutlineTopComponent.getDefault().getExplorerManager().getRootContext());
-                try {
-                    IReportManager.getInstance().getActiveVisualView().getExplorerManager().setSelectedNodes(new Node[]{node});
-                    //IReportManager.getInstance().setSelectedObject(cellContent == null ? crosstab : cellContent);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                    final Node node = IReportManager.getInstance().findNodeOf(cellContent == null ? crosstab : cellContent, OutlineTopComponent.getDefault().getExplorerManager().getRootContext());
+
+                    SwingUtilities.invokeLater( new Runnable() {
+
+                    public void run() {
+                         try {
+                            IReportManager.getInstance().getActiveVisualView().getExplorerManager().setSelectedNodes(new Node[]{node});
+                            //IReportManager.getInstance().setSelectedObject(cellContent == null ? crosstab : cellContent);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+
                     //IReportManager.getInstance().setSelectedObject(cellContent == null ? crosstab : cellContent);
             }
         }

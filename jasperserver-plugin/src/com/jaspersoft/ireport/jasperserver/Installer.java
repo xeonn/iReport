@@ -23,9 +23,7 @@ public class Installer extends ModuleInstall {
         // Set a fake query executer for sl languages...
         if (JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.sl") == null)
         {
-            JRProperties.setProperty("net.sf.jasperreports.query.executer.factory.sl", "net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory");
-            IReportManager.getInstance().getDefaultJasperReportsProperties().put("net.sf.jasperreports.query.executer.factory.sl", "net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory");
-            JRProperties.backupProperties();
+            IReportManager.getInstance().setJRProperty("net.sf.jasperreports.query.executer.factory.sl", "net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory");
         }
     }
 }

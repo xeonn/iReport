@@ -175,8 +175,20 @@ public class PieDatasetPanel extends javax.swing.JPanel  implements ChartDataset
             setMode( MULTIPLE_SERIES_MODE);
         }
 
-        jSpinnerMaxCount.setValue( pieDataset.getMaxCount() == null ? 0 : pieDataset.getMaxCount());
-        jSpinnerMinPercentage.setValue( pieDataset.getMinPercentage() == null ? new Float(0) : pieDataset.getMinPercentage());
+        try {
+            SpinnerNumberModel model = (SpinnerNumberModel)jSpinnerMaxCount.getModel();
+            if (pieDataset.getMinPercentage() == null)
+            {
+                model.setValue(new Double(0));
+            }
+            else
+            {
+                model.setValue(pieDataset.getMinPercentage());
+            }
+        } catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
     public void setMode(int mode)
@@ -468,7 +480,7 @@ public class PieDatasetPanel extends javax.swing.JPanel  implements ChartDataset
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanel1.add(jSpinnerMaxCount, gridBagConstraints);
 
-        jLabelMinPercentage.setText("Min slice percentace");
+        jLabelMinPercentage.setText("Min slice percentage");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

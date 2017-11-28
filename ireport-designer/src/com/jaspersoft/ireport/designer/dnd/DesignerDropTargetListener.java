@@ -26,11 +26,13 @@ package com.jaspersoft.ireport.designer.dnd;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.ReportObjectScene;
+import com.jaspersoft.ireport.designer.crosstab.CellInfo;
 import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
 import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
 import com.jaspersoft.ireport.designer.palette.PaletteItem;
 import com.jaspersoft.ireport.designer.palette.PaletteUtils;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
@@ -38,7 +40,9 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
+import java.util.List;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import org.netbeans.api.visual.widget.Scene;
 
@@ -147,7 +151,21 @@ class DesignerDropTargetListener implements DropTargetListener {
         else if (scene instanceof CrosstabObjectScene)
         {
             JRDesignCrosstab crosstab = ((CrosstabObjectScene)scene).getDesignCrosstab();
-            return ModelUtils.getCellAt(crosstab,  p) != null;
+            List<CellInfo> cells = ModelUtils.getCellInfos(crosstab);
+            int crosstabWidth = 0;
+            int crosstabHeight = 0;
+
+            for (int i=0; i<cells.size(); ++i)
+            {
+                CellInfo ci = cells.get(i);
+
+                int thisW = ci.getLeft() + ci.getCellContents().getWidth();
+                if (thisW > crosstabWidth) crosstabWidth = thisW;
+
+                int thisH = ci.getTop() + ci.getCellContents().getHeight();
+                if (thisH > crosstabHeight) crosstabHeight = thisH;
+            }
+            return (new Rectangle(0,0,crosstabWidth, crosstabHeight).contains(p));
         }
        return false;
     }

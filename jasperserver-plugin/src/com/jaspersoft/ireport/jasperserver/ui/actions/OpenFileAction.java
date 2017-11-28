@@ -96,8 +96,11 @@ public final class OpenFileAction extends NodeAction {
                             RepositoryReportUnit reportUnit = ReportUnitNode.getParentReportUnit(node);
                                
                             // Add temporary info about where this jd comes from...
-                            JasperServerManager.getMainInstance().getJrxmlReportUnitMap().put(fname , reportUnit);
-
+                            if (reportUnit != null)
+                            {
+                                JasperServerManager.getMainInstance().getJrxmlReportUnitMap().put(fname , reportUnit);
+                            }
+                            
                             if (rf.getDescriptor().getWsType().equals( ResourceDescriptor.TYPE_JRXML))
                             {
                                 JrxmLookupListener listener = new JrxmLookupListener(obj, jrxmlListeners, reportUnit, rf.getServer());

@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer.actions;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.outline.nodes.CellNode;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
@@ -118,8 +119,9 @@ public final class PaddingAndBordersAction extends NodeAction {
         {
             for (JRLineBox bb : boxes)
             {
-                  ModelUtils.applyBoxProperties(bb, box);  
+                  ModelUtils.applyBoxProperties(bb, box);
             }
+            if (boxes.size() > 0) IReportManager.getInstance().notifyReportChange();
         }
         
 //        for (int i=0; i<activatedNodes.length; ++i)

@@ -37,10 +37,10 @@ import org.openide.explorer.ExplorerUtils;
 import org.openide.explorer.view.BeanTreeView;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
+import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
-import org.openide.util.Utilities;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.util.lookup.ProxyLookup;
@@ -73,7 +73,7 @@ final public class GenericInspectorTopComponent extends TopComponent implements 
         initComponents();
         setName(I18n.getString("CTL_GenericInspectorTopComponent"));
         setToolTipText(I18n.getString("HINT_GenericInspectorTopComponent"));
-        setIcon(Utilities.loadImage(ICON_PATH, true));
+        setIcon(ImageUtilities.loadImage(ICON_PATH, true));
 
         this.ic = new InstanceContent();
         this.lookup = new AbstractLookup(ic);

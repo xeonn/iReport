@@ -25,7 +25,7 @@ package com.jaspersoft.ireport.designer.editor;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import org.openide.util.Utilities;
+import org.openide.util.ImageUtilities;
 
 /**
  *
@@ -90,7 +90,7 @@ public class NamedIconItem {
     {
         this(item, displayName);
         try {
-            this.icon = new ImageIcon( Utilities.loadImage(iconName) );
+            this.icon = new ImageIcon( ImageUtilities.loadImage(iconName) );
         } catch (Exception ex)
         {
             ex.printStackTrace();

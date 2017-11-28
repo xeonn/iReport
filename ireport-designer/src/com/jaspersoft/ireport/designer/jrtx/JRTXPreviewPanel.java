@@ -117,7 +117,7 @@ public class JRTXPreviewPanel extends javax.swing.JPanel
                     requiredSpace += elements[i].getWidth();
                 }
 
-                gap = Math.max(15, (int)((component.getWidth() - component.getInsets().left - component.getInsets().right)-requiredSpace)/(1+elements.length) );
+                gap = Math.max(15, ((component.getWidth() - component.getInsets().left - component.getInsets().right)-requiredSpace)/(1+elements.length) );
 
                 for (int i=0; i<elements.length; ++i)
                 {

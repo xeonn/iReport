@@ -28,7 +28,7 @@ import org.netbeans.api.visual.border.Border;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import javax.swing.ImageIcon;
-import org.openide.util.Utilities;
+import org.openide.util.ImageUtilities;
 
 /**
  * @author David Kaspar
@@ -45,7 +45,7 @@ public class ElementSelectedBorder implements Border {
     protected static final Insets INSETS = new Insets(5, 5, 5, 5); //new Insets(9, 8, 10, 9);
     protected Color COLOR_1 = Color.LIGHT_GRAY;
     protected Color COLOR_2 = new Color(255,175,0, 200);
-    private static final ImageIcon gripIcon = new ImageIcon(Utilities.loadImage("com/jaspersoft/ireport/designer/borders/grip.png"));
+    private static final ImageIcon gripIcon = new ImageIcon(ImageUtilities.loadImage("com/jaspersoft/ireport/designer/borders/grip.png"));
     
     private int status = 0;
 

@@ -102,25 +102,25 @@ public class LineStyleListCellRenderer extends JComponent implements ListCellRen
             float penWidth = 1f;
             if (styleName == JRPen.LINE_STYLE_SOLID)
             {
-                stroke = (Stroke) new BasicStroke((float) (penWidth));
+                stroke = (Stroke) new BasicStroke(penWidth);
             }
             else if (styleName == JRPen.LINE_STYLE_DASHED)
             {
-                stroke =  (Stroke) new BasicStroke((float) (penWidth), 
+                stroke =  (Stroke) new BasicStroke(penWidth, 
                                             BasicStroke.CAP_BUTT, 
                                             BasicStroke.JOIN_BEVEL, 0f, 
                                             new float[] { 5f, 3f }, 0f);
             }
             else if (styleName == JRPen.LINE_STYLE_DOTTED)
             {
-                stroke =  (Stroke) new BasicStroke((float) (penWidth), 
+                stroke =  (Stroke) new BasicStroke(penWidth, 
                                             BasicStroke.CAP_BUTT, 
                                             BasicStroke.JOIN_BEVEL, 0f, 
                                             new float[] { 1f*penWidth, 1f*penWidth }, 0f);
             }
             else if (styleName == JRPen.LINE_STYLE_DOUBLE)
             {
-                stroke =  (Stroke) new BasicStroke((float) (penWidth/3f));
+                stroke =  (Stroke) new BasicStroke((penWidth/3f));
             }
             
             if (stroke != null)

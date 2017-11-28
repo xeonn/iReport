@@ -71,7 +71,7 @@ public class IRExpressionCollector extends JRExpressionCollector {
     public void collect(JRChart element)
     {
             JRDesignChart chart = (JRDesignChart)element;
-            super.collect((JRChart)element);
+            super.collect(element);
             chart.getDataset().collectExpressions(this);
             chart.getPlot().collectExpressions(this);
             JRDatasetRun datasetRun = chart.getDataset().getDatasetRun();

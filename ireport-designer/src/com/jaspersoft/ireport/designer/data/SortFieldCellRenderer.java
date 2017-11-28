@@ -39,8 +39,8 @@ public class SortFieldCellRenderer extends DefaultListCellRenderer {
     
     /** Creates a new instance of SortFieldCellRenderer */
     public SortFieldCellRenderer() {
-        if (ascIcon == null) ascIcon = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/data/arrow_down.png"));
-        if (descIcon == null) descIcon = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/data/arrow_up.png"));
+        if (ascIcon == null) ascIcon = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/data/arrow_up.png"));
+        if (descIcon == null) descIcon = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/data/arrow_down.png"));
     }
 
     @Override

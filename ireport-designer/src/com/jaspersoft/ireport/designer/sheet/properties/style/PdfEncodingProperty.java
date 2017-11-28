@@ -57,6 +57,11 @@ final public  class PdfEncodingProperty extends PropertySupport.ReadWrite {
         return style.getPdfEncoding();
     }
 
+    @Override
+    public String getHtmlDisplayName() {
+        return "<html><s>" + getDisplayName();
+    }
+
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         if (val == null || val instanceof String) {
             if ((val + "").trim().length() == 0) {

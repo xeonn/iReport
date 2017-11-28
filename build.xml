@@ -7,29 +7,38 @@
     <import file="nbproject/build-impl.xml"/>
 
     <patternset id="locale.platform.included.files">
-                <include name="platform7/**/*_de.jar"/>
-                <include name="platform7/**/*_es.jar"/>
-                <include name="platform7/**/*_fr.jar"/>
-                <include name="platform7/**/*_it.jar"/>
-                <include name="platform7/**/*_pl.jar"/>
-                <!-- <include name="platform7/**/*_pt_BR.jar"/> -->
-                <include name="platform7/**/*_sq.jar"/>
+                <include name="platform*/**/*_de.jar"/>
+                <include name="platform*/**/*_es.jar"/>
+                <include name="platform*/**/*_fr.jar"/>
+                <include name="platform*/**/*_it.jar"/>
+                <include name="platform*/**/*_ja.jar"/>
+                <include name="platform*/**/*_pl.jar"/>
+                <include name="platform*/**/*_pt_BR.jar"/>
+                <include name="platform*/**/*_sq.jar"/>
+                <include name="platform*/**/*_zh_TW.jar"/>
+                <include name="platform*/**/*_zh_CN.jar"/>
 
-                <include name="ide8/**/*_de.jar"/>
-                <include name="ide8/**/*_es.jar"/>
-                <include name="ide8/**/*_fr.jar"/>
-                <include name="ide8/**/*_it.jar"/>
-                <include name="ide8/**/*_pl.jar"/>
-                <!-- <include name="ide8/**/*_pt_BR.jar"/> -->
-                <include name="ide8/**/*_sq.jar"/>
+                <include name="ide*/**/*_de.jar"/>
+                <include name="ide*/**/*_es.jar"/>
+                <include name="ide*/**/*_fr.jar"/>
+                <include name="ide*/**/*_it.jar"/>
+                <include name="ide*/**/*_ja.jar"/>
+                <include name="ide*/**/*_pl.jar"/>
+                <include name="ide*/**/*_pt_BR.jar"/>
+                <include name="ide*/**/*_sq.jar"/>
+                <include name="ide*/**/*_zh_TW.jar"/>
+                <include name="ide*/**/*_zh_CN.jar"/>
 
-                <include name="nb6.0/**/*_de.jar"/>
-                <include name="nb6.0/**/*_es.jar"/>
-                <include name="nb6.0/**/*_fr.jar"/>
-                <include name="nb6.0/**/*_it.jar"/>
-                <include name="nb6.0/**/*_pl.jar"/>
-                <!-- <include name="nb6.0/**/*_pt_BR.jar"/> -->
-                <include name="nb6.0/**/*_sq.jar"/>
+                <include name="nb*/**/*_de.jar"/>
+                <include name="nb*/**/*_es.jar"/>
+                <include name="nb*/**/*_fr.jar"/>
+                <include name="nb*/**/*_it.jar"/>
+                <include name="nb*/**/*_ja.jar"/>
+                <include name="nb*/**/*_pl.jar"/>
+                <include name="nb*/**/*_pt_BR.jar"/>
+                <include name="nb*/**/*_sq.jar"/>
+                <include name="nb*/**/*_zh_TW.jar"/>
+                <include name="nb*/**/*_zh_CN.jar"/>
     </patternset>
 
     <target name="update_versions" depends="-init" description="Update the version of the branding files to the app.title and app.version">
@@ -239,12 +248,13 @@
     <delete file="${dist.dir}/${app.name}.app/Contents/Resources/${app.name}.icns"/>
     <copy file="${basedir}/etc/ireport.icns" tofile="${dist.dir}/${app.name}.app/Contents/Resources/${app.name}.icns"/>
     <mkdir dir="${dist.dir}/${distro.zipfilename}"/>
-    <move file="${dist.dir}/${app.name}.app" tofile="${dist.dir}/${distro.zipfilename}/${app.title}.app"/>
+    
     <copy todir="${dist.dir}/${app.name}.app/Contents/Resources/${app.name}">
         <fileset dir="${netbeans.dest.dir}">
             <patternset refid="locale.platform.included.files"/>
         </fileset>
     </copy>
+    <move file="${dist.dir}/${app.name}.app" tofile="${dist.dir}/${distro.zipfilename}/${app.title}.app"/>
 
     <copy  todir="${dist.dir}/${distro.zipfilename}">
                 <fileset dir="${basedir}">
@@ -337,28 +347,12 @@
         <delete dir="${dist.dir}/${app.name}"/>
     </target>
 
-    <target name="update_platform_giulio" description="Update the 6.0.1 platform on Giulio's PC" depends="build">
-        <copy file="build/cluster/modules/com-jaspersoft-ireport-jasperserver.jar" tofile="C:/JasperSoft/SUBVERSION/platform-6.0.1/ireport/modules/com-jaspersoft-ireport-jasperserver.jar" />
-        <copy file="build/cluster/modules/com-jaspersoft-ireport.jar" tofile="C:/JasperSoft/SUBVERSION/platform-6.0.1/ireport/modules/com-jaspersoft-ireport.jar" />
-        <copy file="build/cluster/update_tracking/com-jaspersoft-ireport.xml" tofile="C:/JasperSoft/SUBVERSION/platform-6.0.1/ireport/update_tracking/com-jaspersoft-ireport.xml" />
-        <copy file="build/cluster/update_tracking/com-jaspersoft-ireport-jasperserver.xml" tofile="C:/JasperSoft/SUBVERSION/platform-6.0.1/ireport/update_tracking/com-jaspersoft-ireport-jasperserver.xml" />
-        <!-- Update the ext jars.... -->
-        <delete>
-            <fileset dir="C:/JasperSoft/SUBVERSION/platform-6.0.1/ireport/modules/ext" includes="**/*.jar"/>
-        </delete>
+    <target name="update_platform_generic" description="Update the 6.0.1 platform" depends="build">
 
-        <copy todir="C:/JasperSoft/SUBVERSION/platform-6.0.1/ireport/modules/ext">
-            <fileset dir="build/cluster/modules/ext" includes="**/*.jar"/>
-        </copy>
-
-    </target>
-
-    <target name="update_platform_generic" description="Update the 6.0.1 platform on Giulio's PC" depends="build">
-
-        <delete>
+        <delete failonerror="false">
             <fileset dir="${netbeans.dest.dir}/ireport" includes="**/*"/>
         </delete>
-
+        <mkdir dir="${netbeans.dest.dir}/ireport"/>
         <copy todir="${netbeans.dest.dir}/ireport">
             <fileset dir="build/cluster/" includes="**/*"/>
         </copy>

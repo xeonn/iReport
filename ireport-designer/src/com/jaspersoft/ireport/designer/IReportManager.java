@@ -73,7 +73,9 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.JRProperties;
+import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
 import org.apache.xerces.parsers.DOMParser;
+import org.eclipse.jdt.internal.compiler.util.SuffixConstants;
 import org.netbeans.api.db.explorer.JDBCDriver;
 import org.netbeans.api.db.explorer.JDBCDriverManager;
 import org.openide.awt.StatusDisplayer;
@@ -108,6 +110,7 @@ public class IReportManager {
     
     public static final String CURRENT_DIRECTORY = "CURRENT_DIRECTORY";
     public static final String IREPORT_CLASSPATH = "IREPORT_CLASSPATH";
+    public static final String IREPORT_HIDDEN_CLASSPATH = "IREPORT_HIDDEN_CLASSPATH";
     public static final String IREPORT_RELODABLE_CLASSPATH = "IREPORT_RELODABLE_CLASSPATH";
     public static final String IREPORT_FONTPATH = "IREPORT_FONTPATH";
     public static final String DEFAULT_CONNECTION_NAME = "DEFAULT_CONNECTION_NAME";
@@ -121,15 +124,31 @@ public class IReportManager {
 
     public static HashMap<String, ElementNodeFactory> elementNodeFactories = new HashMap<String, ElementNodeFactory>();
 
+    private boolean noNetwork = false;
 
-    public void reloadJasperReportsProperties() {
-        
+
+    /**
+     * The jasperReports properties are stored in the JRProperties class.
+     * Anyway the set of properties stored here may change at run time when
+     * a report is compiled or executed. This methods returns the properties
+     * has they are stored in iReport. If you need to set a JRProperty,
+     * make sure you use the method setPersistentJRPRoperty().
+     * The reloadJasperReportsProperties method relies on this one to
+     * reload the properties. Please note that changes made to the JRProperties
+     * that are not done using setPersistentJRPRoperty may be lost during the
+     * use of iReport.
+     * @return
+     */
+    public Properties getPersistentJRProperties()
+    {
+        Properties persistentProperties = new Properties();
+
         Properties props = getDefaultJasperReportsProperties();
         Enumeration en = props.keys();
         while (en.hasMoreElements())
         {
             String key = (String) en.nextElement();
-            JRProperties.setProperty(key, props.getProperty(key));
+            persistentProperties.setProperty(key, props.getProperty(key));
         }
 
         // Setting JR properties saved in iReport....
@@ -151,11 +170,62 @@ public class IReportManager {
                 }
                 else
                 {
-                    JRProperties.setProperty(name, value);
+                    persistentProperties.setProperty(name, value);
                 }
             }
         }
 
+        return persistentProperties;
+    }
+
+    /**
+     * This method reset the JRProperties to the set of persisten properties
+     * set in iReport.
+     */
+    public void reloadJasperReportsProperties() {
+        
+        Properties props = getPersistentJRProperties();
+        Enumeration en = props.keys();
+        while (en.hasMoreElements())
+        {
+            String key = (String) en.nextElement();
+            JRProperties.setProperty(key, props.getProperty(key));
+        }
+
+        // remove other keys...
+        List keys = JRProperties.getProperties("");
+        for (int i=0; i<keys.size(); ++i)
+        {
+            PropertySuffix k = (JRProperties.PropertySuffix)keys.get(i);
+            if (!props.contains(k.getKey()))
+            {
+                JRProperties.removePropertyValue(k.getKey());
+            }
+        }
+    }
+
+    /**
+     * This is the most clean way to set a JRProperties property.
+     * The property is set in the JRProperties and it is cached
+     * to be restored in case a restore of the properties is performed
+     * (i.e. after a report execution).
+     * 
+     * @param key - If null does nothing
+     * @param value - If null, remove the property
+     */
+    public void setJRProperty(String key, String value)
+    {
+        if (key == null) return;
+        if (value == null)
+        {
+            JRProperties.removePropertyValue(key);
+            getDefaultJasperReportsProperties().remove(key);
+        }
+        else
+        {
+            JRProperties.setProperty(key, value);
+            getDefaultJasperReportsProperties().setProperty(key, value);
+        }
     }
 
     private java.util.ArrayList<IReportConnection> connections = null;
@@ -410,9 +480,19 @@ public class IReportManager {
     private void initialize()
     {
 
-        
+        // Save the properties like they are when loaded from the default.jasperreports.properties file...
+
+        List props = JRProperties.getProperties("");
+
+        for (int i=0; i<props.size(); ++i)
+        {
+            JRProperties.PropertySuffix prop = (JRProperties.PropertySuffix)props.get(i);
+            if (prop.getKey() == null || prop.getValue() == null) continue;
+            getDefaultJasperReportsProperties().setProperty(prop.getKey(), prop.getValue());
+        }
+
         try {
-            net.sf.jasperreports.engine.util.JRProperties.setProperty("net.sf.jasperreports.query.executer.factory.xmla-mdx",
+            setJRProperty("net.sf.jasperreports.query.executer.factory.xmla-mdx",
                     "net.sf.jasperreports.engine.query.JRXmlaQueryExecuterFactory");
         } catch (Exception ex)
         { 
@@ -421,7 +501,7 @@ public class IReportManager {
         }
 
         try {
-            net.sf.jasperreports.engine.util.JRProperties.setProperty("net.sf.jasperreports.xpath.executer.factory",
+            setJRProperty("net.sf.jasperreports.xpath.executer.factory",
                     "net.sf.jasperreports.engine.util.xml.JaxenXPathExecuterFactory");
         } catch (Exception ex)
         { 
@@ -431,18 +511,6 @@ public class IReportManager {
 
         // This initialize the query executers.
         getQueryExecuters();
-
-        // Save the properties like they are when loaded from the default.jasperreports.properties file...
-        // plus some other basic properties set by ireport...
-        defaultJasperReportsProperties = new Properties();
-        List props = JRProperties.getProperties("");
-
-        for (int i=0; i<props.size(); ++i)
-        {
-            JRProperties.PropertySuffix prop = (JRProperties.PropertySuffix)props.get(i);
-            defaultJasperReportsProperties.setProperty(prop.getKey(), prop.getValue());
-        }
-        JRProperties.backupProperties();
 
         reloadJasperReportsProperties();
         
@@ -811,6 +879,9 @@ public class IReportManager {
         ProxyClassLoader
         */
         // Add all the dabatase classpath entries...
+
+        List<String> hiddenClasspath = getHiddenClasspath();
+
         JDBCDriverManager manager = JDBCDriverManager.getDefault();
 
         JDBCDriver[] drivers = manager.getDrivers();
@@ -837,42 +908,32 @@ public class IReportManager {
                 if (f != null && f.exists())
                 {
                     try {
-                        reportClassLoader.addNoRelodablePath( f.getCanonicalPath() );
+                        if (!hiddenClasspath.contains(f.getCanonicalPath()))
+                        {
+                            hiddenClasspath.add(f.getCanonicalPath());
+                        }
 
-                    } catch (IOException ex) {}
+                    } catch (IOException ex) {
+
+                        ex.printStackTrace();
+                    }
                 }
             }
         }
 
-        /*
-        File fontsDir = InstalledFileLocator.getDefault().locate("fonts", null, false);
-        if (fontsDir != null && fontsDir.exists() && fontsDir.isDirectory())
-        {
-            File[] fontJars = fontsDir.listFiles(new FilenameFilter() {
+        // Adding fonts directory...
 
-                public boolean accept(File dir, String name) {
-                    return name.toLowerCase().endsWith(".jar");
-                }
-            });
+        try {
+            File fontsDir = Misc.getFontsDirectory();
 
-            for (int i=0; i<fontJars.length; ++i)
+            // This does not work apparently...
+            if (!hiddenClasspath.contains(fontsDir.getCanonicalPath()))
             {
-                try {
-                    reportClassLoader.addNoRelodablePath(fontJars[i].getCanonicalPath());
-                    System.out.println("Adding to path: " + fontJars[i].getCanonicalPath());
-                    System.out.flush();
-                } catch (IOException ex) {
-                    //Exceptions.printStackTrace(ex);
-                }
+                hiddenClasspath.add(fontsDir.getCanonicalPath());
             }
-        }
-        else
-        {
-            System.out.println("Invalid fonts dir: " + fontsDir);
-                    System.out.flush();
-        }
-        */
+        } catch (IOException ex) {}
 
+        setHiddenClasspath(hiddenClasspath, false);
         reportClassLoader.rescanAdditionalClasspath();
 
         // set the not cached classpath...
@@ -1070,6 +1131,7 @@ public class IReportManager {
         addConnectionImplementation("com.jaspersoft.ireport.designer.connection.JRXMLADataSourceConnection");
         addConnectionImplementation("com.jaspersoft.ireport.designer.connection.MondrianConnection");
         addConnectionImplementation("com.jaspersoft.ireport.designer.connection.QueryExecuterConnection");
+        addConnectionImplementation("com.jaspersoft.ireport.designer.connection.JRXlsDataSourceConnection");
     }
     
     /**
@@ -1152,8 +1214,18 @@ public class IReportManager {
      *  Return the user defined set of additional paths for the classpath.
      */
     public List<String> getClasspath() {
+        return getClasspath(getPreferences().get(IREPORT_CLASSPATH, ""));
+    }
+
+    public List<String> getHiddenClasspath() {
+        return getClasspath(getPreferences().get(IREPORT_HIDDEN_CLASSPATH, ""));
+    }
+
+    private List<String> getClasspath(String cpString) {
         ArrayList<String> cp = new ArrayList<String>();
-        String[] paths = getPreferences().get(IREPORT_CLASSPATH, "").split(";");
+        if (cpString == null) return cp;
+
+        String[] paths = cpString.split(";");
         for (int idx = 0; idx < paths.length; idx++) {
             cp.add(paths[idx]);
         }
@@ -1164,40 +1236,36 @@ public class IReportManager {
      *  Return the user defined set of additional paths for the classpath.
      */
     public List<String> getRelodableClasspath() {
-        ArrayList<String> cp = new ArrayList<String>();
-        String[] paths = getPreferences().get(IREPORT_RELODABLE_CLASSPATH, "").split(";");
-        for (int idx = 0; idx < paths.length; idx++) {
-            cp.add(paths[idx]);
-        }
-        return cp;
+        return getClasspath(getPreferences().get(IREPORT_RELODABLE_CLASSPATH, ""));
     }
-    
+
+
+    private void setClasspath(List<String> cp, String classpathType) {
+        String classpathString = "";
+        for (String path : cp)
+        {
+            classpathString += path + ";";
+        }
+        getPreferences().put(classpathType, classpathString);
+    }
+
     /**
      *  Save the new classpath
      */
     public void setClasspath(List<String> cp) {
-        String classpathString = "";
-        for (String path : cp)
-        {
-            classpathString += path + ";";
-        }
-        getPreferences().put(IREPORT_CLASSPATH, classpathString);
-
-//        if (reportClassLoader != null)
-//        {
-//            reportClassLoader.rescanAdditionalClasspath();
-//        }
-
+        setClasspath(cp, IREPORT_CLASSPATH);
         getReportClassLoader(true); // This recreates the classloader with the updated paths.
     }
 
+    /**
+     *  Save the new classpath
+     */
+    public void setHiddenClasspath(List<String> cp, boolean refreshClassloader) {
+        setClasspath(cp, IREPORT_HIDDEN_CLASSPATH);
+    }
+
     public void setRelodableClasspath(List<String> cp) {
-        String classpathString = "";
-        for (String path : cp)
-        {
-            classpathString += path + ";";
-        }
-        getPreferences().put(IREPORT_RELODABLE_CLASSPATH, classpathString);
+        setClasspath(cp, IREPORT_RELODABLE_CLASSPATH);
     }
 
     public void updateConnection(int i, IReportConnection con) {
@@ -1239,6 +1307,16 @@ public class IReportManager {
         for (int i=0; i<getQueryExecuters().size(); ++i)
         {
             QueryExecuterDef tqe = getQueryExecuters().get(i);
+            if (tqe == null)
+            {
+                Misc.log("Error: null query executer");
+                continue;
+            }
+            if (tqe.getLanguage() == null)
+            {
+                Misc.log("Error: null query language of executer " + tqe);
+                continue;
+            }
             if (tqe.getLanguage().equals( qed.getLanguage()) )
             {
                 if (overrideSameLanguage)
@@ -1260,7 +1338,7 @@ public class IReportManager {
         }
         
         // register the QE in the JasperServer properties...
-        net.sf.jasperreports.engine.util.JRProperties.setProperty("net.sf.jasperreports.query.executer.factory." + qed.getLanguage(), qed.getClassName());
+        setJRProperty("net.sf.jasperreports.query.executer.factory." + qed.getLanguage(), qed.getClassName());
             
         
         return true;
@@ -1428,12 +1506,17 @@ public class IReportManager {
     public Object getLastParameterValue(JRParameter p)
     {
           Object o = parameterValues.get(p.getName() + " " + p.getValueClassName());
-          
-          if (p.getValueClass().isInstance(o))
-          {
-              return o;
-          }
-          return null;
+          return o;
+
+          // There is no reason here to make type checking.
+          // If there is a previous stored value, it's because iReport set it.
+          // If the value is not congruent with the actual parameter type,
+          // it's catched by the key used with the parameter.
+          //if (p.getValueClass().isInstance(o))
+          //{
+          //    return o;
+          //}
+          //return null;
     }
     
     /**
@@ -1539,10 +1622,12 @@ public class IReportManager {
             exporterFactories.add(new DefaultExporterFactory("xhtml"));
             exporterFactories.add(new DefaultExporterFactory("xls"));
             exporterFactories.add(new DefaultExporterFactory("xls2"));
+            exporterFactories.add(new DefaultExporterFactory("xlsx"));
             exporterFactories.add(new DefaultExporterFactory("java2D"));
             exporterFactories.add(new DefaultExporterFactory("txt"));
             exporterFactories.add(new DefaultExporterFactory("rtf"));
             exporterFactories.add(new DefaultExporterFactory("odf"));
+            exporterFactories.add(new DefaultExporterFactory("ods"));
             exporterFactories.add(new DefaultExporterFactory("docx"));
             exporterFactories.add(new DefaultExporterFactory("xml"));
         }
@@ -1553,6 +1638,10 @@ public class IReportManager {
      * @return the defaultJasperReportsProperties
      */
     public Properties getDefaultJasperReportsProperties() {
+        if (defaultJasperReportsProperties == null)
+        {
+            defaultJasperReportsProperties = new Properties();
+        }
         return defaultJasperReportsProperties;
     }
 
@@ -1563,5 +1652,31 @@ public class IReportManager {
         this.defaultJasperReportsProperties = defaultJasperReportsProperties;
     }
 
+    public void addPathToClasspath(String path, boolean reloadable)
+    {
+        List<String> classpath = (reloadable) ? IReportManager.getInstance().getRelodableClasspath() : IReportManager.getInstance().getClasspath();
+
+        if (classpath.contains(path)) return;
+
+        classpath.add(path);
+
+        if (reloadable) IReportManager.getInstance().setRelodableClasspath(classpath);
+        else IReportManager.getInstance().setClasspath(classpath);
+
+    }
+
+    /**
+     * @return the noNetwork
+     */
+    public boolean isNoNetwork() {
+        return noNetwork;
+    }
+
+    /**
+     * @param noNetwork the noNetwork to set
+     */
+    public void setNoNetwork(boolean noNetwork) {
+        this.noNetwork = noNetwork;
+    }
 
 }

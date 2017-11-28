@@ -63,8 +63,7 @@ public class ConfigurableDrawVisitor extends DrawVisitor {
         //this.convertVisitor = new ConvertVisitor(reportConverter);
         this.grx = grx;
         this.reportConverter = reportConverter;
-
-	}
+    }
 
     @Override
     public void visitFrame(JRFrame frame) {
@@ -80,7 +79,7 @@ public class ConfigurableDrawVisitor extends DrawVisitor {
 
             if (frameDrawer == null)
             {
-                frameDrawer = new FrameDrawer(null, new TextRenderer(false));
+                frameDrawer = new FrameDrawer(null, new TextRenderer(false, true));
                 frameDrawer.setClip(true);
             }
             JRPrintFrame element = (JRPrintFrame)convertVisitor.getVisitPrintElement(frame);
@@ -94,7 +93,7 @@ public class ConfigurableDrawVisitor extends DrawVisitor {
 		}
         catch (JRException e)
 		{
-			throw new JRRuntimeException(e);
+            throw new JRRuntimeException(e);
 		}
 
 

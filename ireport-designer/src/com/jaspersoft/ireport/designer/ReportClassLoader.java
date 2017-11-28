@@ -114,6 +114,7 @@ public class ReportClassLoader extends java.lang.ClassLoader {
     {
         // Looking for jars or zip in lib directory not in classpath...
         List<String> cp = IReportManager.getInstance().getClasspath();
+        cp.addAll(IReportManager.getInstance().getHiddenClasspath());
         for (String path : cp)
         {
             File f = new File( path );
@@ -121,16 +122,15 @@ public class ReportClassLoader extends java.lang.ClassLoader {
             try {
                 if (!fPathChachedItems.contains(f.getCanonicalPath()))
                 {
-                      //System.out.println("Added dynamically " + f.getCanonicalPath() + " to ireport class path");
                       fPathChachedItems.add(f.getCanonicalPath());
                 }
             } catch (Exception ex)
             {
                 System.out.println(I18n.getString("ReportClassLoader.Warning.Path") + f);
             }
-                   
-            
         }
+
+
     }
         
     /**

@@ -72,14 +72,18 @@ public class JRListComponentWidget extends JRDesignElementWidget {
             contents.getEventSupport().addPropertyChangeListener(this);
         }
 
-        getElement().getEventSupport().addPropertyChangeListener(JRDesignElement.PROPERTY_HEIGHT, new PropertyChangeListener() {
+        PropertyChangeListener pcl = new PropertyChangeListener() {
 
             public void propertyChange(PropertyChangeEvent evt) {
                     ListComponent c = (ListComponent) ((JRDesignComponentElement)getElement()).getComponent();
                     DesignListContents contents = (DesignListContents) c.getContents();
                     contents.setHeight( getElement().getHeight() );
+                    contents.setWidth( getElement().getWidth() );
             }
-        });
+        };
+
+        getElement().getEventSupport().addPropertyChangeListener(JRDesignElement.PROPERTY_HEIGHT, pcl);
+        getElement().getEventSupport().addPropertyChangeListener(JRDesignElement.PROPERTY_WIDTH, pcl);
 
     }
 
@@ -106,7 +110,7 @@ public class JRListComponentWidget extends JRDesignElementWidget {
         new_af.concatenate(translate);
         gr.setTransform(new_af);
 
-        JRDesignElement element = (JRDesignElement)this.getElement();
+        JRDesignElement element = this.getElement();
         
         StandardListComponent component = (StandardListComponent) ((JRDesignComponentElement)getElement()).getComponent();
         
@@ -118,6 +122,12 @@ public class JRListComponentWidget extends JRDesignElementWidget {
         gr.setStroke(DOTTED_LINE);
         gr.setColor(ReportObjectScene.DESIGN_LINE_COLOR );
         gr.drawLine( 0, component.getContents().getHeight() , element.getWidth(), component.getContents().getHeight());
+
+        if (component.getContents().getWidth() != null && component.getContents().getWidth().intValue() != 0)
+        {
+            gr.drawLine( component.getContents().getWidth(), 0 , component.getContents().getWidth(), element.getHeight());
+        }
+
         gr.setClip(oldClip);
         gr.setStroke(oldStroke);
 

@@ -63,6 +63,13 @@ public class PdfFontNameProperty extends PropertySupport.ReadWrite
         return font.getPdfFontName();
     }
 
+    @Override
+    public String getHtmlDisplayName() {
+        return "<html><s>" + getDisplayName();
+    }
+
+
+
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         if (val == null || val instanceof String)

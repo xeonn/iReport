@@ -84,7 +84,7 @@ public class CellNode extends IRIndexedNode implements PropertyChangeListener {
         this.cellContents.getEventSupport().addPropertyChangeListener(this);
         
         
-        setDisplayName ( ModelUtils.nameOf(cellContents) );
+        setDisplayName ( ModelUtils.nameOf(cellContents));
         
         this.addNodeListener(new NodeListener() {
 

@@ -47,6 +47,15 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
+                    <code-name-base>org.netbeans.libs.xerces</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <release-version>1</release-version>
+                        <specification-version>1.12.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>org.netbeans.modules.db</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -361,7 +370,6 @@
                 <package>net.sf.jasperreports.engine.export.draw</package>
                 <package>net.sf.jasperreports.engine.export.legacy</package>
                 <package>net.sf.jasperreports.engine.export.oasis</package>
-                <package>net.sf.jasperreports.engine.export.oasis.zip</package>
                 <package>net.sf.jasperreports.engine.export.xmlss</package>
                 <package>net.sf.jasperreports.engine.fill</package>
                 <package>net.sf.jasperreports.engine.fonts</package>
@@ -474,7 +482,6 @@
                 <package>org.apache.commons.vfs.provider.zip</package>
                 <package>org.apache.commons.vfs.tasks</package>
                 <package>org.apache.commons.vfs.util</package>
-                <package>org.apache.html.dom</package>
                 <package>org.apache.log4j</package>
                 <package>org.apache.log4j.chainsaw</package>
                 <package>org.apache.log4j.config</package>
@@ -516,43 +523,6 @@
                 <package>org.apache.poi.poifs.property</package>
                 <package>org.apache.poi.poifs.storage</package>
                 <package>org.apache.poi.util</package>
-                <package>org.apache.wml</package>
-                <package>org.apache.wml.dom</package>
-                <package>org.apache.xerces.dom</package>
-                <package>org.apache.xerces.dom.events</package>
-                <package>org.apache.xerces.dom3.as</package>
-                <package>org.apache.xerces.impl</package>
-                <package>org.apache.xerces.impl.dtd</package>
-                <package>org.apache.xerces.impl.dtd.models</package>
-                <package>org.apache.xerces.impl.dv</package>
-                <package>org.apache.xerces.impl.dv.dtd</package>
-                <package>org.apache.xerces.impl.dv.util</package>
-                <package>org.apache.xerces.impl.dv.xs</package>
-                <package>org.apache.xerces.impl.io</package>
-                <package>org.apache.xerces.impl.msg</package>
-                <package>org.apache.xerces.impl.validation</package>
-                <package>org.apache.xerces.impl.xpath</package>
-                <package>org.apache.xerces.impl.xpath.regex</package>
-                <package>org.apache.xerces.impl.xs</package>
-                <package>org.apache.xerces.impl.xs.identity</package>
-                <package>org.apache.xerces.impl.xs.models</package>
-                <package>org.apache.xerces.impl.xs.opti</package>
-                <package>org.apache.xerces.impl.xs.traversers</package>
-                <package>org.apache.xerces.impl.xs.util</package>
-                <package>org.apache.xerces.jaxp</package>
-                <package>org.apache.xerces.jaxp.datatype</package>
-                <package>org.apache.xerces.jaxp.validation</package>
-                <package>org.apache.xerces.parsers</package>
-                <package>org.apache.xerces.util</package>
-                <package>org.apache.xerces.xinclude</package>
-                <package>org.apache.xerces.xni</package>
-                <package>org.apache.xerces.xni.grammars</package>
-                <package>org.apache.xerces.xni.parser</package>
-                <package>org.apache.xerces.xpointer</package>
-                <package>org.apache.xerces.xs</package>
-                <package>org.apache.xerces.xs.datatypes</package>
-                <package>org.apache.xml.serialize</package>
-                <package>org.apache.xmlcommons</package>
                 <package>org.dom4j</package>
                 <package>org.dom4j.bean</package>
                 <package>org.dom4j.datatype</package>
@@ -624,20 +594,7 @@
                 <package>org.krysalis.barcode4j.servlet</package>
                 <package>org.krysalis.barcode4j.tools</package>
                 <package>org.krysalis.barcode4j.xalan</package>
-                <package>org.w3c.dom</package>
-                <package>org.w3c.dom.bootstrap</package>
-                <package>org.w3c.dom.events</package>
-                <package>org.w3c.dom.html</package>
-                <package>org.w3c.dom.ls</package>
-                <package>org.w3c.dom.ranges</package>
-                <package>org.w3c.dom.stylesheets</package>
-                <package>org.w3c.dom.traversal</package>
-                <package>org.w3c.dom.views</package>
-                <package>org.w3c.dom.xpath</package>
                 <package>org.w3c.tools.codec</package>
-                <package>org.xml.sax</package>
-                <package>org.xml.sax.ext</package>
-                <package>org.xml.sax.helpers</package>
                 <package>rex.xmla</package>
             </public-packages>
             <class-path-extension>
@@ -648,10 +605,10 @@
                 <runtime-relative-path>ext/jfreechart-1.0.12.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/jfreechart-1.0.12.jar</binary-origin>
             </class-path-extension>
-            <class-path-extension>
+            <!-- <class-path-extension> No longer requires with NetBeans 6.5.1
                 <runtime-relative-path>ext/xercesImpl-2.7.0.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/xercesImpl-2.7.0.jar</binary-origin>
-            </class-path-extension>
+            </class-path-extension> -->
             <class-path-extension>
                 <runtime-relative-path>ext/commons-digester-1.7.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/commons-digester-1.7.jar</binary-origin>
@@ -676,10 +633,10 @@
                 <runtime-relative-path>ext/poi-3.2-FINAL-20081019.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/poi-3.2-FINAL-20081019.jar</binary-origin>
             </class-path-extension>
-            <class-path-extension>
+            <!-- <class-path-extension>
                 <runtime-relative-path>ext/xml-apis.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/xml-apis.jar</binary-origin>
-            </class-path-extension>
+            </class-path-extension> -->
             <class-path-extension>
                 <runtime-relative-path>ext/ant-1.7.1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/ant-1.7.1.jar</binary-origin>
@@ -713,8 +670,12 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-3.6.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-3.6.0.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-3.6.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-3.6.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jasperreports-fonts-3.6.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-fonts-3.6.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jaxen-1.1.1.jar</runtime-relative-path>
@@ -847,10 +808,6 @@
             <class-path-extension>
                 <runtime-relative-path>ext/castor-1.2.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/castor-1.2.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-dejavu-fonts.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-dejavu-fonts.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/xml-apis-ext.jar</runtime-relative-path>

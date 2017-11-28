@@ -27,10 +27,12 @@ import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.validation.ImageElementValidationItem;
 import com.jaspersoft.ireport.jasperserver.validation.SubReportElementValidationItem;
+import com.jaspersoft.ireport.jasperserver.validation.TemplateElementValidationItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
@@ -316,7 +318,7 @@ public class RepositoryJrxmlFile extends RepositoryFile {
              
             // try to resolve this file locally....
 
-            exp = Misc.string_replace("\\","\\\\",exp);
+            //exp = Misc.string_replace("\\","\\\\",exp);
             // Could be a file...
             exp = Misc.string_replace("\\","\\\\",exp);
             exp = Misc.string_replace("","\"",exp);
@@ -348,6 +350,26 @@ public class RepositoryJrxmlFile extends RepositoryFile {
     {
             List elementValidationItems = new ArrayList();
             
+            // look for style references...
+            JRReportTemplate[] templates = report.getTemplates();
+            for (JRReportTemplate template : templates)
+            {
+                String fname = Misc.getExpressionText(template.getSourceExpression());
+                File f = getFileFromExpression(fname, "java.lang.String",reportDir);
+                if (f != null)
+                {
+                    TemplateElementValidationItem ievi = new TemplateElementValidationItem(template);
+                    ievi.setOriginalFileName( f );
+
+                    String name = getValidName( f.getName(), parentDescriptor );
+                    ievi.setParentFolder( parentDescriptor.getParentFolder());
+                    ievi.setResourceName( name );
+                    ievi.setProposedExpression("\"repo:" + name +"\"");
+                    elementValidationItems.add(ievi);
+                }
+            }
+
+
             List<JRDesignElement> elements = ModelUtils.getAllElements(report, true);
             for (JRDesignElement re : elements)
             {
@@ -381,7 +403,6 @@ public class RepositoryJrxmlFile extends RepositoryFile {
                     String fname = sre.getExpression().getText();
                           
                     File f = getFileFromExpression(fname, sre.getExpression().getValueClassName(), reportDir);
-                    
 
 //                    if (f.getName().toUpperCase().endsWith(".jasper"))
 //                    {

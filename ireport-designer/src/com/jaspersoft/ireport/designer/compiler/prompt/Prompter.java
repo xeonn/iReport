@@ -104,9 +104,9 @@ public class Prompter
                             System.out.println(ex.getMessage());
                         }
                     }
-                    else if (param.getValueClassName().equals("java.lang.Double"))
+                    else if (param.getValueClassName().equals("java.lang.Double") ||
+                             param.getValueClassName().equals("java.lang.Number"))
                     {
-
                         try
                         {
                             hm.put(param.getName(), new Double("" + value));

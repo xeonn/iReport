@@ -243,6 +243,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         moreSet.put(new JRPropertiesMapProperty( jd ));
         moreSet.put(new TitleNewPageProperty( jd ));
         moreSet.put(new SummaryNewPageProperty( jd ));
+        moreSet.put(new SummaryWithPageHeaderAndFooterProperty( jd ));
         moreSet.put(new FloatColumnFooterProperty( jd ));
         moreSet.put(new IgnorePaginationProperty( jd ));
         moreSet.put(new PrintOrderProperty( jd ));
@@ -970,6 +971,45 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
                     // Find the undoRedo manager...
                     IReportManager.getInstance().addUndoableEdit(urob);
             
+                }
+            }
+    }
+
+
+    /**
+     *  Class to manage the JasperDesign.PROPERTY_SUMMARY_NEW_PAGE property
+     */
+    private static final class  SummaryWithPageHeaderAndFooterProperty extends PropertySupport
+    {
+            private final JasperDesign jasperDesign;
+
+            @SuppressWarnings("unchecked")
+            public SummaryWithPageHeaderAndFooterProperty(JasperDesign jd)
+            {
+                super(JasperDesign.PROPERTY_SUMMARY_WITH_PAGE_HEADER_AND_FOOTER,Boolean.class, I18n.getString("ReportNode.Property.SummaryWithPageHeaderAndFooter"), I18n.getString("ReportNode.Property.SummaryWithPageHeaderAndFooterdetails"), true, true);
+                this.jasperDesign = jd;
+            }
+
+            public Object getValue() throws IllegalAccessException, InvocationTargetException {
+                return jasperDesign.isSummaryWithPageHeaderAndFooter();
+            }
+
+            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+                if (val instanceof Boolean)
+                {
+                    Boolean oldValue = jasperDesign.isSummaryWithPageHeaderAndFooter();
+                    Boolean newValue = (Boolean)val;
+                    jasperDesign.setSummaryWithPageHeaderAndFooter(newValue);
+
+                    ObjectPropertyUndoableEdit urob =
+                            new ObjectPropertyUndoableEdit(
+                                jasperDesign,
+                                "SummaryWithPageHeaderAndFooter",
+                                Boolean.TYPE,
+                                oldValue,newValue);
+                    // Find the undoRedo manager...
+                    IReportManager.getInstance().addUndoableEdit(urob);
+
                 }
             }
     }

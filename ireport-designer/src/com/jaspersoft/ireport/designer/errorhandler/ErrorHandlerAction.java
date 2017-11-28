@@ -26,8 +26,8 @@ package com.jaspersoft.ireport.designer.errorhandler;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
+import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
-import org.openide.util.Utilities;
 import org.openide.windows.TopComponent;
 
 /**
@@ -37,7 +37,7 @@ public class ErrorHandlerAction extends AbstractAction {
 
     public ErrorHandlerAction() {
         super(NbBundle.getMessage(ErrorHandlerAction.class, "CTL_ErrorHandlerAction"));
-        putValue(SMALL_ICON, new ImageIcon(Utilities.loadImage(ErrorHandlerTopComponent.ICON_PATH, true)));
+        putValue(SMALL_ICON, new ImageIcon(ImageUtilities.loadImage(ErrorHandlerTopComponent.ICON_PATH, true)));
     }
 
     public void actionPerformed(ActionEvent evt) {

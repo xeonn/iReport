@@ -46,6 +46,7 @@ public class ReportUnitChildren extends Index.KeysChildren implements PropertyCh
     private Lookup doLkp = null;
     private ReportUnitInputControlsNode controlsNode = null;
     private ReportUnitResourcesNode resourcesNode = null;
+    private boolean calculating = false;
             
        
     public ReportUnitChildren(RepositoryReportUnit reportUnit, Lookup doLkp) {
@@ -93,6 +94,8 @@ public class ReportUnitChildren extends Index.KeysChildren implements PropertyCh
     }
     
     public void recalculateKeys(final boolean reload) {
+        if (isCalculating()) return;
+        setCalculating(true);
         final List l = (List)lock();
         l.clear();
         
@@ -136,6 +139,7 @@ public class ReportUnitChildren extends Index.KeysChildren implements PropertyCh
                        ((InputControlsChildren)controlsNode.getChildren()).recalculateKeys();
                        ((ResourcesChildren)resourcesNode.getChildren()).recalculateKeys();
                        ((ReportUnitNode)getNode()).setLoading(false);
+                       setCalculating(false);
                     }
                 });
             }
@@ -166,5 +170,19 @@ public class ReportUnitChildren extends Index.KeysChildren implements PropertyCh
 
     public void setReportUnit(RepositoryReportUnit reportUnit) {
         this.reportUnit = reportUnit;
+    }
+
+    /**
+     * @return the calculating
+     */
+    public boolean isCalculating() {
+        return calculating;
+    }
+
+    /**
+     * @param calculating the calculating to set
+     */
+    public void setCalculating(boolean calculating) {
+        this.calculating = calculating;
     }
 }

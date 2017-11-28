@@ -27,13 +27,13 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import org.netbeans.spi.options.OptionsCategory;
 import org.netbeans.spi.options.OptionsPanelController;
+import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
-import org.openide.util.Utilities;
 
 public final class IReportOptionsCategory extends OptionsCategory {
 
     public Icon getIcon() {
-        return new ImageIcon(Utilities.loadImage("com/jaspersoft/ireport/designer/options/ireport_icon.png"));
+        return new ImageIcon(ImageUtilities.loadImage("com/jaspersoft/ireport/designer/options/ireport_icon.png"));
     }
 
     public String getCategoryName() {

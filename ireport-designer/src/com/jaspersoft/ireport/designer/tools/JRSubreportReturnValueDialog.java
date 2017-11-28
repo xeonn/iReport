@@ -100,7 +100,8 @@ public class JRSubreportReturnValueDialog
         this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_HIGHEST ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.Highest")));
         this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_STANDARD_DEVIATION ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.StandardDeviation")));
         this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_VARIANCE ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.Variance")));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_SYSTEM ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.System")));
+        // CALCULATION_SYSTEM Not allowed as calc type for return values... [bug 0004349]
+        // this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_SYSTEM ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.System")));
         this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_FIRST ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.First")));
     }
 

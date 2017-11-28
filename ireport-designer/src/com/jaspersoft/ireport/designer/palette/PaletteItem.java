@@ -28,7 +28,7 @@ import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Image;
 import java.util.Properties;
-import org.openide.util.Utilities;
+import org.openide.util.ImageUtilities;
 
 /**
  *
@@ -100,9 +100,9 @@ public class PaletteItem {
     private void loadIcons() {
         String iconId = props.getProperty( PROP_ICON16 );
         if (iconId == null) return;
-        icon16 = Utilities.loadImage( iconId );
+        icon16 = ImageUtilities.loadImage( iconId );
         iconId = props.getProperty( PROP_ICON32 );
-        icon32 = Utilities.loadImage( iconId );
+        icon32 = ImageUtilities.loadImage( iconId );
     }
     
     public void drop(java.awt.dnd.DropTargetDropEvent dtde)

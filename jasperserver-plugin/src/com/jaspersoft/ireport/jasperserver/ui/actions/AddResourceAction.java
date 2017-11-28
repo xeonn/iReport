@@ -45,13 +45,20 @@ import com.jaspersoft.ireport.jasperserver.ui.wizards.ReportUnitWizardDescriptor
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
+import org.openide.nodes.Children;
 import org.openide.nodes.Node;
+import org.openide.nodes.NodeEvent;
+import org.openide.nodes.NodeListener;
+import org.openide.nodes.NodeMemberEvent;
+import org.openide.nodes.NodeReorderEvent;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.NodeAction;
@@ -72,6 +79,7 @@ public class AddResourceAction extends NodeAction {
     JMenuItem jMenuItemJrxml = null;
     JMenuItem jMenuItemJar = null;
     JMenuItem jMenuItemFont = null;
+    JMenuItem jMenuItemStyleTemplate = null;
     JMenuItem jMenuItemDatasource = null;
     JMenuItem jMenuItemXMLADatasource = null;
     JMenuItem jMenuItemDataType = null;
@@ -198,6 +206,18 @@ public class AddResourceAction extends NodeAction {
             }
         });
         jMenuAdd.add(jMenuItemFont);
+
+        jMenuItemStyleTemplate = new javax.swing.JMenuItem();
+        jMenuItemStyleTemplate.setText( JasperServerManager.getString("menu.styleTemplate", "Style Template") );
+        jMenuItemStyleTemplate.setIcon( new ImageIcon(AddResourceAction.class.getResource("/com/jaspersoft/ireport/jasperserver/res/style-16.png")));
+        jMenuItemStyleTemplate.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                addResource( ResourceDescriptor.TYPE_STYLE_TEMPLATE);
+            }
+        });
+        jMenuAdd.add(jMenuItemStyleTemplate);
+
+
         
         jSeparator3 = new javax.swing.JSeparator();
         jMenuAdd.add(jSeparator3);
@@ -291,9 +311,7 @@ public class AddResourceAction extends NodeAction {
     }
 
     protected void performAction(org.openide.nodes.Node[] activatedNodes) {
-        
-            System.out.println("Eccci!! " + activatedNodes.toString());
-            System.out.flush();
+    
     }
 
     protected boolean enable(org.openide.nodes.Node[] activatedNodes) {
@@ -355,21 +373,21 @@ public class AddResourceAction extends NodeAction {
                 try {
                     datasources = server.getWSClient().listDatasources();
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(Misc.getMainFrame(),
-                            JasperServerManager.getFormattedString("repositoryExplorer.message.errorListingDatasources", "Error getting the list of available datasources:\n{0}", new Object[] {ex.getMessage()}));
-                    ex.printStackTrace();
-                    return;
+                    //JOptionPane.showMessageDialog(Misc.getMainFrame(),
+                    //        JasperServerManager.getFormattedString("repositoryExplorer.message.errorListingDatasources", "Error getting the list of available datasources:\n{0}", new Object[] {ex.getMessage()}));
+                    //ex.printStackTrace();
+                    //return;
                 }
 
-                if (datasources == null || datasources.size() == 0) {
-                    JOptionPane.showMessageDialog(Misc.getMainFrame(),
-                            JasperServerManager.getString("repositoryExplorer.message.noDatasourceFound",
-                            "No datasources was found on the server.\nPlease create a new datasource on the server before create a report unit.")) ;
-                    return;
-                }
-            } else {
-                datasources = new java.util.ArrayList();
+                //if (datasources == null || datasources.size() == 0) {
+                //    JOptionPane.showMessageDialog(Misc.getMainFrame(),
+                //            JasperServerManager.getString("repositoryExplorer.message.noDatasourceFound",
+                //            "No datasources was found on the server.\nPlease create a new datasource on the server before create a report unit.")) ;
+                //    return;
+                //}
             }
+
+            if (datasources == null) datasources = new java.util.ArrayList();
 
             ReportUnitWizardDescriptor wizardDescriptor = new ReportUnitWizardDescriptor();
         
@@ -378,9 +396,31 @@ public class AddResourceAction extends NodeAction {
             wizardDescriptor.setServer(server);
             if (wizardDescriptor.runWizard())
             {
-                ResourceDescriptor rd = wizardDescriptor.getNewResourceDescriptor();
+                final ResourceDescriptor rd = wizardDescriptor.getNewResourceDescriptor();
                 if (rd != null) {
                     addChild(selectedNode, server, rd);
+
+                    if (wizardDescriptor.getProperty("currentlyOpenedFileSelected") != null &&
+                        wizardDescriptor.getProperty("currentlyOpenedFileSelected").equals("true"))
+                    {
+                        if( JOptionPane.showConfirmDialog(Misc.getMainFrame(),
+                            JasperServerManager.getString("repositoryExplorer.message.openReportUnitFile",
+                            "The new ReportUnit has been created from the current opened file.\nThis local file should no longer be used to edit the report unit Jrxml.\n" +
+                            "Instead you should use the file stored on JasperServer.\n\nDo you want open the Jrxml from the server now?")) == JOptionPane.YES_OPTION)
+                            {
+                                final Node node = (Node)selectedNode;
+
+                                SwingUtilities.invokeLater(new Runnable() {
+
+                                public void run() {
+                                    NestedResourceOpener opener = new NestedResourceOpener((FolderNode)node,rd.getUriString());
+                                     opener.openFile();
+                                }
+                            });
+                               
+                            }
+
+                    }
                 }
             }
         

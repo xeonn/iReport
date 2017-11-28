@@ -1,24 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.1//EN" "http://www.netbeans.org/dtds/filesystem-1_1.dtd">
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
 <filesystem>
-    <attr name="Menu\Window\CloneDocumentAction.shadow\position" intvalue="1700"/>
-    <attr name="Menu\Window\CloseAllButThisAction.shadow\position" intvalue="1900"/>
-    <attr name="Menu\Window\CloseAllDocumentsAction.shadow\position" intvalue="1800"/>
-    <attr name="Menu\Window\CloseWindowAction.shadow\position" intvalue="1300"/>
-    <attr name="Menu\Window\DocumentsAction.shadow\position" intvalue="2000"/>
-    <attr name="Menu\Window\JRViewerAction.shadow\position" intvalue="100"/>
-    <attr name="Menu\Window\MaximizeWindowAction.shadow\position" intvalue="1400"/>
-    <attr name="Menu\Window\ProgressListAction.shadow\position" intvalue="1100"/>
-    <attr name="Menu\Window\RepositoryAction.shadow\position" intvalue="200"/>
-    <attr name="Menu\Window\Separator3.instance\position" intvalue="1200"/>
-    <attr name="Menu\Window\Separator4.instance\position" intvalue="1600"/>
-    <attr name="Menu\Window\Separator5.instance\position" intvalue="2100"/>
-    <attr name="Menu\Window\ShowPaletteAction.shadow\position" intvalue="500"/>
-    <attr name="Menu\Window\SwitchToRecentDocumentAction.shadow\position" intvalue="1000"/>
-    <attr name="Menu\Window\ViewFavoritesTabAction.shadow\position" intvalue="400"/>
-    <attr name="Menu\Window\org-netbeans-core-actions-GlobalPropertiesAction.shadow\position" intvalue="700"/>
+    <attr name="Menu\File\Separator2.instance\position" intvalue="1250"/>
+    <attr name="Menu\File\com-jaspersoft-ireport-designer-standalone-menu-OpenFileAction.shadow\position" intvalue="1300"/>
+    <attr name="Menu\Tools\PaletteManager\position" intvalue="100"/>
+    <attr name="Menu\Tools\Separator1.instance\position" intvalue="400"/>
+    <attr name="Menu\Tools\Separator2.instance\position" intvalue="600"/>
+    <attr name="Menu\Tools\Separator3.instance\position" intvalue="800"/>
+    <attr name="Menu\Tools\org-netbeans-modules-autoupdate-ui-actions-PluginManagerAction.shadow\position" intvalue="700"/>
+    <attr name="Menu\Tools\org-netbeans-modules-favorites-templates-TemplatesAction.instance\position" intvalue="500"/>
+    <attr name="Menu\Tools\org-netbeans-modules-options-OptionsWindowAction.shadow\position" intvalue="900"/>
+    <attr name="Menu\Tools\org-openide-actions-ToolsAction.instance\position" intvalue="201"/>
+    <attr name="Menu\Window\CloneDocumentAction.shadow\position" intvalue="2400"/>
+    <attr name="Menu\Window\CloseAllButThisAction.shadow\position" intvalue="2600"/>
+    <attr name="Menu\Window\CloseAllDocumentsAction.shadow\position" intvalue="2500"/>
+    <attr name="Menu\Window\CloseWindowAction.shadow\position" intvalue="2000"/>
+    <attr name="Menu\Window\DocumentsAction.shadow\position" intvalue="2700"/>
+    <attr name="Menu\Window\ErrorHandlerAction.shadow\position" intvalue="500"/>
+    <attr name="Menu\Window\FormattingToolsAction.shadow\position" intvalue="101"/>
+    <attr name="Menu\Window\IRConsoleAction.shadow\position" intvalue="600"/>
+    <attr name="Menu\Window\JRViewerAction.shadow\position" intvalue="200"/>
+    <attr name="Menu\Window\MaximizeWindowAction.shadow\position" intvalue="2100"/>
+    <attr name="Menu\Window\OutlineAction.shadow\position" intvalue="400"/>
+    <attr name="Menu\Window\ProgressListAction.shadow\position" intvalue="1700"/>
+    <attr name="Menu\Window\RepositoryAction.shadow\position" intvalue="700"/>
+    <attr name="Menu\Window\Separator3.instance\position" intvalue="1900"/>
+    <attr name="Menu\Window\Separator4.instance\position" intvalue="2300"/>
+    <attr name="Menu\Window\Separator5.instance\position" intvalue="2800"/>
+    <attr name="Menu\Window\ShowPaletteAction.shadow\position" intvalue="1000"/>
+    <attr name="Menu\Window\SwitchToRecentDocumentAction.shadow\position" intvalue="1600"/>
+    <attr name="Menu\Window\ViewFavoritesTabAction.shadow\position" intvalue="900"/>
+    <attr name="Menu\Window\ViewRuntimeTabAction.shadow\position" intvalue="1800"/>
+    <attr name="Menu\Window\org-netbeans-core-actions-GlobalPropertiesAction.shadow\position" intvalue="1200"/>
     <attr name="Menu\Window\org-netbeans-core-windows-actions-ResetWindowsAction.instance\position" intvalue="2200"/>
-    <attr name="Menu\Window\org-netbeans-core-windows-actions-UndockAction.shadow\position" intvalue="1500"/>
+    <attr name="Menu\Window\org-netbeans-core-windows-actions-ResetWindowsAction.shadow\position" intvalue="2900"/>
+    <attr name="Menu\Window\org-netbeans-core-windows-actions-UndockAction.shadow\position" intvalue="2200"/>
     <attr name="Services\MIMEResolver\Languagesresolver.xml\position" intvalue="500"/>
     <attr name="Services\MIMEResolver\org-netbeans-modules-editor-settings-storage-mime-resolver.xml\position" intvalue="600"/>
     <attr name="Services\MIMEResolver\plain-text-resolver.xml\position" intvalue="300"/>
@@ -33,6 +49,16 @@
     <attr name="Templates\Report\StyleTemplate.jrtx\position" intvalue="300"/>
     <attr name="Templates\Report\ChartThemeTemplate.jrctx\position" intvalue="400"/>
 
+    <attr name="Windows2\Modes\commonpalette\CommonPalette.wstcref\position" intvalue="0"/>
+    <attr name="Windows2\Modes\explorer\ASTBrowserTopComponent.wstcref\position" intvalue="600"/>
+    <attr name="Windows2\Modes\explorer\RepositoryTopComponent.wstcref\position" intvalue="100"/>
+    <attr name="Windows2\Modes\explorer\TokensBrowserTopComponent.wstcref\position" intvalue="500"/>
+    <attr name="Windows2\Modes\explorer\favorites.wstcref\position" intvalue="250"/>
+    <attr name="Windows2\Modes\explorer\runtime.wstcref\position" intvalue="400"/>
+    <attr name="Windows2\Modes\output\find-usages.wstcref\position" intvalue="500"/>
+    <attr name="Windows2\Modes\output\output.wstcref\position" intvalue="600"/>
+    <attr name="Windows2\Modes\output\refactoring-preview.wstcref\position" intvalue="400"/>
+    <attr name="Windows2\Modes\output\search-results.wstcref\position" intvalue="300"/>
     <folder name="Actions">
         <attr name="SystemFileSystem.localizingBundle" stringvalue="org.netbeans.core.Bundle"/>
         <folder name="Designer">
@@ -89,8 +115,10 @@
         <folder name="Report_preview">
             <file name="com-jaspersoft-ireport-designer-menu-preview-PDFPreviewAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-preview-ODFPreviewAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-ODSPreviewAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-preview-XLSPreviewAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-preview-XLS2PreviewAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-XLSXPreviewAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-preview-TXTPreviewAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-preview-RTFPreviewAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-preview-CSVPreviewAction.instance"/>
@@ -105,6 +133,12 @@
             <file name="com-jaspersoft-ireport-designer-menu-FontpathAction.instance"/>
         </folder>
         <folder name="Window">
+            <file name="com-jaspersoft-ireport-designer-crosstab-CrosstabDebugConsoleAction.instance">
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="com.jaspersoft.ireport.Bundle"/>
+                <attr name="component" methodvalue="com.jaspersoft.ireport.designer.crosstab.CrosstabDebugConsoleTopComponent.findInstance"/>
+                <attr name="displayName" bundlevalue="com.jaspersoft.ireport.designer.crosstab.Bundle#CTL_CrosstabDebugConsoleAction"/>
+                <attr name="instanceCreate" methodvalue="org.openide.windows.TopComponent.openAction"/>
+            </file>
             <file name="com-jaspersoft-ireport-designer-errorhandler-ErrorHandlerAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-formatting-FormattingToolsAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-GenericInspectorAction.instance"/>
@@ -594,6 +628,10 @@
                 <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-XLS2PreviewAction.instance"/>
                 <attr name="position" intvalue="522"/>
             </file>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-XLSXPreviewAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-XLSXPreviewAction.instance"/>
+                <attr name="position" intvalue="523"/>
+            </file>
             <file name="com-jaspersoft-ireport-designer-menu-preview-RTFPreviewAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-RTFPreviewAction.instance"/>
                 <attr name="position" intvalue="530"/>
@@ -612,7 +650,11 @@
             </file>
             <file name="com-jaspersoft-ireport-designer-menu-preview-ODFPreviewAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-ODFPreviewAction.instance"/>
-                <attr name="position" intvalue="560"/>
+                <attr name="position" intvalue="552"/>
+            </file>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-ODSPreviewAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-ODSPreviewAction.instance"/>
+                <attr name="position" intvalue="555"/>
             </file>
             <file name="com-jaspersoft-ireport-designer-menu-preview-XMLPreviewAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-XMLPreviewAction.instance"/>
@@ -652,6 +694,10 @@
                     <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-XLS2PreviewAction.instance"/>
                     <attr name="position" intvalue="522"/>
                 </file>
+                <file name="com-jaspersoft-ireport-designer-menu-preview-XLSXPreviewAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-XLSXPreviewAction.instance"/>
+                    <attr name="position" intvalue="523"/>
+                </file>
                 <file name="com-jaspersoft-ireport-designer-menu-preview-RTFPreviewAction.shadow">
                     <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-RTFPreviewAction.instance"/>
                     <attr name="position" intvalue="530"/>
@@ -666,6 +712,10 @@
                 </file>
                 <file name="com-jaspersoft-ireport-designer-menu-preview-ODFPreviewAction.shadow">
                     <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-ODFPreviewAction.instance"/>
+                    <attr name="position" intvalue="560"/>
+                </file>
+                <file name="com-jaspersoft-ireport-designer-menu-preview-ODSPreviewAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-ODSPreviewAction.instance"/>
                     <attr name="position" intvalue="560"/>
                 </file>
                 <file name="com-jaspersoft-ireport-designer-menu-preview-XMLPreviewAction.shadow">
@@ -704,30 +754,31 @@
                 </file>
                 
             </folder>
-            <attr name="com-jaspersoft-ireport-designer-menu-OpenQueryDialogAction.shadow/com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow" boolvalue="true"/>
         </folder>
         <folder name="Tools">
             <file name="com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow" url="com-jaspersoft-ireport-designer-menu-DatasourcesAction_1.shadow">
                 <attr name="originalFile" stringvalue="Actions/Data/com-jaspersoft-ireport-designer-menu-DatasourcesAction.instance"/>
+                <attr name="position" intvalue="150"/>
             </file>
         </folder>
         <folder name="Window">
 
             <file name="GenericInspectorAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-menu-GenericInspectorAction.instance"/>
+                <attr name="position" intvalue="150"/>
             </file>
             <folder name="Navigator">
-                <attr name="position" intvalue="900"/>
+                <attr name="position" intvalue="1400"/>
                 </folder>
 
             <folder name="Output">
-                <attr name="position" intvalue="800"/>
+                <attr name="position" intvalue="1300"/>
                 </folder>
             <folder name="Report designer">
                 <file name="ErrorHandlerAction.shadow">
                     <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-errorhandler-ErrorHandlerAction.instance"/>
                 </file>
-                <attr name="position" intvalue="950"/>
+                <attr name="position" intvalue="1500"/>
                 <file name="FormattingToolsAction.shadow" url="FormattingToolsAction.shadow">
                     <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-formatting-FormattingToolsAction.instance"/>
                     <attr name="position" intvalue="200"/>
@@ -752,6 +803,7 @@
             </file> -->
             <file name="StylesLibraryAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-styles-StylesLibraryAction.instance"/>
+                <attr name="position" intvalue="800"/>
             </file>
             <!--file name="ViewRuntimeTabAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Window/org-netbeans-core-actions-ViewRuntimeTabAction.instance"/>
@@ -760,6 +812,7 @@
 
             <file name="WelcomeAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-welcome-WelcomeAction.instance"/>
+                <attr name="position" intvalue="1100"/>
             </file>
         </folder>
         </folder>
@@ -770,12 +823,15 @@
         <folder name="MIMEResolver">
             <file name="JRCTXResolver.xml" url="JRCTXResolver.xml">
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="com.jaspersoft.ireport.Bundle"/>
+                <attr name="position" intvalue="1"/>
             </file>
             <file name="JRTXResolver.xml" url="JRTXResolver.xml">
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="com.jaspersoft.ireport.Bundle"/>
+                <attr name="position" intvalue="2"/>
             </file>
             <file name="JasperResolver.xml" url="JasperResolver.xml">
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="com.jaspersoft.ireport.Bundle"/>
+                <attr name="position" intvalue="3"/>
             </file>
             <file name="JrxmlResolver.xml" url="JrxmlResolver.xml">
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="com.jaspersoft.ireport.Bundle"/>
@@ -837,10 +893,10 @@
     <folder name="Toolbars">
         <folder name="Designer">
             <!-- <attr name="com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow/com-jaspersoft-ireport-designer-menu-RunReportAction.shadow" boolvalue="true"/> -->
-            <attr name="com-jaspersoft-ireport-designer-menu-SelectDatasourceAction.shadow/com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow" boolvalue="true"/>
             <attr name="position" intvalue="400"/>
             <file name="com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow">
                     <attr name="originalFile" stringvalue="Actions/Data/com-jaspersoft-ireport-designer-menu-DatasourcesAction.instance"/>
+                <attr name="position" intvalue="0"/>
             </file>
             <!-- <file name="com-jaspersoft-ireport-designer-menu-RunReportAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Designer/com-jaspersoft-ireport-designer-menu-RunReportAction.instance"/>
@@ -848,6 +904,7 @@
             -->
             <file name="com-jaspersoft-ireport-designer-menu-SelectDatasourceAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Designer/com-jaspersoft-ireport-designer-menu-SelectDatasourceAction.instance"/>
+                <attr name="position" intvalue="100"/>
             </file>
         </folder>
 
@@ -911,7 +968,8 @@
                 <file name="Percentage.irpitem" url="designer/palette/actions/tools/Percentage.irpitem"/>
             </folder>
        </folder>
-       <folder name="templates">
+       <file name="style_library.jrtx" url="style_library.jrtx"/>
+        <folder name="templates">
            <folder name="columnar">
                <file name="Classic" url="designer/templates/classicC.jrxml"/>
                <file name="Classic.preview" url="designer/templates/classicC.gif"/>
@@ -945,6 +1003,7 @@
 
     <folder name="Windows2">
         <folder name="Components">
+            <file name="CrosstabDebugConsoleTopComponent.settings" url="CrosstabDebugConsoleTopComponentSettings.xml"/>
             <file name="ErrorHandlerTopComponent.settings" url="ErrorHandlerTopComponentSettings.xml"/>
             <file name="FormattingToolsTopComponent.settings" url="FormattingToolsTopComponentSettings.xml"/>
             <file name="IRConsoleTopComponent.settings" url="IRConsoleTopComponentSettings.xml"/>
@@ -972,21 +1031,31 @@
                 <file name="WelcomeTopComponent.wstcref" url="WelcomeTopComponentWstcref.xml"/>
             </folder>
             <folder name="commonpalette">
-                <file name="FormattingToolsTopComponent.wstcref" url="FormattingToolsTopComponentWstcref.xml"/>
+                <file name="CrosstabDebugConsoleTopComponent.wstcref" url="CrosstabDebugConsoleTopComponentWstcref.xml">
+                    <attr name="position" intvalue="703"/>
+                </file>
+                <file name="FormattingToolsTopComponent.wstcref" url="FormattingToolsTopComponentWstcref.xml">
+                    <attr name="position" intvalue="300"/>
+                </file>
             </folder>
             <folder name="explorer">
-                <file name="GenericInspectorTopComponent.wstcref" url="GenericInspectorTopComponentWstcref.xml"/>
+                <file name="GenericInspectorTopComponent.wstcref" url="GenericInspectorTopComponentWstcref.xml">
+                    <attr name="position" intvalue="1"/>
+                </file>
+                <file name="OutlineTopComponent.wstcref" url="OutlineTopComponentWstcref.xml">
+                    <attr name="position" intvalue="2"/>
+                </file>
             </folder>
             <folder name="leftSlidingSide">
                 <file name="ResourceBundleTopComponent.wstcref" url="ResourceBundleTopComponentWstcref.xml"/>
             </folder>
-            <folder name="navigator">
-                <file name="OutlineTopComponent.wstcref" url="OutlineTopComponentWstcref.xml"/>
-                <file name="navigatorTC.wstcref" url="navigatorTCWstcref.xml"/>
-            </folder>
             <folder name="output">
-                <file name="ErrorHandlerTopComponent.wstcref" url="ErrorHandlerTopComponentWstcref.xml"/>
-                <file name="IRConsoleTopComponent.wstcref" url="IRConsoleTopComponentWstcref.xml"/>
+                <file name="ErrorHandlerTopComponent.wstcref" url="ErrorHandlerTopComponentWstcref.xml">
+                    <attr name="position" intvalue="0"/>
+                </file>
+                <file name="IRConsoleTopComponent.wstcref" url="IRConsoleTopComponentWstcref.xml">
+                    <attr name="position" intvalue="100"/>
+                </file>
             </folder>
             <folder name="properties">
                 <file name="StylesLibraryTopComponent.wstcref" url="StylesLibraryTopComponentWstcref.xml"/>

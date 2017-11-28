@@ -63,12 +63,12 @@ import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
+import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 import org.openide.util.Mutex;
 import org.openide.util.NbBundle;
 import org.openide.util.RequestProcessor;
 import org.openide.windows.TopComponent;
-import org.openide.util.Utilities;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.util.lookup.ProxyLookup;
@@ -235,7 +235,7 @@ final class JRTXVisualView extends TopComponent
                     initComponents();
                     setName(NbBundle.getMessage(JRTXVisualView.class, "CTL_JRTXVisualEditorTopComponent"));
                     setToolTipText(NbBundle.getMessage(JRTXVisualView.class, "HINT_JRTXVisualEditorTopComponent"));
-                    setIcon(Utilities.loadImage(ICON_PATH, true));
+                    setIcon(ImageUtilities.loadImage(ICON_PATH, true));
 
                     //treeView = new BeanTreeView();
                     //propertySheetView = new PropertySheetView();

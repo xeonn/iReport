@@ -341,7 +341,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         tmpmi.setLabel( jTextFieldLabel.getText());
         tmpmi.setBackgroundColor(backGroundColor);
         
-        tmpmi.setAlpha( ((SpinnerNumberModel)jSpinnerAlpha.getModel()).getNumber().doubleValue() );
+        tmpmi.setAlpha( new Double( ((SpinnerNumberModel)jSpinnerAlpha.getModel()).getNumber().doubleValue()) );
         
         tmpmi.setDataRange(new JRDesignDataRange(null));
         
@@ -432,7 +432,9 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         if (meterInterval != null)
         {
             jTextFieldLabel.setText( meterInterval.getLabel() );
-            ((SpinnerNumberModel)jSpinnerAlpha.getModel()).setValue( new Double( meterInterval.getAlpha() ));
+            Double d = meterInterval.getAlphaDouble();
+            if (d == null) d = new Double(1.0);
+            ((SpinnerNumberModel)jSpinnerAlpha.getModel()).setValue( d );
             if ( meterInterval.getBackgroundColor() != null)
             {
                 backGroundColor = meterInterval.getBackgroundColor();

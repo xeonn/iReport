@@ -28,7 +28,7 @@ import com.jaspersoft.ireport.locale.I18n;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
-import org.openide.util.Utilities;
+import org.openide.util.ImageUtilities;
 import org.openide.windows.TopComponent;
 
 /**
@@ -38,7 +38,7 @@ public class GenericInspectorAction extends AbstractAction {
 
     public GenericInspectorAction() {
         super(I18n.getString("CTL_GenericInspectorAction"));
-        putValue(SMALL_ICON, new ImageIcon(Utilities.loadImage(GenericInspectorTopComponent.ICON_PATH, true)));
+        putValue(SMALL_ICON, new ImageIcon(ImageUtilities.loadImage(GenericInspectorTopComponent.ICON_PATH, true)));
     }
 
     public void actionPerformed(ActionEvent evt) {

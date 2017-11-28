@@ -151,13 +151,13 @@ public class OpenFileAction extends CallableSystemAction {
 			DataObject dob = DataObject.find (fob);
                         if (f.getName().toLowerCase().endsWith(".properties")) // NOI18N
                         {
-                            EditCookie oc = (EditCookie) dob.getCookie (EditCookie.class);
+                            EditCookie oc = dob.getCookie (EditCookie.class);
                             if (oc != null)
 				oc.edit();
                         }
                         else
                         {
-                            OpenCookie oc = (OpenCookie) dob.getCookie (OpenCookie.class);
+                            OpenCookie oc = dob.getCookie (OpenCookie.class);
 			if (oc != null)
 				oc.open();
                         }

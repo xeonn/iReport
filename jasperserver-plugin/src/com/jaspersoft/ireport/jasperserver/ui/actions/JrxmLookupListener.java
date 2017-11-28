@@ -28,11 +28,13 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.designer.widgets.JRDesignImageWidget;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.RepoImageCache;
 import com.jaspersoft.ireport.jasperserver.RepositoryReportUnit;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
@@ -41,6 +43,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRExpressionUtil;
+import org.netbeans.api.visual.widget.Widget;
 import org.openide.cookies.CloseCookie;
 import org.openide.cookies.EditorCookie;
 import org.openide.loaders.DataObject;
@@ -123,6 +126,8 @@ public class JrxmLookupListener implements LookupListener {
                                         String fname = JasperServerManager.createTmpFileName("img","");
                                         rd = getServer().getWSClient().get(rd, new File(fname));
                                         RepoImageCache.getInstance().put(s, new File(fname));
+                                        System.out.println("Added to the image cache the file: " + s + " " + fname + " " + new File(fname).length());
+                                        System.out.flush();
                                     } catch (Exception ex)
                                     {
                                        ex.printStackTrace(); 
@@ -136,7 +141,15 @@ public class JrxmLookupListener implements LookupListener {
                         public void run() {
                             try {
                                 ReportObjectScene scene = IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel().getScene();
-                                scene.refreshBands();
+                                //scene.refreshBands();
+                                List<Widget> widgets = scene.getElementsLayer().getChildren();
+                                for (Widget w : widgets)
+                                {
+                                    if (w instanceof JRDesignImageWidget)
+                                    {
+                                        ((JRDesignImageWidget)w).propertyChange(new PropertyChangeEvent(this, JRDesignImage.PROPERTY_EXPRESSION, null, null));
+                                    }
+                                }
 
 
                                 // Display warning in case of Ad Hoc document...
