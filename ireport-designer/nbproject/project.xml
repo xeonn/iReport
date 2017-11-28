@@ -377,6 +377,7 @@
                 <package>net.sf.jasperreports.components</package>
                 <package>net.sf.jasperreports.components.barbecue</package>
                 <package>net.sf.jasperreports.components.barcode4j</package>
+                <package>net.sf.jasperreports.components.charts</package>
                 <package>net.sf.jasperreports.components.list</package>
                 <package>net.sf.jasperreports.components.spiderchart</package>
                 <package>net.sf.jasperreports.components.spiderchart.type</package>
@@ -402,7 +403,6 @@
                 <package>net.sf.jasperreports.engine.export.legacy</package>
                 <package>net.sf.jasperreports.engine.export.oasis</package>
                 <package>net.sf.jasperreports.engine.export.ooxml</package>
-                <package>net.sf.jasperreports.engine.export.xmlss</package>
                 <package>net.sf.jasperreports.engine.export.zip</package>
                 <package>net.sf.jasperreports.engine.fill</package>
                 <package>net.sf.jasperreports.engine.fonts</package>
@@ -717,8 +717,8 @@
                 <binary-origin>release/modules/ext/commons-collections-3.2.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/poi-3.5-FINAL-20090928.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/poi-3.5-FINAL-20090928.jar</binary-origin>
+                <runtime-relative-path>ext/poi-3.6-20091214.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/poi-3.6-20091214.jar</binary-origin>
             </class-path-extension>
             <!-- <class-path-extension>
                 <runtime-relative-path>ext/xml-apis.jar</runtime-relative-path>
@@ -757,12 +757,12 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-3.7.4.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-3.7.4.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-3.7.5.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-3.7.5.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-fonts-3.7.4.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-fonts-3.7.4.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-fonts-3.7.5.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-fonts-3.7.5.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jaxen-1.1.1.jar</runtime-relative-path>
@@ -773,8 +773,8 @@
                 <binary-origin>release/modules/ext/iText-2.1.7.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jxl-2.6.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jxl-2.6.jar</binary-origin>
+                <runtime-relative-path>ext/jxl-2.6.10.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jxl-2.6.10.jar</binary-origin>
             </class-path-extension>
             <!-- <class-path-extension>
                 <runtime-relative-path>ext/servlet.jar</runtime-relative-path>

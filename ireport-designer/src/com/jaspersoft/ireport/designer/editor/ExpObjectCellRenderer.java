@@ -47,7 +47,8 @@ public class ExpObjectCellRenderer extends JTextPane implements ListCellRenderer
         private Color background;
         
         private boolean showObjectType = true;
-        
+        private boolean showObjectClass = true;
+
         // Create a style object and then set the style attributes
         Style typeStyle = null;
         Style classTypeStyle = null;
@@ -68,7 +69,7 @@ public class ExpObjectCellRenderer extends JTextPane implements ListCellRenderer
             
         }
 
-    private Component getRendererComponent(Object object, boolean isSelected, boolean cellHasFocus) {
+    protected Component getRendererComponent(Object object, boolean isSelected, boolean cellHasFocus) {
        
             this.setText("");
             StyledDocument doc = (StyledDocument)this.getDocument();
@@ -116,12 +117,15 @@ public class ExpObjectCellRenderer extends JTextPane implements ListCellRenderer
                          
                          doc.insertString(doc.getLength(), type + " ", s);
                      }
-                     
-                     String tp = eo.getClassType() + "";
-                     if (tp.lastIndexOf(".") > 0) tp = tp.substring(tp.lastIndexOf(".")+1);
-                     
-                     doc.insertString(doc.getLength(), tp, classTypeStyle);
-                     doc.setLogicalStyle(0, normalStyle);
+
+                     if (isShowObjectClass())
+                     {
+                         String tp = eo.getClassType() + "";
+                         if (tp.lastIndexOf(".") > 0) tp = tp.substring(tp.lastIndexOf(".")+1);
+
+                         doc.insertString(doc.getLength(), tp, classTypeStyle);
+                         doc.setLogicalStyle(0, normalStyle);
+                     }
                 } catch (Exception ex){}
             }
             else
@@ -197,6 +201,20 @@ public class ExpObjectCellRenderer extends JTextPane implements ListCellRenderer
 
     public void setShowObjectType(boolean showObjectType) {
         this.showObjectType = showObjectType;
+    }
+
+    /**
+     * @return the showObjectClass
+     */
+    public boolean isShowObjectClass() {
+        return showObjectClass;
+    }
+
+    /**
+     * @param showObjectClass the showObjectClass to set
+     */
+    public void setShowObjectClass(boolean showObjectClass) {
+        this.showObjectClass = showObjectClass;
     }
     
     

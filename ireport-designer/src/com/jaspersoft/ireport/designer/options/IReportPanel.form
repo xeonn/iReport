@@ -232,8 +232,9 @@
                                   <Component id="jCheckBoxDebugMode" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jCheckBoxShowPositionErrors" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jCheckBoxSaveZoom" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jCheckBoxLabelForField" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="235" max="32767" attributes="0"/>
+                              <EmptySpace pref="79" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -254,7 +255,9 @@
                               <Component id="jCheckBoxShowPositionErrors" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jCheckBoxSaveZoom" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="94" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jCheckBoxLabelForField" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="71" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -315,6 +318,14 @@
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxSaveZoomActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JCheckBox" name="jCheckBoxLabelForField">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Create a label for fields dropped in the detail band if the column header band is heigher than 20 pixels"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxLabelForFieldActionPerformed"/>
                       </Events>
                     </Component>
                   </SubComponents>
@@ -494,7 +505,7 @@
                               <Component id="jComboBoxCompatibility" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jCheckBoxShowCompatibilityWarning" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="165" max="32767" attributes="0"/>
+                              <EmptySpace pref="151" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>

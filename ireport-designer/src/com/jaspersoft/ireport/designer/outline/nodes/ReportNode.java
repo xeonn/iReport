@@ -39,6 +39,7 @@ import com.jaspersoft.ireport.designer.sheet.JRImportsProperty;
 import com.jaspersoft.ireport.designer.sheet.JRPropertiesMapProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
+import com.jaspersoft.ireport.designer.sheet.properties.AbstractProperty;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import com.jaspersoft.ireport.designer.wizards.ReportGroupWizardAction;
 import com.jaspersoft.ireport.locale.I18n;
@@ -57,6 +58,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.RunDirectionEnum;
 import org.openide.ErrorManager;
 import org.openide.actions.PasteAction;
 import org.openide.cookies.SaveCookie;
@@ -247,6 +249,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         moreSet.put(new FloatColumnFooterProperty( jd ));
         moreSet.put(new IgnorePaginationProperty( jd ));
         moreSet.put(new PrintOrderProperty( jd ));
+        moreSet.put(new ColumnDirectionProperty(jd));
         moreSet.put(new WhenNoDataTypeProperty( jd ));
         moreSet.put(new LanguageProperty( jd ));
         moreSet.put(new FormatFactoryClassProperty( jd ));
@@ -1333,4 +1336,89 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         return new ExpressionContext( jd.getMainDesignDataset() );
     }
     
+}
+
+
+/**
+ *  Class to manage the JasperDesign.PROPERTY_ORIENTATION property
+ */
+class ColumnDirectionProperty extends AbstractProperty
+{
+        private final JasperDesign jd;
+        private ComboBoxPropertyEditor editor = null;
+
+        @SuppressWarnings("unchecked")
+        public ColumnDirectionProperty(JasperDesign jd)
+        {
+            super(RunDirectionEnum.class,jd);
+            this.jd = jd;
+            setValue("suppressCustomEditor", Boolean.TRUE);
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public PropertyEditor getPropertyEditor()
+        {
+            if (editor == null)
+            {
+                editor = new ComboBoxPropertyEditor(false, getTagList());
+            }
+            return editor;
+        }
+
+        @Override
+        public String getName()
+        {
+            return JasperDesign.PROPERTY_COLUMN_DIRECTION;
+        }
+
+        @Override
+        public String getDisplayName()
+        {
+            return I18n.getString("Global.Property.ColumnDirection");
+        }
+
+        @Override
+        public String getShortDescription()
+        {
+            return I18n.getString("Global.Property.ColumnDirection.desc");
+        }
+
+        public List getTagList()
+        {
+            List tags = new java.util.ArrayList();
+            tags.add(new Tag(RunDirectionEnum.LTR, I18n.getString("Global.Property.ColumnDirection.LTR")));
+            tags.add(new Tag(RunDirectionEnum.RTL, I18n.getString("Global.Property.ColumnDirection.RTL")));
+
+            return tags;
+        }
+
+        @Override
+        public Object getPropertyValue() {
+            return jd.getColumnDirection();
+        }
+
+        @Override
+        public Object getOwnPropertyValue() {
+            return getPropertyValue();
+        }
+
+        @Override
+        public Object getDefaultValue() {
+            return RunDirectionEnum.LTR;
+        }
+
+        @Override
+        public void validate(Object value) {
+
+        }
+
+        @Override
+        public void setPropertyValue(Object value) {
+            if (value != null && value instanceof RunDirectionEnum)
+            {
+                jd.setColumnDirection( (RunDirectionEnum)value);
+            }
+        }
+
 }

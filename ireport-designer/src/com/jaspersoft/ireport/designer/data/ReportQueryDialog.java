@@ -1699,28 +1699,40 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
         {
            JRDataSourceProviderConnection ic = (JRDataSourceProviderConnection)conn;
             try {
-                JasperDesign report = IReportManager.getInstance().getActiveReport();
-                
-                
+                //JasperDesign report = IReportManager.getInstance().getActiveReport();
                 // Create a temporary JasperReports object...
-                net.sf.jasperreports.engine.JasperReport jr = new net.sf.jasperreports.engine.JasperReport(report,"",null,(JRBaseObjectFactory)null,"");
+                //net.sf.jasperreports.engine.JasperReport jr = new net.sf.jasperreports.engine.JasperReport(report,"",null,(JRBaseObjectFactory)null,"");
+
+                InputStream is = getClass().getResourceAsStream("/com/jaspersoft/ireport/designer/data/data.jrxml");
+                JasperDesign dataJd = net.sf.jasperreports.engine.xml.JRXmlLoader.load(is);
+
+                // Remove fields...
+                dataJd.getFieldsList().clear(); // This would not be legal...
+                dataJd.getFieldsMap().clear();
+
+                JasperDesign report = IReportManager.getInstance().getActiveReport();
+                ModelUtils.replacePropertiesMap(report.getPropertiesMap(), dataJd.getPropertiesMap());
+
+                JasperReport jr = JasperCompileManager.compileReport(dataJd);
+
+                net.sf.jasperreports.engine.JRField[] jrfields = ic.getDataSourceProvider().getFields( jr );
+
+                DefaultTableModel dtm = (DefaultTableModel)jTableFields.getModel();
+                dtm.setRowCount(0);
                 
-            net.sf.jasperreports.engine.JRField[] jrfields = ic.getDataSourceProvider().getFields( jr );
-            DefaultTableModel dtm = (DefaultTableModel)jTableFields.getModel();
-            dtm.setRowCount(0);
-            for (int i=0; i< jrfields.length; ++i)
-            {
-                Vector row = new Vector();
-                row.addElement(jrfields[i]);
-                row.addElement(jrfields[i].getValueClassName());
-                row.addElement(jrfields[i].getDescription());
-                dtm.addRow(row);
-            }
-            } catch (Exception ex)
-            {
-                setColumnsError( "" + ex.getMessage() );
-            
-            }
+                for (int i=0; i< jrfields.length; ++i)
+                {
+                    Vector row = new Vector();
+                    row.addElement(jrfields[i]);
+                    row.addElement(jrfields[i].getValueClassName());
+                    row.addElement(jrfields[i].getDescription());
+                    dtm.addRow(row);
+                }
+                } catch (Exception ex)
+                {
+                    setColumnsError( "" + ex.getMessage() );
+                    ex.printStackTrace();
+                }
         }
         
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -2079,6 +2091,9 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
 
     private void populateDataPreview() throws JRException
     {
+        System.out.println(" Populating preview... ");
+        System.out.flush();
+        
         ClassLoader origCL = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader( IReportManager.getReportClassLoader());
         InputStream is = getClass().getResourceAsStream("/com/jaspersoft/ireport/designer/data/data.jrxml");
@@ -2106,10 +2121,17 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
         List parameters = getDataset().getParametersList();
         dataJd.setLanguage( IReportManager.getInstance().getActiveReport().getLanguage() );
 
+        // Copy the properties map...
+        try {
+            JasperDesign report = IReportManager.getInstance().getActiveReport();
+            ModelUtils.replacePropertiesMap(report.getPropertiesMap(), dataJd.getPropertiesMap());
+        } catch (Exception ex){}
+        
         // set the parameters
         for (Object p : parameters)
         {
             JRParameter par = (JRParameter)p;
+            if (par.isSystemDefined()) continue;
             if (dataJd.getParametersMap().containsKey(par.getName()))
             {
                 dataJd.removeParameter(par.getName());
@@ -2194,69 +2216,69 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
                            ds = connection.getJRDataSource(jasper_report_obj);
                            JasperFillManager.fillReport(jasper_report_obj,hm,ds);
                        }
-            }
-            else
-            {
-               if (connection instanceof JRHibernateConnection)
-               {
-                   Session session = null;
-                   Transaction transaction = null;
-
-                   try {
-                        session = ((JRHibernateConnection)connection).createSession();
-                        transaction = session.beginTransaction();
-                        hm.put(JRHibernateQueryExecuterFactory.PARAMETER_HIBERNATE_SESSION, session);
-                        JasperFillManager.fillReport(jasper_report_obj,hm);
-
-                   } catch (Exception ex)
+                }
+                else
+                {
+                   if (connection instanceof JRHibernateConnection)
                    {
-                       throw ex;
-                   } finally
-                   {
-                        if (transaction != null) try {  transaction.rollback(); } catch (Exception ex) { }
-                        if (transaction != null) try {  session.close(); } catch (Exception ex) { }
+                       Session session = null;
+                       Transaction transaction = null;
+
+                       try {
+                            session = ((JRHibernateConnection)connection).createSession();
+                            transaction = session.beginTransaction();
+                            hm.put(JRHibernateQueryExecuterFactory.PARAMETER_HIBERNATE_SESSION, session);
+                            JasperFillManager.fillReport(jasper_report_obj,hm);
+
+                       } catch (Exception ex)
+                       {
+                           throw ex;
+                       } finally
+                       {
+                            if (transaction != null) try {  transaction.rollback(); } catch (Exception ex) { }
+                            if (transaction != null) try {  session.close(); } catch (Exception ex) { }
+                       }
                    }
-               }
-               else if (connection instanceof EJBQLConnection)
-               {
-                   EntityManager em = null;
-                   try {
-                        em = ((EJBQLConnection)connection).getEntityManager();
-                        hm.put(JRJpaQueryExecuterFactory.PARAMETER_JPA_ENTITY_MANAGER, em);
-                        //Thread.currentThread().setContextClassLoader( reportClassLoader );
-                        JasperFillManager.fillReport(jasper_report_obj,hm);
+                   else if (connection instanceof EJBQLConnection)
+                   {
+                       EntityManager em = null;
+                       try {
+                            em = ((EJBQLConnection)connection).getEntityManager();
+                            hm.put(JRJpaQueryExecuterFactory.PARAMETER_JPA_ENTITY_MANAGER, em);
+                            //Thread.currentThread().setContextClassLoader( reportClassLoader );
+                            JasperFillManager.fillReport(jasper_report_obj,hm);
 
-                   } catch (Exception ex)
-                   {
-                       throw ex;
-                   } finally
-                   {
-                        ((EJBQLConnection)connection).closeEntityManager();
+                       } catch (Exception ex)
+                       {
+                           throw ex;
+                       } finally
+                       {
+                            ((EJBQLConnection)connection).closeEntityManager();
+                       }
                    }
-               }
-               else if (connection instanceof MondrianConnection)
-               {
-                   mondrian.olap.Connection mCon = null;
-                   try {
-                        mCon = ((MondrianConnection)connection).getMondrianConnection();
-                        hm.put(JRMondrianQueryExecuterFactory.PARAMETER_MONDRIAN_CONNECTION, mCon);
-                        //Thread.currentThread().setContextClassLoader( reportClassLoader );
-                        JasperFillManager.fillReport(jasper_report_obj,hm);
+                   else if (connection instanceof MondrianConnection)
+                   {
+                       mondrian.olap.Connection mCon = null;
+                       try {
+                            mCon = ((MondrianConnection)connection).getMondrianConnection();
+                            hm.put(JRMondrianQueryExecuterFactory.PARAMETER_MONDRIAN_CONNECTION, mCon);
+                            //Thread.currentThread().setContextClassLoader( reportClassLoader );
+                            JasperFillManager.fillReport(jasper_report_obj,hm);
 
-                   } catch (Exception ex)
-                   {
-                       throw ex;
-                   } finally
-                   {
-                        ((MondrianConnection)connection).closeMondrianConnection();
+                       } catch (Exception ex)
+                       {
+                           throw ex;
+                       } finally
+                       {
+                            ((MondrianConnection)connection).closeMondrianConnection();
+                       }
                    }
-               }
-               else // Query Executor mode...
-               {
-                   //Thread.currentThread().setContextClassLoader( reportClassLoader );
-                   JasperFillManager.fillReport(jasper_report_obj,hm);
-               }
-            }
+                   else // Query Executor mode...
+                   {
+                       //Thread.currentThread().setContextClassLoader( reportClassLoader );
+                       JasperFillManager.fillReport(jasper_report_obj,hm);
+                   }
+                }
 
         } catch (final Throwable ex)
         {

@@ -26,6 +26,7 @@ package com.jaspersoft.ireport.designer;
 import com.jaspersoft.ireport.designer.actions.BandDblClickResizeAction;
 import com.jaspersoft.ireport.designer.actions.BandMoveAction;
 import com.jaspersoft.ireport.designer.actions.BandSelectionAction;
+import com.jaspersoft.ireport.designer.actions.ExMoveAction;
 import com.jaspersoft.ireport.designer.actions.KeyboardElementMoveAction;
 import com.jaspersoft.ireport.designer.actions.ReportAlignWithMoveStrategyProvider;
 import com.jaspersoft.ireport.designer.actions.ReportAlignWithResizeStrategyProvider;
@@ -240,17 +241,24 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
                         reportAlignWithResizeStrategyProvider, 
                         reportAlignWithResizeStrategyProvider) );
         
-        widget.getSelectionWidget().getActions().addAction( ActionFactory.createMoveAction(
-                        reportAlignWithMoveStrategyProvider, 
-                        reportAlignWithMoveStrategyProvider) );
+        widget.getSelectionWidget().getActions().addAction(
+                    new ExMoveAction(reportAlignWithMoveStrategyProvider, reportAlignWithMoveStrategyProvider));
+
+//          widget.getSelectionWidget().getActions().addAction(
+//                  ActionFactory.createMoveAction(
+//                        reportAlignWithMoveStrategyProvider,
+//                        reportAlignWithMoveStrategyProvider));
         
         widget.getActions().addAction( ActionFactory.createResizeAction(
                         reportAlignWithResizeStrategyProvider, 
                         reportAlignWithResizeStrategyProvider) );
-        
-        widget.getActions().addAction( ActionFactory.createMoveAction(
-                        reportAlignWithMoveStrategyProvider, 
-                        reportAlignWithMoveStrategyProvider) );
+
+        widget.getActions().addAction(
+                    new ExMoveAction(reportAlignWithMoveStrategyProvider, reportAlignWithMoveStrategyProvider));
+
+//        widget.getActions().addAction( ActionFactory.createMoveAction(
+//                        reportAlignWithMoveStrategyProvider,
+//                        reportAlignWithMoveStrategyProvider) );
         
         widget.getActions().addAction(inplaceEditorAction);
         widget.getSelectionWidget().getActions().addAction(inplaceEditorAction);
@@ -755,6 +763,8 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
             evt.getPropertyName().equals(JRDesignGroup.PROPERTY_GROUP_FOOTER) ||
             evt.getPropertyName().equals(JRDesignDataset.PROPERTY_GROUPS) ||
             evt.getPropertyName().equals(JRDesignSection.PROPERTY_BANDS) ||
+            evt.getPropertyName().equals(JasperDesign.PROPERTY_PRINT_ORDER) ||
+            evt.getPropertyName().equals(JasperDesign.PROPERTY_COLUMN_DIRECTION) ||
             // PROPERTY_HEIGHT is used only for the background band when it is detached...
             evt.getPropertyName().equals(JRDesignBand.PROPERTY_HEIGHT))
         {

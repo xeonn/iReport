@@ -58,18 +58,18 @@ public final class PlotSeriesColorsProperty extends SeriesColorsProperty
     @Override
     public Object getValue()
     {
-        SortedSet set = new TreeSet();
+        List list = new ArrayList();
         if (settings.getSeriesColorSequence() != null)
         {
             for(int i = 0; i < settings.getSeriesColorSequence().size(); i++)
             {
-                set.add(
+                list.add(
                     new JRBaseChartPlot.JRBaseSeriesColor(i, ((ColorProvider)settings.getSeriesColorSequence().get(i)).getColor())
                     
                     );
             }
         }
-        return set;
+        return list;
     }
 
     @Override
@@ -81,16 +81,48 @@ public final class PlotSeriesColorsProperty extends SeriesColorsProperty
     @SuppressWarnings("unchecked")
     private void setPropertyValue(Object val)
     {
-        if (val instanceof SortedSet)
+        if (val instanceof List)
         {
-            if (val == settings.getSeriesColorSequence()) return;
-            SortedSet oldValue = (SortedSet)getValue();
-            SortedSet newValue =  (SortedSet)val;
+            List oldValue = (List)settings.getSeriesColorSequence();
             
             List colors = new ArrayList();
-            if (newValue != null)
+            if (oldValue == val) return;
+            if (oldValue == null && val == null) return;
+
+            // Check for changes...
+
+
+
+            if (val != null)
             {
-                for(Iterator it = newValue.iterator(); it.hasNext();)
+                boolean update = false;
+                if (oldValue ==null || oldValue.size() != ((List)val).size())
+                {
+                    update = true;
+                }
+                else
+                {
+                    ;
+                    for(int idx = 0; !update && idx < ((List)val).size(); ++idx)
+                    {
+
+                        Color c1 = ((JRBaseChartPlot.JRBaseSeriesColor)((List)val).get(idx)).getColor();
+                        Color c2 = ((ColorProvider)oldValue.get(idx)).getColor();
+
+                        if (c1 == null && c1 != c2)
+                        {
+                            update = true;
+                        }
+                        else if (c1 != null && !c1.equals(c2))
+                        {
+                            update = true;
+                        }
+                    }
+                }
+
+                if (!update) return;
+                
+                for(Iterator it = ((List)val).iterator(); it.hasNext();)
                 {
                     colors.add(new ColorProvider(((JRBaseChartPlot.JRBaseSeriesColor)it.next()).getColor()));
                 }
@@ -100,9 +132,9 @@ public final class PlotSeriesColorsProperty extends SeriesColorsProperty
             ObjectPropertyUndoableEdit urob =
                     new ObjectPropertyUndoableEdit(
                         settings,
-                        "SeriesColors", 
-                        Collection.class,
-                        oldValue,newValue);
+                        "SeriesColorSequence",
+                        List.class,
+                        oldValue,colors);
             // Find the undoRedo manager...
             IReportManager.getInstance().addUndoableEdit(urob);
         }

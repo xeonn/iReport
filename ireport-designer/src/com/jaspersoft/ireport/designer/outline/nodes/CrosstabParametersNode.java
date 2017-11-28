@@ -26,6 +26,7 @@ package com.jaspersoft.ireport.designer.outline.nodes;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 
+import com.jaspersoft.ireport.designer.menu.SortParametersAction;
 import com.jaspersoft.ireport.designer.outline.NewTypesUtils;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
@@ -33,6 +34,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import javax.swing.Action;
@@ -64,8 +67,10 @@ import org.openide.util.lookup.ProxyLookup;
  *
  * @author gtoffoli
  */
-public class CrosstabParametersNode extends IRIndexedNode implements PropertyChangeListener {
+public class CrosstabParametersNode extends IRIndexedNode implements PropertyChangeListener, SortableParametersNode {
 
+    private boolean sort = false;
+    private boolean sorting = false;
     private JasperDesign jd = null;
     private JRDesignCrosstab crosstab = null;
     
@@ -258,7 +263,9 @@ public class CrosstabParametersNode extends IRIndexedNode implements PropertyCha
         return new Action[]{
             SystemAction.get(NewAction.class),
             SystemAction.get(PasteAction.class),
-            SystemAction.get(ReorderAction.class)};
+            SystemAction.get(ReorderAction.class),
+            SystemAction.get(SortParametersAction.class)
+        };
     }
 
     @Override
@@ -303,5 +310,95 @@ public class CrosstabParametersNode extends IRIndexedNode implements PropertyCha
 
     public JRDesignCrosstab getCrosstab() {
         return crosstab;
+    }
+
+
+    /**
+     * Activate/Disable alphabetical sort.
+     * A recalculation of the children is performed.
+     * @param sort the sort to set
+     */
+    public void setSort(boolean sort) {
+        this.sort = sort;
+        if (sort)
+        {
+            setIconBaseWithExtension("com/jaspersoft/ireport/designer/resources/parameters-sort-16.png");
+        }
+        else
+        {
+            setIconBaseWithExtension("com/jaspersoft/ireport/designer/resources/parameters-16.png");
+        }
+        this.fireIconChange();
+        if (this.getChildren() != null && this.getChildren() instanceof CrosstabParametersChildren)
+        {
+            this.setSorting(true);
+            ((CrosstabParametersChildren)this.getChildren()).recalculateKeys();
+            this.setSorting(false);
+        }
+    }
+
+    /**
+     * This value says if a sorting operation is occurring.
+     * In that case no changes must be made to the model.
+     * This value is not related to the sorting status,
+     * see isSort() for that.
+     * @return sorting status sorting
+     */
+    public boolean isSorting() {
+        return sorting;
+    }
+
+    /**
+     * See isSorting() for an explanation of this method.
+     * @param sorting the sorting to set
+     */
+    public void setSorting(boolean sorting) {
+        this.sorting = sorting;
+    }
+
+        /**
+     * This method recalculates the childrens if the sort is set to true,
+     * without recreate the list of nodes.
+     * It is called i.e. when the name of a child node changes...
+     */
+    public void updateSorting()
+    {
+        if (!isSort()) return;
+
+
+        setSorting(true);
+        try {
+
+            Node[] nodes = getChildren().getNodes();
+            List nodesList = new ArrayList(Arrays.asList(nodes));
+            Arrays.sort(nodes, new Comparator<Node>() {
+
+                public int compare(Node o1, Node o2) {
+                    return o1.getName().compareToIgnoreCase(o2.getName());
+                }
+            });
+
+
+            int ints[] = new int[nodes.length];
+
+            for (int i=0; i<ints.length; ++i)
+            {
+                ints[ nodesList.indexOf(nodes[i])]=i;
+            }
+
+
+            ((CrosstabParametersChildren)getChildren()).forceReorder(ints);
+
+        } finally
+        {
+            setSorting(false);
+        }
+    }
+
+    /**
+     * @return the sort
+     */
+    public boolean isSort() {
+        return sort;
     }
 }

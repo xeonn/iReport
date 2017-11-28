@@ -23,21 +23,27 @@
  */
 package com.jaspersoft.ireport.designer.palette.actions;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.ReportObjectScene;
+import com.jaspersoft.ireport.designer.palette.PaletteItemAction;
 import com.jaspersoft.ireport.designer.tools.AggregationFunctionDialog;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Point;
 import java.awt.dnd.DropTargetDropEvent;
+import java.util.ArrayList;
+import java.util.List;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.JRVariable;
+import net.sf.jasperreports.engine.convert.StaticTextConverter;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -92,7 +98,11 @@ public class CreateTextFieldFromFieldAction extends CreateTextFieldAction {
 
     public void dropFieldElementAt(Scene theScene, JasperDesign jasperDesign, JRDesignTextField element, Point location)
     {
+
         JRDesignField newField = (JRDesignField)getPaletteItem().getData();
+
+        JRDesignStaticText label = null; // If label != null, add the label too...
+        Point labelLocation = null;
 
         if (theScene instanceof ReportObjectScene)
         {
@@ -204,9 +214,57 @@ public class CreateTextFieldFromFieldAction extends CreateTextFieldAction {
                         }
                     }
                 }
+                else if (b.getOrigin().getBandType() == JROrigin.DETAIL)
+                {
+                    // Check if the column band exists and it is not zero height...
+                    if (getJasperDesign().getColumnHeader() != null &&
+                        getJasperDesign().getColumnHeader().getHeight() >= 20 &&
+                        IReportManager.getPreferences().getBoolean("createLabelForField", true))
+                    {
+                        // Add a label for this textfield...
+                        label = new JRDesignStaticText( getJasperDesign() );
+                        if (newField.getDescription() != null &&
+                            newField.getDescription().trim().length() > 0)
+                        {
+                            label.setText(newField.getDescription());
+                        }
+                        else
+                        {
+                            label.setText(newField.getName());
+                        }
+                        label.setWidth(100);
+                        label.setHeight(20);
+                        
+                        int y = ModelUtils.getBandLocation(getJasperDesign().getColumnHeader(), getJasperDesign());
+                        
+                        labelLocation = theScene.convertSceneToView(new Point(0,y+2));
+                        labelLocation.x = location.x;
+                    }
+
+                }
             }
+
         }
 
-        super.dropElementAt(theScene, jasperDesign, element, location);
+        super.dropElementsAt(theScene, jasperDesign, new JRDesignElement[]{element}, location);
+        
+        if (label != null && labelLocation != null)
+        {
+            super.dropElementsAt(theScene, jasperDesign, new JRDesignElement[]{label}, labelLocation);
+        }
     }
+
+    @Override
+    public void adjustElement(JRDesignElement[] elements, int index, Scene theScene, JasperDesign jasperDesign, Object parent, Point dropLocation) {
+
+        if (elements[index] instanceof JRDesignStaticText)
+        {
+            elements[index].setY(0);
+        }
+
+        super.adjustElement(elements, index, theScene, jasperDesign, parent, dropLocation);
+    }
+
+
+
 }

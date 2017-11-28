@@ -141,7 +141,7 @@ public class ExpressionEditor extends javax.swing.JPanel {
         
         jButtonApply.setVisible(false);
         jButtonCancel.setVisible(false);
-        
+
         jList1.setCellRenderer(new NamedIconItemCellRenderer());
         jList2.setModel(new DefaultListModel());
         jList3.setModel(new DefaultListModel());
@@ -675,123 +675,6 @@ public class ExpressionEditor extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
-
-        if (isRefreshingContext()) return;
-
-        setRefreshingContext(true);
-        DefaultListModel dlm2 = new DefaultListModel(); //(DefaultListModel)jList2.getModel();
-        DefaultListModel dlm3 = (DefaultListModel)jList3.getModel();
-        
-        dlm2.removeAllElements();
-        dlm3.removeAllElements();
-
-        if (jList1.getSelectedValue() != null)
-        {
-            NamedIconItem item = (NamedIconItem)jList1.getSelectedValue();
-            if (item.getItem().equals( USER_DEFINED_EXPRESSIONS))
-            {
-                ArrayList<String> exps = getPredefinedExpressions();
-                for (String s : exps) dlm2.addElement(s);
-            }
-            else if (item.getItem().equals( RECENT_EXPRESSIONS))
-            {
-                for (String s : recentExpressions) dlm2.addElement(s);
-            }
-            else if (item.getItem().equals( PARAMETERS))
-            {
-                JRDesignDataset ds = getExpressionContext().getDatasets().get(0);
-                Iterator parameters = ds.getParametersList().iterator();
-                while (parameters.hasNext())
-                {
-                    dlm2.addElement(new ExpObject(parameters.next()));
-                }
-            }
-            else if (item.getItem().equals( FIELDS))
-            {
-                JRDesignDataset ds = getExpressionContext().getDatasets().get(0);
-                Iterator fields = ds.getFieldsList().iterator();
-                while (fields.hasNext())
-                {
-                    ExpObject eo = new ExpObject(fields.next());
-                    dlm2.addElement(eo);
-               }
-            }
-            else if (item.getItem().equals( VARIABLES))
-            {
-                JRDesignDataset ds = getExpressionContext().getDatasets().get(0);
-                Iterator variables = ds.getVariablesList().iterator();
-                while (variables.hasNext())
-                {
-                    dlm2.addElement(new ExpObject(variables.next()));
-                }
-            }
-            else if (item.getItem() instanceof JRDesignCrosstab)
-            {
-                JRDesignCrosstab crosstab = (JRDesignCrosstab)item.getItem();
-                List rowGroups = crosstab.getRowGroupsList();
-                List columnGroups = crosstab.getColumnGroupsList();
-                
-                Iterator measures = crosstab.getMesuresList().iterator();
-                while (measures.hasNext())
-                {
-                    JRDesignCrosstabMeasure measure = (JRDesignCrosstabMeasure)measures.next();
-                    dlm2.addElement(new ExpObject(measure.getVariable()));
-                    
-                    for (int i=0; i<rowGroups.size(); ++i)
-                    {
-                        JRDesignCrosstabRowGroup rowGroup = (JRDesignCrosstabRowGroup)rowGroups.get(i);
-                        dlm2.addElement(new CrosstabTotalVariable(measure, rowGroup, null));
-                        
-                        
-                        for (int j=0; j<columnGroups.size(); ++j)
-                        {
-                            JRDesignCrosstabColumnGroup columnGroup = (JRDesignCrosstabColumnGroup)columnGroups.get(j);
-                            if (j==0)
-                            {
-                                dlm2.addElement(new CrosstabTotalVariable(measure, null, columnGroup));
-                            }
-                            
-                            dlm2.addElement(new CrosstabTotalVariable(measure, rowGroup, columnGroup));
-                        }
-                    }
-                }
-                
-                for (int i=0; i<rowGroups.size(); ++i)
-                {
-                    JRDesignCrosstabRowGroup rowGroup = (JRDesignCrosstabRowGroup)rowGroups.get(i);
-                    dlm2.addElement(new ExpObject(rowGroup.getVariable()));
-                }
-                
-                for (int i=0; i<columnGroups.size(); ++i)
-                {
-                    JRDesignCrosstabColumnGroup columnGroup = (JRDesignCrosstabColumnGroup)columnGroups.get(i);
-                    dlm2.addElement(new ExpObject(columnGroup.getVariable()));
-                }
-                
-                List crosstabParameters = crosstab.getParametersList();
-                for (int i=0; i<crosstabParameters.size(); ++i)
-                {
-                    JRDesignCrosstabParameter parameter = (JRDesignCrosstabParameter)crosstabParameters.get(i);
-                    dlm2.addElement(new ExpObject(parameter));
-                }
-                
-            }
-            // TODO -> Wizards
-            jList2.setModel(dlm2);
-
-            setRefreshingContext(false);
-
-            if (dlm2.size() > 0)
-            {
-                jList2.setSelectedIndex(0);
-            }
-            
-        }
-        
-        
-    }//GEN-LAST:event_jList1ValueChanged
-
     private void jList2ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList2ValueChanged
 
         if (isRefreshingContext()) return;
@@ -929,6 +812,99 @@ public class ExpressionEditor extends javax.swing.JPanel {
     private void jEditorPane1CaretPositionChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jEditorPane1CaretPositionChanged
 
     }//GEN-LAST:event_jEditorPane1CaretPositionChanged
+
+    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
+
+        if (isRefreshingContext()) return;
+
+        setRefreshingContext(true);
+        DefaultListModel dlm2 = new DefaultListModel(); //(DefaultListModel)jList2.getModel();
+        DefaultListModel dlm3 = (DefaultListModel)jList3.getModel();
+
+        dlm2.removeAllElements();
+        dlm3.removeAllElements();
+
+        if (jList1.getSelectedValue() != null) {
+            NamedIconItem item = (NamedIconItem)jList1.getSelectedValue();
+            if (item.getItem().equals( USER_DEFINED_EXPRESSIONS)) {
+                ArrayList<String> exps = getPredefinedExpressions();
+                for (String s : exps) dlm2.addElement(s);
+            } else if (item.getItem().equals( RECENT_EXPRESSIONS)) {
+                for (String s : recentExpressions) dlm2.addElement(s);
+            } else if (item.getItem().equals( PARAMETERS)) {
+                JRDesignDataset ds = getExpressionContext().getDatasets().get(0);
+                Iterator parameters = ds.getParametersList().iterator();
+                while (parameters.hasNext()) {
+                    dlm2.addElement(new ExpObject(parameters.next()));
+                }
+            } else if (item.getItem().equals( FIELDS)) {
+                JRDesignDataset ds = getExpressionContext().getDatasets().get(0);
+                Iterator fields = ds.getFieldsList().iterator();
+                while (fields.hasNext()) {
+                    ExpObject eo = new ExpObject(fields.next());
+                    dlm2.addElement(eo);
+                }
+            } else if (item.getItem().equals( VARIABLES)) {
+                JRDesignDataset ds = getExpressionContext().getDatasets().get(0);
+                Iterator variables = ds.getVariablesList().iterator();
+                while (variables.hasNext()) {
+                    dlm2.addElement(new ExpObject(variables.next()));
+                }
+            } else if (item.getItem() instanceof JRDesignCrosstab) {
+                JRDesignCrosstab crosstab = (JRDesignCrosstab)item.getItem();
+                List rowGroups = crosstab.getRowGroupsList();
+                List columnGroups = crosstab.getColumnGroupsList();
+
+                Iterator measures = crosstab.getMesuresList().iterator();
+                while (measures.hasNext()) {
+                    JRDesignCrosstabMeasure measure = (JRDesignCrosstabMeasure)measures.next();
+                    dlm2.addElement(new ExpObject(measure.getVariable()));
+
+                    for (int i=0; i<rowGroups.size(); ++i) {
+                        JRDesignCrosstabRowGroup rowGroup = (JRDesignCrosstabRowGroup)rowGroups.get(i);
+                        dlm2.addElement(new CrosstabTotalVariable(measure, rowGroup, null));
+
+
+                        for (int j=0; j<columnGroups.size(); ++j) {
+                            JRDesignCrosstabColumnGroup columnGroup = (JRDesignCrosstabColumnGroup)columnGroups.get(j);
+                            if (j==0) {
+                                dlm2.addElement(new CrosstabTotalVariable(measure, null, columnGroup));
+                            }
+
+                            dlm2.addElement(new CrosstabTotalVariable(measure, rowGroup, columnGroup));
+                        }
+                    }
+                }
+
+                for (int i=0; i<rowGroups.size(); ++i) {
+                    JRDesignCrosstabRowGroup rowGroup = (JRDesignCrosstabRowGroup)rowGroups.get(i);
+                    dlm2.addElement(new ExpObject(rowGroup.getVariable()));
+                }
+
+                for (int i=0; i<columnGroups.size(); ++i) {
+                    JRDesignCrosstabColumnGroup columnGroup = (JRDesignCrosstabColumnGroup)columnGroups.get(i);
+                    dlm2.addElement(new ExpObject(columnGroup.getVariable()));
+                }
+
+                List crosstabParameters = crosstab.getParametersList();
+                for (int i=0; i<crosstabParameters.size(); ++i) {
+                    JRDesignCrosstabParameter parameter = (JRDesignCrosstabParameter)crosstabParameters.get(i);
+                    dlm2.addElement(new ExpObject(parameter));
+                }
+
+            }
+            // TODO -> Wizards
+            jList2.setModel(dlm2);
+
+            setRefreshingContext(false);
+
+            if (dlm2.size() > 0) {
+                jList2.setSelectedIndex(0);
+            }
+
+        }
+
+    }//GEN-LAST:event_jList1ValueChanged
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

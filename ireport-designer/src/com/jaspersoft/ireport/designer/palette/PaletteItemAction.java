@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer.palette;
 
+import java.awt.dnd.DropTargetDropEvent;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.netbeans.api.visual.widget.Scene;
 

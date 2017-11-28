@@ -26,7 +26,11 @@ package com.jaspersoft.ireport.designer.sheet;
 import com.jaspersoft.ireport.designer.sheet.editors.SeriesColorsPropertyEditor;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedSet;
+import java.util.TreeSet;
+import net.sf.jasperreports.engine.base.JRBaseChartPlot.JRBaseSeriesColor;
 import org.openide.nodes.PropertySupport;
 
 /**
@@ -61,6 +65,80 @@ public class SeriesColorsProperty extends PropertySupport {
             editor = new SeriesColorsPropertyEditor();
         }
         return editor;
+    }
+
+    public static List sortedSetAsList(SortedSet set)
+    {
+         List list = new ArrayList();
+        list.addAll( set );
+        return list;
+    }
+
+    public static SortedSet listAsSortedSet(List list)
+    {
+         SortedSet set = new TreeSet();
+         set.addAll( list );
+         return set;
+    }
+
+    public static boolean isListChanged(List values, SortedSet originalValues)
+    {
+            if (values == null && originalValues == null)
+            {
+                return false;
+            }
+
+            if (values != null && originalValues != null)
+            {
+                // Check if the colors are the same...
+                List l1 = values;
+                List l2 = sortedSetAsList(originalValues);
+
+                boolean areEq = true;
+                if (l1.size() != l2.size())
+                {
+                    areEq = false;
+                }
+                if (areEq)
+                {
+                    for (int i=0; areEq && i<l1.size(); ++i)
+                    {
+                        if (l1.get(i) instanceof JRBaseSeriesColor && l2.get(i) instanceof JRBaseSeriesColor)
+                        {
+                            JRBaseSeriesColor c1 = (JRBaseSeriesColor)l1.get(i);
+                            JRBaseSeriesColor c2 = (JRBaseSeriesColor)l2.get(i);
+
+                            if (c1 == null || c2 == null)
+                            {
+                                if (c1 != c2)
+                                {
+                                    areEq = false;
+                                }
+                            }
+                            else
+                            {
+                                if (c1.getSeriesOrder() != c2.getSeriesOrder())
+                                {
+                                    areEq = false;
+                                }
+                                else if (c1.getColor() != c2.getColor() || (c1.getColor() != null && !c1.getColor().equals(c2.getColor()))  )
+                                {
+                                    areEq = false;
+                                }
+                            }
+
+
+                        }
+                        else if (!(l1.get(i).equals(l2.get(i))))
+                        {
+                            areEq = false;
+                        }
+                    }
+                }
+
+                return !areEq;
+            }
+            return true;
     }
     
 }

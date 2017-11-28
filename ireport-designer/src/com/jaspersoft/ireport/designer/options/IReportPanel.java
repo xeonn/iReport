@@ -246,6 +246,7 @@ final class IReportPanel extends javax.swing.JPanel {
         //jTabbedPane1.remove(5);
 
         jComboBoxCompatibility.addItem(new Tag("", "Last version"));
+        jComboBoxCompatibility.addItem(new Tag("3_7_4", "JasperReports 3.7.4"));
         jComboBoxCompatibility.addItem(new Tag("3_7_3", "JasperReports 3.7.3"));
         jComboBoxCompatibility.addItem(new Tag("3_7_1", "JasperReports 3.7.1-3.7.2"));
         jComboBoxCompatibility.addItem(new Tag("3_6_2", "JasperReports 3.7.0"));
@@ -318,6 +319,7 @@ final class IReportPanel extends javax.swing.JPanel {
         jCheckBoxDebugMode = new javax.swing.JCheckBox();
         jCheckBoxShowPositionErrors = new javax.swing.JCheckBox();
         jCheckBoxSaveZoom = new javax.swing.JCheckBox();
+        jCheckBoxLabelForField = new javax.swing.JCheckBox();
         jPanel22 = new javax.swing.JPanel();
         jLabelExpressions = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -594,6 +596,13 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxLabelForField, "Create a label for fields dropped in the detail band if the column header band is heigher than 20 pixels");
+        jCheckBoxLabelForField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxLabelForFieldActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout jPanel26Layout = new org.jdesktop.layout.GroupLayout(jPanel26);
         jPanel26.setLayout(jPanel26Layout);
         jPanel26Layout.setHorizontalGroup(
@@ -607,8 +616,9 @@ final class IReportPanel extends javax.swing.JPanel {
                     .add(jCheckBoxAskConfirmationOnDelete)
                     .add(jCheckBoxDebugMode)
                     .add(jCheckBoxShowPositionErrors)
-                    .add(jCheckBoxSaveZoom))
-                .addContainerGap(235, Short.MAX_VALUE))
+                    .add(jCheckBoxSaveZoom)
+                    .add(jCheckBoxLabelForField))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
         jPanel26Layout.setVerticalGroup(
             jPanel26Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -627,7 +637,9 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jCheckBoxShowPositionErrors)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxSaveZoom)
-                .addContainerGap(94, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxLabelForField)
+                .addContainerGap(71, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Designer", jPanel26);
@@ -2955,6 +2967,10 @@ private void jButtonPPTXViewerActionPerformed(java.awt.event.ActionEvent evt) {/
             jTextFieldPPTXViewer.setText( jfc.getSelectedFile().getPath());
         }
 }//GEN-LAST:event_jButtonPPTXViewerActionPerformed
+
+private void jCheckBoxLabelForFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxLabelForFieldActionPerformed
+   notifyChange();
+}//GEN-LAST:event_jCheckBoxLabelForFieldActionPerformed
     
             
     void load() {
@@ -2980,6 +2996,8 @@ private void jButtonPPTXViewerActionPerformed(java.awt.event.ActionEvent evt) {/
         jCheckBoxSaveZoom.setSelected( pref.getBoolean("save_zoom_and_location", true) ); // NOI18N
         
         jCheckBoxShowPositionErrors.setSelected( pref.getBoolean("showPositionErrors", true) ); // NOI18N
+
+        jCheckBoxLabelForField.setSelected( pref.getBoolean("createLabelForField", true) ); // NOI18N
 
 
 
@@ -3257,6 +3275,8 @@ private void jButtonPPTXViewerActionPerformed(java.awt.event.ActionEvent evt) {/
         pref.putBoolean("showPositionErrors", jCheckBoxShowPositionErrors.isSelected());// NOI18N
         pref.putBoolean("save_zoom_and_location", jCheckBoxSaveZoom.isSelected());// NOI18N
 
+        pref.putBoolean("createLabelForField", jCheckBoxLabelForField.isSelected());// NOI18N
+
         if (getCurrentReportLocale() != null) pref.put("reportLocale", getCurrentReportLocale().toString());
         else pref.remove("reportLocale");
         
@@ -3466,6 +3486,7 @@ private void jButtonPPTXViewerActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JCheckBox jCheckBoxDebugMode;
     private javax.swing.JCheckBox jCheckBoxIgnorePagination;
     private javax.swing.JCheckBox jCheckBoxKeyInReportInspector;
+    private javax.swing.JCheckBox jCheckBoxLabelForField;
     private javax.swing.JCheckBox jCheckBoxLimitRecordNumber;
     private javax.swing.JCheckBox jCheckBoxMagneticGuideLines;
     private javax.swing.JCheckBox jCheckBoxSaveZoom;

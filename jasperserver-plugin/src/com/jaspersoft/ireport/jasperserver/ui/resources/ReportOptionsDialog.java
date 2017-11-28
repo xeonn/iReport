@@ -213,7 +213,7 @@ public class ReportOptionsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanel2.add(jTextFieldUriString, gridBagConstraints);
 
-        jLabelName.setText("Name");
+        jLabelName.setText("ID");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -235,7 +235,7 @@ public class ReportOptionsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 6, 4);
         jPanel2.add(jSeparator2, gridBagConstraints);
 
-        jLabelLabel.setText("Label");
+        jLabelLabel.setText("Name");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

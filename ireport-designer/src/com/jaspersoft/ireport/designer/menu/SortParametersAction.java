@@ -25,6 +25,7 @@
 package com.jaspersoft.ireport.designer.menu;
 
 import com.jaspersoft.ireport.designer.outline.nodes.ParametersNode;
+import com.jaspersoft.ireport.designer.outline.nodes.SortableParametersNode;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -79,16 +80,16 @@ public class SortParametersAction  extends NodeAction implements Presenter.Menu,
     }
 
     protected void performAction(org.openide.nodes.Node[] activatedNodes) {
-        ((ParametersNode)activatedNodes[0]).setSort(!((ParametersNode)activatedNodes[0]).isSort());
+        ((SortableParametersNode)activatedNodes[0]).setSort(!((SortableParametersNode)activatedNodes[0]).isSort());
     }
 
     protected boolean enable(org.openide.nodes.Node[] activatedNodes) {
         if (activatedNodes != null &&
                 activatedNodes.length == 1 &&
-                activatedNodes[0] instanceof ParametersNode)
+                activatedNodes[0] instanceof SortableParametersNode)
         {
             SORT_MENU.setEnabled(true);
-            SORT_MENU.setSelected( ((ParametersNode)activatedNodes[0]).isSort());
+            SORT_MENU.setSelected( ((SortableParametersNode)activatedNodes[0]).isSort());
             return true;
         }
         SORT_MENU.setEnabled(false);

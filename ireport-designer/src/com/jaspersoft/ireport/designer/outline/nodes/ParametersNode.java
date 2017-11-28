@@ -66,7 +66,7 @@ import org.openide.util.lookup.ProxyLookup;
  *
  * @author gtoffoli
  */
-public class ParametersNode extends IRIndexedNode implements PropertyChangeListener {
+public class ParametersNode extends IRIndexedNode implements PropertyChangeListener, SortableParametersNode {
 
     private JasperDesign jd = null;
     private JRDesignDataset dataset = null;

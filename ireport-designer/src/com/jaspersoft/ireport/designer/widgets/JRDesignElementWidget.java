@@ -522,12 +522,14 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
             this.repaint(); 
             this.getSelectionWidget().updateBounds();
             this.getSelectionWidget().revalidate(true);
-            try {
-            getScene().validate();
-            } catch (Exception ex)
-            {
-                ex.printStackTrace();
-            }
+            
+                try {
+                    getScene().validate();
+                } catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                }
+            
         }
         
         if (propertyName.equals( JRDesignFrame.PROPERTY_CHILDREN))
@@ -541,8 +543,6 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
                      this.getElement() instanceof JRDesignComponentElement &&
                      this.getChildrenElements() != null)
             {
-                System.out.println("Componenst changed! Refreshing bands!");
-                System.out.flush();
                 ((ReportObjectScene)getScene()).refreshBands();
             }
         }

@@ -36,7 +36,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.crosstabs.JRCrosstabCell;
 import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
@@ -50,7 +49,6 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabParameter;
 import net.sf.jasperreports.crosstabs.fill.calculation.BucketDefinition;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRBand;
-import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementDataset;
@@ -85,7 +83,10 @@ import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
+import net.sf.jasperreports.engine.type.PrintOrderEnum;
+import net.sf.jasperreports.engine.type.RunDirectionEnum;
 import org.netbeans.api.visual.widget.Widget;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
@@ -2101,6 +2102,13 @@ public class ModelUtils {
 
         JRElementGroup grp = element.getElementGroup();
 
+        if (grp == element)
+        {
+            System.out.println("ERROR ---------- Element group same as element!!!");
+            System.out.flush();
+            return null;
+
+        }
         // I need to discover the first logical parent of this element
         while (grp != null)    // Element placed in a frame
         {
@@ -2111,6 +2119,22 @@ public class ModelUtils {
                         jd.getLeftMargin(),  // X
                         ModelUtils.getBandLocation(band, jd) // Y
                 );
+
+                if ((band.getOrigin().getBandTypeValue() == BandTypeEnum.DETAIL ||
+                     band.getOrigin().getBandTypeValue() == BandTypeEnum.COLUMN_FOOTER ||
+                     band.getOrigin().getBandTypeValue() == BandTypeEnum.COLUMN_HEADER ||
+                     (band.getOrigin().getBandTypeValue() == BandTypeEnum.GROUP_HEADER && jd.getPrintOrderValue() == PrintOrderEnum.VERTICAL) ||
+                     (band.getOrigin().getBandTypeValue() == BandTypeEnum.GROUP_FOOTER && jd.getPrintOrderValue() == PrintOrderEnum.VERTICAL)
+                     ) &&
+                     //jd.getPrintOrderValue() == PrintOrderEnum.HORIZONTAL &&
+                     jd.getColumnDirection() == RunDirectionEnum.RTL &&
+                     jd.getColumnCount() > 1)
+                {
+                    // the band origin is different... let's calculate it...
+                    int x = jd.getLeftMargin() + (jd.getColumnCount()-1)*jd.getColumnWidth() + (jd.getColumnCount()-1)*jd.getColumnSpacing();
+                    base.x = x;
+                }
+
                 break;
             }
             else if (grp instanceof JRDesignCellContents)    // Element placed in a cell

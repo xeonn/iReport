@@ -28,6 +28,7 @@ import com.jaspersoft.ireport.components.spiderchart.properties.AxisLineWidthPro
 import com.jaspersoft.ireport.components.spiderchart.properties.BackgroundAlphaProperty;
 import com.jaspersoft.ireport.components.spiderchart.properties.BackgroundColorProperty;
 import com.jaspersoft.ireport.components.spiderchart.properties.ChartBackgroundColorProperty;
+import com.jaspersoft.ireport.components.spiderchart.properties.CustomizerClassProperty;
 import com.jaspersoft.ireport.components.spiderchart.properties.EvaluationGroupProperty;
 import com.jaspersoft.ireport.components.spiderchart.properties.EvaluationTimeProperty;
 import com.jaspersoft.ireport.components.spiderchart.properties.ForegroundAlphaProperty;
@@ -145,6 +146,8 @@ public class SpiderChartElementNode extends ElementNode {
         propertySet.put(new LegendPositionProperty(chartSettings));
         propertySet.put(new ChartBackgroundColorProperty(chartSettings));
         propertySet.put(new RenderTypeProperty(chartSettings));
+        propertySet.put(new CustomizerClassProperty(chartSettings));
+
 
         sheet.put( propertySet );
 

@@ -141,7 +141,7 @@ public final class ReportUnitVisualPanel1 extends JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanel0.add(jTextFieldUriString, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelName, "Name");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelName, "ID");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -163,7 +163,7 @@ public final class ReportUnitVisualPanel1 extends JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 6, 4);
         jPanel0.add(jSeparator2, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelLabel, "Label");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelLabel, "Name");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

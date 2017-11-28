@@ -161,6 +161,11 @@ public class CrosstabParameterNode extends ParameterNode implements PropertyChan
         
         String oldName = getParameter().getName();
         getParameter().setName(s);
+
+
+        // We need to update the parameters map too...
+        crosstab.getParametersMap().remove(oldName);
+        crosstab.getParametersMap().put(s,getParameter());
         
         ObjectPropertyUndoableEdit opue = new ObjectPropertyUndoableEdit(
                     getParameter(), "Name", String.class, oldName, s);
@@ -225,6 +230,10 @@ public class CrosstabParameterNode extends ParameterNode implements PropertyChan
             }
             String oldName = getParameter().getName();
             getParameter().setName(s);
+
+            // We need to update the parameters map too...
+            crosstab.getParametersMap().remove(oldName);
+            crosstab.getParametersMap().put(s,getParameter());
 
             ObjectPropertyUndoableEdit opue = new ObjectPropertyUndoableEdit(
                     getParameter(), "Name", String.class, oldName, getParameter().getName());

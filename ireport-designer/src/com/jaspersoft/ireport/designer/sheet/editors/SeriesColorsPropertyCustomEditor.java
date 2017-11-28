@@ -27,7 +27,7 @@ import com.jaspersoft.ireport.designer.tools.SeriesColorsPanel;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
-import java.util.SortedSet;
+import java.util.List;
 import org.openide.explorer.propertysheet.PropertyEnv;
 
 /**
@@ -56,7 +56,7 @@ public class SeriesColorsPropertyCustomEditor extends SeriesColorsPanel implemen
      * @param oneline whether the text component should be a single-line or multi-line component (NOT USED)
      * @param instructions any instructions that should be displayed (NOT USED)
      */
-    SeriesColorsPropertyCustomEditor (SortedSet value, boolean oneline, String instructions, PropertyEditor editor, PropertyEnv env) {
+    SeriesColorsPropertyCustomEditor (List value, boolean oneline, String instructions, PropertyEditor editor, PropertyEnv env) {
         
         super();
         

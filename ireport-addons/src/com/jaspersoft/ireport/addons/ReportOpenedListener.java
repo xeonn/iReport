@@ -89,7 +89,7 @@ public class ReportOpenedListener implements PropertyChangeListener {
             {
                 String fileName = FileUtil.toFile(jrxmlEditorSupport.getDataObject().getPrimaryFile()).getPath();
                 JrxmlVisualView view = (JrxmlVisualView)jrxmlEditorSupport.getDescriptions()[0];
-                if (view != null)
+                if (view != null && view.getReportDesignerPanel() != null)
                 {
                     view.getReportDesignerPanel().removePropertyChangeListener( this);
                     view.getReportDesignerPanel().addPropertyChangeListener( this);

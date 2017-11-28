@@ -193,7 +193,7 @@ public abstract class CreateReportElementsAction extends PaletteItemAction
                 {
                     Runnable r = new Runnable() {
                         public void run() {
-                            JOptionPane.showMessageDialog(Misc.getMainFrame(), "You can use this kind of element inside a crosstab.","Error", JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(Misc.getMainFrame(), "You cannot use this kind of element inside a crosstab.","Error", JOptionPane.WARNING_MESSAGE);
                         }
                     };
 

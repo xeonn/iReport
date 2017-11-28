@@ -194,7 +194,7 @@ public class ObjectPropertiesDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanel1.add(jTextFieldUriString, gridBagConstraints);
 
-        jLabelName.setText("Name"); // NOI18N
+        jLabelName.setText("ID"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -220,7 +220,7 @@ public class ObjectPropertiesDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 6, 4);
         jPanel1.add(jSeparator1, gridBagConstraints);
 
-        jLabelLabel.setText("Label"); // NOI18N
+        jLabelLabel.setText("Name"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

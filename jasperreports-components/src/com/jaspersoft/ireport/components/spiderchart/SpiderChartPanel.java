@@ -17,8 +17,6 @@ import com.jaspersoft.ireport.designer.charts.datasets.CategorySeriesDialog;
 import com.jaspersoft.ireport.designer.charts.datasets.DatasetListsCellRenderer;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.Tag;
-import com.jaspersoft.ireport.designer.tools.DatasetParametersTableCellRenderer;
-import com.jaspersoft.ireport.designer.tools.JRDatasetParameterDialog;
 import com.jaspersoft.ireport.designer.utils.ExpressionInterpreter;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
@@ -51,6 +49,9 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import com.jaspersoft.ireport.designer.tools.*;
+
+
 
 /**
  *
@@ -1524,7 +1525,7 @@ public class SpiderChartPanel extends javax.swing.JPanel {
                 }
 
                 // Fill the entities
-                JRCategorySeries[] items = currentSelectedChartComponent.getDataset().getSeries();
+                JRCategorySeries[] items = ((StandardSpiderDataset)currentSelectedChartComponent.getDataset()).getSeries();
                 jList1.setModel(new DefaultListModel());
                 for (JRCategorySeries item : items)
                 {

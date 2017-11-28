@@ -23,6 +23,8 @@
  */
 package com.jaspersoft.ireport.designer.actions;
 
+import bsh.EvalError;
+import bsh.Interpreter;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
@@ -38,6 +40,7 @@ import net.sf.jasperreports.charts.design.JRDesignPieDataset;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -136,9 +139,70 @@ public final class TransformElementAction extends NodeAction {
                         copyBasicProperties(element, newElement);
                         copyTextProperties((JRDesignTextField)element, (JRDesignStaticText)newElement);
                         String s = Misc.getExpressionText( ((JRDesignTextField)element).getExpression() );
-                        s = Misc.string_replace("\"", "\\\"", s);
-                        s = Misc.string_replace("\\", "\\\\", s);
-                        ((JRDesignStaticText)newElement).setText(s);
+                        // remove quotes...
+                        StringBuffer newString = new StringBuffer();
+                        if (s.length() > 0)
+                        {
+                            for (int index=0; index<s.length(); ++index)
+                            {
+                                char c = s.charAt(index);
+                                switch (c)
+                                {
+                                    case '"':
+                                        break;
+
+                                    case '\\':
+                                    {
+                                        index++;
+                                        if (index<s.length())
+                                        {
+                                            char c1 = s.charAt(index);
+                                            if (c1 == 'n') newString.append('\n');
+                                            else if (c1 == 't') newString.append('\t');
+                                            else if (c1 == '\\') newString.append('\\');
+                                            else if (c1 == '"') newString.append('"');
+                                            else if (c1 == 'u')
+                                            {
+                                                // Unicode character...
+                                                if (index+4<s.length() &&
+                                                   isOctal(s.charAt(index+1)) &&
+                                                   isOctal(s.charAt(index+2)) &&
+                                                   isOctal(s.charAt(index+3)) &&
+                                                   isOctal(s.charAt(index+4)))
+                                                {
+                                                    Interpreter interpreter = new Interpreter();
+                                                    try {
+                                                        newString.append(interpreter.eval("\"" + s.substring(index - 1, index - 1 + 6) + "\""));
+
+                                                    } catch (EvalError ex) {
+                                                        ex.printStackTrace();
+                                                        newString.append(s.substring(index - 1, index - 1 + 6));
+                                                    }
+                                                    index+=4;
+                                                    
+                                                }
+                                            }
+                                            else
+                                            {
+                                                newString.append("\\" + c);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            newString.append(c);
+                                        }
+                                        break;
+                                    }
+                                    default:
+                                       newString.append(c);
+                                }
+                            }
+                        }
+
+
+                        //s = Misc.string_replace("\"", "\\\"", s);
+                        //s = Misc.string_replace("\\", "\\\\", s);
+                        ((JRDesignStaticText)newElement).setText(newString.toString());
                     }
                     break;
                 }
@@ -545,5 +609,12 @@ public final class TransformElementAction extends NodeAction {
         }
 
         return transformActions;
+    }
+
+    private boolean isOctal(char c)
+    {
+        c = Character.toLowerCase(c);
+        return (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' ||
+                c == '8' || c == '9' || c == 'a' || c == 'b' || c == 'c' || c == 'd' || c == 'e' || c == 'f');
     }
 }

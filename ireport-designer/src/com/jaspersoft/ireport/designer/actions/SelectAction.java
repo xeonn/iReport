@@ -27,6 +27,8 @@ import com.jaspersoft.ireport.designer.widgets.SelectionWidget;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.List;
+import javax.swing.SwingUtilities;
 import org.netbeans.api.visual.action.SelectProvider;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.action.WidgetAction.State;
@@ -45,6 +47,7 @@ public class SelectAction extends WidgetAction.LockedAdapter {
     private Widget aimedWidget = null;
     private boolean invertSelection;
     private SelectProvider provider;
+    private boolean rightButton = false;
 
     public SelectAction (SelectProvider provider) {
         this.provider = provider;
@@ -55,11 +58,13 @@ public class SelectAction extends WidgetAction.LockedAdapter {
     }
 
     public State mousePressed (Widget widget, WidgetMouseEvent event) {
+
         if (isLocked ())
             return State.createLocked (widget, this);
-        if (event.getButton ()  ==  MouseEvent.BUTTON1  ||  event.getButton () == MouseEvent.BUTTON2) {
+        if (event.getButton ()  ==  MouseEvent.BUTTON1 ||  event.getButton () == MouseEvent.BUTTON3)
+        {
 
-
+            rightButton = event.getButton () == MouseEvent.BUTTON3;
             widget.getScene().getView().requestFocus();
 
             invertSelection = (event.getModifiersEx () & MouseEvent.CTRL_DOWN_MASK) != 0;
@@ -93,7 +98,7 @@ public class SelectAction extends WidgetAction.LockedAdapter {
         return State.REJECTED;
     }
 
-    public State mouseReleased (Widget widget, WidgetMouseEvent event) {
+    public State mouseReleased (final Widget widget, final WidgetMouseEvent event) {
         if (aiming) {
             Point point = event.getPoint ();
             updateState (widget, point);
@@ -101,6 +106,28 @@ public class SelectAction extends WidgetAction.LockedAdapter {
                 provider.select (widget, point, invertSelection);
             updateState (null, null);
             aiming = false;
+
+            if (event.getButton() == MouseEvent.BUTTON3 && rightButton)
+            {
+                // if there is a PopupMenuAction, use it..
+
+                List<WidgetAction> actions = widget.getActions().getActions();
+                for (final WidgetAction action : actions)
+                {
+                    if (action.getClass().getName().contains("PopupMenuAction"))
+                    {
+                        SwingUtilities.invokeLater(new Runnable() {
+
+                            public void run() {
+                                action.mousePressed(widget, event);
+                                action.mouseReleased(widget, event);
+                            }
+                        });
+                        break;
+                    }
+                }
+            }
+
             return State.CONSUMED;
         }
         return super.mouseReleased (widget, event);

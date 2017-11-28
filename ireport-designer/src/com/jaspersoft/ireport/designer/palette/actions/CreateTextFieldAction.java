@@ -32,7 +32,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  */
-public class CreateTextFieldAction extends CreateReportElementAction 
+public class CreateTextFieldAction extends CreateReportElementsAction
 {
 
     static private java.util.List acceptedTextfieldClasses = null;
@@ -124,6 +124,11 @@ public class CreateTextFieldAction extends CreateReportElementAction
         {
             setMatchingClassExpression(expression, superClass.getName(), adjustExpression);
         }
+    }
+
+    @Override
+    public JRDesignElement[] createReportElements(JasperDesign jd) {
+        return new JRDesignElement[]{createReportElement(jd)};
     }
 
 }

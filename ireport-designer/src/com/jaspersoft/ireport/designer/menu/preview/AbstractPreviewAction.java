@@ -28,8 +28,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.CallableSystemAction;
 
@@ -41,39 +41,28 @@ public abstract class AbstractPreviewAction extends CallableSystemAction impleme
 
     public abstract String getPreviewType();
 
-    private JCheckBoxMenuItem item;
+    private JRadioButtonMenuItem item;
+    private boolean updating = false;
     
     public AbstractPreviewAction()
     {
-        item = new JCheckBoxMenuItem(getName());
+        item = new JRadioButtonMenuItem(getName());
         IReportManager.getPreferences().addPreferenceChangeListener(this);
         preferenceChange(null);
         item.addItemListener(this);
     }
     
-    
+    public void performAction()
+    {
+
+    }
+            
+
     @Override
     public JMenuItem getMenuPresenter() {
-        
         return item;
     }
      
-    
-    public void performAction() {
-        
-        if (item.isSelected())
-        {
-            if (getPreviewType().length() > 0)
-            {
-                IReportManager.getPreferences().put("output_format", getPreviewType());
-            }
-            else
-            {
-                IReportManager.getPreferences().remove("output_format");
-            }
-        }
-    }
-
     @Override
     protected void initialize() {
         super.initialize();
@@ -94,13 +83,50 @@ public abstract class AbstractPreviewAction extends CallableSystemAction impleme
     
     public void preferenceChange(PreferenceChangeEvent evt)
     {
-        item.setSelected(  IReportManager.getPreferences().get("output_format", "").equals(getPreviewType()) ); 
+        String fmt = IReportManager.getPreferences().get("output_format", "");
+        if (getPreviewType().equals(fmt) != item.isSelected())
+        {
+            setUpdating(true);
+            item.setSelected(!item.isSelected());
+            setUpdating(false);
+        }
     }
-    
+                      
     
     public void itemStateChanged(ItemEvent e)
     {
+        if (isUpdating()) return;
+        
+        if (e.getStateChange() == ItemEvent.DESELECTED)
+        {
+            IReportManager.getPreferences().remove("output_format");
+        }
+        else
+        {
+            if (getPreviewType().length() > 0)
+            {
+                IReportManager.getPreferences().put("output_format", getPreviewType());
+            }
+            else
+            {
+                IReportManager.getPreferences().remove("output_format");
+            }
+        }
         performAction();
+    }
+
+    /**
+     * @return the updating
+     */
+    public boolean isUpdating() {
+        return updating;
+    }
+
+    /**
+     * @param updating the updating to set
+     */
+    public void setUpdating(boolean updating) {
+        this.updating = updating;
     }
 
 }

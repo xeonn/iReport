@@ -29,10 +29,10 @@ import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
-import com.jaspersoft.ireport.designer.editor.ExpressionEditor;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
+import com.jaspersoft.ireport.designer.editor.ExpressionEditor;
 import com.jaspersoft.ireport.designer.undo.PropertyUndoableEdit;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import javax.swing.JOptionPane;
@@ -65,6 +65,7 @@ public final class EditTextfieldExpressionAction extends NodeAction {
 
     protected void performAction(org.openide.nodes.Node[] activatedNodes) {
         ElementNode node = (ElementNode)activatedNodes[0];
+        //ExpressionEditor2 editor = new ExpressionEditor2();
         ExpressionEditor editor = new ExpressionEditor();
 
         JRDesignTextField element = (JRDesignTextField)node.getElement();

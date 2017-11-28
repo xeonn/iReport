@@ -24,18 +24,14 @@
 
 package com.jaspersoft.ireport.designer.data;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRDefaultScriptlet;
 import net.sf.jasperreports.engine.JRScriptletException;
-import net.sf.jasperreports.engine.fill.JRFillGroup;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -47,37 +43,23 @@ public class DataScriptlet extends JRDefaultScriptlet {
 
     DefaultTableModel model = null;
 
-    public DataScriptlet()
-    {
-        super();
-
-        System.out.println("Isntanced a DataScriptlet");
-        System.out.flush();
-
-    }
-
-
     Map fields = null;
     List<String> fieldNames = null;
 
     @Override
-    public void beforeReportInit() throws JRScriptletException {
-        super.beforeReportInit();
-
-        System.out.println(" Ok, we are starting up...!");
-        System.out.flush();
+    public void afterReportInit() throws JRScriptletException {
     }
+
+
+
 
     @Override
     public void afterDetailEval() throws JRScriptletException {
-        super.afterDetailEval();
-
+        
+        
         if (model == null)
         {
             model = (DefaultTableModel)getParameterValue("ireport.data.tabelmodel");
-            System.out.println(" I'm here!!! " + model);
-            System.out.flush();
-
         }
 
         if (fieldNames == null)
@@ -117,17 +99,26 @@ public class DataScriptlet extends JRDefaultScriptlet {
             i++;
         }
         try {
+
+            
+
+            
             SwingUtilities.invokeAndWait(new Runnable() {
 
                 public void run() {
-                    model.addRow(row);
+                    try {
+                        final int record_count = (Integer)getVariableValue("REPORT_COUNT");
+                        if (model.getRowCount() < record_count) model.addRow(row);
+                    } catch (Exception ex) {}
                 }
             });
         } catch (Exception ex) {
         }
 
-    }
 
+        super.afterDetailEval();
+
+    }
 
 
 }

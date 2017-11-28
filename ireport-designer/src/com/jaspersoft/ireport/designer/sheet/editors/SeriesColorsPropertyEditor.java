@@ -26,11 +26,6 @@ package com.jaspersoft.ireport.designer.sheet.editors;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.beans.FeatureDescriptor;
-import java.beans.PropertyEditorSupport;
-import org.openide.explorer.propertysheet.ExPropertyEditor;
-import org.openide.explorer.propertysheet.PropertyEnv;
-import org.openide.nodes.Node;
 
 import java.beans.PropertyEditorSupport;
 
@@ -39,7 +34,7 @@ import org.openide.explorer.propertysheet.ExPropertyEditor;
 import org.openide.explorer.propertysheet.PropertyEnv;
 import java.beans.FeatureDescriptor;
 import java.util.Iterator;
-import java.util.SortedSet;
+import java.util.List;
 import net.sf.jasperreports.engine.JRChartPlot;
 import org.openide.nodes.Node;
 
@@ -63,7 +58,7 @@ public class SeriesColorsPropertyEditor extends PropertyEditorSupport implements
     @Override
     public void paintValue(Graphics gfx, Rectangle box) {
         //super.paintValue(gfx, box);
-        SortedSet colors = (SortedSet)getValue();
+        List colors = (List)getValue();
         if (colors == null) super.paintValue(gfx, box);
         else
         {
@@ -117,7 +112,7 @@ public class SeriesColorsPropertyEditor extends PropertyEditorSupport implements
 
     @Override
     public java.awt.Component getCustomEditor () {
-        SortedSet val = (SortedSet)getValue();
+        List val = (List)getValue();
         return new SeriesColorsPropertyCustomEditor(val, false, null, this, env); // NOI18N
     }
 

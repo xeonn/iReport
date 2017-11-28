@@ -23,15 +23,19 @@
  */
 package com.jaspersoft.ireport.designer.data;
 
+import com.jaspersoft.ireport.designer.editor.ExpObjectCellRenderer;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
+import net.sf.jasperreports.engine.design.JRDesignVariable;
+import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 /**
  *
  * @author  Administrator
@@ -51,6 +55,10 @@ public class SortFieldDialog extends javax.swing.JDialog {
         jComboBoxSortType.addItem(new Tag(JRDesignSortField.SORT_ORDER_ASCENDING,"Ascending"));
         jComboBoxSortType.addItem(new Tag(JRDesignSortField.SORT_ORDER_DESCENDING,"Descending"));
 
+        ExpObjectCellRenderer renderer = new ExpObjectCellRenderer();
+        renderer.setShowObjectType(true);
+        renderer.setShowObjectClass(false);
+        jComboBoxSortBy.setRenderer(renderer);
         
         javax.swing.KeyStroke escape =  javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0, false);
         javax.swing.Action escapeAction = new javax.swing.AbstractAction() {
@@ -92,21 +100,54 @@ public class SortFieldDialog extends javax.swing.JDialog {
      * Populate the fields combobox
      */
     @SuppressWarnings("unchecked")
-    private void setFieldNames(List fields)
+    public void setDataset(JRDesignDataset ds)
     {
         jComboBoxSortBy.removeAllItems();
         List newList = new ArrayList();
-        if (fields != null)
-        {
-            for (int i=0; i<fields.size(); ++i)
-            {
-                JRDesignField f = (JRDesignField)fields.get(i);
-                newList.add(f.getName());
+        newList.addAll(ds.getFieldsList());
+        newList.addAll(ds.getVariablesList());
+
+        Object[] objs = newList.toArray();
+
+        Arrays.sort(objs, new Comparator() {
+
+            public int compare(Object o1, Object o2) {
+
+                String name1 = null;
+                String name2 = null;
+                if (o1 instanceof JRDesignField && o2 instanceof JRDesignVariable)
+                {
+                   return 1;
+                }
+                else if (o2 instanceof JRDesignField && o1 instanceof JRDesignVariable)
+                {
+                    return -1;
+                }
+
+                if (o1 instanceof JRDesignField)
+                {
+                    name1 = ((JRDesignField)o1).getName();
+                }
+                else if (o1 instanceof JRDesignVariable)
+                {
+                    name1 = ((JRDesignVariable)o1).getName();
+                }
+                if (o2 instanceof JRDesignField)
+                {
+                    name2 = ((JRDesignField)o1).getName();
+                }
+                if (o2 instanceof JRDesignVariable)
+                {
+                    name2 = ((JRDesignVariable)o1).getName();
+                }
+
+                if (name1 == null || name2 == null) return 0;
+
+                return name1.compareToIgnoreCase(name2);
             }
-        }
-        Object[] names = newList.toArray();
-        Arrays.sort(names);
-        jComboBoxSortBy.setModel(new DefaultComboBoxModel( names ) );
+        });
+
+        jComboBoxSortBy.setModel(new DefaultComboBoxModel( objs ) );
     }
     
     /** This method is called from within the constructor to
@@ -127,7 +168,7 @@ public class SortFieldDialog extends javax.swing.JDialog {
         jLabelSortType = new javax.swing.JLabel();
         jComboBoxSortType = new javax.swing.JComboBox();
 
-        setTitle(I18n.getString("SortFieldDialog.Title.AddModParam")); // NOI18N
+        setTitle("Add/modify parameter");
         setModal(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -136,7 +177,7 @@ public class SortFieldDialog extends javax.swing.JDialog {
         });
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jLabelSortBy.setText(I18n.getString("SortFieldDialog.Label.SortBy")); // NOI18N
+        jLabelSortBy.setText("Sort by");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -144,8 +185,12 @@ public class SortFieldDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
         getContentPane().add(jLabelSortBy, gridBagConstraints);
 
-        jComboBoxSortBy.setEditable(true);
         jComboBoxSortBy.setPreferredSize(new java.awt.Dimension(250, 22));
+        jComboBoxSortBy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxSortByActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -168,7 +213,7 @@ public class SortFieldDialog extends javax.swing.JDialog {
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         jButtonOK.setMnemonic('o');
-        jButtonOK.setText(I18n.getString("Global.Button.Ok")); // NOI18N
+        jButtonOK.setText("OK");
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOKActionPerformed(evt);
@@ -177,7 +222,7 @@ public class SortFieldDialog extends javax.swing.JDialog {
         jPanel1.add(jButtonOK);
 
         jButtonCancel.setMnemonic('c');
-        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
+        jButtonCancel.setText("Cancel");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -193,7 +238,7 @@ public class SortFieldDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         getContentPane().add(jPanel1, gridBagConstraints);
 
-        jLabelSortType.setText(I18n.getString("SortFieldDialog.Label.SortType")); // NOI18N
+        jLabelSortType.setText("Sort type");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -223,11 +268,9 @@ public class SortFieldDialog extends javax.swing.JDialog {
 
     private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKActionPerformed
         
-        String fieldName = (String)this.jComboBoxSortBy.getSelectedItem();
-        if (fieldName == null) fieldName="";
-        fieldName = fieldName.trim();
+        Object obj = this.jComboBoxSortBy.getSelectedItem();
         
-        if (fieldName.length() <= 0)
+        if (obj == null)
         {
             javax.swing.JOptionPane.showMessageDialog(this,
                     //I18n.getString("sortFieldDialog.messageNotValidField",
@@ -237,8 +280,22 @@ public class SortFieldDialog extends javax.swing.JDialog {
                     javax.swing.JOptionPane.WARNING_MESSAGE );
             return;
         }
-        
+
+        String fieldName = "";
         tmpSortField = new JRDesignSortField();
+
+        if (obj instanceof JRDesignField)
+        {
+            fieldName = ((JRDesignField)obj).getName();
+            tmpSortField.setType(SortFieldTypeEnum.FIELD);
+        }
+        else if (obj instanceof JRDesignVariable)
+        {
+            fieldName = ((JRDesignVariable)obj).getName();
+            tmpSortField.setType(SortFieldTypeEnum.VARIABLE);
+        }
+        
+        
         tmpSortField.setName(fieldName);
         tmpSortField.setOrder( (jComboBoxSortType.getSelectedIndex() == 1) ? 
                     JRDesignSortField.SORT_ORDER_DESCENDING : JRDesignSortField.SORT_ORDER_ASCENDING);
@@ -254,6 +311,13 @@ public class SortFieldDialog extends javax.swing.JDialog {
         this.setDialogResult( javax.swing.JOptionPane.CLOSED_OPTION);
         dispose();
     }//GEN-LAST:event_closeDialog
+
+    private void jComboBoxSortByActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSortByActionPerformed
+
+
+
+
+    }//GEN-LAST:event_jComboBoxSortByActionPerformed
     
     
     /** Getter for property dialogResult.
@@ -284,12 +348,6 @@ public class SortFieldDialog extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private int dialogResult;    
-    
-    public void setDataset(JRDesignDataset dataset) {
-    
-       setFieldNames( dataset.getFieldsList() );
-       
-    }
 
     /**
      * return a new sortField instance
@@ -302,7 +360,29 @@ public class SortFieldDialog extends javax.swing.JDialog {
         this.tmpSortField = new JRDesignSortField();
         this.tmpSortField.setName(  sortField.getName() );
         this.tmpSortField.setOrder(  sortField.getOrder() );
-        this.jComboBoxSortBy.setSelectedItem( tmpSortField.getName() );
+        this.tmpSortField.setType( sortField.getType() );
+        this.tmpSortField.setName( sortField.getName());
+
+        for (int i=0; i<jComboBoxSortBy.getItemCount(); ++i)
+        {
+            Object item = jComboBoxSortBy.getItemAt(i);
+
+            if (item instanceof JRDesignField &&
+                sortField.getType() == SortFieldTypeEnum.FIELD &&
+                ((JRDesignField)item).getName().equals(sortField.getName()))
+            {
+                jComboBoxSortBy.setSelectedIndex(i);
+                break;
+            }
+            else if (item instanceof JRDesignVariable &&
+                sortField.getType() == SortFieldTypeEnum.VARIABLE &&
+                ((JRDesignVariable)item).getName().equals(sortField.getName()))
+            {
+                jComboBoxSortBy.setSelectedIndex(i);
+                break;
+            }
+        }
+
         this.jComboBoxSortType.setSelectedIndex( ((tmpSortField.getOrder() == JRDesignSortField.SORT_ORDER_DESCENDING) ? 1 : 0) );
     }
     

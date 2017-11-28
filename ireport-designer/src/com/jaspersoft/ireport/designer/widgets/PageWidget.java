@@ -33,20 +33,24 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.TexturePaint;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.PrintOrderEnum;
+import net.sf.jasperreports.engine.type.RunDirectionEnum;
 import org.netbeans.api.visual.widget.Widget;
+import org.openide.util.ImageUtilities;
 
 
 /**
@@ -59,6 +63,8 @@ public class PageWidget extends Widget {
     private TexturePaint gridTexture = null;
     private static final BasicStroke GRID_STROKE = new BasicStroke(0, BasicStroke.CAP_SQUARE,
             BasicStroke.JOIN_BEVEL, 1.0f, new float[]{2f,2f}, 0.0f);
+
+    private static TexturePaint restrictedAreaTexture = null; //
     
     public PageWidget(ReportObjectScene scene) {
         super(scene);
@@ -139,11 +145,15 @@ public class PageWidget extends Widget {
             g.setColor(Color.WHITE);
             g.fillRect(0,0,jd.getPageWidth(), dh);
 
+            
 
             if (((ReportObjectScene)getScene()).isGridVisible())
             {
                 paintGrid(g, new Rectangle(0,0,jd.getPageWidth(), dh));
             }
+
+            // Paint restricted area...
+            paintRestrictedArea(jd, g);
 
             g.setColor(ReportObjectScene.DESIGN_LINE_COLOR);
             // LEFT MARGINE LINE
@@ -166,20 +176,56 @@ public class PageWidget extends Widget {
             // Draw the columns....
             if (jd.getColumnCount() > 1)
             {
-                int c_y0 = ModelUtils.getBandLocation(jd.getColumnHeader(), jd);
-                int c_y1 = ModelUtils.getBandLocation(jd.getPageFooter(), jd);
+                // TODO: show locked document portion 
+                // Column header
                 int c_x = jd.getLeftMargin();
-                for (int i=1; i < jd.getColumnCount(); ++i)
+                if (jd.getPrintOrderValue() != null &&
+                    jd.getPrintOrderValue() == PrintOrderEnum.VERTICAL)
                 {
-                    c_x += jd.getColumnWidth();
-                    g.drawLine( c_x, c_y0,
-                                c_x, c_y1);
-                    
-                    c_x += jd.getColumnSpacing();
-                    g.drawLine( c_x, c_y0,
-                                c_x, c_y1);
-                    
+                    int c_y0 = ModelUtils.getBandLocation(jd.getColumnHeader(), jd);
+                    int c_y1 = ModelUtils.getBandLocation(jd.getPageFooter(), jd);
+                    for (int i=1; i < jd.getColumnCount(); ++i)
+                    {
+                        c_x += jd.getColumnWidth();
+                        g.drawLine( c_x, c_y0,
+                                    c_x, c_y1);
+
+                        c_x += jd.getColumnSpacing();
+                        g.drawLine( c_x, c_y0,
+                                    c_x, c_y1);
+
+                    }
                 }
+                else
+                {
+                    List<JRBand> bands = new ArrayList<JRBand>();
+                    if (jd.getColumnHeader() != null) bands.add(jd.getColumnHeader());
+                    if (jd.getColumnFooter() != null) bands.add(jd.getColumnFooter());
+                    if (jd.getDetailSection()!= null && jd.getDetailSection().getBands() != null
+                        && jd.getDetailSection().getBands().length > 0)
+                    {
+                        bands.addAll( Arrays.asList(jd.getDetailSection().getBands()) );
+                    }
+
+                    for (JRBand b : bands)
+                    {
+                        int c_y0 = ModelUtils.getBandLocation(b, jd);
+                        int c_y1 = c_y0 + b.getHeight();
+                        c_x = jd.getLeftMargin();
+                        for (int i=1; i < jd.getColumnCount(); ++i)
+                        {
+                            c_x += jd.getColumnWidth();
+                            g.drawLine( c_x, c_y0,
+                                        c_x, c_y1);
+
+                            c_x += jd.getColumnSpacing();
+                            g.drawLine( c_x, c_y0,
+                                        c_x, c_y1);
+
+                        }
+                    }
+                }
+
             }
             
             //g.setColor( Color.RED);
@@ -350,6 +396,76 @@ public class PageWidget extends Widget {
     public void setGridSize(int gridSize) {
         this.gridSize = gridSize;
     }
-   
+
+
+    private  static TexturePaint getRestrictedAreaTexture()
+    {
+        if ( restrictedAreaTexture == null )
+        {
+                Image img2 = ImageUtilities.loadImage("com/jaspersoft/ireport/designer/resources/restricted_area.png");
+                BufferedImage img = new BufferedImage(14, 14, BufferedImage.TYPE_INT_ARGB);
+                img.getGraphics().drawImage(img2, 0, 0, null);
+                restrictedAreaTexture = new TexturePaint( img, new Rectangle(0,0, 14, 14) );
+        }
+        return restrictedAreaTexture;
+    }
+
+    private void paintRestrictedArea(JasperDesign jd, Graphics2D g) {
+
+        if (jd.getColumnCount() <= 1) return;
+        // Column header
+        int c_x = jd.getLeftMargin();
+        if (jd.getPrintOrderValue() != null &&
+            jd.getPrintOrderValue() == PrintOrderEnum.VERTICAL)
+        {
+            int c_y0 = ModelUtils.getBandLocation(jd.getColumnHeader(), jd);
+            int c_y1 = ModelUtils.getBandLocation(jd.getPageFooter(), jd);
+
+            Paint oldPaint = g.getPaint();
+            g.setPaint(getRestrictedAreaTexture());
+            int x0 = jd.getLeftMargin() + jd.getColumnWidth();
+            int width = jd.getPageWidth() - x0 - jd.getRightMargin();
+
+            if (jd.getColumnDirection() == RunDirectionEnum.RTL)
+            {
+                x0 = jd.getLeftMargin();
+                width = (jd.getColumnCount()-1)*jd.getColumnWidth() + (jd.getColumnCount()-1)*jd.getColumnSpacing();
+            }
+
+            g.fillRect(x0, c_y0, width, c_y1-c_y0);
+            g.setPaint(oldPaint);
+        }
+        else
+        {
+            List<JRBand> bands = new ArrayList<JRBand>();
+            if (jd.getColumnHeader() != null) bands.add(jd.getColumnHeader());
+            if (jd.getColumnFooter() != null) bands.add(jd.getColumnFooter());
+            if (jd.getDetailSection()!= null && jd.getDetailSection().getBands() != null
+                && jd.getDetailSection().getBands().length > 0)
+            {
+                bands.addAll( Arrays.asList(jd.getDetailSection().getBands()) );
+            }
+
+            int x0 = jd.getLeftMargin() + jd.getColumnWidth();
+            int width = jd.getPageWidth() - x0 - jd.getRightMargin();
+
+            if (jd.getColumnDirection() == RunDirectionEnum.RTL)
+            {
+                x0 = jd.getLeftMargin();
+                width = (jd.getColumnCount()-1)*jd.getColumnWidth() + (jd.getColumnCount()-1)*jd.getColumnSpacing();
+            }
+
+            Paint oldPaint = g.getPaint();
+            g.setPaint(getRestrictedAreaTexture());
+            for (JRBand b : bands)
+            {
+                int c_y0 = ModelUtils.getBandLocation(b, jd);
+                g.fillRect(x0, c_y0, width, b.getHeight());
+            }
+
+             g.setPaint(oldPaint);
+        }
+
+    }
     
 }

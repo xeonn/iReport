@@ -36,9 +36,10 @@ public class NamedIconItem {
     public static final String ICON_FOLDER_FIELDS = "com/jaspersoft/ireport/designer/resources/fields-16.png";
     public static final String ICON_FOLDER_PARAMETERS = "com/jaspersoft/ireport/designer/resources/parameters-16.png";
     public static final String ICON_FOLDER_VARIABLES = "com/jaspersoft/ireport/designer/resources/variables-16.png";
-    public static final String ICON_FOLDER_WIZARDS = "com/jaspersoft/ireport/designer/resources/fields-16.png";
-    public static final String ICON_FOLDER_RECENT_EXPRESSIONS = "com/jaspersoft/ireport/designer/resources/fields-16.png";
-    public static final String ICON_FOLDER_FORMULAS = "com/jaspersoft/ireport/designer/resources/fields-16.png";
+    public static final String ICON_FOLDER = "com/jaspersoft/ireport/designer/resources/folder.png";
+    public static final String ICON_FOLDER_WIZARDS = ICON_FOLDER;
+    public static final String ICON_FOLDER_RECENT_EXPRESSIONS = ICON_FOLDER;
+    public static final String ICON_FOLDER_FORMULAS = ICON_FOLDER;
     public static final String ICON_CROSSTAB = "com/jaspersoft/ireport/designer/resources/crosstab-16.png";
     
     private Object item = null;

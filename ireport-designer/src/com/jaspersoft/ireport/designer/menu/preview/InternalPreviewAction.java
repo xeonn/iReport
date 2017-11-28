@@ -24,6 +24,7 @@
 package com.jaspersoft.ireport.designer.menu.preview;
 
 import com.jaspersoft.ireport.locale.I18n;
+import java.util.prefs.PreferenceChangeEvent;
 
 public final class InternalPreviewAction extends AbstractPreviewAction {
 
@@ -34,7 +35,5 @@ public final class InternalPreviewAction extends AbstractPreviewAction {
     @Override
     public String getPreviewType() {
         return "";
-    }
-
-    
+    }    
 }

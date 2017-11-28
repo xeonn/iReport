@@ -1,3 +1,25 @@
+2010-09-22 Version 3.7.5 released
+_______________________________________________________________________________
+- Updated to JasperReports 3.7.5
+- Support for sorting using variables
+- Improved graphical representation of columns and allowed areas
+- Added support for Right To Left columns filling
+- Added support for chart customizer class to the Spider chart
+- Ability to add and basically modify parameters from the query dialog
+- Fixed Bug 0004878: Series Colors does not Take Effect if User Modifies the Order Only 
+- Ability to drag multiple fields in the detail band
+- Fixed Bug 18753 - [Case #13793] creating column header automatically
+- Fixed Bug 0004738: Retriving fields using JRDataSourceProvider error 
+- Fixed Request 0004883: Support for import static 
+- Fixed Bug 18685 - data source set to empty data source
+- Fixed Bug 18686 - transform to static text
+- Fixed Bug 18687 - unexpected drag & drop behavior
+- Fixed Bug 18665 - hide built in parameters
+- Fixed Bug 17990 - improve right click
+- Fixed Bug 16006 - Align iReport and JS naming pattern for copied resources
+- Fixed Bug 18023 - [Case #12211] iReport CE issue: Null Pointer Exception when selecting report in Favorites
+
+
 2010-07-20 Version 3.7.4 released
 _______________________________________________________________________________
 - Updated to JasperReports 3.7.4

@@ -23,14 +23,18 @@
  */
 package com.jaspersoft.ireport.designer.outline.nodes;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
+import net.sf.jasperreports.crosstabs.JRCrosstabParameter;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabParameter;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.nodes.Index;
 import org.openide.nodes.Node;
@@ -41,7 +45,7 @@ import org.openide.util.Mutex;
  *
  * @author gtoffoli
  */
-public class CrosstabParametersChildren extends Index.KeysChildren implements PropertyChangeListener {
+public class CrosstabParametersChildren extends Index.KeysChildren implements PropertyChangeListener, PreferenceChangeListener {
 
     JasperDesign jd = null;
     private JRDesignCrosstab crosstab = null;
@@ -55,8 +59,16 @@ public class CrosstabParametersChildren extends Index.KeysChildren implements Pr
         this.doLkp = doLkp;
         this.crosstab = crosstab;
         this.crosstab.getEventSupport().addPropertyChangeListener(this);
+        IReportManager.getPreferences().addPreferenceChangeListener(this);
     }
 
+    public void preferenceChange(PreferenceChangeEvent evt) {
+        if (evt.getKey().equals("filter_parameters"))
+        {
+            recalculateKeys();
+        }
+    }
+    
     /*
     @Override
     protected List<Node> initCollection() {
@@ -81,11 +93,55 @@ public class CrosstabParametersChildren extends Index.KeysChildren implements Pr
     
     @SuppressWarnings("unchecked")
     public void recalculateKeys() {
-        
+
+        /*
         List l = (List)lock();
         l.clear();
         List params = null;
         l.addAll(crosstab.getParametersList());
+        */
+        
+        List l = (List)lock();
+        l.clear();
+        if (IReportManager.getPreferences().getBoolean("filter_parameters",false))
+        {
+            List paramsAll = crosstab.getParametersList();
+            for (int i=0; i<paramsAll.size(); ++i)
+            {
+                JRCrosstabParameter p = (JRCrosstabParameter)paramsAll.get(i);
+                if (!p.isSystemDefined())
+                {
+                    l.add(p);
+                }
+            }
+        }
+        else
+        {
+            l.addAll(crosstab.getParametersList());
+        }
+
+        if (getNode() != null && getNode() instanceof CrosstabParametersNode)
+        {
+            if (((SortableParametersNode)getNode()).isSort())
+            {
+                // Order elements by name...
+                Object[] parameters = l.toArray();
+                Arrays.sort(parameters, new Comparator() {
+
+                    public int compare(Object o1, Object o2) {
+                        return ((JRDesignCrosstabParameter)o1).getName().compareToIgnoreCase(((JRDesignCrosstabParameter)o2).getName());
+                    }
+                });
+                l.clear();
+                l.addAll(Arrays.asList(parameters));
+            }
+        }
+
+         update();
+    }
+
+    protected void forceReorder(int[] ints) {
+        super.reorder(ints);
         update();
     }
     

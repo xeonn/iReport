@@ -48,7 +48,7 @@ import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.formatting.actions.OrganizeAsTableAction;
 import com.jaspersoft.ireport.designer.menu.HyperlinkAction;
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
-import com.jaspersoft.ireport.designer.undo.DeleteElementUndoableEdit;
+import com.jaspersoft.ireport.designer.tools.DeletePerformer;
 import com.jaspersoft.ireport.designer.utils.SubMenuAction;
 import com.jaspersoft.ireport.designer.utils.WeakPreferenceChangeListener;
 import java.awt.datatransfer.Transferable;
@@ -78,7 +78,6 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignEllipse;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JRDesignGenericElement;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
@@ -111,6 +110,7 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
     JasperDesign jd = null;
     JRDesignElement element = null;
     private ElementNameVisitor elemenNameVisitor = null;
+    private static final DeletePerformer deletePerformer= new DeletePerformer();
 
     public JRDesignElement getElement() {
         return element;
@@ -238,7 +238,8 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
      */
     @Override
     public void destroy() throws IOException {
-       
+
+        /*
        Object container = element.getElementGroup();
        int index = 0;
        
@@ -255,6 +256,10 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
        }
        DeleteElementUndoableEdit edit = new DeleteElementUndoableEdit(element,container,index);
        IReportManager.getInstance().addUndoableEdit(edit, true);
+       */
+
+       deletePerformer.deleteElement(element);
+
        // TODO: add Unduable edit here
        super.destroy();
     }

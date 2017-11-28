@@ -27,10 +27,13 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.SeriesColorsProperty;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import net.sf.jasperreports.engine.base.JRBaseChartPlot;
+import net.sf.jasperreports.engine.base.JRBaseChartPlot.JRBaseSeriesColor;
     
     
 /**
@@ -49,26 +52,28 @@ public final class PlotSeriesColorsProperty extends SeriesColorsProperty {
         this.element = element;
     }
 
+    
+
     @Override
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
-        return element.getSeriesColors();
+        return sortedSetAsList( element.getSeriesColors() );
     }
 
     @Override
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-
         setPropertyValue(val);
     }
 
     @SuppressWarnings("unchecked")
     private void setPropertyValue(Object val)
     {
-        if (val instanceof SortedSet)
+        if (val instanceof List)
         {
-            if (val == element.getSeriesColors()) return;
+            if (!isListChanged( (List)val, element.getSeriesColors()) ) return;
+
             SortedSet oldValue = new TreeSet();
             if (element.getSeriesColors() != null) oldValue.addAll(element.getSeriesColors());
-            SortedSet newValue =  (SortedSet)val;
+            SortedSet newValue =  (val == null) ? null : listAsSortedSet((List)val);
             
             element.setSeriesColors(newValue);
             

@@ -23,10 +23,13 @@
  */
 package com.jaspersoft.ireport.designer.data;
 
+import java.awt.Color;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
+import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
+import org.springframework.ui.jasperreports.JasperReportsUtils;
 
 /**
  *
@@ -54,7 +57,17 @@ public class SortFieldCellRenderer extends DefaultListCellRenderer {
         {
             JRDesignSortField sf = (JRDesignSortField)value;
             JLabel label = (JLabel)retValue;
-            label.setText( sf.getName()  ); 
+
+            String t = sf.getType() == SortFieldTypeEnum.FIELD ? "Field" : "Variable";
+
+            Color cf = Color.green.darker().darker();
+            Color cv = Color.BLUE;
+            String c = sf.getType() == SortFieldTypeEnum.FIELD ? getEncodedColor(cf) : getEncodedColor(cv);
+
+            String text = "<html>" + sf.getName() + " " + ((isSelected) ? t : "<font color=\"" + c + "\">" + t + "</font>");
+
+
+            label.setText( text);
             
             label.setIcon( sf.getOrder() == JRDesignSortField.SORT_ORDER_DESCENDING ? descIcon : ascIcon );
         }
@@ -63,5 +76,17 @@ public class SortFieldCellRenderer extends DefaultListCellRenderer {
     }
     
     
-    
+    public static String getEncodedColor(java.awt.Color c) {
+        String nums = "0123456789ABCDEF";
+        String s = "#";
+        s += nums.charAt( c.getRed()/16 );
+        s += nums.charAt( c.getRed()%16 );
+        s += nums.charAt( c.getGreen()/16 );
+        s += nums.charAt( c.getGreen()%16 );
+        s += nums.charAt( c.getBlue()/16 );
+        s += nums.charAt( c.getBlue()%16 );
+        return s;
+    }
+
+
 }

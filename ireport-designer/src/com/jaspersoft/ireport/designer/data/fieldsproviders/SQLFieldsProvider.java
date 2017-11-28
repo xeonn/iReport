@@ -456,7 +456,7 @@ public class SQLFieldsProvider implements FieldsProvider {
     }
 
     public boolean hasEditorComponent() {
-        return false;
+        return true;
     }
 
     public String designQuery(IReportConnection con,  String query, ReportQueryDialog reportQueryDialog) throws JRException, UnsupportedOperationException {
@@ -494,7 +494,10 @@ public class SQLFieldsProvider implements FieldsProvider {
     }
 
     public FieldsProviderEditor getEditorComponent(ReportQueryDialog reportQueryDialog) {
-        return null;
+
+        SQLFieldsProviderEditor dpe = new SQLFieldsProviderEditor();
+        dpe.setReportQueryDialog( reportQueryDialog );
+        return dpe;
     }
     
 }
