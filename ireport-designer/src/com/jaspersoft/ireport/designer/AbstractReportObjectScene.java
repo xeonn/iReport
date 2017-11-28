@@ -495,7 +495,10 @@ public abstract class AbstractReportObjectScene extends ObjectScene implements G
 
     public Point getParentLocation(JasperDesign jd, JRDesignElement element, JRDesignElementWidget widget)
     {
-        return ModelUtils.getParentLocationImpl(jd, element, widget);
+
+        Point p = ModelUtils.getParentLocationImpl(jd, element, widget);
+        
+        return p;
     }
 
     public Rectangle getParentBounds(JasperDesign jd, JRDesignElement element, JRDesignElementWidget widget)

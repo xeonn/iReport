@@ -282,7 +282,7 @@ public class IRFontUtils {
 
         if (font.getPdfEncoding() != null && font.getPdfEncoding().length() > 0)
         {
-            bean_xml.append("       <pdfEncoding><![CDATA[" + font.getItalicFont() +  "]]></pdfEncoding>\n");
+            bean_xml.append("       <pdfEncoding><![CDATA[" + font.getPdfEncoding() +  "]]></pdfEncoding>\n");
         }
 
         bean_xml.append("       <pdfEmbedded><![CDATA[" + font.isPdfEmbedded() +  "]]></pdfEmbedded>\n");

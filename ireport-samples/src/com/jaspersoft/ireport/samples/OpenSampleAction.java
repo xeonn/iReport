@@ -33,6 +33,7 @@ public class OpenSampleAction extends AbstractAction {
         final String s = (String) fo.getAttribute("key");
         action.putValue(Action.NAME, NbBundle.getMessage(OpenSampleAction.class, s));
         action.setKey(s);
+        System.out.println("Action " + s + " created!");
         return action;
     }
 

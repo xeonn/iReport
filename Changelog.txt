@@ -1,3 +1,21 @@
+2010-06-02 Version 3.7.3 released
+_______________________________________________________________________________
+- Mew massive processing tool to compile a set of jrxml or make changes to a jrxml
+- Transform to Barcode menu item (to transform iR 3.0 image based barcodes to new barcode elements
+- Fixed Bug 17890 - [case #12198]Oracle plugin in iReport
+- Updated to JasperReports 3.7.3
+- New data preview panel
+- Bug 17583 - Column width causes error message in iReport
+- New file resolver to run locally a jrxml which references images on a JasperServer repository
+- Fixed 0004713: space in subreport name (foldername) fails
+- Fixed 0004715: The text of LICENSE_ireport.txt is incomplete
+- Fixed 0004718: Crosstab/Column Header/Header Position
+- Fixed bug 0004724: Fonts installation settings overridden
+- Fixed cell location calculation when total position is set to NONE
+- Added support for Header position in column/row groups in crosstab (RFE 0004725)
+- Added the print when expression for the table columns
+
+
 2010-04-12 Version 3.7.2 released
 _______________________________________________________________________________
 - New Wood template

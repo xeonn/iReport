@@ -41,9 +41,13 @@ import javax.swing.table.*;
 import javax.swing.*;
 import java.util.*;
 import bsh.Interpreter;
+import com.jaspersoft.ireport.designer.connection.EJBQLConnection;
+import com.jaspersoft.ireport.designer.connection.JDBCConnection;
 import com.jaspersoft.ireport.designer.connection.JRCSVDataSourceConnection;
 import com.jaspersoft.ireport.designer.connection.JRDataSourceProviderConnection;
+import com.jaspersoft.ireport.designer.connection.JRHibernateConnection;
 import com.jaspersoft.ireport.designer.connection.JRXlsDataSourceConnection;
+import com.jaspersoft.ireport.designer.connection.MondrianConnection;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.editor.ExpressionEditor;
 import com.jaspersoft.ireport.designer.sheet.Tag;
@@ -52,13 +56,22 @@ import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import javax.swing.event.*;
 import java.awt.datatransfer.*;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.text.MessageFormat;
+import javax.persistence.EntityManager;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.base.JRBaseObjectFactory;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -66,6 +79,11 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.query.JRHibernateQueryExecuterFactory;
+import net.sf.jasperreports.engine.query.JRJpaQueryExecuterFactory;
+import net.sf.jasperreports.olap.JRMondrianQueryExecuterFactory;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.jdesktop.swingx.JXBusyLabel;
 import org.jdesktop.swingx.icon.ColumnControlIcon;
 
@@ -104,6 +122,9 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
     
     FieldReader readerThread = null;
     public static int num = 1;
+
+    private boolean showPreview = false;
+    int lastPreviewSize = -1;
     
     public JLabel getJLabelStatusSQL()
     {
@@ -168,6 +189,14 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         jComboBoxQueryType.addItem( new Tag("ejbql","EJBQL"));
         jComboBoxQueryType.addItem( new Tag("mdx","MDX"));
         jComboBoxQueryType.addItem( new Tag("xmla-mdx","XMLA-MDX"));
+
+        jComboBoxMaxPreviewData.addItem( new Tag(100,"First 100 records"));
+        jComboBoxMaxPreviewData.addItem( new Tag(500,"First 500 records"));
+        jComboBoxMaxPreviewData.addItem( new Tag(1000,"First 1000 records"));
+        jComboBoxMaxPreviewData.addItem( new Tag(0,"All"));
+
+        jComboBoxMaxPreviewData.setSelectedIndex(0);
+
         
         java.util.List<QueryExecuterDef> queryExecuters = IReportManager.getInstance().getQueryExecuters();
         
@@ -417,6 +446,28 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
      */
     public void setNormalBounds(Rectangle normalBounds) {
         this.normalBounds = normalBounds;
+    }
+
+    /**
+     * @return the showPreview
+     */
+    public boolean isShowPreview() {
+        return showPreview;
+    }
+
+    /**
+     * @param showPreview the showPreview to set
+     */
+    public void setShowPreview(boolean showPreview) {
+        this.showPreview = showPreview;
+        if (showPreview)
+        {
+            jButtonPreview.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/arrow_up.png")));
+        }
+        else
+        {
+            jButtonPreview.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/arrow_down.png")));
+        }
     }
     
     /**
@@ -843,6 +894,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jSplitPanePreview = new javax.swing.JSplitPane();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -883,10 +935,18 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         jPanel9 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jButtonPreview = new javax.swing.JButton();
         columnsErrorScrollPane = new javax.swing.JScrollPane();
         columnsErrorMsgLabel = new javax.swing.JLabel();
         columnsScrollPane = new javax.swing.JScrollPane();
         jTableFields = new org.jdesktop.swingx.JXTable();
+        jPanelPreview = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jButtonRefreshData = new javax.swing.JButton();
+        jComboBoxMaxPreviewData = new javax.swing.JComboBox();
+        jLabelStatusPreview = new org.jdesktop.swingx.JXBusyLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableData = new javax.swing.JTable();
 
         setTitle("Report query");
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -902,6 +962,10 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
                 formComponentResized(evt);
             }
         });
+
+        jSplitPanePreview.setDividerSize(0);
+        jSplitPanePreview.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        jSplitPanePreview.setResizeWeight(1.0);
 
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setResizeWeight(0.5);
@@ -1232,6 +1296,18 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
         jPanel9.add(jButton4, gridBagConstraints);
 
+        jButtonPreview.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/arrow_down.png"))); // NOI18N
+        jButtonPreview.setText("Preview data");
+        jButtonPreview.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jButtonPreview.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPreviewActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
+        jPanel9.add(jButtonPreview, gridBagConstraints);
+
         jPanel3.add(jPanel9, java.awt.BorderLayout.WEST);
 
         jPanel2.add(jPanel3, java.awt.BorderLayout.SOUTH);
@@ -1276,7 +1352,52 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
 
         jSplitPane1.setBottomComponent(jPanel2);
 
-        getContentPane().add(jSplitPane1, java.awt.BorderLayout.CENTER);
+        jSplitPanePreview.setTopComponent(jSplitPane1);
+
+        jPanelPreview.setMinimumSize(new java.awt.Dimension(0, 0));
+        jPanelPreview.setPreferredSize(new java.awt.Dimension(0, 0));
+        jPanelPreview.setLayout(new java.awt.BorderLayout());
+
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        jButtonRefreshData.setText("Refresh Preview Data");
+        jButtonRefreshData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRefreshDataActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel5.add(jButtonRefreshData, gridBagConstraints);
+        jPanel5.add(jComboBoxMaxPreviewData, new java.awt.GridBagConstraints());
+
+        jLabelStatusPreview.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabelStatusPreview.setText("Ready");
+        jLabelStatusPreview.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 8);
+        jPanel5.add(jLabelStatusPreview, gridBagConstraints);
+
+        jPanelPreview.add(jPanel5, java.awt.BorderLayout.NORTH);
+
+        jTableData.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane2.setViewportView(jTableData);
+
+        jPanelPreview.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+
+        jSplitPanePreview.setBottomComponent(jPanelPreview);
+
+        getContentPane().add(jSplitPanePreview, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1849,7 +1970,307 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
             setNormalBounds(getBounds());
         }
     }//GEN-LAST:event_formComponentResized
-    
+
+    private void jButtonPreviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPreviewActionPerformed
+        
+        
+        if (!isShowPreview())
+        {
+            final int last = jSplitPanePreview.getDividerLocation();
+            jSplitPanePreview.setDividerSize(5);
+            Dimension d = getSize();
+            d.height += (lastPreviewSize > 0) ? lastPreviewSize : 300;
+            this.setSize(d);
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    jSplitPanePreview.setDividerLocation(last);
+                }
+            });
+            setShowPreview(true);
+
+            SwingUtilities.invokeLater(new Runnable() {
+
+                public void run() {
+                    jButtonRefreshDataActionPerformed(null);
+                }
+            });
+        }
+        else
+        {
+            jSplitPanePreview.setDividerSize(0);
+            final int last = jSplitPanePreview.getDividerLocation();
+            Dimension d = getSize();
+            d.height -= jPanelPreview.getSize().height+5;
+            lastPreviewSize = jPanelPreview.getSize().height;
+            jPanelPreview.setSize(0,0);
+            this.setSize(d);
+            SwingUtilities.invokeLater(new Runnable() {
+
+                public void run() {
+                    jSplitPanePreview.setDividerLocation(last);
+                }
+            });
+            setShowPreview(false);
+        }
+    }//GEN-LAST:event_jButtonPreviewActionPerformed
+
+    private void jButtonRefreshDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshDataActionPerformed
+
+        // 1 . clear the table model...
+
+        DefaultTableModel dtm = (DefaultTableModel) jTableData.getModel();
+        dtm.setRowCount(0);
+        dtm.setColumnCount(0);
+
+        
+        
+        Thread t = new Thread(new Runnable() {
+
+            public void run() {
+                try {
+                    // 2. we need a data source...
+                    // to do that, we relay of what JasperReports does by creating the proper Query executer (if necessary...)..
+                    // we will load a simple jasperReports with a proper scriptlet...
+
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                        public void run() {
+                            getJLabelStatusPreview().setBusy(true);
+                            getJLabelStatusPreview().setText("Getting data...");
+                        }
+                    });
+
+
+                    populateDataPreview();
+
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                        public void run() {
+                            getJLabelStatusPreview().setBusy(false);
+                            getJLabelStatusPreview().setText( MessageFormat.format("Ready ({0} records read)", jTableData.getRowCount()));
+                        }
+                    });
+                } catch (final JRException ex) {
+                    ex.printStackTrace();
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                        public void run() {
+                            getJLabelStatusPreview().setBusy(false);
+                            getJLabelStatusPreview().setText("Error: " + ex.getMessage());
+                        }
+                    });
+                }
+            }
+        });
+        
+        t.start();
+
+    }//GEN-LAST:event_jButtonRefreshDataActionPerformed
+
+    public JXBusyLabel getJLabelStatusPreview()
+    {
+        return this.jLabelStatusPreview;
+    }
+
+    private void populateDataPreview() throws JRException
+    {
+        ClassLoader origCL = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader( IReportManager.getReportClassLoader());
+        InputStream is = getClass().getResourceAsStream("/com/jaspersoft/ireport/designer/data/data.jrxml");
+        
+        JasperDesign dataJd = net.sf.jasperreports.engine.xml.JRXmlLoader.load(is);
+        // set language and query...
+        Object obj = jComboBoxQueryType.getSelectedItem();
+        //JRDesignQuery query = (JRDesignQuery)dataset.getQuery();
+        JRDesignQuery query = new JRDesignQuery();
+
+        if (obj != null && obj instanceof Tag)
+        {
+            query.setLanguage(""+((Tag)obj).getValue());
+        }
+        else
+        {
+            query.setLanguage(""+obj);
+        }
+
+        query.setText(jEditorPane1.getText());
+
+        
+        dataJd.setQuery(query);
+
+        List parameters = getDataset().getParametersList();
+        dataJd.setLanguage( IReportManager.getInstance().getActiveReport().getLanguage() );
+
+        // set the parameters
+        for (Object p : parameters)
+        {
+            JRParameter par = (JRParameter)p;
+            if (dataJd.getParametersMap().containsKey(par.getName()))
+            {
+                dataJd.removeParameter(par.getName());
+            }
+            dataJd.addParameter(par);
+        }
+
+        JRDesignParameter param = new JRDesignParameter();
+        param.setName("ireport.data.tabelmodel");
+        param.setValueClass(DefaultTableModel.class);
+
+        dataJd.addParameter(param);
+
+        // Add the fields...
+        if ( jTableFields.getRowCount() > 0)
+        {
+            // Clear all the existing fields.
+            dataJd.getFieldsList().clear(); // This would not be legal...
+            dataJd.getFieldsMap().clear();
+            // Add the new fields.
+            for (int i=0; i<jTableFields.getRowCount(); ++i)
+            {
+                JRDesignField field = (JRDesignField)this.jTableFields.getValueAt(i, 0);
+                dataJd.addField(field);
+            }
+        }
+
+        JasperReport jasper_report_obj = JasperCompileManager.compileReport(dataJd);
+        
+        HashMap hm = new HashMap();
+        hm.put("ireport.data.tabelmodel", jTableData.getModel());
+        int max_records = Integer.valueOf( "" + ((Tag)jComboBoxMaxPreviewData.getSelectedItem()).getValue());
+
+        if (max_records > 0)
+        {
+            hm.put("REPORT_MAX_COUNT", max_records);
+        }
+
+        // Now we need to decide how to fill this dataset... this is not a trivial thing actually...
+        IReportConnection connection = IReportManager.getInstance().getDefaultConnection();
+
+        try
+        {
+
+                if (connection.isJDBCConnection())
+                {
+                   Connection con = connection.getConnection();
+                   try {
+                      JasperFillManager.fillReport(jasper_report_obj,hm, con);
+                   } catch (Exception ex)
+                   {
+                       throw ex;
+                   } finally
+                   {
+                       // FIXMEGT This way of closing connection based on the connection class is not very clean...
+
+                       if (connection instanceof JDBCConnection)
+                       {
+                            if (con != null) try {  con.close(); } catch (Exception ex) { }
+                       }
+                   }
+                }
+                else if (connection.isJRDataSource())
+                {
+
+                       JRDataSource ds = null;
+                       if (connection instanceof JRDataSourceProviderConnection)
+                       {
+                            ds = ((JRDataSourceProviderConnection) connection).getJRDataSource(jasper_report_obj);
+
+                            if (ds == null)
+                            {
+                                throw new JRException("Unable to create the datasource using the JRDataSourceProvider");
+                            }
+                            JasperFillManager.fillReport(jasper_report_obj,hm,ds);
+
+                            try { ((JRDataSourceProviderConnection)connection).disposeDataSource(); } catch (Exception ex) {
+                            }
+                       }
+                       else
+                       {
+                           ds = connection.getJRDataSource(jasper_report_obj);
+                           JasperFillManager.fillReport(jasper_report_obj,hm,ds);
+                       }
+            }
+            else
+            {
+               if (connection instanceof JRHibernateConnection)
+               {
+                   Session session = null;
+                   Transaction transaction = null;
+
+                   try {
+                        session = ((JRHibernateConnection)connection).createSession();
+                        transaction = session.beginTransaction();
+                        hm.put(JRHibernateQueryExecuterFactory.PARAMETER_HIBERNATE_SESSION, session);
+                        JasperFillManager.fillReport(jasper_report_obj,hm);
+
+                   } catch (Exception ex)
+                   {
+                       throw ex;
+                   } finally
+                   {
+                        if (transaction != null) try {  transaction.rollback(); } catch (Exception ex) { }
+                        if (transaction != null) try {  session.close(); } catch (Exception ex) { }
+                   }
+               }
+               else if (connection instanceof EJBQLConnection)
+               {
+                   EntityManager em = null;
+                   try {
+                        em = ((EJBQLConnection)connection).getEntityManager();
+                        hm.put(JRJpaQueryExecuterFactory.PARAMETER_JPA_ENTITY_MANAGER, em);
+                        //Thread.currentThread().setContextClassLoader( reportClassLoader );
+                        JasperFillManager.fillReport(jasper_report_obj,hm);
+
+                   } catch (Exception ex)
+                   {
+                       throw ex;
+                   } finally
+                   {
+                        ((EJBQLConnection)connection).closeEntityManager();
+                   }
+               }
+               else if (connection instanceof MondrianConnection)
+               {
+                   mondrian.olap.Connection mCon = null;
+                   try {
+                        mCon = ((MondrianConnection)connection).getMondrianConnection();
+                        hm.put(JRMondrianQueryExecuterFactory.PARAMETER_MONDRIAN_CONNECTION, mCon);
+                        //Thread.currentThread().setContextClassLoader( reportClassLoader );
+                        JasperFillManager.fillReport(jasper_report_obj,hm);
+
+                   } catch (Exception ex)
+                   {
+                       throw ex;
+                   } finally
+                   {
+                        ((MondrianConnection)connection).closeMondrianConnection();
+                   }
+               }
+               else // Query Executor mode...
+               {
+                   //Thread.currentThread().setContextClassLoader( reportClassLoader );
+                   JasperFillManager.fillReport(jasper_report_obj,hm);
+               }
+            }
+
+        } catch (final Throwable ex)
+        {
+
+            throw new JRException(ex);
+
+        }
+        finally
+        {
+            connection.disposeSpecialParameters(hm);
+            if (connection != null && connection instanceof JRDataSourceProviderConnection)
+            {
+                    try { ((JRDataSourceProviderConnection)connection).disposeDataSource(); } catch (Exception ex) {
+                    }
+            }
+
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -1962,12 +2383,16 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButtonLoadQuery;
     private javax.swing.JButton jButtonOpenDesigner;
+    private javax.swing.JButton jButtonPreview;
     private javax.swing.JButton jButtonReadBeanAttributes3;
+    private javax.swing.JButton jButtonRefreshData;
     private javax.swing.JButton jButtonSaveQuery;
+    private javax.swing.JComboBox jComboBoxMaxPreviewData;
     private javax.swing.JComboBox jComboBoxQueryType;
     private javax.swing.JEditorPane jEditorPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
+    private org.jdesktop.swingx.JXBusyLabel jLabelStatusPreview;
     private org.jdesktop.swingx.JXBusyLabel jLabelStatusSQL;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
@@ -1978,17 +2403,22 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JPanel jPanelPreview;
     private javax.swing.JPanel jPanelQueryArea;
     private javax.swing.JPanel jPanelSQL;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
+    private javax.swing.JSplitPane jSplitPanePreview;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTableData;
     private org.jdesktop.swingx.JXTable jTableFields;
     private javax.swing.JTextField jTextFieldBeanClass1;
     private javax.swing.JButton okButton;
@@ -2294,6 +2724,8 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
                 int h = IReportManager.getPreferences().getInt("ReportQueryDialog.size.height", getPreferredSize().height);
                 int x = IReportManager.getPreferences().getInt("ReportQueryDialog.position.x", getLocation().x);
                 int y = IReportManager.getPreferences().getInt("ReportQueryDialog.position.y", getLocation().y);
+                boolean preview = IReportManager.getPreferences().getBoolean("ReportQueryDialog.preview.open",false);
+                int dividerLocation = IReportManager.getPreferences().getInt("ReportQueryDialog.divider.location", -1);
 
                 setWinMaximized(IReportManager.getPreferences().getBoolean("ReportQueryDialog.position.maximized", false));
 
@@ -2318,6 +2750,24 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
                 {
                     this.setBounds(Misc.getMainFrame().getBounds());
                 }
+
+                if (preview)
+                {
+                    final int last = dividerLocation;
+                    jSplitPanePreview.setDividerSize(5);
+                    //Dimension d = getSize();
+                    //d.height += (lastPreviewSize > 0) ? lastPreviewSize : 300;
+                    //this.setSize(d);
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+
+                            System.out.println("Setting divider at " + last);
+                            jSplitPanePreview.setDividerLocation(last);
+                            setShowPreview(true);
+                        }
+                    });
+                }
+
             }
             else
             {
@@ -2332,7 +2782,8 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
                 }
 
                 IReportManager.getPreferences().putBoolean("ReportQueryDialog.position.maximized", isWinMaximized());
-                
+                IReportManager.getPreferences().putBoolean("ReportQueryDialog.preview.open", isShowPreview());
+                IReportManager.getPreferences().putInt("ReportQueryDialog.divider.location", jSplitPanePreview.getDividerLocation());
             }
         } catch (Exception ex)
         {

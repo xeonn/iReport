@@ -88,7 +88,7 @@ public class CellSeparatorMoveProvider implements MoveProvider {
         //List<JRDesignCellContents> cells = getAllCells(scene.getDesignCrosstab());
         int delta = 0;
         java.util.List<CellResizeUndoableEdit> undos = new java.util.ArrayList<CellResizeUndoableEdit>();
-        
+
         int currentPosition = 0;
         
         if (separator.getOrientation() == Orientation.HORIZONTAL)

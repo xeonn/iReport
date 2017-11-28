@@ -142,6 +142,10 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
    private String javaFile = "";
    static private StringBuffer outputBuffer = new StringBuffer();
 
+
+   private Map additionalParameters = new HashMap();
+
+
    
    /**
     * This is used to enable the preview tab when the report is ready...
@@ -638,11 +642,16 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
           if (!compilation_ok) {
 
               fireCompilationStatus(CompilationStatusEvent.STATUS_FAILED, CLS_COMPILE_SOURCE_FAIL);
-              fireCompileListner(this, CL_COMPILE_FAIL, CLS_COMPILE_SOURCE_FAIL);
+              fireCompileListner(this, CL_COMPILE_FAIL, CLS_NONE);
               cleanup();
               handle.finish();
               showErrorConsole();
               return;
+          }
+          else
+          {
+
+               fireCompileListner(this, CL_COMPILE_OK, CLS_NONE);
           }
 
            if  ((command & CMD_EXPORT) == 0)
@@ -802,6 +811,16 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
 
                  }
              }
+
+             // Now we add the paramaters contributed from the outside
+             // by listeners of this compiler (i.e. the JasperServer plugin set a specific file resolver when the report
+             // has the property "ireport.jasperserver.url"  set to some value...
+             if (getAdditionalParameters().size() > 0)
+             {
+                 hm.putAll(getAdditionalParameters());
+                 getLogTextArea().logOnConsole("<font face=\"SansSerif\" size=\"3\" color=\"#000000\">Added additional parameters.</font>",true);
+             }
+             
 
              if (Thread.interrupted()) throw new InterruptedException();
              start = System.currentTimeMillis();
@@ -971,8 +990,11 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                        }
                    }
 
+                   fireCompileListner(this, CL_FILL_OK, CLS_NONE);
+
                 } catch (Exception ex)
                 {
+
                    getLogTextArea().logOnConsole(
                            Misc.formatString("Error filling print... {0}\n",
                                                        new Object[]{ex.getMessage()}));
@@ -981,6 +1003,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                    outputBuffer = new StringBuffer();
                    
                    showErrorConsole();
+                   fireCompileListner(this, CL_FILL_FAIL, CLS_NONE);
                 }
                 catch (Throwable ext)
                 {
@@ -993,6 +1016,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                    
                    getJrxmlPreviewView().setJasperPrint(null);
                    showErrorConsole();
+                   fireCompileListner(this, CL_FILL_FAIL, CLS_NONE);
                 }
                 finally
                 {
@@ -1132,6 +1156,8 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                       exporter.exportReport();
                       getLogTextArea().logOnConsole(outputBuffer.toString());
                       outputBuffer = new StringBuffer();
+
+                      fireCompileListner(this, CL_EXPORT_OK, CLS_NONE);
                    }
     //               else if (format.equalsIgnoreCase("java2D") )
     //               {
@@ -1161,7 +1187,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                    ex2.printStackTrace();
                    getLogTextArea().logOnConsole(outputBuffer.toString());
                    outputBuffer = new StringBuffer();
-
+                   fireCompileListner(this, CL_EXPORT_FAIL, CLS_NONE);
                    
                 }
 
@@ -1269,8 +1295,8 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
              }
           }
 
-          fireCompilationStatus(CompilationStatusEvent.STATUS_COMPLETED, CLS_COMPILE_OK);
-          fireCompileListner(this, CL_COMPILE_OK, CLS_COMPILE_OK);
+          fireCompilationStatus(CompilationStatusEvent.STATUS_COMPLETED, CLS_NONE);
+          
           cleanup();
           handle.finish();
 
@@ -1601,6 +1627,20 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
         fireCompilationStatus(CompilationStatusEvent.STATUS_RUNNING, status);
     }
 
+    /**
+     * @return the additionalParameters
+     */
+    public Map getAdditionalParameters() {
+        return additionalParameters;
+    }
+
+    /**
+     * @param additionalParameters the additionalParameters to set
+     */
+    public void setAdditionalParameters(Map additionalParameters) {
+        this.additionalParameters = additionalParameters;
+    }
+
    class FilteredStream extends FilterOutputStream
    {
       public FilteredStream(OutputStream aStream)
@@ -1845,10 +1885,16 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
      */
     public static final int CL_COMPILE_OK = 1;
     public static final int CL_COMPILE_FAIL = 2;
+    public static final int CL_FILL_OK = 3;
+    public static final int CL_FILL_FAIL = 4;
+    public static final int CL_EXPORT_OK = 5;
+    public static final int CL_EXPORT_FAIL = 6;
+
 
     public static final String CLS_COMPILE_OK = "compileok";
     public static final String CLS_COMPILE_SCRIPTLET_FAIL = "scriptletfail";
     public static final String CLS_COMPILE_SOURCE_FAIL = "sourcefail";
+    public static final String CLS_NONE = "";
 
 
     private java.util.List<CompilationStatusListener> compilationStatusListener = new java.util.ArrayList<CompilationStatusListener>();

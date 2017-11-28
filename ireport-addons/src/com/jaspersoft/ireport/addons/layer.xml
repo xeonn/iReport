@@ -11,6 +11,10 @@
             <file name="com-jaspersoft-ireport-addons-background-ShowBackgroundImageAction.instance"/>
             <file name="com-jaspersoft-ireport-addons-background-DeleteBackgroundImageAction.instance"/>
             <file name="com-jaspersoft-ireport-addons-background-TransformBackgroundImageAction.instance"/>
+            <folder name="Tools">
+                <file name="com-jaspersoft-ireport-addons-transformer-TransformToBarcodeComponentAction.instance"/>
+                <file name="com-jaspersoft-ireport-addons-transformer-tool-OpenTransformationToolAction.instance"/>
+            </folder>
         </folder>
         <folder name="Window">
             <file name="com-jaspersoft-ireport-addons-layers-LayersAction.instance">
@@ -51,7 +55,12 @@
                 <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-addons-layers-LayersAction.instance"/>
             </file>
         </folder>
-        
+       <folder name="Tools">
+           <file name="com-jaspersoft-ireport-addons-transformer-tool-OpenTransformationToolAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Designer/Tools/com-jaspersoft-ireport-addons-transformer-tool-OpenTransformationToolAction.instance"/>
+                    <attr name="position" intvalue="1"/>
+                </file>
+       </folder>
     </folder>
 
     <folder name="ireport">
@@ -64,6 +73,10 @@
             <folder name="elements">
                <file name="com-jaspersoft-ireport-addons-layers-LayerElementDecorator.instance">
                <!--  <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.addons.layers.LayerElementDecorator"/> -->
+               </file>
+               <file name="com-jaspersoft-ireport-addons-transformer-BarcodeTransformerElementDecorator.instance">
+                <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.addons.transformer.BarcodeTransformerElementDecorator"/>
+                <attr name="instanceOf" stringvalue="com.jaspersoft.ireport.designer.ElementDecorator"/>
                </file>
             </folder>
         </folder>

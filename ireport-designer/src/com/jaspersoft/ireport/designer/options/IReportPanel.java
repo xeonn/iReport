@@ -329,6 +329,12 @@ final class IReportPanel extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jComboBoxCompatibility = new javax.swing.JComboBox();
         jCheckBoxShowCompatibilityWarning = new javax.swing.JCheckBox();
+        jPanel8 = new javax.swing.JPanel();
+        jPanel9 = new javax.swing.JPanel();
+        jLabelLanguage = new javax.swing.JLabel();
+        jTextFieldLanguage = new javax.swing.JTextField();
+        jLabelTerritory = new javax.swing.JLabel();
+        jTextFieldTerritory = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabelClasspath = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -734,7 +740,7 @@ final class IReportPanel extends javax.swing.JPanel {
 
         jTabbedPane3.addTab("Expression editor", jPanel22);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, "<html>Set the compatibility of the produced jrxml source code when the report is saved. If you don't use the last version, you risk to loose part the report content.");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, "<html>Set the compatibility of the produced jrxml source code when the report is saved. If you don't use the last version, you risk to lose part the report content.");
 
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxShowCompatibilityWarning, "Show compatibility warning dialog");
         jCheckBoxShowCompatibilityWarning.addActionListener(new java.awt.event.ActionListener() {
@@ -768,6 +774,60 @@ final class IReportPanel extends javax.swing.JPanel {
         );
 
         jTabbedPane3.addTab("Compatibility", jPanelCompatibility);
+
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Oracle Globalization Options"));
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelLanguage, "Language");
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelTerritory, "Territory");
+
+        org.jdesktop.layout.GroupLayout jPanel9Layout = new org.jdesktop.layout.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabelLanguage)
+                    .add(jLabelTerritory))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jTextFieldTerritory, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE)
+                    .add(jTextFieldLanguage, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabelLanguage)
+                    .add(jTextFieldLanguage, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabelTerritory)
+                    .add(jTextFieldTerritory, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(0, 0, Short.MAX_VALUE))
+        );
+
+        org.jdesktop.layout.GroupLayout jPanel8Layout = new org.jdesktop.layout.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel9, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(167, Short.MAX_VALUE))
+        );
+
+        jTabbedPane3.addTab("Other", jPanel8);
 
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -3010,6 +3070,8 @@ private void jButtonPPTXViewerActionPerformed(java.awt.event.ActionEvent evt) {/
         jTextPromptFieldDateFormat.setText(pref.get("PromptDateFormat", ""));
         jTextPromptFieldDateTimeFormat.setText(pref.get("PromptDateTimeFormat", ""));
 
+        jTextFieldLanguage.setText(pref.get("oracle_language", ""));
+        jTextFieldTerritory.setText(pref.get("oracle_territory", ""));
 
         this.jTextFieldVirtualizerDir.setText( pref.get("ReportVirtualizerDirectory", Misc.nvl(JRProperties.getProperty(JRProperties.COMPILER_TEMP_DIR),"")));
         this.jSpinnerVirtualizerSize.setValue(pref.getInt("ReportVirtualizerSize",100));
@@ -3018,7 +3080,8 @@ private void jButtonPPTXViewerActionPerformed(java.awt.event.ActionEvent evt) {/
         this.jSpinnerVirtualizerGrownCount.setValue(pref.getInt("ReportVirtualizerMinGrownCount",100));
 
         Misc.setComboboxSelectedTagValue(jComboBoxLanguage, pref.get("DefaultLanguage", "eye.candy.sixties") );
-        
+
+
         ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(IReportManager.getJRExtensionsClassLoader());
         
@@ -3316,6 +3379,17 @@ private void jButtonPPTXViewerActionPerformed(java.awt.event.ActionEvent evt) {/
         else {
             pref.remove("PromptDateTimeFormat");
         }
+
+
+        if (jTextFieldLanguage.getText().length() > 0) pref.put("oracle_language", this.jTextFieldLanguage.getText());
+        else {
+            pref.remove("oracle_language");
+        }
+
+        if (jTextFieldTerritory.getText().length() > 0) pref.put("oracle_territory", this.jTextFieldTerritory.getText());
+        else {
+            pref.remove("oracle_territory");
+        }
     }
     
     private List<String> getClasspath(boolean relodable)
@@ -3418,6 +3492,7 @@ private void jButtonPPTXViewerActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JLabel jLabelFontspath;
     private javax.swing.JLabel jLabelFontspath1;
     private javax.swing.JLabel jLabelHTMLViewer;
+    private javax.swing.JLabel jLabelLanguage;
     private javax.swing.JLabel jLabelMaxNumber;
     private javax.swing.JLabel jLabelODFViewer;
     private javax.swing.JLabel jLabelODSViewer;
@@ -3431,6 +3506,7 @@ private void jButtonPPTXViewerActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JLabel jLabelReportVirtualizerSize;
     private javax.swing.JLabel jLabelReportVirtualizerSize1;
     private javax.swing.JLabel jLabelTXTViewer;
+    private javax.swing.JLabel jLabelTerritory;
     private javax.swing.JLabel jLabelTimeZone;
     private javax.swing.JLabel jLabelTimeZone1;
     private javax.swing.JLabel jLabelTimeZone2;
@@ -3458,6 +3534,8 @@ private void jButtonPPTXViewerActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JPanel jPanelCompatibility;
     private javax.swing.JPanel jPanelParameterPromptOptions;
     private javax.swing.JPanel jPanelVirtualizer;
@@ -3482,6 +3560,7 @@ private void jButtonPPTXViewerActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JTextField jTextFieldDOCXViewer;
     private javax.swing.JTextField jTextFieldExternalEditor;
     private javax.swing.JTextField jTextFieldHTMLViewer;
+    private javax.swing.JTextField jTextFieldLanguage;
     private javax.swing.JTextField jTextFieldODFViewer;
     private javax.swing.JTextField jTextFieldODSViewer;
     private javax.swing.JTextField jTextFieldPDFViewer;
@@ -3489,6 +3568,7 @@ private void jButtonPPTXViewerActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JTextField jTextFieldRTFViewer;
     private javax.swing.JTextField jTextFieldReportLocale;
     private javax.swing.JTextField jTextFieldTXTViewer;
+    private javax.swing.JTextField jTextFieldTerritory;
     private javax.swing.JTextField jTextFieldTimeZone;
     private javax.swing.JTextField jTextFieldVirtualizerDir;
     private javax.swing.JTextField jTextFieldXLSViewer;

@@ -24,7 +24,13 @@
 package com.jaspersoft.ireport.jasperserver;
 
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.compiler.CompilationStatusEvent;
+import com.jaspersoft.ireport.designer.compiler.CompilationStatusListener;
+import com.jaspersoft.ireport.designer.compiler.IReportCompiler;
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.designer.utils.Misc;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -36,7 +42,11 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRProperties;
+import org.openide.filesystems.FileUtil;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
@@ -129,7 +139,51 @@ public class JasperServerManager {
 
         ActiveEditorTopComponentListener.getDefaultInstance().startListening();
         jrxmlNotifier = new JrxmlNotifier();
+
         this.addFileResourceUpdatingListener(jrxmlNotifier);
+        IReportCompiler.addCompileListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                final IReportCompiler compiler = (IReportCompiler)e.getSource();
+
+                if (e.getID() == IReportCompiler.CL_COMPILE_OK)
+                {
+                    JasperDesign jd = compiler.getJrxmlVisualView().getEditorSupport().getCurrentModel();
+
+                    System.out.println("Setting up the file resolver..." );
+                    if (jd.getProperty("ireport.jasperserver.url") != null)
+                    {
+                        // find the server required to run this report...
+                        List<JServer> servers = getJServers();
+                        for (JServer server : servers)
+                        {
+                            if (server.getUrl().equals(jd.getProperty("ireport.jasperserver.url")))
+                            {
+                                // add to the list the jasper file directory and the current directory...
+                                File jasperDir = FileUtil.toFile( compiler.getFile().getParent() );
+                                if (!IReportManager.getPreferences().getBoolean("useReportDirectoryToCompile", true))
+                                {
+                                   jasperDir = new File(IReportManager.getPreferences().get("reportDirectoryToCompile", "."));
+                                }
+                                List<File> resolverPath = new ArrayList<File>();
+                                if (jasperDir.exists())
+                                {
+                                    resolverPath.add(jasperDir);
+                                }
+                                resolverPath.add(new File("."));
+                                
+                                JSFileResolver resolver = new JSFileResolver(resolverPath, server, jd);
+                                if (resolver != null)
+                                {
+                                    compiler.getAdditionalParameters().put("REPORT_FILE_RESOLVER", resolver);
+                                    System.out.println("Added file resolver..." );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
     
     

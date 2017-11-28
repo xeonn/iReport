@@ -25,6 +25,7 @@ package com.jaspersoft.ireport.designer.subreport;
 
 import com.jaspersoft.ireport.designer.JrxmlLoader;
 import java.awt.Component;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -171,6 +172,7 @@ public class SubreportSelectionWizardPanel implements WizardDescriptor.Finishabl
    
         try {
             getWizard().putProperty("subreport_parameters", null);
+            getWizard().putProperty("subreport_directory", null);
             if (component.getSelectedSubreportType() == 1)
             {
                 String filename = component.getSelectedReportName();
@@ -195,6 +197,11 @@ public class SubreportSelectionWizardPanel implements WizardDescriptor.Finishabl
                 }
 
                 getWizard().putProperty("subreport_parameters", newParams.toArray(new JRParameter[newParams.size()]));
+
+                try {
+                   File f = new File(filename);
+                   getWizard().putProperty("subreport_directory", f.getParentFile().getAbsolutePath() + File.separator);
+                } catch (Exception ex) {}
             }
         } catch (Exception ex)
         {

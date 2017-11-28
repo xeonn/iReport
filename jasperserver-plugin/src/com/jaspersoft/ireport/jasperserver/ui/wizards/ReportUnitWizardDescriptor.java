@@ -23,7 +23,9 @@
  */
 package com.jaspersoft.ireport.jasperserver.ui.wizards;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlVisualView;
+import com.jaspersoft.ireport.designer.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
@@ -35,6 +37,8 @@ import java.awt.Component;
 import java.awt.Dialog;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -286,7 +290,7 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
      */
     public static void addRequiredResources(JServer server, File resourceFile, JasperDesign report, ResourceDescriptor reportUnitDescriptor, ResourceDescriptor jrxmlDescriptor) throws java.lang.Exception {
 
-        boolean useTemporaryFile = report == null;
+        boolean useTemporaryFile = false; //report == null;
 
         if (report == null) report = JRXmlLoader.load(resourceFile);
 
@@ -309,6 +313,12 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
 
             long modified = resourceFile.lastModified();
 
+            if (reportUnitDescriptor != null)
+            {
+                report.setProperty("ireport.jasperserver.reportUnit", reportUnitDescriptor.getUriString());
+            }
+
+            report.setProperty("ireport.jasperserver.url", server.getUrl() );
             JrxmlValidationDialog jvd = new JrxmlValidationDialog(Misc.getMainFrame(),true);
             jvd.setElementVelidationItems( children );
             jvd.setServer( server );
@@ -318,34 +328,65 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
             jvd.setReport( report );
             jvd.setVisible(true);
 
-            if (jvd.getDialogResult() != JOptionPane.CANCEL_OPTION)
+
+            if (view != null)
             {
-                // Save the report in a new temporary file and store it....
-                // Look for the main jrxml...
-                if (modified != resourceFile.lastModified())
+                view.getEditorSupport().saveDocument();
+            }
+            else
+            {
+                writeReport(report, resourceFile);
+            }
+
+            jvd.getDialogResult();
+
+            // Save the report and store it....
+            // Look for the main jrxml...
+            if (modified != resourceFile.lastModified())
+            {
+                for (int i=0; i<reportUnitDescriptor.getChildren().size(); ++i)
                 {
-                    for (int i=0; i<reportUnitDescriptor.getChildren().size(); ++i)
+                    ResourceDescriptor rdJrxml = (ResourceDescriptor)reportUnitDescriptor.getChildren().get(i);
+                    if ( (jrxmlDescriptor != null && rdJrxml.getUriString().equals(jrxmlDescriptor.getUriString())) ||
+                         (jrxmlDescriptor == null && rdJrxml.getWsType().equals(rdJrxml.TYPE_JRXML) && rdJrxml.isMainReport()))
                     {
-                        ResourceDescriptor rdJrxml = (ResourceDescriptor)reportUnitDescriptor.getChildren().get(i);
-                        if ( (jrxmlDescriptor != null && rdJrxml.getUriString().equals(jrxmlDescriptor.getUriString())) ||
-                             (jrxmlDescriptor == null && rdJrxml.getWsType().equals(rdJrxml.TYPE_JRXML) && rdJrxml.isMainReport()))
-                        {
-                            rdJrxml.setIsNew(false);
-                            rdJrxml.setHasData(true);
-                            rdJrxml = server.getWSClient().modifyReportUnitResource(reportUnitDescriptor.getUriString(), rdJrxml, resourceFile );
-                            // Refresh reportUnitResourceDescriptor....
-                            reportUnitDescriptor.getChildren().set(i, rdJrxml);
-                            break;
-                        }
+                        rdJrxml.setIsNew(false);
+                        rdJrxml.setHasData(true);
+                        rdJrxml = server.getWSClient().modifyReportUnitResource(reportUnitDescriptor.getUriString(), rdJrxml, resourceFile );
+                        // Refresh reportUnitResourceDescriptor....
+                        reportUnitDescriptor.getChildren().set(i, rdJrxml);
+                        break;
                     }
                 }
-                else
-                {
-                    System.out.println("Not modified...." + modified + " != " + resourceFile.lastModified());
-                    System.out.flush();
-                }
+
+
+
+            }
+            else
+            {
+                System.out.println("Not modified...." + modified + " != " + resourceFile.lastModified());
+                System.out.flush();
             }
         }
+    }
+
+    public static void writeReport(JasperDesign jd, File outputFile) throws java.lang.Exception
+    {
+        final String compatibility = IReportManager.getPreferences().get("compatibility", "");
+
+        String content = "";
+        if (compatibility.length() == 0)
+        {
+            content = JRXmlWriter.writeReport(jd, "UTF-8"); // IReportManager.getInstance().getProperty("jrxmlEncoding", System.getProperty("file.encoding") ));
+        }
+        else
+        {
+            content = JRXmlWriterHelper.writeReport(jd, "UTF-8", compatibility);
+        }
+
+        Writer out = new OutputStreamWriter(new FileOutputStream(outputFile), "UTF-8");
+        out.write(content);
+        out.close();
     }
     
 }

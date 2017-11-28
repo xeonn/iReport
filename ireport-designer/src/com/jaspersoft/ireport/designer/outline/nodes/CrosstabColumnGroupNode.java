@@ -32,6 +32,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
 import net.sf.jasperreports.crosstabs.fill.calculation.BucketDefinition;
+import net.sf.jasperreports.crosstabs.type.CrosstabColumnPositionEnum;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.nodes.Sheet;
 import org.openide.util.Lookup;
@@ -58,6 +59,11 @@ public class CrosstabColumnGroupNode extends CrosstabGroupNode implements Proper
     @Override
     protected Sheet createSheet() {
         Sheet sheet = super.createSheet();
+
+        Sheet.Set set = sheet.get(Sheet.PROPERTIES);
+        set.put(new PositionProperty(group,getCrosstab()));
+        sheet.put(set);
+        
         return sheet;
     }
     
@@ -72,5 +78,61 @@ public class CrosstabColumnGroupNode extends CrosstabGroupNode implements Proper
     public int getType() {
         return COLUMN_GROUP;
     }
-    
+
+
+    /**
+     *  Class to manage the JRDesignElement.PROPERTY_POSITION_TYPE property
+     */
+    public static final class PositionProperty extends ByteProperty
+    {
+        private final JRDesignCrosstabColumnGroup group;
+        private final JRDesignCrosstab crosstab;
+
+        @SuppressWarnings("unchecked")
+        public PositionProperty(JRDesignCrosstabColumnGroup group, JRDesignCrosstab crosstab)
+        {
+            super(group);
+            setName( JRDesignCrosstabColumnGroup.PROPERTY_POSITION );
+            setDisplayName("Header Position");
+            setShortDescription("This property set the position of the content of the group header cell");
+            this.crosstab = crosstab;
+            this.group = group;
+        }
+
+        @Override
+        public List getTagList()
+        {
+            List tags = new java.util.ArrayList();
+            tags.add(new Tag(CrosstabColumnPositionEnum.LEFT.getValueByte(), "Left"));
+            tags.add(new Tag(CrosstabColumnPositionEnum.CENTER.getValueByte(), "Center"));
+            tags.add(new Tag(CrosstabColumnPositionEnum.RIGHT.getValueByte(), "Right"));
+            tags.add(new Tag(CrosstabColumnPositionEnum.STRETCH.getValueByte(), "Stretch"));
+            return tags;
+        }
+
+        @Override
+        public Byte getByte()
+        {
+            return (group.getTotalPositionValue()) == null ? null : group.getTotalPositionValue().getValueByte();
+        }
+
+        @Override
+        public Byte getOwnByte()
+        {
+            return getByte();
+        }
+
+        @Override
+        public Byte getDefaultByte()
+        {
+            return null;
+        }
+
+        @Override
+        public void setByte(Byte positionType)
+        {
+            group.setTotalPosition(positionType);
+        }
+
+    }
 }

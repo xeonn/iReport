@@ -118,7 +118,6 @@ public abstract class AbstractTableChildren extends Index.KeysChildren implement
 //
 //    }
 
-    @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
         if (evt.getPropertyName().equals(getCellPropertyName()))

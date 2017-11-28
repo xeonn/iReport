@@ -341,6 +341,7 @@ public final class SubreportWizardIterator implements WizardDescriptor.Instantia
     {
         Boolean useSubParam  = (Boolean)wizard.getProperty("addsubreportparameter");
             String exp = (String)wizard.getProperty("subreportexpression");
+            String subreport_directory = (String)wizard.getProperty("subreport_directory");
             String con_exp = (String)wizard.getProperty("subreport_connection_expression");
             String ds_exp = (String)wizard.getProperty("subreport_datasource_expression");
             
@@ -357,10 +358,13 @@ public final class SubreportWizardIterator implements WizardDescriptor.Instantia
                 param.setName("SUBREPORT_DIR");
                 param.setForPrompting(false);
                 // TODO: set as directory the target directory for compiled files....
-                String s = Misc.getDataFolderPath( ((TemplateWizard)wizard).getTargetFolder() ) + File.separator;
-                s = Misc.string_replace("\\\\","\\",s);
-                s = "\"" + s + "\"";
-                param.setDefaultValueExpression( Misc.createExpression("java.lang.String", s));
+                if (subreport_directory == null)
+                {
+                    subreport_directory = Misc.getDataFolderPath( ((TemplateWizard)wizard).getTargetFolder() ) + File.separator;
+                }
+                subreport_directory = Misc.string_replace("\\\\","\\",subreport_directory);
+                subreport_directory = "\"" + subreport_directory + "\"";
+                param.setDefaultValueExpression( Misc.createExpression("java.lang.String", subreport_directory));
                 param.setValueClassName("java.lang.String");
                 
                 // add the parameter to the document...

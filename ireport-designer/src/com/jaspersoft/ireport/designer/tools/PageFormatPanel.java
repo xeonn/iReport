@@ -633,11 +633,10 @@ public class PageFormatPanel extends javax.swing.JPanel {
                     multiUnitNumberEditorWidth.setValue(p.x);
                     multiUnitNumberEditorHeight.setValue(p.y);
                 }
-                updatePreview();
             }
-
         }
-
+        recalculateColumnWidth();
+        updatePreview();
     }//GEN-LAST:event_jComboBoxFormatActionPerformed
 
     public void recalculateColumnWidth()

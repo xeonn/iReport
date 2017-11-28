@@ -152,7 +152,7 @@ public class JDBCConnection extends com.jaspersoft.ireport.designer.IReportConne
 				    
 	                    } catch (Exception ex)
 	                    {
-	                    	//ex.printStackTrace();
+	                    	ex.printStackTrace();
 	        	    }
 	        	    finally {
 		        	    if (stmt != null) stmt.close();

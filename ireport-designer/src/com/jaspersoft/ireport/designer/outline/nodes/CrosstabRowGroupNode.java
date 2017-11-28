@@ -23,12 +23,15 @@
  */
 package com.jaspersoft.ireport.designer.outline.nodes;
 
+import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
 import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.List;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
+import net.sf.jasperreports.crosstabs.type.CrosstabRowPositionEnum;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.nodes.Sheet;
 import org.openide.util.Lookup;
@@ -55,6 +58,12 @@ public class CrosstabRowGroupNode extends CrosstabGroupNode implements PropertyC
     @Override
     protected Sheet createSheet() {
         Sheet sheet = super.createSheet();
+
+
+        Sheet.Set set = sheet.get(Sheet.PROPERTIES);
+        set.put(new PositionProperty(group,getCrosstab()));
+        sheet.put(set);
+
         return sheet;
     }
     
@@ -69,7 +78,64 @@ public class CrosstabRowGroupNode extends CrosstabGroupNode implements PropertyC
     public int getType() {
         return ROW_GROUP;
     }
-    
+
+
+
+    /**
+     *  Class to manage the JRDesignElement.PROPERTY_POSITION_TYPE property
+     */
+    public static final class PositionProperty extends ByteProperty
+    {
+        private final JRDesignCrosstabRowGroup group;
+        private final JRDesignCrosstab crosstab;
+
+        @SuppressWarnings("unchecked")
+        public PositionProperty(JRDesignCrosstabRowGroup group, JRDesignCrosstab crosstab)
+        {
+            super(group);
+            setName( JRDesignCrosstabRowGroup.PROPERTY_POSITION );
+            setDisplayName("Header Position");
+            setShortDescription("This property set the position of the content of the group header cell");
+            this.crosstab = crosstab;
+            this.group = group;
+        }
+
+        @Override
+        public List getTagList()
+        {
+            List tags = new java.util.ArrayList();
+            tags.add(new Tag(CrosstabRowPositionEnum.TOP.getValueByte(), "Top"));
+            tags.add(new Tag(CrosstabRowPositionEnum.BOTTOM.getValueByte(), "Bottom"));
+            tags.add(new Tag(CrosstabRowPositionEnum.MIDDLE.getValueByte(), "Middle"));
+            tags.add(new Tag(CrosstabRowPositionEnum.STRETCH.getValueByte(), "Stretch"));
+            return tags;
+        }
+
+        @Override
+        public Byte getByte()
+        {
+            return (group.getTotalPositionValue()) == null ? null : group.getTotalPositionValue().getValueByte();
+        }
+
+        @Override
+        public Byte getOwnByte()
+        {
+            return getByte();
+        }
+
+        @Override
+        public Byte getDefaultByte()
+        {
+            return null;
+        }
+
+        @Override
+        public void setByte(Byte positionType)
+        {
+            group.setTotalPosition(positionType);
+        }
+
+    }
     
  
 }

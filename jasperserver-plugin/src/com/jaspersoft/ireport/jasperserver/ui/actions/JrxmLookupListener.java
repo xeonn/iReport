@@ -100,6 +100,17 @@ public class JrxmLookupListener implements LookupListener {
             Runnable run = new Runnable() {
 
                 public void run() {
+
+                    // Set the properties useful to run this report...
+                    if (parentReportUnit != null)
+                    {
+                        jd.setProperty("ireport.jasperserver.reportUnit", parentReportUnit.getDescriptor().getUriString());
+                    }
+                    else jd.getPropertiesMap().removeProperty("ireport.jasperserver.reportUnit");
+
+                    jd.setProperty("ireport.jasperserver.url", server.getUrl());
+
+
                     List<JRDesignElement> elements = ModelUtils.getAllElements(jd, true);
                     for (JRDesignElement ele : elements)
                     {

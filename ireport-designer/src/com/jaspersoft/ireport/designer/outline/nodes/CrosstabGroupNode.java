@@ -51,6 +51,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.fill.calculation.BucketDefinition;
+import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRExpressionChunk;
 import net.sf.jasperreports.engine.JRExpressionCollector;
 import net.sf.jasperreports.engine.JRGroup;
@@ -503,19 +504,19 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
         @Override
         public Byte getByte()
         {
-            return group.getTotalPosition();
+            return group.getTotalPositionValue() == null ? null : group.getTotalPositionValue().getValueByte();
         }
 
         @Override
         public Byte getOwnByte()
         {
-            return group.getTotalPosition();
+            return getByte();
         }
 
         @Override
         public Byte getDefaultByte()
         {
-            return BucketDefinition.TOTAL_POSITION_NONE;
+            return CrosstabTotalPositionEnum.NONE.getValueByte();
         }
 
         @Override

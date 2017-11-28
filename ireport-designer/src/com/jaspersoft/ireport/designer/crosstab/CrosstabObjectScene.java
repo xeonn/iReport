@@ -42,6 +42,7 @@ import java.awt.event.InputEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.SwingUtilities;
@@ -52,6 +53,7 @@ import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.fill.calculation.BucketDefinition;
+import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
@@ -269,6 +271,92 @@ public class CrosstabObjectScene extends AbstractReportObjectScene implements Pr
     }
     
     /**
+     * Returns a boolean array which says for each column if it exists or not.
+     * The only case a column does not exists is when a column group total position
+     * is set to none.
+     * @return
+     */
+    public boolean[] columnExistsArray()
+    {
+        JRCrosstabRowGroup[] row_groups = getDesignCrosstab().getRowGroups();
+        JRCrosstabColumnGroup[] col_groups = getDesignCrosstab().getColumnGroups();
+
+        boolean[] cols = new boolean[row_groups.length + col_groups.length+1];
+        Arrays.fill(cols, true);
+
+        int w = col_groups.length+1;
+        int currentX = row_groups.length;
+
+        for (JRCrosstabColumnGroup colGroup : col_groups)
+        {
+            if (colGroup.getTotalPositionValue() == CrosstabTotalPositionEnum.START)
+            {
+                currentX++;
+            }
+            else if (colGroup.getTotalPositionValue() == CrosstabTotalPositionEnum.NONE)
+            {
+                // The current last column does not exists...
+                cols[currentX+w-1]=false;
+            }
+            w--;
+        }
+
+//        for (boolean b : cols)
+//        {
+//            System.out.print( ((b) ? "-" : "X"));
+//        }
+//        System.out.println();
+
+        return cols;
+
+
+    }
+
+
+    /**
+     * Returns a boolean array which says for each column if it exists or not.
+     * The only case a column does not exists is when a column group total position
+     * is set to none.
+     * @return
+     */
+    public boolean[] rowExistsArray()
+    {
+        JRCrosstabRowGroup[] row_groups = getDesignCrosstab().getRowGroups();
+        JRCrosstabColumnGroup[] col_groups = getDesignCrosstab().getColumnGroups();
+
+        boolean[] rows = new boolean[row_groups.length + col_groups.length+1];
+        Arrays.fill(rows, true);
+
+        int h = row_groups.length+1;
+        int currentY = col_groups.length;
+
+        for (JRCrosstabRowGroup rowGroup : row_groups)
+        {
+            if (rowGroup.getTotalPositionValue() == CrosstabTotalPositionEnum.START)
+            {
+                currentY++;
+            }
+            else if (rowGroup.getTotalPositionValue() == CrosstabTotalPositionEnum.NONE)
+            {
+                // The current last column does not exists...
+                rows[currentY+h-1]=false;
+            }
+            h--;
+        }
+
+//        for (boolean b : cols)
+//        {
+//            System.out.print( ((b) ? "-" : "X"));
+//        }
+//        System.out.println();
+
+        return rows;
+
+
+    }
+
+
+    /**
      * Refresh the bands, adding the missing elements if required.
      * Elements no longer referenced in the model are not removed by this method.
      * 
@@ -328,20 +416,31 @@ public class CrosstabObjectScene extends AbstractReportObjectScene implements Pr
         }
         
         // Check for the crosstab widget....
+        boolean[] rowsExists = rowExistsArray();
         for (int i=0; i<getHorizontalSeparators().size();++i)
         {
-            CellSeparatorWidget w = new CellSeparatorWidget(this, i, Orientation.HORIZONTAL);
-            w.getActions().addAction( new CellSeparatorMoveAction(true, InputEvent.SHIFT_DOWN_MASK) );
-            w.getActions().addAction( new CellSeparatorMoveAction() );
-            cellSeparatorsLayer.addChild(w);
+            if (rowsExists[i])
+            {
+                CellSeparatorWidget w = new CellSeparatorWidget(this, i, Orientation.HORIZONTAL);
+                w.getActions().addAction( new CellSeparatorMoveAction(true, InputEvent.SHIFT_DOWN_MASK) );
+                w.getActions().addAction( new CellSeparatorMoveAction() );
+                cellSeparatorsLayer.addChild(w);
+            }
         }
-        
+
+        boolean[] colsExists = columnExistsArray();
         for (int i=0; i<getVerticalSeparators().size();++i)
         {
-            CellSeparatorWidget w = new CellSeparatorWidget(this, i, Orientation.VERTICAL);
-            w.getActions().addAction( new CellSeparatorMoveAction(true, InputEvent.SHIFT_DOWN_MASK) );
-            w.getActions().addAction( new CellSeparatorMoveAction() );
-            cellSeparatorsLayer.addChild(w);
+            // If this separator is tied to a column which actually does not exists, just remove it.
+            // This happen when this is the end column of a group, which has the total position set to NONE...
+            // Which group? Let's find out...
+            if (colsExists[i])
+            {
+                CellSeparatorWidget w = new CellSeparatorWidget(this, i, Orientation.VERTICAL);
+                w.getActions().addAction( new CellSeparatorMoveAction(true, InputEvent.SHIFT_DOWN_MASK) );
+                w.getActions().addAction( new CellSeparatorMoveAction() );
+                cellSeparatorsLayer.addChild(w);
+            }
         }
         
         

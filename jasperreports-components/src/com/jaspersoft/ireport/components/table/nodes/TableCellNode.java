@@ -39,6 +39,7 @@ import com.jaspersoft.ireport.components.table.actions.TableCellDoLayoutAction;
 import com.jaspersoft.ireport.components.table.actions.TableCellDoVerticalLayoutAction;
 import com.jaspersoft.ireport.components.table.nodes.properties.CellHeightProperty;
 import com.jaspersoft.ireport.components.table.nodes.properties.CellPaddingAndBordersProperty;
+import com.jaspersoft.ireport.components.table.nodes.properties.ColumnPrintWhenExpressionProperty;
 import com.jaspersoft.ireport.components.table.nodes.properties.ColumnWidthProperty;
 import com.jaspersoft.ireport.components.table.nodes.properties.RowSpanProperty;
 import com.jaspersoft.ireport.designer.ModelUtils;
@@ -63,6 +64,7 @@ import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -199,6 +201,14 @@ public class TableCellNode extends IRIndexedNode implements PropertyChangeListen
         set.put(new RowSpanProperty(getCell(), getTable(), getJasperDesign()));
         set.put(new ColumnWidthProperty((StandardBaseColumn) getColumn(), getTable(), getJasperDesign()));
         set.put(new CellPaddingAndBordersProperty(getCell()));
+
+        JRDesignDataset dataset = getJasperDesign().getMainDesignDataset();
+        if (getTable().getDatasetRun() != null && getTable().getDatasetRun().getDatasetName() != null)
+        {
+            dataset = (JRDesignDataset) getJasperDesign().getDatasetMap().get(getTable().getDatasetRun().getDatasetName());
+        }
+
+        set.put(new ColumnPrintWhenExpressionProperty((StandardBaseColumn) getColumn(), dataset));
 
         sheet.put(set);
 

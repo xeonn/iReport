@@ -400,27 +400,27 @@ public class AddResourceAction extends NodeAction {
                 if (rd != null) {
                     addChild(selectedNode, server, rd);
 
-                    if (wizardDescriptor.getProperty("currentlyOpenedFileSelected") != null &&
-                        wizardDescriptor.getProperty("currentlyOpenedFileSelected").equals("true"))
-                    {
-                        if( JOptionPane.showConfirmDialog(Misc.getMainFrame(),
-                            JasperServerManager.getString("repositoryExplorer.message.openReportUnitFile",
-                            "The new ReportUnit has been created from the current opened file.\nThis local file should no longer be used to edit the report unit Jrxml.\n" +
-                            "Instead you should use the file stored on JasperServer.\n\nDo you want open the Jrxml from the server now?")) == JOptionPane.YES_OPTION)
-                            {
-                                final Node node = (Node)selectedNode;
-
-                                SwingUtilities.invokeLater(new Runnable() {
-
-                                public void run() {
-                                    NestedResourceOpener opener = new NestedResourceOpener((FolderNode)node,rd.getUriString());
-                                     opener.openFile();
-                                }
-                            });
-                               
-                            }
-
-                    }
+//                    if (wizardDescriptor.getProperty("currentlyOpenedFileSelected") != null &&
+//                        wizardDescriptor.getProperty("currentlyOpenedFileSelected").equals("true"))
+//                    {
+//                        if( JOptionPane.showConfirmDialog(Misc.getMainFrame(),
+//                            JasperServerManager.getString("repositoryExplorer.message.openReportUnitFile",
+//                            "The new ReportUnit has been created from the current opened file.\nThis local file should no longer be used to edit the report unit Jrxml.\n" +
+//                            "Instead you should use the file stored on JasperServer.\n\nDo you want open the Jrxml from the server now?")) == JOptionPane.YES_OPTION)
+//                            {
+//                                final Node node = (Node)selectedNode;
+//
+//                                SwingUtilities.invokeLater(new Runnable() {
+//
+//                                public void run() {
+//                                    NestedResourceOpener opener = new NestedResourceOpener((FolderNode)node,rd.getUriString());
+//                                     opener.openFile();
+//                                }
+//                            });
+//
+//                            }
+//
+//                    }
                 }
             }
         

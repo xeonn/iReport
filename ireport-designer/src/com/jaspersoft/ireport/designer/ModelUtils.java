@@ -48,6 +48,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabParameter;
 import net.sf.jasperreports.crosstabs.fill.calculation.BucketDefinition;
+import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
@@ -135,7 +136,7 @@ public class ModelUtils {
 
         if (includeCrosstabs)
         {
-             List<JRDesignElement> list2 = new ArrayList<JRDesignElement>();
+            List<JRDesignElement> list2 = new ArrayList<JRDesignElement>();
             for (int i=0; i<list.size(); ++i)
             {
                 JRDesignElement ele = list.get(i);
@@ -424,9 +425,9 @@ public class ModelUtils {
             // paint row cells...
             for (int i=0; i<row_groups.length; ++i)
             {
-                switch (row_groups[i].getTotalPosition())
+                switch (row_groups[i].getTotalPositionValue())
                 {
-                    case BucketDefinition.TOTAL_POSITION_START:
+                    case START:
                         Rectangle rect1 = new Rectangle(x,y,row_groups[i].getTotalHeader().getWidth(),row_groups[i].getTotalHeader().getHeight());
                         if (rect1.contains(point)) 
                         {
@@ -439,7 +440,7 @@ public class ModelUtils {
                         data_height -= row_groups[i].getTotalHeader().getHeight();
                         y += row_groups[i].getTotalHeader().getHeight();
                         break;
-                    case BucketDefinition.TOTAL_POSITION_END:
+                    case END:
                         int y_loc = y + data_height - row_groups[i].getTotalHeader().getHeight();
                         Rectangle rect2 = new Rectangle(x,y_loc,row_groups[i].getTotalHeader().getWidth(),row_groups[i].getTotalHeader().getHeight());
                         if (rect2.contains(point)) 
@@ -475,9 +476,9 @@ public class ModelUtils {
             // paint col cells...
             for (int i=0; i<col_groups.length; ++i)
             {
-                switch (col_groups[i].getTotalPosition())
+                switch (col_groups[i].getTotalPositionValue())
                 {
-                    case BucketDefinition.TOTAL_POSITION_START:
+                    case START:
                         Rectangle rect1 = new Rectangle(x,y,col_groups[i].getTotalHeader().getWidth(),col_groups[i].getTotalHeader().getHeight());
                         if (rect1.contains(point))
                         {
@@ -490,7 +491,7 @@ public class ModelUtils {
                         data_width -= col_groups[i].getTotalHeader().getWidth();
                         x += col_groups[i].getTotalHeader().getWidth();
                         break;
-                    case BucketDefinition.TOTAL_POSITION_END:
+                    case END:
                         int x_loc = x + data_width - col_groups[i].getTotalHeader().getWidth();
                         Rectangle rect2 = new Rectangle(x_loc,y,col_groups[i].getTotalHeader().getWidth(),col_groups[i].getTotalHeader().getHeight());
                         if (rect2.contains(point))
@@ -504,7 +505,7 @@ public class ModelUtils {
                             
                         data_width -= col_groups[i].getTotalHeader().getWidth();
                         break;
-                    case BucketDefinition.TOTAL_POSITION_NONE:
+                    case NONE:
                         break;
                 }
 
@@ -577,7 +578,7 @@ public class ModelUtils {
             for (int i=0; i<col_groups.length; ++i)
             {
                 JRCrosstabColumnGroup group = col_groups[i];
-                //if (group.getTotalPosition() != BucketDefinition.TOTAL_POSITION_NONE)
+                if (group.getTotalPositionValue() != CrosstabTotalPositionEnum.NONE)
                 {
                     w++;
                 }
@@ -590,24 +591,23 @@ public class ModelUtils {
             {
                 JRCrosstabColumnGroup group = col_groups[i];
 
-                if (group.getTotalPosition() == BucketDefinition.TOTAL_POSITION_START)
+                if (group.getTotalPositionValue() == CrosstabTotalPositionEnum.START)
                 {
                     CellInfo ci = new CellInfo(x, y, 1, h, group.getTotalHeader());
                     cellInfos.add(ci);
                     x++;
+                    w--;
                 }
 
                 CellInfo ci2 = new CellInfo(x, y, w, 1, group.getHeader());
                 cellInfos.add(ci2);
 
-                if (group.getTotalPosition() == BucketDefinition.TOTAL_POSITION_END)
+                if (group.getTotalPositionValue() == CrosstabTotalPositionEnum.END)
                 {
                      CellInfo ci = new CellInfo(x+w-1, y, 1, h, group.getTotalHeader());
                      cellInfos.add(ci);
                      w--;
                 }
-
-                
                 h--;
                 y++;
             }
@@ -624,7 +624,7 @@ public class ModelUtils {
             for (int i=0; i<row_groups.length; ++i)
             {
                 JRCrosstabRowGroup group = row_groups[i];
-                //if (group.getTotalPosition() != BucketDefinition.TOTAL_POSITION_NONE)
+                if (group.getTotalPosition() != BucketDefinition.TOTAL_POSITION_NONE)
                 {
                     h++;
                 }
@@ -634,17 +634,18 @@ public class ModelUtils {
             {
                 JRCrosstabRowGroup group = row_groups[i];
 
-                if (group.getTotalPosition() == BucketDefinition.TOTAL_POSITION_START)
+                if (group.getTotalPositionValue() == CrosstabTotalPositionEnum.START)
                 {
                     CellInfo ci = new CellInfo(x, y, w, 1, group.getTotalHeader());
                     cellInfos.add(ci);
                     y++;
+                    h--;
                 }
 
                 CellInfo ci2 = new CellInfo(x, y, 1, h, group.getHeader());
                 cellInfos.add(ci2);
 
-                if (group.getTotalPosition() == BucketDefinition.TOTAL_POSITION_END)
+                if (group.getTotalPositionValue() == CrosstabTotalPositionEnum.END)
                 {
                     CellInfo ci = new CellInfo(x, y+h-1, w, 1, group.getTotalHeader());
                     cellInfos.add(ci);
@@ -752,7 +753,7 @@ public class ModelUtils {
             verticalSeparator.add(current_x);
 
             cellContents.add( (JRDesignCellContents)row_groups[i].getHeader());
-            if (row_groups[i].getTotalPosition() != BucketDefinition.TOTAL_POSITION_NONE )
+            if (row_groups[i].getTotalPositionValue() != CrosstabTotalPositionEnum.NONE )
             {
                 cellContents.add( (JRDesignCellContents)row_groups[i].getTotalHeader());
             }
@@ -770,7 +771,7 @@ public class ModelUtils {
             horizontalSeparator.add(current_y);
 
             cellContents.add( (JRDesignCellContents)col_groups[i].getHeader());
-            if (col_groups[i].getTotalPosition() != BucketDefinition.TOTAL_POSITION_NONE )
+            if (col_groups[i].getTotalPositionValue() != CrosstabTotalPositionEnum.NONE )
             {
                 cellContents.add( (JRDesignCellContents)col_groups[i].getTotalHeader());
             }
@@ -1115,10 +1116,10 @@ public class ModelUtils {
         JRCrosstabRowGroup[] row_groups = designCrosstab.getRowGroups();
         for (int i=0; i<row_groups.length; ++i)
         {
-            switch (row_groups[i].getTotalPosition())
+            switch (row_groups[i].getTotalPositionValue())
             {
-                case BucketDefinition.TOTAL_POSITION_START:
-                case BucketDefinition.TOTAL_POSITION_END:
+                case START:
+                case END:
                     list.add( (JRDesignCellContents)row_groups[i].getTotalHeader());
                     break;
                 default: break;
@@ -1129,10 +1130,10 @@ public class ModelUtils {
         JRCrosstabColumnGroup[] col_groups = designCrosstab.getColumnGroups();
         for (int i=0; i<col_groups.length; ++i)
         {
-            switch (col_groups[i].getTotalPosition())
+            switch (col_groups[i].getTotalPositionValue())
             {
-                case BucketDefinition.TOTAL_POSITION_START:
-                case BucketDefinition.TOTAL_POSITION_END:
+                case START:
+                case END:
                     list.add( (JRDesignCellContents)col_groups[i].getTotalHeader());
                     break;
                 default: break;
@@ -1736,7 +1737,7 @@ public class ModelUtils {
         
         for (int i=0; i<row_groups.length; ++i)
         {
-            if (row_groups[i].getTotalPosition() == BucketDefinition.TOTAL_POSITION_START)
+            if (row_groups[i].getTotalPositionValue() == CrosstabTotalPositionEnum.START)
             {
                 rowsConversion[i] = maxRow;
                 maxRow--;
@@ -1752,7 +1753,7 @@ public class ModelUtils {
         
         for (int i=0; i<col_groups.length; ++i)
         {
-            if (col_groups[i].getTotalPosition() == BucketDefinition.TOTAL_POSITION_START)
+            if (col_groups[i].getTotalPositionValue() == CrosstabTotalPositionEnum.START)
             {
                 colsConversion[i] = maxCol;
                 maxCol--;

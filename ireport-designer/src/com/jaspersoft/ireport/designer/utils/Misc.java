@@ -1374,7 +1374,7 @@ public class Misc {
                         }
                     }
 
-                    f = new File(url.getPath());
+                    f = new File(url.toURI());
                     if (f.exists())
                     {
                         fileToOpen = f;

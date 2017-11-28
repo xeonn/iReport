@@ -3,6 +3,7 @@
 <filesystem>
     <folder name="Actions">
         <folder name="Help">
+
             <file name="com-jaspersoft-ireport-samples-db-RunSampleDatabaseAction.instance">
                 <attr name="delegate" newvalue="com.jaspersoft.ireport.samples.db.RunSampleDatabaseAction"/>
                 <attr name="displayName" bundlevalue="com.jaspersoft.ireport.samples.db.Bundle#CTL_RunSampleDatabaseAction"/>
@@ -10,49 +11,48 @@
                 <attr name="noIconInMenu" boolvalue="false"/>
             </file>
 
-            <file name="com-jaspersoft-ireport-samples-BasicReport">
-                <attr name="instanceClass" newvalue="com.jaspersoft.ireport.samples.OpenSampleAction"/>
+            <file name="com-jaspersoft-ireport-samples-BasicReport.instance">
                 <attr name="instanceCreate" methodvalue="com.jaspersoft.ireport.samples.OpenSampleAction.createAction"/>
                 <attr name="key" stringvalue="Basic_report"/>
             </file>
 
-            <file name="com-jaspersoft-ireport-samples-Elements">
+            <file name="com-jaspersoft-ireport-samples-Elements.instance">
                 <attr name="instanceClass" newvalue="com.jaspersoft.ireport.samples.OpenSampleAction"/>
                 <attr name="instanceCreate" methodvalue="com.jaspersoft.ireport.samples.OpenSampleAction.createAction"/>
                 <attr name="key" stringvalue="Elements"/>
             </file>
 
-            <file name="com-jaspersoft-ireport-samples-ParametersAndVariables">
+            <file name="com-jaspersoft-ireport-samples-ParametersAndVariables.instance">
                 <attr name="instanceClass" newvalue="com.jaspersoft.ireport.samples.OpenSampleAction"/>
                 <attr name="instanceCreate" methodvalue="com.jaspersoft.ireport.samples.OpenSampleAction.createAction"/>
                 <attr name="key" stringvalue="Parameters_and_Variables"/>
             </file>
 
-            <file name="com-jaspersoft-ireport-samples-Groups">
+            <file name="com-jaspersoft-ireport-samples-Groups.instance">
                 <attr name="instanceClass" newvalue="com.jaspersoft.ireport.samples.OpenSampleAction"/>
                 <attr name="instanceCreate" methodvalue="com.jaspersoft.ireport.samples.OpenSampleAction.createAction"/>
                 <attr name="key" stringvalue="Groups"/>
             </file>
 
-            <file name="com-jaspersoft-ireport-samples-Fonts">
+            <file name="com-jaspersoft-ireport-samples-Fonts.instance">
                 <attr name="instanceClass" newvalue="com.jaspersoft.ireport.samples.OpenSampleAction"/>
                 <attr name="instanceCreate" methodvalue="com.jaspersoft.ireport.samples.OpenSampleAction.createAction"/>
                 <attr name="key" stringvalue="Fonts"/>
             </file>
 
-            <file name="com-jaspersoft-ireport-samples-Charts">
+            <file name="com-jaspersoft-ireport-samples-Charts.instance">
                 <attr name="instanceClass" newvalue="com.jaspersoft.ireport.samples.OpenSampleAction"/>
                 <attr name="instanceCreate" methodvalue="com.jaspersoft.ireport.samples.OpenSampleAction.createAction"/>
                 <attr name="key" stringvalue="Charts"/>
             </file>
 
-            <file name="com-jaspersoft-ireport-samples-Subreports">
+            <file name="com-jaspersoft-ireport-samples-Subreports.instance">
                 <attr name="instanceClass" newvalue="com.jaspersoft.ireport.samples.OpenSampleAction"/>
                 <attr name="instanceCreate" methodvalue="com.jaspersoft.ireport.samples.OpenSampleAction.createAction"/>
                 <attr name="key" stringvalue="Subreports"/>
             </file>
 
-            <file name="com-jaspersoft-ireport-samples-Crosstabs">
+            <file name="com-jaspersoft-ireport-samples-Crosstabs.instance">
                 <attr name="instanceClass" newvalue="com.jaspersoft.ireport.samples.OpenSampleAction"/>
                 <attr name="instanceCreate" methodvalue="com.jaspersoft.ireport.samples.OpenSampleAction.createAction"/>
                 <attr name="key" stringvalue="Crosstabs"/>
