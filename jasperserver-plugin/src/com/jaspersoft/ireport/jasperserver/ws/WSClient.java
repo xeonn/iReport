@@ -23,11 +23,14 @@
  */
 package com.jaspersoft.ireport.jasperserver.ws;
 
+import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JServer;
+import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.ws.util.ResourceConfigurationProvider;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -58,6 +61,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Request;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.ws.xml.Marshaller;
 import com.jaspersoft.jasperserver.ws.xml.Unmarshaller;
+import java.io.FileInputStream;
 import org.apache.xerces.parsers.DOMParser;
 
 
@@ -488,6 +492,15 @@ public class WSClient {
     	}
     	else 
     	{
+                // patch jrxml files....
+                if (JasperServerManager.getMainInstance().getProperties().getProperty("use_jrxml_DTD", "true").equals("true"))
+                {
+                    if (inputFile.getName().toLowerCase().endsWith(".jrxml"))
+                    {
+                        inputFile = patchJRXML(inputFile);
+                    }
+                }
+
     		FileDataSource fileDataSource = new FileDataSource(inputFile);
     		RequestAttachment attachment = new RequestAttachment(fileDataSource);
 			attachments = new RequestAttachment[]{attachment};
@@ -525,7 +538,7 @@ public class WSClient {
         		((org.apache.axis.client.Stub)ms)._setProperty(Call.ATTACHMENT_ENCAPSULATION_FORMAT, Call.ATTACHMENT_ENCAPSULATION_FORMAT_DIME);
             	
             	for (int i = 0; i < attachments.length; i++) {
-					RequestAttachment attachment = attachments[i];
+			RequestAttachment attachment = attachments[i];
 	                DataHandler attachmentHandler = new DataHandler(attachment.getDataSource());
             		AttachmentPart attachmentPart = new AttachmentPart(attachmentHandler);
 	                if (attachment.getContentID() != null)
@@ -655,6 +668,34 @@ public class WSClient {
         
         return obj;
             
+    }
+
+    private File patchJRXML(File inputFile) throws Exception {
+
+        String content = "";
+        FileInputStream is = new FileInputStream(inputFile);
+        byte[] buffer = new byte[1024];
+        int bcount = 0;
+        while ( (bcount = is.read(buffer)) > 0)
+        {
+            content += new String(buffer,0,bcount);
+        }
+        is.close();
+
+        if (content.indexOf("xmlns=\"http://jasperreports.sourceforge.net/jasperreports\"") > 0)
+        {
+            content = Misc.string_replace(
+                        "<!DOCTYPE jasperReport PUBLIC \"-//JasperReports//DTD Report Design//EN\" \"http://jasperreports.sourceforge.net/dtds/jasperreport.dtd\">\n<jasperReport ",
+                        "<jasperReport xmlns=\"http://jasperreports.sourceforge.net/jasperreports\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd\"",
+                        content);
+            File newFile = new File( JasperServerManager.createTmpFileName(null, null));
+            FileOutputStream os = new FileOutputStream(newFile);
+            os.write( content.getBytes());
+            os.close();
+            return newFile;
+        }
+
+        return inputFile;
     }
 }
 

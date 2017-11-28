@@ -492,9 +492,15 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
                     throw iae; 
                 }
             }
+            
+            
+            
             String oldName = group.getName();
             group.setName(s);
+            dataset.getGroupsMap().remove(oldName);
+            dataset.getGroupsMap().put(s, group);
 
+            
             ObjectPropertyUndoableEdit opue = new ObjectPropertyUndoableEdit(
                     group, "Name", String.class, oldName, group.getName());
 

@@ -27,8 +27,7 @@ final public class IRConsoleTopComponent extends TopComponent implements java.aw
 
     private IRConsoleTopComponent() {
         initComponents();
-        setName(NbBundle.getMessage(IRConsoleTopComponent.class, "CTL_IRConsoleTopComponent"));
-        setToolTipText(NbBundle.getMessage(IRConsoleTopComponent.class, "HINT_IRConsoleTopComponent"));
+//        setName(NbBundle.getMessage(IRConsoleTopComponent.class, "CTL_IRConsoleTopComponent"));
 //        setIcon(Utilities.loadImage(ICON_PATH, true));
         
         mainLogTextArea = new LogTextArea(I18n.getString("IRConsoleTopComponent.TextArea.iReportConsole")); //I18n.getString("logPane.mainConsole",

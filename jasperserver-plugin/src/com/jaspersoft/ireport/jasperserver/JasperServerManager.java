@@ -65,7 +65,13 @@ public class JasperServerManager {
      */
     private java.util.Properties brandingProperties = new java.util.Properties();
 
-    
+
+    /**
+     * This map helps to track where a jrxml comes from...
+     *
+     */
+    private java.util.HashMap<String, RepositoryReportUnit> jrxmlReportUnitMap= new java.util.HashMap<String, RepositoryReportUnit>();
+
     private static java.util.ResourceBundle oLanguage = null;
     private static Locale pluginLocale = null;
     
@@ -401,6 +407,20 @@ public class JasperServerManager {
         for (int i=0; i<tobeordered.length; ++i) list.add(tobeordered[i]);
         
         return list;
+    }
+
+    /**
+     * @return the jrxmlReportUnitMap
+     */
+    public java.util.HashMap<String, RepositoryReportUnit> getJrxmlReportUnitMap() {
+        return jrxmlReportUnitMap;
+    }
+
+    /**
+     * @param jrxmlReportUnitMap the jrxmlReportUnitMap to set
+     */
+    public void setJrxmlReportUnitMap(java.util.HashMap<String, RepositoryReportUnit> jrxmlReportUnitMap) {
+        this.jrxmlReportUnitMap = jrxmlReportUnitMap;
     }
     
 }

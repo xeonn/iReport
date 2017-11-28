@@ -70,7 +70,7 @@ public class OlapBrowser extends javax.swing.JPanel implements FieldsProviderEdi
         
         jComboBoxType.addItem(new Tag("java.lang.String",I18n.getString("OlapBrowser.ComboBox.Text")));
         jComboBoxType.addItem(new Tag("java.lang.Number", I18n.getString("OlapBrowser.ComboBox.Numeric")));
-        jComboBoxType.addItem(new Tag("java.util.Date", I18n.getString("OlapBrowser.ComboBox.Date")));
+        jComboBoxType.addItem(new Tag("java.util.Date", I18n.getString("Global.List.Date")));
         jComboBoxType.addItem(new Tag("java.util.Date", I18n.getString("OlapBrowser.ComboBox.Boolean")));
         
         jComboBoxType.setSelectedIndex(0);

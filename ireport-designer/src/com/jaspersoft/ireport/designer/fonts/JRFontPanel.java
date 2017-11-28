@@ -380,7 +380,7 @@ public class JRFontPanel extends javax.swing.JPanel {
         jPanel6.add(jPanel7, gridBagConstraints);
 
         jButtonOK.setMnemonic('o');
-        jButtonOK.setText(I18n.getString("JRFontPanel.jButtonOK.text")); // NOI18N
+        jButtonOK.setText(I18n.getString("Global.Button.Ok")); // NOI18N
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOKActionPerformed(evt);
@@ -394,7 +394,7 @@ public class JRFontPanel extends javax.swing.JPanel {
         jPanel6.add(jButtonOK, gridBagConstraints);
 
         jButtonCancel.setMnemonic('c');
-        jButtonCancel.setText(I18n.getString("JRFontPanel.jButtonCancel.text")); // NOI18N
+        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);

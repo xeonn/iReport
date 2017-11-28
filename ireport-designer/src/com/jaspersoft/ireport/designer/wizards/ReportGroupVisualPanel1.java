@@ -66,6 +66,10 @@ public final class ReportGroupVisualPanel1 extends JPanel {
         {
             jComboBoxObject.addItem(new ExpObject( values.get(i) ));
         }
+        if (jComboBoxObject.getItemCount() > 0)
+        {
+            jComboBoxObject.setSelectedIndex(0);
+        }
         
         jRTextExpressionArea.setExpressionContext(new ExpressionContext(wizardPanel.getJasperDesign().getMainDesignDataset()));
         
@@ -279,6 +283,10 @@ public final class ReportGroupVisualPanel1 extends JPanel {
             else if (obj instanceof JRParameter)
             {
                 text = "$P{" + ((JRParameter)obj).getName() + "}";
+            }
+            else if (obj instanceof ExpObject)
+            {
+                text = ((ExpObject)obj).getExpression();
             }
             
             return text;

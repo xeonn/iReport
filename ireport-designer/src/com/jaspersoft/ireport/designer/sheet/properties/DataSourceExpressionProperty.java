@@ -74,7 +74,7 @@ public final class DataSourceExpressionProperty extends ExpressionProperty
     @Override
     public boolean canWrite() //FIXMETD is this needed? check all
     {
-        return subreport.getExpression() != null;
+        return getExpression() != null;
     }
 
     @Override

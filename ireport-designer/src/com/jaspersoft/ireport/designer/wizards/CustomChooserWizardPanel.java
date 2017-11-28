@@ -14,6 +14,8 @@ import java.util.Set;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.openide.WizardDescriptor;
+import org.openide.filesystems.FileUtil;
+import org.openide.loaders.DataFolder;
 import org.openide.loaders.TemplateWizard;
 import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
@@ -98,16 +100,37 @@ public class CustomChooserWizardPanel implements WizardDescriptor.Panel {
             try {
                 if (((TemplateWizard) settings).getTargetFolder() != null)
                 {
-                    component.setTargetDirectory( Misc.getDataFolderPath( ((TemplateWizard) settings).getTargetFolder()) );
-                
-                    // Look for the first available reportX.jrxml
-                    for (int i=1; i<100; ++i)
+                    ((CustomChooserVisualPanel)getComponent()).setTargetDirectory( Misc.getDataFolderPath( ((TemplateWizard) settings).getTargetFolder()) );
+
+                    String name = //((TemplateWizard) settings).getTargetName();
+                            ((TemplateWizard) settings).getTemplate().getPrimaryFile().getNameExt();
+
+                    if (name != null && name.toLowerCase().endsWith(".properties"))
                     {
-                        File f = new File( Misc.getDataFolderPath(  ((TemplateWizard) settings).getTargetFolder()), "report" + i + ".jrxml");
-                        if (f.exists()) continue;
-                        
-                        component.setReportName("report" + i);
-                        break;
+                        for (int i=0; i<100; ++i)
+                        {
+                            String tmpName = "Bundle" + ((i>0) ? i+"" : "") ;
+                            File f = new File( Misc.getDataFolderPath(  ((TemplateWizard) settings).getTargetFolder()), tmpName + ".properties");
+                            if (f.exists()) continue;
+
+                            component.setReportName(tmpName);
+                            component.setExtension(".properties");
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        // Look for the first available reportX.jrxml
+                        for (int i=1; i<100; ++i)
+                        {
+                            // get the file extension...\
+                            File f = new File( Misc.getDataFolderPath(  ((TemplateWizard) settings).getTargetFolder()), "report" + i + ".jrxml");
+                            if (f.exists()) continue;
+
+                            component.setReportName("report" + i);
+                            component.setExtension(".jrxml");
+                            break;
+                        }
                     }
                 }
                 
@@ -121,7 +144,16 @@ public class CustomChooserWizardPanel implements WizardDescriptor.Panel {
         
         ((WizardDescriptor)settings).putProperty("filename", component.getFileName() );
         ((WizardDescriptor)settings).putProperty("reportname", component.getReportName() );
-        
+        if (settings instanceof TemplateWizard)
+        {
+            File f = new File(component.getFileName());
+            try {
+            ((TemplateWizard)settings).setTargetFolder(DataFolder.findFolder( FileUtil.toFileObject(f.getParentFile())));
+            ((TemplateWizard)settings).setTargetName(component.getReportName());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     public WizardDescriptor getWizard() {

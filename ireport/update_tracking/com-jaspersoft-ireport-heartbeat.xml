@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="com.jaspersoft.ireport.heartbeat">
-    <module_version install_time="1218467493665" last="true" origin="installer" specification_version="1.0">
+    <module_version install_time="1222374317436" last="true" origin="installer" specification_version="1.0">
         <file crc="226628366" name="config/Modules/com-jaspersoft-ireport-heartbeat.xml"/>
-        <file crc="1298245853" name="modules/com-jaspersoft-ireport-heartbeat.jar"/>
+        <file crc="496675692" name="modules/com-jaspersoft-ireport-heartbeat.jar"/>
     </module_version>
 </module>

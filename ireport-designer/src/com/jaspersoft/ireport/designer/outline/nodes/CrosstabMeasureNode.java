@@ -566,7 +566,16 @@ public class CrosstabMeasureNode extends IRAbstractNode implements PropertyChang
 
         @Override
         public void setExpression(JRDesignExpression expression) {
-            expression.setValueClassName(measure.getValueClassName());
+            // TODO: check the best way to solve the class expression problem...
+            if (measure.getCalculation() == JRDesignVariable.CALCULATION_COUNT ||
+                measure.getCalculation() == JRDesignVariable.CALCULATION_DISTINCT_COUNT)
+            {
+                expression.setValueClassName("java.lang.Object"); //measure.getValueClassName()
+            }
+            else
+            {
+                expression.setValueClassName(measure.getValueClassName()); //
+            }
             measure.setValueExpression(expression);
         }
 

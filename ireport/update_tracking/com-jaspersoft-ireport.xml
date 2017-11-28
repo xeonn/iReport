@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="com.jaspersoft.ireport/1">
-    <module_version install_time="1218467478113" last="true" origin="installer" specification_version="1.0">
+    <module_version install_time="1222374276467" last="true" origin="installer" specification_version="1.0">
         <file crc="2425646588" name="config/Modules/com-jaspersoft-ireport.xml"/>
         <file crc="2666141633" name="libs/xalan.jar"/>
-        <file crc="91285947" name="modules/com-jaspersoft-ireport.jar"/>
+        <file crc="4284551823" name="modules/com-jaspersoft-ireport.jar"/>
         <file crc="2050849624" name="modules/ext/ant-1.5.1.jar"/>
         <file crc="1663336707" name="modules/ext/antlr-2.7.5.jar"/>
         <file crc="1656749251" name="modules/ext/asm-attrs.jar"/>
@@ -38,17 +38,17 @@
         <file crc="631414938" name="modules/ext/eigenbase-properties.jar"/>
         <file crc="1787729400" name="modules/ext/eigenbase-resgen.jar"/>
         <file crc="1053104977" name="modules/ext/eigenbase-xom.jar"/>
-        <file crc="814369756" name="modules/ext/groovy-all-1.0.jar"/>
+        <file crc="1882296452" name="modules/ext/groovy-all-1.5.5.jar"/>
         <file crc="360201894" name="modules/ext/hibernate3.jar"/>
         <file crc="3833901688" name="modules/ext/hsqldb-1.7.1.jar"/>
         <file crc="3460807796" name="modules/ext/iText-2.1.0.jar"/>
         <file crc="1545701264" name="modules/ext/jakarta-bcel-20050813.jar"/>
-        <file crc="1692902910" name="modules/ext/jasperreports-3.0.1.jar"/>
+        <file crc="788801221" name="modules/ext/jasperreports-3.1.0.jar"/>
         <file crc="4248097675" name="modules/ext/javacup.jar"/>
         <file crc="409387958" name="modules/ext/jaxen-1.1.1.jar"/>
-        <file crc="69686959" name="modules/ext/jcommon-1.0.0.jar"/>
+        <file crc="2166140824" name="modules/ext/jcommon-1.0.13.jar"/>
         <file crc="2659592228" name="modules/ext/jdt-compiler-3.1.1.jar"/>
-        <file crc="2113030579" name="modules/ext/jfreechart-1.0.3.jar"/>
+        <file crc="1210304711" name="modules/ext/jfreechart-1.0.10.jar"/>
         <file crc="3870944862" name="modules/ext/jpa.jar"/>
         <file crc="190545487" name="modules/ext/jta.jar"/>
         <file crc="3654587812" name="modules/ext/jxl-2.6.jar"/>

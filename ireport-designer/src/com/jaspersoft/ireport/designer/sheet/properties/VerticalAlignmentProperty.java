@@ -51,9 +51,9 @@ public final class VerticalAlignmentProperty extends ByteProperty
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_TOP), "Left"));
-        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_MIDDLE), "Center"));
-        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_BOTTOM), "Right"));
+        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_TOP), "Top"));
+        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_MIDDLE), "Middle"));
+        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_BOTTOM), "Bottom"));
         tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_JUSTIFIED), "Justified"));
         return tags;
     }

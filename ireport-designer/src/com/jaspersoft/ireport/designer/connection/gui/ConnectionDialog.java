@@ -454,6 +454,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
             newConn.setName(conn.getName());
             return newConn;
         } catch (Throwable t) {
+            t.printStackTrace();
         }    
         
         return null;

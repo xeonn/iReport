@@ -65,10 +65,12 @@ public class JRCSVDataSourceConnection extends IReportConnection {
      *  If isJDBCConnection() return false => getConnection() return null
      *
      */
+    @Override
     public java.sql.Connection getConnection() {       
             return null;
     }
     
+    @Override
     public boolean isJDBCConnection() {
         return false;
     }

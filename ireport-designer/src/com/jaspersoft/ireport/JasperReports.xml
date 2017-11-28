@@ -14,16 +14,16 @@ and open the template in the editor.
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/commons-collections-2.1.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/commons-digester-1.7.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/commons-logging-1.1.jar!/</resource>
-        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/groovy-all-1.0.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/groovy-all-1.5.5.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jakarta-bcel-20050813.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jaxen-1.1.1.jar!/</resource>
-        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jcommon-1.0.0.jar!/</resource>
-        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jfreechart-1.0.3.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jcommon-1.0.13.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jfreechart-1.0.10.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jpa.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jxl-2.6.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/png-encoder-1.5.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/poi-3.0.1-FINAL-20070705.jar!/</resource>
-        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-3.0.1.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-3.1.0.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/libs/xalan.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/xercesImpl.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/xml-apis.jar!/</resource>

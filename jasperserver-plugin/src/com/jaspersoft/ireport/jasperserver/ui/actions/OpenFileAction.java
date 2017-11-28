@@ -11,15 +11,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.cookies.OpenCookie;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.Node;
 import org.openide.util.HelpCtx;
-import org.openide.util.Lookup;
-import org.openide.util.LookupEvent;
-import org.openide.util.LookupListener;
 import org.openide.util.Mutex;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.NodeAction;
@@ -76,7 +72,9 @@ public final class OpenFileAction extends NodeAction {
                             
                             RepositoryReportUnit reportUnit = ReportUnitNode.getParentReportUnit(node);
                                
-                            
+                            // Add temporary info about where this jd comes from...
+                            JasperServerManager.getMainInstance().getJrxmlReportUnitMap().put(fname , reportUnit);
+
                             if (rf.getDescriptor().getWsType().equals( ResourceDescriptor.TYPE_JRXML))
                             {
                                 JrxmLookupListener listener = new JrxmLookupListener(obj, jrxmlListeners, reportUnit, rf.getServer());

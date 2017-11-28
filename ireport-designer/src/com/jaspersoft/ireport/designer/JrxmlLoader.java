@@ -16,6 +16,8 @@ import java.net.URL;
 import java.util.Enumeration;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlDigester;
@@ -74,16 +76,11 @@ public class JrxmlLoader implements ErrorHandler {
        }
        
        try {
+
+           JasperDesign jd = JRXmlLoader.load(in);
            
-       
-           JRXmlDigester digester = new JRXmlDigester(); //(XMLReader)(Class.forName("org.apache.xerces.parsers.SAXParser").newInstance()));
-	   JRXmlDigesterFactory.configureDigester(digester);
-           digester.setErrorHandler(this);
-           
-           JRXmlLoader xmlLoader = new JRXmlLoader(digester);
-           
-           return xmlLoader.loadXML(in);
-           
+           return jd;
+
        } 
        catch (JRException  ex)
        {

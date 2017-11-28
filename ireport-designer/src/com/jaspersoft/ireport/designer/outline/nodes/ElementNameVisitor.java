@@ -13,9 +13,12 @@ import com.jaspersoft.ireport.designer.utils.Misc;
 import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.engine.JRBreak;
 import net.sf.jasperreports.engine.JRChart;
+import net.sf.jasperreports.engine.JRComponentElement;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JREllipse;
 import net.sf.jasperreports.engine.JRFrame;
+import net.sf.jasperreports.engine.JRGenericElement;
 import net.sf.jasperreports.engine.JRImage;
 import net.sf.jasperreports.engine.JRLine;
 import net.sf.jasperreports.engine.JRRectangle;
@@ -50,6 +53,18 @@ public class ElementNameVisitor implements JRVisitor {
     public String getName(JRVisitable visitable)
     {
         visitable.visit(this);
+        
+        // At this point name has got his value.
+        // We can choose to show the key...
+        if (visitable instanceof JRElement)
+        {
+            JRElement ele = (JRElement)visitable;
+            if (name != null && ele.getKey() != null)
+            {
+                name += " (" + ele.getKey() + ")";
+            }
+        }
+        
         return name;
     }
     
@@ -136,6 +151,10 @@ public class ElementNameVisitor implements JRVisitor {
     public void visitImage(JRImage image)
     {
         name = Misc.getExpressionText( image.getExpression() );
+        if (name.length() > 15)
+        {
+            name = name.substring(0,15) + "...";
+        }
     }
 
     /**
@@ -159,6 +178,12 @@ public class ElementNameVisitor implements JRVisitor {
      */
     public void visitStaticText(JRStaticText staticText)
     {
+        // Take just few characters...
+        String s = staticText.getText();
+        if (s.length() > 15)
+        {
+            s = s.substring(0,15) + "...";
+        }
         name = staticText.getText();
     }
 
@@ -168,6 +193,10 @@ public class ElementNameVisitor implements JRVisitor {
     public void visitSubreport(JRSubreport subreport)
     {
         name = Misc.getExpressionText( subreport.getExpression() );
+        if (name.length() > 15)
+        {
+            name = name.substring(0,15) + "...";
+        }
     }
 
     /**
@@ -176,5 +205,18 @@ public class ElementNameVisitor implements JRVisitor {
     public void visitTextField(JRTextField textField)
     {
         name = Misc.getExpressionText( textField.getExpression() );
+        
+        if (name.length() > 15)
+        {
+            name = name.substring(0,15) + "...";
+        }
+    }
+
+    public void visitComponentElement(JRComponentElement component) {
+        name = "Component";
+    }
+
+    public void visitGenericElement(JRGenericElement arg0) {
+        name = "Generic element";
     }
 }

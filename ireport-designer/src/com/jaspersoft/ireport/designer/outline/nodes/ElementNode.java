@@ -13,6 +13,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.outline.nodes.properties.ElementPropertiesFactory;
 import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.actions.OpenSubreportAction;
 import com.jaspersoft.ireport.designer.actions.PaddingAndBordersAction;
 import com.jaspersoft.ireport.designer.charts.ChartDataAction;
 import com.jaspersoft.ireport.designer.menu.HyperlinkAction;
@@ -233,7 +234,15 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
     @Override
     public Action[] getActions(boolean popup) {
         java.util.List<Action> list = new ArrayList<Action>();
-        
+
+        if (getElement() instanceof JRDesignSubreport)
+        {
+
+            list.add( SystemAction.get( OpenSubreportAction.class ) );
+            list.add( null );
+        }
+
+
         if (getElement() instanceof JRDesignChart &&
             ((JRDesignChart)getElement()).getChartType() != JRDesignChart.CHART_TYPE_MULTI_AXIS)
         {

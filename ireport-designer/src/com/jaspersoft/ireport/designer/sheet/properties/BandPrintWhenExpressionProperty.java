@@ -36,7 +36,7 @@ public final class BandPrintWhenExpressionProperty extends ExpressionProperty
     @Override
     public String getDisplayName()
     {
-        return "Print When Expressio";
+        return "Print When Expression";
     }
 
     @Override

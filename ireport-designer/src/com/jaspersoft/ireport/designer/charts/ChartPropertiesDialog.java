@@ -37,6 +37,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.charts.datasets.CategoryDatasetPanel;
 import com.jaspersoft.ireport.designer.charts.datasets.ChartDatasetPanel;
+import com.jaspersoft.ireport.designer.charts.datasets.GanttDatasetPanel;
 import com.jaspersoft.ireport.designer.charts.datasets.HighLowDatasetPanel;
 import com.jaspersoft.ireport.designer.charts.datasets.PieDatasetPanel;
 import com.jaspersoft.ireport.designer.charts.datasets.TimePeriodDatasetPanel;
@@ -68,6 +69,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableColumnModel;
 import net.sf.jasperreports.charts.design.JRDesignCategoryDataset;
+import net.sf.jasperreports.charts.design.JRDesignGanttDataset;
 import net.sf.jasperreports.charts.design.JRDesignHighLowDataset;
 import net.sf.jasperreports.charts.design.JRDesignPieDataset;
 import net.sf.jasperreports.charts.design.JRDesignTimePeriodDataset;
@@ -296,6 +298,10 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
                           chartType == JRChart.CHART_TYPE_THERMOMETER)
                 {
                     jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignValueDataset", I18n.getString("ChartPropertiesDialog.ComboBox.value_dataset")));
+                }
+                else if ( chartType == JRChart.CHART_TYPE_GANTT)
+                {
+                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignGanttDataset", I18n.getString("ChartPropertiesDialog.ComboBox.gantt_dataset")));
                 }
 
                 setDatasetPanel( currentSelectedChartElement.getDataset(), dataset  );
@@ -955,7 +961,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         jTabbedPaneData.addTab("Dataset", jPanelDataset);
 
         jPanelDataDefinition.setLayout(new java.awt.GridBagLayout());
-        jTabbedPaneData.addTab(I18n.getString("ChartPropertiesDialog.Pane.Details"), jPanelDataDefinition); // NOI18N
+        jTabbedPaneData.addTab(I18n.getString("Global.Pane.Details"), jPanelDataDefinition); // NOI18N
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1620,6 +1626,12 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         {
             ValueDatasetPanel pdp = new ValueDatasetPanel();
              pdp.setValueDataset((JRDesignValueDataset)dataset);
+             this.jPanelDataDefinition.add(pdp, gridBagConstraints);
+        }
+        else if (dataset instanceof JRDesignGanttDataset)
+        {
+             GanttDatasetPanel pdp = new GanttDatasetPanel();
+             pdp.setGanttDataset((JRDesignGanttDataset)dataset);
              this.jPanelDataDefinition.add(pdp, gridBagConstraints);
         }
         

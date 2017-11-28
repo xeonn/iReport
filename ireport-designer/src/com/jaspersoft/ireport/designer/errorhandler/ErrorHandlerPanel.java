@@ -20,6 +20,7 @@ import org.openide.nodes.Node;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
+import org.openide.util.Mutex;
 import org.openide.util.Utilities;
 
 /**
@@ -52,6 +53,8 @@ public class ErrorHandlerPanel extends javax.swing.JPanel implements JrxmlVisual
         //result.addLookupListener(this);
         //result.allItems();
         IReportManager.getInstance().addJrxmlVisualViewActivatedListener(this);
+
+
         refreshErrors();
         
         locator = new ErrorLocator();
@@ -59,30 +62,40 @@ public class ErrorHandlerPanel extends javax.swing.JPanel implements JrxmlVisual
     }
 
     void refreshErrors() {
-        JrxmlVisualView view = IReportManager.getInstance().getActiveVisualView();
+        final JrxmlVisualView view = IReportManager.getInstance().getActiveVisualView();
+
+        Mutex.EVENT.writeAccess(new Runnable() {
+
+                public void run() {
+
+                    if (view != null)
+                    {
+
+                        // Update errors
+                        List<ProblemItem> items = view.getReportProblems();
+
+                        ((DefaultTableModel)jTable1.getModel()).setRowCount(0);
+
+                        for (ProblemItem item : items)
+                        {
+                            Object errorSource = item.getProblemReference();
+                            Node node = IReportManager.getInstance().findNodeOf(errorSource, view.getExplorerManager().getRootContext());
+                            if (node != null) errorSource = node;
+
+                            ((DefaultTableModel)jTable1.getModel()).addRow(new Object[]{item,item.getDescription(),errorSource});
+                        }
+                    }
+                    else
+                    {
+                        ((DefaultTableModel)jTable1.getModel()).setRowCount(0);
+                    }
+
+                    jTable1.updateUI();
+
+                }
+            });
+
         
-        if (view != null)
-        {
-            // Update errors
-            List<ProblemItem> items = view.getReportProblems();
-            
-            ((DefaultTableModel)jTable1.getModel()).setRowCount(0);
-            
-            for (ProblemItem item : items)
-            {
-                Object errorSource = item.getProblemReference();
-                Node node = IReportManager.getInstance().findNodeOf(errorSource, view.getExplorerManager().getRootContext());
-                if (node != null) errorSource = node;
-                
-                ((DefaultTableModel)jTable1.getModel()).addRow(new Object[]{item,item.getDescription(),errorSource});
-            }
-        }
-        else
-        {
-            ((DefaultTableModel)jTable1.getModel()).setRowCount(0);
-        }
-        
-        jTable1.updateUI();
     
     }
 

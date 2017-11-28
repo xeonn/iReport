@@ -84,7 +84,7 @@ public abstract class ExpressionProperty extends AbstractProperty
         
         JRDesignExpression oldExp = getExpression();
         String defaultValueClassName = getDefaultExpressionClassName();
-        String valueClassName = oldExp == null ? defaultValueClassName : oldExp.getValueClassName();
+        String valueClassName = oldExp == null || oldExp.getValueClassName() == null  ? defaultValueClassName : oldExp.getValueClassName();
 
         if (
             (text != null && text.trim().length() > 0) 

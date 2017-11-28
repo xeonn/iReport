@@ -1,3 +1,15 @@
+2008-09-17 Version 3.1.1 released
+_______________________________________________________________________________
+
+- Support to run the proper application viewer after exporting
+- Fixed some expressions issues
+- Added a new image file chooser for image elements
+- New wizard templates installation process
+- Support for resource bundles
+- Support for charts themes
+- Updated to JasperReports 3.1.1
+- Added hypelink top and parent targets
+- Fixed XML parsing
 
 2008-08-05 Version 3.1.0 released
 _______________________________________________________________________________

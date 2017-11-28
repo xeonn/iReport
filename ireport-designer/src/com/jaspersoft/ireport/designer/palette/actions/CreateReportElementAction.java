@@ -56,8 +56,8 @@ public abstract class CreateReportElementAction extends PaletteItemAction
         if (theScene instanceof ReportObjectScene)
         {
             Point p = theScene.convertViewToScene( location );
-            p.x -= 10;
-            p.y -= 10;
+            //p.x -= 10; removing a location transformation
+            //p.y -= 10;
             // find the band...
             JRDesignBand b = ModelUtils.getBandAt(jasperDesign, p);
             
@@ -74,8 +74,8 @@ public abstract class CreateReportElementAction extends PaletteItemAction
         else if (theScene instanceof CrosstabObjectScene)
         {
             Point p = theScene.convertViewToScene( location );
-            p.x -= 10;
-            p.y -= 10;
+            //p.x -= 10; removing a location transformation
+            //p.y -= 10;
             
             // This if should be always false since the check is done
             // in the specific implementations of createReportElement...

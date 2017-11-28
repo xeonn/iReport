@@ -291,18 +291,18 @@ public class ExpressionEditor extends javax.swing.JPanel {
 
         jSplitPane1.setRightComponent(jPanel1);
 
-        jButtonImport.setText(I18n.getString("ExpressionEditor.jButtonImport.text")); // NOI18N
+        jButtonImport.setText(I18n.getString("Global.Button.Import")); // NOI18N
 
-        jButtonExport.setText(I18n.getString("ExpressionEditor.jButtonExport.text")); // NOI18N
+        jButtonExport.setText(I18n.getString("Global.Button.Export")); // NOI18N
 
-        jButtonCancel.setText(I18n.getString("ExpressionEditor.jButtonCancel.text")); // NOI18N
+        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
             }
         });
 
-        jButtonApply.setText(I18n.getString("ExpressionEditor.jButtonApply.text")); // NOI18N
+        jButtonApply.setText(I18n.getString("Global.Button.Apply")); // NOI18N
         jButtonApply.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonApplyActionPerformed(evt);

@@ -127,7 +127,7 @@ public class JRPropertiesMapPropertyCustomEditor extends javax.swing.JPanel impl
         jPanelButtons2.setPreferredSize(new java.awt.Dimension(100, 100));
         jPanelButtons2.setLayout(new java.awt.GridBagLayout());
 
-        jButtonNewProperty.setText(I18n.getString("JRPropertiesMapPropertyCustomEditor.jButtonNewProperty.text")); // NOI18N
+        jButtonNewProperty.setText(I18n.getString("Global.Button.Add")); // NOI18N
         jButtonNewProperty.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonNewPropertyActionPerformed(evt);
@@ -158,7 +158,7 @@ public class JRPropertiesMapPropertyCustomEditor extends javax.swing.JPanel impl
         gridBagConstraints.insets = new java.awt.Insets(3, 4, 0, 4);
         jPanelButtons2.add(jButtonModifyProperty, gridBagConstraints);
 
-        jButtonDeleteProperty.setText(I18n.getString("JRPropertiesMapPropertyCustomEditor.jButtonDeleteProperty.text")); // NOI18N
+        jButtonDeleteProperty.setText(I18n.getString("Global.Button.Delete")); // NOI18N
         jButtonDeleteProperty.setEnabled(false);
         jButtonDeleteProperty.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -227,7 +227,13 @@ public class JRPropertiesMapPropertyCustomEditor extends javax.swing.JPanel impl
         JRPropertyDialog jrpd = new JRPropertyDialog(Misc.getMainFrame(), true, canUseExp);
         //JRPropertyDialog jrpd = new JRPropertyDialog(w, true);
         jrpd.setProperties(getProperties());
-        
+
+        if (env.getFeatureDescriptor().getValue("reportProperties") != null &&
+             env.getFeatureDescriptor().getValue("reportProperties").equals(Boolean.TRUE))
+        {
+            jrpd.addExporterHints();
+        }
+
         if (env.getFeatureDescriptor().getValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT) != null)
         {
             jrpd.setExpressionContext((ExpressionContext)env.getFeatureDescriptor().getValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT));
@@ -263,7 +269,13 @@ public class JRPropertiesMapPropertyCustomEditor extends javax.swing.JPanel impl
         JRPropertyDialog jrpd = new JRPropertyDialog(Misc.getMainFrame(), true, canUseExp);
         //JRPropertyDialog jrpd = new JRPropertyDialog(w, true);
         jrpd.setProperties(getProperties());
-        
+
+        if (env.getFeatureDescriptor().getValue("reportProperties") != null &&
+             env.getFeatureDescriptor().getValue("reportProperties").equals(Boolean.TRUE))
+        {
+            jrpd.addExporterHints();
+        }
+
         if (env.getFeatureDescriptor().getValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT) != null)
         {
             jrpd.setExpressionContext((ExpressionContext)env.getFeatureDescriptor().getValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT));

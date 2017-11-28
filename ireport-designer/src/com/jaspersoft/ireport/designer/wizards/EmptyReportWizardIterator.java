@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.jaspersoft.ireport.designer.standalone;
+package com.jaspersoft.ireport.designer.wizards;
 
 import com.jaspersoft.ireport.designer.wizards.CustomChooserWizardPanel;
 import java.awt.Component;

@@ -106,7 +106,7 @@ public class TimePeriodDatasetPanel extends javax.swing.JPanel implements ChartD
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
-        jMenuItemCopy.setText(I18n.getString("TimePeriodDatasetPanel.MenuItem.copySeries")); // NOI18N
+        jMenuItemCopy.setText("Copy series");
         jMenuItemCopy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemCopyActionPerformed(evt);
@@ -114,7 +114,7 @@ public class TimePeriodDatasetPanel extends javax.swing.JPanel implements ChartD
         });
         jPopupMenuSeries.add(jMenuItemCopy);
 
-        jMenuItemPaste.setText(I18n.getString("TimePeriodDatasetPanel.MenuItem.PasteSeries")); // NOI18N
+        jMenuItemPaste.setText("Paste series");
         jMenuItemPaste.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemPasteActionPerformed(evt);
@@ -153,7 +153,7 @@ public class TimePeriodDatasetPanel extends javax.swing.JPanel implements ChartD
         jPanel1.setPreferredSize(new java.awt.Dimension(100, 0));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButtonAdd.setText(I18n.getString("Global.Button.Add")); // NOI18N
+        jButtonAdd.setText("Add");
         jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddActionPerformed(evt);
@@ -166,7 +166,7 @@ public class TimePeriodDatasetPanel extends javax.swing.JPanel implements ChartD
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 4);
         jPanel1.add(jButtonAdd, gridBagConstraints);
 
-        jButtonModify.setText(I18n.getString("Global.Button.Modify")); // NOI18N
+        jButtonModify.setText("Modify");
         jButtonModify.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonModifyActionPerformed(evt);
@@ -179,7 +179,7 @@ public class TimePeriodDatasetPanel extends javax.swing.JPanel implements ChartD
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 0, 4);
         jPanel1.add(jButtonModify, gridBagConstraints);
 
-        jButtonRemove.setText(I18n.getString("Global.Button.Remove")); // NOI18N
+        jButtonRemove.setText("Remove");
         jButtonRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonRemoveActionPerformed(evt);
@@ -201,7 +201,7 @@ public class TimePeriodDatasetPanel extends javax.swing.JPanel implements ChartD
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         add(jPanel1, gridBagConstraints);
 
-        jLabel1.setText(I18n.getString("TimePeriodDatasetPanel.Label.TimePeriodSeries")); // NOI18N
+        jLabel1.setText("Time period series");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

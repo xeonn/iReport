@@ -160,6 +160,9 @@ public class JRDesignChartWidget extends JRDesignElementWidget {
             case JRDesignChart.CHART_TYPE_XYLINE:
                 imgUri = "/com/jaspersoft/ireport/designer/charts/icons/xyline_big.png";
                 break;
+            case JRDesignChart.CHART_TYPE_GANTT:
+                imgUri = "/com/jaspersoft/ireport/designer/charts/icons/gantt_big.png";
+                break;
         }
         
         if (staticChartImage == null && imgUri != null)

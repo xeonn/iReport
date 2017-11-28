@@ -14,6 +14,7 @@ import javax.swing.event.DocumentListener;
 
 public final class CustomChooserVisualPanel extends JPanel {
 
+    private String extension = ".jrxml";
     private CustomChooserWizardPanel panel = null;
     
     /** Creates new form NewJrxmlVisualPanel1 */
@@ -204,9 +205,9 @@ public final class CustomChooserVisualPanel extends JPanel {
     {
         String dir = jTextFieldDirectory.getText();
         String fname = jTextFieldReportName.getText().trim();
-        if (!fname.endsWith(".jrxml"))
+        if (!fname.endsWith(getExtension()))
         {
-            fname += ".jrxml";
+            fname += getExtension();
         }
         File finalFile = new File(dir,fname);
         jTextFieldFileName.setText( finalFile.getPath());
@@ -231,12 +232,28 @@ public final class CustomChooserVisualPanel extends JPanel {
         }
         
         String fname = jTextFieldReportName.getText().trim();
-        fname += ".jrxml";
+        fname += getExtension();
         File finalFile = new File(dir,fname);
         if (finalFile.exists())
         {
             throw new IllegalArgumentException(I18n.getString("CustomChooserVisualPanel.Message.Exception4") + fname );
         }
+    }
+
+    /**
+     * @return the extension
+     */
+    public String getExtension() {
+        return extension;
+    }
+
+    /**
+     * @param extension the extension to set
+     */
+    public void setExtension(String extension) {
+        this.extension = extension;
+        updateFileName();
+        getPanel().fireChangeEvent();
     }
 }
 

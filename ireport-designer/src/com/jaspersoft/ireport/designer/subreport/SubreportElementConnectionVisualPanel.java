@@ -244,7 +244,7 @@ public final class SubreportElementConnectionVisualPanel extends JPanel {
             return datasourceExpressionEditorArea.getText();
         
         if (jRadioButton4.isSelected())
-            return "new net.sf.jasperreports.engine.JRDataSource()";
+            return "new net.sf.jasperreports.engine.JREmptyDataSource()";
         
         return null;
     }

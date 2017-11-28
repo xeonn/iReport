@@ -14,9 +14,11 @@ import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRBreak;
 import net.sf.jasperreports.engine.JRChart;
+import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JREllipse;
 import net.sf.jasperreports.engine.JRFrame;
+import net.sf.jasperreports.engine.JRGenericElement;
 import net.sf.jasperreports.engine.JRImage;
 import net.sf.jasperreports.engine.JRLine;
 import net.sf.jasperreports.engine.JRRectangle;
@@ -28,9 +30,11 @@ import net.sf.jasperreports.engine.JRVisitor;
 import net.sf.jasperreports.engine.base.JRBaseChartPlot;
 import net.sf.jasperreports.engine.design.JRDesignBreak;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignEllipse;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
+import net.sf.jasperreports.engine.design.JRDesignGenericElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignLine;
 import net.sf.jasperreports.engine.design.JRDesignRectangle;
@@ -199,6 +203,16 @@ public class ElementNodeVisitor implements JRVisitor {
     {
         node = new ElementNode(jasperDesign, (JRDesignTextField)textField,doLkp);
         node.setIconBaseWithExtension(ICON_TEXT_FIELD);
+    }
+
+    public void visitComponentElement(JRComponentElement componentElement) {
+        node = new ElementNode(jasperDesign, (JRDesignComponentElement)componentElement,doLkp);
+        node.setIconBaseWithExtension(ICON_RECTANGLE);
+    }
+
+    public void visitGenericElement(JRGenericElement genericElement) {
+        node = new ElementNode(jasperDesign, (JRDesignGenericElement)genericElement,doLkp);
+        node.setIconBaseWithExtension(ICON_RECTANGLE);
     }
     
 }

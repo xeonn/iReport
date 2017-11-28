@@ -21,7 +21,7 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;font size=+1&gt;Congratulation!&lt;/font&gt;&lt;br&gt;&lt;br&gt;You have succesfully created a new report.&lt;br&gt;&#xa;Click finish to generate it."/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;font size=+1&gt;Congratulations!&lt;/font&gt;&lt;br&gt;&lt;br&gt;You have succesfully created a new report.&lt;br&gt; Click finish to generate it."/>
         <Property name="verticalAlignment" type="int" value="1"/>
         <Property name="verticalTextPosition" type="int" value="1"/>
       </Properties>

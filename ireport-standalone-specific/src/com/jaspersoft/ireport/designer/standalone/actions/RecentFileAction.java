@@ -87,29 +87,33 @@ public class RecentFileAction extends AbstractAction implements Presenter.Menu, 
                 // by RecentFiles.getRecentFiles()
                 FileObject fo = RecentFiles.convertURL2File(new URL(hItem));
                 // allow only up to max items
-                if (++counter > MAX_COUNT) {
-                    break;
+                if (fo != null)
+                {
+                    if (++counter > MAX_COUNT) {
+                        break;
+                    }
+                    // obtain icon for fileobject
+                    Image icon = null;
+                    try {
+
+                        DataObject dObj = DataObject.find(fo);
+                        icon = dObj.getNodeDelegate().getIcon(BeanInfo.ICON_COLOR_16x16);
+                    } catch (DataObjectNotFoundException ex) {
+                        // should not happen, log and skip to next
+                        Logger.getLogger(RecentFiles.class.getName()).log(Level.INFO, ex.getMessage(), ex);
+                        continue;
+                    }
+                    // create and configure menu item
+                    JMenuItem jmi = null;
+                    if (icon != null) {
+                        jmi = new JMenuItem(fo.getNameExt(), new ImageIcon(icon));
+                    } else {
+                        jmi = new JMenuItem(fo.getNameExt());
+                    }
+                    jmi.putClientProperty(FO_PROP, fo);
+                    jmi.addActionListener(this);
+                    menu.add(jmi);
                 }
-                // obtain icon for fileobject
-                Image icon = null;
-                try {
-                    DataObject dObj = DataObject.find(fo);
-                    icon = dObj.getNodeDelegate().getIcon(BeanInfo.ICON_COLOR_16x16);
-                } catch (DataObjectNotFoundException ex) {
-                    // should not happen, log and skip to next
-                    Logger.getLogger(RecentFiles.class.getName()).log(Level.INFO, ex.getMessage(), ex);
-                    continue;
-                }
-                // create and configure menu item
-                JMenuItem jmi = null;
-                if (icon != null) {
-                    jmi = new JMenuItem(fo.getNameExt(), new ImageIcon(icon));
-                } else {
-                    jmi = new JMenuItem(fo.getNameExt());
-                }
-                jmi.putClientProperty(FO_PROP, fo);
-                jmi.addActionListener(this);
-                menu.add(jmi);
             } catch (MalformedURLException ex) {
                 Exceptions.printStackTrace(ex);
             }

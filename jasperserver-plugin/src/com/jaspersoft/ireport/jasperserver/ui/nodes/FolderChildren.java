@@ -98,7 +98,7 @@ public class FolderChildren extends Index.KeysChildren implements PropertyChange
                     }
                 });
                 
-                List children = folder.getChildren();
+                List children = folder.getChildren(true);
                 if (children != null)
                 {
                     l.addAll( children );

@@ -112,7 +112,7 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/save.GIF"))); // NOI18N
         btnSave.setText(I18n.getString("JrxmlPreviewToolbar.btnSave.text")); // NOI18N
-        btnSave.setToolTipText(I18n.getString("JrxmlPreviewToolbar.btnSave.toolTipText")); // NOI18N
+        btnSave.setToolTipText(I18n.getString("Global.Button.Save")); // NOI18N
         btnSave.setFocusable(false);
         btnSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSave.setMaximumSize(new java.awt.Dimension(23, 23));
@@ -651,7 +651,8 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
 
 	protected void reportLoaded()
 	{
-		btnRefresh.setEnabled(getViewerContext().isReloadSupported());
+                // GT: I prefer to have this button always active
+		//btnRefresh.setEnabled(getViewerContext().isReloadSupported());
 	}
 
 	protected void refreshPage()

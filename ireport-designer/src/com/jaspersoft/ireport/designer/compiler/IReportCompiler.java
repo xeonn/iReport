@@ -62,8 +62,8 @@ import java.net.URLClassLoader;
 import javax.persistence.EntityManager;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.xml.parsers.ParserConfigurationException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JRJdtCompiler;
 import net.sf.jasperreports.engine.design.JRValidationException;
@@ -511,7 +511,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                     IReportCompiler.loadJasperDesign( new FileInputStream(srcFileName) , digester);
                 }
                 
-                if (jdtCompiler != null && jd.getLanguage().equals("java"))
+                if (jdtCompiler != null && jd.getLanguage() == null || jd.getLanguage().equals("java"))
                 {
                     ((ExtendedJRJdtCompiler)jdtCompiler).setDigester(digester);
                     ((ExtendedJRJdtCompiler)jdtCompiler).setErrorHandler(errorsCollector);
@@ -1046,7 +1046,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                 status  = "Exporting report";
                 updateHandleStatus(status);
                 start = System.currentTimeMillis();
-                String  format = Misc.nvl(properties.get(OUTPUT_FORMAT),"pdf");
+                String  format = IReportManager.getPreferences().get("output_format","");
                 String  viewer_program = "";
 
                 //getLogTextArea().logOnConsole(properties.get(OUTPUT_FORMAT) + "Exporting\n");
@@ -1179,7 +1179,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                       exportingMessage = "Exporting to Java2D...";
                       viewer_program = null;
                    }
-                   else if (format.equalsIgnoreCase("jrviewer"))
+                   else if (format.equalsIgnoreCase(""))
                    {
                       exportingMessage = "Viewing with JasperReports Viewer";
                       exporter = null;
@@ -1200,7 +1200,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
     //                  exportingMessage = Misc.formatString("Exporting txt (iReport) to file... {0}!",  new Object[]{fileName});
     //                  viewer_program = Misc.nvl( IReportManager.getInstance().getProperty("ExternalTXTViewer"), "");
     //               }
-                   else if (format.equalsIgnoreCase("txtjr"))
+                   else if (format.equalsIgnoreCase("txt"))
                    {
                       exporter = new  net.sf.jasperreports.engine.export.JRTextExporter();
 
@@ -1242,6 +1242,36 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
 
                    //((JrxmlPreviewView)getSupport().getDescriptions()[2]).setJasperPrint(null);
                           
+                   if (print.getPages().size() == 0)
+                   {
+                      try {
+                      SwingUtilities.invokeLater(new Runnable() {
+                          public void run() {
+                                  JOptionPane.showMessageDialog(getLogTextArea(), "The document has no pages");
+                          }
+                      });
+                      } catch (Exception ex){}
+                   }
+                    else
+                    {
+                      final JasperPrint thePrint = print;
+                      ThreadUtils.invokeInAWTThread(
+                              new Runnable()
+                              {
+                                    public void run()
+                                    {
+                                        ((JrxmlPreviewView)getSupport().getDescriptions()[2]).setJasperPrint(thePrint);
+                                        ((JrxmlPreviewView)getSupport().getDescriptions()[2]).requestVisible();
+                                        ((JrxmlPreviewView)getSupport().getDescriptions()[2]).requestActive();
+                                        ((JrxmlPreviewView)getSupport().getDescriptions()[2]).updateUI();
+                                    }
+                      });
+                      //JasperViewer jasperViewer = new JasperViewer(print,false);
+                      //jasperViewer.setTitle("iReport JasperViewer");
+                      //jasperViewer.setVisible(true);
+
+                    }
+                   
                    if (exporter != null)
                    {
                       exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME,fileName);
@@ -1293,40 +1323,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
     //                    pd.setVisible(true);
     //                  }
     //               }
-                   else if (format.equalsIgnoreCase("jrviewer"))
-                   {
-                      //jrv = new net.sf.jasperreports.view.JRViewer(print);
-                      if (print.getPages().size() == 0)
-                      {
-                          try {
-                          SwingUtilities.invokeLater(new Runnable() {
-                              public void run() {
-                                      JOptionPane.showMessageDialog(getLogTextArea(), "The document has no pages");
-                              }
-                          });
-                          } catch (Exception ex){}
-                      }
-                      else
-                      {
-                          final JasperPrint thePrint = print;
-                          ThreadUtils.invokeInAWTThread(
-                                  new Runnable()
-                                  {
-                                        public void run()
-                                        {
-                                            ((JrxmlPreviewView)getSupport().getDescriptions()[2]).setJasperPrint(thePrint);
-                                            ((JrxmlPreviewView)getSupport().getDescriptions()[2]).requestVisible();
-                                            ((JrxmlPreviewView)getSupport().getDescriptions()[2]).requestActive();
-                                            ((JrxmlPreviewView)getSupport().getDescriptions()[2]).updateUI();
-                                        }
-                          });
-                          //JasperViewer jasperViewer = new JasperViewer(print,false);
-                          //jasperViewer.setTitle("iReport JasperViewer");
-                          //jasperViewer.setVisible(true);
-
-                      }
-                      //net.sf.jasperreports.view.JasperViewer.viewReport( print, false);
-                   }
+                   
                 } catch (Throwable ex2)
                 {
 
@@ -1352,7 +1349,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                 if (viewer_program == null || viewer_program.equals(""))
                 {
 
-                   if (format.equalsIgnoreCase("jrviewer") || format.equalsIgnoreCase("java2D"))
+                   if (format.equalsIgnoreCase("") || format.equalsIgnoreCase("java2D"))
                    {
 
                    }
@@ -1366,7 +1363,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                 {
                    try
                    {
-                      String execute_string = viewer_program + " "+fileName+"";
+                      String execute_string = viewer_program + " \""+fileName+"\"";
                       getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\">" +
                              Misc.formatString("Executing: {0}",
                                     new Object[]{execute_string}) + "</font>",true);

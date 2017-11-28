@@ -72,10 +72,12 @@ public class IReportManager {
     public static final String DEFAULT_CONNECTION_NAME = "DEFAULT_CONNECTION_NAME";
     
     public static final String USE_AUTO_REGISTER_FIELDS = "UseAutoRegiesterFields";
+    public static final String TEMPLATE_PATH = "TEMPLATE_PATH";
     
     
     private static ReportClassLoader reportClassLoader = null;
     private static IReportManager mainInstance = null;
+    
     private java.util.ArrayList<IReportConnection> connections = null;
     private java.util.ArrayList<QueryExecuterDef> queryExecuters = null;
     private java.util.List<IRFont> fonts = null;
@@ -287,7 +289,7 @@ public class IReportManager {
                     }
 
                     try {
-                        IReportConnection con = (IReportConnection) Class.forName(connectionClass).newInstance();
+                        IReportConnection con = (IReportConnection) Class.forName(connectionClass, true, getReportClassLoader()).newInstance();
                         con.loadProperties(hm);
                         con.setName(connectionName);
                         return con;
@@ -371,6 +373,13 @@ public class IReportManager {
                 i++;
             }
             
+            // Remove all the remaining connections...
+            while (getPreferences().get("connection."+i, null) != null)
+            {
+                getPreferences().remove("connection."+i);
+                i++;
+            }
+            
             getPreferences().flush();
         } catch (BackingStoreException ex) {
             Exceptions.printStackTrace(ex);
@@ -409,10 +418,14 @@ public class IReportManager {
         }
         return false;
     }
-    
+
     public static ClassLoader getReportClassLoader()
     {
-        if (reportClassLoader == null)
+        return getReportClassLoader(false);
+    }
+    public static ClassLoader getReportClassLoader(boolean recreate)
+    {
+        if (recreate || reportClassLoader == null)
         {
             ClassLoader syscl = Lookup.getDefault().lookup(ClassLoader.class);
             reportClassLoader = new ReportClassLoader(syscl);

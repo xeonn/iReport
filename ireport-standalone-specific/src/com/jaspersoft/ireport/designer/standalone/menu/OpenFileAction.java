@@ -10,17 +10,16 @@ import com.jaspersoft.ireport.designer.utils.Misc;
 import java.io.File;
 import javax.swing.JFileChooser;
 import org.openide.ErrorManager;
+import org.openide.cookies.EditCookie;
 import org.openide.cookies.OpenCookie;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
-import org.openide.nodes.Node;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 import org.openide.util.UserCancelException;
 import org.openide.util.actions.CallableSystemAction;
-import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 
 /**
@@ -141,9 +140,19 @@ public class OpenFileAction extends CallableSystemAction {
                 try {
 			// the process succeeded 
 			DataObject dob = DataObject.find (fob);
-			OpenCookie oc = (OpenCookie) dob.getCookie (OpenCookie.class);
+                        if (f.getName().toLowerCase().endsWith(".properties"))
+                        {
+                            EditCookie oc = (EditCookie) dob.getCookie (EditCookie.class);
+                            if (oc != null)
+				oc.edit();
+                        }
+                        else
+                        {
+                            OpenCookie oc = (OpenCookie) dob.getCookie (OpenCookie.class);
 			if (oc != null)
 				oc.open();
+                        }
+			
 		} catch (DataObjectNotFoundException ex) {
 			 ErrorManager.getDefault().notify(ex);
                 }

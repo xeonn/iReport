@@ -114,7 +114,7 @@ public class LogTextArea extends javax.swing.JPanel {
         });
         jPopupMenuLog.add(jMenuItemCopy);
 
-        jMenuItemSelectAll.setText(I18n.getString("LogTextArea.Menu.SelectAll")); // NOI18N
+        jMenuItemSelectAll.setText(I18n.getString("Global.Button.SelectAll")); // NOI18N
         jMenuItemSelectAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemSelectAllActionPerformed(evt);

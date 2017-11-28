@@ -24,7 +24,7 @@ public final class ReportGroupVisualPanel2 extends JPanel {
 
     @Override
     public String getName() {
-        return I18n.getString("ReportGroupVisualPanel2.Name.Details");
+        return I18n.getString("Global.Pane.Details");
     }
 
     /** This method is called from within the constructor to

@@ -69,7 +69,7 @@ public class JrxmLookupListener implements LookupListener {
         {
             // JasperDesign found...
             final JasperDesign jd = jds.iterator().next();
-           
+
             // Look inside the jasperdesign for all the images having a simple expression
             // starting with repo: ....
             Runnable run = new Runnable() {

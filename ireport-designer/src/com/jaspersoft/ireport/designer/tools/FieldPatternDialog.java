@@ -109,7 +109,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
         jListCategory.setModel( dlm );
         dlm.addElement( I18n.getString("Global.List.Number") );      // 0
         dlm.addElement( I18n.getString("Global.List.Date") );        // 1
-        dlm.addElement( I18n.getString("Global.List.Time") );        // 2
+        dlm.addElement( I18n.getString("Global.Label.Time") );        // 2
         dlm.addElement( I18n.getString("Global.List.Currency") );    // 3
         dlm.addElement( I18n.getString("Global.List.Percentage") );  // 4
         dlm.addElement( I18n.getString("Global.List.Scientific") );  // 5
@@ -159,7 +159,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
             javax.swing.DefaultListModel dlm = (javax.swing.DefaultListModel)jListCategory.getModel();
             dlm.removeAllElements();
             dlm.addElement( I18n.getString("Global.List.Date") );
-            dlm.addElement( I18n.getString("Global.List.Time") );        // 2
+            dlm.addElement( I18n.getString("Global.Label.Time") );        // 2
             selectedCategory = -1;
             jListCategory.setSelectedIndex(0);
             //jListCategoryValueChanged(null);
@@ -1124,7 +1124,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
         
         if (category.equals(I18n.getString("Global.List.Number") )) i = 0;  // 0
         if (category.equals(I18n.getString("Global.List.Date") )) i = 1;  // 0
-        if (category.equals(I18n.getString("Global.List.Time") )) i = 2;  // 0
+        if (category.equals(I18n.getString("Global.Label.Time") )) i = 2;  // 0
         if (category.equals(I18n.getString("Global.List.Currency") )) i = 3;  // 0
         if (category.equals(I18n.getString("Global.List.Percentage") )) i = 4;  // 0
         if (category.equals(I18n.getString("Global.List.Scientific") )) i = 5;  // 0

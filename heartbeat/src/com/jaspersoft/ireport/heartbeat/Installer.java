@@ -15,7 +15,7 @@ import org.openide.modules.ModuleInstall;
  */
 public class Installer extends ModuleInstall implements Runnable {
 
-    public static final String VERSION = "3.1.0";
+    public static final String VERSION = "3.1.1";
     
     @Override
     public void restored() {

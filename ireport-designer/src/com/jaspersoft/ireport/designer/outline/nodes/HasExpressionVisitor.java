@@ -13,10 +13,12 @@ import com.jaspersoft.ireport.designer.errorhandler.IRExpressionCollector;
 import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.engine.JRBreak;
 import net.sf.jasperreports.engine.JRChart;
+import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JREllipse;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRFrame;
+import net.sf.jasperreports.engine.JRGenericElement;
 import net.sf.jasperreports.engine.JRImage;
 import net.sf.jasperreports.engine.JRLine;
 import net.sf.jasperreports.engine.JRRectangle;
@@ -166,6 +168,14 @@ public class HasExpressionVisitor implements JRVisitor {
 
     public void setExpression(JRExpression expression) {
         this.expression = expression;
+    }
+
+    public void visitComponentElement(JRComponentElement componentElement) {
+        collector.collect(componentElement);
+    }
+
+    public void visitGenericElement(JRGenericElement genericElement) {
+        collector.collect(genericElement);
     }
 
     

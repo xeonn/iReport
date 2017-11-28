@@ -11,6 +11,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import net.sf.jasperreports.charts.design.JRDesignCategorySeries;
+import net.sf.jasperreports.charts.design.JRDesignGanttSeries;
 import net.sf.jasperreports.charts.design.JRDesignTimePeriodSeries;
 import net.sf.jasperreports.charts.design.JRDesignTimeSeries;
 import net.sf.jasperreports.charts.design.JRDesignXySeries;
@@ -51,6 +52,10 @@ public class DatasetListsCellRenderer extends DefaultListCellRenderer {
          else if (value instanceof JRDesignXyzSeries)
          {
                   label.setText( "XYZ series [" + Misc.getExpressionText( ((JRDesignXyzSeries)value).getSeriesExpression() ) +"]");
+         }
+         else if (value instanceof JRDesignGanttSeries)
+         {
+                  label.setText( "Gantt series [" + Misc.getExpressionText( ((JRDesignGanttSeries)value).getSeriesExpression() ) +"]");
          }
          
          return this;

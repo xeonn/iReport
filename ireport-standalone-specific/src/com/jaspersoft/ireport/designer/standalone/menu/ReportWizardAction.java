@@ -4,13 +4,11 @@
  */
 package com.jaspersoft.ireport.designer.standalone.menu;
 
+import com.jaspersoft.ireport.designer.standalone.wizards.CustomTemplateWizard;
 import com.jaspersoft.ireport.designer.utils.Misc;
-import com.jaspersoft.ireport.designer.wizards.NewJrxmlWizardIterator;
 import java.awt.Dialog;
 import java.io.File;
-import java.text.MessageFormat;
 import org.openide.DialogDisplayer;
-import org.openide.WizardDescriptor;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.filesystems.Repository;
@@ -18,7 +16,6 @@ import org.openide.loaders.DataFolder;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.loaders.TemplateWizard;
-import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.CallableSystemAction;
@@ -28,31 +25,65 @@ public final class ReportWizardAction extends CallableSystemAction {
     public void performAction() {
         
 
-            TemplateWizard wizardDescriptor = new TemplateWizard();
+            CustomTemplateWizard wizardDescriptor = new CustomTemplateWizard();
+
+            //wizardDescriptor.putProperty("useCustomChooserPanel", "true");
             File targetFolder = Misc.findStartingDirectory();
             DataFolder df = DataFolder.findFolder(FileUtil.toFileObject(targetFolder));
             wizardDescriptor.setTargetFolder(df);
 
+            
             try {
-            FileObject templateFileObject = Repository.getDefault().getDefaultFileSystem().getRoot().getFileObject("Templates/Report/Report.jrxml");
+            FileObject templateFileObject = Repository.getDefault().getDefaultFileSystem().getRoot().getFileObject("Templates/Report/Report");
             wizardDescriptor.setTemplate(DataObject.find(templateFileObject));
             } catch (DataObjectNotFoundException ex) {
             }
             
-            wizardDescriptor.setTargetName("report.jrxml");
-            wizardDescriptor.putProperty("useCustomChooserPanel", "true");
             
-            NewJrxmlWizardIterator wIterator = new NewJrxmlWizardIterator();
-            wIterator.initialize(wizardDescriptor);
-            wizardDescriptor.setPanelsAndSettings(wIterator, wizardDescriptor);
+            wizardDescriptor.setTargetName("report.jrxml");
+            
+            
+//            NewJrxmlWizardIterator wIterator = new NewJrxmlWizardIterator();
+//            wIterator.initialize(wizardDescriptor);
+//            wizardDescriptor.setPanelsAndSettings(wIterator, wizardDescriptor);
 
             // {0} will be replaced by WizardDesriptor.Panel.getComponent().getName()
-            wizardDescriptor.setTitleFormat(new MessageFormat("{0}"));
-            wizardDescriptor.setTitle("New report");
+            //wizardDescriptor.setTitleFormat(new MessageFormat("{0}"));
+            //wizardDescriptor.setTitle("New report");
             Dialog dialog = DialogDisplayer.getDefault().createDialog(wizardDescriptor);
             dialog.setVisible(true);
             dialog.toFront();
-        
+//
+//            System.out.println(wizardDescriptor.getValue() + " " + WizardDescriptor.FINISH_OPTION);
+//            System.out.flush();
+//            boolean cancelled = wizardDescriptor.getValue() != WizardDescriptor.FINISH_OPTION;
+//            if (!cancelled) {
+//                Set objects = wizardDescriptor.getInstantiatedObjects();
+//                if (objects != null)
+//                {
+//                    Iterator iter = objects.iterator();
+//                    int i=0;
+//                    while (iter.hasNext())
+//                    {
+//                         System.out.println("Object " + i);
+//                         i++;
+//                            System.out.flush();
+//                        DataObject dob = (DataObject)iter.next();
+//                        dob.getCookie(OpenCookie.class).open();
+//                    }
+//
+//                    System.out.println("Objects " + i);
+//                         i++;
+//                            System.out.flush();
+//                }
+//                else
+//                {
+//                    System.out.println("Objects is null...");
+//                            System.out.flush();
+//                }
+//
+//            }
+
     
     }
 

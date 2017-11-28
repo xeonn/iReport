@@ -251,6 +251,7 @@ public class ChartPropertiesFactory {
         propertySet.put(new LegendPositionProperty(element));
         propertySet.put(new CustomizerClassProperty(element));
         propertySet.put(new RenderTypeProperty(element));
+        propertySet.put(new ThemeProperty(element));
         
         
         // Common plot properties

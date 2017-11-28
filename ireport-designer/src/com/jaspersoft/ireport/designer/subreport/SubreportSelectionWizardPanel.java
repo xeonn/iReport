@@ -6,8 +6,10 @@ package com.jaspersoft.ireport.designer.subreport;
 
 import com.jaspersoft.ireport.designer.JrxmlLoader;
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -165,7 +167,15 @@ public class SubreportSelectionWizardPanel implements WizardDescriptor.Finishabl
                     params = report.getParameters();
                 }
 
-                getWizard().putProperty("subreport_parameters", params);
+                // remove buildit params...
+                List newParams = new ArrayList();
+                for (int i=0; i<params.length; ++i)
+                {
+                    if (params[i].isSystemDefined()) continue;
+                    newParams.add(params[i]);
+                }
+
+                getWizard().putProperty("subreport_parameters", newParams.toArray(new JRParameter[newParams.size()]));
             }
         } catch (Exception ex)
         {

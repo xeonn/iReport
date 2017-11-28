@@ -27,7 +27,7 @@
     <attr name="Toolbars\Memory\position" intvalue="600"/>
     <attr name="Toolbars\Standard.xml\position" intvalue="500"/>
     <folder name="Actions">
-        <attr name="SystemFileSystem.localizingBundle" stringvalue="org.netbeans.core.Bundle"/> 
+        <attr name="SystemFileSystem.localizingBundle" stringvalue="org.netbeans.core.Bundle"/>
         <folder name="Designer">
             <file name="com-jaspersoft-ireport-designer-actions-AddBandAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-OpenQueryDialogAction.instance"/>
@@ -39,6 +39,17 @@
         <folder name="Data">
             <file name="com-jaspersoft-ireport-designer-menu-DatasourcesAction.instance"/>
         </folder>
+        <folder name="Report_preview">
+            <file name="com-jaspersoft-ireport-designer-menu-preview-PDFPreviewAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-ODFPreviewAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-XLSPreviewAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-XLS2PreviewAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-TXTPreviewAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-RTFPreviewAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-CSVPreviewAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-InternalPreviewAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-HTMLPreviewAction.instance"/>
+        </folder>
         <folder name="Tools">
             <file name="com-jaspersoft-ireport-designer-menu-ClasspathAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-FontpathAction.instance"/>
@@ -48,13 +59,14 @@
             <file name="com-jaspersoft-ireport-designer-formatting-FormattingToolsAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-outline-OutlineAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-logpane-IRConsoleAction.instance"/>
-            <file name="org-netbeans-core-actions-ViewRuntimeTabAction.instance"> 
-                <attr name="SystemFileSystem.icon" urlvalue="nbresloc:/org/netbeans/core/resources/environment.gif"/> 
+            <file name="org-netbeans-core-actions-ViewRuntimeTabAction.instance">
+                <attr name="SystemFileSystem.icon" urlvalue="nbresloc:/org/netbeans/core/resources/environment.gif"/>
             </file>
+            <file name="com-jaspersoft-ireport-designer-resourcebundle-ResourceBundleAction.instance"/>
         </folder>
     </folder>
-    
-    
+
+
     <folder name="Loaders">
         <folder name="text">
             <folder name="x-irpitem">
@@ -162,15 +174,56 @@
                 <attr name="position" intvalue="1100"/>
             </file>
         </folder>
-        <folder name="Tools">
-            <file name="com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow" url="com-jaspersoft-ireport-designer-menu-DatasourcesAction_1.shadow">
-                <attr name="originalFile" stringvalue="Actions/Data/com-jaspersoft-ireport-designer-menu-DatasourcesAction.instance"/>
+        <folder name="BuildProject">
+            <file name="SeparatorCompileSingle.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="4900"/>
             </file>
+            <folder name="Report preview">
+                <attr name="position" intvalue="5000"/>
+                <file name="com-jaspersoft-ireport-designer-menu-preview-PDFPreviewAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-PDFPreviewAction.instance"/>
+                    <attr name="position" intvalue="500"/>
+                </file>
+                <file name="com-jaspersoft-ireport-designer-menu-preview-HTMLPreviewAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-HTMLPreviewAction.instance"/>
+                    <attr name="position" intvalue="510"/>
+                </file>
+                <file name="com-jaspersoft-ireport-designer-menu-preview-XLSPreviewAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-XLSPreviewAction.instance"/>
+                    <attr name="position" intvalue="520"/>
+                </file>
+                <file name="com-jaspersoft-ireport-designer-menu-preview-XLS2PreviewAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-XLS2PreviewAction.instance"/>
+                    <attr name="position" intvalue="522"/>
+                </file>
+                <file name="com-jaspersoft-ireport-designer-menu-preview-RTFPreviewAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-RTFPreviewAction.instance"/>
+                    <attr name="position" intvalue="530"/>
+                </file>
+                <file name="com-jaspersoft-ireport-designer-menu-preview-TXTPreviewAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-TXTPreviewAction.instance"/>
+                    <attr name="position" intvalue="540"/>
+                </file>
+                <file name="com-jaspersoft-ireport-designer-menu-preview-CSVPreviewAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-CSVPreviewAction.instance"/>
+                    <attr name="position" intvalue="550"/>
+                </file>
+                <file name="com-jaspersoft-ireport-designer-menu-preview-ODFPreviewAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-ODFPreviewAction.instance"/>
+                    <attr name="position" intvalue="560"/>
+                </file>
+                <file name="com-jaspersoft-ireport-designer-menu-preview-InternalPreviewAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-InternalPreviewAction.instance"/>
+                    <attr name="position" intvalue="570"/>
+                </file>
+            </folder>
         </folder>
         <folder name="View">
             <folder name="Report Designer Grid">
-                <attr name="com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow/Separator2.instance" boolvalue="true"/>
+                <!-- <attr name="com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow/Separator2.instance" boolvalue="true"/>
                 <attr name="com-jaspersoft-ireport-designer-menu-OpenQueryDialogAction.shadow/com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow" boolvalue="true"/>
+                -->
                 <attr name="position" intvalue="950"/>
                 <file name="com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow" url="com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow">
                     <attr name="originalFile" stringvalue="Actions/Tools/com-jaspersoft-ireport-designer-menu-DatasourcesAction.instance"/>
@@ -182,15 +235,19 @@
                     <attr name="originalFile" stringvalue="Actions/Designer/com-jaspersoft-ireport-designer-menu-SnapToGridAction.instance"/>
                 </file>
             </folder>
-            <file name="org-netbeans-modules-editor-MainMenuAction$ShowLineNumbersAction.instance_hidden"/>
-            <file name="org-netbeans-modules-editor-NbCodeFoldingAction.instance_hidden"/>
+            <attr name="com-jaspersoft-ireport-designer-menu-OpenQueryDialogAction.shadow/com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow" boolvalue="true"/>
+        </folder>
+        <folder name="Tools">
+            <file name="com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow" url="com-jaspersoft-ireport-designer-menu-DatasourcesAction_1.shadow">
+                <attr name="originalFile" stringvalue="Actions/Data/com-jaspersoft-ireport-designer-menu-DatasourcesAction.instance"/>
+            </file>
         </folder>
         <folder name="Window">
-            
+
             <folder name="Navigator">
                 <attr name="position" intvalue="900"/>
-                </folder> 
-             
+                </folder>
+
             <folder name="Output">
                 <attr name="position" intvalue="800"/>
                 </folder>
@@ -211,10 +268,13 @@
                     <attr name="position" intvalue="100"/>
                 </file>
             </folder>
-            <file name="ViewRuntimeTabAction.shadow"> 
-                <attr name="originalFile" stringvalue="Actions/Window/org-netbeans-core-actions-ViewRuntimeTabAction.instance"/> 
+            <file name="ResourceBundleAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-resourcebundle-ResourceBundleAction.instance"/>
+            </file>
+            <file name="ViewRuntimeTabAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/org-netbeans-core-actions-ViewRuntimeTabAction.instance"/>
                 <attr name="position" intvalue="300"/>
-            </file> 
+            </file>
 
         </folder>
         </folder>
@@ -244,7 +304,9 @@
         -->
         <folder name="Report">
             <file name="Report.jrxml" url="JrxmlTemplate.jrxml">
-                <attr name="SystemFileSystem.localizingBundle" stringvalue="com.jaspersoft.ireport.Bundle"/>
+                <attr name="SystemFileSystem.icon" urlvalue="nbresloc:/com/jaspersoft/ireport/designer/resources/jasperreports.png"/>
+               <attr name="SystemFileSystem.localizingBundle" stringvalue="com.jaspersoft.ireport.Bundle"/>
+               <attr name="instantiatingIterator" newvalue="com.jaspersoft.ireport.designer.wizards.EmptyReportWizardIterator"/>
                 <attr name="template" boolvalue="true"/>
             </file>
             <file name="Report">
@@ -255,7 +317,7 @@
                 <attr name="templateWizardURL" urlvalue="nbresloc:/com/jaspersoft/ireport/designer/wizards/newJrxml.html"/>
             </file>
         </folder>
-       
+
     </folder>
     <folder name="Toolbars">
         <folder name="Designer">
@@ -273,7 +335,7 @@
                 <attr name="originalFile" stringvalue="Actions/Designer/com-jaspersoft-ireport-designer-menu-SelectDatasourceAction.instance"/>
             </file>
         </folder>
-        
+
     </folder>
     <!-- Panel moved as top component....
     <folder name="Navigator">
@@ -298,7 +360,7 @@
             </folder>
         </folder>
     </folder>
-    
+
      <folder name="UI">
         <folder name="Services">
             <folder name="IDEConfiguration">
@@ -334,13 +396,14 @@
            </folder>
        </folder>
      </folder>
-    
+
     <folder name="Windows2">
         <folder name="Components">
             <file name="ErrorHandlerTopComponent.settings" url="ErrorHandlerTopComponentSettings.xml"/>
             <file name="FormattingToolsTopComponent.settings" url="FormattingToolsTopComponentSettings.xml"/>
             <file name="IRConsoleTopComponent.settings" url="IRConsoleTopComponentSettings.xml"/>
             <file name="OutlineTopComponent.settings" url="OutlineTopComponentSettings.xml"/>
+            <file name="ResourceBundleTopComponent.settings" url="ResourceBundleTopComponentSettings.xml"/>
         </folder>
         <folder name="Groups">
             <file name="ireport.wsgrp" url="ireport.wsgrp"/>
@@ -353,6 +416,9 @@
         <folder name="Modes">
             <folder name="commonpalette">
                 <file name="FormattingToolsTopComponent.wstcref" url="FormattingToolsTopComponentWstcref.xml"/>
+            </folder>
+            <folder name="leftSlidingSide">
+                <file name="ResourceBundleTopComponent.wstcref" url="ResourceBundleTopComponentWstcref.xml"/>
             </folder>
             <folder name="navigator">
                 <file name="OutlineTopComponent.wstcref" url="OutlineTopComponentWstcref.xml"/>

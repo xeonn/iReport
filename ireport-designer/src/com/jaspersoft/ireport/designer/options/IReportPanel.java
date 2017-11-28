@@ -29,6 +29,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 
@@ -52,6 +53,7 @@ final class IReportPanel extends javax.swing.JPanel {
         
         jListClassPath.setModel(new DefaultListModel());
         jListFontspath.setModel(new DefaultListModel());
+        jListTemplates.setModel(new DefaultListModel());
         
         jListFontspath.addMouseListener(new MouseAdapter()
         {
@@ -61,6 +63,32 @@ final class IReportPanel extends javax.swing.JPanel {
                controller.changed();
             }
          });
+         
+         
+         
+         javax.swing.event.DocumentListener textfieldListener =  new javax.swing.event.DocumentListener()
+                {
+                    public void changedUpdate(javax.swing.event.DocumentEvent evt)
+                    {
+                        controller.changed();
+                    }
+                    public void insertUpdate(javax.swing.event.DocumentEvent evt)
+                    {
+                        controller.changed();
+                    }
+                    public void removeUpdate(javax.swing.event.DocumentEvent evt)
+                    {
+                        controller.changed();
+                    }
+                };
+                
+         jTextFieldPDFViewer.getDocument().addDocumentListener(textfieldListener);
+         jTextFieldXLSViewer.getDocument().addDocumentListener(textfieldListener);
+         jTextFieldTXTViewer.getDocument().addDocumentListener(textfieldListener);
+         jTextFieldCSVViewer.getDocument().addDocumentListener(textfieldListener);
+         jTextFieldODFViewer.getDocument().addDocumentListener(textfieldListener);
+         jTextFieldRTFViewer.getDocument().addDocumentListener(textfieldListener);
+         jTextFieldHTMLViewer.getDocument().addDocumentListener(textfieldListener);
     }
 
     /** This method is called from within the constructor to
@@ -107,10 +135,50 @@ final class IReportPanel extends javax.swing.JPanel {
         jButtonSelectAllFonts = new javax.swing.JButton();
         jButtonDeselectAllFonts = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
+        jPanel10 = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
+        jLabelPDFViewer = new javax.swing.JLabel();
+        jTextFieldPDFViewer = new javax.swing.JTextField();
+        jButtonPDFViewer = new javax.swing.JButton();
+        jPanel12 = new javax.swing.JPanel();
+        jLabelHTMLViewer = new javax.swing.JLabel();
+        jTextFieldHTMLViewer = new javax.swing.JTextField();
+        jButtonHTMLViewer = new javax.swing.JButton();
+        jPanel13 = new javax.swing.JPanel();
+        jLabelXLSViewer = new javax.swing.JLabel();
+        jTextFieldXLSViewer = new javax.swing.JTextField();
+        jButtonXLSViewer = new javax.swing.JButton();
+        jPanel14 = new javax.swing.JPanel();
+        jLabelCSVViewer = new javax.swing.JLabel();
+        jTextFieldCSVViewer = new javax.swing.JTextField();
+        jButtonCSVViewer = new javax.swing.JButton();
+        jPanel15 = new javax.swing.JPanel();
+        jLabelTXTViewer = new javax.swing.JLabel();
+        jTextFieldTXTViewer = new javax.swing.JTextField();
+        jButtonTXTViewer = new javax.swing.JButton();
+        jPanel16 = new javax.swing.JPanel();
+        jLabelRTFViewer = new javax.swing.JLabel();
+        jTextFieldRTFViewer = new javax.swing.JTextField();
+        jButtonRTFViewer = new javax.swing.JButton();
+        jPanel17 = new javax.swing.JPanel();
+        jLabelODFViewer = new javax.swing.JLabel();
+        jTextFieldODFViewer = new javax.swing.JTextField();
+        jButtonODFViewer = new javax.swing.JButton();
+        jPanel18 = new javax.swing.JPanel();
+        jLabelClasspath1 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jListTemplates = new javax.swing.JList();
+        jPanel19 = new javax.swing.JPanel();
+        jButtonAddTemplate = new javax.swing.JButton();
+        jButtonAddTemplateFolder = new javax.swing.JButton();
+        jButtonRemoveTemplate = new javax.swing.JButton();
+        jButtonMoveUpTemplate = new javax.swing.JButton();
+        jButtonMoveDownTemplate = new javax.swing.JButton();
+        jPanel20 = new javax.swing.JPanel();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Units"));
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, I18n.getString("IReportPanel.Label.DefaultUnit")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, "Default unit");
 
         jComboBoxUnits.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -127,7 +195,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabel1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jComboBoxUnits, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 72, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(334, Short.MAX_VALUE))
+                .addContainerGap(282, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -140,19 +208,19 @@ final class IReportPanel extends javax.swing.JPanel {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report execution options"));
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxLimitRecordNumber, I18n.getString("IReportPanel.CheckBox.LimitRecords")); // NOI18N
-        jCheckBoxLimitRecordNumber.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jCheckBoxLimitRecordNumberStateChanged(evt);
-            }
-        });
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxLimitRecordNumber, "Limit the number of records");
         jCheckBoxLimitRecordNumber.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxLimitRecordNumberActionPerformed(evt);
             }
         });
+        jCheckBoxLimitRecordNumber.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jCheckBoxLimitRecordNumberStateChanged(evt);
+            }
+        });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelMaxNumber, I18n.getString("IReportPanel.Label.MaxReports")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelMaxNumber, "Max number of reports");
         jLabelMaxNumber.setEnabled(false);
 
         jSpinnerMaxRecordNumber.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(5000), Integer.valueOf(1), null, Integer.valueOf(1)));
@@ -165,27 +233,27 @@ final class IReportPanel extends javax.swing.JPanel {
 
         jTextFieldReportLocale.setEditable(false);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonReportLocale, I18n.getString("IReportPanel.Button.Select")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonReportLocale, "Select...");
         jButtonReportLocale.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonReportLocaleActionPerformed(evt);
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelReportLocale, I18n.getString("IReportPanel.Label.ReportLocale")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelReportLocale, "Report Locale");
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelTimeZone, I18n.getString("IReportPanel.Label.ReportTimeZone")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelTimeZone, "Report Time Zone");
 
         jTextFieldTimeZone.setEditable(false);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonTimeZone, I18n.getString("IReportPanel.Button.Select")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonTimeZone, "Select...");
         jButtonTimeZone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonTimeZoneActionPerformed(evt);
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxIgnorePagination, I18n.getString("IReportPanel.CheckBox.IgnorePagination")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxIgnorePagination, "Ignore pagination");
         jCheckBoxIgnorePagination.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jCheckBoxIgnorePaginationStateChanged(evt);
@@ -210,24 +278,24 @@ final class IReportPanel extends javax.swing.JPanel {
                         .add(jSpinnerMaxRecordNumber, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 83, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .add(jCheckBoxLimitRecordNumber, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE))
+                        .add(jCheckBoxLimitRecordNumber, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE))
                     .add(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jTextFieldReportLocale, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
-                            .add(jLabelReportLocale, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE))
+                            .add(jTextFieldReportLocale, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                            .add(jLabelReportLocale, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonReportLocale))
                     .add(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jTextFieldTimeZone, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
-                            .add(jLabelTimeZone, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE))
+                            .add(jTextFieldTimeZone, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                            .add(jLabelTimeZone, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonTimeZone))
                     .add(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .add(jCheckBoxIgnorePagination, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)))
+                        .add(jCheckBoxIgnorePagination, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -263,7 +331,7 @@ final class IReportPanel extends javax.swing.JPanel {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 508, Short.MAX_VALUE)
+            .add(0, 456, Short.MAX_VALUE)
             .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(jPanel3Layout.createSequentialGroup()
                     .addContainerGap()
@@ -274,20 +342,20 @@ final class IReportPanel extends javax.swing.JPanel {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 327, Short.MAX_VALUE)
+            .add(0, 303, Short.MAX_VALUE)
             .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(jPanel3Layout.createSequentialGroup()
                     .addContainerGap()
                     .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                     .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(49, Short.MAX_VALUE)))
+                    .addContainerGap(27, Short.MAX_VALUE)))
         );
 
         jTabbedPane1.addTab("General", jPanel3);
 
         jLabelClasspath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelClasspath, I18n.getString("IReportPanel.Label.Classpath")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelClasspath, "Classpath");
 
         jScrollPane1.setViewportView(jListClassPath);
 
@@ -295,7 +363,7 @@ final class IReportPanel extends javax.swing.JPanel {
         jPanel5.setPreferredSize(new java.awt.Dimension(120, 10));
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonAddClasspathItem, I18n.getString("IReportPanel.Button.AddJAR")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonAddClasspathItem, "Add JAR");
         jButtonAddClasspathItem.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonAddClasspathItem.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonAddClasspathItem.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -311,7 +379,7 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel5.add(jButtonAddClasspathItem, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonAddClasspathItem1, I18n.getString("IReportPanel.Button.AddFolder")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonAddClasspathItem1, "Add Folder");
         jButtonAddClasspathItem1.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonAddClasspathItem1.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonAddClasspathItem1.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -327,7 +395,7 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel5.add(jButtonAddClasspathItem1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonRemoveClasspathItem, I18n.getString("Global.Button.Remove")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonRemoveClasspathItem, "Remove");
         jButtonRemoveClasspathItem.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonRemoveClasspathItem.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonRemoveClasspathItem.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -342,7 +410,7 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel5.add(jButtonRemoveClasspathItem, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonMoveUpClasspathItem, I18n.getString("Global.Button.MoveUp")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonMoveUpClasspathItem, "Move up");
         jButtonMoveUpClasspathItem.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonMoveUpClasspathItem.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonMoveUpClasspathItem.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -357,7 +425,7 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel5.add(jButtonMoveUpClasspathItem, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonMoveDownClasspathItem, I18n.getString("Global.Button.MoveDown")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonMoveDownClasspathItem, "Move down");
         jButtonMoveDownClasspathItem.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonMoveDownClasspathItem.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonMoveDownClasspathItem.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -383,9 +451,9 @@ final class IReportPanel extends javax.swing.JPanel {
             .add(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabelClasspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
+                    .add(jLabelClasspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
+                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 122, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -397,15 +465,15 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelClasspath)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
+                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab(I18n.getString("IReportPanel.Label.Classpath"), jPanel4); // NOI18N
+        jTabbedPane1.addTab("Classpath", jPanel4);
 
         jLabelFontspath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelFontspath, I18n.getString("IReportPanel.Label.FontsPath")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelFontspath, "Fonts path");
 
         jListFontspath.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -418,7 +486,7 @@ final class IReportPanel extends javax.swing.JPanel {
         jPanel8.setPreferredSize(new java.awt.Dimension(120, 10));
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonSelectAllFonts, I18n.getString("Global.Button.SelectAll")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonSelectAllFonts, "Select all");
         jButtonSelectAllFonts.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonSelectAllFonts.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonSelectAllFonts.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -433,7 +501,7 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel8.add(jButtonSelectAllFonts, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonDeselectAllFonts, I18n.getString("Global.Button.DeselectAll")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonDeselectAllFonts, "Deselect all");
         jButtonDeselectAllFonts.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonDeselectAllFonts.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonDeselectAllFonts.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -461,10 +529,10 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel7Layout.createSequentialGroup()
-                        .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+                        .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jLabelFontspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE))
+                    .add(jLabelFontspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -474,22 +542,384 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelFontspath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jPanel8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
-                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
+                    .add(jPanel8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
+                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab("Fontpath", jPanel7);
 
+        jPanel10.setLayout(new java.awt.GridBagLayout());
+
+        jPanel11.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelPDFViewer, "PDF Viewer");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel11.add(jLabelPDFViewer, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        jPanel11.add(jTextFieldPDFViewer, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonPDFViewer, "Browse");
+        jButtonPDFViewer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPDFViewerActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        jPanel11.add(jButtonPDFViewer, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel10.add(jPanel11, gridBagConstraints);
+
+        jPanel12.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelHTMLViewer, "HTML Viewer");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel12.add(jLabelHTMLViewer, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        jPanel12.add(jTextFieldHTMLViewer, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonHTMLViewer, "Browse");
+        jButtonHTMLViewer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonHTMLViewerActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        jPanel12.add(jButtonHTMLViewer, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel10.add(jPanel12, gridBagConstraints);
+
+        jPanel13.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelXLSViewer, "XLS Viewer");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel13.add(jLabelXLSViewer, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        jPanel13.add(jTextFieldXLSViewer, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonXLSViewer, "Browse");
+        jButtonXLSViewer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonXLSViewerActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        jPanel13.add(jButtonXLSViewer, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel10.add(jPanel13, gridBagConstraints);
+
+        jPanel14.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelCSVViewer, "CSV Viewer");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel14.add(jLabelCSVViewer, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        jPanel14.add(jTextFieldCSVViewer, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonCSVViewer, "Browse");
+        jButtonCSVViewer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCSVViewerActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        jPanel14.add(jButtonCSVViewer, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel10.add(jPanel14, gridBagConstraints);
+
+        jPanel15.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelTXTViewer, "TXT Viewer");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel15.add(jLabelTXTViewer, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        jPanel15.add(jTextFieldTXTViewer, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonTXTViewer, "Browse");
+        jButtonTXTViewer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonTXTViewerActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        jPanel15.add(jButtonTXTViewer, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel10.add(jPanel15, gridBagConstraints);
+
+        jPanel16.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelRTFViewer, "RTF Viewer");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel16.add(jLabelRTFViewer, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        jPanel16.add(jTextFieldRTFViewer, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonRTFViewer, "Browse");
+        jButtonRTFViewer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRTFViewerActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        jPanel16.add(jButtonRTFViewer, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel10.add(jPanel16, gridBagConstraints);
+
+        jPanel17.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelODFViewer, "OpenOffice (ODF) Viewer");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel17.add(jLabelODFViewer, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        jPanel17.add(jTextFieldODFViewer, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonODFViewer, "Browse");
+        jButtonODFViewer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonODFViewerActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        jPanel17.add(jButtonODFViewer, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel10.add(jPanel17, gridBagConstraints);
+
+        jTabbedPane1.addTab("Viewers", jPanel10);
+
+        jLabelClasspath1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelClasspath1, "<html>Wizard templates are used in the report wizard to create a report starting from an existing layout.");
+
+        jScrollPane3.setViewportView(jListTemplates);
+
+        jPanel19.setMinimumSize(new java.awt.Dimension(120, 10));
+        jPanel19.setPreferredSize(new java.awt.Dimension(120, 10));
+        jPanel19.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonAddTemplate, "Add Jrxml");
+        jButtonAddTemplate.setMaximumSize(new java.awt.Dimension(200, 26));
+        jButtonAddTemplate.setMinimumSize(new java.awt.Dimension(90, 26));
+        jButtonAddTemplate.setPreferredSize(new java.awt.Dimension(120, 26));
+        jButtonAddTemplate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddTemplateActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
+        jPanel19.add(jButtonAddTemplate, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonAddTemplateFolder, "Add Folder");
+        jButtonAddTemplateFolder.setMaximumSize(new java.awt.Dimension(200, 26));
+        jButtonAddTemplateFolder.setMinimumSize(new java.awt.Dimension(90, 26));
+        jButtonAddTemplateFolder.setPreferredSize(new java.awt.Dimension(120, 26));
+        jButtonAddTemplateFolder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddTemplateFolderjButtonAddActionPerformed1(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
+        jPanel19.add(jButtonAddTemplateFolder, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonRemoveTemplate, "Remove");
+        jButtonRemoveTemplate.setMaximumSize(new java.awt.Dimension(200, 26));
+        jButtonRemoveTemplate.setMinimumSize(new java.awt.Dimension(90, 26));
+        jButtonRemoveTemplate.setPreferredSize(new java.awt.Dimension(120, 26));
+        jButtonRemoveTemplate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRemoveTemplateActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
+        jPanel19.add(jButtonRemoveTemplate, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonMoveUpTemplate, "Move up");
+        jButtonMoveUpTemplate.setMaximumSize(new java.awt.Dimension(200, 26));
+        jButtonMoveUpTemplate.setMinimumSize(new java.awt.Dimension(90, 26));
+        jButtonMoveUpTemplate.setPreferredSize(new java.awt.Dimension(120, 26));
+        jButtonMoveUpTemplate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonMoveUpTemplateActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
+        jPanel19.add(jButtonMoveUpTemplate, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonMoveDownTemplate, "Move down");
+        jButtonMoveDownTemplate.setMaximumSize(new java.awt.Dimension(200, 26));
+        jButtonMoveDownTemplate.setMinimumSize(new java.awt.Dimension(90, 26));
+        jButtonMoveDownTemplate.setPreferredSize(new java.awt.Dimension(120, 26));
+        jButtonMoveDownTemplate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonMoveDownTemplateActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
+        jPanel19.add(jButtonMoveDownTemplate, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel19.add(jPanel20, gridBagConstraints);
+
+        org.jdesktop.layout.GroupLayout jPanel18Layout = new org.jdesktop.layout.GroupLayout(jPanel18);
+        jPanel18.setLayout(jPanel18Layout);
+        jPanel18Layout.setHorizontalGroup(
+            jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel18Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabelClasspath1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel18Layout.createSequentialGroup()
+                        .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel19, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 122, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel18Layout.setVerticalGroup(
+            jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel18Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jLabelClasspath1)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel19, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Wizard templates", jPanel18);
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)
+            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 331, Short.MAX_VALUE)
         );
 
         jTabbedPane1.getAccessibleContext().setAccessibleName("General");
@@ -706,19 +1136,197 @@ final class IReportPanel extends javax.swing.JPanel {
         }
         jListFontspath.updateUI();
 }//GEN-LAST:event_jButtonDeselectAllFontsActionPerformed
+
+private void jButtonPDFViewerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPDFViewerActionPerformed
+
+            javax.swing.JFileChooser jfc = new javax.swing.JFileChooser();
+            
+            jfc.setDialogTitle("Choose a PDF viewer...");
+	    jfc.setMultiSelectionEnabled(false);
+	    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+		    jTextFieldPDFViewer.setText( jfc.getSelectedFile().getPath());
+            }
+}//GEN-LAST:event_jButtonPDFViewerActionPerformed
+
+private void jButtonHTMLViewerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHTMLViewerActionPerformed
+
+            javax.swing.JFileChooser jfc = new javax.swing.JFileChooser();
+            
+            jfc.setDialogTitle("Choose a HTML viewer...");
+	    jfc.setMultiSelectionEnabled(false);
+	    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+		    jTextFieldHTMLViewer.setText( jfc.getSelectedFile().getPath());
+            }
+}//GEN-LAST:event_jButtonHTMLViewerActionPerformed
+
+private void jButtonXLSViewerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonXLSViewerActionPerformed
+
+            javax.swing.JFileChooser jfc = new javax.swing.JFileChooser();
+            
+            jfc.setDialogTitle("Choose a XLS viewer...");
+	    jfc.setMultiSelectionEnabled(false);
+	    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+		    jTextFieldXLSViewer.setText( jfc.getSelectedFile().getPath());
+            }
+}//GEN-LAST:event_jButtonXLSViewerActionPerformed
+
+private void jButtonCSVViewerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCSVViewerActionPerformed
+
+            javax.swing.JFileChooser jfc = new javax.swing.JFileChooser();
+            
+            jfc.setDialogTitle("Choose a CSV viewer...");
+	    jfc.setMultiSelectionEnabled(false);
+	    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+		    jTextFieldCSVViewer.setText( jfc.getSelectedFile().getPath());
+            }
+}//GEN-LAST:event_jButtonCSVViewerActionPerformed
+
+private void jButtonTXTViewerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTXTViewerActionPerformed
+
+            javax.swing.JFileChooser jfc = new javax.swing.JFileChooser();
+            
+            jfc.setDialogTitle("Choose a Text viewer...");
+	    jfc.setMultiSelectionEnabled(false);
+	    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+		    jTextFieldTXTViewer.setText( jfc.getSelectedFile().getPath());
+            }
+}//GEN-LAST:event_jButtonTXTViewerActionPerformed
+
+private void jButtonRTFViewerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRTFViewerActionPerformed
+
+            javax.swing.JFileChooser jfc = new javax.swing.JFileChooser();
+            
+            jfc.setDialogTitle("Choose a RTF viewer...");
+	    jfc.setMultiSelectionEnabled(false);
+	    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+		    jTextFieldRTFViewer.setText( jfc.getSelectedFile().getPath());
+            }
+}//GEN-LAST:event_jButtonRTFViewerActionPerformed
+
+private void jButtonODFViewerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonODFViewerActionPerformed
+
+                javax.swing.JFileChooser jfc = new javax.swing.JFileChooser();
+            
+            jfc.setDialogTitle("Choose an ODF viewer...");
+	    jfc.setMultiSelectionEnabled(false);
+	    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+		    jTextFieldODFViewer.setText( jfc.getSelectedFile().getPath());
+            }
+}//GEN-LAST:event_jButtonODFViewerActionPerformed
+
+private void jButtonAddTemplateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddTemplateActionPerformed
+        String fileName = "";
+        javax.swing.JFileChooser jfc = new javax.swing.JFileChooser( IReportManager.getInstance().getCurrentDirectory());
+
+        jfc.setDialogTitle(I18n.getString("IReportPanel.Title.Dialog"));
+        jfc.setDialogTitle(I18n.getString("IReportPanel.Title.Dialog"));//"addToClassPath"
+
+        jfc.setAcceptAllFileFilterUsed(true);
+        jfc.setFileSelectionMode( JFileChooser.FILES_ONLY  );
+        jfc.addChoosableFileFilter( new javax.swing.filechooser.FileFilter() {
+            public boolean accept(java.io.File file) {
+                String filename = file.getName();
+                return (filename.toLowerCase().endsWith("c.jrxml") || file.isDirectory() ||
+                        filename.toLowerCase().endsWith("t.jrxml") ||
+                        filename.toLowerCase().endsWith("c.xml") ||
+                        filename.toLowerCase().endsWith("t.xml")
+                        ) ;
+            }
+            public String getDescription() {
+                return "Columnar or Tabular template definition (*<C|T>.jrxml, *<C|T>.xml)";
+            }
+        });
+
+        jfc.setMultiSelectionEnabled(true);
+
+        jfc.setDialogType( javax.swing.JFileChooser.OPEN_DIALOG);
+        if  (jfc.showOpenDialog( this) == javax.swing.JOptionPane.OK_OPTION) {
+            java.io.File[] files = jfc.getSelectedFiles();
+
+            for (int i=0; i<files.length; ++i) {
+                ((DefaultListModel)jListTemplates.getModel()).addElement( files[i] );
+            }
+            IReportManager.getInstance().setCurrentDirectory( jfc.getSelectedFile(), true);
+            controller.changed();
+        }
+}//GEN-LAST:event_jButtonAddTemplateActionPerformed
+
+private void jButtonAddTemplateFolderjButtonAddActionPerformed1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddTemplateFolderjButtonAddActionPerformed1
+        javax.swing.JFileChooser jfc = new javax.swing.JFileChooser( IReportManager.getInstance().getCurrentDirectory());
+
+        jfc.setDialogTitle(I18n.getString("IReportPanel.Title.Dialog"));
+        jfc.setDialogTitle(I18n.getString("IReportPanel.Title.Dialog")); //"addToClassPath"
+
+        jfc.setAcceptAllFileFilterUsed(true);
+        jfc.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY  );
+
+        jfc.setMultiSelectionEnabled(true);
+
+        jfc.setDialogType( javax.swing.JFileChooser.OPEN_DIALOG);
+        if  (jfc.showOpenDialog( this) == javax.swing.JOptionPane.OK_OPTION) {
+            java.io.File[] files = jfc.getSelectedFiles();
+
+            for (int i=0; i<files.length; ++i) {
+                ((DefaultListModel)jListTemplates.getModel()).addElement( files[i] );
+            }
+            IReportManager.getInstance().setCurrentDirectory( jfc.getSelectedFile(), true);
+            controller.changed();
+        }
+}//GEN-LAST:event_jButtonAddTemplateFolderjButtonAddActionPerformed1
+
+private void jButtonRemoveTemplateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveTemplateActionPerformed
+     if (jListTemplates.getSelectedValues() != null) {
+            Object[] values = jListTemplates.getSelectedValues();
+            for (int i=0; i<values.length; ++i) {
+                ((DefaultListModel)jListTemplates.getModel()).removeElement(values[i]);
+            }
+            controller.changed();
+        }
+}//GEN-LAST:event_jButtonRemoveTemplateActionPerformed
+
+private void jButtonMoveUpTemplateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMoveUpTemplateActionPerformed
+    if (jListTemplates.getSelectedValues() != null) {
+            int[] indices = jListTemplates.getSelectedIndices();
+            for (int i=0; i<indices.length; ++i) {
+                if (indices[i] == 0) continue;
+                Object val = ((DefaultListModel)jListTemplates.getModel()).remove( indices[i] );
+                ((DefaultListModel)jListTemplates.getModel()).insertElementAt(val, indices[i]-1);
+                indices[i]--;
+            }
+            jListTemplates.setSelectedIndices(indices);
+            controller.changed();
+        }
+}//GEN-LAST:event_jButtonMoveUpTemplateActionPerformed
+
+private void jButtonMoveDownTemplateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMoveDownTemplateActionPerformed
+    if (jListTemplates.getSelectedValues() != null) {
+            int[] indices = jListTemplates.getSelectedIndices();
+            for (int i=indices.length-1; i>=0; --i) {
+                if (indices[i] >= ((DefaultListModel)jListTemplates.getModel()).size() -1 ) continue;
+
+                Object val = ((DefaultListModel)jListTemplates.getModel()).remove( indices[i] );
+                ((DefaultListModel)jListTemplates.getModel()).insertElementAt(val, indices[i]+1);
+                indices[i]++;
+            }
+            jListTemplates.setSelectedIndices(indices);
+            controller.changed();
+        }
+}//GEN-LAST:event_jButtonMoveDownTemplateActionPerformed
+    
+            
     void load() {
     
         Preferences pref = IReportManager.getPreferences();
         
-        String unit = pref.get(I18n.getString("IReportPanel.Value.Unit"),I18n.getString("IReportPanel.Measure.inches"));
+        String unit = pref.get("Unit",I18n.getString("IReportPanel.Measure.inches")); // NOI18N
         Misc.setComboboxSelectedTagValue(jComboBoxUnits, unit);
         
-        jCheckBoxLimitRecordNumber.setSelected( pref.getBoolean("limitRecordNumber", false)  );
-        ((SpinnerNumberModel)jSpinnerMaxRecordNumber.getModel()).setValue(  pref.getInt("maxRecordNumber", 1)  );
+        jCheckBoxLimitRecordNumber.setSelected( pref.getBoolean("limitRecordNumber", false)  );  // NOI18N
+        ((SpinnerNumberModel)jSpinnerMaxRecordNumber.getModel()).setValue(  pref.getInt("maxRecordNumber", 1)  );  // NOI18N
      
-        jCheckBoxIgnorePagination.setSelected( pref.getBoolean("isIgnorePagination", false)  );
+        jCheckBoxIgnorePagination.setSelected( pref.getBoolean("isIgnorePagination", false)  );  // NOI18N
     
-        String locName = pref.get("reportLocale", null);
+        String locName = pref.get("reportLocale", null);  // NOI18N
         if (locName != null)
         {
             setCurrentReportLocale(Misc.getLocaleFromString(locName));
@@ -728,7 +1336,7 @@ final class IReportPanel extends javax.swing.JPanel {
             setCurrentReportLocale(null);
         }
         
-        String timeZoneId = pref.get("reportTimeZone", null);
+        String timeZoneId = pref.get("reportTimeZone", null);  // NOI18N
         if (timeZoneId != null)
         {
             setCurrentReportTimeZoneId(timeZoneId);
@@ -749,6 +1357,27 @@ final class IReportPanel extends javax.swing.JPanel {
         }
         
         setFontspath(IReportManager.getInstance().getFontpath(), cp);
+
+
+        ((DefaultListModel)jListTemplates.getModel()).clear();
+        String templatesPath = IReportManager.getPreferences().get(IReportManager.TEMPLATE_PATH, "");
+        String[] paths = templatesPath.split("\\n");
+        for (int i=0; i<paths.length; ++i)
+        {
+            String tpath = paths[i];
+            if (tpath != null && tpath.length() > 0)
+            {
+                ((DefaultListModel)jListTemplates.getModel()).addElement( tpath );
+            }
+        }
+
+        jTextFieldCSVViewer.setText(pref.get("ExternalCSVViewer", ""));
+        jTextFieldPDFViewer.setText(pref.get("ExternalPDFViewer", ""));
+        jTextFieldXLSViewer.setText(pref.get("ExternalXLSViewer", ""));
+        jTextFieldRTFViewer.setText(pref.get("ExternalRTFViewer", ""));
+        jTextFieldODFViewer.setText(pref.get("ExternalODFViewer", ""));
+        jTextFieldTXTViewer.setText(pref.get("ExternalTXTViewer", ""));
+        jTextFieldHTMLViewer.setText(pref.get("ExternalHTMLViewer", ""));
     }
 
     void store() {
@@ -757,7 +1386,7 @@ final class IReportPanel extends javax.swing.JPanel {
         if (jComboBoxUnits.getSelectedIndex() >= 0)
         {
             String unit = ""+((Tag)jComboBoxUnits.getSelectedItem()).getValue();
-            pref.put(I18n.getString("IReportPanel.Value.Unit"), unit);
+            pref.put("Unit", unit); // NOI18N
         }
         
         pref.putBoolean("limitRecordNumber"  , jCheckBoxLimitRecordNumber.isSelected() );
@@ -772,6 +1401,36 @@ final class IReportPanel extends javax.swing.JPanel {
         
         IReportManager.getInstance().setClasspath( getClasspath());
         IReportManager.getInstance().setFontpath( getFontspath());
+
+        String templatesPath = "";
+        ListModel model = jListTemplates.getModel();
+        for (int i=0; i<model.getSize(); ++i)
+        {
+            templatesPath += model.getElementAt(i) + "\n";
+        }
+
+        pref.put(IReportManager.TEMPLATE_PATH, templatesPath);
+     
+        if (jTextFieldCSVViewer.getText().length() > 0) pref.put("ExternalCSVViewer", jTextFieldCSVViewer.getText());
+        else pref.remove("ExternalCSVViewer");
+        
+        if (jTextFieldPDFViewer.getText().length() > 0) pref.put("ExternalPDFViewer", jTextFieldPDFViewer.getText());
+        else pref.remove("ExternalPDFViewer");
+
+        if (jTextFieldXLSViewer.getText().length() > 0) pref.put("ExternalXLSViewer", jTextFieldXLSViewer.getText());
+        else pref.remove("ExternalXLSViewer");
+
+        if (jTextFieldTXTViewer.getText().length() > 0) pref.put("ExternalTXTViewer", jTextFieldTXTViewer.getText());
+        else pref.remove("ExternalTXTViewer");
+
+        if (jTextFieldODFViewer.getText().length() > 0) pref.put("ExternalODFViewer", jTextFieldODFViewer.getText());
+        else pref.remove("ExternalODFViewer");
+
+        if (jTextFieldRTFViewer.getText().length() > 0) pref.put("ExternalRTFViewer", jTextFieldRTFViewer.getText());
+        else pref.remove("ExternalRTFViewer");
+
+        if (jTextFieldHTMLViewer.getText().length() > 0) pref.put("ExternalHTMLViewer", jTextFieldHTMLViewer.getText());
+        else pref.remove("ExternalHTMLViewer");
         
     }
     
@@ -793,26 +1452,58 @@ final class IReportPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddClasspathItem;
     private javax.swing.JButton jButtonAddClasspathItem1;
+    private javax.swing.JButton jButtonAddTemplate;
+    private javax.swing.JButton jButtonAddTemplateFolder;
+    private javax.swing.JButton jButtonCSVViewer;
     private javax.swing.JButton jButtonDeselectAllFonts;
+    private javax.swing.JButton jButtonHTMLViewer;
     private javax.swing.JButton jButtonMoveDownClasspathItem;
+    private javax.swing.JButton jButtonMoveDownTemplate;
     private javax.swing.JButton jButtonMoveUpClasspathItem;
+    private javax.swing.JButton jButtonMoveUpTemplate;
+    private javax.swing.JButton jButtonODFViewer;
+    private javax.swing.JButton jButtonPDFViewer;
+    private javax.swing.JButton jButtonRTFViewer;
     private javax.swing.JButton jButtonRemoveClasspathItem;
+    private javax.swing.JButton jButtonRemoveTemplate;
     private javax.swing.JButton jButtonReportLocale;
     private javax.swing.JButton jButtonSelectAllFonts;
+    private javax.swing.JButton jButtonTXTViewer;
     private javax.swing.JButton jButtonTimeZone;
+    private javax.swing.JButton jButtonXLSViewer;
     private javax.swing.JCheckBox jCheckBoxIgnorePagination;
     private javax.swing.JCheckBox jCheckBoxLimitRecordNumber;
     private javax.swing.JComboBox jComboBoxUnits;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabelCSVViewer;
     private javax.swing.JLabel jLabelClasspath;
+    private javax.swing.JLabel jLabelClasspath1;
     private javax.swing.JLabel jLabelFontspath;
+    private javax.swing.JLabel jLabelHTMLViewer;
     private javax.swing.JLabel jLabelMaxNumber;
+    private javax.swing.JLabel jLabelODFViewer;
+    private javax.swing.JLabel jLabelPDFViewer;
+    private javax.swing.JLabel jLabelRTFViewer;
     private javax.swing.JLabel jLabelReportLocale;
+    private javax.swing.JLabel jLabelTXTViewer;
     private javax.swing.JLabel jLabelTimeZone;
+    private javax.swing.JLabel jLabelXLSViewer;
     private javax.swing.JList jListClassPath;
     private com.jaspersoft.ireport.designer.fonts.CheckBoxList jListFontspath;
+    private javax.swing.JList jListTemplates;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel17;
+    private javax.swing.JPanel jPanel18;
+    private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -822,10 +1513,18 @@ final class IReportPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSpinner jSpinnerMaxRecordNumber;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextFieldCSVViewer;
+    private javax.swing.JTextField jTextFieldHTMLViewer;
+    private javax.swing.JTextField jTextFieldODFViewer;
+    private javax.swing.JTextField jTextFieldPDFViewer;
+    private javax.swing.JTextField jTextFieldRTFViewer;
     private javax.swing.JTextField jTextFieldReportLocale;
+    private javax.swing.JTextField jTextFieldTXTViewer;
     private javax.swing.JTextField jTextFieldTimeZone;
+    private javax.swing.JTextField jTextFieldXLSViewer;
     // End of variables declaration//GEN-END:variables
 
     public Locale getCurrentReportLocale() {

@@ -42,6 +42,7 @@ import javax.swing.tree.*;
 import javax.swing.table.*;
 import javax.swing.*;
 import java.util.*;
+import net.sf.jasperreports.charts.design.JRDesignXyDataset;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JasperDesign;
 /**
@@ -105,6 +106,7 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
         dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/timeseries.png",I18n.getString("ChartSelectionJDialog.Chart.Time_Series"), JRDesignChart.CHART_TYPE_TIMESERIES));
         dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/highlow.png",I18n.getString("ChartSelectionJDialog.Chart.High_Low"), JRDesignChart.CHART_TYPE_HIGHLOW));
         dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/candlestick.png",I18n.getString("ChartSelectionJDialog.Chart.Candlestick"), JRDesignChart.CHART_TYPE_CANDLESTICK));
+        if (!isMultiAxisMode()) dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/gantt.png",I18n.getString("ChartSelectionJDialog.Chart.Gantt"), JRDesignChart.CHART_TYPE_GANTT));
         if (!isMultiAxisMode()) dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/meter.png",I18n.getString("ChartSelectionJDialog.Chart.Meter"), JRDesignChart.CHART_TYPE_METER));
         if (!isMultiAxisMode()) dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/thermometer.png",I18n.getString("ChartSelectionJDialog.Chart.Thermometer"), JRDesignChart.CHART_TYPE_THERMOMETER));
         if (!isMultiAxisMode()) dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/multiaxis.png",I18n.getString("ChartSelectionJDialog.Chart.Multi_Axis"), JRDesignChart.CHART_TYPE_MULTI_AXIS));
@@ -256,6 +258,10 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
         ChartDescriptor cd = (ChartDescriptor)jList1.getSelectedValue();
         try {
             this.setChart(new JRDesignChart(getJasperDesign(), cd.getChartType()) );
+            if (cd.getChartType() == JRDesignChart.CHART_TYPE_XYBAR)
+            {
+                getChart().setDataset(new JRDesignXyDataset(getChart().getDataset()));
+            }
         } catch (Exception ex)
         {
             

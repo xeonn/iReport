@@ -157,7 +157,7 @@ public class SubreportReturnValuesPanel extends javax.swing.JPanel {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButtonAdd.setText(I18n.getString("SubreportParametersPanel.jButtonAdd.text")); // NOI18N
+        jButtonAdd.setText(I18n.getString("Global.Button.Add")); // NOI18N
         jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddActionPerformed(evt);
@@ -178,7 +178,7 @@ public class SubreportReturnValuesPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         jPanel1.add(jButtonModify, gridBagConstraints);
 
-        jButtonDelete.setText(I18n.getString("SubreportParametersPanel.jButtonDelete.text")); // NOI18N
+        jButtonDelete.setText(I18n.getString("Global.Button.Delete")); // NOI18N
         jButtonDelete.setEnabled(false);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

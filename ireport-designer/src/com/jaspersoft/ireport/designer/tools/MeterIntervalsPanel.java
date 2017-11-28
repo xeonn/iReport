@@ -209,7 +209,7 @@ public class MeterIntervalsPanel extends javax.swing.JPanel {
         jPanel2.setPreferredSize(new java.awt.Dimension(100, 283));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jButtonAdd.setText(I18n.getString("MeterIntervalsPanel.jButtonAdd.text")); // NOI18N
+        jButtonAdd.setText(I18n.getString("Global.Button.Add")); // NOI18N
         jButtonAdd.setMargin(new java.awt.Insets(2, 8, 2, 8));
         jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -238,7 +238,7 @@ public class MeterIntervalsPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanel2.add(jButtonModify, gridBagConstraints);
 
-        jButtonDelete.setText(I18n.getString("MeterIntervalsPanel.jButtonDelete.text")); // NOI18N
+        jButtonDelete.setText(I18n.getString("Global.Button.Delete")); // NOI18N
         jButtonDelete.setEnabled(false);
         jButtonDelete.setMargin(new java.awt.Insets(2, 8, 2, 8));
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -253,7 +253,7 @@ public class MeterIntervalsPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanel2.add(jButtonDelete, gridBagConstraints);
 
-        jButtonMoveUp.setText(I18n.getString("MeterIntervalsPanel.jButtonMoveUp.text")); // NOI18N
+        jButtonMoveUp.setText(I18n.getString("Global.Button.MoveUp")); // NOI18N
         jButtonMoveUp.setEnabled(false);
         jButtonMoveUp.setMargin(new java.awt.Insets(2, 8, 2, 8));
         jButtonMoveUp.addActionListener(new java.awt.event.ActionListener() {
@@ -268,7 +268,7 @@ public class MeterIntervalsPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanel2.add(jButtonMoveUp, gridBagConstraints);
 
-        jButtonMoveDown.setText(I18n.getString("MeterIntervalsPanel.jButtonMoveDown.text")); // NOI18N
+        jButtonMoveDown.setText(I18n.getString("Global.Button.MoveDown")); // NOI18N
         jButtonMoveDown.setEnabled(false);
         jButtonMoveDown.setMargin(new java.awt.Insets(2, 8, 2, 8));
         jButtonMoveDown.addActionListener(new java.awt.event.ActionListener() {
@@ -349,7 +349,7 @@ public class MeterIntervalsPanel extends javax.swing.JPanel {
         jPanel1.setPreferredSize(new java.awt.Dimension(320, 23));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButtonOk.setText(I18n.getString("MeterIntervalsPanel.jButtonOk.text")); // NOI18N
+        jButtonOk.setText(I18n.getString("Global.Button.Ok")); // NOI18N
         jButtonOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOkActionPerformed(evt);
@@ -361,7 +361,7 @@ public class MeterIntervalsPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         jPanel1.add(jButtonOk, gridBagConstraints);
 
-        jButtonCancel.setText(I18n.getString("MeterIntervalsPanel.jButtonCancel.text")); // NOI18N
+        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);

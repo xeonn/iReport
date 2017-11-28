@@ -5,9 +5,15 @@
 
 package com.jaspersoft.ireport.designer.wizards;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Component;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -15,10 +21,13 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileStateInvalidException;
+import org.openide.filesystems.FileUtil;
 import org.openide.filesystems.Repository;
 import org.openide.loaders.DataFolder;
 import org.openide.loaders.DataObject;
+import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.util.Exceptions;
+import org.openide.util.HelpCtx;
 
 public final class TemplateVisualPanel extends JPanel {
 
@@ -64,12 +73,76 @@ public final class TemplateVisualPanel extends JPanel {
             }
         }
         
+        
+        
+        // Load all the templates from the templates directories (is set...)
+        String pathsString = IReportManager.getPreferences().get(IReportManager.TEMPLATE_PATH, "");
+        // All the paths are separated by an end line...
+        if (pathsString.length() > 0)
+        {
+            String[] paths = pathsString.split("\\n");
+            for (int i=0; i<paths.length; ++i)
+            {
+                File f = new File(paths[i]);
+                loadTemplatesFromFile(f, type);
+                
+            }
+        }
+        
+        
         if (((DefaultListModel)jList1.getModel()).getSize() > 0)
         {
             jList1.setSelectedIndex(0);
         }
-        
     }
+
+    public void loadTemplatesFromFile(File file, String type)
+    {
+        if (file == null || !file.exists()) return;
+        
+        if (file.isDirectory())
+        {
+            loadTemplatesFromDirectory(file, type);
+            return;
+        }
+        
+        final String ext = (type.equals("columnar")) ? "c.jrxml" : "t.jrxml";
+        final String ext2 = (type.equals("columnar")) ? "c.xml" : "t.xml";
+        
+        if (file.getName().toLowerCase().endsWith(ext) ||
+            file.getName().toLowerCase().endsWith(ext2))
+        {
+            FileObject fo = FileUtil.toFileObject(file);
+            if (fo != null)
+            {
+                DataObject dobj = null;
+                try {
+                    dobj = DataObject.find(fo);
+                } catch (DataObjectNotFoundException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
+                if (dobj != null)
+                {
+                     ((DefaultListModel)jList1.getModel()).addElement(dobj);
+                }
+            }
+        }
+    }
+
+
+    public void loadTemplatesFromDirectory(File folder, String type)
+    {
+        if (folder != null && folder.exists())
+        {
+            File[] files = folder.listFiles();
+
+            for (int i=0; i<files.length; ++i)
+            {
+                loadTemplatesFromFile(files[i], type);
+            }
+        }
+    }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -90,10 +163,15 @@ public final class TemplateVisualPanel extends JPanel {
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, I18n.getString("TemplateVisualPanel.RadioButton.ColLayout")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, "Columnar Layout");
         jRadioButton1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jRadioButton1StateChanged(evt);
+            }
+        });
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -104,10 +182,15 @@ public final class TemplateVisualPanel extends JPanel {
         add(jRadioButton1, gridBagConstraints);
 
         buttonGroup1.add(jRadioButton2);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton2, I18n.getString("TemplateVisualPanel.RadioButton.TabLayout")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton2, "Tabular Layout");
         jRadioButton2.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jRadioButton2StateChanged(evt);
+            }
+        });
+        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton2ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -151,9 +234,9 @@ public final class TemplateVisualPanel extends JPanel {
         if (jList1.getSelectedIndex() >= 0)
         {
             DataObject dataObject = (DataObject)jList1.getSelectedValue();
-            if (dataObject.getPrimaryFile().existsExt(I18n.getString("TemplateVisualPanel.List.Preview")))
+            if (dataObject.getPrimaryFile().existsExt("preview"))
             {
-                FileObject previewFileObject = dataObject.getFolder().getPrimaryFile().getFileObject(dataObject.getName(), I18n.getString("TemplateVisualPanel.List.Preview"));
+                FileObject previewFileObject = dataObject.getFolder().getPrimaryFile().getFileObject(dataObject.getName(), "preview");
                 if (previewFileObject != null)
                 {
                     try {
@@ -166,18 +249,58 @@ public final class TemplateVisualPanel extends JPanel {
                     }
                 }
             }
+            else
+            {
+                // Look for a .gif or .png or .jpg....
+                File f = FileUtil.toFile(dataObject.getPrimaryFile());
+                String fileName = f.getName();
+                if (fileName.lastIndexOf(".") > 0)
+                {
+                    fileName = fileName.substring(0, fileName.lastIndexOf("."));
+                    List<String> extensions = new ArrayList<String>();
+                    extensions.add(".gif");
+                    extensions.add(".GIF");
+                    extensions.add(".jpg");
+                    extensions.add(".JPG");
+                    extensions.add(".png");
+                    extensions.add(".PNG");
+
+                    // Try gif..
+
+                    for (String ext : extensions)
+                    {
+                        File imageFile = new File(f.getParent(), fileName + ext);
+                        if (imageFile.exists())
+                        {
+                            ImageIcon img = new ImageIcon(imageFile+"");
+                            jLabelPreview.setIcon(img);
+                            jLabelPreview.updateUI();
+                            break;
+                        }
+                    }
+                }
+
+
+            }
         }
         
         
     }//GEN-LAST:event_jList1ValueChanged
 
     private void jRadioButton1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButton1StateChanged
-        updateTemplates();
     }//GEN-LAST:event_jRadioButton1StateChanged
 
     private void jRadioButton2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButton2StateChanged
-        updateTemplates();
+        
     }//GEN-LAST:event_jRadioButton2StateChanged
+
+    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+        updateTemplates();
+    }//GEN-LAST:event_jRadioButton2ActionPerformed
+
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        updateTemplates();
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;

@@ -89,7 +89,7 @@ public class JRPropertyDialog extends javax.swing.JDialog {
         jList1.setModel( new DefaultListModel());
         jList1.setCellRenderer(new PropertyHintListCellRenderer());
         addHints();
-        
+
         //to make the default button ...
         this.getRootPane().setDefaultButton(this.jButtonOK);
     }
@@ -112,6 +112,10 @@ public class JRPropertyDialog extends javax.swing.JDialog {
         dlm.addElement(new PropertyHint("net.sf.jasperreports.text.measurer.factory",
                 I18n.getString("JRPropertyDialog.List.Prop4")
                 ));
+
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.chart.theme",
+            I18n.getString("JRPropertyDialog.List.Prop11") +
+            I18n.getString("JRPropertyDialog.List.DefaultNull")));
         
     }
     
@@ -228,6 +232,7 @@ public class JRPropertyDialog extends javax.swing.JDialog {
         dlm.addElement(new PropertyHint("net.sf.jasperreports.export.csv.record.delimiter",
         I18n.getString("JRPropertyDialog.List.Prop10") +
         I18n.getString("JRPropertyDialog.List.Default1")));
+        
     }
     
   

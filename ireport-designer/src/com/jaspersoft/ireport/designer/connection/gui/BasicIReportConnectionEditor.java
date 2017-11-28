@@ -110,7 +110,7 @@ public class BasicIReportConnectionEditor extends javax.swing.JPanel implements 
     @SuppressWarnings("unchecked")
     public IReportConnection getIReportConnection() {
         
-        if (iReportConnection == null)
+        if (iReportConnection != null)
         {
             HashMap map = new HashMap();
             for (int i=0; i<jTableCustomProperties.getRowCount(); ++i)

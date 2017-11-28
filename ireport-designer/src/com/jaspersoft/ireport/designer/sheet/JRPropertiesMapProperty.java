@@ -15,6 +15,7 @@ import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.nodes.PropertySupport;
 
 /**
@@ -32,6 +33,10 @@ public class JRPropertiesMapProperty  extends PropertySupport {
        super( "properties", JRPropertiesMap.class, "Properties","Properties of this object", true,true);
        setValue("canEditAsText", Boolean.FALSE);
        this.propertiesHolder = holder;
+       if (holder instanceof JasperDesign)
+       {
+           setValue("reportProperties", Boolean.TRUE);
+       }
     }
 
     public Object getValue() throws IllegalAccessException, InvocationTargetException {

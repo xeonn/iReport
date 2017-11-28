@@ -598,7 +598,7 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
               {
                   
                   JRPen pen = getLineBox().getPen();
-                  spinnedModel.setValue(pen.getLineWidth());
+                  spinnedModel.setValue(pen.getLineWidth().doubleValue());
                   colorSelector.setColor( pen.getLineColor() ); 
                   if (pen.getLineStyle() != null)
                   {

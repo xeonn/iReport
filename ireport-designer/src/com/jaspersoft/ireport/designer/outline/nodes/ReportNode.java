@@ -16,6 +16,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.actions.AddDatasetAction;
 import com.jaspersoft.ireport.designer.menu.EditQueryAction;
+import com.jaspersoft.ireport.designer.menu.OpenReportDirectoryInFavoritesAction;
 import com.jaspersoft.ireport.designer.sheet.JRPropertiesMapProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
@@ -172,6 +173,8 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         myactions.add(null);
         myactions.add(SystemAction.get(ReportGroupWizardAction.class));
         myactions.add(SystemAction.get(AddDatasetAction.class));
+        myactions.add(null);
+        myactions.add(SystemAction.get(OpenReportDirectoryInFavoritesAction.class));
         //testPropertiesAction);
         
         return myactions.toArray(new Action[myactions.size()]);
@@ -252,7 +255,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
                                 oldValue,newValue);
                     // Find the undoRedo manager...
                     IReportManager.getInstance().addUndoableEdit(urob);
-            
+                    adjustColumns(jasperDesign);
                 }
             }
     }
@@ -329,6 +332,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
                                 oldValue,newValue);
                     // Find the undoRedo manager...
                     IReportManager.getInstance().addUndoableEdit(urob);
+                    adjustColumns(jasperDesign);
                 }
             }
     }
@@ -367,6 +371,8 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
                                 oldValue,newValue);
                     // Find the undoRedo manager...
                     IReportManager.getInstance().addUndoableEdit(urob);
+                    
+                    adjustColumns(jasperDesign);
                 }
             }
     }
@@ -488,41 +494,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
                                 Integer.TYPE,
                                 oldValue,newValue);
                     
-                    // Recalculate the column width...
-                    int total = jasperDesign.getPageWidth();
-                    total -= jasperDesign.getLeftMargin();
-                    total -= jasperDesign.getRightMargin();
-                    if (jasperDesign.getColumnCount() > 1)
-                    {
-                        total -= jasperDesign.getColumnSpacing()*jasperDesign.getColumnCount()-1;
-                    }
-                    
-                    total /= jasperDesign.getColumnCount();
-                    
-                    ObjectPropertyUndoableEdit urob2 =
-                            new ObjectPropertyUndoableEdit(
-                                jasperDesign,
-                                "ColumnWidth", 
-                                Integer.TYPE,
-                                jasperDesign.getColumnWidth(),total);
-                    
-                    jasperDesign.setColumnWidth(total);
-                    urob.concatenate(urob2);
-                    
-                    if (jasperDesign.getColumnCount() == 1 &&
-                        jasperDesign.getColumnSpacing() != 0)
-                    {
-                        ObjectPropertyUndoableEdit urob3 =
-                            new ObjectPropertyUndoableEdit(
-                                jasperDesign,
-                                "ColumnSpacing", 
-                                Integer.TYPE,
-                                jasperDesign.getColumnSpacing(),0);
-                    
-                        jasperDesign.setColumnSpacing(0);
-                        urob.concatenate(urob3);
-                    }
-                    
+                    adjustColumns(jasperDesign);
                     
                     
                     // Find the undoRedo manager...
@@ -681,7 +653,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
                     available = jasperDesign.getPageWidth();
                     available -= jasperDesign.getLeftMargin();
                     available -= jasperDesign.getRightMargin();
-                    available -= (jasperDesign.getColumnCount()-1) * newValue;
+                    available -= ((jasperDesign.getColumnCount()-1) * newValue);
                     available /= jasperDesign.getColumnCount();
 
                     // Recalculate the column spacing...
@@ -761,8 +733,61 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
                                 "Orientation", 
                                 Byte.TYPE,
                                 oldValue,newValue);
+                    
                     // Find the undoRedo manager...
                     IReportManager.getInstance().addUndoableEdit(urob);
+                    // When changing orientation, we want to rotate the
+                    // document too...
+                    int pWidth = jasperDesign.getPageWidth();
+                    int pHeight = jasperDesign.getPageHeight();
+                    
+                    if ((jasperDesign.getOrientation() == jasperDesign.ORIENTATION_LANDSCAPE && pWidth < pHeight) ||
+                        (jasperDesign.getOrientation() == jasperDesign.ORIENTATION_PORTRAIT && pWidth > pHeight)) 
+                    {
+                        jasperDesign.setPageWidth(pHeight);
+                        jasperDesign.setPageHeight(pWidth);
+                        
+                        // switch height and width...
+                        ObjectPropertyUndoableEdit urob1 =
+                            new ObjectPropertyUndoableEdit(
+                                jasperDesign,
+                                "PageWidth", 
+                                Integer.TYPE,
+                                pWidth,pHeight);
+                        IReportManager.getInstance().addUndoableEdit(urob1, true);
+                        ObjectPropertyUndoableEdit urob2 =
+                            new ObjectPropertyUndoableEdit(
+                                jasperDesign,
+                                "PageHeight", 
+                                Integer.TYPE,
+                                pHeight,pWidth);
+                        IReportManager.getInstance().addUndoableEdit(urob2, true);
+                        
+                        // Adjust the columns width...
+                        if (jasperDesign.getColumnCount() > 1)
+                        {
+                            int availableSpace = jasperDesign.getPageWidth() - jasperDesign.getLeftMargin() - jasperDesign.getRightMargin();
+                            availableSpace -= (jasperDesign.getColumnCount()-1) * jasperDesign.getColumnSpacing();
+                            int columnWidth = availableSpace / jasperDesign.getColumnCount();
+                            int oldColumnWidth = jasperDesign.getColumnWidth();
+
+                            jasperDesign.setColumnWidth(columnWidth);
+                            ObjectPropertyUndoableEdit urob3 =
+                            new ObjectPropertyUndoableEdit(
+                                jasperDesign,
+                                "ColumnWidth", 
+                                Integer.TYPE,
+                                oldColumnWidth,columnWidth);
+                            IReportManager.getInstance().addUndoableEdit(urob3, true);
+                        }
+                    }
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                 }
             }
     }
@@ -1043,15 +1068,18 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         
         if (evt.getPropertyName().equals( JasperDesign.PROPERTY_COLUMN_COUNT) ||
             evt.getPropertyName().equals( JasperDesign.PROPERTY_COLUMN_SPACING) ||
-            evt.getPropertyName().equals( JasperDesign.PROPERTY_COLUMN_WIDTH))
+            evt.getPropertyName().equals( JasperDesign.PROPERTY_COLUMN_WIDTH) ||
+            evt.getPropertyName().equals( JasperDesign.PROPERTY_ORIENTATION) ||
+            evt.getPropertyName().equals( JasperDesign.PROPERTY_LEFT_MARGIN) ||
+            evt.getPropertyName().equals( JasperDesign.PROPERTY_RIGHT_MARGIN) ||
+            evt.getPropertyName().equals( JasperDesign.PROPERTY_PAGE_WIDTH))
         {
             this.firePropertyChange(JasperDesign.PROPERTY_COLUMN_COUNT, null, jd.getColumnCount() );
             this.firePropertyChange(JasperDesign.PROPERTY_COLUMN_SPACING, null, jd.getColumnSpacing() );
             this.firePropertyChange(JasperDesign.PROPERTY_COLUMN_WIDTH, null, jd.getColumnWidth() );
-            
-            
         }
-        else if (ModelUtils.containsProperty(  this.getPropertySets(), evt.getPropertyName()))
+        
+        if (ModelUtils.containsProperty(  this.getPropertySets(), evt.getPropertyName()))
         {
             this.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue() );
         }
@@ -1090,6 +1118,44 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         */
     }
 
+    public static void adjustColumns(JasperDesign jasperDesign)
+    {
+        // Recalculate the column width...
+        int total = jasperDesign.getPageWidth();
+        total -= jasperDesign.getLeftMargin();
+        total -= jasperDesign.getRightMargin();
+        if (jasperDesign.getColumnCount() > 1)
+        {
+            total -= jasperDesign.getColumnSpacing()*(jasperDesign.getColumnCount()-1);
+        }
+
+        total /= jasperDesign.getColumnCount();
+
+        ObjectPropertyUndoableEdit urob2 =
+                new ObjectPropertyUndoableEdit(
+                    jasperDesign,
+                    "ColumnWidth", 
+                    Integer.TYPE,
+                    jasperDesign.getColumnWidth(),total);
+
+        jasperDesign.setColumnWidth(total);
+        IReportManager.getInstance().addUndoableEdit(urob2, true);
+
+        if (jasperDesign.getColumnCount() == 1 &&
+            jasperDesign.getColumnSpacing() > 0)
+        {
+            ObjectPropertyUndoableEdit urob3 =
+                new ObjectPropertyUndoableEdit(
+                    jasperDesign,
+                    "ColumnSpacing", 
+                    Integer.TYPE,
+                    jasperDesign.getColumnSpacing(),0);
+
+            jasperDesign.setColumnSpacing(0);
+            IReportManager.getInstance().addUndoableEdit(urob3, true);
+        }
+    }
+    
     
     @Override
     public <T extends Node.Cookie> T getCookie(Class<T> type) {

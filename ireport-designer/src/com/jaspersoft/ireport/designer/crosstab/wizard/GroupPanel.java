@@ -321,19 +321,19 @@ public class GroupPanel extends javax.swing.JPanel {
         {
             if (groupByType.equals(I18n.getString("Global.ComboBox.Year")))
             {
-                return I18n.getString("GroupPanel.Label.DateFormat")+expression+")";
+                return "(new SimpleDateFormat(\"yyyy\")).format("+expression+")";
             }
             else if (groupByType.equals(I18n.getString("Global.ComboBox.Month")))
             {
-                return I18n.getString("GroupPanel.Label.DateFormat2")+expression+")";
+                return "(new SimpleDateFormat(\"yyyy-MM\")).format("+expression+")";
             }
             else if (groupByType.equals(I18n.getString("Global.ComboBox.Week")))
             {
-                return I18n.getString("GroupPanel.Label.DateFormat3")+expression+")";
+                return "(new SimpleDateFormat(\"yyyy-ww\")).format("+expression+")";
             }
             else if (groupByType.equals(I18n.getString("Global.ComboBox.Day")))
             {
-                return I18n.getString("GroupPanel.Label.DateFormat4")+expression+")";
+                return "(new SimpleDateFormat(\"yyyy-MM-dd\")).format("+expression+")";
             }
         }
         
