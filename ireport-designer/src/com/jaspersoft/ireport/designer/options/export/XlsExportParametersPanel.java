@@ -429,6 +429,7 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
 
 
     public void load() {
+        setInit(true);
         Preferences pref = IReportManager.getPreferences();
 
         jCheckBoxCreateCustomPalette.setSelected( pref.getBoolean(JExcelApiExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE, JRProperties.getBooleanProperty(JExcelApiExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE)));
@@ -451,7 +452,7 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
         jCheckBoxUseSheetNames.setSelected( pref.getBoolean(JRProperties.PROPERTY_PREFIX + "export.xls.useSheetNames", false));
 
         jTextArea1.setText(pref.get(JRProperties.PROPERTY_PREFIX + "export.xls.sheetNames", ""));
-
+        setInit(false);
     }
 
     public void store() {

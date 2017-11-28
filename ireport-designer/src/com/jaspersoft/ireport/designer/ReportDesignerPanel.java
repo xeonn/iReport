@@ -41,6 +41,7 @@ import org.netbeans.api.visual.model.ObjectSceneListener;
 import org.netbeans.api.visual.model.ObjectState;
 import org.openide.explorer.ExplorerManager;
 import org.openide.nodes.Node;
+import org.openide.util.Mutex;
 
         
 /**
@@ -241,12 +242,38 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
 
             public void preferenceChange(PreferenceChangeEvent evt) {
                 try {
-                    getScene().refreshDocument();
-                    getScene().validate();
+                    Mutex.EVENT.readAccess(new Runnable() {
+
+                        public void run() {
+
+                            try {
+                                if (setRefreshing(true)) return;
+                                getScene().refreshDocument();
+                                getScene().validate();
+                             } catch (Exception ex) {}
+                            setRefreshing(false);
+                        }
+                    });
+                    
                 } catch (Exception ex) {}
             }
         });
     }
+
+    boolean refreshing = false;
+
+    public synchronized boolean setRefreshing(boolean b)
+    {
+        boolean old = refreshing;
+        refreshing =b;
+        return old;
+    }
+
+    public boolean isRefreshing()
+    {
+        return refreshing;
+    }
+
 
     static private double[] zoomSteps = new double[]{0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0};
     public void zoomIn() {

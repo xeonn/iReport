@@ -198,8 +198,10 @@ import com.jaspersoft.ireport.designer.sheet.properties.charts.RenderTypePropert
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.AreaRangeAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.AreaRangeAxisMinValueExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DItemLabelProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DRangeAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DRangeAxisMinValueExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.BarItemLabelProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.BarRangeAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.BarRangeAxisMinValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.BubbleDomainAxisMaxValueExpressionProperty;
@@ -220,8 +222,10 @@ import com.jaspersoft.ireport.designer.sheet.properties.charts.MeterTickLabelFon
 import com.jaspersoft.ireport.designer.sheet.properties.charts.PieLabelFormatProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.PieLegendLabelFormatProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.OrientationProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.Pie3DItemLabelProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.Pie3DLabelFormatProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.Pie3DLegendLabelFormatProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.PieItemLabelProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.ScatterDomainAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.ScatterDomainAxisMinValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.ScatterRangeAxisMaxValueExpressionProperty;
@@ -319,20 +323,25 @@ public class ChartPropertiesFactory {
             propertySet.setDisplayName("PiePlot properties");
             propertySet.put(new PieCircularProperty((JRDesignPiePlot)plot));
             propertySet.put(new PieLabelFormatProperty((JRDesignPiePlot)plot));
+            propertySet.put(new PieItemLabelProperty((JRDesignPiePlot)plot));
             propertySet.put(new PieLegendLabelFormatProperty((JRDesignPiePlot)plot));
+            
         }
         else if (plot instanceof JRDesignPie3DPlot)
         {
             propertySet.setDisplayName("Pie3DPlot properties");
             propertySet.put(new Pie3DLabelFormatProperty((JRDesignPie3DPlot)plot));
+            propertySet.put(new Pie3DItemLabelProperty((JRDesignPie3DPlot)plot));
             propertySet.put(new Pie3DLegendLabelFormatProperty((JRDesignPie3DPlot)plot));
             propertySet.put(new Pie3DCircularProperty((JRDesignPie3DPlot)plot));
             propertySet.put(new Pie3DDepthFactorProperty((JRDesignPie3DPlot)plot));
+
         }
         else if (plot instanceof JRDesignBarPlot)
         {
             propertySet.setDisplayName("BarPlot properties");
             propertySet.put(new BarShowLabelsProperty((JRDesignBarPlot)plot));
+            propertySet.put(new BarItemLabelProperty((JRDesignBarPlot)plot));
             propertySet.put(new BarShowTickMarksProperty((JRDesignBarPlot)plot));
             propertySet.put(new BarShowTickLabelsProperty((JRDesignBarPlot)plot));
             propertySet.put(new BarCategoryAxisLabelExpressionProperty((JRDesignBarPlot)plot, dataset));
@@ -351,11 +360,13 @@ public class ChartPropertiesFactory {
             propertySet.put(new BarValueAxisLineColorProperty((JRDesignBarPlot)plot));
             propertySet.put(new BarRangeAxisMinValueExpressionProperty((JRDesignBarPlot)plot, dataset));
             propertySet.put(new BarRangeAxisMaxValueExpressionProperty((JRDesignBarPlot)plot, dataset));
+
         }
         else if (plot instanceof JRDesignBar3DPlot)
         {
             propertySet.setDisplayName("Bar3DPlot properties");
             propertySet.put(new Bar3DShowLabelsProperty((JRDesignBar3DPlot)plot));
+            propertySet.put(new Bar3DItemLabelProperty((JRDesignBar3DPlot)plot));
             propertySet.put(new Bar3DXOffsetProperty((JRDesignBar3DPlot)plot));
             propertySet.put(new Bar3DYOffsetProperty((JRDesignBar3DPlot)plot));
             propertySet.put(new Bar3DCategoryAxisLabelExpressionProperty((JRDesignBar3DPlot)plot, dataset));
@@ -374,6 +385,7 @@ public class ChartPropertiesFactory {
             propertySet.put(new Bar3DValueAxisLineColorProperty((JRDesignBar3DPlot)plot));
             propertySet.put(new Bar3DRangeAxisMinValueExpressionProperty((JRDesignBar3DPlot)plot, dataset));
             propertySet.put(new Bar3DRangeAxisMaxValueExpressionProperty((JRDesignBar3DPlot)plot, dataset));
+
         }
         else if (plot instanceof JRDesignLinePlot)
         {

@@ -74,7 +74,7 @@ public final class OpenSubreportAction extends NodeAction {
         {
            // Return default image...
            // Unable to resolve the subreoport jrxml file...
-            subreportNotFound("The subreport expression is empty.");
+            subreportNotFound("The subreport expression is empty or it is not of type String.");
             return;
         }
 
@@ -119,7 +119,7 @@ public final class OpenSubreportAction extends NodeAction {
                     URL[] urls = new URL[]{};
                     if (reportFolder != null)
                     {
-                        urls = new URL[]{ reportFolder.toURL()};
+                        urls = new URL[]{ reportFolder.toURI().toURL()};
                     }
                     URLClassLoader urlClassLoader = new URLClassLoader(urls, classLoader);
                     URL url = urlClassLoader.findResource(resourceName);
@@ -144,6 +144,10 @@ public final class OpenSubreportAction extends NodeAction {
                 }
 
              }
+            else
+            {
+                subreportNotFound("The subreport expression returned null. I'm unable to locate the subreport jrxml :-(");
+            }
         } catch (Throwable ex) {
 
             subreportNotFound(ex.getMessage());

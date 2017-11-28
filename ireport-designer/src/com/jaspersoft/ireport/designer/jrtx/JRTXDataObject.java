@@ -4,6 +4,7 @@
  */
 package com.jaspersoft.ireport.designer.jrtx;
 
+import com.jaspersoft.ireport.designer.utils.FileEncodingQueryImpl;
 import java.io.IOException;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObjectExistsException;
@@ -29,6 +30,7 @@ public class JRTXDataObject extends MultiDataObject implements Lookup.Provider {
         JRTXEditorSupport support = JRTXEditorSupport.create(this);
         ic.add(support);
         ic.add(this);
+        ic.add( new FileEncodingQueryImpl());
         ic.add( getPrimaryFile() );
     }
 

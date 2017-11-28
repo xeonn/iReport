@@ -3,7 +3,7 @@
 ; HM NIS Edit Wizard helper defines
 ;!define PRODUCT_NAME "iReport"
 ;!define PRODUCT_VERSION "1.2.3"
-!define PRODUCT_PUBLISHER "JasperSoft Corp."
+!define PRODUCT_PUBLISHER "Jaspersoft Corp."
 ;!define PRODUCT_WEB_SITE "http://ireport.sourceforge.net"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_NAME}-${PRODUCT_VERSION}.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}-${PRODUCT_VERSION}.exe"
@@ -32,7 +32,7 @@
 ; Start menu page
 var ICONS_GROUP
 !define MUI_STARTMENUPAGE_NODISABLE
-!define MUI_STARTMENUPAGE_DEFAULTFOLDER "JasperSoft\${PRODUCT_NAME}-${PRODUCT_VERSION}"
+!define MUI_STARTMENUPAGE_DEFAULTFOLDER "Jaspersoft\${PRODUCT_NAME}-${PRODUCT_VERSION}"
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "${PRODUCT_UNINST_ROOT_KEY}"
 !define MUI_STARTMENUPAGE_REGISTRY_KEY "${PRODUCT_UNINST_KEY}"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "${PRODUCT_STARTMENU_REGVAL}"
@@ -53,7 +53,7 @@ var ICONS_GROUP
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "..\dist\${PRODUCT_NAME}-${PRODUCT_VERSION}-windows-installer.exe"
-InstallDir "$PROGRAMFILES\JasperSoft\${PRODUCT_NAME}-${PRODUCT_VERSION}"
+InstallDir "$PROGRAMFILES\Jaspersoft\${PRODUCT_NAME}-${PRODUCT_VERSION}"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
@@ -133,7 +133,7 @@ Section Uninstall
   !insertmacro APP_UNASSOCIATE "jrxml" "iReport.Jrxml"
 
   RMDir "$SMPROGRAMS\$ICONS_GROUP"
-  RMDir "$SMPROGRAMS\JasperSoft"
+  RMDir "$SMPROGRAMS\Jaspersoft"
   
   MessageBox MB_YESNO "Do you want to delete the ${PRODUCT_NAME} configuration files too? ($APPDATA\.${PRODUCT_NAME}\${PRODUCT_VERSION})" IDNO configDone
     RMDir /r /REBOOTOK "$APPDATA\.${PRODUCT_NAME}\${PRODUCT_VERSION}"

@@ -75,10 +75,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.actions.CopyAction;
 import org.openide.actions.CutAction;
 import org.openide.actions.DeleteAction;
-import org.openide.actions.MoveDownAction;
-import org.openide.actions.MoveUpAction;
 import org.openide.actions.PasteAction;
-import org.openide.actions.ReorderAction;
 import org.openide.nodes.Children;
 import org.openide.nodes.Index;
 import org.openide.nodes.Node;
@@ -593,14 +590,18 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
 
     @Override
     public PasteType getDropType(Transferable t, final int action, int index) {
-
+        
         Node dropNode = NodeTransfer.node(t, DnDConstants.ACTION_COPY_OR_MOVE + NodeTransfer.CLIPBOARD_CUT);
+        Node[] dropNodes = NodeTransfer.nodes(t, DnDConstants.ACTION_COPY_OR_MOVE + NodeTransfer.CLIPBOARD_CUT);
         int dropAction = DnDUtilities.getTransferAction(t);
+
+        if (dropNode == null)
+        {
+            ElementPasteType.setLastPastedNodes(dropNodes);
+        }
 
         if (null != dropNode && !(dropNode instanceof NotRealElementNode)) {
             JRDesignElement element = dropNode.getLookup().lookup(JRDesignElement.class);
-
-
 
             if (null != element) {
 

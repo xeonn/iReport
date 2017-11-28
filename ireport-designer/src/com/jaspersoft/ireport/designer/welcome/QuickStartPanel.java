@@ -14,6 +14,7 @@ package com.jaspersoft.ireport.designer.welcome;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.connection.gui.ConnectionDialog;
+import com.jaspersoft.ireport.designer.templates.TemplatesFrame;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.designer.wizards.CustomTemplateWizard;
 import com.jaspersoft.ireport.locale.I18n;
@@ -291,7 +292,10 @@ public class QuickStartPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-            CustomTemplateWizard wizardDescriptor = new CustomTemplateWizard();
+
+        /*
+
+        CustomTemplateWizard wizardDescriptor = new CustomTemplateWizard();
 
             //wizardDescriptor.putProperty("useCustomChooserPanel", "true");
             File targetFolder = Misc.findStartingDirectory();
@@ -310,6 +314,9 @@ public class QuickStartPanel extends javax.swing.JPanel {
             Dialog dialog = DialogDisplayer.getDefault().createDialog(wizardDescriptor);
             dialog.setVisible(true);
             dialog.toFront();
+        */
+        TemplatesFrame td = new TemplatesFrame(Misc.getMainFrame(), true);
+        td.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
 

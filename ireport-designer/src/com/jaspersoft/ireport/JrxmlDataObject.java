@@ -1,6 +1,7 @@
 package com.jaspersoft.ireport;
 
 import com.jaspersoft.ireport.designer.JrxmlEditorSupport;
+import com.jaspersoft.ireport.designer.utils.FileEncodingQueryImpl;
 import java.io.IOException;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObjectExistsException;
@@ -29,6 +30,7 @@ public class JrxmlDataObject extends MultiDataObject
         ic.add(support);
         ic.add(this);
         ic.add( getPrimaryFile() );
+        ic.add( new FileEncodingQueryImpl());
         //ic.add(new JrxmlProviderImpl(getPrimaryFile()));
         //CookieSet cookies = getCookieSet();
         

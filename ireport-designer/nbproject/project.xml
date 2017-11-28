@@ -665,8 +665,8 @@
                 <binary-origin>release/modules/ext/jpa.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/hsqldb-1.7.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/hsqldb-1.7.1.jar</binary-origin>
+                <runtime-relative-path>ext/hsqldb-1.8.0-10.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/hsqldb-1.8.0-10.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/commons-collections-3.2.1.jar</runtime-relative-path>
@@ -713,8 +713,8 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-3.5.2.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-3.5.2.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-3.5.3.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-3.5.3.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jaxen-1.1.1.jar</runtime-relative-path>
@@ -841,8 +841,8 @@
                 <binary-origin>release/modules/ext/rhino-1.7R1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-chart-themes-3.5.2.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-chart-themes-3.5.2.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-chart-themes-3.5.3.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-chart-themes-3.5.3.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/castor-1.2.jar</runtime-relative-path>

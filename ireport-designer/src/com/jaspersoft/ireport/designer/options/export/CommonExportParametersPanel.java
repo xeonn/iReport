@@ -311,6 +311,7 @@ public class CommonExportParametersPanel extends AbstractExportParametersPanel {
     // End of variables declaration//GEN-END:variables
 
     public void load() {
+        setInit(true);
         Preferences pref = IReportManager.getPreferences();
 
         jCheckBoxIgnorePageMargins.setSelected( pref.getBoolean(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS, JRProperties.getBooleanProperty(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS)));
@@ -340,7 +341,7 @@ public class CommonExportParametersPanel extends AbstractExportParametersPanel {
         m.setValue(pref.getInt(JRProperties.PROPERTY_PREFIX + "export.offset.x", 0));
         m = (SpinnerNumberModel)jSpinnerOffsetY.getModel();
         m.setValue(pref.getInt(JRProperties.PROPERTY_PREFIX + "export.offset.y", 0));
-
+        setInit(false);
     }
 
     public void store() {

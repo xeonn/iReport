@@ -6,7 +6,6 @@
 package com.jaspersoft.ireport.jasperserver.options;
 
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import javax.swing.SpinnerNumberModel;
 
 final class JasperServerRepositoryPanel extends javax.swing.JPanel {
@@ -18,6 +17,31 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
         initComponents();
         // TODO listen to changes in form fields and call controller.changed()
         jSpinner1.setModel(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE/1000, 5));
+    }
+
+    private boolean init = false;
+
+    public boolean setInit(boolean b)
+    {
+        boolean old = init;
+        init =b;
+        return old;
+    }
+
+    public boolean isInit()
+    {
+        return init;
+    }
+
+    /**
+     * Notify a change in the UI.
+     */
+    public void notifyChange()
+    {
+        if (this.controller != null && !isInit())
+        {
+            controller.changed();
+        }
     }
 
     /** This method is called from within the constructor to
@@ -33,6 +57,12 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
         jCheckBoxProMode = new javax.swing.JCheckBox();
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(JasperServerRepositoryPanel.class, "JasperServerRepositoryPanel.jLabel1.text")); // NOI18N
+
+        jSpinner1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinner1StateChanged(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxProMode, org.openide.util.NbBundle.getMessage(JasperServerRepositoryPanel.class, "JasperServerRepositoryPanel.jCheckBoxProMode.text")); // NOI18N
         jCheckBoxProMode.addActionListener(new java.awt.event.ActionListener() {
@@ -72,14 +102,20 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCheckBoxProModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxProModeActionPerformed
-        controller.changed();
+        notifyChange();
 }//GEN-LAST:event_jCheckBoxProModeActionPerformed
 
+    private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
+        notifyChange();
+    }//GEN-LAST:event_jSpinner1StateChanged
+
     void load() {
+        setInit(true);
         //jCheckBoxJS30Compatibility.setSelected(IReportManager.getPreferences().getBoolean("use_jrxml_DTD", false));
         int timeout = IReportManager.getPreferences().getInt("client_timeout", 0);
         jSpinner1.setValue(new Integer(timeout));
         jCheckBoxProMode.setSelected(IReportManager.getPreferences().getBoolean("proMode", false));
+        setInit(false);
     }
 
     void store() {

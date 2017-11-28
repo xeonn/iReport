@@ -17,6 +17,20 @@ public abstract class AbstractExportParametersPanel extends JPanel implements Op
 
     private IReportOptionsPanelController controller = null;
 
+    private boolean init = false;
+
+    public boolean setInit(boolean b)
+    {
+        boolean old = init;
+        init =b;
+        return old;
+    }
+
+    public boolean isInit()
+    {
+        return init;
+    }
+
     public AbstractExportParametersPanel()
     {
     }
@@ -26,7 +40,7 @@ public abstract class AbstractExportParametersPanel extends JPanel implements Op
      */
     public void notifyChange()
     {
-        if (this.getController() != null)
+        if (this.getController() != null && !isInit())
         {
             getController().changed();
         }

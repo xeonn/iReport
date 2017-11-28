@@ -1,3 +1,43 @@
+2009-08-03 Version 3.5.3 released
+_______________________________________________________________________________
+- Modified ireport.exe to fix a problem when missing the user app data registry key
+- Feature Req 0000941: iReport should compile automatically all referenced sub reports
+- Feature Req 0004151: Support for the XHTML Exporter of JasperReports
+- Feature Req 0004147: Support for the .docx exporter of JasperReports
+- Feature Req 0000942: Add XML Preview in iReports
+- Feature Req 0003596: dialog to edit jasperreports.properties file
+- Fixed bug 0003671: Under Linux Acrobat cannot find preview pdf
+- Fixed bug 0004061: IReport supplies (OLD) JDBC Drivers that can't be replaced without building
+- Fixed bug 0004119: Cancel Meter Intervals Dialog removes All Intervals
+- Fixed bug 0004019: java.sql.Timestamp parameter contains wrong value
+- Fixed bug 0004021: iReport 3.5.2 compatibility save removes group footers
+- Fixed bug 0004121: default value of runToBottom property misrepresented in checkbox
+- Fixed bug 0004142: Report designer has no fields on a CSV source
+- Fixed bug 0004017: Bad encoding of characters with accents in JRXML
+- Fixed bug 0004104: HQLFieldsReader deals incorrectly with fields of primitive types
+- Fixed bug 0004078: iReport 3.5.1 or 3.5.2 freeze when trying to add multiple list components to a Frame
+- Improved expression editor
+- Fixed bug 14693  applying a style corrupts jrxml
+- Fixed bug 14817  Cannot create simple report
+- Fixed bug 14906 - CSV data source does not handle row separators as expected
+- Fixed bug renaming conditional styles
+- Added support for Ignore Width property for crosstabs
+- Added support for Label Item for Pie and Bar charts
+- Automatic opening of output files using OS features (for Win32 and MacOS)
+- Added edit with external text editor menu item
+- iReport is set as default txt, csv and xml viewer if a viewer application is not set in the properties
+- iReport tries now to automatically detect the system browser for HTML preview
+- Added new templates
+- Added a button to save a page as png (for template thumbnail porpuses) in the preview toolbar
+- Improved template wizard with ability to read jrxml properties to drive the template generation
+- New template chooser with integrated wizard
+- Fixed bug 14622 - [Case #8466] The separators setting for the CSV datasource is not retained after iReport is restarted
+- Fixed bug 14505 - Ship Vertica JDBC driver with iReport Pro
+- Fixed bug 15001 - [Case #9242] crosstab measure expression class incorrectly set in iReport
+- Fixed bug 14815 - [Case #9134] iR 3.5.2 - Compatibility Mode changes only after saving the report
+- Fixed bug 14616 - Property "Legend font" should be "Legend Font"
+- Fixed bug 14602 - [case #8859] Report Wizard does not suggest default Datasource
+
 2009-06-03 Version 3.5.2 released
 _______________________________________________________________________________
 - Fixed bug 3785: [Bugs iReport - NB] Right-click OPEN SUBREPORT does nothing

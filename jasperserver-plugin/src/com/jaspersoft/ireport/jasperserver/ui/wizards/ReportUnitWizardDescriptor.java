@@ -231,10 +231,16 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
     
     private void addRequiredResources(File resourceFile, ResourceDescriptor rd) throws java.lang.Exception {
         
+        addRequiredResources(getServer(), resourceFile, rd);
+    }
+
+
+    public static void addRequiredResources(JServer server, File resourceFile, ResourceDescriptor rd) throws java.lang.Exception {
+
         JasperDesign report = JRXmlLoader.load(resourceFile);
         List children = RepositoryJrxmlFile.identifyElementValidationItems(report, rd, resourceFile.getParent());
-        
-        
+
+
         if (children.size() > 0)
         {
             // We will create a temporary file somewhere else...
@@ -245,16 +251,16 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
 
             System.out.println("Temporary file: " + resourceFile + " " + resourceFile.lastModified() + " " + resourceFile.exists());
             System.out.flush();
-            
+
             JrxmlValidationDialog jvd = new JrxmlValidationDialog(Misc.getMainFrame(),true);
             jvd.setElementVelidationItems( children );
-            jvd.setServer( getServer() );
+            jvd.setServer( server );
             jvd.setFileName(tmpFileName);
-            jvd.setReportUnit( new RepositoryReportUnit(getServer(), rd) );
+            jvd.setReportUnit( new RepositoryReportUnit(server, rd) );
             jvd.setReport( report );
             jvd.setVisible(true);
             if (jvd.getDialogResult() != JOptionPane.CANCEL_OPTION)
-            {               
+            {
                 // Save the report in a new temporary file and store it....
                 // Look for the main jrxml...
                 if (modified != resourceFile.lastModified())
@@ -266,15 +272,18 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
                         ResourceDescriptor rdMainJrxml = (ResourceDescriptor)rd.getChildren().get(i);
                         if (rdMainJrxml.getWsType().equals(rdMainJrxml.TYPE_JRXML) && rdMainJrxml.isMainReport())
                         {
-                            
+
                             rdMainJrxml.setIsNew(false);
                             rdMainJrxml.setHasData(true);
-                            rdMainJrxml = getServer().getWSClient().modifyReportUnitResource(rd.getUriString(), rdMainJrxml, new File(tmpFileName) ); 
+                            rdMainJrxml = server.getWSClient().modifyReportUnitResource(rd.getUriString(), rdMainJrxml, new File(tmpFileName) );
                             // Refresh reportUnitResourceDescriptor....
                             rd.getChildren().set(i, rdMainJrxml);
                             break;
                         }
                     }
+
+                    // At this point, if the file is open we should reload it...
+                    
                 }
                 else
                 {

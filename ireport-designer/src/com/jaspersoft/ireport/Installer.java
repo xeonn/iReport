@@ -4,6 +4,7 @@
  */
 package com.jaspersoft.ireport;
 
+import net.sf.jasperreports.engine.util.JRProperties;
 import org.openide.modules.ModuleInstall;
 
 /**
@@ -30,9 +31,8 @@ public class Installer extends ModuleInstall {
             System.setProperty("javax.xml.datatype.DatatypeFactory","com.sun.org.apache.xerces.internal.jaxp.datatype.DatatypeFactoryImpl");
         }
 
-        System.out.println("javax.xml.parsers.SAXParserFactory="+System.getProperty("javax.xml.parsers.SAXParserFactory"));
-        System.out.println("javax.xml.parsers.DocumentBuilderFactory="+System.getProperty("javax.xml.parsers.DocumentBuilderFactory"));
-        System.out.println("javax.xml.datatype.DatatypeFactory="+System.getProperty("javax.xml.datatype.DatatypeFactory"));
-        System.out.flush();
+        
+
+
     }
 }

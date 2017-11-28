@@ -211,7 +211,13 @@ public class ElementGroupNode extends IRIndexedNode implements PropertyChangeLis
     public PasteType getDropType(Transferable t, final int action, int index) {
 
         Node dropNode = NodeTransfer.node(t, DnDConstants.ACTION_COPY_OR_MOVE + NodeTransfer.CLIPBOARD_CUT);
+        Node[] dropNodes = NodeTransfer.nodes(t, DnDConstants.ACTION_COPY_OR_MOVE + NodeTransfer.CLIPBOARD_CUT);
         int dropAction = DnDUtilities.getTransferAction(t);
+
+        if (dropNode == null)
+        {
+            ElementPasteType.setLastPastedNodes(dropNodes);
+        }
                
         if (null != dropNode) {
             JRDesignElement element = dropNode.getLookup().lookup(JRDesignElement.class);

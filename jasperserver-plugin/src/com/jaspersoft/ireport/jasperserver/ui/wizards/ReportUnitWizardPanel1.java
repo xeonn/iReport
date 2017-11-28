@@ -102,12 +102,12 @@ public class ReportUnitWizardPanel1 implements WizardDescriptor.Panel {
     public void storeSettings(Object settings) {
         getComponent().storeSettings(getWizardDescriptor());
         java.util.Iterator namesProps = getWizardDescriptor().getProperties().keySet().iterator();
-        while (namesProps.hasNext())
-        {
-            String name = ""+namesProps.next();
-            System.out.println("Property: " + name + " " + getWizardDescriptor().getProperty(name));
-            System.out.flush();
-        }
+//        while (namesProps.hasNext())
+//        {
+//            String name = ""+namesProps.next();
+//            System.out.println("Property: " + name + " " + getWizardDescriptor().getProperty(name));
+//            System.out.flush();
+//        }
     }
 
 }

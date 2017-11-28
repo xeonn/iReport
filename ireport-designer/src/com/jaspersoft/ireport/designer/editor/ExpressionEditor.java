@@ -6,32 +6,36 @@
 
 package com.jaspersoft.ireport.designer.editor;
 
+import bsh.ParseException;
+import bsh.Parser;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
+import java.awt.Point;
 import java.awt.Window;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.prefs.Preferences;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
-import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.text.EditorKit;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabParameter;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
-import org.openide.text.CloneableEditorSupport;
 
 /**
  *
@@ -58,6 +62,7 @@ public class ExpressionEditor extends javax.swing.JPanel {
 
     public void setExpression(String expression) {
         jEditorPane1.setText(expression);
+        checkSyntax();
     }
 
     public static ArrayList<String> getPredefinedExpressions() {
@@ -89,6 +94,7 @@ public class ExpressionEditor extends javax.swing.JPanel {
 
     public void setExpressionContext(ExpressionContext expressionContext) {
         this.expressionContext = expressionContext;
+        this.jEditorPane1.setExpressionContext(expressionContext);
         refreshContext();
     }
     
@@ -105,6 +111,8 @@ public class ExpressionEditor extends javax.swing.JPanel {
         defaultExpressions.add("((net.sf.jasperreports.engine.data.JRXmlDataSource)$P{REPORT_DATA_SOURCE}).subDataSource(<select expression>)");
         defaultExpressions.add("((net.sf.jasperreports.engine.data.JRXmlDataSource)$P{REPORT_DATA_SOURCE}).dataSource(<select expression>)");
     }
+
+    
     
     /** Creates new form ExpressionEditorPanel */
     public ExpressionEditor() {
@@ -120,23 +128,253 @@ public class ExpressionEditor extends javax.swing.JPanel {
         
         jList2.setCellRenderer(new ExpObjectCellRenderer(jList2));
         jList3.setCellRenderer(new MethodsListCellRenderer((jList3)));
-        
-        EditorKit kit = CloneableEditorSupport.getEditorKit("text/jrxml-expression");
-        jEditorPane1.setEditorKit(kit);
-        
-        jEditorPane1.addFocusListener(new FocusListener() {
 
-            public void focusGained(FocusEvent e) {
-                ExpressionContext.setGlobalContext(getExpressionContext());
-                ExpressionContext.activeEditor = jEditorPane1;
+        //jList4.setModel(new DefaultListModel());
+
+        /*
+        jEditorPane1.getDocument().addDocumentListener(new DocumentListener() {
+
+            public void insertUpdate(DocumentEvent e) {
+                refreshTokensList();
             }
 
-            public void focusLost(FocusEvent e) {
+            public void removeUpdate(DocumentEvent e) {
+                refreshTokensList();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                refreshTokensList();
             }
         });
-        
+        */
+
+        jEditorPane1.addCaretListener(new CaretListener() {
+
+            public void caretUpdate(CaretEvent e) {
+                //refreshTokensList();
+                int y = 0;
+                int x = 0;
+                try {
+                    String text = jEditorPane1.getText(0, jEditorPane1.getCaretPosition());
+                    String[] lines = text.split("[\\r\\n]+");
+                    y = lines.length;
+                    x = lines[lines.length-1].length();
+                } catch (Exception ex){}
+                // Calculate caret position...
+                jLabelCaretPosition.setText( "Ln " + y + ", Col " + x);
+            }
+        });
+
+
+        jEditorPane1.getDocument().addDocumentListener(new DocumentListener() {
+
+            public void insertUpdate(DocumentEvent e) {
+                checkSyntax();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                checkSyntax();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                checkSyntax();
+            }
+        } );
+
         refreshContext();
     }
+
+
+    public void checkSyntax()
+    {
+        jLabelErrors.setForeground(Color.BLACK);
+        jLabelErrors.setText(" ");
+        String exp = jEditorPane1.getText();
+
+        while (exp.length() > 0 && Character.isWhitespace(  exp.charAt(exp.length()-1)) )
+        {
+            exp = exp.substring(0,exp.length()-1);
+        }
+        if (exp.endsWith(";"))
+        {
+            Point p = findCaretPosition(exp);
+            jLabelErrors.setForeground(Color.red.darker());
+            jLabelErrors.setText("Invalid character ';' at line: " + p.y + ", column: " + p.x);
+        }
+
+        // Replace all the $x{xxx} with a valid variable name one by one
+            // to keep the width...
+        String[] patterns = new String[]{"$P{", "$V{", "$F{", "$R{"};
+        String[] patternNames = new String[]{"Parameter", "Variable", "Field", "Resource"};
+
+        for (int k=0; k<patterns.length; ++k)
+        {
+            while (exp.indexOf(patterns[k]) >= 0)
+            {
+                int initialIndex = exp.indexOf(patterns[k]);
+                boolean endFound = false;
+                for (int index = initialIndex; index >=0 && index < exp.length(); ++index)
+                {
+                    char c = exp.charAt(index);
+                    exp = exp.substring(0,index) + "X" + exp.substring(index+1);
+
+                    if (c == '}')
+                    {
+                        endFound = true;
+                        break;
+                    }
+                }
+                if (!endFound)
+                {
+                    String text = jEditorPane1.getText();
+                    Point p = findCaretPosition(text, initialIndex);
+                    jLabelErrors.setForeground(Color.red.darker());
+                    jLabelErrors.setText("Report " + patternNames[k] + " reference not closed at line: " + p.y + ", column: " + p.x);
+                    return;
+                }
+           }
+        }
+
+        exp += ";";
+        Parser parser = new Parser(new StringReader(exp));
+        try {
+            
+//            interpreter.eval(exp);
+            parser.Line();
+
+        } catch (ParseException  ex)
+        {
+            bsh.Token errorToken = null;
+            bsh.Token tmp = parser.getToken(0);
+            for (int i=1; tmp != null; i++)
+            {
+                errorToken = tmp;
+                tmp = tmp.next;
+            }
+            String message = ex.getMessage() +  "\n";
+            if (errorToken != null)
+            {
+
+                Point p = findCaretPosition(exp);
+                if (p.y == errorToken.beginLine && p.x == errorToken.beginColumn)
+                {
+                    message = "Incomplete expression.";
+                }
+            }
+            jLabelErrors.setForeground(Color.red.darker());
+            jLabelErrors.setText(message);
+
+        } catch (Throwable  ex) {}
+    }
+
+    /**
+     * Return column/line
+     * @param text
+     * @param position
+     * @return
+     */
+    private Point findCaretPosition(String text)
+    {
+        Point p = new Point(0,1);
+        String[] lines = text.split("[\\r\\n]+");
+        p.y = lines.length;
+        p.x = lines[lines.length-1].length();
+        return p;
+    }
+
+    /**
+     * Return column/line
+     * @param text
+     * @param position
+     * @return
+     */
+    private Point findCaretPosition(String text, int position)
+    {
+        return findCaretPosition(text.substring(0,position));
+    }
+
+    /*
+    public void refreshTokensList()
+    {
+        DefaultListModel model = (DefaultListModel)jList4.getModel();
+        model.removeAllElements();
+
+        AbstractDocument document = (AbstractDocument)jEditorPane1.getDocument();
+        document.readLock();
+        try {
+
+            TokenHierarchy th = TokenHierarchy.get(document);
+            TokenSequence ts = th.tokenSequence();
+
+            int caretPos = jEditorPane1.getCaretPosition();
+            model.addElement("Current position: "  + jEditorPane1.getCaretPosition());
+
+            Token tokenAtPosition = null;
+            Token previousPositionToken = null;
+            String textFromLastValidToked = "";
+            try {
+                textFromLastValidToked = document.getText(0, caretPos);
+            } catch (BadLocationException ex) {
+                //Exceptions.printStackTrace(ex);
+            }
+
+            ts.moveStart();
+            int pos = 0;
+            while (ts.moveNext())
+            {
+                Token t = ts.token();
+                if (t.length() <= 0) continue; // skip null tokens...
+                int t_start = pos;
+                int t_end = pos + t.length();
+                pos = t_end;
+
+                if (caretPos > t_start && caretPos <= t_end)
+                {
+                    tokenAtPosition = t;
+                    model.addElement("**" + t.id().name() + " " + t.text() + " {"  + t_start + " - " + t_end + "}");
+                }
+                else
+                {
+                    model.addElement(t.id().name() + " " + t.text() + " {"  + t_start + " - " + t_end + "}");
+                }
+                
+                if (caretPos > t_end)
+                {
+                    previousPositionToken = t;
+                    try {
+                        textFromLastValidToked = document.getText(t_end, caretPos - t_end);
+                    } catch (BadLocationException ex) {
+                        //Exceptions.printStackTrace(ex);
+                    }
+                }
+            }
+
+            if (previousPositionToken != null)
+            {
+                model.insertElementAt("PT: " + previousPositionToken.id().name() + " " + previousPositionToken.text(),1);
+            }
+            else
+            {
+                model.insertElementAt( "NO PT",1);
+            }
+            if (tokenAtPosition != null)
+            {
+                model.insertElementAt("CT: " + tokenAtPosition.id().name() + " " + tokenAtPosition.text(),1);
+            }
+            else
+            {
+                model.insertElementAt("NO CT",1);
+            }
+            
+            model.insertElementAt("Pre text:" + textFromLastValidToked,1);
+
+        } finally {
+            document.readUnlock();
+        }
+
+
+    }
+    */
     
     /**
      *  Refresh the content of the expression editor based on the current
@@ -228,10 +466,15 @@ public class ExpressionEditor extends javax.swing.JPanel {
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jSplitPane1 = new javax.swing.JSplitPane();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jEditorPane1 = new JEditorPane();
+        jEditorPane1 = new com.jaspersoft.ireport.designer.editor.ExpressionEditorPane();
+        jPanel3 = new javax.swing.JPanel();
+        jLabelErrors = new javax.swing.JLabel();
+        jLabelCaretPosition = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
         jSplitPane3 = new javax.swing.JSplitPane();
@@ -248,13 +491,43 @@ public class ExpressionEditor extends javax.swing.JPanel {
 
         setPreferredSize(new java.awt.Dimension(550, 450));
 
+        jSplitPane1.setBorder(null);
         jSplitPane1.setDividerLocation(200);
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setResizeWeight(0.8);
 
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        jEditorPane1.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+                jEditorPane1CaretPositionChanged(evt);
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+            }
+        });
         jScrollPane1.setViewportView(jEditorPane1);
 
-        jSplitPane1.setTopComponent(jScrollPane1);
+        jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        jLabelErrors.setText(org.openide.util.NbBundle.getMessage(ExpressionEditor.class, "ExpressionEditor.jLabelErrors.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel3.add(jLabelErrors, gridBagConstraints);
+
+        jLabelCaretPosition.setText(org.openide.util.NbBundle.getMessage(ExpressionEditor.class, "ExpressionEditor.jLabelCaretPosition.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        jPanel3.add(jLabelCaretPosition, gridBagConstraints);
+
+        jPanel2.add(jPanel3, java.awt.BorderLayout.SOUTH);
+
+        jSplitPane1.setLeftComponent(jPanel2);
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
 
         jSplitPane2.setBorder(null);
         jSplitPane2.setResizeWeight(0.3);
@@ -296,16 +569,7 @@ public class ExpressionEditor extends javax.swing.JPanel {
 
         jSplitPane2.setLeftComponent(jScrollPane2);
 
-        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jSplitPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jSplitPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-        );
+        jPanel1.add(jSplitPane2, java.awt.BorderLayout.CENTER);
 
         jSplitPane1.setRightComponent(jPanel1);
 
@@ -344,7 +608,7 @@ public class ExpressionEditor extends javax.swing.JPanel {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jSplitPane1)
+                    .add(jSplitPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
                         .add(jButtonImport)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -616,6 +880,10 @@ public class ExpressionEditor extends javax.swing.JPanel {
     private void jButtonExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExportActionPerformed
         Misc.saveExpression( jEditorPane1.getText(), this );
     }//GEN-LAST:event_jButtonExportActionPerformed
+
+    private void jEditorPane1CaretPositionChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jEditorPane1CaretPositionChanged
+
+    }//GEN-LAST:event_jEditorPane1CaretPositionChanged
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -623,11 +891,15 @@ public class ExpressionEditor extends javax.swing.JPanel {
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonExport;
     private javax.swing.JButton jButtonImport;
-    private javax.swing.JEditorPane jEditorPane1;
+    private com.jaspersoft.ireport.designer.editor.ExpressionEditorPane jEditorPane1;
+    private javax.swing.JLabel jLabelCaretPosition;
+    private javax.swing.JLabel jLabelErrors;
     private javax.swing.JList jList1;
     private javax.swing.JList jList2;
     private javax.swing.JList jList3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

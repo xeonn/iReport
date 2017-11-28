@@ -60,6 +60,31 @@ final class IReportPanel extends javax.swing.JPanel {
 
     private Locale currentReportLocale = null;
     private String currentReportTimeZoneId = null;
+
+    private boolean init = false;
+
+    public boolean setInit(boolean b)
+    {
+        boolean old = init;
+        init =b;
+        return old;
+    }
+
+    public boolean isInit()
+    {
+        return init;
+    }
+
+    /**
+     * Notify a change in the UI.
+     */
+    public void notifyChange()
+    {
+        if (this.controller != null && !isInit())
+        {
+            this.controller.changed();
+        }
+    }
     
     IReportPanel(IReportOptionsPanelController ctlr) {
         this.controller = ctlr;
@@ -82,7 +107,7 @@ final class IReportPanel extends javax.swing.JPanel {
 
         jCheckBoxKeyInReportInspector.setText(I18n.getString("OptionsTabs.showelementkey"));
 
-        // TODO listen to changes in form fields and call controller.changed()
+        // TODO listen to changes in form fields and call notifyChange()
         Unit[] units = Unit.getStandardUnits();
         for (int i=0; i<units.length; ++i)
         {
@@ -107,7 +132,7 @@ final class IReportPanel extends javax.swing.JPanel {
             @Override
             public void mousePressed(MouseEvent e)
             {
-               controller.changed();
+               notifyChange();
             }
          });
 
@@ -120,15 +145,15 @@ final class IReportPanel extends javax.swing.JPanel {
                 {
                     public void changedUpdate(javax.swing.event.DocumentEvent evt)
                     {
-                        controller.changed();
+                        notifyChange();
                     }
                     public void insertUpdate(javax.swing.event.DocumentEvent evt)
                     {
-                        controller.changed();
+                        notifyChange();
                     }
                     public void removeUpdate(javax.swing.event.DocumentEvent evt)
                     {
-                        controller.changed();
+                        notifyChange();
                     }
                 };
                 
@@ -191,6 +216,7 @@ final class IReportPanel extends javax.swing.JPanel {
         //jTabbedPane1.remove(5);
 
         jComboBoxCompatibility.addItem(new Tag("", "Last version"));
+        jComboBoxCompatibility.addItem(new Tag("3_5_2", "JasperReports 3.5.2-3.5.3"));
         jComboBoxCompatibility.addItem(new Tag("3_5_1", "JasperReports 3.5.1"));
         jComboBoxCompatibility.addItem(new Tag("3_5_0", "JasperReports 3.5.0"));
         jComboBoxCompatibility.addItem(new Tag("3_1_4", "JasperReports 3.1.4"));
@@ -249,6 +275,7 @@ final class IReportPanel extends javax.swing.JPanel {
         jCheckBoxCrosstabAutoLayout = new javax.swing.JCheckBox();
         jCheckBoxShowBackgroundAsSeparatedDocument = new javax.swing.JCheckBox();
         jCheckBoxAskConfirmationOnDelete = new javax.swing.JCheckBox();
+        jCheckBoxDebugMode = new javax.swing.JCheckBox();
         jPanel22 = new javax.swing.JPanel();
         jLabelExpressions = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -281,6 +308,10 @@ final class IReportPanel extends javax.swing.JPanel {
         jButtonDeselectAllFonts = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
+        jPanel29 = new javax.swing.JPanel();
+        jTextFieldExternalEditor = new javax.swing.JTextField();
+        jButtonPDFViewer1 = new javax.swing.JButton();
+        jPanel30 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jLabelPDFViewer = new javax.swing.JLabel();
         jTextFieldPDFViewer = new javax.swing.JTextField();
@@ -309,6 +340,10 @@ final class IReportPanel extends javax.swing.JPanel {
         jLabelODFViewer = new javax.swing.JLabel();
         jTextFieldODFViewer = new javax.swing.JTextField();
         jButtonODFViewer = new javax.swing.JButton();
+        jPanel28 = new javax.swing.JPanel();
+        jLabelDOCXViewer = new javax.swing.JLabel();
+        jTextFieldDOCXViewer = new javax.swing.JTextField();
+        jButtonDOCXViewer = new javax.swing.JButton();
         jPanel18 = new javax.swing.JPanel();
         jLabelClasspath1 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -326,6 +361,7 @@ final class IReportPanel extends javax.swing.JPanel {
         jTextFieldCompilationDirectory = new javax.swing.JTextField();
         jButtonCompilationDirectory = new javax.swing.JButton();
         jCheckBoxUseReportDirectoryToCompile = new javax.swing.JCheckBox();
+        jCheckBoxCompileSubreports = new javax.swing.JCheckBox();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jCheckBoxLimitRecordNumber = new javax.swing.JCheckBox();
@@ -445,7 +481,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jPanel24Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabelTimeZone2)
                     .add(jComboBoxTheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(179, Short.MAX_VALUE))
+                .addContainerGap(254, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Report defaults", jPanel24);
@@ -478,6 +514,13 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxDebugMode, "Debug mode (for model changes)");
+        jCheckBoxDebugMode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxDebugModeActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout jPanel26Layout = new org.jdesktop.layout.GroupLayout(jPanel26);
         jPanel26.setLayout(jPanel26Layout);
         jPanel26Layout.setHorizontalGroup(
@@ -488,7 +531,8 @@ final class IReportPanel extends javax.swing.JPanel {
                     .add(jCheckBoxKeyInReportInspector)
                     .add(jCheckBoxCrosstabAutoLayout)
                     .add(jCheckBoxShowBackgroundAsSeparatedDocument)
-                    .add(jCheckBoxAskConfirmationOnDelete))
+                    .add(jCheckBoxAskConfirmationOnDelete)
+                    .add(jCheckBoxDebugMode))
                 .addContainerGap(393, Short.MAX_VALUE))
         );
         jPanel26Layout.setVerticalGroup(
@@ -502,7 +546,9 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jCheckBoxShowBackgroundAsSeparatedDocument)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxAskConfirmationOnDelete)
-                .addContainerGap(137, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxDebugMode)
+                .addContainerGap(189, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Designer", jPanel26);
@@ -610,7 +656,7 @@ final class IReportPanel extends javax.swing.JPanel {
                         .add(jButtonRemoveExpression, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonRestoreExpressions))
-                    .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE))
+                    .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -646,7 +692,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jComboBoxCompatibility, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(18, 18, 18)
                 .add(jCheckBoxShowCompatibilityWarning)
-                .addContainerGap(125, Short.MAX_VALUE))
+                .addContainerGap(200, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Compatibility", jPanelCompatibility);
@@ -668,7 +714,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jTabbedPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+                .add(jTabbedPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -810,8 +856,8 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelClasspath)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
-                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE))
+                    .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
+                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -887,14 +933,45 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelFontspath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jPanel8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
-                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE))
+                    .add(jPanel8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
+                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab("Fontpath", jPanel7);
 
         jPanel10.setLayout(new java.awt.GridBagLayout());
+
+        jPanel29.setBorder(javax.swing.BorderFactory.createTitledBorder("Jrxml External Editor"));
+        jPanel29.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        jPanel29.add(jTextFieldExternalEditor, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonPDFViewer1, "Browse");
+        jButtonPDFViewer1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPDFViewer1ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        jPanel29.add(jButtonPDFViewer1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(8, 4, 4, 4);
+        jPanel10.add(jPanel29, gridBagConstraints);
+
+        jPanel30.setBorder(javax.swing.BorderFactory.createTitledBorder("Report Viewers"));
+        jPanel30.setLayout(new java.awt.GridBagLayout());
 
         jPanel11.setLayout(new java.awt.GridBagLayout());
 
@@ -928,7 +1005,7 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        jPanel10.add(jPanel11, gridBagConstraints);
+        jPanel30.add(jPanel11, gridBagConstraints);
 
         jPanel12.setLayout(new java.awt.GridBagLayout());
 
@@ -962,7 +1039,7 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        jPanel10.add(jPanel12, gridBagConstraints);
+        jPanel30.add(jPanel12, gridBagConstraints);
 
         jPanel13.setLayout(new java.awt.GridBagLayout());
 
@@ -996,7 +1073,7 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        jPanel10.add(jPanel13, gridBagConstraints);
+        jPanel30.add(jPanel13, gridBagConstraints);
 
         jPanel14.setLayout(new java.awt.GridBagLayout());
 
@@ -1030,7 +1107,7 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        jPanel10.add(jPanel14, gridBagConstraints);
+        jPanel30.add(jPanel14, gridBagConstraints);
 
         jPanel15.setLayout(new java.awt.GridBagLayout());
 
@@ -1064,7 +1141,7 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        jPanel10.add(jPanel15, gridBagConstraints);
+        jPanel30.add(jPanel15, gridBagConstraints);
 
         jPanel16.setLayout(new java.awt.GridBagLayout());
 
@@ -1098,7 +1175,7 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        jPanel10.add(jPanel16, gridBagConstraints);
+        jPanel30.add(jPanel16, gridBagConstraints);
 
         jPanel17.setLayout(new java.awt.GridBagLayout());
 
@@ -1133,8 +1210,51 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
+        jPanel30.add(jPanel17, gridBagConstraints);
+
+        jPanel28.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelDOCXViewer, "Microsoft Word (DOCX) Viewer");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel28.add(jLabelDOCXViewer, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        jPanel28.add(jTextFieldDOCXViewer, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonDOCXViewer, "Browse");
+        jButtonDOCXViewer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDOCXViewerActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        jPanel28.add(jButtonDOCXViewer, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel30.add(jPanel28, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel10.add(jPanel17, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel10.add(jPanel30, gridBagConstraints);
 
         jTabbedPane1.addTab("Viewers", jPanel10);
 
@@ -1249,8 +1369,8 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelClasspath1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel19, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
-                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE))
+                    .add(jPanel19, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
+                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -1280,6 +1400,13 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxCompileSubreports, "Compile Subreports (if can be found)");
+        jCheckBoxCompileSubreports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxCompileSubreportsActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout jPanel27Layout = new org.jdesktop.layout.GroupLayout(jPanel27);
         jPanel27.setLayout(jPanel27Layout);
         jPanel27Layout.setHorizontalGroup(
@@ -1287,13 +1414,18 @@ final class IReportPanel extends javax.swing.JPanel {
             .add(jPanel27Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel27Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jCheckBoxUseReportDirectoryToCompile, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
                     .add(jPanel27Layout.createSequentialGroup()
-                        .add(jLabelCompilationDirectory)
+                        .add(jCheckBoxCompileSubreports)
+                        .addContainerGap())
+                    .add(jPanel27Layout.createSequentialGroup()
+                        .add(jPanel27Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jCheckBoxUseReportDirectoryToCompile, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
+                            .add(jPanel27Layout.createSequentialGroup()
+                                .add(jLabelCompilationDirectory)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(jTextFieldCompilationDirectory, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jTextFieldCompilationDirectory, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jButtonCompilationDirectory))
+                        .add(jButtonCompilationDirectory))))
         );
         jPanel27Layout.setVerticalGroup(
             jPanel27Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1303,7 +1435,10 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jPanel27Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabelCompilationDirectory)
                     .add(jTextFieldCompilationDirectory, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jButtonCompilationDirectory)))
+                    .add(jButtonCompilationDirectory))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxCompileSubreports)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxLimitRecordNumber, "Limit the number of records");
@@ -1436,7 +1571,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jCheckBoxIgnorePagination)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jCheckBoxVirtualizer)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Execution options", jPanel2);
@@ -1562,7 +1697,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jSpinnerVirtualizerSize, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(0, 0, 0)
                 .add(jPanel23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Virtualizer", jPanelVirtualizer);
@@ -1571,20 +1706,20 @@ final class IReportPanel extends javax.swing.JPanel {
         jPanel21.setLayout(jPanel21Layout);
         jPanel21Layout.setHorizontalGroup(
             jPanel21Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel21Layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel21Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel21Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel27, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE))
+                .add(jPanel21Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel27, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel21Layout.setVerticalGroup(
             jPanel21Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel21Layout.createSequentialGroup()
-                .add(11, 11, 11)
+                .addContainerGap()
                 .add(jPanel27, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1685,7 +1820,7 @@ final class IReportPanel extends javax.swing.JPanel {
                         .add(jButtonModifyQueryExecuter, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonRemoveQueryExecuter, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE))
+                    .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -1700,7 +1835,7 @@ final class IReportPanel extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 378, Short.MAX_VALUE)
+                .add(jTabbedPane1)
                 .addContainerGap())
         );
 
@@ -1708,7 +1843,7 @@ final class IReportPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBoxUnitsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxUnitsActionPerformed
-        controller.changed();
+        notifyChange();
     }//GEN-LAST:event_jComboBoxUnitsActionPerformed
 
     private void jCheckBoxLimitRecordNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxLimitRecordNumberActionPerformed
@@ -1718,11 +1853,11 @@ final class IReportPanel extends javax.swing.JPanel {
     private void jCheckBoxLimitRecordNumberStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxLimitRecordNumberStateChanged
         jLabelMaxNumber.setEnabled( jCheckBoxLimitRecordNumber.isSelected());
         jSpinnerMaxRecordNumber.setEnabled( jCheckBoxLimitRecordNumber.isSelected() );
-        controller.changed();
+        notifyChange();
 }//GEN-LAST:event_jCheckBoxLimitRecordNumberStateChanged
 
     private void jSpinnerMaxRecordNumberStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerMaxRecordNumberStateChanged
-        controller.changed();
+        notifyChange();
     }//GEN-LAST:event_jSpinnerMaxRecordNumberStateChanged
 
     private void jCheckBoxIgnorePaginationStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxIgnorePaginationStateChanged
@@ -1730,7 +1865,7 @@ final class IReportPanel extends javax.swing.JPanel {
 }//GEN-LAST:event_jCheckBoxIgnorePaginationStateChanged
 
     private void jCheckBoxIgnorePaginationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxIgnorePaginationActionPerformed
-        controller.changed();
+        notifyChange();
 }//GEN-LAST:event_jCheckBoxIgnorePaginationActionPerformed
 
     private void jButtonReportLocaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonReportLocaleActionPerformed
@@ -1760,7 +1895,7 @@ final class IReportPanel extends javax.swing.JPanel {
             setCurrentReportLocale(selectorDialog.getSelectedLocale());
         }
         
-        controller.changed();
+        notifyChange();
     }//GEN-LAST:event_jButtonReportLocaleActionPerformed
 
     private void jButtonTimeZoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTimeZoneActionPerformed
@@ -1789,7 +1924,7 @@ final class IReportPanel extends javax.swing.JPanel {
             setCurrentReportTimeZoneId(selectorDialog.getReportTimeZoneId());
         }
         
-        controller.changed();
+        notifyChange();
         
     }//GEN-LAST:event_jButtonTimeZoneActionPerformed
 
@@ -1830,7 +1965,7 @@ final class IReportPanel extends javax.swing.JPanel {
 
 
             IReportManager.getInstance().setCurrentDirectory( jfc.getSelectedFile(), true);
-            controller.changed();
+            notifyChange();
             classpathChanged();
         }
 }//GEN-LAST:event_jButtonAddClasspathItemActionPerformed
@@ -1858,7 +1993,7 @@ final class IReportPanel extends javax.swing.JPanel {
 //                ((DefaultListModel)jListClassPath.getModel()).addElement( files[i] );
 //            }
             IReportManager.getInstance().setCurrentDirectory( jfc.getSelectedFile(), true);
-            controller.changed();
+            notifyChange();
             classpathChanged();
         }
 }//GEN-LAST:event_jButtonAddClasspathItem1jButtonAddActionPerformed1
@@ -1879,7 +2014,7 @@ final class IReportPanel extends javax.swing.JPanel {
             //for (int i=0; i<values.length; ++i) {
             //    ((DefaultListModel)jListClassPath.getModel()).removeElement(values[i]);
             //}
-            controller.changed();
+            notifyChange();
             classpathChanged();
         }
 }//GEN-LAST:event_jButtonRemoveClasspathItemActionPerformed
@@ -1899,7 +2034,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 rows[i]--;
                 jTable1.addRowSelectionInterval(rows[i],rows[i]);
             }
-            controller.changed();
+            notifyChange();
         }
 //        if (jListClassPath.getSelectedValues() != null) {
 //            int[] indices = jListClassPath.getSelectedIndices();
@@ -1910,7 +2045,7 @@ final class IReportPanel extends javax.swing.JPanel {
 //                indices[i]--;
 //            }
 //            jListClassPath.setSelectedIndices(indices);
-//            controller.changed();
+//            notifyChange();
 //        }
 }//GEN-LAST:event_jButtonMoveUpClasspathItemActionPerformed
 
@@ -1929,7 +2064,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 rows[i]++;
                 jTable1.addRowSelectionInterval(rows[i],rows[i]);
             }
-            controller.changed();
+            notifyChange();
         }
             
 //      if (jListClassPath.getSelectedValues() != null) {            
@@ -1942,7 +2077,7 @@ final class IReportPanel extends javax.swing.JPanel {
 //                indices[i]++;
 //            }
 //            jListClassPath.setSelectedIndices(indices);
-//            controller.changed();
+//            notifyChange();
 //        }
 }//GEN-LAST:event_jButtonMoveDownClasspathItemActionPerformed
 
@@ -2082,7 +2217,7 @@ private void jButtonAddTemplateActionPerformed(java.awt.event.ActionEvent evt) {
                 ((DefaultListModel)jListTemplates.getModel()).addElement( files[i] );
             }
             IReportManager.getInstance().setCurrentDirectory( jfc.getSelectedFile(), true);
-            controller.changed();
+            notifyChange();
         }
 }//GEN-LAST:event_jButtonAddTemplateActionPerformed
 
@@ -2105,7 +2240,7 @@ private void jButtonAddTemplateFolderjButtonAddActionPerformed1(java.awt.event.A
                 ((DefaultListModel)jListTemplates.getModel()).addElement( files[i] );
             }
             IReportManager.getInstance().setCurrentDirectory( jfc.getSelectedFile(), true);
-            controller.changed();
+            notifyChange();
         }
 }//GEN-LAST:event_jButtonAddTemplateFolderjButtonAddActionPerformed1
 
@@ -2115,7 +2250,7 @@ private void jButtonRemoveTemplateActionPerformed(java.awt.event.ActionEvent evt
             for (int i=0; i<values.length; ++i) {
                 ((DefaultListModel)jListTemplates.getModel()).removeElement(values[i]);
             }
-            controller.changed();
+            notifyChange();
         }
 }//GEN-LAST:event_jButtonRemoveTemplateActionPerformed
 
@@ -2129,7 +2264,7 @@ private void jButtonMoveUpTemplateActionPerformed(java.awt.event.ActionEvent evt
                 indices[i]--;
             }
             jListTemplates.setSelectedIndices(indices);
-            controller.changed();
+            notifyChange();
         }
 }//GEN-LAST:event_jButtonMoveUpTemplateActionPerformed
 
@@ -2144,16 +2279,16 @@ private void jButtonMoveDownTemplateActionPerformed(java.awt.event.ActionEvent e
                 indices[i]++;
             }
             jListTemplates.setSelectedIndices(indices);
-            controller.changed();
+            notifyChange();
         }
 }//GEN-LAST:event_jButtonMoveDownTemplateActionPerformed
 
 private void jComboBoxVirtualizerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxVirtualizerActionPerformed
-    controller.changed();
+    notifyChange();
 }//GEN-LAST:event_jComboBoxVirtualizerActionPerformed
 
 private void jTextFieldVirtualizerDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldVirtualizerDirActionPerformed
-    controller.changed();
+    notifyChange();
 }//GEN-LAST:event_jTextFieldVirtualizerDirActionPerformed
 
 private void jButtonVirtualizerDirBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVirtualizerDirBrowseActionPerformed
@@ -2162,19 +2297,19 @@ private void jButtonVirtualizerDirBrowseActionPerformed(java.awt.event.ActionEve
     if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
         jTextFieldVirtualizerDir.setText( jfc.getSelectedFile().getPath());
     }
-    controller.changed();
+    notifyChange();
 }//GEN-LAST:event_jButtonVirtualizerDirBrowseActionPerformed
 
 private void jSpinnerVirtualizerSizeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerVirtualizerSizeStateChanged
-    controller.changed();
+    notifyChange();
 }//GEN-LAST:event_jSpinnerVirtualizerSizeStateChanged
 
 private void jSpinnerVirtualizerBlockSizejSpinnerVirtualizerSizeStateChanged2(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerVirtualizerBlockSizejSpinnerVirtualizerSizeStateChanged2
-    controller.changed();
+    notifyChange();
 }//GEN-LAST:event_jSpinnerVirtualizerBlockSizejSpinnerVirtualizerSizeStateChanged2
 
 private void jSpinnerVirtualizerGrownCountjSpinnerVirtualizerSize1jSpinnerVirtualizerSizeStateChanged2(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerVirtualizerGrownCountjSpinnerVirtualizerSize1jSpinnerVirtualizerSizeStateChanged2
-    controller.changed();
+    notifyChange();
 }//GEN-LAST:event_jSpinnerVirtualizerGrownCountjSpinnerVirtualizerSize1jSpinnerVirtualizerSizeStateChanged2
 
 private void jCheckBoxVirtualizerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxVirtualizerStateChanged
@@ -2182,15 +2317,15 @@ private void jCheckBoxVirtualizerStateChanged(javax.swing.event.ChangeEvent evt)
 }//GEN-LAST:event_jCheckBoxVirtualizerStateChanged
 
 private void jCheckBoxVirtualizerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxVirtualizerActionPerformed
-    controller.changed();
+    notifyChange();
 }//GEN-LAST:event_jCheckBoxVirtualizerActionPerformed
 
 private void jComboBoxLanguageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLanguageActionPerformed
-    controller.changed();
+    notifyChange();
 }//GEN-LAST:event_jComboBoxLanguageActionPerformed
 
 private void jComboBoxThemeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxThemeActionPerformed
-    controller.changed();
+    notifyChange();
 }//GEN-LAST:event_jComboBoxThemeActionPerformed
 
 private void jButtonAddQueryExecuterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddQueryExecuterActionPerformed
@@ -2201,7 +2336,7 @@ private void jButtonAddQueryExecuterActionPerformed(java.awt.event.ActionEvent e
         if (jrpd.getDialogResult() == javax.swing.JOptionPane.OK_OPTION) {
             QueryExecuterDef qe = jrpd.getQueryExecuterDef();
             ((DefaultTableModel)jTableQueryExecuters.getModel()).addRow(new Object[]{qe, qe.getClassName(),qe.getFieldsProvider()});
-            controller.changed();
+            notifyChange();
         }
 
 }//GEN-LAST:event_jButtonAddQueryExecuterActionPerformed
@@ -2221,7 +2356,7 @@ private void jButtonRemoveQueryExecuterActionPerformed(java.awt.event.ActionEven
                 dtm.removeRow( indices[i]);
                 //dtm.insertRow( indices[i]-1, new Object[]{val, ((QueryExecuterDef)val).getClassName(),((QueryExecuterDef)val).getFieldsProvider()});
                 //indices[i]--;
-                controller.changed();
+                notifyChange();
             }
             else
             {
@@ -2267,14 +2402,14 @@ private void jButtonModifyQueryExecuterActionPerformed(java.awt.event.ActionEven
             dtm.setValueAt( jrpd.getQueryExecuterDef(),  index, 0);
             dtm.setValueAt( jrpd.getQueryExecuterDef().getClassName(),  index, 1);
             dtm.setValueAt( jrpd.getQueryExecuterDef().getFieldsProvider(),  index, 2);
-            controller.changed();
+            notifyChange();
         }
     }
 
 }//GEN-LAST:event_jButtonModifyQueryExecuterActionPerformed
 
 private void jCheckBoxMagneticGuideLinesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMagneticGuideLinesActionPerformed
-    controller.changed();
+    notifyChange();
 }//GEN-LAST:event_jCheckBoxMagneticGuideLinesActionPerformed
 
 private void jButtonCompilationDirectoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCompilationDirectoryActionPerformed
@@ -2286,13 +2421,13 @@ private void jButtonCompilationDirectoryActionPerformed(java.awt.event.ActionEve
             jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                     jTextFieldCompilationDirectory.setText( jfc.getSelectedFile().getPath());
-                    controller.changed();
+                    notifyChange();
             }
 }//GEN-LAST:event_jButtonCompilationDirectoryActionPerformed
 
 private void jCheckBoxUseReportDirectoryToCompileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxUseReportDirectoryToCompileActionPerformed
 
-    controller.changed();
+    notifyChange();
 
     jTextFieldCompilationDirectory.setEnabled(!jCheckBoxUseReportDirectoryToCompile.isSelected());
     jButtonCompilationDirectory.setEnabled(!jCheckBoxUseReportDirectoryToCompile.isSelected());
@@ -2300,12 +2435,12 @@ private void jCheckBoxUseReportDirectoryToCompileActionPerformed(java.awt.event.
 }//GEN-LAST:event_jCheckBoxUseReportDirectoryToCompileActionPerformed
 
 private void jCheckBoxKeyInReportInspectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxKeyInReportInspectorActionPerformed
-    controller.changed();
+    notifyChange();
 }//GEN-LAST:event_jCheckBoxKeyInReportInspectorActionPerformed
 
 private void jCheckBoxCrosstabAutoLayoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxCrosstabAutoLayoutActionPerformed
 
-        controller.changed();
+        notifyChange();
 }//GEN-LAST:event_jCheckBoxCrosstabAutoLayoutActionPerformed
 
 private void jTableExpressionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableExpressionsMouseClicked
@@ -2326,7 +2461,7 @@ private void jButtonAddExpressionActionPerformed(java.awt.event.ActionEvent evt)
     if (editor.showDialog(this) == JOptionPane.OK_OPTION)
     {
         ((DefaultTableModel)jTableExpressions.getModel()).addRow(new Object[]{editor.getExpression()});
-        controller.changed();
+        notifyChange();
     }
 
 }//GEN-LAST:event_jButtonAddExpressionActionPerformed
@@ -2346,7 +2481,7 @@ private void jButtonModifyExpressionActionPerformed(java.awt.event.ActionEvent e
         if (editor.showDialog(this) == JOptionPane.OK_OPTION)
         {
             dtm.setValueAt( editor.getExpression(),  index, 0);
-            controller.changed();
+            notifyChange();
         }
     }
 
@@ -2362,7 +2497,7 @@ private void jButtonRemoveExpressionActionPerformed(java.awt.event.ActionEvent e
         {
             Object val = dtm.getValueAt( indices[i], 0);
             dtm.removeRow( indices[i]);
-            controller.changed();
+            notifyChange();
         }
     }
 }//GEN-LAST:event_jButtonRemoveExpressionActionPerformed
@@ -2375,25 +2510,56 @@ private void jButtonRestoreExpressionsActionPerformed(java.awt.event.ActionEvent
     {
         ((DefaultTableModel)jTableExpressions.getModel()).addRow(new Object[]{s});
     }
-    controller.changed();
+    notifyChange();
 
 }//GEN-LAST:event_jButtonRestoreExpressionsActionPerformed
 
 private void jCheckBoxAskConfirmationOnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxAskConfirmationOnDeleteActionPerformed
-    controller.changed();
+    notifyChange();
 }//GEN-LAST:event_jCheckBoxAskConfirmationOnDeleteActionPerformed
 
 private void jCheckBoxShowBackgroundAsSeparatedDocumentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxShowBackgroundAsSeparatedDocumentActionPerformed
-    controller.changed();
+    notifyChange();
 }//GEN-LAST:event_jCheckBoxShowBackgroundAsSeparatedDocumentActionPerformed
 
 private void jCheckBoxShowCompatibilityWarningActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxShowCompatibilityWarningActionPerformed
     // TODO add your handling code here:
 }//GEN-LAST:event_jCheckBoxShowCompatibilityWarningActionPerformed
+
+private void jButtonDOCXViewerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDOCXViewerActionPerformed
+
+        javax.swing.JFileChooser jfc = new javax.swing.JFileChooser();
+
+        jfc.setDialogTitle("Choose a DOCX viewer...");
+        jfc.setMultiSelectionEnabled(false);
+        if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            jTextFieldDOCXViewer.setText( jfc.getSelectedFile().getPath());
+        }
+}//GEN-LAST:event_jButtonDOCXViewerActionPerformed
+
+private void jCheckBoxCompileSubreportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxCompileSubreportsActionPerformed
+     notifyChange();
+}//GEN-LAST:event_jCheckBoxCompileSubreportsActionPerformed
+
+private void jCheckBoxDebugModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxDebugModeActionPerformed
+    notifyChange();
+}//GEN-LAST:event_jCheckBoxDebugModeActionPerformed
+
+private void jButtonPDFViewer1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPDFViewer1ActionPerformed
+
+        javax.swing.JFileChooser jfc = new javax.swing.JFileChooser();
+
+        jfc.setDialogTitle("Choose a Jrxml External Editor...");
+        jfc.setMultiSelectionEnabled(false);
+        if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            jTextFieldExternalEditor.setText( jfc.getSelectedFile().getPath());
+        }
+}//GEN-LAST:event_jButtonPDFViewer1ActionPerformed
     
             
     void load() {
-    
+
+        setInit(true);
         Preferences pref = IReportManager.getPreferences();
         
         String unit = pref.get("Unit","inches"); // NOI18N
@@ -2408,7 +2574,8 @@ private void jCheckBoxShowCompatibilityWarningActionPerformed(java.awt.event.Act
         jCheckBoxShowBackgroundAsSeparatedDocument.setSelected( pref.getBoolean("ShowBackgroundAsSeparatedDocument", true) ); // NOI18N
         jCheckBoxAskConfirmationOnDelete.setSelected( !pref.getBoolean("noConfirmElementDelete", true) ); // NOI18N
         jCheckBoxShowCompatibilityWarning.setSelected( pref.getBoolean("show_compatibility_warning", true) ); // NOI18N
-
+        jCheckBoxCompileSubreports.setSelected( pref.getBoolean("compile_subreports", true) ); // NOI18N
+        jCheckBoxDebugMode.setSelected( pref.getBoolean("designer_debug_mode", false) ); // NOI18N
 
 
         jCheckBoxKeyInReportInspector.setSelected( pref.getBoolean("showKeyInReportInspector", false)  );  // NOI18N
@@ -2490,6 +2657,8 @@ private void jCheckBoxShowCompatibilityWarningActionPerformed(java.awt.event.Act
         jTextFieldODFViewer.setText(pref.get("ExternalODFViewer", ""));
         jTextFieldTXTViewer.setText(pref.get("ExternalTXTViewer", ""));
         jTextFieldHTMLViewer.setText(pref.get("ExternalHTMLViewer", ""));
+        jTextFieldDOCXViewer.setText(pref.get("ExternalDOCXViewer", ""));
+        jTextFieldExternalEditor.setText(pref.get("ExternalEditor", ""));
 
         this.jTextFieldVirtualizerDir.setText(  pref.get("ReportVirtualizerDirectory", Misc.nvl(JRProperties.getProperty(JRProperties.COMPILER_TEMP_DIR),"")));
         this.jSpinnerVirtualizerSize.setValue(pref.getInt("ReportVirtualizerSize",100));
@@ -2500,7 +2669,7 @@ private void jCheckBoxShowCompatibilityWarningActionPerformed(java.awt.event.Act
         Misc.setComboboxSelectedTagValue(jComboBoxLanguage, pref.get("DefaultLanguage", "eye.candy.sixties") );
         
         ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
-        Thread.currentThread().setContextClassLoader(new ReportClassLoader(oldCL));
+        Thread.currentThread().setContextClassLoader(IReportManager.getJRExtensionsClassLoader());
         
         Set<String> themeNamesSet = new HashSet<String>();
         List themeBundles = ExtensionsEnvironment.getExtensionsRegistry().getExtensions(ChartThemeBundle.class);
@@ -2557,7 +2726,8 @@ private void jCheckBoxShowCompatibilityWarningActionPerformed(java.awt.event.Act
 
         exportOptionsPanel.load();
         jrOptionsPanel.load();
-
+        
+        setInit(false);
 
     }
 
@@ -2584,6 +2754,9 @@ private void jCheckBoxShowCompatibilityWarningActionPerformed(java.awt.event.Act
 
         pref.putBoolean("useReportDirectoryToCompile"  , jCheckBoxUseReportDirectoryToCompile.isSelected() );
         pref.put("reportDirectoryToCompile", jTextFieldCompilationDirectory.getText());
+        pref.putBoolean("compile_subreports", jCheckBoxCompileSubreports.isSelected());
+        pref.putBoolean("designer_debug_mode", jCheckBoxDebugMode.isSelected());
+
 
         if (getCurrentReportLocale() != null) pref.put("reportLocale", getCurrentReportLocale().toString());
         else pref.remove("reportLocale");
@@ -2624,6 +2797,12 @@ private void jCheckBoxShowCompatibilityWarningActionPerformed(java.awt.event.Act
 
         if (jTextFieldHTMLViewer.getText().length() > 0) pref.put("ExternalHTMLViewer", jTextFieldHTMLViewer.getText());
         else pref.remove("ExternalHTMLViewer");
+
+        if (jTextFieldDOCXViewer.getText().length() > 0) pref.put("ExternalDOCXViewer", jTextFieldDOCXViewer.getText());
+        else pref.remove("ExternalDOCXViewer");
+
+        if (jTextFieldExternalEditor.getText().length() > 0) pref.put("ExternalEditor", jTextFieldExternalEditor.getText());
+        else pref.remove("ExternalEditor");
 
 
         if (jTextFieldVirtualizerDir.getText().length() > 0) pref.put("ReportVirtualizerDirectory", this.jTextFieldVirtualizerDir.getText());
@@ -2723,6 +2902,7 @@ private void jCheckBoxShowCompatibilityWarningActionPerformed(java.awt.event.Act
     private javax.swing.JButton jButtonAddTemplateFolder;
     private javax.swing.JButton jButtonCSVViewer;
     private javax.swing.JButton jButtonCompilationDirectory;
+    private javax.swing.JButton jButtonDOCXViewer;
     private javax.swing.JButton jButtonDeselectAllFonts;
     private javax.swing.JButton jButtonHTMLViewer;
     private javax.swing.JButton jButtonModifyExpression;
@@ -2733,6 +2913,7 @@ private void jCheckBoxShowCompatibilityWarningActionPerformed(java.awt.event.Act
     private javax.swing.JButton jButtonMoveUpTemplate;
     private javax.swing.JButton jButtonODFViewer;
     private javax.swing.JButton jButtonPDFViewer;
+    private javax.swing.JButton jButtonPDFViewer1;
     private javax.swing.JButton jButtonRTFViewer;
     private javax.swing.JButton jButtonRemoveClasspathItem;
     private javax.swing.JButton jButtonRemoveExpression;
@@ -2746,7 +2927,9 @@ private void jCheckBoxShowCompatibilityWarningActionPerformed(java.awt.event.Act
     private javax.swing.JButton jButtonVirtualizerDirBrowse;
     private javax.swing.JButton jButtonXLSViewer;
     private javax.swing.JCheckBox jCheckBoxAskConfirmationOnDelete;
+    private javax.swing.JCheckBox jCheckBoxCompileSubreports;
     private javax.swing.JCheckBox jCheckBoxCrosstabAutoLayout;
+    private javax.swing.JCheckBox jCheckBoxDebugMode;
     private javax.swing.JCheckBox jCheckBoxIgnorePagination;
     private javax.swing.JCheckBox jCheckBoxKeyInReportInspector;
     private javax.swing.JCheckBox jCheckBoxLimitRecordNumber;
@@ -2767,6 +2950,7 @@ private void jCheckBoxShowCompatibilityWarningActionPerformed(java.awt.event.Act
     private javax.swing.JLabel jLabelClasspath;
     private javax.swing.JLabel jLabelClasspath1;
     private javax.swing.JLabel jLabelCompilationDirectory;
+    private javax.swing.JLabel jLabelDOCXViewer;
     private javax.swing.JLabel jLabelExpressions;
     private javax.swing.JLabel jLabelFontspath;
     private javax.swing.JLabel jLabelHTMLViewer;
@@ -2807,7 +2991,10 @@ private void jCheckBoxShowCompatibilityWarningActionPerformed(java.awt.event.Act
     private javax.swing.JPanel jPanel25;
     private javax.swing.JPanel jPanel26;
     private javax.swing.JPanel jPanel27;
+    private javax.swing.JPanel jPanel28;
+    private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel30;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -2833,6 +3020,8 @@ private void jCheckBoxShowCompatibilityWarningActionPerformed(java.awt.event.Act
     private javax.swing.JTable jTableQueryExecuters;
     private javax.swing.JTextField jTextFieldCSVViewer;
     private javax.swing.JTextField jTextFieldCompilationDirectory;
+    private javax.swing.JTextField jTextFieldDOCXViewer;
+    private javax.swing.JTextField jTextFieldExternalEditor;
     private javax.swing.JTextField jTextFieldHTMLViewer;
     private javax.swing.JTextField jTextFieldODFViewer;
     private javax.swing.JTextField jTextFieldPDFViewer;

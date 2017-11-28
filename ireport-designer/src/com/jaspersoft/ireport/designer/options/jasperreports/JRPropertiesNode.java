@@ -32,9 +32,6 @@ public class JRPropertiesNode extends AbstractNode {
         Sheet.Set set = createSet("JasperReports properties",null);
 
         List props = JRProperties.getProperties("");
-
-        System.out.println("Properties found: " + props.size());
-        System.out.flush();
         
         for (int i=0; i<props.size(); ++i)
         {

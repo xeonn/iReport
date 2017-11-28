@@ -371,7 +371,7 @@ public class CrosstabObjectScene extends AbstractReportObjectScene implements Pr
         {
             // Remove just the orphan elements...
             Object obj = iter.next();
-            if (obj instanceof JRDesignElement && ModelUtils.isOrphan((JRDesignElement)obj))
+            if (obj instanceof JRDesignElement && ModelUtils.isOrphan((JRDesignElement)obj, getJasperDesign()))
             {
                 // remove object and relative widgets...
                 Widget w = findWidget(obj);

@@ -7,7 +7,6 @@ package com.jaspersoft.ireport.designer.wizards;
 
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportConnection;
-import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.connection.gui.ConnectionDialog;
 import com.jaspersoft.ireport.designer.data.WizardFieldsProvider;
@@ -15,7 +14,6 @@ import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.BorderLayout;
 import java.awt.Dialog;
 import java.awt.Frame;
-import java.awt.Window;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -47,6 +45,11 @@ public final class ConnectionSelectionVisualPanel extends JPanel {
                 getPanel().fireChangeEvent();
             }
         });
+
+        if (IReportManager.getInstance().getDefaultConnection() != null)
+        {
+            jComboBoxConnections.setSelectedItem(IReportManager.getInstance().getDefaultConnection());
+        }
     }
     
     private void updateConnections()
@@ -242,6 +245,10 @@ public final class ConnectionSelectionVisualPanel extends JPanel {
         }
         jPanelMain.updateUI();
         getPanel().fireChangeEvent();
+        if (con != null)
+        {
+            IReportManager.getInstance().setDefaultConnection(con);
+        }
         
     }//GEN-LAST:event_jComboBoxConnectionsActionPerformed
 

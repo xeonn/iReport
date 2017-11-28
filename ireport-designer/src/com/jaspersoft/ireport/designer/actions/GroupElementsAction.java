@@ -139,7 +139,7 @@ public final class GroupElementsAction extends NodeAction {
         }
         else if (parent instanceof JRDesignFrame)
         {
-            ((JRDesignCellContents)parent).addElementGroup(newgroup);
+            ((JRDesignFrame)parent).addElementGroup(newgroup);
         }
 
         undoEdit.concatenate(new AddElementGroupUndoableEdit(newgroup, parent));

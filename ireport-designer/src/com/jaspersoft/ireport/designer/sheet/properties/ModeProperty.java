@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
@@ -70,7 +71,14 @@ public final class ModeProperty extends BooleanProperty
     @Override
     public void setBoolean(Boolean isPrint)
     {
+
         element.setMode(isPrint == null ? null : (isPrint ? JRElement.MODE_OPAQUE : JRElement.MODE_TRANSPARENT));
+
+        if (IReportManager.getPreferences().getBoolean("designer_debug_mode", false))
+        {
+            System.out.println(new java.util.Date() + ": setting mode to: " + isPrint + ". If the value is unattended or null, please report this notification to http://jasperforge.org/plugins/mantis/view.php?id=4139");
+            Thread.dumpStack();
+        }
     }
 
 }

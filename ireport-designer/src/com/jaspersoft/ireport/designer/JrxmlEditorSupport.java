@@ -125,7 +125,7 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
                 createCloneableMultiView(descriptions, descriptions[0], new GenericCloseOperationHandler(this));
     }
     
-    protected boolean notifyModified() {
+    public boolean notifyModified() {
         boolean retValue;
         retValue = super.notifyModified();
         if (retValue) {
@@ -142,7 +142,7 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
         return retValue;
     }
     
-    protected void notifyUnmodified() {
+    public void notifyUnmodified() {
         super.notifyUnmodified();
         JrxmlDataObject obj = (JrxmlDataObject)getDataObject();
         
@@ -224,9 +224,15 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
                         content = JRXmlWriterHelper.writeReport(jd, "UTF-8", compatibility);
                     }
                     
-                } catch (Exception ex)
+                } catch (final Exception ex)
                 {
-                    JOptionPane.showMessageDialog(Misc.getMainWindow(), "Error saving the JRXML: " + ex.getMessage() + "\nSee the log file for more details.", "Error saving", JOptionPane.ERROR_MESSAGE);
+                    Mutex.EVENT.readAccess(new Runnable() {
+
+                    public void run() {
+                        JOptionPane.showMessageDialog(Misc.getMainWindow(), "Error saving the JRXML: " + ex.getMessage() + "\nSee the log file for more details.", "Error saving", JOptionPane.ERROR_MESSAGE);
+
+                    }
+                   });
                     ex.printStackTrace();
                     return;
                 }
@@ -243,9 +249,10 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
                 }
             }
 
-            System.out.println("Saved with the encoding: " + FileEncodingQuery.getEncoding(getDataObject().getPrimaryFile()) + "  system def: " + System.getProperty("file.encoding") );
-            System.out.flush();
-            
+            //System.out.println("Saved with the encoding: " + FileEncodingQuery.getEncoding(getDataObject().getPrimaryFile()) + "  system def: " + System.getProperty("file.encoding") );
+            //System.out.flush();
+
+
             Charset cs = FileEncodingQuery.getDefaultEncoding();
             String fileEncoding = System.getProperty("file.encoding", "UTF-8");
             try {
@@ -260,6 +267,7 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
 
             //getDataObject().getPrimaryFile().setAttribute(EDITOR_MODE, this)
             try {
+                this.getDataObject().getPrimaryFile().setAttribute(EDITOR_MODE, cs);
                 super.saveDocument();
             } finally
             {

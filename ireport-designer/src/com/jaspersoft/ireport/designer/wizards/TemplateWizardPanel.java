@@ -91,7 +91,7 @@ public class TemplateWizardPanel implements WizardDescriptor.Panel {
 
     public void storeSettings(Object settings) {
         
-        getWizard().putProperty("reportTemplate", component.getReportTemplate() );
+        //getWizard().putProperty("reportTemplate", component.getReportTemplate() );
         getWizard().putProperty("reportType", component.getReportType());
 
     }

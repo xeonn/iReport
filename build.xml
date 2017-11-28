@@ -181,6 +181,8 @@
                 <include name="ireport-standalone-specific/**"/>
                 <include name="ireport-designer/**"/>
                 <include name="jasperserver-plugin/**"/>
+                <include name="jasperreports-components/**"/>
+                <include name="jasperreports-extensions/**"/>
                 <include name="heartbeat/**"/>
                 <include name="branding/**"/>
                 <include name="etc/**"/>
@@ -190,6 +192,7 @@
                 
             </zipfileset>
 
+<!--
             <zipfileset dir="." prefix="${distro.zipfilename}-src">
                 <and>
                     <not>
@@ -202,11 +205,10 @@
                 <patternset refid="locale.platform.included.files"/>
             </zipfileset>
 
-            <!-- Yes, the doubled app.name is a bit ugly, but better than the alternative; cf. #66441: -->
             <zipfileset dir="${cluster}" prefix="${distro.zipfilename}-src/${app.name}">
                 <exclude name="config/Modules/*.xml_hidden"/>
             </zipfileset>
-
+-->
         </zip>
     </target>
 
@@ -219,11 +221,13 @@
         <copy file="build/updates/com-jaspersoft-ireport-jasperserver.nbm" tofile="dist/${distro.zipfilename.js}.nbm" />
         <copy file="build/updates/com-jaspersoft-ireport-heartbeat.nbm" tofile="dist/${distro.zipfilename.hb}.nbm" />
         <copy file="build/updates/com-jaspersoft-ireport-components.nbm" tofile="dist/${distro.zipfilename.components}.nbm" />
+        <copy file="build/updates/com-jaspersoft-jrx.nbm" tofile="dist/${distro.zipfilename.extensions}.nbm" />
         <zip destfile="dist/${distro.zipfilename}-plugin.zip">
             <zipfileset dir="dist" prefix="">
                 <include name="${distro.zipfilename}.nbm"/>
                 <include name="${distro.zipfilename.js}.nbm"/>
                 <include name="${distro.zipfilename.components}.nbm"/>
+                <include name="${distro.zipfilename.extensions}.nbm"/>
             </zipfileset>
         </zip>
 

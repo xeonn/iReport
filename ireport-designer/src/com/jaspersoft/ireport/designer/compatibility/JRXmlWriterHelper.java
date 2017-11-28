@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
 import org.openide.util.Exceptions;
+import org.openide.util.Mutex;
 
 
 /**
@@ -26,6 +27,7 @@ public class JRXmlWriterHelper {
 
     static {
 
+        writers.put("3_5_2", JRXmlWriter_3_5_2.class);
         writers.put("3_5_1", JRXmlWriter_3_5_1.class);
         writers.put("3_5_0", JRXmlWriter_3_5_0.class);
         writers.put("3_1_4", JRXmlWriter_3_1_4.class);
@@ -53,21 +55,21 @@ public class JRXmlWriterHelper {
 
            if (SwingUtilities.isEventDispatchThread())
            {
-               dialog.setVisible(true);
+               getDialog().setVisible(true);
            }
            else
            {
                SwingUtilities.invokeAndWait(new Runnable() {
 
                     public void run() {
-                        dialog.setVisible(true);
+                        getDialog().setVisible(true);
                     }
                 });
            }
            
-           int res = dialog.getDialogResult();
+           int res = getDialog().getDialogResult();
 
-           if (!dialog.askAgain())
+           if (!getDialog().askAgain())
            {
                IReportManager.getPreferences().putBoolean("show_compatibility_warning", false);
            }
@@ -97,8 +99,8 @@ public class JRXmlWriterHelper {
     public static VersionWarningDialog getDialog() {
         if (dialog == null)
         {
-
-            Runnable run = new Runnable(){
+            // The operation Misc.getMainFrame() requires an AWT thread...
+           Runnable run = new Runnable(){
                     public void run() {
                             setDialog(new VersionWarningDialog(Misc.getMainFrame(), true));
                         }

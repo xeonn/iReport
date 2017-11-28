@@ -37,7 +37,7 @@ public class ReportObjectSelectProvider implements SelectProvider {
         }
 
         public void select (Widget widget, Point localLocation, boolean invertSelection) {
-            
+
             if (widget instanceof SelectionWidget)
             {
                 widget = ((SelectionWidget)widget).getRealWidget();

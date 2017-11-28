@@ -4,6 +4,7 @@
  */
 package com.jaspersoft.ireport.designer.jrctx;
 
+import com.jaspersoft.ireport.designer.utils.FileEncodingQueryImpl;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 import org.openide.filesystems.FileObject;
@@ -33,6 +34,7 @@ public class JRCTXDataObject extends MultiDataObject {
         dataEditorSupport = JRCTXEditorSupport.create(this);
         ic.add(dataEditorSupport);
         ic.add(this);
+        ic.add( new FileEncodingQueryImpl());
         ic.add( getPrimaryFile() );
     }
 

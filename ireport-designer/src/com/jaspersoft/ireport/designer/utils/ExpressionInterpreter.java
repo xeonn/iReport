@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.util.Exceptions;
 
 /**
@@ -28,11 +29,21 @@ public class ExpressionInterpreter {
 
     JRDesignDataset dataset = null;
     Interpreter interpreter = null;
-            
+    JasperDesign jasperDesign = null;
+
     public ExpressionInterpreter(JRDesignDataset dataset, ClassLoader classLoader)
+    {
+        this(dataset, classLoader, null);
+    }
+    public ExpressionInterpreter(JRDesignDataset dataset, ClassLoader classLoader, JasperDesign jasperDesign)
     {
         try {
             this.dataset = dataset;
+            this.jasperDesign = jasperDesign;
+            if (jasperDesign == null && IReportManager.getInstance().getActiveReport() != null)
+            {
+                jasperDesign = IReportManager.getInstance().getActiveReport();
+            }
             prepareExpressionEvaluator(classLoader);
         } catch (EvalError ex) {
             Exceptions.printStackTrace(ex);
@@ -166,11 +177,14 @@ public class ExpressionInterpreter {
         interpreter.eval("import java.util.*;");
         interpreter.eval("import net.sf.jasperreports.engine.*;");
         interpreter.eval("import net.sf.jasperreports.engine.data.*;");
-        
-        String[] imports =  IReportManager.getInstance().getActiveReport().getImports();
-        for (int i=0; imports != null && i<imports.length; ++i)
+
+        if (jasperDesign != null)
         {
-            interpreter.eval("import " + imports[i] + ";");
+            String[] imports =  jasperDesign.getImports();
+            for (int i=0; imports != null && i<imports.length; ++i)
+            {
+                interpreter.eval("import " + imports[i] + ";");
+            }
         }
    }
     

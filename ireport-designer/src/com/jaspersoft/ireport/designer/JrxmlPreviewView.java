@@ -57,6 +57,7 @@ public class JrxmlPreviewView extends TopComponent
         IReportManager.getPreferences().addPreferenceChangeListener(new PreferenceChangeListener() {
 
             public void preferenceChange(PreferenceChangeEvent evt) {
+                if (evt.getKey() != null && evt.getKey().equals("RecentFiles")) return;
                 setNeedRefresh(true);
             }
         });

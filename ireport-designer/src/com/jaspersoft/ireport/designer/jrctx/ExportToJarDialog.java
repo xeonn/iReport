@@ -227,11 +227,11 @@ public class ExportToJarDialog extends javax.swing.JDialog {
 
             if (jCheckBox1.isSelected())
             {
-                List<String> cp = IReportManager.getInstance().getRelodableClasspath();
+                List<String> cp = IReportManager.getInstance().getClasspath();
                 if (!cp.contains(""+newFile))
                 {
                     cp.add(""+newFile);
-                    IReportManager.getInstance().setRelodableClasspath(cp);
+                    IReportManager.getInstance().setClasspath(cp);
                 }
             }
 

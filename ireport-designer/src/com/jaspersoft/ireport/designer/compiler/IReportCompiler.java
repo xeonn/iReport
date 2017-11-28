@@ -37,7 +37,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlEditorSupport;
 import com.jaspersoft.ireport.designer.JrxmlPreviewView;
 import com.jaspersoft.ireport.designer.JrxmlVisualView;
-import com.jaspersoft.ireport.designer.ReportClassLoader;
+import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.ThreadUtils;
 import com.jaspersoft.ireport.designer.compiler.prompt.Prompter;
 import com.jaspersoft.ireport.designer.compiler.xml.SourceLocation;
@@ -53,6 +53,7 @@ import com.jaspersoft.ireport.designer.export.ExporterFactory;
 import com.jaspersoft.ireport.designer.logpane.IRConsoleTopComponent;
 import com.jaspersoft.ireport.designer.logpane.LogTextArea;
 import com.jaspersoft.ireport.designer.tools.TimeZoneWrapper;
+import com.jaspersoft.ireport.designer.utils.ExpressionInterpreter;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -60,6 +61,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.sql.Connection;
 import java.util.prefs.Preferences;
 import javax.persistence.EntityManager;
 import javax.swing.JOptionPane;
@@ -67,6 +69,9 @@ import javax.swing.SwingUtilities;
 
 import javax.xml.parsers.ParserConfigurationException;
 import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JRJdtCompiler;
 import net.sf.jasperreports.engine.design.JRValidationException;
 import net.sf.jasperreports.engine.design.JRValidationFault;
@@ -85,9 +90,14 @@ import org.hibernate.Transaction;
 import org.hibernate.classic.Session;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
+import org.openide.awt.HtmlBrowser;
+import org.openide.cookies.OpenCookie;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
+import org.openide.loaders.DataObject;
+import org.openide.modules.InstalledFileLocator;
 import org.openide.util.Cancellable;
+import org.openide.util.Utilities;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import org.xml.sax.SAXException;
@@ -112,6 +122,10 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
    public static final String SCRIPTLET_OUTPUT_DIRECTORY = "SCRIPTLET_OUTPUT_DIRECTORY";
    public static final String COMPILER = "COMPILER";
    public static final String EMPTY_DATASOURCE_RECORDS = "EMPTY_DATASOURCE_RECORDS";
+
+   private static int executingReport = 0;
+   private static String systemCpBackup = "";
+
 
    private String constTabTitle = "";
 
@@ -209,28 +223,21 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
       
       try {
           
-      
           SourceTraceDigester digester = null;
           ErrorsCollector errorsCollector = new ErrorsCollector();
 
           File f_report_title = FileUtil.toFile(getFile());
           constTabTitle = " [" + f_report_title.getName() + "]";
 
-
-
           logTextArea = IRConsoleTopComponent.getDefault().createNewLog();
           status  = "Starting";
           updateHandleStatus(status);
           logTextArea.setTitle(status + constTabTitle);
 
-          String backupJRClasspath = net.sf.jasperreports.engine.util.JRProperties.getProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASSPATH);
-          // System.getProperty("jasper.reports.compile.class.path");
-          String backupSystemClasspath = System.getProperty("java.class.path");
-
           boolean compilation_ok = true;
           long start = System.currentTimeMillis();
-          // Redirect output stream....
 
+          // Redirect output stream....
           if (myPrintStream == null)
              myPrintStream  =new PrintStream(new FilteredStream(new ByteArrayOutputStream()));
 
@@ -242,19 +249,9 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
           outputBuffer= new StringBuffer();
 
 
-            //by Egon - DEBUG: Something is wrong here, please check. ok? thx.
-            //1 - Line 148 - srcScriptletFileName = C:\jasperreports-0.5.3\demo\samples\jasper\FirstJasper.jrxmScriptlet.java -> scriptlet filename
-            //2 - Line 157 - Misc.nvl( new File(fileName).getParent(), ".") =>  .  -> report directory
-
-          // Add an entry in the thread list...
-        //by Egon - DEBUG: C:\jasperreports-0.5.3\demo\samples\jasper\FirstJasper.jrxml
           String fileName = JRXML_FILE_NAME;
-
-            //by Egon - DEBUG: C:\jasperreports-0.5.3\demo\samples\jasper\FirstJasper.jrxml
           String srcFileName = JRXML_FILE_NAME;
-            //by Egon - DEBUG: C:\jasperreports-0.5.3\demo\samples\jasper\FirstJasper.jasper
           fileName = Misc.changeFileExtension(fileName,"jasper");
-
 
           File f = new File(fileName);
           if (!IReportManager.getPreferences().getBoolean("useReportDirectoryToCompile", true))
@@ -267,15 +264,10 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
              fileName += f.getName();
           }
 
-            //by Egon - DEBUG: C:\jasperreports-0.5.3\demo\samples\jasper\FirstJasper.jrxml
+          /*
           String scriptletFileName = JRXML_FILE_NAME;
-            //by Egon - DEBUG: C:\jasperreports-0.5.3\demo\samples\jasper\FirstJasper.jrxml
           String srcScriptletFileName = JRXML_FILE_NAME;
-            //by Egon - DEBUG: .\FirstJasper.
-          //fileName = Misc.changeFileExtension(fileName,"");
-            //by Egon - DEBUG: C:\jasperreports-0.5.3\demo\samples\jasper\FirstJasper.jrxmScriptlet.java
           scriptletFileName = srcScriptletFileName.substring(0,scriptletFileName.length()-1)+"Scriptlet.java";
-            //1 - by Egon - DEBUG: C:\jasperreports-0.5.3\demo\samples\jasper\FirstJasper.jrxmScriptlet.java
           srcScriptletFileName = scriptletFileName;
 
           File f2 = new File(scriptletFileName);
@@ -283,23 +275,10 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
           {
              scriptletFileName = (String)properties.get(IReportCompiler.SCRIPTLET_OUTPUT_DIRECTORY) + f2.separatorChar + f2.getName();
           }
-
+          */
 
            String reportDirectory = new File(JRXML_FILE_NAME).getParent();
 
-
-           //String classpath = System.getProperty("jasper.reports.compile.class.path");
-           String classpath = net.sf.jasperreports.engine.util.JRProperties.getProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASSPATH);
-
-           if(classpath != null){
-                classpath += File.pathSeparator + reportDirectory;
-                //System.setProperty("jasper.reports.compile.class.path", classpath);
-                net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASSPATH, classpath);
-          } else if (System.getProperty("java.class.path") != null){
-            classpath = System.getProperty("java.class.path");
-            classpath += File.pathSeparator + reportDirectory;
-            System.setProperty("java.class.path", classpath);
-           }
            reportDirectory = reportDirectory.replace('\\', '/');
            if(!reportDirectory.endsWith("/")){
                 reportDirectory += "/";//the file path separator must be present
@@ -308,26 +287,9 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                 reportDirectory = "/" + reportDirectory;//it's important to JVM 1.4.2 especially if contains windows drive letter
            }
 
-           //sClassLoader reportClassLoader = IReportManager.getInstance().getReportClassLoader();
-           //reportClassLoader.setRelodablePaths( reportDirectory );
-
-           /******************/
-
-           /*
-           try{
-                Thread.currentThread().setContextClassLoader(new URLClassLoader(new URL[]{new URL("file://"+reportDirectory)},  reportClassLoader));
-           } catch (MalformedURLException mue){
-                mue.printStackTrace();
-           }
-           */
-
            if (Thread.interrupted()) throw new InterruptedException();
            
            /******************/
-
-
-
-
            /*
            if ((command & CMD_COMPILE_SCRIPTLET) != 0)
           {
@@ -426,14 +388,14 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
 
              //System.setProperty("jasper.reports.compile.keep.java.file", "true");
 
-             if (IReportManager.getInstance().getProperty("KeepJavaFile","false").equals("false") )
-             {
-                    net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_KEEP_JAVA_FILE, false);
-             }
-             else
-             {
-                    net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_KEEP_JAVA_FILE, true);
-             }
+//             if (IReportManager.getInstance().getProperty("KeepJavaFile","false").equals("false") )
+//             {
+//                    net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_KEEP_JAVA_FILE, false);
+//             }
+//             else
+//             {
+//                    net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_KEEP_JAVA_FILE, true);
+//             }
 
              //String tempDirStr = System.getProperty("jasper.reports.compile.temp");
              String tempDirStr = net.sf.jasperreports.engine.util.JRProperties.getProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_TEMP_DIR);
@@ -452,27 +414,48 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                              Misc.formatString("Compiling to file... {0}",
                                     new Object[]{fileName}) + "</font>",true);
 
-             String old_jr_classpath = Misc.nvl(net.sf.jasperreports.engine.util.JRProperties.getProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASSPATH), "");
-             @SuppressWarnings("deprecation")
-             String old_defaul_compiler = Misc.nvl(net.sf.jasperreports.engine.util.JRProperties.getProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASS), "");
-
+             
              try
              {
-                //net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_TEMP_DIR, tempDirStr);
+                net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_TEMP_DIR, tempDirStr);
                 //net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASSPATH, Misc.nvl( new File(fileName).getParent(), ".")  + File.pathSeparator  + Misc.getClassPath());
 
                 String compiler_name  = "JasperReports default compiler";
                 String compiler_code = IReportManager.getInstance().getProperty("DefaultCompiler",null);
 
-                JRJdtCompiler jdtCompiler = null; 
+                JRJdtCompiler jdtCompiler = null;
+
+                JasperDesign jd = null;
+
+                String compatibility = IReportManager.getPreferences().get("compatibility", "");
+
+                if (getJrxmlVisualView().getModel() != null &&
+                    getJrxmlVisualView().getModel().getJasperDesign() != null &&
+                    compatibility.length() == 0)
+                {
+                    jd = getJrxmlVisualView().getModel().getJasperDesign();
+                }
+                else
+                {
+                    jd = IReportCompiler.loadJasperDesign( new FileInputStream(srcFileName) , digester);
+                }
 
                 if (this.getProperties().get(COMPILER) != null)
                 {
                     net.sf.jasperreports.engine.util.JRProperties. setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASS, ""+this.getProperties().get(COMPILER));
                     compiler_name = Misc.formatString("Special language compiler ({0})", new Object[]{this.getProperties().get(COMPILER)});
                 }
+                else if ( (jd.getLanguage() == null || jd.getLanguage().equals("java")) && JRProperties.getProperty("net.sf.jasperreports.compiler.java") != null
+                        && JRProperties.getProperty("net.sf.jasperreports.compiler.java").length() > 0)
+                {
+                    // Use specified compiler...
+                     setupClassPath(reportDirectory);
+                     compiler_name = Misc.formatString("Using Java compiler: {0}", new Object[]{JRProperties.getProperty("net.sf.jasperreports.compiler.java")});
+                     getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\" color=\"#000000\">"+ compiler_name +"</font>",true);
+                }
                 else if (compiler_code !=  null && !compiler_code.equals("0") && !compiler_code.equals(""))
                 {
+                    /*
                     if (compiler_code.equals("1"))
                     {
                         net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.design.JRCompiler.COMPILER_PREFIX + "java", "net.sf.jasperreports.engine.design.JRJdk13Compiler");
@@ -494,31 +477,22 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                         net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.design.JRCompiler.COMPILER_PREFIX + "java", "net.sf.jasperreports.engine.design.JRJikesCompiler" );
                         compiler_name = "Jikes Compiler";
                     }
+                    */
                 }
                 else
                 {
                      //Force to use the jdtCompiler compiler....
-                     net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.design.JRCompiler.COMPILER_PREFIX + "java", "it.businesslogic.ireport.compiler.ExtendedJRJdtCompiler" );
+                     //net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.design.JRCompiler.COMPILER_PREFIX + "java", "it.businesslogic.ireport.compiler.ExtendedJRJdtCompiler" );
                      jdtCompiler = new ExtendedJRJdtCompiler();
                 }
 
-
-               // getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\" color=\"#000000\"><b>Using compiler "+ compiler_name  + " (" + System.getProperty("jasper.reports.compiler.class","" ) +")</b></font>",true);
+                
                 start = System.currentTimeMillis();
 
                 digester = IReportCompiler.createDigester();
-                JasperDesign jd = null;
                 
-                if (getJrxmlVisualView().getModel().getJasperDesign() != null)
-                {
-                    jd = getJrxmlVisualView().getModel().getJasperDesign();
-                }
-                else
-                {
-                    IReportCompiler.loadJasperDesign( new FileInputStream(srcFileName) , digester);
-                }
                 
-                if (jdtCompiler != null && jd.getLanguage() == null || jd.getLanguage().equals("java"))
+                if (jdtCompiler != null && (jd.getLanguage() == null || jd.getLanguage().equals("java")))
                 {
                     ((ExtendedJRJdtCompiler)jdtCompiler).setDigester(digester);
                     ((ExtendedJRJdtCompiler)jdtCompiler).setErrorHandler(errorsCollector);
@@ -527,16 +501,23 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
 
                     if (errorsCollector.getProblemItems().size() > 0 || finalJR == null)
                     {
-
                         throw new JRException("");
                     }
                     JRSaver.saveObject(finalJR,  fileName);
 
+                    if (IReportManager.getPreferences().getBoolean("compile_subreports",true))
+                    {
+                        compileSubreports(jd, reportDirectory, true);
+                    }
                     //System.out.println("Report saved..." + finalJR + " " + errorsCollector.getProblemItems().size());
                 }
                 else
                 {
-                         JasperCompileManager.compileReportToFile(jd, fileName);
+                     JasperCompileManager.compileReportToFile(jd, fileName);
+                     if (IReportManager.getPreferences().getBoolean("compile_subreports",true))
+                     {
+                        compileSubreports(jd, reportDirectory, true);
+                     }
                 }
 
                 if (errorsCollector != null && getJrxmlVisualView() != null)
@@ -635,25 +616,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
              }
              finally
              {
-                //System.setProperty("jasper.reports.compile.class.path", old_jr_classpath);
-                net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASSPATH, old_jr_classpath );
-                //System.setProperty("jasper.reports.compiler.class", old_defaul_compiler);
-                net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASS, old_defaul_compiler );
-
-                //if(mainFrame.isUsingCurrentFilesDirectoryForCompiles())
-                //{
-                   if( oldCompileTemp != null )
-                   {
-                      System.setProperty("jasper.reports.compile.temp", oldCompileTemp);
-                      net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_TEMP_DIR, oldCompileTemp );
-                   }
-                   else
-                   {
-                      System.setProperty("jasper.reports.compile.temp", "");
-                      net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_TEMP_DIR, "" );
-                   }
-
-                //}//end if using current files directory for compiles
+                
              }//end finally
              getLogTextArea().logOnConsole(outputBuffer.toString());
              outputBuffer=new StringBuffer();
@@ -687,7 +650,8 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
               showErrorConsole();
               return;
           }
-          else if  ((command & CMD_EXPORT) == 0)
+
+           if  ((command & CMD_EXPORT) == 0)
           {
                // Show the output console.
                showOutputConsole();
@@ -895,7 +859,16 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
 
                    if (connection.isJDBCConnection())
                    {
-                      print = JasperFillManager.fillReport(fileName,hm, connection.getConnection());
+                       Connection con = connection.getConnection();
+                       try {
+                          print = JasperFillManager.fillReport(fileName,hm, con);
+                       } catch (Exception ex)
+                       {
+                           throw ex;
+                       } finally
+                       {
+                            if (con != null) try {  con.close(); } catch (Exception ex) { }
+                       }
                    }
                    else if (connection.isJRDataSource())
                    {
@@ -1206,23 +1179,71 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
 
                    if (format.equalsIgnoreCase("") || format.equalsIgnoreCase("java2D"))
                    {
-
+                        
                    }
                    else
-                      getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\">" +
-                              "No external viewer specified for this type of print. Set it in the options frame!" +
-                              "</font>",true);
+                   {
+                       // Try to use an internal viewer before give up
+                        try {
+                                   if (fileName.toLowerCase().endsWith(".html"))
+                                   {
+                                       HtmlBrowser.URLDisplayer.getDefault().showURL( new File(fileName).toURI().toURL() );
+                                   }
+                                   else if (fileName.toLowerCase().endsWith(".txt") ||
+                                            fileName.toLowerCase().endsWith(".csv") ||
+                                            fileName.toLowerCase().endsWith(".xml") ||
+                                            fileName.toLowerCase().endsWith(".jrpxml"))
+                                   {
 
+                                       // Open default browser
+                                       FileObject fo = FileUtil.toFileObject(new File(fileName));
+                                       DataObject dobj = DataObject.find(fo);
+                                       if (dobj != null)
+                                       {
+                                           dobj.getCookie(OpenCookie.class).open();
+                                       }
+                                   }
+                                   else
+                                   {
+                                       // try using the default OS specific tricks...
+                                      if (Utilities.isWindows())
+                                      {
+                                        viewer_program = "rundll32 SHELL32.DLL,ShellExec_RunDLL";
+                                      }
+                                      else if (Utilities.isMac())
+                                      {
+                                        viewer_program = "open";
+                                      }
+                                   }
+
+                        }
+                        catch (Exception ex) {
+
+                            ex.printStackTrace();
+                        }
+
+                      
+                   }
                 }
-                else
+
+                // Retry after the first pass....
+                if (viewer_program != null && !viewer_program.equals(""))
                 {
                    try
                    {
-                      String execute_string = viewer_program + " \""+fileName+"\"";
-                      getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\">" +
+                       String execute_string = viewer_program + " \""+fileName+"\"";
+                          getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\">" +
                              Misc.formatString("Executing: {0}",
                                     new Object[]{execute_string}) + "</font>",true);
-                      rt.exec( execute_string );
+
+                      if (Utilities.isWindows())
+                      {
+                        rt.exec( execute_string );
+                      }
+                      else if (Utilities.isUnix() || Utilities.isMac())
+                      {
+                          rt.exec(new String[]{viewer_program, fileName});
+                      }
                    } catch (Exception ex)
                    {
 
@@ -1232,6 +1253,12 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                       outputBuffer = new StringBuffer();
                    }
                    //getLogTextArea().logOnConsole("Finished...\n");
+                }
+                else
+                {
+                    getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\">" +
+                              "No external viewer specified for this type of print. Set it in the options frame!" +
+                              "</font>",true);
                 }
              }
              else
@@ -1247,19 +1274,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
           cleanup();
           handle.finish();
 
-          if (backupJRClasspath != null) {
-              //System.setProperty("jasper.reports.compile.class.path",backupJRClasspath);
-              net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASSPATH, backupJRClasspath );
-          }
-          else
-          {
-              //System.getProperties().remove("jasper.reports.compile.class.path");
-              net.sf.jasperreports.engine.util.JRProperties.restoreProperties();
-          }
-
-          if (backupSystemClasspath != null) System.setProperty("java.class.path",backupSystemClasspath);
-          else System.getProperties().remove("java.class.path");
-
+          
      } catch (InterruptedException ex)
      {
          stopThread();
@@ -1336,6 +1351,153 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
       return status;
    }
 
+    private void compileSubreports(JasperDesign jd, String reportDir) throws JRException
+    {
+        compileSubreports(jd, reportDir, false);
+    }
+
+    private void compileSubreports(JasperDesign jd, String reportDir, boolean first) throws JRException {
+
+        boolean foundSubreport = false;
+        List<JRDesignElement> elements = ModelUtils.getAllElements(jd);
+        for (JRDesignElement element : elements)
+        {
+            if (element instanceof JRDesignSubreport)
+            {
+                if (!foundSubreport && first)
+                {
+                   URL img_url_comp = this.getClass().getResource("/com/jaspersoft/ireport/designer/compiler/comp1_mini.jpg");
+                   getLogTextArea().logOnConsole("<font face=\"SansSerif\" size=\"3\" color=\"#000000\"><img align=\"right\" src=\""+  img_url_comp  +"\"> &nbsp;Compiling subreports....</font>",true);
+                   foundSubreport = true;
+                }
+                JRDesignSubreport subreport = (JRDesignSubreport)element;
+
+                File f = locateSubreport(jd, subreport, new File(reportDir), null);
+                if (f == null)
+                {
+                    URL img_url_warning = this.getClass().getResource("/com/jaspersoft/ireport/designer/resources/errorhandler/warning.png");
+                    getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\" color=\"#000000\"><img align=\"right\" src=\""+  img_url_warning  +"\"> &nbsp;" +
+                                "Unable to locate the subreport with expression: \"<code>" + Misc.getExpressionText(subreport.getExpression()) + "</code>\".</font>",true);
+                }
+                else
+                {
+                    long lastModified = f.lastModified();
+                    String jasper = Misc.changeFileExtension(f.getPath(), ".jasper");
+                    File jasperFile = new File(jasper);
+                    if (jasperFile.exists() && jasperFile.lastModified() > lastModified)
+                    {
+                        URL img_url_info = this.getClass().getResource("/com/jaspersoft/ireport/designer/resources/errorhandler/information.png");
+                        getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\" color=\"#000000\"><img align=\"right\" src=\""+  img_url_info  +"\"> &nbsp;" +
+                                "Subreport " + f.getPath() + " already compiled.</font>",true);
+                    }
+                    else
+                    {
+                        try {
+                            JasperCompileManager.compileReportToFile(f.getPath(), jasper);
+                            URL img_url_info = this.getClass().getResource("/com/jaspersoft/ireport/designer/resources/errorhandler/information.png");
+                             getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\" color=\"#000000\"><img align=\"right\" src=\""+  img_url_info  +"\"> &nbsp;" +
+                                "Subreport " + f.getPath() + " compiled.</font>",true);
+                        } catch (JRException ex) {
+
+                            URL img_url_error = this.getClass().getResource("/com/jaspersoft/ireport/designer/resources/errorhandler/error.png");
+                            try {
+                                getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\" color=\"#000000\"><img align=\"right\" src=\"" + img_url_error + "\"> &nbsp;" + "An error has accurred compiling the subreport: <a href=\"" + f.toURI().toURL() + "\">" + f.getPath() + "</a></font>", true);
+                            } catch (MalformedURLException ex1) {
+                            }
+                            
+                            throw new JRException("An error has accurred compiling the subreport: " + f.getPath(), ex);
+                        }
+                        compileSubreports(JRXmlLoader.load(f), f.getParent());
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    /**
+     * Return an array of files: File[0] is the jrxml, File[1] is the optional jasper file.
+     * Return null in case of error.
+     * @param jasperDesign
+     * @param subreport
+     * @param reportDir
+     * @param cl
+     * @return
+     */
+    public File locateSubreport(JasperDesign jasperDesign, JRDesignSubreport subreport, File reportFolder, ClassLoader cl)
+    {
+        if (subreport.getExpression() == null ||
+                subreport.getExpression().getValueClassName() == null ||
+                !subreport.getExpression().getValueClassName().equals("java.lang.String"))
+        {
+           // Return default image...
+           // Unable to resolve the subreoport jrxml file...
+            return null;
+        }
+        if (cl == null) cl = Thread.currentThread().getContextClassLoader();
+
+        JRDesignDataset dataset =  jasperDesign.getMainDesignDataset();
+
+        try {
+
+            // Try to process the expression...
+            ExpressionInterpreter interpreter = new ExpressionInterpreter(dataset, cl);
+
+            Object ret = interpreter.interpretExpression( subreport.getExpression().getText() );
+
+            if (ret != null)
+            {
+                String resourceName = ret + "";
+                if (resourceName.toLowerCase().endsWith(".jasper"))
+                {
+                    resourceName = resourceName.substring(0, resourceName.length() -  ".jasper".length());
+                    resourceName += ".jrxml";
+                }
+
+                if (!resourceName.toLowerCase().endsWith(".jrxml"))
+                {
+                    return null;
+                }
+
+                File f = new File(resourceName);
+                if (!f.exists())
+                {
+                    URL[] urls = new URL[]{};
+                    if (reportFolder != null)
+                    {
+                        urls = new URL[]{ reportFolder.toURL()};
+                    }
+                    URLClassLoader urlClassLoader = new URLClassLoader(urls, cl);
+                    URL url = urlClassLoader.findResource(resourceName);
+                    if (url == null)
+                    {
+                        return null;
+                    }
+
+                    f = new File(url.getPath());
+                    if (f.exists())
+                    {
+                        return f;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    return f;
+                }
+
+             }
+        } catch (Throwable ex) {
+
+        }
+        return null;
+    }
+
+
     private void configureExporter(JRExporter exporter) {
 
         Preferences pref = IReportManager.getPreferences();
@@ -1367,6 +1529,68 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
         {
             exporter.setParameter(JRExporterParameter.OFFSET_Y, pref.getInt(JRProperties.PROPERTY_PREFIX + "export.offset.y", 0));
         }
+    }
+
+    /**
+     * Setting up the classpath in the JRProperties. This is useful only when using not standard java compiler.
+     * The classpath is not set if the java compiler class is not set in the JR properties, since in this case
+     * the context classloader is used instead...
+     */
+    private void setupClassPath(String reportDirectory) {
+
+            if ( JRProperties.getProperty("net.sf.jasperreports.compiler.java") != null
+                 && JRProperties.getProperty("net.sf.jasperreports.compiler.java").length() > 0)
+            {
+               //String classpath = System.getProperty("jasper.reports.compile.class.path");
+               String oldClasspath = net.sf.jasperreports.engine.util.JRProperties.getProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASSPATH);
+               if (oldClasspath == null) oldClasspath="";
+               String classpath = "";
+
+               ArrayList<String> oldCp = new ArrayList<String>();
+               String[] paths = oldClasspath.split(File.pathSeparator);
+               for (int idx = 0; idx < paths.length; idx++) {
+                   oldCp.add(paths[idx]);
+               }
+
+               //We should add to the classpath all the required jar in modules/ext too...
+               File libDir = InstalledFileLocator.getDefault().locate("modules/ext", null, false);
+
+                // find a jar called jasperreports-extensions-*.jar
+                if (libDir != null && libDir.isDirectory())
+                {
+                    File[] jars = libDir.listFiles();
+
+                    for (int i=0; i<jars.length; ++i)
+                    {
+                        if (oldCp.contains(jars[i].getPath())) continue;
+                        oldCp.add(jars[i].getPath());
+                    }
+                }
+
+
+               if (!oldCp.contains(reportDirectory))
+               {
+                    classpath += ((oldCp.size() > 0) ? File.pathSeparator : "" ) + reportDirectory + File.pathSeparator;
+               }
+
+               for (String cpItem : oldCp)
+               {
+                   classpath += cpItem + File.pathSeparator;
+               }
+
+               // Concatenate the iReport classpath...
+               List<String> cp = IReportManager.getInstance().getClasspath();
+               for (String cpItem : cp)
+               {
+                   if (!oldCp.contains(cpItem))
+                   {
+                    classpath += cpItem + File.pathSeparator;
+                   }
+               }
+
+               JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASSPATH, classpath);
+               System.setProperty("java.class.path", classpath);
+           }
     }
 
     private void updateHandleStatus(String status) {
@@ -1495,13 +1719,8 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
 //		  }
 		  
 		  //include report directory for resource search path
-		  reportDirectory = reportDirectory.replace('\\', '/');
-		  if(!reportDirectory.endsWith("/")){
-			  reportDirectory += "/";//the file path separator must be present
-		  }
-		  if(!reportDirectory.startsWith("/")){
-			  reportDirectory = "/" + reportDirectory;//it's important to JVM 1.4.2 especially if contains windows drive letter
-		  }
+          URL reportDirectoryUrl = new File(reportDirectory).toURI().toURL();
+
 
           ClassLoader urlClassLoader = null;
           String reportCompileDir = IReportManager.getPreferences().get("reportDirectoryToCompile", ".");
@@ -1509,13 +1728,13 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
           if ((reportCompileDirFile.exists()) && !IReportManager.getPreferences().getBoolean("useReportDirectoryToCompile", true))
           {
               urlClassLoader = new URLClassLoader(new URL[]{
-                   new URL("file://"+reportDirectory),reportCompileDirFile.toURI().toURL()},
+                   reportDirectoryUrl,reportCompileDirFile.toURI().toURL()},
                    IReportManager.getInstance().getReportClassLoader());
           }
           else
           {
             urlClassLoader = new URLClassLoader(new URL[]{
-		  	  new URL("file://"+reportDirectory)
+		  	  reportDirectoryUrl
             }, IReportManager.getInstance().getReportClassLoader());
           }
 
@@ -1539,6 +1758,16 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
     */
    public void cleanup()
     {
+        
+        synchronized(this) {
+            executingReport--;
+            if (executingReport == 0)
+            {
+              System.setProperty("java.class.path", systemCpBackup);
+              JRProperties.backupProperties();
+            }
+        }
+        JRProperties.restoreProperties();
         getLogTextArea().setTitle("Finished" + constTabTitle);
         getLogTextArea().setRemovable(true);
         
@@ -1546,6 +1775,14 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
    
    public void start()
    {
+      synchronized(this) {
+          executingReport++;
+          if (executingReport == 1)
+          {
+              this.systemCpBackup = System.getProperty("java.class.path");
+              JRProperties.backupProperties();
+          }
+      }
       this.thread = new Thread(this);
       init();
       this.thread.start();
@@ -1691,12 +1928,10 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
      */
     public static JasperDesign loadJasperDesign(InputStream fileStream, SourceTraceDigester digester) throws JRException
     {
-            JRXmlLoader xmlLoader = new JRXmlLoader(digester);
-
             try
             {
-                    JasperDesign jasperDesign = xmlLoader.loadXML(fileStream);
-                    return jasperDesign;
+                    JasperDesign jd = JRXmlLoader.load(fileStream);
+                    return jd;
             }
             finally
             {

@@ -43,6 +43,7 @@
             <file name="com-jaspersoft-ireport-designer-menu-ShowGridAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-SnapToGridAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-pdf508-ShowPdf508TagsAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-menu-EditWithExternalEditorAction.instance"/>
             <folder name="Format">
                 <file name="com-jaspersoft-ireport-designer-formatting-actions-AdaptToParentAction.instance"/>
                 <file name="com-jaspersoft-ireport-designer-formatting-actions-AdaptToParentHAction.instance"/>
@@ -95,6 +96,9 @@
             <file name="com-jaspersoft-ireport-designer-menu-preview-CSVPreviewAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-preview-InternalPreviewAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-preview-HTMLPreviewAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-XHTMLPreviewAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-DOCXPreviewAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-XMLPreviewAction.instance"/>
         </folder>
         <folder name="Tools">
             <file name="com-jaspersoft-ireport-designer-menu-ClasspathAction.instance"/>
@@ -108,9 +112,9 @@
             <file name="com-jaspersoft-ireport-designer-logpane-IRConsoleAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-styles-StylesLibraryAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-welcome-WelcomeAction.instance"/>
-            <file name="org-netbeans-core-actions-ViewRuntimeTabAction.instance">
+            <!-- <file name="org-netbeans-core-actions-ViewRuntimeTabAction.instance">
                 <attr name="SystemFileSystem.icon" urlvalue="nbresloc:/org/netbeans/core/resources/environment.gif"/>
-            </file>
+            </file>-->
             <file name="com-jaspersoft-ireport-designer-resourcebundle-ResourceBundleAction.instance"/>
         </folder>
         <folder name="Menu">
@@ -578,6 +582,10 @@
                 <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-HTMLPreviewAction.instance"/>
                 <attr name="position" intvalue="510"/>
             </file>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-XHTMLPreviewAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-XHTMLPreviewAction.instance"/>
+                <attr name="position" intvalue="511"/>
+            </file>
             <file name="com-jaspersoft-ireport-designer-menu-preview-XLSPreviewAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-XLSPreviewAction.instance"/>
                 <attr name="position" intvalue="520"/>
@@ -590,6 +598,10 @@
                 <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-RTFPreviewAction.instance"/>
                 <attr name="position" intvalue="530"/>
             </file>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-DOCXPreviewAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-DOCXPreviewAction.instance"/>
+                <attr name="position" intvalue="535"/>
+            </file>
             <file name="com-jaspersoft-ireport-designer-menu-preview-TXTPreviewAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-TXTPreviewAction.instance"/>
                 <attr name="position" intvalue="540"/>
@@ -601,6 +613,10 @@
             <file name="com-jaspersoft-ireport-designer-menu-preview-ODFPreviewAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-ODFPreviewAction.instance"/>
                 <attr name="position" intvalue="560"/>
+            </file>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-XMLPreviewAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-XMLPreviewAction.instance"/>
+                <attr name="position" intvalue="565"/>
             </file>
             <file name="com-jaspersoft-ireport-designer-menu-preview-InternalPreviewAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-InternalPreviewAction.instance"/>
@@ -622,6 +638,10 @@
                 </file>
                 <file name="com-jaspersoft-ireport-designer-menu-preview-HTMLPreviewAction.shadow">
                     <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-HTMLPreviewAction.instance"/>
+                    <attr name="position" intvalue="510"/>
+                </file>
+                <file name="com-jaspersoft-ireport-designer-menu-preview-XHTMLPreviewAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-XHTMLPreviewAction.instance"/>
                     <attr name="position" intvalue="510"/>
                 </file>
                 <file name="com-jaspersoft-ireport-designer-menu-preview-XLSPreviewAction.shadow">
@@ -648,11 +668,21 @@
                     <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-ODFPreviewAction.instance"/>
                     <attr name="position" intvalue="560"/>
                 </file>
+                <file name="com-jaspersoft-ireport-designer-menu-preview-XMLPreviewAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-XMLPreviewAction.instance"/>
+                    <attr name="position" intvalue="565"/>
+                </file>
                 <file name="com-jaspersoft-ireport-designer-menu-preview-InternalPreviewAction.shadow">
                     <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-InternalPreviewAction.instance"/>
                     <attr name="position" intvalue="570"/>
                 </file>
             </folder>
+        </folder>
+        <folder name="Edit">
+            <file name="EditWithExternalEditorAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Designer/com-jaspersoft-ireport-designer-menu-EditWithExternalEditorAction.instance"/>
+                    <attr name="position" intvalue="3100"/>
+            </file>
         </folder>
         <folder name="View">
             <folder name="Report Designer">
@@ -672,7 +702,7 @@
                 <file name="ShowPdf508TagsAction.shadow">
                     <attr name="originalFile" stringvalue="Actions/Designer/com-jaspersoft-ireport-designer-pdf508-ShowPdf508TagsAction.instance"/>
                 </file>
-
+                
             </folder>
             <attr name="com-jaspersoft-ireport-designer-menu-OpenQueryDialogAction.shadow/com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow" boolvalue="true"/>
         </folder>
@@ -723,10 +753,10 @@
             <file name="StylesLibraryAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-styles-StylesLibraryAction.instance"/>
             </file>
-            <file name="ViewRuntimeTabAction.shadow">
+            <!--file name="ViewRuntimeTabAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Window/org-netbeans-core-actions-ViewRuntimeTabAction.instance"/>
                 <attr name="position" intvalue="300"/>
-            </file>
+            </file>-->
 
             <file name="WelcomeAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-welcome-WelcomeAction.instance"/>
@@ -856,6 +886,7 @@
     <folder name="ireport">
         <folder name="palette">
             <folder name="ReportElements">
+                <attr name="isExpanded" boolvalue="true"/>
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="com.jaspersoft.ireport.locale.Bundle"/>
                 <file name="line.irpitem" url="designer/palette/items/line.irpitem"/>
                 <file name="ellipse.irpitem" url="designer/palette/items/ellipse.irpitem"/>
@@ -871,6 +902,7 @@
                 <file name="roundRectangle.irpitem" url="designer/palette/items/roundRectangle.irpitem"/>
             </folder>
             <folder name="Tools">
+                <attr name="isExpanded" boolvalue="true"/>
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="com.jaspersoft.ireport.locale.Bundle"/>
                 <file name="PageNumber.irpitem" url="designer/palette/actions/tools/PageNumber.irpitem"/>
                 <file name="TotalPageNumber.irpitem" url="designer/palette/actions/tools/TotalPageNumber.irpitem"/>

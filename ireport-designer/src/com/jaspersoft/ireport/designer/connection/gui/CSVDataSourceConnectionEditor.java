@@ -93,7 +93,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         jButtonModifyParameter = new javax.swing.JButton();
         jButtonDeleteParameter = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
-        jButtonNewParameter1 = new javax.swing.JButton();
+        jButtonGetColumns = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jCheckBoxCVSDateFormat = new javax.swing.JCheckBox();
         jTextFieldCVSDateFormat = new javax.swing.JTextField();
@@ -244,10 +244,10 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 4, 4);
         jPanel8.add(jPanel9, gridBagConstraints);
 
-        jButtonNewParameter1.setText("Get columns name from the first row of the file");
-        jButtonNewParameter1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonGetColumns.setText("Get columns name from the first row of the file");
+        jButtonGetColumns.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonNewParameterActionPerformed11(evt);
+                jButtonGetColumnsActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -256,7 +256,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        jPanel8.add(jButtonNewParameter1, gridBagConstraints);
+        jPanel8.add(jButtonGetColumns, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 5;
@@ -563,9 +563,9 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
     private javax.swing.JButton jButtonCSVFilename;
     private javax.swing.JButton jButtonCVSDateFormat;
     private javax.swing.JButton jButtonDeleteParameter;
+    private javax.swing.JButton jButtonGetColumns;
     private javax.swing.JButton jButtonModifyParameter;
     private javax.swing.JButton jButtonNewParameter;
-    private javax.swing.JButton jButtonNewParameter1;
     private javax.swing.JCheckBox jCheckBoxCVSDateFormat;
     private javax.swing.JCheckBox jCheckBoxCVSFirstRowAsHeader;
     private javax.swing.JLabel jLabel15;
@@ -807,7 +807,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
 // TODO add your handling code here:
     }                                                       
 
-    private void jButtonNewParameterActionPerformed11(java.awt.event.ActionEvent evt) {                                                      
+    private void jButtonGetColumnsActionPerformed(java.awt.event.ActionEvent evt) {
 
         try {
             JRCsvDataSourceInspector ds = new JRCsvDataSourceInspector(new File( jTextFieldCSVFilename.getText()));
@@ -824,7 +824,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
             if (jRadioButtonCVSSeparatorSpace1.isSelected()) ds.setRecordDelimiter(" ");
             if (jRadioButtonCVSSeparatorSemicolon1.isSelected()) ds.setRecordDelimiter(";");
             if (jRadioButtonCVSSeparatorNewLine1.isSelected()) ds.setRecordDelimiter("\n");
-            if (jRadioButtonCVSSeparatorNewLine3.isSelected()) ds.setRecordDelimiter("\n\r");
+            if (jRadioButtonCVSSeparatorNewLine3.isSelected()) ds.setRecordDelimiter("\r\n");
             if (jRadioButtonCVSSeparatorOther1.isSelected()) ds.setRecordDelimiter(Misc.removeSlashesString(jTextFieldCVSSeparatorText1.getText()));
             
             DefaultListModel dlm = (DefaultListModel)jListCVSColumns.getModel();

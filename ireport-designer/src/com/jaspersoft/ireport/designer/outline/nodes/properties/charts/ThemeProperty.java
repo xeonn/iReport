@@ -77,7 +77,7 @@ public final class ThemeProperty extends StringListProperty implements Preferenc
     private void updateTags()
     {
         ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
-        Thread.currentThread().setContextClassLoader(new ReportClassLoader(IReportManager.getReportClassLoader()));
+        Thread.currentThread().setContextClassLoader(IReportManager.getJRExtensionsClassLoader());
 
         Set<String> themeNamesSet = new HashSet<String>();
         List themeBundles = ExtensionsEnvironment.getExtensionsRegistry().getExtensions(ChartThemeBundle.class);

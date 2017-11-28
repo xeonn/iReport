@@ -32,10 +32,14 @@
 
 package com.jaspersoft.ireport.designer.logpane;
 
+import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
+import java.io.File;
 import java.net.URL;
 import javax.swing.*;
-import java.util.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkEvent.EventType;
+import javax.swing.event.HyperlinkListener;
 
 
 /**
@@ -67,6 +71,24 @@ public class LogTextArea extends javax.swing.JPanel {
             maxlines = 5000;
         }
         clearConsole();
+        jEditorPaneOutput.addHyperlinkListener(new HyperlinkListener() {
+
+            public void hyperlinkUpdate(HyperlinkEvent e) {
+
+                if (e.getEventType() == EventType.ACTIVATED)
+                {
+                    if (e.getURL().getFile().endsWith(".jrxml"))
+                    {
+                        String fileName = e.getURL().getFile();
+                        File f = new File(fileName);
+                        if (f.exists())
+                        {
+                            Misc.openFile(f);
+                        }
+                    }
+                }
+            }
+        });
     }
 
   

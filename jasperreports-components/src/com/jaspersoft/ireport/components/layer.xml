@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.1//EN" "http://www.netbeans.org/dtds/filesystem-1_1.dtd">
+<filesystem>
+    <folder name="ireport">
+        <folder name="palette">
+            <folder name="ReportElements">
+                 <attr name="SystemFileSystem.localizingBundle" stringvalue="com.jaspersoft.ireport.locale.Bundle"/>
+                 <file name="JRList.irpitem" url="list/JRList.irpitem"/>
+                 <file name="JRBarcode.irpitem" url="barcode/JRBarcode.irpitem"/>
+            </folder>
+        </folder>
+       <!--
+       <folder name="decorators">
+            <folder name="elements">
+               <file name="com-jaspersoft-ireport-designer-pdf508-Pdf508TagDecorator"/>
+            </folder>
+       </folder> -->
+       <folder name="components">
+            <folder name="nodes">
+               <file name="net-sf-jasperreports-components-list-StandardListComponent.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.list.ListElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-barbecue-StandardBarbecueComponent.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.barcode.barbecue.BarbecueElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-barcode4j-CodabarComponent.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.barcode.barcode4j.Barcode4JElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-barcode4j-Code128Component.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.barcode.barcode4j.Barcode4JElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-barcode4j-EAN128Component.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.barcode.barcode4j.Barcode4JElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-barcode4j-DataMatrixComponent.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.barcode.barcode4j.Barcode4JElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-barcode4j-RoyalMailCustomerComponent.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.barcode.barcode4j.Barcode4JElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-barcode4j-USPSIntelligentMailComponent.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.barcode.barcode4j.Barcode4JElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-barcode4j-Code39Component.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.barcode.barcode4j.Barcode4JElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-barcode4j-Interleaved2Of5Component.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.barcode.barcode4j.Barcode4JElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-barcode4j-UPCAComponent.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.barcode.barcode4j.Barcode4JElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-barcode4j-UPCEComponent.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.barcode.barcode4j.Barcode4JElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-barcode4j-EAN13Component.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.barcode.barcode4j.Barcode4JElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-barcode4j-EAN8Component.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.barcode.barcode4j.Barcode4JElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-barcode4j-POSTNETComponent.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.barcode.barcode4j.Barcode4JElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-barcode4j-PDF417Component.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.barcode.barcode4j.Barcode4JElementNodeFactory"/>
+               </file>
+            </folder>
+       </folder>
+     </folder>
+
+
+</filesystem>

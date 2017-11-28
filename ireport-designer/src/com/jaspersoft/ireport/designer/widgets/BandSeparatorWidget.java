@@ -46,6 +46,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.netbeans.api.visual.border.BorderFactory;
 import org.netbeans.api.visual.widget.SeparatorWidget;
@@ -76,6 +77,15 @@ public class BandSeparatorWidget extends SeparatorWidget implements PropertyChan
         if (b instanceof JRDesignBand)
         {
             ((JRDesignBand)b).getEventSupport().addPropertyChangeListener(this);
+            if (((JRDesignBand)b).getOrigin().getGroupName() != null)
+            {
+                String gname = ((JRDesignBand)b).getOrigin().getGroupName();
+                JRDesignGroup group = (JRDesignGroup) scene.getJasperDesign().getGroupsMap().get(gname);
+                if (group != null)
+                {
+                    group.getEventSupport().addPropertyChangeListener(JRDesignGroup.PROPERTY_NAME , this );
+                }
+            }
         }
         
         updateBounds();
@@ -123,7 +133,8 @@ public class BandSeparatorWidget extends SeparatorWidget implements PropertyChan
         Runnable r = null;
         
         if (evt.getPropertyName() == null) return;
-        if (evt.getPropertyName().equals( JRDesignBand.PROPERTY_HEIGHT))
+        if (evt.getPropertyName().equals( JRDesignBand.PROPERTY_HEIGHT) ||
+            evt.getPropertyName().equals( JRDesignGroup.PROPERTY_NAME))
         {
             r = new Runnable(){  
                  public void run()  {
@@ -132,6 +143,7 @@ public class BandSeparatorWidget extends SeparatorWidget implements PropertyChan
         }
         else if (evt.getPropertyName().equals( JRDesignBand.PROPERTY_CHILDREN))
         {
+
             r = new Runnable(){  
                  public void run()  {
                     ((ReportObjectScene)getScene()).refreshElementGroup( (JRDesignBand)band);

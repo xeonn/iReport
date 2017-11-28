@@ -49,6 +49,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import org.apache.commons.beanutils.MethodUtils;
 
 /**
  *
@@ -334,7 +335,15 @@ public class BeanInspectorPanel extends javax.swing.JPanel implements FieldsProv
                    String fieldName = pd[nd].getName();
                    if (pd[nd].getPropertyType() != null && pd[nd].getReadMethod() != null)
                    {
-                       String returnType =  pd[nd].getPropertyType().getName();
+                        Class clazzRT = pd[nd].getPropertyType();
+
+                        if ( clazzRT.isPrimitive() ) {
+                          clazzRT = MethodUtils.getPrimitiveWrapper(clazzRT);
+                        }
+
+                        String returnType = clazzRT.getName();
+
+
                        JRDesignField field = new JRDesignField();
                        field.setName(fieldName);
                        field.setValueClassName(returnType);
@@ -374,6 +383,7 @@ public class BeanInspectorPanel extends javax.swing.JPanel implements FieldsProv
             return;
         } catch (Exception ex)
         {
+            ex.printStackTrace();
             javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage() ,
                          I18n.getString("BeanInspectorPanel.Message.Error2"),javax.swing.JOptionPane.ERROR_MESSAGE);
             return;

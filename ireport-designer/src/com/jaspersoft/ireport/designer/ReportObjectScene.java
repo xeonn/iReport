@@ -537,7 +537,7 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
                     JRDesignElementWidget dw = (JRDesignElementWidget)w;
 
                     // Please note that the element can belong to a sub group ...
-                    if (ModelUtils.isOrphan(dw.getElement()) ) 
+                    if (ModelUtils.isOrphan(dw.getElement(), getJasperDesign()) )
                     {
                         // Fix Giulio (it does not make sense to remove all the group elements
                         // all the time. Add elements will take care to correctly discover
@@ -549,7 +549,7 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
                         JRDesignElementWidget owner = findCustomComponentOwner(dw.getElement());
                         if (owner != null)
                         {
-                            remove = ModelUtils.isOrphan(owner.getElement());
+                            remove = ModelUtils.isOrphan(owner.getElement(), getJasperDesign());
                         }
 
                         if (remove)
@@ -587,8 +587,8 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
                 dw.removeFromParent();
                 if (getObjects().contains(dw.getElement()))
                 {
-                    System.out.println("Removing object2: " + dw.getElement());
-                    System.out.flush();
+                    //System.out.println("Removing object2: " + dw.getElement());
+                   // System.out.flush();
                     removeObject(dw.getElement());
                 }
             }

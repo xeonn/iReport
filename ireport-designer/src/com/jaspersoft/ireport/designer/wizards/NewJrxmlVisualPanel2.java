@@ -7,7 +7,6 @@ package com.jaspersoft.ireport.designer.wizards;
 
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportConnection;
-import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.connection.gui.ConnectionDialog;
 import com.jaspersoft.ireport.designer.data.WizardFieldsProvider;
@@ -15,7 +14,6 @@ import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.BorderLayout;
 import java.awt.Dialog;
 import java.awt.Frame;
-import java.awt.Window;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -32,6 +30,8 @@ public final class NewJrxmlVisualPanel2 extends JPanel {
         this.panel = panel;
         initComponents();
         updateConnections();
+
+        
         
         jEditorPaneQuery.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -47,6 +47,9 @@ public final class NewJrxmlVisualPanel2 extends JPanel {
                 getPanel().fireChangeEvent();
             }
         });
+
+
+        jComboBoxConnections.setSelectedItem(IReportManager.getInstance().getDefaultConnection());
     }
     
     private void updateConnections()

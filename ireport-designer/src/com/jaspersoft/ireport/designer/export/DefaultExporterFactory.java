@@ -36,6 +36,8 @@ public class DefaultExporterFactory implements ExporterFactory {
     }
 
     public String getExporterFileExtension() {
+        if (format.equals("xhtml")) return "html";
+        if (format.equals("xml")) return "jrpxml";
         return format;
     }
 
@@ -57,6 +59,11 @@ public class DefaultExporterFactory implements ExporterFactory {
        {
           exporter = new  net.sf.jasperreports.engine.export.JRHtmlExporter();
           configureHtmlExporter(exporter);
+       }
+       else if (format.equalsIgnoreCase("xhtml"))
+       {
+          exporter = new  net.sf.jasperreports.engine.export.JRXhtmlExporter();
+          configureXHtmlExporter(exporter);
        }
        else if (format.equalsIgnoreCase("xls"))
        {
@@ -85,7 +92,15 @@ public class DefaultExporterFactory implements ExporterFactory {
        {
           exporter = new  net.sf.jasperreports.engine.export.oasis.JROdtExporter();
        }
-
+       else if (format.equalsIgnoreCase("docx"))
+       {
+          exporter = new  net.sf.jasperreports.engine.export.ooxml.JRDocxExporter();
+       }
+       else if (format.equalsIgnoreCase("xml"))
+       {
+          exporter = new  net.sf.jasperreports.engine.export.JRXmlExporter();
+          configureXmlExporter(exporter);
+       }
        return exporter;
     }
 
@@ -103,7 +118,7 @@ public class DefaultExporterFactory implements ExporterFactory {
        {
           return Misc.nvl( IReportManager.getInstance().getProperty("ExternalCSVViewer"), "");
        }
-       else if (format.equalsIgnoreCase("html"))
+       else if (format.equalsIgnoreCase("html") || format.equalsIgnoreCase("xhtml") )
        {
           return Misc.nvl( IReportManager.getInstance().getProperty("ExternalHTMLViewer"), "");
        }
@@ -119,7 +134,7 @@ public class DefaultExporterFactory implements ExporterFactory {
        {
           return null;
        }
-       else if (format.equalsIgnoreCase("txt"))
+       else if (format.equalsIgnoreCase("txt") || format.equalsIgnoreCase("xml"))
        {
           return Misc.nvl( IReportManager.getInstance().getProperty("ExternalTXTViewer"), "");
        }
@@ -130,6 +145,10 @@ public class DefaultExporterFactory implements ExporterFactory {
        else if (format.equalsIgnoreCase("odf"))
        {
           return Misc.nvl( IReportManager.getInstance().getProperty("ExternalODFViewer"), "");
+       }
+       else if (format.equalsIgnoreCase("docx"))
+       {
+          return Misc.nvl( IReportManager.getInstance().getProperty("ExternalDOCXViewer"), "");
        }
        return null;
     }
@@ -254,6 +273,42 @@ public class DefaultExporterFactory implements ExporterFactory {
     }
 
 
+    private void configureXHtmlExporter(JRExporter exporter) {
+
+        Preferences pref = IReportManager.getPreferences();
+
+        exporter.setParameter( JRHtmlExporterParameter.IS_OUTPUT_IMAGES_TO_DIR, pref.getBoolean(JRProperties.PROPERTY_PREFIX + "export.html.saveImages", true));
+        exporter.setParameter( JRHtmlExporterParameter.IS_WHITE_PAGE_BACKGROUND, pref.getBoolean(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND, JRProperties.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND)));
+        exporter.setParameter( JRHtmlExporterParameter.IS_WRAP_BREAK_WORD, pref.getBoolean(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD, JRProperties.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD)));
+
+        if (pref.get(JRProperties.PROPERTY_PREFIX + "export.html.imagesDirectory","").length() > 0)
+        {
+            exporter.setParameter( JRHtmlExporterParameter.IMAGES_DIR_NAME , pref.get(JRProperties.PROPERTY_PREFIX + "export.html.imagesDirectory",""));
+        }
+        if (pref.get(JRProperties.PROPERTY_PREFIX + "export.html.imagesUri","").length() > 0)
+        {
+            exporter.setParameter( JRHtmlExporterParameter.IMAGES_URI , pref.get(JRProperties.PROPERTY_PREFIX + "export.html.imagesUri",""));
+        }
+        if (pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlHeader","").length() > 0)
+        {
+            exporter.setParameter( JRHtmlExporterParameter.HTML_HEADER , pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlHeader",""));
+        }
+        if (pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlBetweenPages","").length() > 0)
+        {
+            exporter.setParameter( JRHtmlExporterParameter.BETWEEN_PAGES_HTML , pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlBetweenPages",""));
+        }
+        if (pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlFooter","").length() > 0)
+        {
+            exporter.setParameter( JRHtmlExporterParameter.HTML_FOOTER , pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlFooter",""));
+        }
+        if (pref.get(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT, JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT)).length() > 0)
+        {
+            exporter.setParameter( JRHtmlExporterParameter.SIZE_UNIT , pref.get(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT, JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT)));
+        }
+
+    }
+
+
     private void configureHtmlExporter(JRExporter exporter) {
 
         Preferences pref = IReportManager.getPreferences();
@@ -299,6 +354,14 @@ public class DefaultExporterFactory implements ExporterFactory {
 
         exporter.setParameter( JRCsvExporterParameter.FIELD_DELIMITER, pref.get(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER, JRProperties.getProperty(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER)));
         exporter.setParameter( JRCsvExporterParameter.RECORD_DELIMITER, pref.get(JRCsvExporterParameter.PROPERTY_RECORD_DELIMITER, JRProperties.getProperty(JRCsvExporterParameter.PROPERTY_RECORD_DELIMITER)));
+    }
+
+    private void configureXmlExporter(JRExporter exporter) {
+
+        Preferences pref = IReportManager.getPreferences();
+
+        //exporter.setParameter( JRCsvExporterParameter.FIELD_DELIMITER, pref.get(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER, JRProperties.getProperty(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER)));
+        //exporter.setParameter( JRCsvExporterParameter.RECORD_DELIMITER, pref.get(JRCsvExporterParameter.PROPERTY_RECORD_DELIMITER, JRProperties.getProperty(JRCsvExporterParameter.PROPERTY_RECORD_DELIMITER)));
     }
 
 

@@ -9,9 +9,11 @@ import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.logging.Level;
@@ -74,15 +76,27 @@ public final class NewJrxmlWizardIterator implements TemplateWizard.Iterator {
                         //Exceptions.printStackTrace(ex);
                     }
                 }
+
+                List<WizardDescriptor.Panel> panelsList = new ArrayList<WizardDescriptor.Panel>();
+                //this.wizard.
+
+                if (wizard.getProperty("reportTemplate") == null)
+                {
+                    panelsList.add(new TemplateListWizardPanel(wizard));
+                }
+                panelsList.add(targetChooserPanel);
+                if (wizard.getProperty("noFields") == null ||
+                    !wizard.getProperty("noFields").equals("true"))
+                {
+                    panelsList.add(new ConnectionSelectionWizardPanel(wizard));
+                    panelsList.add(new FieldsSelectionWizardPanel(wizard));
+                    panelsList.add(new GroupingWizardPanel(wizard));
+                    //panelsList.add(new TemplateWizardPanel(wizard));
+                }
                 
-                panels = new WizardDescriptor.Panel[]{
-                    targetChooserPanel,
-                    new ConnectionSelectionWizardPanel(wizard),
-                    new FieldsSelectionWizardPanel(wizard),
-                    new GroupingWizardPanel(wizard),
-                    new TemplateWizardPanel(wizard),
-                    new NewJrxmlWizardPanel6(wizard)
-                };
+                panelsList.add(new NewJrxmlWizardPanel6(wizard));
+
+                panels = panelsList.toArray(new WizardDescriptor.Panel[panelsList.size()]);
                 
                 String[] steps = createSteps();
                 for (int i = 0; i < panels.length; i++) {
@@ -181,6 +195,8 @@ public final class NewJrxmlWizardIterator implements TemplateWizard.Iterator {
     public void initialize(TemplateWizard wizard) {
         this.wizard = wizard;
 
+        //this.wizard.putProperty( "WizardPanel_contentDisplayed", Boolean.FALSE);
+
         index = 0;
         setCreatedDataObject(null);
         getPanels();
@@ -255,42 +271,33 @@ public final class NewJrxmlWizardIterator implements TemplateWizard.Iterator {
         component.putClientProperty("WizardPanel_contentSelectedIndex", new Integer(index)); // NOI18N
         component.firePropertyChange("WizardPanel_contentSelectedIndex", new Integer(index-1), new Integer(index));
     }
-    
-
-    // If nothing unusual changes in the middle of the wizard, simply:
-    public void addChangeListener(ChangeListener l) {
-    }
-
-    public void removeChangeListener(ChangeListener l) {
-    }
 
     // If something changes dynamically (besides moving between panels), e.g.
     // the number of panels changes in response to user input, then uncomment
     // the following and call when needed: fireChangeEvent();
     
-//    private Set<ChangeListener> listeners = new HashSet<ChangeListener>(1); // or can use ChangeSupport in NB 6.0
-//    public final void addChangeListener(ChangeListener l) {
-//        synchronized (listeners) {
-//        listeners.add(l);
-//        }
-//        System.out.println("Added change listener...");
-//        System.out.flush();
-//    }
-//    public final void removeChangeListener(ChangeListener l) {
-//        synchronized (listeners) {
-//            listeners.remove(l);
-//        }
-//    }
-//    protected final void fireChangeEvent() {
-//    Iterator<ChangeListener> it;
-//    synchronized (listeners) {
-//        it = new HashSet<ChangeListener>(listeners).iterator();
-//    }
-//    ChangeEvent ev = new ChangeEvent(this);
-//        while (it.hasNext()) {
-//            it.next().stateChanged(ev);
-//        }
-//    }
+    private final Set<ChangeListener> listeners = new HashSet<ChangeListener>(1); // or can use ChangeSupport in NB 6.0
+
+    public final void addChangeListener(ChangeListener l) {
+        synchronized (listeners) {
+        listeners.add(l);
+        }
+    }
+    public final void removeChangeListener(ChangeListener l) {
+        synchronized (listeners) {
+            listeners.remove(l);
+        }
+    }
+    protected final void fireChangeEvent() {
+    Iterator<ChangeListener> it;
+    synchronized (listeners) {
+        it = new HashSet<ChangeListener>(listeners).iterator();
+    }
+    ChangeEvent ev = new ChangeEvent(this);
+        while (it.hasNext()) {
+            it.next().stateChanged(ev);
+        }
+    }
     
     
     public String[] createSteps()

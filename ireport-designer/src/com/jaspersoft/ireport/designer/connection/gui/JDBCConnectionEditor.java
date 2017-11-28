@@ -39,7 +39,8 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
 		new JDBCDriverDefinition("MySQL","com.mysql.jdbc.Driver","jdbc:mysql://{0}/{1}"),
 		new JDBCDriverDefinition("Oracle","oracle.jdbc.driver.OracleDriver","jdbc:oracle:thin:@{0}:1521:{1}"),
 		new JDBCDriverDefinition("PostgreSQL","org.postgresql.Driver","jdbc:postgresql://{0}:5432/{1}"),
-                new JDBCDriverDefinition("Sybase","com.sybase.jdbc2.jdbc.SybDriver","jdbc:sybase:Tds:{0}:2638/{1}")
+                new JDBCDriverDefinition("Sybase","com.sybase.jdbc2.jdbc.SybDriver","jdbc:sybase:Tds:{0}:2638/{1}"),
+                new JDBCDriverDefinition("Vertica","com.vertica.Driver","jdbc:vertica://{0}:5433/{1}")
 		};
 
     /** Creates new form JDBCConnectionEditor */

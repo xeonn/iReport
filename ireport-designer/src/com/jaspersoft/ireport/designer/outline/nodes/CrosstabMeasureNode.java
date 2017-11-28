@@ -13,7 +13,6 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.dnd.ReportObjectPaletteTransferable;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
-import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
@@ -390,6 +389,17 @@ public class CrosstabMeasureNode extends IRAbstractNode implements PropertyChang
         public void setByte(Byte b)
         {
             measure.setCalculation(b);
+
+            if (b == JRDesignVariable.CALCULATION_COUNT ||
+                b == JRDesignVariable.CALCULATION_DISTINCT_COUNT)
+            {
+                measure.setValueClassName( "java.lang.Integer");
+            }
+            else if (measure.getValueExpression() != null &&
+                     measure.getValueExpression().getValueClassName() != null)
+            {
+                measure.setValueClassName( measure.getValueExpression().getValueClassName() );
+            }
         }
         
         public JRDesignCrosstab getCrosstab() {
@@ -465,7 +475,8 @@ public class CrosstabMeasureNode extends IRAbstractNode implements PropertyChang
            getMeasure().setValueClassName(value);
            if (getMeasure().getValueExpression() != null)
            {
-               ((JRDesignExpression)getMeasure().getValueExpression()).setValueClassName(value);
+               ((JRDesignExpression)getMeasure().getValueExpression()).setValueClassName("java.lang.Object");
+               //((JRDesignExpression)getMeasure().getValueExpression()).setValueClassName(value);
            }
         }
 

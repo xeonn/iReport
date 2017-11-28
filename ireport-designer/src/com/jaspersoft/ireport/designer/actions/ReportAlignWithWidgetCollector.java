@@ -89,6 +89,7 @@ public class ReportAlignWithWidgetCollector implements AlignWithWidgetCollector 
     
     public boolean isChildOf(Widget widget, Widget parent)
     {
+        if (parent == widget) return true;
         if (widget instanceof JRDesignElementWidget)
         {
             if (parent instanceof SelectionWidget)
@@ -104,9 +105,9 @@ public class ReportAlignWithWidgetCollector implements AlignWithWidgetCollector 
                 //    // Look if a child element has this widget....
                 //    return ModelUtils.isChildOf(element, ((JRDesignFrame)frame).getElements());
                 //}
-                if ( ((JRDesignElementWidget)widget).getChildrenElements() != null)
+                if ( ((JRDesignElementWidget)parent).getChildrenElements() != null)
                 {
-                    ModelUtils.isChildOf(element, ((JRDesignElementWidget)widget).getChildrenElements());
+                    return ModelUtils.isChildOf(element, ((JRDesignElementWidget)parent).getChildrenElements());
                 }
             }
         }
@@ -122,6 +123,7 @@ public class ReportAlignWithWidgetCollector implements AlignWithWidgetCollector 
         ArrayList<Rectangle> regions = new ArrayList<Rectangle> (children.size());
         for (Widget widget : children)
         {
+
             if (widget != movingWidget && !isSelectedObject(widget) && !isChildOf(widget, movingWidget))
             {
                 regions.add(widget.convertLocalToScene (widget.getClientArea()));

@@ -107,15 +107,16 @@ public class HtmlExportParametersPanel extends AbstractExportParametersPanel {
         jTextAreaHtmlBetweenPages = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        jCheckBoxRemoveEmptySpace = new javax.swing.JCheckBox();
         jCheckBoxWhiteBackground = new javax.swing.JCheckBox();
-        jCheckBoxUseImagesToAlign = new javax.swing.JCheckBox();
         jCheckBoxWrapBreakWord = new javax.swing.JCheckBox();
         jLabelSizeUnit = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox();
+        jPanel5 = new javax.swing.JPanel();
+        jCheckBoxRemoveEmptySpace = new javax.swing.JCheckBox();
+        jCheckBoxUseImagesToAlign = new javax.swing.JCheckBox();
         jCheckBoxFrameAsNestedTables = new javax.swing.JCheckBox();
 
-        jLabelTitle.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabelTitle.setFont(new java.awt.Font("Tahoma", 1, 12));
         jLabelTitle.setText("HTML Export Parametes");
 
         jCheckBoxSaveImages.setText("Save images to disk");
@@ -246,24 +247,10 @@ public class HtmlExportParametersPanel extends AbstractExportParametersPanel {
 
         jTabbedPane1.addTab("Between pages", jPanel3);
 
-        jCheckBoxRemoveEmptySpace.setText("Remove empty space between rows");
-        jCheckBoxRemoveEmptySpace.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxRemoveEmptySpaceActionPerformed(evt);
-            }
-        });
-
         jCheckBoxWhiteBackground.setText("White background");
         jCheckBoxWhiteBackground.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxWhiteBackgroundActionPerformed(evt);
-            }
-        });
-
-        jCheckBoxUseImagesToAlign.setText("Use images to align");
-        jCheckBoxUseImagesToAlign.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxUseImagesToAlignActionPerformed(evt);
             }
         });
 
@@ -284,6 +271,22 @@ public class HtmlExportParametersPanel extends AbstractExportParametersPanel {
             }
         });
 
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("HTML  specific options"));
+
+        jCheckBoxRemoveEmptySpace.setText("Remove empty space between rows");
+        jCheckBoxRemoveEmptySpace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxRemoveEmptySpaceActionPerformed(evt);
+            }
+        });
+
+        jCheckBoxUseImagesToAlign.setText("Use images to align");
+        jCheckBoxUseImagesToAlign.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxUseImagesToAlignActionPerformed(evt);
+            }
+        });
+
         jCheckBoxFrameAsNestedTables.setText("Frames as nested tables");
         jCheckBoxFrameAsNestedTables.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -291,34 +294,51 @@ public class HtmlExportParametersPanel extends AbstractExportParametersPanel {
             }
         });
 
+        org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jCheckBoxRemoveEmptySpace)
+                    .add(jCheckBoxUseImagesToAlign)
+                    .add(jCheckBoxFrameAsNestedTables))
+                .addContainerGap(26, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel5Layout.createSequentialGroup()
+                .add(jCheckBoxRemoveEmptySpace)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxUseImagesToAlign)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxFrameAsNestedTables))
+        );
+
         org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jCheckBoxRemoveEmptySpace)
+                .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                     .add(jCheckBoxWhiteBackground)
-                    .add(jCheckBoxUseImagesToAlign)
-                    .add(jCheckBoxFrameAsNestedTables)
-                    .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                        .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel4Layout.createSequentialGroup()
-                            .add(jLabelSizeUnit)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                            .add(jComboBox1, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .add(org.jdesktop.layout.GroupLayout.LEADING, jCheckBoxWrapBreakWord)))
-                .addContainerGap(345, Short.MAX_VALUE))
+                    .add(jPanel4Layout.createSequentialGroup()
+                        .add(jCheckBoxWrapBreakWord)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 132, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jPanel4Layout.createSequentialGroup()
+                        .add(jLabelSizeUnit)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(301, 301, 301))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jCheckBoxRemoveEmptySpace)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxWhiteBackground)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jCheckBoxUseImagesToAlign)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxWrapBreakWord)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
@@ -326,8 +346,8 @@ public class HtmlExportParametersPanel extends AbstractExportParametersPanel {
                     .add(jLabelSizeUnit)
                     .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jCheckBoxFrameAsNestedTables)
-                .addContainerGap(54, Short.MAX_VALUE))
+                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Other", jPanel4);
@@ -393,6 +413,7 @@ public class HtmlExportParametersPanel extends AbstractExportParametersPanel {
     }//GEN-LAST:event_jCheckBoxFrameAsNestedTablesActionPerformed
 
     public void load() {
+        setInit(true);
         Preferences pref = IReportManager.getPreferences();
 
         jCheckBoxFrameAsNestedTables.setSelected( pref.getBoolean(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES, JRProperties.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES)));
@@ -409,6 +430,7 @@ public class HtmlExportParametersPanel extends AbstractExportParametersPanel {
         jTextAreaHtmlFooter.setText(  pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlFooter",""));
         jTextAreaHtmlHeader.setText(  pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlHeader",""));
         jComboBox1.setSelectedItem(  pref.get(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT, JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT)));
+        setInit(false);
     }
 
     public void store() {
@@ -456,6 +478,7 @@ public class HtmlExportParametersPanel extends AbstractExportParametersPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

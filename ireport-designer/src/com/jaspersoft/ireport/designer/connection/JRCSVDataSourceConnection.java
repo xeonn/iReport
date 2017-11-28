@@ -84,8 +84,8 @@ public class JRCSVDataSourceConnection extends IReportConnection {
     {    
         java.util.HashMap map = new java.util.HashMap();
         map.put("Filename", Misc.nvl(this.getFilename() ,"") );    
-        map.put("recordDelimiter", Misc.nvl(this.getRecordDelimiter(),"\n") );
-        map.put("fieldDelimiter", Misc.nvl(this.getFieldDelimiter() ,"") );
+        map.put("recordDelimiter", Misc.nvl(  Misc.addSlashesString(this.getRecordDelimiter()),"\n") );
+        map.put("fieldDelimiter", Misc.nvl( Misc.addSlashesString(this.getFieldDelimiter()) ,"") );
         map.put("useFirstRowAsHeader", Misc.nvl(""+this.isUseFirstRowAsHeader() ,"") );
         map.put("customDateFormat", Misc.nvl(this.getCustomDateFormat() ,"") );
         
@@ -101,8 +101,16 @@ public class JRCSVDataSourceConnection extends IReportConnection {
     public void loadProperties(java.util.HashMap map)
     {
         this.setFilename( (String)map.get("Filename"));
-        this.setRecordDelimiter( (String)map.get("recordDelimiter"));
-        this.setFieldDelimiter( (String)map.get("fieldDelimiter"));
+        String fieldDelimiterStr = (String)map.get("fieldDelimiter");
+        if (fieldDelimiterStr != null)
+        {
+            this.setFieldDelimiter( Misc.removeSlashesString(fieldDelimiterStr) );
+        }
+        String recordDelimiterStr = (String)map.get("recordDelimiter");
+        if (recordDelimiterStr != null)
+        {
+            this.setRecordDelimiter( Misc.removeSlashesString(recordDelimiterStr) );
+        }
         this.setUseFirstRowAsHeader( ((String)map.get("useFirstRowAsHeader")).equals("true"));
         this.setCustomDateFormat( (String)map.get("customDateFormat"));
         

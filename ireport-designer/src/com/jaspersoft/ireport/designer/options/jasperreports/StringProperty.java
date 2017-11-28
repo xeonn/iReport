@@ -13,7 +13,7 @@ import org.openide.nodes.PropertySupport;
  *
  * @author gtoffoli
  */
-public class StringProperty extends PropertySupport.ReadOnly {
+public class StringProperty extends PropertySupport.ReadWrite {
 
     public StringProperty(String name)
     {
@@ -31,8 +31,16 @@ public class StringProperty extends PropertySupport.ReadOnly {
         return "";
     }
 
+
+
     @Override
-    public void setValue(Object arg0) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public void setValue(Object newValue) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+
+        if (newValue != null)
+        {
+
+        }
+
     }
 
 }

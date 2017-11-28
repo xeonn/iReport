@@ -38,15 +38,11 @@ import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Component;
-import java.awt.Dialog;
-import java.awt.Frame;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.JRAnchor;
 import net.sf.jasperreports.engine.JRExpression;
@@ -65,6 +61,8 @@ public class HyperlinkPanel extends javax.swing.JPanel {
     private JRHyperlink hyperlink = null;
     private ExpressionContext expressionContext = null;
     
+    public static final String PROPERTY_HYPERLINK = "hyperlink";
+
     private boolean init = false;
     
     
@@ -168,6 +166,11 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         jSpinnerBookmarkLevel.setModel( new javax.swing.SpinnerNumberModel(0,0,10000,1));
         //applyI18n();
          setInit(false);
+    }
+
+    private void fireHyperlinkChanged()
+    {
+        firePropertyChange(PROPERTY_HYPERLINK, null, getHyperlink());
     }
 
     public JRHyperlink getHyperlink() {
@@ -814,6 +817,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
             jTableLinkParameters.updateUI();
             IReportManager.getInstance().notifyReportChange();
         }
+        fireHyperlinkChanged();
     }//GEN-LAST:event_jButtonModLinkParameterActionPerformed
 
     private void jButtonAddLinkParameterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddLinkParameterActionPerformed
@@ -830,6 +834,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
             dtm.addRow(new Object[]{parameter, Misc.getExpressionText( parameter.getValueExpression())});
             IReportManager.getInstance().notifyReportChange();
         }
+        fireHyperlinkChanged();
     }//GEN-LAST:event_jButtonAddLinkParameterActionPerformed
 
     private void jComboBoxLinkTypeActionPerformed1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLinkTypeActionPerformed1
@@ -998,11 +1003,13 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         }
         
         jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Tooltip"), this.jPanelTooltip);
+        fireHyperlinkChanged();
     }//GEN-LAST:event_jComboBoxLinkTypeActionPerformed1
 
     private void jComboBoxLinkTargetActionPerformed1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLinkTargetActionPerformed1
         if (this.isInit()) return;
         setHyperlinkAttribute("HyperlinkTarget", Byte.TYPE, (Byte)((Tag)jComboBoxLinkTarget.getSelectedItem()).getValue());
+        fireHyperlinkChanged();
     }//GEN-LAST:event_jComboBoxLinkTargetActionPerformed1
 
     private void jButtonCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCloseActionPerformed
@@ -1021,6 +1028,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         Object val = new Integer(level);
         
         setHyperlinkAttribute( "BookmarkLevel" , Integer.TYPE, val);
+        fireHyperlinkChanged();
                 
     }//GEN-LAST:event_jSpinnerBookmarkLevelStateChanged
     
@@ -1066,26 +1074,31 @@ public class HyperlinkPanel extends javax.swing.JPanel {
      public void jRTextExpressionAreaTooltipTextChanged() {
         if (this.isInit()) return;
         setHyperlinkAttribute("HyperlinkTooltipExpression", JRExpression.class, Misc.createExpression("java.lang.String", jRTextExpressionAreaTooltip.getText()) );
+        fireHyperlinkChanged();
     }
     
      public void jRTextExpressionAreaAnchorNameChanged() {
         if (this.isInit()) return;
         setHyperlinkAttribute("AnchorNameExpression", JRExpression.class, Misc.createExpression("java.lang.String", jRTextExpressionAreaAnchorName.getText()) );
+        fireHyperlinkChanged();
     }
      
     public void jRTextExpressionAreaReferenceTextChanged() {
         if (this.isInit()) return;
         setHyperlinkAttribute("HyperlinkReferenceExpression", JRExpression.class, Misc.createExpression("java.lang.String", jRTextExpressionAreaReference.getText()) );
+        fireHyperlinkChanged();
     }
     
     public void jRTextExpressionAreaAnchorTextChanged() {
         if (this.isInit()) return;
         setHyperlinkAttribute("HyperlinkAnchorExpression", JRExpression.class, Misc.createExpression("java.lang.String", jRTextExpressionAreaAnchor.getText()) );
+        fireHyperlinkChanged();
     }
     
     public void jRTextExpressionAreaPageTextChanged() {
         if (this.isInit()) return;
             setHyperlinkAttribute("HyperlinkPageExpression", JRExpression.class, Misc.createExpression("java.lang.String", jRTextExpressionAreaPage.getText()) );
+            fireHyperlinkChanged();
     }
     /*
     public void applyI18n(){

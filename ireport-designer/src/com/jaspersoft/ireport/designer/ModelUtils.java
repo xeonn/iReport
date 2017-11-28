@@ -41,6 +41,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import net.sf.jasperreports.crosstabs.JRCrosstabCell;
 import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
@@ -68,6 +69,7 @@ import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.JRSection;
+import net.sf.jasperreports.engine.base.JRBaseGroup;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignChartDataset;
@@ -185,7 +187,8 @@ public class ModelUtils {
     
     public static List<JRDesignElement> getAllElements(JRElementGroup group) {
         List list = new ArrayList();
-        
+
+        if (group == null) return list;
         List elements = group.getChildren();
         
         for (Object ele : elements)
@@ -604,26 +607,10 @@ public class ModelUtils {
                 }
             }
 
-            System.out.println("Unable to find the cell location of: " + content + ModelUtils.nameOf(content));
-            System.out.flush();
-
             return new Point(0,0);
     }
 
-    public static boolean isChildOf(JRDesignElement element, List childrenElements) {
-        
-        for (int i=0; i<childrenElements.size(); ++i)
-        {
-            if (childrenElements.get(i) instanceof JRDesignElement)
-            {
-                if (isChildOf(element, (JRDesignElement)childrenElements.get(i)))
-                    return true;
-            }
-        }
-        return false;
-
-
-    }
+    
 
     /**
      * Look in the crosstab if the provided new name is already a name of a group or a measure...
@@ -864,38 +851,68 @@ public class ModelUtils {
     }
 
     /**
-     * Find element in elements. If an element is a frame, look inside the frame
+     * Find element in elements. If an element is a frame or can have children, look inside the frame
      * recursively
      **/
     public static boolean isChildOf(JRDesignElement element,  JRElement[] elements)
     {
-        for (int i=0; i<elements.length; ++i)
+        return isChildOf(element, Arrays.asList(elements));
+//        for (int i=0; i<elements.length; ++i)
+//        {
+//            if (element == elements[i]) return true;
+//            if (elements[i] instanceof JRDesignFrame)
+//            {
+//                if (isChildOf(element, ((JRDesignFrame)elements[i]).getElements() ))
+//                    return true;
+//            }
+//        }
+//        return false;
+    }
+
+    public static boolean isChildOf(JRDesignElement element, List childrenElements) {
+
+        if (childrenElements == null) return false;
+        for (int i=0; i<childrenElements.size(); ++i)
         {
-            if (element == elements[i]) return true;
-            if (elements[i] instanceof JRDesignFrame)
+            if (childrenElements.get(i) instanceof JRDesignElement)
             {
-                if (isChildOf(element, ((JRDesignFrame)elements[i]).getElements() ))
+                if (isChildOf(element, (JRDesignElement)childrenElements.get(i)))
                     return true;
             }
         }
         return false;
+
+
     }
 
+    /**
+     * The method returns true if element is equals to elementParent or
+     * if elementParent is of type JRDesignFrame and it belongs to it or
+     * if elementParent is of type JRDesignComponentElement and it belongs to it.
+     * @param element
+     * @param elementParent
+     * @return
+     */
     public static boolean isChildOf(JRDesignElement element,  JRDesignElement elementParent)
     {
-        if (element == elementParent) return true;
+        if (element == elementParent)
+        {
+            return true;
+        }
         if (elementParent instanceof JRDesignFrame)
         {
             if (isChildOf(element, ((JRDesignFrame)elementParent).getElements() ))
+            {
                 return true;
+            }
         }
         else if (elementParent instanceof JRDesignComponentElement)
         {
             // In this case we need to find if the component can have children.
             // The easiest way to do it is looking for its widget...
             try {
-                JRDesignElementWidget w = (JRDesignElementWidget)(IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel().getActiveScene().findWidget(element));
-                if (w.getChildrenElements() != null)
+                JRDesignElementWidget w = (JRDesignElementWidget)(IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel().getActiveScene().findWidget(elementParent));
+                if (w != null && w.getChildrenElements() != null)
                 {
                     if (isChildOf(element, w.getChildrenElements()))
                     {
@@ -985,6 +1002,7 @@ public class ModelUtils {
         JROrigin origin = ((JRDesignBand)b).getOrigin();
         if (origin.getBandType() == JROrigin.GROUP_HEADER)
         {
+
                 JRGroup group = (JRGroup)jd.getGroupsMap().get(origin.getGroupName());
                 int index = getBandIndex(group.getGroupHeaderSection(), b);
                 return  I18n.getString("band.name.GroupHeaderSection", origin.getGroupName(),index+1);
@@ -1857,10 +1875,10 @@ public class ModelUtils {
             for (int j=0; j<pp.length; ++j)
             {
                 String name = pp[j].getName();
-                if (pp[j] instanceof PatternProperty)
-                {
-                    System.out.println("Property: " + pp[j].getName());
-                }
+//                if (pp[j] instanceof PatternProperty)
+//                {
+//                    System.out.println("Property: " + pp[j].getName());
+//                }
 
                 if (name != null && name.equals(propertyName)) return pp[j];
             }
@@ -1889,9 +1907,22 @@ public class ModelUtils {
      * Check if an element is orphan or not.
      * An element is orphan when his parent is null, or if is null one of his ancestor parents
      */
-    public static boolean isOrphan(JRDesignElement element) {
+    public static boolean isOrphan(JRDesignElement element, JasperDesign jd) {
         
-        return getTopElementGroup(element) == null;
+        JRElementGroup group = getTopElementGroup(element);
+        if (group == null) return true;
+        // Check if it belongs to this jasperdesign...
+        if (group instanceof JRBand && !ModelUtils.getBands(jd).contains(group)) return true;
+
+        // We should check if it the parent belongs for real to this report...
+        if (group instanceof JRDesignCellContents)
+        {
+            // TODO check if this cell contents belongs to a crosstab in this report...
+            JRDesignCellContents cell = (JRDesignCellContents)group;
+        }
+
+        
+        return  false;
     }
     
     /**
@@ -1903,8 +1934,10 @@ public class ModelUtils {
         JRElementGroup g1 = element.getElementGroup();
         while (g1 != null)
         {
+            //if (!g1.getChildren().contains(element)) return null; // The element points to its parent, but its parent has not it as child
             if (g1 instanceof JRDesignBand || g1 instanceof JRDesignCellContents) return g1;
             g1 = g1.getElementGroup();
+
         }
         return null;
     }
@@ -2113,5 +2146,28 @@ public class ModelUtils {
         if (main.getOwnLineColor() != null && !main.getOwnLineColor().equals(from.getOwnLineColor())) main.setLineColor(null);
         if (main.getOwnLineWidth() != null && !main.getOwnLineWidth().equals(from.getOwnLineWidth())) main.setLineWidth(null);
         if (main.getOwnLineStyle() != null && !main.getOwnLineStyle().equals(from.getOwnLineStyle())) main.setLineStyle(null);
+     }
+
+     /**
+      * This method is a workaround for the getGroupFooter implemented in JR 3.5.2. It should be not used after the release
+      * of JR 3.5.3
+      * @param gruop
+      * @return
+      */
+     public static JRBand getGroupFooter(JRGroup group)
+     {
+         // This
+         if (group.getGroupFooter() == null)
+         {
+             if (group.getGroupFooterSection() != null)
+             {
+                 JRBand[] footers = group.getGroupFooterSection().getBands();
+                 if (footers != null && footers.length > 0)
+                 {
+                     return footers[0];
+                 }
+             }
+         }
+         return null;
      }
 }

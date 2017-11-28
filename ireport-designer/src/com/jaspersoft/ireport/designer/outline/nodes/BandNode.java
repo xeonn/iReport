@@ -49,6 +49,7 @@ import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlConstants;
 import org.openide.ErrorManager;
 import org.openide.actions.PasteAction;
 import org.openide.nodes.Node;
@@ -363,8 +364,14 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
     public PasteType getDropType(Transferable t, final int action, int index) {
 
         Node dropNode = NodeTransfer.node(t, DnDConstants.ACTION_COPY_OR_MOVE + NodeTransfer.CLIPBOARD_CUT);
+        Node[] dropNodes = NodeTransfer.nodes(t, DnDConstants.ACTION_COPY_OR_MOVE + NodeTransfer.CLIPBOARD_CUT);
         int dropAction = DnDUtilities.getTransferAction(t);
-               
+
+        if (dropNode == null)
+        {
+            ElementPasteType.setLastPastedNodes(dropNodes);
+        }
+        
         if (null != dropNode && !(dropNode instanceof NotRealElementNode)) {
             JRDesignElement element = dropNode.getLookup().lookup(JRDesignElement.class);
             
@@ -563,10 +570,9 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
             }
             
             String oldName = group.getName();
-            group.setName(s);
-
             dataset.getGroupsMap().remove(oldName);
             dataset.getGroupsMap().put(s, group);
+            group.setName(s);
 
             JRDesignVariable var = (JRDesignVariable) dataset.getVariablesMap().get(oldName + "_COUNT");
             var.setName(s + "_COUNT");
@@ -934,7 +940,15 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
         }
 
         public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+
+            if (IReportManager.getPreferences().getBoolean("designer_debug_mode", false))
+            {
+                System.out.println(new java.util.Date() + ": setting SplitType to: " + val + ". If the value is unattended or null, please report this notification to http://jasperforge.org/plugins/mantis/view.php?id=4139");
+                Thread.dumpStack();
+            }
+            
             if (val == null || val instanceof Byte) {
+
                 Byte oldValue = band.getSplitType();
                 Byte newValue = (Byte) val;
                 band.setSplitType(newValue);

@@ -27,6 +27,7 @@ import org.openide.util.lookup.Lookups;
  */
 public class ExportOptionsPanel extends javax.swing.JPanel implements OptionsPanel {
 
+
     IReportOptionsPanelController controller = null;
     /** Creates new form ExportOptionsPanel */
     public ExportOptionsPanel(IReportOptionsPanelController controller) {
@@ -63,7 +64,6 @@ CVS
 
     public void load()
     {
-
         DefaultListModel dlm = (DefaultListModel)jList1.getModel();
         for (int i=0; i<dlm.size(); ++i)
         {

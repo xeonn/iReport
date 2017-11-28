@@ -5,29 +5,8 @@
 
 package com.jaspersoft.ireport.designer.wizards;
 
-import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.locale.I18n;
-import java.awt.Component;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import org.openide.filesystems.FileObject;
-import org.openide.filesystems.FileStateInvalidException;
-import org.openide.filesystems.FileUtil;
-import org.openide.filesystems.Repository;
-import org.openide.loaders.DataFolder;
-import org.openide.loaders.DataObject;
-import org.openide.loaders.DataObjectNotFoundException;
-import org.openide.util.Exceptions;
-import org.openide.util.HelpCtx;
 
 public final class TemplateVisualPanel extends JPanel {
 
@@ -37,9 +16,9 @@ public final class TemplateVisualPanel extends JPanel {
     public TemplateVisualPanel(TemplateWizardPanel panel) {
         this.panel = panel;
         initComponents();
-        jList1.setModel(new DefaultListModel());
-        jList1.setCellRenderer(new TemplateVisualPanel.FieldListCellRenderer());
-        updateTemplates();
+        //jList1.setModel(new DefaultListModel());
+        //jList1.setCellRenderer(new TemplateVisualPanel.FieldListCellRenderer());
+        //updateTemplates();
     }
 
     @Override
@@ -47,11 +26,13 @@ public final class TemplateVisualPanel extends JPanel {
         return I18n.getString("TemplateVisualPanel.Name.Layout");
     }
 
+    /*
     private void updateTemplates()
     {
         loadTemplates( getReportType() );
     }
-    
+
+
     private void loadTemplates(String type)
     {
         
@@ -142,6 +123,7 @@ public final class TemplateVisualPanel extends JPanel {
             }
         }
     }
+    */
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -155,9 +137,6 @@ public final class TemplateVisualPanel extends JPanel {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        jLabelPreview = new javax.swing.JLabel();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -197,95 +176,12 @@ public final class TemplateVisualPanel extends JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
-        add(jRadioButton2, gridBagConstraints);
-
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(200, 120));
-
-        jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                jList1ValueChanged(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jList1);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(10, 4, 4, 4);
-        add(jScrollPane1, gridBagConstraints);
-
-        jLabelPreview.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabelPreview.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 4, 4);
-        add(jLabelPreview, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
+        add(jRadioButton2, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
-        
-        jLabelPreview.setIcon(null);
-        if (jList1.getSelectedIndex() >= 0)
-        {
-            DataObject dataObject = (DataObject)jList1.getSelectedValue();
-            if (dataObject.getPrimaryFile().existsExt("preview"))
-            {
-                FileObject previewFileObject = dataObject.getFolder().getPrimaryFile().getFileObject(dataObject.getName(), "preview");
-                if (previewFileObject != null)
-                {
-                    try {
-                        // Get file object...
-                        ImageIcon img = new ImageIcon(previewFileObject.getURL());
-                        jLabelPreview.setIcon(img);
-                        jLabelPreview.updateUI();
-                    } catch (FileStateInvalidException ex) {
-                        Exceptions.printStackTrace(ex);
-                    }
-                }
-            }
-            else
-            {
-                // Look for a .gif or .png or .jpg....
-                File f = FileUtil.toFile(dataObject.getPrimaryFile());
-                String fileName = f.getName();
-                if (fileName.lastIndexOf(".") > 0)
-                {
-                    fileName = fileName.substring(0, fileName.lastIndexOf("."));
-                    List<String> extensions = new ArrayList<String>();
-                    extensions.add(".gif");
-                    extensions.add(".GIF");
-                    extensions.add(".jpg");
-                    extensions.add(".JPG");
-                    extensions.add(".png");
-                    extensions.add(".PNG");
-
-                    // Try gif..
-
-                    for (String ext : extensions)
-                    {
-                        File imageFile = new File(f.getParent(), fileName + ext);
-                        if (imageFile.exists())
-                        {
-                            ImageIcon img = new ImageIcon(imageFile+"");
-                            jLabelPreview.setIcon(img);
-                            jLabelPreview.updateUI();
-                            break;
-                        }
-                    }
-                }
-
-
-            }
-        }
-        
-        
-    }//GEN-LAST:event_jList1ValueChanged
 
     private void jRadioButton1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButton1StateChanged
     }//GEN-LAST:event_jRadioButton1StateChanged
@@ -295,20 +191,17 @@ public final class TemplateVisualPanel extends JPanel {
     }//GEN-LAST:event_jRadioButton2StateChanged
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-        updateTemplates();
+        //updateTemplates();
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-        updateTemplates();
+        //updateTemplates();
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JLabel jLabelPreview;
-    private javax.swing.JList jList1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
     public String getReportType()
@@ -317,27 +210,27 @@ public final class TemplateVisualPanel extends JPanel {
 
     }
     
-    public FileObject getReportTemplate()
-    {
-        DataObject dataObject = (DataObject)jList1.getSelectedValue();
-        return dataObject.getPrimaryFile();
-    }
+//    public FileObject getReportTemplate()
+//    {
+//        DataObject dataObject = (DataObject)jList1.getSelectedValue();
+//        return dataObject.getPrimaryFile();
+//    }
     
     
-    static class FieldListCellRenderer extends DefaultListCellRenderer
-    {
-
-        @Override
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        
-            if (value instanceof DataObject)
-            {
-                value = ((DataObject)value).getName();
-            }
-           
-            return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-        }
-        
-    }
+//    static class FieldListCellRenderer extends DefaultListCellRenderer
+//    {
+//
+//        @Override
+//        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+//
+//            if (value instanceof DataObject)
+//            {
+//                value = ((DataObject)value).getName();
+//            }
+//
+//            return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+//        }
+//
+//    }
 }
 

@@ -49,6 +49,7 @@ import java.util.Vector;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
+import org.apache.commons.beanutils.MethodUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -208,7 +209,16 @@ public class HQLFieldsReader {
                             aliasName = aliases[i];
                             JRDesignField field = new JRDesignField();
                             field.setName(aliases[i]);
-                            field.setValueClassName(types[i].getReturnedClass().getName());
+
+                            Class clazzRT = types[i].getReturnedClass();
+
+                            if ( clazzRT.isPrimitive() ) {
+                              clazzRT = MethodUtils.getPrimitiveWrapper(clazzRT);
+                            }
+
+                            String returnType = clazzRT.getName();
+
+                            field.setValueClassName(returnType);
                             field.setDescription(aliases[i]);
                             fields.add(field);
                         }
@@ -232,8 +242,16 @@ public class HQLFieldsReader {
                                {
                                    if (fieldName.equals("class")) continue;
                                    
-                                   String returnType =  pd[nd].getPropertyType().getName();
                                    
+
+                                    Class clazzRT = pd[nd].getPropertyType();
+
+                                    if ( clazzRT.isPrimitive() ) {
+                                      clazzRT = MethodUtils.getPrimitiveWrapper(clazzRT);
+                                    }
+
+                                    String returnType = clazzRT.getName();
+
                                    JRDesignField field = new JRDesignField();
                                    field.setName(fieldName);
                                    field.setValueClassName(returnType);
@@ -256,10 +274,18 @@ public class HQLFieldsReader {
                         if (aliases != null && 
                             aliases.length > i &&
                             !aliases[i].equals(""+i)) fieldName = aliases[i];
-                        
+
+
+                            Class clazzRT = types[i].getReturnedClass();
+
+                            if ( clazzRT.isPrimitive() ) {
+                              clazzRT = MethodUtils.getPrimitiveWrapper(clazzRT);
+                            }
+                            String returnType = clazzRT.getName();
+
                             JRDesignField field = new JRDesignField();
                             field.setName(fieldName);
-                            field.setValueClassName(types[i].getReturnedClass().getName());
+                            field.setValueClassName(returnType);
                             field.setDescription("");
                             fields.add(field);
                     }

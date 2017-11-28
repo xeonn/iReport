@@ -49,12 +49,16 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
+import org.openide.cookies.OpenCookie;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.filesystems.Repository;
 import org.openide.loaders.DataFolder;
 import org.openide.loaders.DataObject;
+import org.openide.loaders.DataObjectNotFoundException;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
+import org.openide.util.Mutex;
 import org.openide.util.actions.NodeAction;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
@@ -132,14 +136,19 @@ public class Misc {
     {
         return getMainFrame();
     }
-    
+
+    private static Frame mainFrame = null;
     /**
      * Return the NetBeans main window.
      */
     public static Frame getMainFrame()
     {
-        WindowManager w = Lookup.getDefault().lookup( WindowManager.class );
-        return (w == null) ? null : w.getMainWindow();
+        if (mainFrame == null)
+        {
+            WindowManager w = Lookup.getDefault().lookup( WindowManager.class );
+            mainFrame =  (w == null) ? null : w.getMainWindow();
+        }
+        return mainFrame;
     }
     
     public static String formatString(String s, Object[] params)
@@ -1036,7 +1045,35 @@ public class Misc {
     }
 
     
+    public static boolean openFile(File f) {
 
+        DataObject obj;
+
+        f = FileUtil.normalizeFile(f);
+        FileObject fl = FileUtil.toFileObject(f);
+        if (fl == null) return false;
+        try {
+            obj = DataObject.find(fl);
+        } catch (DataObjectNotFoundException ex) {
+            return false;
+        }
+
+        final OpenCookie ocookie = obj.getCookie(OpenCookie.class);
+
+        if (ocookie != null)
+        {
+            Mutex.EVENT.readAccess(new Runnable() {
+
+                public void run() {
+                    ocookie.open();
+                }
+            });
+            
+            return true;
+        }
+
+        return false;
+    }
    
    
 }

@@ -617,10 +617,10 @@ public class JRXmlWriter_3_1_3 extends JRXmlWriter
 			writer.closeElement();
 		}
 
-		if (group.getGroupFooter() != null)
+		if (com.jaspersoft.ireport.designer.ModelUtils.getGroupFooter(group) != null)
 		{
 			writer.startElement(JRXmlConstants.ELEMENT_groupFooter);
-			writeBand(group.getGroupFooter());
+			writeBand(com.jaspersoft.ireport.designer.ModelUtils.getGroupFooter(group));
 			writer.closeElement();
 		}
 

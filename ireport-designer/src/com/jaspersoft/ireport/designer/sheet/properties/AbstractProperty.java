@@ -23,6 +23,8 @@ public abstract class AbstractProperty extends PropertySupport.ReadWrite
 {
     protected final Object object;
 
+
+
     @SuppressWarnings("unchecked")
     public AbstractProperty(Class clazz, Object object)
     {

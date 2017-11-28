@@ -216,8 +216,10 @@ public class StyleNode extends AbstractStyleNode  {
             }
         }
         
-        String oldName = getStyle().getName();
-        getDesignStyle().setName(s);
+        String oldName = getDesignStyle().getName();
+        jd.getStylesMap().remove(oldName);
+        jd.getStylesMap().put(s, getDesignStyle());
+         getDesignStyle().setName(s);
         
         ObjectPropertyUndoableEdit opue = new ObjectPropertyUndoableEdit(
                     getStyle(), "Name", String.class, oldName, s);
@@ -392,7 +394,10 @@ public class StyleNode extends AbstractStyleNode  {
                 }
             }
             String oldName = getStyle().getName();
+            jd.getStylesMap().remove(oldName);
+            jd.getStylesMap().put(s, getStyle());
             getStyle().setName(s);
+
 
             ObjectPropertyUndoableEdit opue = new ObjectPropertyUndoableEdit(
                     getStyle(), "Name", String.class, oldName, getStyle().getName());

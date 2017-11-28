@@ -57,7 +57,7 @@ public class ImageExpressionFileResolver implements FileResolver {
             try {
                 
                 // Try to process the expression...
-                ExpressionInterpreter interpreter = new ExpressionInterpreter(dataset, classLoader);
+                ExpressionInterpreter interpreter = new ExpressionInterpreter(dataset, classLoader, jasperDesign);
 
                 Object ret = interpreter.interpretExpression( imageElement.getExpression().getText() );
 

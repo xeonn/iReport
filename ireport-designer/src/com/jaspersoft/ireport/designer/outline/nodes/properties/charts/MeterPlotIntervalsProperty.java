@@ -53,6 +53,7 @@ public final class MeterPlotIntervalsProperty extends MeterIntervalsProperty {
     {
         if (val == null || val instanceof List)
         {
+            if (val == element.getIntervals()) return;
             List oldValue = element.getIntervals();
             List newValue =  (List)val;
             

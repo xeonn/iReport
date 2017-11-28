@@ -5,8 +5,9 @@
 
 package com.jaspersoft.ireport.designer.templates;
 
-import net.sf.jasperreports.engine.JRBand;
+import com.jaspersoft.ireport.designer.utils.Misc;
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import org.openide.WizardDescriptor;
@@ -26,9 +27,9 @@ public abstract class AbstractReportGenerator implements ReportGenerator {
      * @param exp
      * @return the first matching element or null.
      */
-    public static  JRDesignStaticText findStaticTextElement(JRBand band, String exp)
+    public static  JRDesignStaticText findStaticTextElement(JRElementGroup parent, String exp)
     {
-        JRElement[] elements = band.getElements();
+        JRElement[] elements = parent.getElements();
         for (int i=0; i<elements.length; ++i)
         {
             JRElement ele = elements[i];
@@ -36,10 +37,15 @@ public abstract class AbstractReportGenerator implements ReportGenerator {
             {
                 JRDesignStaticText st = (JRDesignStaticText)ele;
                 if (st.getText() != null &&
-                    st.getText().equals(exp))
+                    st.getText().equalsIgnoreCase(exp))
                 {
                     return st;
                 }
+            }
+            else if (ele instanceof JRElementGroup)
+            {
+                JRDesignStaticText ele2 = findStaticTextElement((JRElementGroup)ele, exp);
+                if (ele2 != null) return ele2;
             }
         }
         return null;
@@ -51,7 +57,7 @@ public abstract class AbstractReportGenerator implements ReportGenerator {
      * @param exp
      * @return the first matching element or null.
      */
-    public static JRDesignTextField findTextFieldElement(JRBand band, String exp)
+    public static JRDesignTextField findTextFieldElement(JRElementGroup band, String exp)
     {
         JRElement[] elements = band.getElements();
         for (int i=0; i<elements.length; ++i)
@@ -59,13 +65,21 @@ public abstract class AbstractReportGenerator implements ReportGenerator {
             JRElement ele = elements[i];
             if (ele instanceof JRDesignTextField)
             {
-                JRDesignTextField st = (JRDesignTextField)ele;
-                if (st.getExpression() != null &&
-                    st.getExpression().getText() != null &&
-                    st.getExpression().getText().equals(exp))
+                String s = Misc.getExpressionText(((JRDesignTextField)ele).getExpression());
+                if (s.startsWith("\""))
                 {
-                    return st;
+                    s = s.substring(1);
                 }
+                if (s.endsWith("\""))
+                {
+                    s = s.substring(0, s.length()-1);
+                }
+                if (s.equalsIgnoreCase(exp)) return (JRDesignTextField) ele;
+            }
+            else if (ele instanceof JRElementGroup)
+            {
+                JRDesignTextField ele2 = findTextFieldElement((JRElementGroup)ele, exp);
+                if (ele2 != null) return ele2;
             }
         }
         return null;

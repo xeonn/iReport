@@ -11,6 +11,7 @@ import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.designer.wizards.ConnectionSelectionWizardPanel;
 import com.jaspersoft.ireport.designer.wizards.FieldsSelectionWizardPanel;
 import com.jaspersoft.ireport.designer.wizards.GroupingWizardPanel;
+import com.jaspersoft.ireport.designer.wizards.TemplateListWizardPanel;
 import com.jaspersoft.ireport.designer.wizards.TemplateWizardPanel;
 import java.awt.Component;
 import java.io.File;
@@ -106,7 +107,7 @@ public final class SubreportWizardIterator implements WizardDescriptor.Instantia
             panels = new ArrayList<WizardDescriptor.Panel>();
             appendWizardPanel(new SubreportSelectionWizardPanel(wizard, this));
             newSubreportPanelSet = new ArrayList<WizardDescriptor.Panel>();
-            
+
             newSubreportPanelSet.add(new ConnectionSelectionWizardPanel(wizard));
             newSubreportPanelSet.add(new FieldsSelectionWizardPanel(wizard));
             newSubreportPanelSet.add(new GroupingWizardPanel(wizard));

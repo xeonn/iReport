@@ -134,22 +134,25 @@ public class SelectionWidget extends Widget {
         Rectangle r0 = getElementWidgetBouns(getRealWidget());
 
         boolean intersect = false;
-        for (Widget w2 : widgets)
+        synchronized(theScene)
         {
-            if (w2 != getRealWidget() &&
-                w2 instanceof JRDesignElementWidget)
+            for (Widget w2 : widgets)
             {
-                JRDesignElementWidget dew = (JRDesignElementWidget)w2;
-
-                Rectangle r1 = getElementWidgetBouns(dew);
-
-                if (r0.contains(r1))
+                if (w2 != getRealWidget() &&
+                    w2 instanceof JRDesignElementWidget)
                 {
-                    return ElementSelectedBorder.STATUS_TOTAL_OVERLAP;
-                }
-                else if (r0.intersects(r1))
-                {
-                    intersect = true;
+                    JRDesignElementWidget dew = (JRDesignElementWidget)w2;
+
+                    Rectangle r1 = getElementWidgetBouns(dew);
+
+                    if (r0.contains(r1))
+                    {
+                        return ElementSelectedBorder.STATUS_TOTAL_OVERLAP;
+                    }
+                    else if (r0.intersects(r1))
+                    {
+                        intersect = true;
+                    }
                 }
             }
         }

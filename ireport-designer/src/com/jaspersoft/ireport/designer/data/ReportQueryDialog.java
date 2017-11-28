@@ -1240,7 +1240,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
     private void jComboBoxQueryTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxQueryTypeActionPerformed
 // TODO add your handling code here:
         boolean autoReadFields = automaticlyReadFieldsCheckBox.isSelected();
-        
+
         readFieldsButton.setEnabled(false);
         automaticlyReadFieldsCheckBox.setSelected(false);
         readFieldsButton.setEnabled(false);
@@ -1256,7 +1256,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
         {
             language = "" + jComboBoxQueryType.getSelectedItem();
         }
-        
+
         
         // 1. Look for a special FieldsProvider....
         getJLabelStatusSQL().setText(I18n.getString("ReportQueryDialog.Label.StatusSQL2")  +  language + I18n.getString("ReportQueryDialog.Label.StatusSQL2B"));
@@ -1282,7 +1282,6 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
         }
         
         exportQueryButton.setEnabled(language.equals("sql"));
-        
         
         /*
         if (getFieldsProvider() == null && language.equals("sql"))
@@ -1324,9 +1323,10 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
         }
         else
         {
-            readFieldsButton.setEnabled( getFieldsProvider().supportsGetFieldsOperation() );
             automaticlyReadFieldsCheckBox.setEnabled( getFieldsProvider().supportsAutomaticQueryExecution() );
             automaticlyReadFieldsCheckBox.setSelected( autoReadFields );
+            readFieldsButton.setEnabled( (getFieldsProvider().supportsAutomaticQueryExecution() && !autoReadFields) || 
+                                          getFieldsProvider().supportsGetFieldsOperation() );
             jButtonOpenDesigner.setEnabled( getFieldsProvider().hasQueryDesigner());
             if (getFieldsProvider().hasEditorComponent())
             {
@@ -1884,7 +1884,10 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
 
     @SuppressWarnings("unchecked")
     public void setDataset(JRDesignDataset dataset) {
-        
+
+        System.out.println("Set Dataset: " + dataset);
+        System.out.flush();
+
         isSettingSQLExpression = true;
         try { // Used only to perform a finally op
             this.dataset = dataset;
@@ -1894,12 +1897,11 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
 
             num++;
             jLabelStatusSQL.setText( "" );
-
             jEditorPane1.setText("");
 
             try {
                 automaticlyReadFieldsCheckBox.setSelected( IReportManager.getPreferences().getBoolean( IReportManager.USE_AUTO_REGISTER_FIELDS , true)  );
-                automaticlyReadFieldsCheckBoxActionPerformed(null);
+                //automaticlyReadFieldsCheckBoxActionPerformed(null);
             } catch (Exception ex)
             {
 
@@ -1959,6 +1961,9 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
                 jLabelStatusSQL.setText("");
  
             }
+
+            jLabelStatusSQL.setText("setting jComboBoxQueryTypeActionPerformed");
+            jComboBoxQueryTypeActionPerformed(null);
         
         } finally {
             

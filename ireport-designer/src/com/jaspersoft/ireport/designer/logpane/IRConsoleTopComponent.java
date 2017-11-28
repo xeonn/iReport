@@ -33,6 +33,7 @@ final public class IRConsoleTopComponent extends TopComponent implements java.aw
         mainLogTextArea = new LogTextArea(I18n.getString("IRConsoleTopComponent.TextArea.iReportConsole")); //I18n.getString("logPane.mainConsole",
         mainLogTextArea.setLogPane( this );
         mainLogTextArea.addActionListener( this );
+
         
         jTabbedPaneLogs.add(mainLogTextArea.getTitle(), mainLogTextArea);
         //jTabbedPaneLogs.add(problemsPanel.getName(), problemsPanel);

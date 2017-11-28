@@ -130,6 +130,7 @@ public class CrosstabNode extends ElementNode {
         propertySet.put(new RepeatColumnHeadersProperty(getCrosstab()));
         propertySet.put(new RepeatRowHeadersProperty(getCrosstab()));
         propertySet.put(new ColumnBreakOffsetProperty(getCrosstab()));
+        propertySet.put(new IgnoreWidthProperty(getCrosstab()));
         propertySet.put(new RunDirectionProperty(getCrosstab()));
         propertySet.put(new CrosstabParametersMapExpressionProperty(getCrosstab(), ModelUtils.getElementDataset(crosstab, jd)));
 
@@ -256,7 +257,59 @@ public class CrosstabNode extends ElementNode {
 
     }
     
-    
+        public static final class IgnoreWidthProperty extends BooleanProperty {
+
+        private final JRDesignCrosstab crosstab;
+
+        @SuppressWarnings("unchecked")
+        public IgnoreWidthProperty(JRDesignCrosstab crosstab)
+        {
+            super(crosstab);
+            this.crosstab = crosstab;
+        }
+        @Override
+        public String getName()
+        {
+            return JRDesignCrosstab.PROPERTY_IGNORE_WIDTH;
+        }
+
+        @Override
+        public String getDisplayName()
+        {
+            return "Ignore Width Property";
+        }
+
+        @Override
+        public String getShortDescription()
+        {
+            return "This attribute determines whether the crosstab will break at the width set for the crosstab element, or whether the crosstab is to expand over this width (and over the page width as well).";
+        }
+
+        @Override
+        public Boolean getBoolean()
+        {
+            return crosstab.getIgnoreWidth();
+        }
+
+        @Override
+        public Boolean getOwnBoolean()
+        {
+            return crosstab.getIgnoreWidth();
+        }
+
+        @Override
+        public Boolean getDefaultBoolean()
+        {
+            return Boolean.FALSE;
+        }
+
+        @Override
+        public void setBoolean(Boolean b)
+        {
+            crosstab.setIgnoreWidth(b);
+        }
+
+    }
     
     public static final class RepeatRowHeadersProperty extends BooleanProperty {
 

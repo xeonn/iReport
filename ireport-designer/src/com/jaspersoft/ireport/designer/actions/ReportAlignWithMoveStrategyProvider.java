@@ -23,11 +23,13 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.netbeans.api.visual.action.ActionFactory;
@@ -80,7 +82,7 @@ public class ReportAlignWithMoveStrategyProvider extends AlignWithSupport implem
     }
 
     public Point locationSuggested (Widget widget, Point originalLocation, Point suggestedLocation) {
-        
+
         if (!moveEnabled)
         {
             if (Math.abs(suggestedLocation.x-originalLocation.x) > 5 || 
@@ -138,7 +140,7 @@ public class ReportAlignWithMoveStrategyProvider extends AlignWithSupport implem
         undoEdits = new java.util.ArrayList<AggregatedUndoableEdit>();
         
         List<Widget> selectedElements = ((AbstractReportObjectScene)widget.getScene()).getSelectionLayer().getChildren();
-        
+
         // for each element, let's save x and y...
         for (Widget w : selectedElements)
         {
@@ -322,12 +324,12 @@ public class ReportAlignWithMoveStrategyProvider extends AlignWithSupport implem
                 {
                     updateChildren(dew, (AbstractReportObjectScene)dew.getScene(), changedWidgets);
                 }
-                
+
                 changedWidgets.add(dew);
            }
         }
     }
-    
+
     private ObjectPropertyUndoableEdit findEdit(Object obj, String property)
     {
         for (AggregatedUndoableEdit theEdit : undoEdits)
@@ -344,11 +346,15 @@ public class ReportAlignWithMoveStrategyProvider extends AlignWithSupport implem
         }
         return null;
     }
-    
+
     private void updateChildren(JRDesignElementWidget dew, AbstractReportObjectScene scene, ArrayList<Widget> changedWidgets)
     {
-          List listOfElements = dew.getChildrenElements();
+        List listOfElements = dew.getChildrenElements();
+        updateChildren(listOfElements, scene, changedWidgets);
+    }
 
+    private void updateChildren(List listOfElements, AbstractReportObjectScene scene, ArrayList<Widget> changedWidgets)
+    {
           for (int i=0; i < listOfElements.size(); ++i)
           {
                if (listOfElements.get(i) instanceof JRDesignElement)
@@ -365,6 +371,10 @@ public class ReportAlignWithMoveStrategyProvider extends AlignWithSupport implem
                    }
 
                    changedWidgets.add(w);
+               }
+               else if (listOfElements.get(i) instanceof JRDesignElementGroup)
+               {
+                   updateChildren(((JRDesignElementGroup)listOfElements.get(i)).getChildren(), scene, changedWidgets);
                }
           }
     }

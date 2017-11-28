@@ -26,5 +26,6 @@
             </not>
         </condition>
     </fail>
+    <echo message="harness.dir: ${harness.dir}/build.xml"/>
     <import file="${harness.dir}/build.xml"/>
 </project>

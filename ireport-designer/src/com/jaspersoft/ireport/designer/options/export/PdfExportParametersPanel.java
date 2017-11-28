@@ -70,7 +70,7 @@ public class PdfExportParametersPanel extends AbstractExportParametersPanel {
     }
 
     public void load() {
-
+        setInit(true);
         Preferences pref = IReportManager.getPreferences();
 
         Misc.setComboboxSelectedTagValue(jComboBoxPDFVersion, pref.get(JRPdfExporterParameter.PROPERTY_PDF_VERSION, JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDF_VERSION)));
@@ -109,7 +109,7 @@ public class PdfExportParametersPanel extends AbstractExportParametersPanel {
         jCheckBoxAllowModifyContents.setSelected( (documentPermissions & PdfWriter.ALLOW_MODIFY_CONTENTS) > 0);
         jCheckBoxAllowPrinting.setSelected( (documentPermissions & PdfWriter.ALLOW_PRINTING) == PdfWriter.ALLOW_PRINTING);
         jCheckBoxAllowScreenReaders.setSelected( (documentPermissions & PdfWriter.ALLOW_SCREENREADERS) > 0);
-
+        setInit(false);
     }
 
     public void store() {

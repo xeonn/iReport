@@ -5,6 +5,7 @@
 package com.jaspersoft.ireport.designer.standalone.menu;
 
 import com.jaspersoft.ireport.designer.standalone.IReportStandaloneManager;
+import com.jaspersoft.ireport.designer.templates.TemplatesFrame;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.designer.wizards.CustomTemplateWizard;
 import com.jaspersoft.ireport.locale.I18n;
@@ -87,6 +88,7 @@ public final class NewReportAction extends CallableSystemAction {
         return HelpCtx.DEFAULT_HELP;
     }
 
+    /*
     @Override
     public JMenuItem getMenuPresenter() {
         
@@ -94,6 +96,7 @@ public final class NewReportAction extends CallableSystemAction {
 
         return menu;
     }
+    */
 
     public void refreshMenu()
     {
@@ -174,5 +177,7 @@ public final class NewReportAction extends CallableSystemAction {
     @Override
     public void performAction() {
         // do nothing...
+        TemplatesFrame td = new TemplatesFrame(Misc.getMainFrame(), true);
+        td.setVisible(true);
     }
 }

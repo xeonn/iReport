@@ -49,7 +49,9 @@ public final class RunToBottomProperty extends BooleanProperty
     @Override
     public Boolean getBoolean()
     {
-        return subreport.isRunToBottom();
+        // showing always a default value which is false for this property.
+        Boolean isRunToBottom=subreport.isRunToBottom();
+        return isRunToBottom==null?false:isRunToBottom;
     }
 
     @Override

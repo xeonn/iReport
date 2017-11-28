@@ -6,9 +6,17 @@
 
 package com.jaspersoft.ireport.designer.tools;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.JrxmlPreviewView;
+import com.jaspersoft.ireport.designer.templates.TemplateRenderer;
+import com.jaspersoft.ireport.designer.utils.Misc;
+import com.keypoint.PngEncoder;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.text.DecimalFormat;
@@ -18,19 +26,25 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 import javax.swing.filechooser.FileFilter;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.engine.export.JRGraphics2DExporter;
+import net.sf.jasperreports.engine.export.JRGraphics2DExporterParameter;
 import net.sf.jasperreports.engine.util.JRClassLoader;
 import net.sf.jasperreports.swing.JRViewerController;
 import net.sf.jasperreports.swing.JRViewerEvent;
 import net.sf.jasperreports.swing.JRViewerListener;
 import net.sf.jasperreports.view.JRSaveContributor;
 import net.sf.jasperreports.view.save.JRPrintSaveContributor;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -104,6 +118,8 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
         btnZoomIn = new javax.swing.JButton();
         btnZoomOut = new javax.swing.JButton();
         cmbZoom = new javax.swing.JComboBox();
+        jSeparator4 = new javax.swing.JToolBar.Separator();
+        jButton1 = new javax.swing.JButton();
 
         setBorder(null);
         setRollover(true);
@@ -307,6 +323,19 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
             }
         });
         add(cmbZoom);
+        add(jSeparator4);
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/template_preview.png"))); // NOI18N
+        jButton1.setToolTipText("Create a preview image");
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        add(jButton1);
     }// </editor-fold>//GEN-END:initComponents
 
     private DefaultComboBoxModel getZoomComboBoxModel()
@@ -543,6 +572,89 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
         btnFitPage.setSelected(false);
         btnFitWidth.setSelected(false);
     }//GEN-LAST:event_cmbZoomItemStateChanged
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        if (getViewerContext().getJasperPrint() != null &&
+            getViewerContext().getJasperPrint().getPages().size() > 0 &&
+            getViewerContext().getPageIndex() >= 0)
+        {
+            JasperPrint print = getViewerContext().getJasperPrint();
+
+            BufferedImage bufImage = new BufferedImage(2*print.getPageWidth(), 2*print.getPageHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g = bufImage.createGraphics();
+            // Export the page in a buffered image...
+            
+            JRGraphics2DExporter exporter;
+            try {
+                exporter = new JRGraphics2DExporter();
+                exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
+                exporter.setParameter(JRGraphics2DExporterParameter.ZOOM_RATIO, new Float(2.0));
+                exporter.setParameter(JRExporterParameter.PAGE_INDEX, getViewerContext().getPageIndex());
+                exporter.setParameter(JRGraphics2DExporterParameter.GRAPHICS_2D, g);
+                exporter.exportReport();
+
+                bufImage = TemplateRenderer.getFasterScaledInstance(bufImage, print.getPageWidth(), print.getPageHeight(),RenderingHints.VALUE_INTERPOLATION_BILINEAR, true);
+                Graphics2D gfx = bufImage.createGraphics();
+                gfx.setColor(Color.DARK_GRAY);
+                gfx.drawRect(0,0,print.getPageWidth()-1, print.getPageHeight()-1);
+
+            } catch (JRException ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+                return;
+            }
+
+            JFileChooser chooser = null;
+
+
+            if (IReportManager.getPreferences().get("templateChooserDirectory", null) != null)
+            {
+                chooser = new JFileChooser(IReportManager.getPreferences().get("templateChooserDirectory", null));
+            }
+            else
+            {
+                chooser = new JFileChooser(Misc.findStartingDirectory());
+            }
+
+            chooser.setFileFilter(new FileFilter() {
+
+                @Override
+                public boolean accept(File f) {
+                    return f.isDirectory() || f.getName().toLowerCase().endsWith(".png");
+                }
+
+                @Override
+                public String getDescription() {
+                    return "PNG Image";
+                }
+            });
+            
+            String fname = print.getName() + ".png";
+            fname = Misc.string_replace("_", " ", fname);
+            chooser.setSelectedFile(new File(fname));
+            try {
+                fname = IReportManager.getInstance().getActiveVisualView().getEditorSupport().getDataObject().getPrimaryFile().getNameExt();
+                fname = Misc.changeFileExtension(fname, ".png");
+                chooser.setSelectedFile(new File(fname));
+            } catch (Exception ex){}
+
+            if (chooser.showSaveDialog(Misc.getMainFrame()) == JFileChooser.APPROVE_OPTION)
+            {
+                IReportManager.getPreferences().put("templateChooserDirectory", chooser.getSelectedFile().getParent());
+                try {
+                ImageIO.write(bufImage, "png", chooser.getSelectedFile());
+                } catch (Exception ex)
+                {
+                    JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+                }
+            }
+
+
+            
+
+        }
+         
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public void init()
     {
@@ -786,9 +898,11 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
     private javax.swing.JButton btnZoomIn;
     private javax.swing.JButton btnZoomOut;
     private javax.swing.JComboBox cmbZoom;
+    private javax.swing.JButton jButton1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
+    private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JTextField txtGoTo;
     // End of variables declaration//GEN-END:variables
 

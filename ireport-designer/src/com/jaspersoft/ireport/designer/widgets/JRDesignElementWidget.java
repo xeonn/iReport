@@ -49,6 +49,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Date;
 import java.util.List;
+import net.sf.jasperreports.charts.design.JRDesignPiePlot;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRElementGroup;
@@ -372,14 +373,8 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
                 ClassLoader oldCL = null;
 
                 dv.setGraphics2D(gr);
-                if (isNeedCLRefresh())
-                {
-                    System.out.println("Refresh classloader...");
-                    System.out.flush();
-                    oldCL = Thread.currentThread().getContextClassLoader();
-                    Thread.currentThread().setContextClassLoader(WrapperClassLoader.wrapClassloader( IReportManager.getReportClassLoader()));
-                    setNeedCLRefresh(false);
-                }
+                oldCL = Thread.currentThread().getContextClassLoader();
+                Thread.currentThread().setContextClassLoader(IReportManager.getJRExtensionsClassLoader());
 
                 try {
                     e.visit( dv );
@@ -399,7 +394,10 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
         {
             dv.setGraphics2D(gr);
             try {
+                ClassLoader cl = Thread.currentThread().getContextClassLoader();
+                Thread.currentThread().setContextClassLoader(IReportManager.getJRExtensionsClassLoader());
                 e.visit( dv );
+                Thread.currentThread().setContextClassLoader(cl);
             } catch (Exception ex){
             
                 System.err.println("iReport - Element rendering exception " + getElement() + " " + ex.getMessage());
@@ -484,14 +482,20 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
             propertyName.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING) ||
             propertyName.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING) ||
             propertyName.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING) ||
-            propertyName.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING)
+            propertyName.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING) ||
+            propertyName.equals(JRDesignPiePlot.PROPERTY_ITEM_LABEL)
             )
         {        
             updateBounds();
             this.repaint(); 
             this.getSelectionWidget().updateBounds();
             this.getSelectionWidget().revalidate(true);
+            try {
             getScene().validate();
+            } catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
         }
         
         if (propertyName.equals( JRDesignFrame.PROPERTY_CHILDREN))

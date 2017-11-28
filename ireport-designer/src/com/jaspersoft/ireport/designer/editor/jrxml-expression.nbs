@@ -4,22 +4,47 @@
 
 # definition of tokens
 TOKEN:keyword:( "instanceof" | "this" | "null" | "true" | "false" | "new")
-TOKEN:invalid_keyword:( "if" | "while" | "for" | "else")
+TOKEN:invalid_keyword:( "if" | "while" | "for" | "else" | "do")
 TOKEN:operator: (
     "==" | "!=" | "<<" | ">>" | ">>>" | ">=" | "<=" | "++" | "--" | 
     "+=" | "-=" | "*=" | "/=" | "%=" | "<<=" | ">>=" | ">>>=" | "&=" | 
     "^=" | "|=" | "&&" | "||" | "===" | "!==" | 
     "?" | ":" | "<" | ">" | "*" | "-" | "+" | "." | "," | "=" |
      "(" | ")" | "[" | "]" | "!" | "@" | "#" | "%" | "^" | "&" | 
-    "~" | "|" | "\\"
+    "~" | "|" | "\\" | "."
 )
 
-TOKEN:identifier: (
-    ["a"-"z" "A"-"Z" "_"] 
-    ["a"-"z" "A"-"Z" "0"-"9" "_" "$"
-    ]*
-)
-TOKEN:object:( ["$"]("F" | "P" | "V" | "R")[ "{" ]["A"-"Z" "_" "a"-"z" "0"-"9"]*[ "}" ])
+TOKEN:whitespace:( [" " "\t" "\n" "\r"]+ )
+
+TOKEN:identifier: ( ["a"-"z" "A"-"Z" "_"]["a"-"z" "A"-"Z" "0"-"9" "_" "$"]*)
+
+#TOKEN:object_start: ( "$F{" | "$V{" | "$P{" )
+
+
+
+#TOKEN:object_F: ( ("$F{")([^"\n" "\r"])*["}"] )
+#TOKEN:object_V: ( ("$V{")([^"\n" "\r"])*["}"] )
+
+TOKEN:object_R: ( ("$R{")([^"\n" "\r"])*["}"] )
+
+TOKEN:object_F: {
+    call: com.jaspersoft.ireport.designer.editor.ExpObjectLexerSupport.parseExpObject;
+}
+
+TOKEN:object_V: {
+    call: com.jaspersoft.ireport.designer.editor.ExpObjectLexerSupport.parseExpObject;
+}
+
+TOKEN:object_P: {
+    call: com.jaspersoft.ireport.designer.editor.ExpObjectLexerSupport.parseExpObject;
+}
+
+
+
+TOKEN:invalid_object: {
+    call: com.jaspersoft.ireport.designer.editor.ExpObjectLexerSupport.parseExpObject;
+}
+
 
 #TOKEN:method:( ["."]["a"-"z" "A"-"Z" "_"] 
 #    ["a"-"z" "A"-"Z" "0"-"9" "_" "$"
@@ -54,21 +79,16 @@ TOKEN:string: (
     "\""
 )
 
-TOKEN:string: (
-    "\'" ( 
-        [^ "\\" "\'" "\n" "\r"] |
-        ("\\" (
-            . |
-            (["0"-"7"] ["0"-"7"] ["0"-"7"]) |
-            ("x" ["0"-"9" "a"-"f" "A"-"F"] ["0"-"9" "a"-"f" "A"-"F"]) |
-            ("u" ["0"-"9" "a"-"f" "A"-"F"] ["0"-"9" "a"-"f" "A"-"F"] ["0"-"9" "a"-"f" "A"-"F"] ["0"-"9" "a"-"f" "A"-"F"])
-        ))
-    )* 
+TOKEN:char: (
+    "\'"
+	( [^"\'" "\n" "\r"] |
+	  ("\\" ["r" "n" "t" "\\" "\'" "\""])
+	)
     "\'"
 )
 
 
-TOKEN:whitespace:( [" " "\t" "\n" "\r"]+ )
+
 
 COLOR:keyword: {
     foreground_color: "0x0000e6";
@@ -79,8 +99,28 @@ COLOR:keyword: {
 #    font_type: "bold";
 #}
 
-COLOR:object: {
-    foreground_color: "0x007700";
+COLOR:object_V: {
+    foreground_color: "0x0000FF";
+    font_type: "bold";
+}
+
+COLOR:object_F: {
+    foreground_color: "0x00b200";
+    font_type: "bold";
+}
+
+COLOR:object_P: {
+    foreground_color: "0xb20000";
+    font_type: "bold";
+}
+
+COLOR:object_R: {
+    foreground_color: "0xce7b66";
+    font_type: "bold";
+}
+
+COLOR:invalid_object: {
+    foreground_color: "0xec2d2d";
     font_type: "bold";
 }
 
@@ -92,18 +132,9 @@ COLOR:invalid_keyword: {
     strike_through_color: "0x770000";
 }
 
-# parser should ignore whitespaces
-SKIP:whitespace
 
-# definition of grammar
 
-#S = (Statement)*;
-#Statement = WhileStatement | IfStatement | ExpressionStatement;
-#WhileStatement = "while" "(" ConditionalExpression ")" Block;
-#IfStatement = "if" "(" ConditionalExpression ")" Block ["else" Block];
-#Block = "{" (Statement)* "}";
-#ConditionalExpression = <identifier>;
-#ExpressionStatement = <identifier>;
+
 
 # code folding
 FOLD:Block
@@ -136,9 +167,10 @@ MARK:error: {
     message:"Unexpected character.";
 }
 
+
 # code completion
 #
-COMPLETION:keyword, invalid_keyword, object, operator, identifier, whitespace: {
+COMPLETION: object_invalid, keyword, invalid_keyword, error, object_V, object_P, object_F, whitespace, identifier, operator  : {
     text1:com.jaspersoft.ireport.designer.editor.JRSyntaxSupport.completionItems;
 }
 

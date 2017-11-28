@@ -258,6 +258,7 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
     // End of variables declaration//GEN-END:variables
 
     public void load() {
+        setInit(true);
         Preferences pref = IReportManager.getPreferences();
 
         SpinnerNumberModel model = (SpinnerNumberModel)jSpinnerCharacterHeight.getModel();
@@ -275,7 +276,7 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
         jTextAreaBetweenPagesText.setText(pref.get(JRProperties.PROPERTY_PREFIX + "export.txt.betweenPagesText", ""));
 
         jTextFieldLineSeparator.setText( Misc.addSlashesString(pref.get(JRProperties.PROPERTY_PREFIX + "export.txt.lineSeparator", System.getProperty("line.separator"))));
-
+        setInit(false);
     }
 
     public void store() {

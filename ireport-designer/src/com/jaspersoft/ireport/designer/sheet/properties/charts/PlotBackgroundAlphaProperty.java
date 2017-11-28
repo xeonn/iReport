@@ -21,7 +21,9 @@ public final class PlotBackgroundAlphaProperty extends FloatProperty {
 
     private final JRBaseChartPlot plot;
 
-    
+
+
+
     public PlotBackgroundAlphaProperty(JRBaseChartPlot plot)
     {
         super(plot);

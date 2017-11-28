@@ -14,7 +14,6 @@ import com.jaspersoft.ireport.designer.connection.DefaultIReportConnectionFactor
 import com.jaspersoft.ireport.designer.connection.JREmptyDatasourceConnection;
 import com.jaspersoft.ireport.designer.fonts.TTFFontsLoader;
 import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
-import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
 import com.jaspersoft.ireport.designer.export.DefaultExporterFactory;
 import com.jaspersoft.ireport.designer.export.ExporterFactory;
 import com.jaspersoft.ireport.designer.fonts.TTFFontsLoaderMonitor;
@@ -22,6 +21,9 @@ import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
 import com.jaspersoft.ireport.designer.outline.nodes.CrosstabNode;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.designer.templates.GenericFileTemplateItemAction;
+import com.jaspersoft.ireport.designer.templates.ReportTemplateItemAction;
+import com.jaspersoft.ireport.designer.templates.TemplateItemAction;
 import com.jaspersoft.ireport.designer.undo.AggregatedUndoableEdit;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
@@ -43,6 +45,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -50,7 +53,6 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoableEdit;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -87,6 +89,7 @@ public class IReportManager {
     public static final String PROPERTY_DEFAULT_CONNECTION = "PROPERTY_DEFAULT_CONNECTION";
     public static final String PROPERTY_SHOW_CELL_NAMES = "PROPERTY_SHOW_CELL_NAMES";
     public static final String PROPERTY_SHOW_BAND_NAMES = "PROPERTY_SHOW_BAND_NAMES";
+    public static final String PROPERTY_JRPROPERTY_PREFIX = "ireport.jrproperty.";
     
     
     public static final String CURRENT_DIRECTORY = "CURRENT_DIRECTORY";
@@ -104,6 +107,43 @@ public class IReportManager {
 
     public static HashMap<String, ElementNodeFactory> elementNodeFactories = new HashMap<String, ElementNodeFactory>();
 
+
+    public void reloadJasperReportsProperties() {
+        
+        Properties props = getDefaultJasperReportsProperties();
+        Enumeration en = props.keys();
+        while (en.hasMoreElements())
+        {
+            String key = (String) en.nextElement();
+            JRProperties.setProperty(key, props.getProperty(key));
+        }
+
+        // Setting JR properties saved in iReport....
+        String[] keys = null;
+        try {
+            keys = getPreferences().keys();
+        } catch (BackingStoreException ex) {
+            //Exceptions.printStackTrace(ex);
+        }
+        for (int i=0; keys != null && i<keys.length; ++i)
+        {
+            if (keys[i].startsWith(PROPERTY_JRPROPERTY_PREFIX))
+            {
+                String name = keys[i].substring(PROPERTY_JRPROPERTY_PREFIX.length());
+                String value = getPreferences().get(keys[i], null);
+                if (value == null || name.length() == 0)
+                {
+                    getPreferences().remove(keys[i]);
+                }
+                else
+                {
+                    JRProperties.setProperty(name, value);
+                }
+            }
+        }
+
+    }
+
     private java.util.ArrayList<IReportConnection> connections = null;
     private java.util.ArrayList<QueryExecuterDef> queryExecuters = null;
     private java.util.List<IRFont> fonts = null;
@@ -120,7 +160,8 @@ public class IReportManager {
     private UndoableEdit lastUndoableEdit = null;
     private long lastUndoableEditTime = 0;
     private java.util.List<ExporterFactory> exporterFactories = null;
-    
+    private Properties defaultJasperReportsProperties = null;
+
 
     public static ElementNode getComponentNode(JasperDesign jd, JRDesignComponentElement componentElement, Lookup lkp) {
 
@@ -354,6 +395,8 @@ public class IReportManager {
      */
     private void initialize()
     {
+
+        
         try {
             net.sf.jasperreports.engine.util.JRProperties.setProperty("net.sf.jasperreports.query.executer.factory.xmla-mdx",
                     "net.sf.jasperreports.engine.query.JRXmlaQueryExecuterFactory");
@@ -374,14 +417,46 @@ public class IReportManager {
 
         // This initialize the query executers.
         getQueryExecuters();
-    
+
+        // Save the properties like they are when loaded from the default.jasperreports.properties file...
+        // plus some other basic properties set by ireport...
+        defaultJasperReportsProperties = new Properties();
+        List props = JRProperties.getProperties("");
+
+        for (int i=0; i<props.size(); ++i)
+        {
+            JRProperties.PropertySuffix prop = (JRProperties.PropertySuffix)props.get(i);
+            defaultJasperReportsProperties.setProperty(prop.getKey(), prop.getValue());
+        }
+        JRProperties.backupProperties();
+
+        reloadJasperReportsProperties();
+        
+
         // Loading fonts...
         RequestProcessor.getDefault().post(new Runnable()
         {
             public void run()
             {
                 //((ReportClassLoader)getReportClassLoader()).rescanAdditionalClasspath();
-                Thread.currentThread().setContextClassLoader( getReportClassLoader() );
+                // add the fonts directory to the classpath...
+//                URL[] urls = null;
+//                if (fontsDir != null && fontsDir.isDirectory())
+//                {
+//                    try {
+//                        urls = new URL[]{fontsDir.toURI().toURL()};
+//                    } catch (MalformedURLException ex) {
+//                        Exceptions.printStackTrace(ex);
+//                    }
+//                }
+//                else
+//                {
+//                    urls = new URL[0];
+//                }
+//                URLClassLoader urlCl = new URLClassLoader(
+//                        urls, getReportClassLoader());
+
+                Thread.currentThread().setContextClassLoader(getReportClassLoader());
                 // Stuff to load the fonts...
                 setFonts( TTFFontsLoader.loadTTFFonts(new TTFFontsLoaderMonitor() {
 
@@ -412,6 +487,32 @@ public class IReportManager {
          */
 
         createPaletteItem();
+
+
+        //create items for the template wizard....
+        TemplateItemAction.addAction(new ReportTemplateItemAction());
+        TemplateItemAction.addAction(new GenericFileTemplateItemAction(
+                    I18n.getString("TemplateItemAction.Style.name"),I18n.getString("TemplateItemAction.Style.description"),
+                    I18n.getString("Templates/Report/StyleTemplate.jrtx"),"Templates/Report/StyleTemplate.jrtx",
+                    new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/template/new_style.png"))));
+
+        TemplateItemAction.addAction(new GenericFileTemplateItemAction(
+                    I18n.getString("TemplateItemAction.ChartTheme.name"),I18n.getString("TemplateItemAction.ChartTheme.description"),
+                    "Templates/Report/ChartThemeTemplate.jrctx","Templates/Report/ChartThemeTemplate.jrctx",
+                    new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/template/new_chart_theme.png"))));
+
+        TemplateItemAction.addAction(new GenericFileTemplateItemAction(
+                    I18n.getString("TemplateItemAction.ResourceBundle.name"),I18n.getString("TemplateItemAction.ResourceBundle.description"),
+                    "Templates/Report/Bundle.properties","Templates/Report/Bundle.properties",
+                    new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/template/new_resource_bundle.png"))));
+
+        TemplateItemAction.addAction(new GenericFileTemplateItemAction(
+                    I18n.getString("TemplateItemAction.GenericFile.name"),I18n.getString("TemplateItemAction.GenericFile.description"),
+                    null,null,
+                    new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/template/new_generic_file.png"))));
+
+
+
     }
     
     public static IReportManager getInstance()
@@ -519,7 +620,7 @@ public class IReportManager {
                             NamedNodeMap nnm2 = child_child.getAttributes();
                             if ( nnm2.getNamedItem("name") != null)
                                 parameterName = nnm2.getNamedItem("name").getNodeValue();
-                            hm.put( parameterName,Misc.readPCDATA(child_child));
+                            hm.put( parameterName,Misc.readPCDATA(child_child,false));
                         }
                     }
 
@@ -666,6 +767,16 @@ public class IReportManager {
         return IReportManager.getInstance().getReportClassLoaderImpl(recreate);
     }
 
+
+    public static ClassLoader getJRExtensionsClassLoader()
+    {
+        if (reportClassLoader == null)
+        {
+            IReportManager.getInstance().getReportClassLoaderImpl(true);
+        }
+        return reportClassLoader;
+    }
+
     private ClassLoader getReportClassLoaderImpl(boolean recreate)
     {
         if (recreate || reportClassLoader == null)
@@ -673,8 +784,8 @@ public class IReportManager {
             ClassLoader syscl = Lookup.getDefault().lookup(ClassLoader.class);
             reportClassLoader = new ReportClassLoader(syscl);
             //reportClassLoader.rescanAdditionalClasspath();
-        }
         
+        }
         /*
         org.netbeans.editor.Registry.getMostActiveComponent();
 
@@ -682,16 +793,16 @@ public class IReportManager {
         registries.
         Lookup lookup = Lookup.getDefault();
         lookup.lookup(arg0);
-        
-        ProxyClassLoader 
+
+        ProxyClassLoader
         */
         // Add all the dabatase classpath entries...
         JDBCDriverManager manager = JDBCDriverManager.getDefault();
-        
+
         JDBCDriver[] drivers = manager.getDrivers();
         InstalledFileLocator locator = InstalledFileLocator.getDefault();
 
-        
+
         for (int i=0; i<drivers.length; ++i)
         {
             URL[] urls = drivers[i].getURLs();
@@ -713,11 +824,40 @@ public class IReportManager {
                 {
                     try {
                         reportClassLoader.addNoRelodablePath( f.getCanonicalPath() );
-                        
+
                     } catch (IOException ex) {}
                 }
             }
         }
+
+        /*
+        File fontsDir = InstalledFileLocator.getDefault().locate("fonts", null, false);
+        if (fontsDir != null && fontsDir.exists() && fontsDir.isDirectory())
+        {
+            File[] fontJars = fontsDir.listFiles(new FilenameFilter() {
+
+                public boolean accept(File dir, String name) {
+                    return name.toLowerCase().endsWith(".jar");
+                }
+            });
+
+            for (int i=0; i<fontJars.length; ++i)
+            {
+                try {
+                    reportClassLoader.addNoRelodablePath(fontJars[i].getCanonicalPath());
+                    System.out.println("Adding to path: " + fontJars[i].getCanonicalPath());
+                    System.out.flush();
+                } catch (IOException ex) {
+                    //Exceptions.printStackTrace(ex);
+                }
+            }
+        }
+        else
+        {
+            System.out.println("Invalid fonts dir: " + fontsDir);
+                    System.out.flush();
+        }
+        */
 
         reportClassLoader.rescanAdditionalClasspath();
 
@@ -745,10 +885,10 @@ public class IReportManager {
                 //Exceptions.printStackTrace(ex);
             }
         }
-        
-        URLClassLoader urlCl = new URLClassLoader( urls.toArray(new URL[urls.size()]) , reportClassLoader);
 
-        return urlCl;
+        ClassLoader newClassLoader = new URLClassLoader( urls.toArray(new URL[urls.size()]) , reportClassLoader);
+        
+        return newClassLoader;
     }
 
     /*
@@ -783,7 +923,9 @@ public class IReportManager {
             try {
                 OutlineTopComponent.getDefault().getExplorerManager().setSelectedNodes(new org.openide.nodes.Node[]{node});
             } catch (PropertyVetoException ex) {
-                Exceptions.printStackTrace(ex);
+                // we are trying to highligh a node not present in the document...
+                // Are we pasting something?
+                // Look unti the parent...
             }
         }
         
@@ -1027,10 +1169,12 @@ public class IReportManager {
         }
         getPreferences().put(IREPORT_CLASSPATH, classpathString);
 
-        if (reportClassLoader != null)
-        {
-            reportClassLoader.rescanAdditionalClasspath();
-        }
+//        if (reportClassLoader != null)
+//        {
+//            reportClassLoader.rescanAdditionalClasspath();
+//        }
+
+        getReportClassLoader(true); // This recreates the classloader with the updated paths.
     }
 
     public void setRelodableClasspath(List<String> cp) {
@@ -1378,14 +1522,31 @@ public class IReportManager {
             exporterFactories.add(new DefaultExporterFactory("pdf"));
             exporterFactories.add(new DefaultExporterFactory("csv"));
             exporterFactories.add(new DefaultExporterFactory("html"));
+            exporterFactories.add(new DefaultExporterFactory("xhtml"));
             exporterFactories.add(new DefaultExporterFactory("xls"));
             exporterFactories.add(new DefaultExporterFactory("xls2"));
             exporterFactories.add(new DefaultExporterFactory("java2D"));
             exporterFactories.add(new DefaultExporterFactory("txt"));
             exporterFactories.add(new DefaultExporterFactory("rtf"));
             exporterFactories.add(new DefaultExporterFactory("odf"));
+            exporterFactories.add(new DefaultExporterFactory("docx"));
+            exporterFactories.add(new DefaultExporterFactory("xml"));
         }
         return exporterFactories;
+    }
+
+    /**
+     * @return the defaultJasperReportsProperties
+     */
+    public Properties getDefaultJasperReportsProperties() {
+        return defaultJasperReportsProperties;
+    }
+
+    /**
+     * @param defaultJasperReportsProperties the defaultJasperReportsProperties to set
+     */
+    public void setDefaultJasperReportsProperties(Properties defaultJasperReportsProperties) {
+        this.defaultJasperReportsProperties = defaultJasperReportsProperties;
     }
 
 

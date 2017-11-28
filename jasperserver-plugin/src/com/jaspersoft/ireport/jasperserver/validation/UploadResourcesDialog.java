@@ -27,6 +27,7 @@ import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -124,9 +125,26 @@ public class UploadResourcesDialog extends javax.swing.JDialog implements Runnab
                 
                 //System.out.println("Modifing resource with RU " + vd.getReportUnit());
                 //System.out.flush();
-                vd.getServer().getWSClient().modifyReportUnitResource(
-                            (vd.getReportUnit() != null) ? vd.getReportUnit().getDescriptor().getUriString() : null,
-                            newDescriptor, evi.getOriginalFileName());
+                // Check if a resource with this name already exists...
+                List existingResources = vd.getServer().getWSClient().list(vd.getReportUnit().getDescriptor());
+                boolean found = false;
+                for (int k=0; k<existingResources.size(); ++k)
+                {
+                   ResourceDescriptor rd = (ResourceDescriptor) existingResources.get(k);
+                   if (rd.getName() != null &&
+                       rd.getName().equals(newDescriptor.getName()))
+                   {
+                       found = true;
+                       break;
+                   }
+                }
+
+                if (!found)
+                {
+                    vd.getServer().getWSClient().modifyReportUnitResource(
+                                (vd.getReportUnit() != null) ? vd.getReportUnit().getDescriptor().getUriString() : null,
+                                newDescriptor, evi.getOriginalFileName());
+                }
                 jProgressBar1.setValue( (int)(100.0/(double)i));
             }
             

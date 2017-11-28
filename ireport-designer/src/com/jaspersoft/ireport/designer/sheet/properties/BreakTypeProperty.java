@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
@@ -79,6 +80,14 @@ public final class BreakTypeProperty extends ByteProperty
     public void setByte(Byte type)
     {
         breakElement.setType(type);
+
+        if (IReportManager.getPreferences().getBoolean("designer_debug_mode", false))
+        {
+            System.out.println(new java.util.Date() + ": setting break type to: " + type + ". If the value is unattended or null, please report this notification to http://jasperforge.org/plugins/mantis/view.php?id=4139");
+            Thread.dumpStack();
+        }
+
+        
     }
 
 }

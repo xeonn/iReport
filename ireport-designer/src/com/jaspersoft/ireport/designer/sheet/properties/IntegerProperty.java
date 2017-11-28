@@ -48,6 +48,8 @@ public abstract class IntegerProperty extends AbstractProperty
         validateInteger((Integer)value);
     }
 
+
+
     @Override
     public void setPropertyValue(Object value)
     {

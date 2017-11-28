@@ -165,10 +165,14 @@ public class CSVExportParametersPanel extends AbstractExportParametersPanel {
     // End of variables declaration//GEN-END:variables
 
     public void load() {
+
+        setInit(true);
         Preferences pref = IReportManager.getPreferences();
 
         jTextField1.setText( Misc.addSlashesString(pref.get(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER, JRProperties.getProperty(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER))));
         jTextField2.setText( Misc.addSlashesString(pref.get(JRCsvExporterParameter.PROPERTY_RECORD_DELIMITER, JRProperties.getProperty(JRCsvExporterParameter.PROPERTY_RECORD_DELIMITER))));
+        
+        setInit(false);
     }
 
     public void store() {

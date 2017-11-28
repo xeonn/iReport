@@ -623,7 +623,7 @@ public class MeterIntervalsPanel extends javax.swing.JPanel {
     public void setMeterIntervals(java.util.List meterIntervals) {
         
         if (meterIntervals == null) return;
-        
+
         this.meterIntervals.clear();
         
         DefaultTableModel dtm = (DefaultTableModel)jTable1.getModel();

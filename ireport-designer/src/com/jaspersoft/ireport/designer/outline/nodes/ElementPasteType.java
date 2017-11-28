@@ -10,35 +10,26 @@
 package com.jaspersoft.ireport.designer.outline.nodes;
 
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.JrxmlVisualView;
-import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
 import com.jaspersoft.ireport.designer.undo.AddElementGroupUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.AddElementUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.AggregatedUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.DeleteElementGroupUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.DeleteElementUndoableEdit;
+import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import java.awt.Point;
 import java.awt.datatransfer.Transferable;
-import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import javax.swing.SwingUtilities;
-import net.sf.jasperreports.crosstabs.JRCellContents;
-import net.sf.jasperreports.crosstabs.JRCrosstabCell;
-import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
-import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRCloneable;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
 import org.openide.nodes.Node;
 import org.openide.nodes.NodeTransfer;
-import org.openide.util.Exceptions;
 import org.openide.util.datatransfer.PasteType;
 
 /**
@@ -46,6 +37,30 @@ import org.openide.util.datatransfer.PasteType;
  * @author gtoffoli
  */
 public class ElementPasteType extends PasteType {
+
+
+
+    private static Node[] lastPastedNodes = null;
+
+    public static void setLastPastedNodes(Node[] dropNodes)
+    {
+        lastPastedNodes = dropNodes;
+    }
+
+    public static Node[] getLastPastedNodes()
+    {
+        return lastPastedNodes;
+    }
+
+
+    /**
+     * movingElements and boxTopLeft are used to change the positions of elements moved
+     * inside another container. If movingElements is empty, the boxTopLeft must be
+     * set again.
+     */
+    private static List movingObjects = new ArrayList();
+    private static Point boxTopLeft = null;
+
 
     JRElementGroup newContainer = null;
     JRElementGroup oldContainer = null;
@@ -86,6 +101,13 @@ public class ElementPasteType extends PasteType {
 
         if( (dropAction & NodeTransfer.MOVE) != 0 ) // Moving field...
         {
+            calculateNewBoxTopLeft();
+            if (boxTopLeft != null)
+            {
+                adjustPosition(element);
+                movingObjects.remove(element);
+            }
+
             int newIndex = -1;
             if (currentIndex != -1) // Case 1: Moving inside the band
             { 
@@ -148,7 +170,8 @@ public class ElementPasteType extends PasteType {
                             element, newContainer.getChildren().size() - 1);
                     
                     // Try to select this new element too...
-                    IReportManager.getInstance().setSelectedObject(element);                    
+                    
+                    IReportManager.getInstance().setSelectedObject(element);
                 }
             }
         }
@@ -157,6 +180,13 @@ public class ElementPasteType extends PasteType {
            if (element instanceof JRCloneable)
            {
                 Object newElement = ((JRCloneable) element).clone();
+
+                calculateNewBoxTopLeft();
+                if (boxTopLeft != null)
+                {
+                    adjustPosition(newElement);
+                    movingObjects.remove(element);
+                }
 
                 /*
                 if (newElement instanceof JRDesignCrosstab)
@@ -243,6 +273,112 @@ public class ElementPasteType extends PasteType {
              IReportManager.getInstance().addUndoableEdit(unduableEdit, true);
         }
         return null;
+    }
+
+    private void adjustPosition(Object elementToAdjust) {
+        if (elementToAdjust instanceof JRDesignElement)
+        {
+            adjustPositionElement((JRDesignElement)elementToAdjust);
+        }
+        else if  (elementToAdjust instanceof JRDesignElementGroup)
+        {
+            List children = ((JRDesignElementGroup)elementToAdjust).getChildren();
+            for (int i=0; i<children.size(); ++i)
+            {
+                adjustPosition(children.get(i));
+            }
+        }
+    }
+
+    private void adjustPositionElement(JRDesignElement ele)
+    {
+        ele.setX( ele.getX() -  boxTopLeft.x);
+        ObjectPropertyUndoableEdit edit = new ObjectPropertyUndoableEdit(element, "X", Integer.TYPE, ele.getX() +  boxTopLeft.x, ele.getX());
+        unduableEdit.concatenate(edit);
+
+        ele.setY( ele.getY() -  boxTopLeft.y);
+        edit = new ObjectPropertyUndoableEdit(element, "Y", Integer.TYPE, ele.getY() +  boxTopLeft.y, ele.getY());
+        unduableEdit.concatenate(edit);
+    }
+
+    private void calculateNewBoxTopLeft() {
+
+        if (movingObjects.size() > 0) return;
+        // Look for all the selected nodes.
+
+
+        boxTopLeft = null;
+        
+        Node[] nodes = getLastPastedNodes();
+        boolean sameContainer = (oldContainer == newContainer);
+        if (sameContainer) boxTopLeft = new Point(0,0);
+
+        for (int i=0; nodes != null && i<nodes.length; ++i)
+        {
+            if (nodes[i] instanceof ElementNode)
+            {
+                ElementNode node = (ElementNode)nodes[i];
+                JRDesignElement ele = node.getElement();
+
+                if (!sameContainer)
+                {
+                    if (boxTopLeft == null)  boxTopLeft = new Point(ele.getX(), ele.getY());
+                    else
+                    {
+                        boxTopLeft.x = Math.min(boxTopLeft.x, ele.getX());
+                        boxTopLeft.y = Math.min(boxTopLeft.y, ele.getY());
+                    }
+                }
+                movingObjects.add(node.getElement());
+            }
+            else if (nodes[i] instanceof ElementGroupNode)
+            {
+
+                ElementGroupNode node = (ElementGroupNode)nodes[i];
+                JRDesignElementGroup ele = node.getElementGroup();
+                if (!sameContainer)
+                {
+                    Point p = getMinXY(ele.getChildren());
+                    if (boxTopLeft == null) boxTopLeft = p;
+                    else
+                    {
+                        boxTopLeft.x = Math.min(boxTopLeft.x, p.x);
+                        boxTopLeft.y = Math.min(boxTopLeft.y, p.y);
+                    }
+                }
+                movingObjects.add(ele);
+            }
+        }
+    }
+
+    private Point getMinXY(List elems)
+    {
+        Point minTopLeft  = null;
+        for (int i=0; i<elems.size(); ++i)
+        {
+            if (elems.get(i) instanceof JRDesignElement)
+            {
+                JRDesignElement ele = (JRDesignElement)elems.get(i);
+                if (minTopLeft == null) minTopLeft = new Point(ele.getX(), ele.getY());
+                else
+                {
+                    minTopLeft.x = Math.min(minTopLeft.x, ele.getX());
+                    minTopLeft.y = Math.min(minTopLeft.y, ele.getY());
+                }
+            }
+            else if (elems.get(i) instanceof JRDesignElementGroup)
+            {
+                JRDesignElementGroup ele = (JRDesignElementGroup)elems.get(i);
+                Point p = getMinXY(ele.getChildren());
+                if (minTopLeft == null) minTopLeft = p;
+                else
+                {
+                    minTopLeft.x = Math.min(minTopLeft.x, p.x);
+                    minTopLeft.y = Math.min(minTopLeft.y, p.y);
+                }
+            }
+        }
+        return minTopLeft;
     }
     
     private void removeElement(JRElementGroup container, JRDesignElement element)
