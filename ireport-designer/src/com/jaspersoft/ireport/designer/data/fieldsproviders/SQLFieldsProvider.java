@@ -117,6 +117,7 @@ public class SQLFieldsProvider implements FieldsProvider {
             JRQueryChunk[] chunks = reportDataset.getQuery().getChunks();
 
             java.util.List queryParams = new ArrayList();
+            java.util.List<Class> queryParamsClass = new ArrayList<Class>();
 
             for (int i=0; i<chunks.length; ++i)
             {
@@ -156,6 +157,7 @@ public class SQLFieldsProvider implements FieldsProvider {
                         Object defValue = parameters.get(paramName);
                         queryBuf.append("?");
                         queryParams.add(defValue);
+                        queryParamsClass.add(findParameterClass(paramName, reportDataset));
                         break;
                     }
                     case JRQueryChunk.TYPE_CLAUSE_TOKENS:
@@ -198,12 +200,14 @@ public class SQLFieldsProvider implements FieldsProvider {
                                         Object itemVal = iter.next();
                                         queryBuf.append("?");
                                         queryParams.add(itemVal);
+                                        queryParamsClass.add(null);
 
                                         while (iter.hasNext())
                                         {
                                             itemVal = iter.next();
                                             clauseText += ",?";
                                             queryParams.add(itemVal);
+                                            queryParamsClass.add(null);
                                         }
 
                                         clauseText += ")";
@@ -234,19 +238,13 @@ public class SQLFieldsProvider implements FieldsProvider {
 
 
             con = irConn.getConnection();
-            System.out.println("Connection: " + con + "  Query: " + query);
-            System.out.flush();
+
             ps = con.prepareStatement( query );
 
             for(int pc=0; pc<queryParams.size(); pc++ ) {
 
-                if (queryParams.get(pc) == null)
-                {
-                    ps.setNull(pc+1, Types.BIT);
-                    continue;
-                }
-
-                Class parameterType = queryParams.get(pc).getClass();
+                Class parameterType = (queryParams.get(pc) == null) ? queryParamsClass.get(pc) : queryParams.get(pc).getClass();
+                
                 if (java.lang.Boolean.class.isAssignableFrom(parameterType))
                 {
                     if (queryParams.get(pc) == null)
@@ -445,6 +443,21 @@ public class SQLFieldsProvider implements FieldsProvider {
             if(ps!=null) try { ps.close(); } catch(Exception e ) {}
             if(con !=null && !(irConn instanceof JDBCNBConnection)) try { con.close(); } catch(Exception e ) {}
         }
+    }
+
+    private Class findParameterClass(String paramName, JRDataset reportDataset)
+    {
+        JRParameter[] params = reportDataset.getParameters();
+        for (JRParameter p : params)
+        {
+            if (p.getName().equals(paramName))
+            {
+                try {
+                    return p.getValueClass();
+                } catch (Throwable t) {}
+            }
+        }
+        return null;
     }
 
     public boolean supportsAutomaticQueryExecution() {

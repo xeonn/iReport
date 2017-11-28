@@ -114,7 +114,7 @@ public class CrosstabRowGroupNode extends CrosstabGroupNode implements PropertyC
         @Override
         public Byte getByte()
         {
-            return (group.getTotalPositionValue()) == null ? null : group.getTotalPositionValue().getValueByte();
+            return (group.getPositionValue()) == null ? null : group.getPositionValue().getValueByte();
         }
 
         @Override
@@ -132,7 +132,7 @@ public class CrosstabRowGroupNode extends CrosstabGroupNode implements PropertyC
         @Override
         public void setByte(Byte positionType)
         {
-            group.setTotalPosition(positionType);
+            group.setPosition(positionType != null ? CrosstabRowPositionEnum.getByValue(positionType) : null );
         }
 
     }

@@ -25,13 +25,13 @@
 package com.jaspersoft.ireport.designer.fonts;
 
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.ReportClassLoader;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,7 +42,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.swing.JFileChooser;
-import net.sf.jasperreports.chartthemes.simple.XmlChartTheme;
+import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.util.JRFontUtil;
 import org.apache.xerces.parsers.DOMParser;
 import org.openide.filesystems.FileUtil;
@@ -246,13 +246,31 @@ public class IRFontUtils {
 
             pw.close();
 
-            // Fire a preference changed event...
-            IReportManager.getPreferences().put("fontExtensions", "" + (new java.util.Date()).getTime());
         } catch (Exception ex)
         {
             ex.printStackTrace();
         }
 
+    }
+
+    public static void reloadAndNotifyFontsListChange()
+    {
+        SwingUtilities.invokeLater(new Runnable() {
+
+                public void run() {
+                    ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+
+                     Thread.currentThread().setContextClassLoader(new ReportClassLoader(IReportManager.getReportClassLoader(true)));
+
+                     JRFontUtil.getFontFamilyNames();
+                     //System.out.println("Reloading fonts: " + JRFontUtil.getFontFamilyNames());
+
+                     Thread.currentThread().setContextClassLoader(oldCL);
+
+                    // Fire a preference changed event...
+                    IReportManager.getPreferences().put("fontExtensions", "" + (new java.util.Date()).getTime());
+                }
+            });
     }
 
     public static String dumpBean(SimpleFontFamilyEx font)

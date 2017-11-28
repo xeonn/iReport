@@ -40,7 +40,9 @@ import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.util.JRFontUtil;
+import net.sf.jasperreports.extensions.ExtensionsEnvironment;
 import org.openide.nodes.PropertySupport;
 
 /**
@@ -110,11 +112,16 @@ public class FontNameProperty extends PropertySupport.ReadWrite implements Prefe
 
     private void updateTags()
     {
+        System.out.println("-----------------------------------------------------------------------------------------------------------\nUpdating tags...");
+
         java.util.List classes = new ArrayList();
+
         ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(new ReportClassLoader(IReportManager.getReportClassLoader()));
-
+        
         Collection extensionFonts = JRFontUtil.getFontFamilyNames();
+
+
         for(Iterator it = extensionFonts.iterator(); it.hasNext();)
         {
             String fname = (String)it.next();

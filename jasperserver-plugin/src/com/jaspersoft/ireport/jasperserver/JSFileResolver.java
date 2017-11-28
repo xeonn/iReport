@@ -115,7 +115,7 @@ public class JSFileResolver extends SimpleFileResolver {
                             }
                         }
                     }
-                    System.out.println("Resource " + objectUri + " not found in the report unit at " + reportUnitUri);
+                    System.out.println("Resource " + objectUri + " not found in the JasperServer Report at " + reportUnitUri);
                 }
             } catch (Exception ex)
             {

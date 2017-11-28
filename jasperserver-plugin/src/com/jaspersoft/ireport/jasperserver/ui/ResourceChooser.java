@@ -668,23 +668,28 @@ public class ResourceChooser extends javax.swing.JPanel {
             for (Object selectedObject : selectedObjects)
             {
                 ResourceDescriptor rd = (ResourceDescriptor)selectedObject;
-                if (rd.getWsType() != null && !rd.getWsType().equals(ResourceDescriptor.TYPE_FOLDER))
+                if (rd.getWsType() != null)
                 {
-                    selectedDescriptors.add(rd);
 
-                    if (selectedDescriptors.size() == 1)
+                    if ( (rd.getWsType().equals(ResourceDescriptor.TYPE_FOLDER) && isFoldersOnly()) ||
+                         (!isFoldersOnly() && !rd.getWsType().equals(ResourceDescriptor.TYPE_FOLDER)))
                     {
-                        jTextField1.setText( rd.getName());
-                    }
-                    else
-                    {
-                        String s = "";
-                        for (ResourceDescriptor rdx : selectedDescriptors)
+                        selectedDescriptors.add(rd);
+
+                        if (selectedDescriptors.size() == 1)
                         {
-                            if (s.length() > 0) s+=" ";
-                            s += "\"" + rdx.getName() + "\"";
+                            jTextField1.setText( rd.getName());
                         }
-                        jTextField1.setText(s);
+                        else
+                        {
+                            String s = "";
+                            for (ResourceDescriptor rdx : selectedDescriptors)
+                            {
+                                if (s.length() > 0) s+=" ";
+                                s += "\"" + rdx.getName() + "\"";
+                            }
+                            jTextField1.setText(s);
+                        }
                     }
                 }
             }

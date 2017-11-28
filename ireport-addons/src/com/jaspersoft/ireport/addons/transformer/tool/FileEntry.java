@@ -47,6 +47,7 @@ public class FileEntry {
     private File file = null;
     private int status = 0;
     private String message = "";
+    private String shortErrorMessage = "";
     private String jasper_version = "";
     
     /** Creates a new instance of FileEntry */
@@ -82,13 +83,13 @@ public class FileEntry {
      * @return Value of property status.
      *
      */
-    public static String decodeStatus( int status ) {
+    public String decodeStatus( int status ) {
         // Decode the status...
         switch (status)
         {
             case STATUS_NOT_TRANSFORMED: return "Not transformed";
             case STATUS_TRANSFORMED: return "Transformed";
-            case STATUS_ERROR_TRANSFORMING: return "Error transforming";
+            case STATUS_ERROR_TRANSFORMING: return (shortErrorMessage == null || shortErrorMessage.trim().length() == 0) ? "Error transforming" : shortErrorMessage;
             case STATUS_TRANSFORMING: return "Transforming...";
         }
         return ""+status;
@@ -143,5 +144,21 @@ public class FileEntry {
     public void setJasper_version(java.lang.String jasper_version) {
         this.jasper_version = jasper_version;
     }
+
+    /**
+     * @return the shortErrorMessage
+     */
+    public String getShortErrorMessage() {
+        return shortErrorMessage;
+    }
+
+    /**
+     * @param shortErrorMessage the shortErrorMessage to set
+     */
+    public void setShortErrorMessage(String shortErrorMessage) {
+        this.shortErrorMessage = shortErrorMessage;
+    }
+
+
     
 }

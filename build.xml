@@ -257,7 +257,7 @@
         </fileset>
     </copy>
     <move file="${dist.dir}/${app.name}.app" tofile="${dist.dir}/${distro.zipfilename}/${app.title}.app"/>
-
+    <symlink link="${dist.dir}/${distro.zipfilename}/Applications" resource="/Applications"/>
     <copy  todir="${dist.dir}/${distro.zipfilename}">
                 <fileset dir="${basedir}">
                 <include name="Changelog.txt"/>
@@ -270,6 +270,9 @@
         <arg value="-srcfolder"/>
         <arg value="${dist.dir}/${distro.zipfilename}"/>
         <arg value="${dist.dir}/${distro.zipfilename}"/>
+    </exec>
+    <exec executable="unlink">
+        <arg value="${dist.dir}/${distro.zipfilename}/Applications"/>
     </exec>
     <delete dir="${dist.dir}/${distro.zipfilename}"/>
 

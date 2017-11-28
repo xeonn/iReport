@@ -110,7 +110,7 @@ public class CompileThread implements Runnable {
                                 dtm.setValueAt( fe, index, 0);
                             
                                 dtm.setValueAt( fe.getFile().getCanonicalPath(), index, 1);
-                                dtm.setValueAt( FileEntry.decodeStatus( fe.getStatus()), index, 2);
+                                dtm.setValueAt( fe.decodeStatus( fe.getStatus()), index, 2);
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -144,6 +144,8 @@ public class CompileThread implements Runnable {
                 StringWriter sw = new StringWriter();
                 ex.printStackTrace( new PrintWriter( sw ));
                 fe.setMessage(  sw.getBuffer().toString() );
+                fe.setShortErrorMessage(ex.getMessage() );
+
             }
 
             try {
@@ -153,7 +155,7 @@ public class CompileThread implements Runnable {
                         try {
                             dtm.setValueAt(fe, index, 0);
                             dtm.setValueAt(fe.getFile().getCanonicalPath(), index, 1);
-                            dtm.setValueAt(FileEntry.decodeStatus(fe.getStatus()), index, 2);
+                            dtm.setValueAt(fe.decodeStatus(fe.getStatus()), index, 2);
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }

@@ -122,7 +122,7 @@ public class AddResourceAction extends NodeAction {
         jMenuAdd.setText( JasperServerManager.getString("menu.add", "Add") );
         
         jMenuItemReportUnit = new javax.swing.JMenuItem();
-        jMenuItemReportUnit.setText( JasperServerManager.getString("menu.reportUnit", "Report Unit") );
+        jMenuItemReportUnit.setText( JasperServerManager.getString("menu.reportUnit", "JasperServer Report") );
         jMenuItemReportUnit.setIcon( new ImageIcon(AddResourceAction.class.getResource("/com/jaspersoft/ireport/jasperserver/res/reportunit.png")));
         jMenuItemReportUnit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

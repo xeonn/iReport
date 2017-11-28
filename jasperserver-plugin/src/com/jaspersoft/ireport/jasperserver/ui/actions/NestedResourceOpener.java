@@ -80,7 +80,6 @@ public class NestedResourceOpener implements NodeListener {
                     ReportUnitNode ruNode = (ReportUnitNode)nodes[i];
                     if (ruNode.getResourceDescriptor().getUriString().equals(ruUri))
                     {
-                        System.out.println("Report Unit found nthe folder nodes!");
                         System.out.flush();
                         reportUnitNode = ruNode;
                         break;
@@ -90,9 +89,6 @@ public class NestedResourceOpener implements NodeListener {
             
             if (reportUnitNode == null)
             {
-                System.out.println("Report Unit not available yet...");
-                System.out.flush();
-
                 // listen for node changes...
                 rootNode.addNodeListener(this);
                 rootNode.refreshChildrens(true);

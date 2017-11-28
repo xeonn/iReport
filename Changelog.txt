@@ -1,3 +1,20 @@
+2011-01-10 Version 4.0.0 released
+_______________________________________________________________________________
+21066  [Case #16386] Intermittant update problem with default values in XML editor  
+21520  Default setting for MaxPermSize in ireportpro.conf should be added  
+21806  [Case #18014] Exception when using Add Jar in iReport  
+21816  [Case #18020] Unexpected <Different Values> written into jrxml expression  
+20424  Display the new name Jaspersoft iReport Designer  
+21735  iReport Pro 4.0 Mac needs a good icon  
+20864  Report properties - "Top of Page" should be "In Page"  
+20866  [Case #16282] The roundup function for a number's pattern doesn't work properly  
+21115  Font extensions not createable in iReport 3.7.6  
+21239  Error when run report in xls export format
+21240  Error while editing resource that has folder type
+21534  iReport should be updated to be consistent with the new "JasperReport" terminology  
+21541  Product naming issues in iReport  
+21054  [Case #14447] iReport unable to read fields from Oracle DB when parameters of type "Date" or "Timestamp" included  
+
 2010-10-31 Version 3.7.6 released (Happy Halloween!)
 _______________________________________________________________________________
 - Fixed import settings on Mac and Linux

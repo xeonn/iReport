@@ -51,8 +51,15 @@ final class WelcomeTopComponent extends TopComponent {
         setToolTipText(I18n.getString("HINT_WelcomeTopComponent"));
 //        setIcon(Utilities.loadImage(ICON_PATH, true));
 
-        jLabelWelcome.setText(I18n.getString("welcome.toiReport"));
-        
+        if (NbBundle.getBranding().equals("ireport") ||
+            I18n.getString("welcome.toiReport.branded").equals("welcome.toiReport.branded"))
+        {
+            jLabelWelcome.setText(I18n.getString("welcome.toiReport"));
+        }
+        else
+        {
+            jLabelWelcome.setText(I18n.getString("welcome.toiReport.branded"));
+        }
         jImagePanel1.setImage( new ImageIcon( this.getClass().getResource("/com/jaspersoft/ireport/designer/resources/welcome/welcomeScreen_filler.png")).getImage());
 
         jPanelContent1.add(new SectionPanel(I18n.getString("welcome.recentReports"), new RecentReportsPanel()), BorderLayout.CENTER);

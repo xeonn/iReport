@@ -2810,10 +2810,10 @@ private void jButtonInstallFontActionPerformed(java.awt.event.ActionEvent evt) {
         InstallFontWizardDescriptor wizardDescriptor = new InstallFontWizardDescriptor();
         if (wizardDescriptor.runWizard())
         {
+            IRFontUtils.reloadAndNotifyFontsListChange();
             // update fonts list...
             updateFontsList();
             // Fire a preference changed event...
-            IReportManager.getPreferences().put("fontExtensions", "" + (new java.util.Date()).getTime());
         }
 }//GEN-LAST:event_jButtonInstallFontActionPerformed
 
@@ -2852,6 +2852,7 @@ private void jButtonRemoveFontActionPerformed(java.awt.event.ActionEvent evt) {/
     }
 
     IRFontUtils.saveFonts(fonts);
+    IRFontUtils.reloadAndNotifyFontsListChange();
     updateFontsList();
 
 }//GEN-LAST:event_jButtonRemoveFontActionPerformed
@@ -2884,6 +2885,7 @@ private void jButtonEditFontActionPerformed(java.awt.event.ActionEvent evt) {//G
             }
 
             IRFontUtils.saveFonts(fonts);
+            IRFontUtils.reloadAndNotifyFontsListChange();
         }
     }
 }//GEN-LAST:event_jButtonEditFontActionPerformed

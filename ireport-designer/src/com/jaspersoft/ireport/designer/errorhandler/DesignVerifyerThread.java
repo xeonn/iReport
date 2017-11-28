@@ -24,6 +24,7 @@
 package com.jaspersoft.ireport.designer.errorhandler;
 
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import com.jaspersoft.ireport.designer.ModelChangeListener;
 import java.util.Collection;
@@ -135,7 +136,11 @@ public class DesignVerifyerThread implements Runnable, ModelChangeListener {
             //ByteArrayOutputStream baos = new ByteArrayOutputStream();
             //rw.writeToOutputStream(baos);
             //JasperDesign jd = IReportCompiler.loadJasperDesign( new ByteArrayInputStream( baos.toByteArray() ), digester);
-            
+
+            // set the correct class loader
+           Thread.currentThread().setContextClassLoader( IReportManager.getReportClassLoader());
+
+
             if (getJrxmlVisualView().getModel() != null &&
                 getJrxmlVisualView().getModel().getJasperDesign() != null)
             {

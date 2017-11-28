@@ -478,12 +478,12 @@ public class CrosstabNode extends ElementNode {
 
         @Override
         public Byte getByte() {
-            return crosstab.getRunDirection();
+            return crosstab.getRunDirectionValue() == null ? null : crosstab.getRunDirectionValue().getValueByte();
         }
 
         @Override
         public Byte getOwnByte() {
-            return crosstab.getRunDirection();
+            return getByte();
         }
 
         @Override

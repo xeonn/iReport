@@ -30,28 +30,25 @@ import com.jaspersoft.ireport.components.table.actions.AddTableColumnEndAction;
 import com.jaspersoft.ireport.components.table.actions.AddTableColumnGroupAction;
 import com.jaspersoft.ireport.components.table.actions.AddTableColumnStartAction;
 import com.jaspersoft.ireport.components.table.actions.DeleteTableColumnAction;
+import com.jaspersoft.ireport.components.table.nodes.properties.ColumnPrintWhenExpressionProperty;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.outline.nodes.IRAbstractNode;
-import com.jaspersoft.ireport.locale.I18n;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.util.List;
 import javax.swing.Action;
 import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.nodes.Node;
-import org.openide.nodes.NodeEvent;
-import org.openide.nodes.NodeListener;
-import org.openide.nodes.NodeMemberEvent;
-import org.openide.nodes.NodeReorderEvent;
 import org.openide.nodes.NodeTransfer;
 import org.openide.nodes.Sheet;
 import org.openide.util.Lookup;
@@ -137,6 +134,13 @@ public class TableColumnGroupNode extends IRAbstractNode implements PropertyChan
         
         Sheet.Set set = Sheet.createPropertiesSet();
 
+        JRDesignDataset dataset = getJasperDesign().getMainDesignDataset();
+        if (getTable().getDatasetRun() != null && getTable().getDatasetRun().getDatasetName() != null)
+        {
+            dataset = (JRDesignDataset) getJasperDesign().getDatasetMap().get(getTable().getDatasetRun().getDatasetName());
+        }
+
+        set.put(new ColumnPrintWhenExpressionProperty((StandardBaseColumn) getColumnGroup(), dataset));
          sheet.put(set);
         
          return sheet;

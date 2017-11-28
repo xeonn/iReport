@@ -113,7 +113,7 @@ public class CrosstabColumnGroupNode extends CrosstabGroupNode implements Proper
         @Override
         public Byte getByte()
         {
-            return (group.getTotalPositionValue()) == null ? null : group.getTotalPositionValue().getValueByte();
+            return (group.getPositionValue()) == null ? null : group.getPositionValue().getValueByte();
         }
 
         @Override
@@ -131,7 +131,7 @@ public class CrosstabColumnGroupNode extends CrosstabGroupNode implements Proper
         @Override
         public void setByte(Byte positionType)
         {
-            group.setTotalPosition(positionType);
+            group.setPosition(positionType != null ? CrosstabColumnPositionEnum.getByValue(positionType) : null );
         }
 
     }

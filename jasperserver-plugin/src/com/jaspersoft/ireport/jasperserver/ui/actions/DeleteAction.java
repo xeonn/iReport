@@ -109,7 +109,7 @@ public final class DeleteAction extends NodeAction {
             }
             else if (node.getResourceDescriptor().getWsType().equals( ResourceDescriptor.TYPE_REPORTUNIT))
             {
-                 msg = JasperServerManager.getFormattedString("repositoryExplorer.message.confirmDeleteReportUnit", "Are you sure you want to remove the report unit {0}\n and all its contents?", new Object[] {rf.getDescriptor().getLabel()});
+                 msg = JasperServerManager.getFormattedString("repositoryExplorer.message.confirmDeleteReportUnit", "Are you sure you want to remove the JasperServer Report {0}\n and all its contents?", new Object[] {rf.getDescriptor().getLabel()});
             }
             else
             {
@@ -122,7 +122,7 @@ public final class DeleteAction extends NodeAction {
                     {
                         JOptionPane.showMessageDialog(Misc.getMainFrame(),
                                     JasperServerManager.getString("repositoryExplorer.message.cannotDeleteRUDatasource",                            
-                                    "You can not delete the report datasource.\nUse Report Unit properties menu item to modify the datasource type."),
+                                    "You can not delete the report datasource.\nUse JasperServer Report properties menu item to modify the datasource type."),
                                     "",JOptionPane.ERROR_MESSAGE);
                             return;
                     }

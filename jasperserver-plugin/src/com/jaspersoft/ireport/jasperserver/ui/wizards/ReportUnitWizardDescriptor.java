@@ -293,6 +293,7 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
 
         boolean useTemporaryFile = false; //report == null;
 
+        Thread.currentThread().setContextClassLoader( IReportManager.getReportClassLoader());
         if (report == null) report = JRXmlLoader.load(resourceFile);
 
         List children = RepositoryJrxmlFile.identifyElementValidationItems(report, reportUnitDescriptor, resourceFile.getParent());
