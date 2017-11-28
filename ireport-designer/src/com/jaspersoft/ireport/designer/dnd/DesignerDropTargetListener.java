@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer.dnd;
 
+import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.ReportObjectScene;
@@ -143,30 +144,10 @@ class DesignerDropTargetListener implements DropTargetListener {
     private boolean isInDocument(Point location)
     {
         Scene scene = OutlineTopComponent.getDefault().getCurrentJrxmlVisualView().getReportDesignerPanel().getActiveScene();
-        Point p = scene.convertViewToScene(location);
-        if (scene instanceof ReportObjectScene)
+        if (scene != null && scene instanceof AbstractReportObjectScene)
         {
-             return ModelUtils.getBandAt(IReportManager.getInstance().getActiveReport(), p) != null;
+            return ((AbstractReportObjectScene)scene).acceptDropAt(location);
         }
-        else if (scene instanceof CrosstabObjectScene)
-        {
-            JRDesignCrosstab crosstab = ((CrosstabObjectScene)scene).getDesignCrosstab();
-            List<CellInfo> cells = ModelUtils.getCellInfos(crosstab);
-            int crosstabWidth = 0;
-            int crosstabHeight = 0;
-
-            for (int i=0; i<cells.size(); ++i)
-            {
-                CellInfo ci = cells.get(i);
-
-                int thisW = ci.getLeft() + ci.getCellContents().getWidth();
-                if (thisW > crosstabWidth) crosstabWidth = thisW;
-
-                int thisH = ci.getTop() + ci.getCellContents().getHeight();
-                if (thisH > crosstabHeight) crosstabHeight = thisH;
-            }
-            return (new Rectangle(0,0,crosstabWidth, crosstabHeight).contains(p));
-        }
-       return false;
+        return false;
     }
 }

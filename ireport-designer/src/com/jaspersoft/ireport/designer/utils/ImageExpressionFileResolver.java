@@ -23,11 +23,11 @@
  */
 package com.jaspersoft.ireport.designer.utils;
 
+import com.jaspersoft.ireport.designer.IRURLClassLoader;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import java.io.File;
 import java.net.URL;
-import java.net.URLClassLoader;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignImage;
@@ -60,59 +60,66 @@ public class ImageExpressionFileResolver implements FileResolver {
     public File resolveFile(String arg0) {
         if (resolveFile)
         {
-            // We need to resolve this file...
-            if (imageElement.getExpression() == null ||
-                imageElement.getExpression().getValueClassName() == null ||
-                !imageElement.getExpression().getValueClassName().equals("java.lang.String"))
-            {
-               // Return default image...
-                return null;
-            }
+//            // We need to resolve this file...
+//            if (imageElement.getExpression() == null ||
+//                imageElement.getExpression().getValueClassName() == null ||
+//                !imageElement.getExpression().getValueClassName().equals("java.lang.String"))
+//            {
+//               // Return default image...
+//                return null;
+//            }
 
             JRDesignDataset dataset = ModelUtils.getElementDataset(imageElement, jasperDesign);
             ClassLoader classLoader = IReportManager.getReportClassLoader();
 
             try {
-                
-                // Try to process the expression...
-                ExpressionInterpreter interpreter = new ExpressionInterpreter(dataset, classLoader, jasperDesign);
-
-                Object ret = interpreter.interpretExpression( imageElement.getExpression().getText() );
-
-                System.out.println("Resolved: " + ret);
-                if (ret != null)
-                {
-                    String resourceName = ret + "";
-                    File f = new File(resourceName);
-                    if (!f.exists())
-                    {
-                        URL[] urls = new URL[]{};
-                        if (reportFolder != null)
-                        {
-                            urls = new URL[]{ (new File(reportFolder)).toURI().toURL()};
-                        }
-                        URLClassLoader urlClassLoader = new URLClassLoader(urls, classLoader);
-                        URL url = urlClassLoader.findResource(resourceName);
-                        if (url != null)
-                        {
-                            f = new File(url.toURI());
-                            if (f.exists())
-                            {
-                                file = f;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        file = f;
-                    }
-                    
-                    resolveFile = false;
-                 }
-            } catch (Exception ex) {
-                resolveFile = false;
-                ex.printStackTrace();
+            file = Misc.locateFileFromExpression(jasperDesign, dataset, imageExpression, new File(reportFolder), null, classLoader);
+            } catch (Exception ex)
+            {
+                file = null;
             }
+
+//            try {
+//
+//                // Try to process the expression...
+//                ExpressionInterpreter interpreter = new ExpressionInterpreter(dataset, classLoader, jasperDesign);
+//
+//                Object ret = interpreter.interpretExpression( imageElement.getExpression().getText() );
+//
+//                System.out.println("Resolved: " + ret);
+//                if (ret != null)
+//                {
+//                    String resourceName = ret + "";
+//                    File f = new File(resourceName);
+//                    if (!f.exists())
+//                    {
+//                        URL[] urls = new URL[]{};
+//                        if (reportFolder != null)
+//                        {
+//                            urls = new URL[]{ (new File(reportFolder)).toURI().toURL()};
+//                        }
+//                        IRURLClassLoader urlClassLoader = new IRURLClassLoader(urls, classLoader);
+//                        URL url = urlClassLoader.findResource(resourceName);
+//                        if (url != null)
+//                        {
+//                            f = new File(url.toURI());
+//                            if (f.exists())
+//                            {
+//                                file = f;
+//                            }
+//                        }
+//                    }
+//                    else
+//                    {
+//                        file = f;
+//                    }
+//
+//                    resolveFile = false;
+//                 }
+//            } catch (Exception ex) {
+//                resolveFile = false;
+//                ex.printStackTrace();
+//            }
         }
         return getFile();
     }

@@ -23,18 +23,12 @@
  */
 package com.jaspersoft.ireport.designer.widgets;
 
-import com.jaspersoft.ireport.designer.ReportObjectScene;
-import com.jaspersoft.ireport.designer.utils.Java2DUtils;
-import com.jaspersoft.ireport.designer.utils.Misc;
-import java.awt.Graphics2D;
+import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import net.sf.jasperreports.engine.base.JRBaseChartPlot;
 import net.sf.jasperreports.engine.design.JRDesignChart;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  *
@@ -45,7 +39,7 @@ public class JRDesignChartWidget extends JRDesignElementWidget {
     private Image chartImage = null;
     private Image staticChartImage = null;
     
-    public JRDesignChartWidget(ReportObjectScene scene, JRDesignChart element) {
+    public JRDesignChartWidget(AbstractReportObjectScene scene, JRDesignChart element) {
         super(scene, element);
         ((JRBaseChartPlot)element.getPlot()).getEventSupport().addPropertyChangeListener(new PropertyChangeListener() {
 

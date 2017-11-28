@@ -78,19 +78,16 @@ public class OlapTreeCellRenderer extends DefaultTreeCellRenderer {
         DefaultMutableTreeNode node =
                 (DefaultMutableTreeNode)value;
 
-        try {
-            WalkableWrapper ww = (WalkableWrapper)node.getUserObject();
-
-            if (node.getParent() != null && node.getParent() instanceof DefaultMutableTreeNode) 
-            {
-                if (ww.isMeasure()) return measureIcon;
-                if (ww.getWalkable() instanceof QueryAxis) return dimensionIcon;
-                return hierarchyIcon;
-            }
-            
-        } catch (Exception ex)
+        if (node.getParent() != null)
         {
-            
+            if (!(node.getUserObject() instanceof OlapElement)) return dimensionIcon;
+
+            OlapElement olapElement = (OlapElement)node.getUserObject();
+            if (olapElement.getType() == OlapElement.TYPE_AXIS) return dimensionIcon;
+            if (olapElement.getType() == OlapElement.TYPE_HIERARCHY) return hierarchyIcon;
+            if (olapElement.getType() == OlapElement.TYPE_MEASURE) return measureIcon;
+            return hierarchyIcon;
+
         }
         return null;
     }

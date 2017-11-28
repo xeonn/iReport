@@ -71,7 +71,7 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
    private boolean changing = false;
     
     
-    Integer[] predefinedFontSizes = new Integer[]{3,5,8,10,12,14,24,36,48};
+    double[] predefinedFontSizes = new double[]{3.0,5.0,8.0,10.0,12.0,14.0,24.0,36.0,48.0};
     
     /** Creates new form TextElementsToolbar */
     public TextElementsToolbar() {
@@ -92,6 +92,12 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
 
         jComboBoxFontName.setRenderer(new FontListCellRenderer());
 
+
+        for (double size : predefinedFontSizes)
+        {
+            ((JNumberComboBox)jComboBoxFontSize).addEntry((int)size + "", size);
+        }
+        
         setInit(false);
 
         IReportManager.getPreferences().addPreferenceChangeListener(this);
@@ -164,7 +170,7 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
     }
 
     public void preferenceChange(PreferenceChangeEvent evt) {
-        if (evt == null || evt.getKey() == null || evt.getKey().equals( IReportManager.IREPORT_CLASSPATH))
+        if (evt == null || evt.getKey() == null || evt.getKey().equals( IReportManager.IREPORT_CLASSPATH) || evt.getKey().equals("fontExtensions"))
         {
             // Refresh the array...
             updateFonts();

@@ -30,6 +30,7 @@ import java.beans.PropertyEditor;
 import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.JRPenContainer;
 import net.sf.jasperreports.engine.base.JRBasePen;
+import net.sf.jasperreports.engine.type.LineStyleEnum;
 
 /**
  *
@@ -65,7 +66,7 @@ public class JRPenProperty extends AbstractProperty {
         {
             pen.setLineColor( null );
             pen.setLineWidth( null );
-            pen.setLineStyle( null );
+            pen.setLineStyle( (LineStyleEnum)null );
         }
     }
     

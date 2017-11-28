@@ -25,6 +25,7 @@ package com.jaspersoft.ireport.designer.connection;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.connection.gui.XlsDataSourceConnectionEditor;
+import com.jaspersoft.ireport.designer.data.WizardFieldsProvider;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
 import java.io.File;
@@ -34,12 +35,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.data.JRXlsDataSource;
+import net.sf.jasperreports.engine.design.JRDesignField;
 
 /**
  *
  * @author  Administrator
  */
-public class JRXlsDataSourceConnection extends IReportConnection {
+public class JRXlsDataSourceConnection extends IReportConnection  implements WizardFieldsProvider {
     
     private String name;
     private boolean useFirstRowAsHeader = false;
@@ -287,6 +289,35 @@ public class JRXlsDataSourceConnection extends IReportConnection {
      */
     public void setColumnIndexes(List<Integer> columnIndexes) {
         this.columnIndexes = columnIndexes;
+    }
+
+    public String getQueryLanguage() {
+        return null;
+    }
+
+    public List<JRDesignField> readFields(String query) throws Exception {
+
+        List<JRDesignField> fields = new ArrayList<JRDesignField>();
+        List<String> names = getColumnNames();
+
+        for (int nd =0; nd < names.size(); ++nd) {
+            String fieldName = ""+names.get(nd);
+            JRDesignField field = new JRDesignField();
+            field.setName(fieldName);
+            field.setValueClassName("java.lang.String");
+            //field.setDescription(""); //Field returned by " +methods[i].getName() + " (real type: "+ returnType +")");
+            fields.add(field);
+        }
+
+        return fields;
+    }
+
+    public boolean supportsDesign() {
+        return false;
+    }
+
+    public String designQuery(String query) {
+        return query;
     }
     
 }

@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer;
 
+import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import com.jaspersoft.ireport.designer.widgets.SelectionWidget;
 import java.awt.Point;
 import java.util.Collections;
@@ -51,6 +52,7 @@ public class ReportObjectSelectProvider implements SelectProvider {
             {
                 widget = ((SelectionWidget)widget).getRealWidget();
             }
+
             return scene.findObject (widget) != null;
         }
 

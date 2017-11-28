@@ -30,7 +30,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.*;
@@ -440,7 +439,7 @@ public class ReportClassLoader extends java.lang.ClassLoader {
             }
         }
         
-        URLClassLoader urlCl = new URLClassLoader(pathUrls, null);
+        IRURLClassLoader urlCl = new IRURLClassLoader(pathUrls, null);
         try {
             return urlCl.findResources(name);
         } catch (Exception ex)
@@ -476,7 +475,7 @@ public class ReportClassLoader extends java.lang.ClassLoader {
             }
         }
         
-        URLClassLoader urlCl = new URLClassLoader(pathUrls, null);
+        IRURLClassLoader urlCl = new IRURLClassLoader(pathUrls, null);
         try {
             URL url = urlCl.findResource(name);
             //System.out.println( url);

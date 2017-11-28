@@ -24,14 +24,12 @@
 package com.jaspersoft.ireport.designer.subreport;
 
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.templates.DefaultReportGenerator;
 import com.jaspersoft.ireport.designer.templates.DefaultSubreportGenerator;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.designer.wizards.ConnectionSelectionWizardPanel;
 import com.jaspersoft.ireport.designer.wizards.FieldsSelectionWizardPanel;
 import com.jaspersoft.ireport.designer.wizards.GroupingWizardPanel;
 import com.jaspersoft.ireport.designer.wizards.TemplateListWizardPanel;
-import com.jaspersoft.ireport.designer.wizards.TemplateWizardPanel;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +41,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import net.sf.jasperreports.engine.JRException;

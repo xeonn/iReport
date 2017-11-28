@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer.utils;
 
+import com.jaspersoft.ireport.designer.IRURLClassLoader;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlEditorSupport;
@@ -41,6 +42,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import java.sql.Connection;
 import java.text.MessageFormat;
 import java.util.Iterator;
@@ -62,7 +64,9 @@ import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreePath;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 import org.openide.cookies.OpenCookie;
@@ -1253,6 +1257,161 @@ public class Misc {
     public static void copyFile(String from, String to) throws java.io.IOException
     {
         copyFile(new File(from), new File(to));
+    }
+
+    public static JrxmlVisualView getViewForJasperDesign(JasperDesign jd)
+    {
+        Set<TopComponent> components = WindowManager.getDefault().getRegistry().getOpened();
+
+        for (TopComponent t : components)
+        {
+            JrxmlEditorSupport jrxmlEditorSupport = t.getLookup().lookup(JrxmlEditorSupport.class);
+
+            if (jrxmlEditorSupport != null && jrxmlEditorSupport.getCurrentModel() == jd)
+            {
+                return (JrxmlVisualView)(jrxmlEditorSupport.getDescriptions()[0]);
+            }
+        }
+        return null;
+    }
+
+        /**
+     * Return the phisical file pointed by the specified expression.
+     * All the .jasper extensions are translated in .jrxml
+     *
+     *
+     * If the file is not found and exception is rised with the reason.
+     *
+     * Where do we look for this file?
+     *
+     * 1. Absolute path
+     * 2. Classpath
+     *
+     * @param jasperDesign
+     * @param dataset - If null, the main dataset from the jasperDesign is used.
+     * @param expression
+     * @param reportFolder If null, the current edited file location is used.
+     * @param extension  If not null, it checks that the file ends with this extension
+     * @param expression If classloader is null, the default report classloader is used.
+     * @return File the file.
+     * @throws Exception
+     */
+    public static File locateFileFromExpression(JasperDesign jasperDesign, JRDesignDataset dataset, JRDesignExpression expression, File reportFolder, String extension, ClassLoader classLoader) throws Exception
+    {
+        if (expression == null ||
+                expression.getValueClassName() == null ||
+                !expression.getValueClassName().equals("java.lang.String"))
+        {
+           // Return default image...
+           // Unable to resolve the subreoport jrxml file...
+            throw new Exception("The file expression is empty or it is not of type String.");
+        }
+
+        if (dataset == null) dataset =  jasperDesign.getMainDesignDataset();
+        if (classLoader == null)
+            classLoader = IReportManager.getReportClassLoader();
+
+        File fileToOpen = null;
+
+        String error = null;
+        try {
+
+            // Try to process the expression...
+            ExpressionInterpreter interpreter = new ExpressionInterpreter(dataset, classLoader);
+            interpreter.setConvertNullParams(true);
+
+            Object ret = interpreter.interpretExpression( expression.getText() );
+
+            if (ret != null)
+            {
+                String resourceName = ret + "";
+                if (resourceName.toLowerCase().endsWith(".jasper"))
+                {
+                    resourceName = resourceName.substring(0, resourceName.length() -  ".jasper".length());
+                    resourceName += ".jrxml";
+                }
+
+                if (extension != null)
+                {
+                    if (!extension.toLowerCase().endsWith(extension))
+                    {
+                        throw new Exception("Unable to resolve the " + extension + " file for this expression");
+                    }
+                }
+
+                File f = new File(resourceName);
+                if (!f.exists())
+                {
+                    String jrxmlFileName = f.getName();
+                    if (reportFolder == null)
+                    {
+                        JrxmlVisualView visualView = IReportManager.getInstance().getActiveVisualView();
+                        if (visualView != null)
+                        {
+                            File file = FileUtil.toFile(visualView.getEditorSupport().getDataObject().getPrimaryFile());
+                            if (file.getParentFile() != null)
+                            {
+                                reportFolder = file.getParentFile();
+                            }
+                        }
+                    }
+
+                    URL[] urls = new URL[]{};
+                    if (reportFolder != null)
+                    {
+                        urls = new URL[]{ reportFolder.toURI().toURL()};
+                    }
+                    IRURLClassLoader urlClassLoader = new IRURLClassLoader(urls, classLoader);
+                    URL url = urlClassLoader.getResource(resourceName);
+                    if (url == null)
+                    {
+                        // try just the file name...
+                        url = urlClassLoader.getResource(jrxmlFileName);
+
+                        if (url == null)
+                        {
+                            throw new Exception(resourceName + " not found.");
+                        }
+                    }
+
+                    f = new File(url.getPath());
+                    if (f.exists())
+                    {
+                        fileToOpen = f;
+                    }
+                    else
+                    {
+                        throw new Exception(f + " not found.");
+                    }
+                }
+                else
+                {
+                    fileToOpen = f;
+                }
+
+             }
+            else
+            {
+                throw new Exception();
+            }
+        } catch (Throwable ex) {
+
+            fileToOpen = null;
+            error = ex.getMessage();
+            ex.printStackTrace();
+        }
+
+
+        if (fileToOpen == null)
+        {
+            if (error == null)
+            {
+                error = "The file expression returned null. I'm unable to locate the file";
+            }
+            throw new Exception(error);
+        }
+
+        return fileToOpen;
     }
 }
 

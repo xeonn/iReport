@@ -143,6 +143,23 @@ public class FieldPatternDialog extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }
     
+    /**
+     *  Possible values:
+     * 
+     * Global.List.Number
+     * Global.List.Date
+     * Global.Label.Time
+     * Global.List.Currency
+     * Global.List.Percentage
+     * Global.List.Scientific
+     * 
+     * @param name
+     */
+    public void setSelectedCategory(String name)
+    {
+        jListCategory.setSelectedValue(I18n.getString(name), true);
+    }
+    
     public void setOnlyDate(boolean b)
     {
         if (b == true)

@@ -44,7 +44,7 @@ public class IRURLClassLoader extends URLClassLoader {
     public URL findResource(String name) {
 
          URL url = super.findResource(name);
-         if (url == null && name.startsWith("/"))
+         while (url == null && name.startsWith("/"))
          {
              return findResource(name.substring(1));
          }

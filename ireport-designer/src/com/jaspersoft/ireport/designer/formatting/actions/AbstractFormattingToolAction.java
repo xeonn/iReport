@@ -80,12 +80,15 @@ public abstract class AbstractFormattingToolAction extends NodeAction {
         if (elements.size() > 0)
         {
             try {
-                  JRDesignElement firstSelected = IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel().getActiveScene().getSelectionManager().getSelectedElements().get(0);
-                  if (firstSelected != null &&
-                      elements.contains(firstSelected))
+                  if (IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel().getActiveScene() != null)
                   {
-                      elements.remove(firstSelected);
-                      elements.add(0, firstSelected);
+                      JRDesignElement firstSelected = IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel().getActiveScene().getSelectionManager().getSelectedElements().get(0);
+                      if (firstSelected != null &&
+                          elements.contains(firstSelected))
+                      {
+                          elements.remove(firstSelected);
+                          elements.add(0, firstSelected);
+                      }
                   }
             } catch (Exception ex){}
             // if possible, set the correct first element selected...

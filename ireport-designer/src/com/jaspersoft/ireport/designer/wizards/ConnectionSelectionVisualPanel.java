@@ -42,6 +42,7 @@ public final class ConnectionSelectionVisualPanel extends JPanel {
 
     private ConnectionSelectionWizardPanel panel = null;
     private boolean useQuery = false;
+    private boolean updating = false;
             
     /** Creates new form ConnectionSelectionVisualPanel */
     public ConnectionSelectionVisualPanel(ConnectionSelectionWizardPanel panel) {
@@ -72,6 +73,7 @@ public final class ConnectionSelectionVisualPanel extends JPanel {
     
     private void updateConnections()
     {
+        updating = true;
         jComboBoxConnections.removeAllItems();
         //jComboBoxConnections.addItem("No connection or datasource");
         
@@ -80,6 +82,12 @@ public final class ConnectionSelectionVisualPanel extends JPanel {
         {
             jComboBoxConnections.addItem(con);
         }
+
+        if (IReportManager.getInstance().getDefaultConnection() != null)
+        {
+            jComboBoxConnections.setSelectedItem(IReportManager.getInstance().getDefaultConnection());
+        }
+        updating = false;
         
     }
 
@@ -235,7 +243,7 @@ public final class ConnectionSelectionVisualPanel extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBoxConnectionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxConnectionsActionPerformed
-        
+
         IReportConnection con = (IReportConnection)jComboBoxConnections.getSelectedItem();
         
         if (con instanceof WizardFieldsProvider)
@@ -263,7 +271,7 @@ public final class ConnectionSelectionVisualPanel extends JPanel {
         }
         jPanelMain.updateUI();
         getPanel().fireChangeEvent();
-        if (con != null)
+        if (con != null && !updating)
         {
             IReportManager.getInstance().setDefaultConnection(con);
         }

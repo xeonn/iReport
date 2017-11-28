@@ -29,6 +29,7 @@ import com.jaspersoft.ireport.locale.I18n;
 import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.type.ModeEnum;
 import org.openide.nodes.PropertySupport;
 
 /**
@@ -40,7 +41,7 @@ public final class ModeProperty extends PropertySupport.ReadWrite {
 
     @Override
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
-        return new Boolean(style.getMode() != null && style.getMode() == JRDesignElement.MODE_OPAQUE);
+        return new Boolean(style.getModeValue() != null && style.getModeValue() == ModeEnum.OPAQUE);
     }
 
     @Override

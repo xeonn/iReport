@@ -23,35 +23,28 @@
  */
 package com.jaspersoft.ireport.designer;
 
-import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
-import com.jaspersoft.ireport.designer.crosstab.CrosstabPanel;
 import com.jaspersoft.ireport.designer.dnd.DesignerDropTarget;
 import com.jaspersoft.ireport.designer.ruler.RulerPanel;
 import com.jaspersoft.ireport.designer.utils.MultilineToolbarLayout;
 import java.awt.BorderLayout;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import net.sf.jasperreports.crosstabs.JRCellContents;
-import net.sf.jasperreports.crosstabs.JRCrosstab;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
-import net.sf.jasperreports.engine.JRBand;
-import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.netbeans.api.visual.model.ObjectSceneEvent;
@@ -61,7 +54,7 @@ import org.netbeans.api.visual.model.ObjectState;
 import org.openide.explorer.ExplorerManager;
 import org.openide.nodes.Node;
 import org.openide.util.Mutex;
-import org.w3c.dom.events.EventListener;
+import org.openide.util.lookup.Lookups;
 
         
 /**
@@ -76,7 +69,7 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
     private boolean firstLoad = true;
     
     
-    private Set<ObjectSceneListener> listeners = new HashSet<ObjectSceneListener>(1); // or can use ChangeSupport in NB 6.0
+    private final Set<ObjectSceneListener> listeners = new HashSet<ObjectSceneListener>(1); // or can use ChangeSupport in NB 6.0
     public final void addObjectSelectionListener(ObjectSceneListener l) {
         synchronized (listeners) {
             listeners.add(l);
@@ -100,13 +93,14 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
                 it.next().selectionChanged(arg0,arg1,arg2);
             }
         }
+
     }
     
     
-    java.util.List<CrosstabPanel> crosstabs = new ArrayList<CrosstabPanel>();
+    private java.util.List<GenericDesignerPanel> deisgnPanels = new ArrayList<GenericDesignerPanel>();
     JasperDesign jasperDesign = null;
     
-    private int activeCrosstabIndex = -1;
+    private int activePanelIndex = -1;
     
     
     private RulerPanel hRuler = null;
@@ -217,28 +211,23 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
 
         }
         // Remove all the listeners...
-        for (CrosstabPanel p : crosstabs)
+        for (GenericDesignerPanel p : getDeisgnPanels())
         {
-            p.getScene().removeObjectSceneListener(this, ObjectSceneEventType.OBJECT_SELECTION_CHANGED);
+            if (p.getScene() != null)
+            {
+                p.getScene().removeObjectSceneListener(this, ObjectSceneEventType.OBJECT_SELECTION_CHANGED);
+            }
         }
+
         
-        crosstabs.clear();
-        activeCrosstabIndex = -1;
+        getDeisgnPanels().clear();
+        activePanelIndex = -1;
         if (jasperDesign != null)
         {
-            // Look for crosstabs in the report...
-            List<JRBand> bands = ModelUtils.getBands(jasperDesign);
-            for (JRBand b : bands)
+            List<JRDesignElement> elements = ModelUtils.getAllElements(jasperDesign);
+            for (JRDesignElement element : elements)
             {
-                List l = ((JRDesignBand)b).getChildren();
-                for (int i=0; i<l.size(); ++i)
-                {
-                    if (l.get(i) instanceof JRDesignCrosstab)
-                    {
-                        JRDesignCrosstab ct = (JRDesignCrosstab)l.get(i);
-                        addCrosstabPanel(ct, jasperDesign);
-                    }
-                }
+                  addElementPanel(element, jasperDesign);
             }
         }
         
@@ -246,7 +235,7 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
             {
                 public void run()
                 {
-                    updateCrosstabPanels();
+                    updateGenericDesignerPanels();
                 }
             });
             
@@ -262,24 +251,49 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
     }
     
     
-    public CrosstabPanel getCrosstabPanel(JRDesignCrosstab crosstab)
+    public GenericDesignerPanel getElementPanel(JRDesignElement element)
     {
-        for (CrosstabPanel p : crosstabs)
+        for (GenericDesignerPanel p : getDeisgnPanels())
         {
-            if (p.getScene().getDesignCrosstab() == crosstab) return p;
+            if (p.getElement() == element) return p;
         }
         return null;
     }
     
-    public boolean addCrosstabPanel(JRDesignCrosstab crosstab, JasperDesign design)
+    public boolean addElementPanel(JRDesignElement element, JasperDesign design)
     {
-        // check if there is already this crosstab...
-        if (getCrosstabPanel(crosstab) != null) return false;
+        // check if there is already this element...
+        if (getElementPanel(element) != null) return false;
+
+        GenericDesignerPanel panel = null;
+
+        Collection<? extends GenericDesignerPanelFactory> genericDesignerPanelFactoryInstances = Lookups.forPath("ireport/components/designers").lookupAll(GenericDesignerPanelFactory.class);
+        Iterator<? extends GenericDesignerPanelFactory> it = genericDesignerPanelFactoryInstances.iterator();
         
-       CrosstabPanel panel = new CrosstabPanel(crosstab, design);
-       crosstabs.add(panel);
-       panel.getScene().addObjectSceneListener(this, ObjectSceneEventType.OBJECT_SELECTION_CHANGED);
-       
+        
+        while (it.hasNext ()) {
+            
+            GenericDesignerPanelFactory factory = it.next();
+            if (factory.accept(element))
+            {
+                panel = factory.createDesigner(element, design);
+                if (panel != null) break;
+            }
+        }
+
+        if (panel == null) return false;
+
+        getDeisgnPanels().add(panel);
+        System.out.println("PAnel added for element: " + element);
+        System.out.flush();
+
+        if (panel.getScene() != null)
+        {
+
+            panel.getScene().addObjectSceneListener(this, ObjectSceneEventType.OBJECT_SELECTION_CHANGED);
+            panel.getScene().addObjectSceneListener(this, ObjectSceneEventType.OBJECT_ADDED);
+            panel.getScene().addObjectSceneListener(this, ObjectSceneEventType.OBJECT_REMOVED);
+        }
        return true;
     }
     
@@ -421,18 +435,19 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
             int selectedIndex = -1;
             int cIndex = 0;
             
-            // If the selected object is just a crosstab, do nothing...
-            if (selectedObjects.size() == 1 &&
-                selectedObjects.iterator().next() instanceof JRCrosstab)
+            // If the selected object is just the element, do nothing...
+
+
+            if (selectedObjects.size() == 1 && selectedObjects.iterator().next() instanceof JRDesignElement && getElementPanel((JRDesignElement)selectedObjects.iterator().next()) != null)
             {
                 // do nothing
-                selectedIndex = getActiveCrosstabIndex();
+                selectedIndex = getActiveDesignerIndex();
             }
             else
             {
-                for (CrosstabPanel p : crosstabs)
+                for (GenericDesignerPanel p : getDeisgnPanels())
                 {
-                    CrosstabObjectScene sc = p.getScene();
+                    AbstractReportObjectScene sc = p.getScene();
                     int count = setSelectedObjects(selectedObjects, sc );
                     if (count0 < count) selectedIndex = cIndex;
                     cIndex++;
@@ -443,12 +458,15 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
             {
                 // do nothing
             }
-            else if (crosstabs.size() > 0)
+            else if (getDeisgnPanels().size() > 0)
             {
-                setActiveCrosstabIndex(selectedIndex);
+                setActiveDesignerIndex(selectedIndex);
             }
-            
-            getActiveScene().validate();
+
+            if (getActiveScene() != null)
+            {
+                getActiveScene().validate();
+            }
         } finally {
             setAdjustingSelection(oldValue);
         }
@@ -456,7 +474,8 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
     } 
     
     public int setSelectedObjects(Set selectedObjects, AbstractReportObjectScene sc) {
-        
+
+        if (sc == null) return 0;
         boolean oldValue = setAdjustingSelection(true);
         List list = new ArrayList();
         int otherObjects = 0;
@@ -561,7 +580,7 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
     }// </editor-fold>//GEN-END:initComponents
 
     private void jToggleButtonMainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonMainActionPerformed
-        setActiveCrosstabIndex(-1);
+        setActiveDesignerIndex(-1);
     }//GEN-LAST:event_jToggleButtonMainActionPerformed
     
     
@@ -584,30 +603,46 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
         this.scene = scene;
     }
 
-    private void updateCrosstabPanels() {
+    private void updateGenericDesignerPanels() {
         
-        if (crosstabs.size() > 0)
+        if (getDeisgnPanels().size() > 0)
         {
             jToolBar1.removeAll();
             jToolBar1.add(jToggleButtonMain);
             jToolBar1.setLayout(new MultilineToolbarLayout());
-            
-            for (int i=0; i<crosstabs.size(); ++i)
+            HashMap<Class,Integer> indexes = new HashMap<Class, Integer>();
+
+            for (int i=0; i<getDeisgnPanels().size(); ++i)
             {
-                JToggleButton jToggleButton = new JToggleButton();
+                GenericDesignerPanel panel = getDeisgnPanels().get(i);
+                
+                if (indexes.containsKey(panel.getClass()))
+                {
+                    Integer index = indexes.get(panel.getClass());
+                    indexes.put(panel.getClass(), index.intValue()+1);
+                }
+                else
+                {
+                    indexes.put(panel.getClass(),1);
+                }
+
+                JToggleButton jToggleButton = new JToggleButton(java.text.MessageFormat.format(panel.getLabel(), new Object[]{indexes.get(panel.getClass()), panel.getElement().getKey()}));
                 buttonGroup1.add(jToggleButton);
-                jToggleButton.setText("Crosstab " + (i+1)); // NOI18N
                 jToggleButton.setFocusable(false);
                 jToggleButton.setActionCommand(""+i);
-                jToggleButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+                //jToggleButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 jToggleButton.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
                 jToggleButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-                jToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/crosstab-16.png"))); // NOI18N
+                Icon icon = panel.getIcon();
+                if (icon != null)
+                {
+                    jToggleButton.setIcon(panel.getIcon());
+                }
                 jToggleButton.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
 
                         int cindex = Integer.parseInt(evt.getActionCommand());
-                        setActiveCrosstabIndex(cindex);
+                        setActiveDesignerIndex(cindex);
                     }
                 });
                 jToolBar1.add(jToggleButton);
@@ -615,26 +650,30 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
             
             add(jToolBar1, BorderLayout.SOUTH);
             // force un update
-            setActiveCrosstabIndex(this.activeCrosstabIndex);
+            setActiveDesignerIndex(this.activePanelIndex);
         }
         else
         {
             remove(jToolBar1);
-            setActiveCrosstabIndex(-1);
+            setActiveDesignerIndex(-1);
         }
         
         
         updateUI();
     }
 
-    public int getActiveCrosstabIndex() {
-        return activeCrosstabIndex;
+    public int getActiveDesignerIndex() {
+        return activePanelIndex;
     }
 
-    public void setActiveCrosstabIndex(int cIndex) {
+    public GenericDesignerPanel getActiveDesignerPanel() {
+        return getDeisgnPanels().get(activePanelIndex);
+    }
+
+    public void setActiveDesignerIndex(int cIndex) {
         
-        if (cIndex >= crosstabs.size()) throw new IndexOutOfBoundsException();
-        this.activeCrosstabIndex = cIndex;
+        if (cIndex >= getDeisgnPanels().size()) throw new IndexOutOfBoundsException();
+        this.activePanelIndex = cIndex;
         jPanelContainer.removeAll();
         if (cIndex == -1)
         {
@@ -643,7 +682,7 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
         }
         else
         {
-            jPanelContainer.add(crosstabs.get(cIndex), BorderLayout.CENTER);
+            jPanelContainer.add(getDeisgnPanels().get(cIndex).getComponent(), BorderLayout.CENTER);
             if (jToolBar1.getComponentCount() > cIndex+1)
             {
                 ((JToggleButton)jToolBar1.getComponent(cIndex+1)).setSelected(true);
@@ -689,8 +728,8 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
      */
     public AbstractReportObjectScene getActiveScene()
     {
-        if (getActiveCrosstabIndex() == -1) return getScene();
-        else return crosstabs.get(getActiveCrosstabIndex()).getScene();
+        if (getActiveDesignerIndex() == -1) return getScene();
+        else return getDeisgnPanels().get(getActiveDesignerIndex()).getScene();
     }
 
     public void objectAdded(ObjectSceneEvent evt, Object elem) {
@@ -702,57 +741,54 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
 //        {
 //                return;
 //        }
-        
-        if (elem instanceof JRDesignCrosstab)
-        {
-            if (getCrosstabPanel((JRDesignCrosstab)elem) == null)
-            {
-                addCrosstabPanel((JRDesignCrosstab)elem, getJasperDesign());
-                activeCrosstabIndex = crosstabs.size()-1;
-                SwingUtilities.invokeLater(new Runnable() {
 
-                    public void run() {
-                        updateCrosstabPanels();
-                    }
-                });
+        if (elem instanceof JRDesignElement)
+        {
+            if (getElementPanel((JRDesignElement)elem) == null)
+            {
+                boolean b = addElementPanel((JRDesignElement)elem, getJasperDesign());
+                if (b)
+                {
+                    activePanelIndex = getDeisgnPanels().size()-1;
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                        public void run() {
+                            updateGenericDesignerPanels();
+                        }
+                    });
+                }
             }
-            //setActiveCrosstabIndex(crosstabs.size()-1);
+
         }
-        
     }
 
     public void objectRemoved(ObjectSceneEvent arg0, Object arg1) {
         
-        
-        
-//        if (arg0.getObjectScene() instanceof AbstractReportObjectScene &&
-//            ((AbstractReportObjectScene)arg0.getObjectScene()).isUpdatingView())  
-//        {
-//                return;
-//        }
-        
-        if (arg1 instanceof JRDesignCrosstab)
+        if (arg1 instanceof JRDesignElement)
         {
-            // Find the right crosstab panel...
-            for (int i=0; i<crosstabs.size(); ++i)
+            // Find the right element panel...
+            for (int i=0; i<getDeisgnPanels().size(); ++i)
             {
-                CrosstabPanel panel = crosstabs.get(i);
-                if (panel.getScene().getDesignCrosstab() == arg1)
+                GenericDesignerPanel panel = getDeisgnPanels().get(i);
+                if (panel.getElement() == arg1)
                 {
-                    panel.getScene().removeObjectSceneListener(this, ObjectSceneEventType.OBJECT_SELECTION_CHANGED);
-                    panel.getScene().removeObjectSceneListener(this, ObjectSceneEventType.OBJECT_REMOVED);
-                    panel.getScene().removeObjectSceneListener(this, ObjectSceneEventType.OBJECT_ADDED);
-                    
-                    if (activeCrosstabIndex >= i)
+                    if (panel.getScene() != null)
                     {
-                        activeCrosstabIndex--;
+                        panel.getScene().removeObjectSceneListener(this, ObjectSceneEventType.OBJECT_SELECTION_CHANGED);
+                        panel.getScene().removeObjectSceneListener(this, ObjectSceneEventType.OBJECT_REMOVED);
+                        panel.getScene().removeObjectSceneListener(this, ObjectSceneEventType.OBJECT_ADDED);
                     }
-                    crosstabs.remove(panel);
+
+                    if (activePanelIndex >= i)
+                    {
+                        activePanelIndex--;
+                    }
+                    getDeisgnPanels().remove(panel);
                     
                     SwingUtilities.invokeLater(new Runnable() {
 
                         public void run() {
-                            updateCrosstabPanels();
+                            updateGenericDesignerPanels();
                         }
                     });
                     
@@ -789,13 +825,14 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
      * @param obj
      * @return
      */
+    @SuppressWarnings("element-type-mismatch")
     public AbstractReportObjectScene getSceneOf(Object obj)
     {
         if (getScene().getObjects().contains(obj)) return getScene();
-        for (CrosstabPanel p : crosstabs)
+        for (GenericDesignerPanel p : getDeisgnPanels())
         {
-            CrosstabObjectScene sc = p.getScene();
-            if (sc.getObjects().contains(obj) ) return sc;
+            AbstractReportObjectScene sc = p.getScene();
+            if (sc != null && sc.getObjects().contains(obj) ) return sc;
         }
         
         return null; // No scene found...
@@ -817,6 +854,13 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
         boolean oldValue = this.adjustingSelection;
         this.adjustingSelection = adjustingSelection;
         return oldValue;
+    }
+
+    /**
+     * @return the deisgnPanels
+     */
+    public java.util.List<GenericDesignerPanel> getDeisgnPanels() {
+        return deisgnPanels;
     }
 }
 

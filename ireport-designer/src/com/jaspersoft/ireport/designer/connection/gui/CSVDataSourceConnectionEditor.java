@@ -859,7 +859,8 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
             {
                 jListCVSColumns.setSelectedIndex(0);
             }
-        
+
+            jCheckBoxCVSFirstRowAsHeader.setSelected(true);
         } catch (Exception ex)
         {
             JOptionPane.showMessageDialog(this,ex.getMessage(), I18n.getString("CSVDataSourceConnectionEditor.Message.Exception"), JOptionPane.ERROR_MESSAGE); //"message.title.exception"

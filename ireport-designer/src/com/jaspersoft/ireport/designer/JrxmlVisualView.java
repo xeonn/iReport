@@ -506,7 +506,15 @@ public class JrxmlVisualView extends TopComponent
             
             if (jasperDesign == null)
             {
-                
+                javax.swing.SwingUtilities.invokeAndWait(new java.lang.Runnable() {
+                    public void run() {
+                            if (IReportManager.getInstance().getActiveVisualView() == JrxmlVisualView.this)
+                            {
+                                IReportManager.getInstance().fireJasperDesignActivatedListenerEvent(jasperDesign);
+                            }
+                    }
+                });
+
                 // I'm loading the document for the first time...
                 if (reportDesignerPanel.getJasperDesign() == null)
                 {
@@ -545,6 +553,11 @@ public class JrxmlVisualView extends TopComponent
                             } catch (Exception ex) { 
                             }
                             fireModelChange();
+
+                            if (IReportManager.getInstance().getActiveVisualView() == JrxmlVisualView.this)
+                            {
+                                IReportManager.getInstance().fireJasperDesignActivatedListenerEvent(jasperDesign);
+                            }
                     }
                 });
             }
@@ -669,26 +682,32 @@ public class JrxmlVisualView extends TopComponent
             if (newSelection.size() == 0 &&
                 getExplorerManager().getRootContext() != null)
             {
-                //
-                // If no elements are selected, avoid to change
-                // the selection...
-                Node[] selectedNodes = explorerManager.getSelectedNodes();
-                for (int i=0; i<selectedNodes.length; ++i)
+
+                boolean elementsSelected = false;
+                for (Node node : explorerManager.getSelectedNodes())
                 {
-                    if (selectedNodes[i] instanceof ElementNode) // .getLookup().lookup(JRDesignElement.class) != null)
+                    if (node instanceof ElementNode)
                     {
-                        // In case of a cell, the lookup contains the crosstab, so we have to skip
-                        // this particular case...
-                        if (selectedNodes[i].getLookup().lookup(JRCellContents.class) != null ||
-                            event.getObjectScene() instanceof CrosstabObjectScene)
-                        {
-                            continue;
-                        }
-                        
-                        
-                        explorerManager.setSelectedNodes( new Node[]{getExplorerManager().getRootContext()} );
+                        elementsSelected = true;
                         break;
                     }
+                }
+
+                if (elementsSelected)
+                {
+                    // If no elements are selected, select the scene root...
+                    if (getReportDesignerPanel().getActiveDesignerIndex() >= 0)
+                    {
+                        GenericDesignerPanel activePanel = getReportDesignerPanel().getActiveDesignerPanel();
+
+                        Node node = IReportManager.getInstance().findNodeOf(activePanel.getElement(), getExplorerManager().getRootContext(), false);
+                        if (node != null)
+                        {
+                           explorerManager.setSelectedNodes( new Node[]{node} );
+                           return;
+                        }
+                    }
+                    explorerManager.setSelectedNodes( new Node[]{getExplorerManager().getRootContext()} );
                 }
                 return;
             }

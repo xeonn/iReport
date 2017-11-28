@@ -75,6 +75,7 @@ public class ExpressionPropertyEditor extends PropertyEditorSupport implements E
         if (val != null) {
             s = val instanceof String ? (String) val : val.toString();
         }
+        
         return new ExpressionPropertyCustomEditor(s, isEditable(), false, null, this, env); // NOI18N
     }
 

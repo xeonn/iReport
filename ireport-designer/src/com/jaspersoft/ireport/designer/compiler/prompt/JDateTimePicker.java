@@ -25,7 +25,11 @@ package com.jaspersoft.ireport.designer.compiler.prompt;
 
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.BorderLayout;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 import javax.swing.SpinnerNumberModel;
 import org.jdesktop.swingx.JXDatePicker;
@@ -55,6 +59,24 @@ public class JDateTimePicker extends javax.swing.JPanel {
         
         //it.businesslogic.ireport.util.I18n.addOnLanguageChangedListener(this);
         applyI18n();
+    }
+
+    public void setDateFormat(DateFormat format)
+    {
+        DateFormat[] formats = datePicker.getFormats();
+
+        System.out.println("Setting format...");
+        for (DateFormat f : formats)
+        {
+            System.out.println(f + "");
+            
+        }
+        System.out.flush();
+        List<DateFormat> listFormats = new ArrayList<DateFormat>(Arrays.asList(formats));
+
+        listFormats.add(0, format);
+
+        datePicker.setFormats(listFormats.toArray(new DateFormat[listFormats.size()]));
     }
 
     public void setDate(java.util.Date d)

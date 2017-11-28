@@ -176,12 +176,14 @@ public class HyperlinkPanel extends javax.swing.JPanel {
     
     public void setExpressionContext( ExpressionContext ec )
     {
+        this.expressionContext = ec;
         jRTextExpressionAreaAnchorName.setExpressionContext(ec);
         jRTextExpressionAreaAnchor.setExpressionContext(ec);
         jRTextExpressionAreaReference.setExpressionContext(ec);
         jRTextExpressionAreaAnchor.setExpressionContext(ec);
         jRTextExpressionAreaPage.setExpressionContext(ec);
         jRTextExpressionAreaTooltip.setExpressionContext(ec);
+
     }
 
     public void setHyperlink(JRHyperlink hlink) {
@@ -824,6 +826,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         if (this.isInit()) return;
         
         JRLinkParameterDialog jrpd = new JRLinkParameterDialog((javax.swing.JDialog)SwingUtilities.getWindowAncestor(this), true);
+        jrpd.setExpressionContext(getExpressionContext());
         jrpd.setVisible(true);
         
         if (jrpd.getDialogResult() == javax.swing.JOptionPane.OK_OPTION) {

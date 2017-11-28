@@ -36,6 +36,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.crosstabs.JRCrosstabCell;
 import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
@@ -81,6 +82,8 @@ import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.LineStyleEnum;
+import org.netbeans.api.visual.widget.Widget;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 
@@ -176,7 +179,12 @@ public class ModelUtils {
         
         return getAllElements(jd, true);
     }
-    
+
+    /**
+     * This method does not include children of components...
+     * @param group
+     * @return
+     */
     public static List<JRDesignElement> getAllElements(JRElementGroup group) {
         List list = new ArrayList();
 
@@ -188,8 +196,10 @@ public class ModelUtils {
             if (ele instanceof JRElementGroup)
             {
                 list.addAll(getAllElements((JRElementGroup)ele));
+
             }
-            else if (ele instanceof JRDesignElement)
+
+            if (ele instanceof JRDesignElement)
             {
                 list.add((JRDesignElement)ele);
                 
@@ -1140,8 +1150,8 @@ public class ModelUtils {
      */
     public static JRDesignDataset getElementDataset(JRDesignElement element, JasperDesign jd) {
         
-        JRDesignDataset dataset = jd.getMainDesignDataset();
-        
+        JRDesignDataset dataset = null;
+
         JRElementGroup group = getTopElementGroup(element);
         
         if (group instanceof JRDesignCellContents) {  // Main datasource
@@ -1155,12 +1165,29 @@ public class ModelUtils {
                     // Get the dataset name...
                     String datasetName = elementDataset.getDatasetRun().getDatasetName();
                     
-                    dataset = (JRDesignDataset)jd.getDatasetMap().get(datasetName);
+                    return (JRDesignDataset)jd.getDatasetMap().get(datasetName);
+                }
+            }
+        }
+        else if (!(group instanceof JRBand))
+        {
+            // This element belongs to a custom component....
+           // Go trought the scenes...
+            JrxmlVisualView view = IReportManager.getInstance().getActiveVisualView();
+            if (view != null)
+            {
+                List<GenericDesignerPanel> panels = view.getReportDesignerPanel().getDeisgnPanels();
+                for (GenericDesignerPanel panel : panels)
+                {
+                    dataset = panel.getElementDataset(element);
+                    if (dataset != null) return dataset;
                 }
             }
         }
         
-        return dataset;
+            
+        return jd.getMainDesignDataset();
+
     }
 
     
@@ -1994,9 +2021,39 @@ public class ModelUtils {
      */ 
     public static Point getParentLocation(JasperDesign jd, JRDesignElement element, JRDesignElementWidget widget)
     {
+        // Check if we are able to find the element widget somewhere before giving up...
+        if (widget == null &&
+            IReportManager.getInstance().getActiveVisualView() != null &&
+            IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel() != null &&
+            IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel().getActiveScene() != null)
+        {
+            Widget wx = IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel().getActiveScene().findWidget(element);
+            if (wx != null && wx instanceof JRDesignElementWidget)
+            {
+                widget = (JRDesignElementWidget)wx;
+            }
+        }
+        
+        if (widget != null && widget.getScene() instanceof AbstractReportObjectScene)
+        {
+            return ((AbstractReportObjectScene)widget.getScene()).getParentLocation(jd, element, widget);
+        }
+
+        return getParentLocationImpl(jd, element, widget);
+    }
+
+    /**
+     * This utility looks for the phisical parent of an element and returns his position.
+     * This position is refers to the plain document preview, where 0,0 are the coordinates
+     * of the upperleft corner of the document.
+     * If no parent is found, the method returns 0,0
+     */
+    public static Point getParentLocationImpl(JasperDesign jd, JRDesignElement element, JRDesignElementWidget widget)
+    {
+
         Point base = null;
         if (element == null) return new Point(0,0);
-        
+
         JRElementGroup grp = element.getElementGroup();
 
         // I need to discover the first logical parent of this element
@@ -2005,7 +2062,7 @@ public class ModelUtils {
             if (grp instanceof JRDesignBand)    // Element placed in a band
             {
                 JRDesignBand band = (JRDesignBand)grp;
-                base = new Point( 
+                base = new Point(
                         jd.getLeftMargin(),  // X
                         ModelUtils.getBandLocation(band, jd) // Y
                 );
@@ -2054,9 +2111,9 @@ public class ModelUtils {
             }
 
         }
-        
+
         return base;
-        
+
     }
     
     /**
@@ -2078,6 +2135,29 @@ public class ModelUtils {
      * If no parent is found, the method returns 0,0
      */
     public static Rectangle getParentBounds(JasperDesign jd, JRDesignElement element, JRDesignElementWidget widget)
+    {
+        // Check if we are able to find the element widget somewhere before giving up...
+        if (widget == null &&
+            IReportManager.getInstance().getActiveVisualView() != null &&
+            IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel() != null &&
+            IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel().getActiveScene() != null)
+        {
+            Widget wx = IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel().getActiveScene().findWidget(element);
+            if (wx != null && wx instanceof JRDesignElementWidget)
+            {
+                widget = (JRDesignElementWidget)wx;
+            }
+        }
+
+        if (widget != null && widget.getScene() instanceof AbstractReportObjectScene)
+        {
+            return ((AbstractReportObjectScene)widget.getScene()).getParentBounds(jd, element, widget);
+        }
+
+        return getParentBoundsImpl(jd, element, widget);
+    }
+
+    public static Rectangle getParentBoundsImpl(JasperDesign jd, JRDesignElement element, JRDesignElementWidget widget)
     {
         Rectangle base = null;
         if (element == null) return new Rectangle(0,0,0,0);
@@ -2572,7 +2652,7 @@ public class ModelUtils {
         // Paddings...
         if (main.getOwnLineColor() != null && !main.getOwnLineColor().equals(from.getOwnLineColor())) main.setLineColor(null);
         if (main.getOwnLineWidth() != null && !main.getOwnLineWidth().equals(from.getOwnLineWidth())) main.setLineWidth(null);
-        if (main.getOwnLineStyle() != null && !main.getOwnLineStyle().equals(from.getOwnLineStyle())) main.setLineStyle(null);
+        if (main.getOwnLineStyleValue() != null && main.getOwnLineStyleValue() != from.getOwnLineStyleValue()) main.setLineStyle((LineStyleEnum)null);
      }
 
      /**

@@ -62,7 +62,7 @@ public final class FillProperty extends PropertySupport {
     }
 
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
-        return style.getFill();
+        return style.getOwnFillValue() == null ? null : style.getOwnFillValue();
     }
 
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -71,7 +71,7 @@ public final class FillProperty extends PropertySupport {
 
     private void setPropertyValue(Object val) {
         if (val == null || val instanceof Byte) {
-            Byte oldValue = style.getOwnFill();
+            Byte oldValue = style.getOwnFillValue() == null ? null : style.getOwnFill();
             Byte newValue = (Byte) val;
             style.setFill(newValue);
             ObjectPropertyUndoableEdit urob = new ObjectPropertyUndoableEdit(style, "Fill", Byte.class, oldValue, newValue);
@@ -81,7 +81,7 @@ public final class FillProperty extends PropertySupport {
 
     @Override
     public boolean isDefaultValue() {
-        return style.getOwnFill() == null;
+        return style.getOwnFillValue() == null;
     }
 
     @Override

@@ -157,6 +157,49 @@ public class ColorSchemaGenerator {
         variants.add(new Tag(SCHEMA_PALE, "Pale"));
         return variants;
     }
+
+    /**
+     * Saturates the color and return  a new color.
+     * @param colorString
+     * @param value (0-1.0)
+     * @return
+     */
+    public static java.awt.Color desaturate(java.awt.Color color, float value)
+    {
+
+         float[] hsb = color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+         hsb[1] -= hsb[1]*value;
+         if (hsb[1] < 0f) hsb[1] = 0f;
+         return new Color( Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
+    }
+
+    /**
+     * Saturates the color and return  a new color.
+     * @param colorString
+     * @param value (0-1.0)
+     * @return
+     */
+    public static java.awt.Color bright(java.awt.Color color, float value)
+    {
+
+         float[] hsb = color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+         hsb[2] += hsb[2]*value;
+         if (hsb[2] > 1.0f) hsb[2] = 1.0f;
+         return new Color( Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
+    }
+
+
+    /**
+     * Saturates the color and return  a new color.
+     * @param colorString
+     * @param value (0-1.0)
+     * @return
+     */
+    public static java.awt.Color overlayWhite(java.awt.Color color)
+    {
+
+         return new Color((color.getRed()+255)/2, (color.getGreen()+255)/2, (color.getBlue()+255)/2);
+    }
     
     static private List<String> colorsList = null;
     static private HashMap<String, String> colorsMap = null;

@@ -566,7 +566,10 @@ public class Pdf508TagMenuUtility extends javax.swing.JPanel {
 
                 public void run() {
                     IReportManager.getInstance().notifyReportChange();
-            IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel().getActiveScene().repaint();
+                    if (IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel().getActiveScene() != null)
+                    {
+                        IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel().getActiveScene().repaint();
+                    }
                 }
             });
         }

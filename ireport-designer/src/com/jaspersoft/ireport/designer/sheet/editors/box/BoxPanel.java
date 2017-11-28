@@ -42,6 +42,7 @@ import javax.swing.UIManager;
 import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
+import net.sf.jasperreports.engine.type.LineStyleEnum;
 /**
  *
  * @author  Administrator
@@ -761,7 +762,7 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
     {
         if (pen == null) return;
         pen.setLineColor(null);
-        pen.setLineStyle(null);
+        pen.setLineStyle((LineStyleEnum)null);
         pen.setLineWidth(null);
     }
     
@@ -941,6 +942,21 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
         getJPanelButtons().setVisible(true);
         dialog = new JDialog(Misc.getMainFrame(), true);
         dialog.getContentPane().add(this);
+
+        javax.swing.KeyStroke escape =  javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0, false);
+        javax.swing.Action escapeAction = new javax.swing.AbstractAction() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                jButtonCancelActionPerformed(e);
+            }
+        };
+
+        dialog.getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        dialog.getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
+
+
+        //to make the default button ...
+        dialog.getRootPane().setDefaultButton(this.jButtonOk);
+
         dialog.pack();
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);

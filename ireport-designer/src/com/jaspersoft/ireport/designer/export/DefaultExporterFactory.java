@@ -129,6 +129,11 @@ public class DefaultExporterFactory implements ExporterFactory {
           exporter = new  net.sf.jasperreports.engine.export.JRXmlExporter();
           configureXmlExporter(exporter);
        }
+       else if (format.equalsIgnoreCase("pptx"))
+       {
+          exporter = new  net.sf.jasperreports.engine.export.ooxml.JRPptxExporter();
+          //configureXmlExporter(exporter);
+       }
        return exporter;
     }
 
@@ -179,6 +184,10 @@ public class DefaultExporterFactory implements ExporterFactory {
        else if (format.equalsIgnoreCase("docx"))
        {
           return Misc.nvl( IReportManager.getInstance().getProperty("ExternalDOCXViewer"), "");
+       }
+       else if (format.equalsIgnoreCase("pptx"))
+       {
+          return Misc.nvl( IReportManager.getInstance().getProperty("ExternalPPTXViewer"), "");
        }
 
        return null;

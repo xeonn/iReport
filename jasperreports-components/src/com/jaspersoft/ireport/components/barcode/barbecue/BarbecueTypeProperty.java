@@ -119,7 +119,7 @@ public final class BarbecueTypeProperty  extends PropertySupport
 
     private java.util.ArrayList getListOfTags()
     {
-        BarcodeProviders bp = new BarcodeProviders();
+//        BarcodeProviders bp = BarcodeProviders.
 //        Map providers = bp.getProviders();
 //
 //        Set keys = providers.keySet();

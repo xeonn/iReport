@@ -64,6 +64,7 @@ import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.RunDirectionEnum;
 import org.netbeans.api.visual.widget.Widget;
 
 
@@ -281,8 +282,8 @@ public class CrosstabWidget extends Widget implements PropertyChangeListener {
         JRFrame frame = getCrosstabCellFrame(new ReportConverter(getJasperDesign(),true, false),
                         contents,
                         x,y,
-                        x==0 && crosstab.getRunDirection() == JRCrosstab.RUN_DIRECTION_LTR,
-			x==0 && crosstab.getRunDirection() == JRCrosstab.RUN_DIRECTION_RTL,
+                        x==0 && crosstab.getRunDirectionValue() == RunDirectionEnum.LTR,
+			x==0 && crosstab.getRunDirectionValue() == RunDirectionEnum.RTL,
                         false);
         if (frame != null && ((CrosstabObjectScene)this.getScene()).getDrawVisitor() != null)
         {

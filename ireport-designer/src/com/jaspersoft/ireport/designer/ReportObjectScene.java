@@ -38,6 +38,7 @@ import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import com.jaspersoft.ireport.designer.widgets.JRDesignImageWidget;
 import com.jaspersoft.ireport.designer.widgets.PageWidget;
 import com.jaspersoft.ireport.designer.widgets.visitor.ConfigurableDrawVisitor;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.beans.PropertyChangeEvent;
@@ -785,7 +786,12 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
     
     
 
-    
+    @Override
+    public boolean acceptDropAt(Point location)
+    {
+        Point p = convertViewToScene(location);
+        return ModelUtils.getBandAt(IReportManager.getInstance().getActiveReport(), p) != null;
+    }
     
 }
 

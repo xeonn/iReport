@@ -90,8 +90,15 @@ public class CreateImageAction extends CreateReportElementAction
                     {
                         try {
                             ImageIcon image = new ImageIcon(jfc.getSelectedFile().getPath());
-                            element.setWidth( image.getIconWidth());
-                            element.setHeight( image.getIconHeight());
+                            if (image.getIconWidth() > 0)
+                            {
+                                element.setWidth( image.getIconWidth());
+                            }
+                            if (image.getIconHeight() > 0)
+                            {
+                                element.setHeight( image.getIconHeight());
+                            }
+                            
                         } catch (Exception ex)
                         {
 

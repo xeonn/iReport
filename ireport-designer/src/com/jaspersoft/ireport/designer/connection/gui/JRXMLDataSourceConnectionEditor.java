@@ -521,7 +521,7 @@ public class JRXMLDataSourceConnectionEditor extends javax.swing.JPanel implemen
             }
             
             this.tmpXMLTimeZone = con.getTimeZone();
-            if (this.tmpXMLLocale != null)
+            if (this.tmpXMLTimeZone != null)
             {
                 jTextFieldXMLTimeZoneValue.setText(  tmpXMLTimeZone.getDisplayName() );
             }

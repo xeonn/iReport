@@ -87,48 +87,45 @@ public class IRFontUtils {
              Node node = document.getDocumentElement();
 
 
-             NodeList list_child = node.getChildNodes(); // The root is beans
+             NodeList list_child = node.getChildNodes(); // The root is fontFamilies
              for (int ck=0; ck< list_child.getLength(); ck++) {
                  Node connectionNode = list_child.item(ck);
-                 if (connectionNode.getNodeName() != null && connectionNode.getNodeName().equals("bean"))
+                 if (connectionNode.getNodeName() != null && connectionNode.getNodeName().equals("fontFamily"))
                  {
                     // Take the CDATA...
                     SimpleFontFamilyEx family = new SimpleFontFamilyEx();
+                     NamedNodeMap familyAttributes = connectionNode.getAttributes();
+
+                     if (familyAttributes.getNamedItem("name") != null)
+                     {
+                         family.setName(familyAttributes.getNamedItem("name").getNodeValue());
+                     }
+
 
                     // Get all connections parameters...
                     NodeList list_child2 = connectionNode.getChildNodes();
                     for (int ck2=0; ck2< list_child2.getLength(); ck2++) {
                         Node child_child = list_child2.item(ck2);
-                        if (child_child.getNodeType() == Node.ELEMENT_NODE && child_child.getNodeName().equals("property")) {
+                        if (child_child.getNodeType() == Node.ELEMENT_NODE) {
 
-                            NamedNodeMap nnm2 = child_child.getAttributes();
+                            String property = child_child.getNodeName();
+                            String value = Misc.readPCDATA(child_child);
 
-                            if ( nnm2.getNamedItem("name") != null)
+                            if (property.equals("normal")) family.setNormalFont(value);
+                            if (property.equals("bold")) family.setBoldFont(value);
+                            if (property.equals("italic")) family.setItalicFont(value);
+                            if (property.equals("boldItalic")) family.setBoldItalicFont(value);
+                            if (property.equals("pdfEncoding")) family.setPdfEncoding(value);
+                            if (property.equals("pdfEmbedded")) family.setPdfEmbedded(value.equals("true") );
+
+                            if (property.equals("locales")) // property[locales]/set/value
                             {
-                                String att = nnm2.getNamedItem("name").getNodeValue();
+                                family.setLocales(new HashSet(getLocales(child_child)));
+                            }
 
-                                if (nnm2.getNamedItem("value") != null)
-                                {
-                                    String value = nnm2.getNamedItem("value").getNodeValue();
-
-                                    if (att.equals("name")) family.setName(value);
-                                    if (att.equals("normal")) family.setNormalFont(value);
-                                    if (att.equals("bold")) family.setBoldFont(value);
-                                    if (att.equals("italic")) family.setItalicFont(value);
-                                    if (att.equals("boldItalic")) family.setBoldItalicFont(value);
-                                    if (att.equals("pdfEncoding")) family.setPdfEncoding(value);
-                                    if (att.equals("pdfEmbedded")) family.setPdfEmbedded(value.equals("true") );
-                                }
-
-                                if (att.equals("locales")) // property[locales]/set/value
-                                {
-                                    family.setLocales(new HashSet(getLocales(child_child)));
-                                }
-
-                                if (att.equals("exportFonts")) // property[exportFonts]/map/entry[key]/value
-                                {
-                                    family.setExportFonts(getMappings(child_child));
-                                }
+                            if (property.equals("exportFonts")) // property[exportFonts]/map/entry[key]/value
+                            {
+                                family.setExportFonts(getMappings(child_child));
                             }
                         }
                     }
@@ -155,10 +152,9 @@ public class IRFontUtils {
     {
         List<String> locales = new ArrayList<String>();
 
-        Node setNode = getSubNode(node, "set");
-        if (setNode != null)
+        if (node != null)
         {
-            List<Node> valueNodes = getSubNodes(setNode, "value");
+            List<Node> valueNodes = getSubNodes(node, "locale");
             for (Node tmpNode : valueNodes)
             {
                 locales.add( Misc.readPCDATA(tmpNode, true));
@@ -201,21 +197,13 @@ public class IRFontUtils {
     private static Map<String, String> getMappings(Node node)
     {
         Map<String, String> map = new HashMap<String,String>();
-
-        Node mapNode = getSubNode(node, "map");
-        if (mapNode != null)
+        if (node != null)
         {
-            List<Node> entryNodes = getSubNodes(mapNode, "entry");
+            List<Node> entryNodes = getSubNodes(node, "export");
             for (Node tmpNode : entryNodes)
             {
                 String key = tmpNode.getAttributes().getNamedItem("key").getNodeValue();
-                String value = "";
-                Node valNode = getSubNode(tmpNode, "value");
-                if (valNode != null)
-                {
-                    value = Misc.readPCDATA(valNode, true);
-                }
-
+                String value = Misc.readPCDATA(tmpNode, true);
                 if (value != null && value.length() > 0 &&
                     key != null && key.length() > 0)
                 {
@@ -247,19 +235,19 @@ public class IRFontUtils {
 
             pw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 
-            pw.println("<beans xmlns=\"http://www.springframework.org/schema/beans\"");
-            pw.println("       xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"");
-            pw.println("       xsi:schemaLocation=\"http://www.springframework.org/schema/beans");
-            pw.println("           http://www.springframework.org/schema/beans/spring-beans-2.0.xsd\">\n");
+            pw.println("<fontFamilies>");
 
             for (SimpleFontFamilyEx font : fonts)
             {
                 pw.print(dumpBean(font));
             }
 
-            pw.println("</beans>");
+            pw.println("</fontFamilies>");
 
             pw.close();
+
+            // Fire a preference changed event...
+            IReportManager.getPreferences().put("fontExtensions", "" + (new java.util.Date()).getTime());
         } catch (Exception ex)
         {
             ex.printStackTrace();
@@ -271,79 +259,66 @@ public class IRFontUtils {
     {
         StringBuffer bean_xml = new StringBuffer("");
 
-        bean_xml.append("   <bean id=\"fontBean"  + (new Date()).getTime() + (long)((Math.random()*100000)) + "\" class=\"net.sf.jasperreports.engine.fonts.SimpleFontFamily\">\n");
-        bean_xml.append("       <property name=\"name\" value=\""  + Misc.escapeXMLEntity(font.getName()) +  "\"/>\n");
+        bean_xml.append("   <fontFamily name=\"" + Misc.escapeXMLEntity(font.getName()) +  "\">\n");
         if (font.getNormalFont() != null && font.getNormalFont().length() > 0)
         {
-            bean_xml.append("       <property name=\"normal\" value=\""  + Misc.escapeXMLEntity(font.getNormalFont()) +  "\"/>\n");
+            bean_xml.append("       <normal><![CDATA[" + font.getNormalFont() +  "]]></normal>\n");
         }
 
         if (font.getBoldFont() != null && font.getBoldFont().length() > 0)
         {
-            bean_xml.append("       <property name=\"bold\" value=\""  + Misc.escapeXMLEntity(font.getBoldFont()) +  "\"/>\n");
+            bean_xml.append("       <bold><![CDATA[" + font.getBoldFont() +  "]]></bold>\n");
         }
 
         if (font.getItalicFont() != null && font.getItalicFont().length() > 0)
         {
-            bean_xml.append("       <property name=\"italic\" value=\""  + Misc.escapeXMLEntity(font.getItalicFont()) +  "\"/>\n");
+            bean_xml.append("       <italic><![CDATA[" + font.getItalicFont() +  "]]></italic>\n");
         }
 
         if (font.getBoldItalicFont() != null && font.getBoldItalicFont().length() > 0)
         {
-            bean_xml.append("       <property name=\"boldItalic\" value=\""  + Misc.escapeXMLEntity(font.getBoldItalicFont()) +  "\"/>\n");
+            bean_xml.append("       <boldItalic><![CDATA[" + font.getBoldItalicFont() +  "]]></boldItalic>\n");
         }
 
         if (font.getPdfEncoding() != null && font.getPdfEncoding().length() > 0)
         {
-            bean_xml.append("       <property name=\"pdfEncoding\" value=\""  + Misc.escapeXMLEntity(font.getPdfEncoding()) +  "\"/>\n");
+            bean_xml.append("       <pdfEncoding><![CDATA[" + font.getItalicFont() +  "]]></pdfEncoding>\n");
         }
 
-        bean_xml.append("       <property name=\"pdfEmbedded\" value=\""  + font.isPdfEmbedded() +  "\"/>\n");
-
+        bean_xml.append("       <pdfEmbedded><![CDATA[" + font.isPdfEmbedded() +  "]]></pdfEmbedded>\n");
 
 
         if (font.getExportFonts() != null && font.getExportFonts().size() > 0)
         {
 
-            bean_xml.append("       <property name=\"exportFonts\">\n");
-            bean_xml.append("           <map>\n");
+            bean_xml.append("       <exportFonts>\n");
 
             java.util.Iterator<String> keys = font.getExportFonts().keySet().iterator();
-
-
             while (keys.hasNext())
             {
                 String key = keys.next();
-                bean_xml.append("               <entry key=\"" + Misc.escapeXMLEntity(key) +  "\">\n");
-                bean_xml.append("                   <value><![CDATA[" + font.getExportFonts().get(key) +  "]]></value>\n");
-                bean_xml.append("               </entry>\n");
+                bean_xml.append("               <export key=\"" + Misc.escapeXMLEntity(key) +  "\"><![CDATA[" + font.getExportFonts().get(key) +  "]]></export>\n");
             }
+            bean_xml.append("       </exportFonts>\n");
 
-
-            bean_xml.append("           </map>\n");
-            bean_xml.append("       </property>\n");
         }
 
         if (font.getLocales() != null && font.getLocales().size() > 0)
         {
 
-            bean_xml.append("       <property name=\"locales\">\n");
-            bean_xml.append("           <set>\n");
-
+            bean_xml.append("       <locales>\n");
             java.util.Iterator<String> keys = font.getLocales().iterator();
 
             while (keys.hasNext())
             {
                 String key = keys.next();
-                bean_xml.append("               <value><![CDATA[" + key +  "]]></value>\n");
+                bean_xml.append("               <locale><![CDATA[" + key +  "]]></locale>\n");
             }
 
-
-            bean_xml.append("           </set>\n");
-            bean_xml.append("       </property>\n");
+            bean_xml.append("       </locales>\n");
         }
 
-        bean_xml.append("   </bean>\n\n");
+        bean_xml.append("   </fontFamily>\n\n");
 
         return bean_xml.toString();
     }
@@ -387,7 +362,8 @@ public class IRFontUtils {
                 ZipOutputStream zipos = new ZipOutputStream(fos);
                 zipos.setMethod(ZipOutputStream.DEFLATED);
 
-                String fontXmlFile = "fonts" + (new Date()).getTime()+".xml";
+                String prefix = "family" + (new Date()).getTime();
+                String fontXmlFile = "fonts" + prefix +".xml";
 
                 ZipEntry propsEntry = new ZipEntry("jasperreports_extension.properties");
                 zipos.putNextEntry(propsEntry);
@@ -395,8 +371,8 @@ public class IRFontUtils {
                 PrintWriter pw = new PrintWriter(zipos);
 
 
-                pw.println("net.sf.jasperreports.extension.registry.factory.fonts=net.sf.jasperreports.extensions.SpringExtensionsRegistryFactory");
-                pw.println("net.sf.jasperreports.extension.fonts.spring.beans.resource=fonts/" + fontXmlFile);
+                pw.println("net.sf.jasperreports.extension.registry.factory.fonts=net.sf.jasperreports.engine.fonts.SimpleFontExtensionsRegistryFactory");
+                pw.println("net.sf.jasperreports.extension.simple.font.families.ireport" + prefix +"=fonts/" + fontXmlFile);
 
                 pw.flush();
 
@@ -407,10 +383,7 @@ public class IRFontUtils {
 
                 pw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 
-                pw.println("<beans xmlns=\"http://www.springframework.org/schema/beans\"");
-                pw.println("       xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"");
-                pw.println("       xsi:schemaLocation=\"http://www.springframework.org/schema/beans");
-                pw.println("           http://www.springframework.org/schema/beans/spring-beans-2.0.xsd\">\n");
+                pw.println("<fontFamilies>\n");
 
                 List<File> files = new ArrayList<File>();
                 for (Object font : fonts)
@@ -442,7 +415,7 @@ public class IRFontUtils {
                     }
                 }
                 
-                pw.println("</beans>");
+                pw.println("</fontFamilies>");
 
                 pw.flush();
 

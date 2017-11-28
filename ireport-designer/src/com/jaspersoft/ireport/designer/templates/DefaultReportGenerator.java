@@ -277,6 +277,7 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
                       jasperDesign.addGroup(g);
                   }
 
+
                   JRDesignGroup group = (JRDesignGroup)jasperDesign.getGroupsList().get(i);
 
 //                  String oldGroupName = group.getName();
@@ -288,7 +289,7 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
                   group.setName(groupFields.get(i).getName());
                   group.setExpression(Misc.createExpression("java.lang.Object", "$F{" + groupFields.get(i).getName() + "}"));
                   // find the two elements having as expression: G1Label and G1Field
-                  if (group.getGroupHeaderSection() != null && group.getGroupHeaderSection().getBands()[0] != null)
+                  if (group.getGroupHeaderSection() != null && group.getGroupHeaderSection().getBands().length > 0)
                   {
                         JRBand groupHeaderSection = group.getGroupHeaderSection().getBands()[0];
                         JRDesignStaticText st = findStaticTextElement(groupHeaderSection, "G"+(i+1)+"Label");
@@ -327,24 +328,31 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
                 }
             }
 
-            
+            JRElementGroup detailBand = (jasperDesign.getDetailSection() != null &&
+                                         jasperDesign.getDetailSection().getBands() != null &&
+                                          jasperDesign.getDetailSection().getBands().length > 0) ? jasperDesign.getDetailSection().getBands()[0] : null;
+           
             // Adjusting detail...
             if (!noLayoutChanges && reportType != null && reportType.equals("tabular"))
             {
                 // Add the labels to the column header..
                 JRElementGroup columnHeaderBand = (JRDesignBand)jasperDesign.getColumnHeader();
-                JRElementGroup detailBand = jasperDesign.getDetailSection().getBands()[0];
-
+                
                 // Find the label template...
-                JRDesignStaticText labelElement = findStaticTextElement(columnHeaderBand, "DetailLabel" );
-                if (labelElement == null) labelElement = findStaticTextElement(columnHeaderBand, "Label");
-                if (labelElement == null) labelElement = findStaticTextElement(columnHeaderBand, "Header");
-
-                JRDesignTextField fieldElement = findTextFieldElement(detailBand, "DetailField" );
-                if (fieldElement == null) fieldElement = findTextFieldElement(detailBand, "Field");
-                System.out.println("Unable to find in the detail band a field with exp DetailField or Field");
-                System.out.flush();
-
+                JRDesignStaticText labelElement = null;
+                if (columnHeaderBand != null)
+                {
+                    labelElement = findStaticTextElement(columnHeaderBand, "DetailLabel" );
+                    if (labelElement == null) labelElement = findStaticTextElement(columnHeaderBand, "Label");
+                    if (labelElement == null) labelElement = findStaticTextElement(columnHeaderBand, "Header");
+                }
+                
+                JRDesignTextField fieldElement = null;
+                if (detailBand != null)
+                {
+                    fieldElement = findTextFieldElement(detailBand, "DetailField" );
+                    if (fieldElement == null) fieldElement = findTextFieldElement(detailBand, "Field");
+                }
 
                 if (labelElement != null)
                 {
@@ -358,7 +366,7 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
                 }
                 
                 int width = jasperDesign.getPageWidth() - jasperDesign.getRightMargin() - jasperDesign.getLeftMargin();
-                if (detailBand instanceof JRDesignFrame)
+                if (detailBand != null && detailBand instanceof JRDesignFrame)
                 {
                     width = ((JRDesignFrame)detailBand).getWidth();
                 }
@@ -370,7 +378,7 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
                      for (JRDesignField f : selectedFields)
                      {
                          if (groupFields.contains(f)) continue;
-                         if (labelElement != null)
+                         if (labelElement != null && columnHeaderBand != null)
                          {
                              JRDesignStaticText newLabel = (JRDesignStaticText)labelElement.clone();
                              newLabel.setText( f.getName() );
@@ -378,7 +386,7 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
                              newLabel.setWidth(width);
                              addElement(columnHeaderBand, newLabel);
                          }
-                         if (fieldElement != null)
+                         if (fieldElement != null && detailBand != null)
                          {
                              JRDesignTextField newTextField = (JRDesignTextField)fieldElement.clone();
                              JRDesignExpression expression = Misc.createExpression( f.getValueClassName(), "$F{" + f.getName() + "}");
@@ -395,12 +403,12 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
                 }
                 
             }
-            else if (!noLayoutChanges && reportType != null && reportType.equals("columnar"))
+            else if (!noLayoutChanges && reportType != null && reportType.equals("columnar") && detailBand != null)
             {
                 // Add the labels to the column header..
-                JRElementGroup detailBand = (JRDesignBand)jasperDesign.getDetailSection().getBands()[0];
                 JRElementGroup detailBandField = (JRDesignBand)jasperDesign.getDetailSection().getBands()[0];
                 // Find the label template...
+
                 JRDesignStaticText labelElement = findStaticTextElement(detailBand, "DetailLabel" );
                 if (labelElement == null) labelElement = findStaticTextElement(detailBand, "Label");
                 if (labelElement == null) labelElement = findStaticTextElement(detailBand, "Header");

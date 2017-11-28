@@ -322,7 +322,7 @@ public class EJBQLFieldsReader {
                        JRDesignField field = new JRDesignField();
                        field.setName(fieldName);
                        field.setValueClassName(Misc.getJRFieldType(returnType));
-                       field.setDescription(""); //Field returned by " +methods[i].getName() + " (real type: "+ returnType +")");
+                       //field.setDescription(""); //Field returned by " +methods[i].getName() + " (real type: "+ returnType +")");
                        fields.addElement(field);
                    }
         }
@@ -347,7 +347,7 @@ public class EJBQLFieldsReader {
         JRDesignField field = new JRDesignField();
         field.setName(fieldName);
         field.setValueClassName(obj.getClass().getName());
-        field.setDescription("");
+        //field.setDescription("");
         
         return field;
     }

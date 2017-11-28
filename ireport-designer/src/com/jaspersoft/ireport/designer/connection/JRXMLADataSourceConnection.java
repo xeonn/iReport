@@ -31,11 +31,13 @@ import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.connection.gui.PasswordDialog;
 import com.jaspersoft.ireport.designer.connection.gui.XMLADataSourceConnectionEditor;
-import com.jaspersoft.ireport.designer.connection.CustomHTTPAuthenticator;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.net.Authenticator;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import javax.xml.soap.MessageFactory;
+import javax.xml.soap.SOAPConnectionFactory;
+import javax.xml.soap.SOAPException;
 import net.sf.jasperreports.engine.query.JRXmlaQueryExecuterFactory;
 
 /**   
@@ -43,7 +45,53 @@ import net.sf.jasperreports.engine.query.JRXmlaQueryExecuterFactory;
  */
 public class JRXMLADataSourceConnection extends IReportConnection 
 {
-    
+
+    private static String soapMessageFactoryClass = null;
+    private static String soapConnectionFactoryClass = null;
+    public static void setAxisSOAPClientConfig()
+    {
+        try {
+            if (soapMessageFactoryClass == null)
+            {
+                soapMessageFactoryClass = System.getProperty("javax.xml.soap.MessageFactory");
+                if (soapMessageFactoryClass == null)
+                {
+                    soapMessageFactoryClass = MessageFactory.newInstance().getClass().getName();
+                }
+            }
+        } catch (Exception ex) {
+        }
+
+        try {
+            if (soapConnectionFactoryClass == null)
+            {
+                soapConnectionFactoryClass = System.getProperty("javax.xml.soap.SOAPConnectionFactory");
+                if (soapConnectionFactoryClass == null)
+                {
+                    soapConnectionFactoryClass = SOAPConnectionFactory.newInstance().getClass().getName();
+                }
+            }
+        } catch (SOAPException ex) {
+        }
+
+        System.setProperty("javax.xml.soap.MessageFactory","org.apache.axis.soap.MessageFactoryImpl");
+        System.setProperty("javax.xml.soap.SOAPConnectionFactory","org.apache.axis.soap.SOAPConnectionFactoryImpl");
+    }
+
+    public static void restoreSOAPClientConfig()
+    {
+        if (soapMessageFactoryClass != null)
+        {
+            System.setProperty("javax.xml.soap.MessageFactory",soapMessageFactoryClass);
+        }
+
+        if (soapConnectionFactoryClass != null)
+        {
+            System.setProperty("javax.xml.soap.SOAPConnectionFactory",soapConnectionFactoryClass);
+        }
+
+    }
+
     private String url;
     
     private String username;
@@ -187,7 +235,9 @@ public class JRXMLADataSourceConnection extends IReportConnection
     public Map getSpecialParameters(Map map) throws net.sf.jasperreports.engine.JRException
     {
        //System.out.println("Starting XMLA MDX Query");
-      
+
+        setAxisSOAPClientConfig();
+
         map.put(JRXmlaQueryExecuterFactory.PARAM_XMLA_URL, getUrl());
         map.put(JRXmlaQueryExecuterFactory.PARAM_XMLA_DS, getDatasource());
         map.put(JRXmlaQueryExecuterFactory.PARAM_XMLA_CAT, getCatalog());
@@ -220,6 +270,7 @@ public class JRXMLADataSourceConnection extends IReportConnection
     @Override
     public Map disposeSpecialParameters(Map map)
     {
+        restoreSOAPClientConfig();
         return map;
     }
 

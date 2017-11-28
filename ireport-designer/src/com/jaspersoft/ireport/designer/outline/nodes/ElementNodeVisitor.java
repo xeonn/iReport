@@ -78,7 +78,8 @@ public class ElementNodeVisitor implements JRVisitor {
     public static final String ICON_STATIC_TEXT = ICON_BASE + "statictext-16.png";
     public static final String ICON_TEXT_FIELD = ICON_BASE + "textfield-16.png";
     public static final String ICON_CHART = ICON_BASE + "chart-16.png";
-            
+    public static final String ICON_GENERIC_ELEMENT = ICON_BASE + "genericelement-16.png";
+
     private JasperDesign jasperDesign = null;
     private ElementNameVisitor nameVisitor = null;
     private IRIndexedNode node = null;
@@ -241,7 +242,7 @@ public class ElementNodeVisitor implements JRVisitor {
 
     public void visitGenericElement(JRGenericElement genericElement) {
         node = new ElementNode(jasperDesign, (JRDesignGenericElement)genericElement,doLkp);
-        node.setIconBaseWithExtension(ICON_RECTANGLE);
+        node.setIconBaseWithExtension(ICON_GENERIC_ELEMENT);
     }
     
 }

@@ -30,6 +30,7 @@ import com.jaspersoft.ireport.designer.dnd.ReportObjectPaletteTransferable;
 import com.jaspersoft.ireport.designer.outline.NewTypesUtils;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
+import com.jaspersoft.ireport.designer.styles.ResetStyleAction;
 import com.jaspersoft.ireport.designer.undo.DeleteStyleUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import com.jaspersoft.ireport.locale.I18n;
@@ -205,6 +206,7 @@ public class StyleNode extends AbstractStyleNode  {
             SystemAction.get( PasteAction.class),
             SystemAction.get( CutAction.class ),
             SystemAction.get( RenameAction.class ),
+            SystemAction.get( ResetStyleAction.class ),
             SystemAction.get( ReorderAction.class ),
             null,
             SystemAction.get( DeleteAction.class ) };
@@ -649,6 +651,7 @@ public class StyleNode extends AbstractStyleNode  {
         for (int i=0; i<styles.size(); ++i)
         {
             JRDesignStyle st = (JRDesignStyle)styles.get(i);
+            if (st == style) continue;
             l.add(new Tag( st , st.getName()));
             st.getEventSupport().addPropertyChangeListener(WeakListeners.propertyChange(this, st.getEventSupport()));
         }

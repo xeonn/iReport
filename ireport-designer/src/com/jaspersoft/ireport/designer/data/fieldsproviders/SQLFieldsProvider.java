@@ -411,7 +411,7 @@ public class SQLFieldsProvider implements FieldsProvider {
                 JRDesignField field = new JRDesignField();
                 field.setName( rsmd.getColumnLabel(i) );
                 field.setValueClassName( Misc.getJdbcTypeClass(rsmd, i) );
-                field.setDescription("");
+                field.setDescription(null);
                 columns.add( field );
             }
 

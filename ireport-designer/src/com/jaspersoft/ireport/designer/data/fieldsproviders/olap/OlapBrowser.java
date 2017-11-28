@@ -38,10 +38,14 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
-import mondrian.olap.*;
 
-import mondrian.mdx.ResolvedFunCall;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.olap.result.JROlapHierarchy;
+import net.sf.jasperreports.olap.result.JROlapHierarchyLevel;
+import net.sf.jasperreports.olap.result.JROlapMember;
+import net.sf.jasperreports.olap.result.JROlapMemberTuple;
+import net.sf.jasperreports.olap.result.JROlapResult;
+import net.sf.jasperreports.olap.result.JROlapResultAxis;
 /**
  *
  * @author  gtoffoli
@@ -71,178 +75,93 @@ public class OlapBrowser extends javax.swing.JPanel implements FieldsProviderEdi
         ((DefaultTreeSelectionModel)jTree1.getSelectionModel()).setSelectionMode(DefaultTreeSelectionModel.SINGLE_TREE_SELECTION );
     }
     
-    
-    public void setOlapQuery(Query query)
+    public void setOlapResult(JROlapResult result)
     {
-        
-        
-        DefaultTreeModel dtm = (DefaultTreeModel)jTree1.getModel();
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode)dtm.getRoot();
-        root.removeAllChildren();
-        
-        if (query == null) 
+        jTree1.setRootVisible(false);
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode)jTree1.getModel().getRoot();
+        if (result == null)
         {
-            jTree1.updateUI();
-            return;
+           jTree1.updateUI();
+           return;
         }
-        
-	QueryAxis[] axes = query.getAxes();
-        
-        Hierarchy[][] queryHierarchies = new Hierarchy[axes.length][];
-        int[][] fieldsMaxDepths = new int[axes.length][];
-        int[][] maxDepths = new int[axes.length][];
-        
-        int hCount = 0;
-        for (int i = 0; i < axes.length; i++)
+        JROlapResultAxis[] axes = result.getAxes();
+        for (int i=0; i<axes.length; ++i)
         {
-                queryHierarchies[i] = query.getMdxHierarchiesOnAxis(AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(i));
-                
-                DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(new WalkableWrapper(axes[i],root));
-                
-                if ( queryHierarchies[i].length == 1 &&
-                     queryHierarchies[i][0].getDimension().isMeasures())
-                {
-                    addChildren(childNode, axes[i].getChildren());
-                }
-                else
-                {
-                    addChildren(childNode, queryHierarchies[i]);
-                }
-                
-                root.add(childNode );
-        
-                hCount += queryHierarchies[i].length;
-                fieldsMaxDepths[i] = new int[queryHierarchies[i].length];
-                maxDepths[i] = new int[queryHierarchies[i].length];
-        }
-        
-        jTree1.updateUI();
-    }
-    
-    public void setOlapResult2(Result result)
-    {
-        DefaultTreeModel dtm = (DefaultTreeModel)jTree1.getModel();
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode)dtm.getRoot();
-        root.removeAllChildren();
-        
-        if (result == null) 
-        {
-            jTree1.updateUI();
-            return;
-        }
-        
-        // Main axes...
-        
-        
-        QueryAxis[] axis = result.getQuery().getAxes();
-        Axis[] raxis = result.getAxes();
-        
-        for (int i=0; i<axis.length; ++i)
-        {   
-            DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(new WalkableWrapper(axis[i], root));
-            addChildren(childNode, axis[i].getChildren());
-            root.add(childNode );
-        }
-        
-        jTree1.updateUI();
-    }
-    
-    public void setOlapResultDataXXX(Result result)
-    {
-        DefaultTreeModel dtm = (DefaultTreeModel)jTree1.getModel();
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode)dtm.getRoot();
-        root.removeAllChildren();
-        
-        if (result == null) 
-        {
-            jTree1.updateUI();
-            return;
-        }
-        
-        // Main axes...
-        
-        
-        QueryAxis[] axis = result.getQuery().getAxes();
-        Axis[] raxis = result.getAxes();
-        
-        for (int i=0; i<axis.length; ++i)
-        {   
-            DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(new WalkableWrapper(axis[i], root));
-            Object[] positions = raxis[i].getPositions().toArray();
-            addChildren(childNode, positions);
-            root.add(childNode );
-        }
-        
-        jTree1.updateUI();
-    }
-    
+            JROlapResultAxis axis = axes[i];
+            OlapElement axisElement = new OlapElement();
+            axisElement.setAxis(i);
+            axisElement.setType(OlapElement.TYPE_AXIS);
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(axisElement);
 
-    String r_level = "";
-    public void addChildren(DefaultMutableTreeNode node, Object[] children)
-    {
-        
-        if (children == null) return;
-        
-        r_level = r_level + "__";
-        for (int i=0; i<children.length; ++i)
-        {
-            
-            if (children[i] instanceof mondrian.mdx.MemberExpr)
+             DefaultMutableTreeNode measuresNode = null;
+
+            JROlapHierarchy[] hierarchies = axis.getHierarchiesOnAxis();
+            for (int k=0; k<hierarchies.length; ++k)
             {
-                
-                DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(new WalkableWrapper(((mondrian.mdx.MemberExpr)children[i]).getMember(), node));
-                node.add(childNode );
-            }
-            else if (children[i] instanceof ResolvedFunCall) // FunCall interface no longes has the method getChildren...
-            {
-                addChildren( node, ((ResolvedFunCall)children[i]).getChildren());
-            }
-            else if (children[i] instanceof QueryPart)
-	    {
-                addChildren( node, ((QueryPart)children[i]).getChildren());
-	    }
-            else if (children[i] instanceof QueryPart)
-	    {
-                addChildren( node, ((QueryPart)children[i]).getChildren());
-	    }
-            else if (children[i] instanceof Hierarchy)
-            {
-                DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(new WalkableWrapper(children[i], node));
-                addChildren(childNode, ((Hierarchy)children[i]).getLevels());
-                node.add(childNode );
-            }
-            else if (children[i] instanceof Level)
-            {
-                DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(new WalkableWrapper(children[i], node));
-                node.add(childNode );
-            }
-            //else
-            /*
-            if (children[i] instanceof Position) 
-            {
-                DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(new WalkableWrapper(children[i], node));
-                if (children[i] instanceof Position)
+                JROlapHierarchy hierarchy = hierarchies[k];
+                OlapElement hierarchyElement = new OlapElement();
+                hierarchyElement.setType(OlapElement.TYPE_HIERARCHY);
+                hierarchyElement.setDisplayName(hierarchy.getDimensionName());
+                DefaultMutableTreeNode hierarchyNode = new DefaultMutableTreeNode(hierarchyElement);
+                node.add(hierarchyNode);
+                if (hierarchy.getDimensionName().equals("Measures"))
                 {
-                    addChildren(childNode, ((Position)children[i]).getMembers());
+                    measuresNode = hierarchyNode;
+                    // Measures have a hierarchy of type 1, so this is enough...
+                    // We will populate this node with all the available measures...
+                    continue;
                 }
-                else if (children[i] instanceof Hierarchy)
+
+                JROlapHierarchyLevel[] levels = hierarchy.getLevels();
+                for (int j=0; j<levels.length; ++j)
                 {
-                    addChildren(childNode, ((Hierarchy)children[i]).getLevels());
+
+                    JROlapHierarchyLevel level = levels[j];
+                    if (level == null) continue;
+
+                    OlapElement levelElement = new OlapElement();
+                    levelElement.setType(OlapElement.TYPE_LEVEL);
+                    levelElement.setDisplayName(level.getName());
+                    levelElement.setuName(level.getName());
+                    levelElement.setHierarchyName(hierarchy.getDimensionName());
+                    levelElement.setAxis(i);
+
+                    DefaultMutableTreeNode levelNode = new DefaultMutableTreeNode(levelElement);
+                    hierarchyNode.add(levelNode);
+
                 }
-                
-                node.add(childNode );
             }
-            
-            if (children[i] instanceof Member)
+
+            // Add measure..
+            if (measuresNode != null)
             {
-                addChildren(childNode, ((Member)children[i]).getChildren());
+                for ( int k=0; k<axis.getTupleCount(); ++k)
+                {
+                    JROlapMemberTuple tuple = axis.getTuple(k);
+                    JROlapMember[] members = tuple.getMembers();
+                    for (int j=0; j<members.length; ++j)
+                    {
+                        JROlapMember member = members[j];
+                        if (member.getUniqueName().startsWith("[Measures]"))
+                        {
+                            OlapElement measureElement = new OlapElement();
+                            measureElement.setType(OlapElement.TYPE_MEASURE);
+                            measureElement.setDisplayName(member.getName());
+                            measureElement.setuName(member.getUniqueName());
+                            DefaultMutableTreeNode measureNode = new DefaultMutableTreeNode(measureElement);
+                            measuresNode.add(measureNode);
+                        }
+                    }
+                }
             }
-            */
-           
+
+            root.add(node);
+
         }
-        
-        r_level = r_level.substring(0, r_level.length()-2);
+
+        jTree1.updateUI();
     }
+    
 
     public JTable getJTableFields() {
         return jTableFields;
@@ -472,30 +391,64 @@ public class OlapBrowser extends javax.swing.JPanel implements FieldsProviderEdi
             TreePath tp = jTree1.getSelectionPath();
             if (tp != null)
             {
-                WalkableWrapper ww = (WalkableWrapper)((DefaultMutableTreeNode)tp.getLastPathComponent()).getUserObject();
-                
-                String exp = ww.getExpression();
-                if (exp != null)
+                String exp = "";
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode)jTree1.getSelectionPath().getLastPathComponent();
+                if (node.getUserObject() instanceof OlapElement)
                 {
-                    if (ww.isMeasure())
+                    OlapElement element = (OlapElement) node.getUserObject();
+
+                    if (element.getType() == OlapElement.TYPE_LEVEL)
                     {
-                        jTextFieldName.setText( ww+"");
-                        jTextFieldExpression.setText( exp);
-                    }
-                    else
-                    {
+                        String s = "";
+                        switch (element.getAxis())
+                        {
+                            case 0:
+                                s = "Columns";
+                                break;
+                            case 1:
+                                s = "Rows";
+                                break;
+                            case 2:
+                                s = "Pages";
+                                break;
+                            case 3:
+                                s = "Chapters";
+                                break;
+                            case 4:
+                                s = "Sections";
+                                break;
+                            default:
+                                s = "Axis(" + element.getAxis() +")";
+                        }
+
+                        exp = s+"[" + element.getHierarchyName() + "]"+"["+ element.getuName()+ "]";
+
                         String newexp = jTextFieldExpression.getText();
                         int ss = ( jTextFieldExpression.getSelectionStart() >= 0 ) ? jTextFieldExpression.getSelectionStart() : jTextFieldExpression.getCaretPosition();
                         int se = ( jTextFieldExpression.getSelectionEnd() >= 0 ) ? jTextFieldExpression.getSelectionEnd() : jTextFieldExpression.getCaretPosition();
                         newexp = newexp.substring(0,ss) + exp + newexp.substring(se);
                         jTextFieldExpression.setText( newexp);
                         jTextFieldExpression.requestFocusInWindow();
+
+                    }
+                    else if (element.getType() == OlapElement.TYPE_MEASURE)
+                    {
+                        int other_axes = ((DefaultMutableTreeNode)jTree1.getModel().getRoot()).getChildCount();
+                        exp = "Data(" + element.getuName();
+
+                        for (int i=0; i<other_axes-1; ++i)
+                        {
+                           exp +=",?";
+                        }
+                        exp +=")";
+
+                        jTextFieldName.setText( element.getDisplayName());
+                        jTextFieldExpression.setText( exp );
                     }
                 }
+
             }
-            
-            
-            
+
         }
     }//GEN-LAST:event_jTree1MouseClicked
     
@@ -579,19 +532,19 @@ public class OlapBrowser extends javax.swing.JPanel implements FieldsProviderEdi
             try {
                 
                 //final mondrian.olap.Result result = olapQE.executeOlapQuery();
-                final mondrian.olap.Query query = olapQE.createOlapQuery();
+                final JROlapResult result = olapQE.createOlapResult();
                 
                 if (in < lastExecution) return; //Abort, new execution requested
                 SwingUtilities.invokeAndWait( new Runnable() {
                     public void run() {
-                        setOlapQuery( query );
+                        setOlapResult( result );
                     }
                 } );
                 
             } catch (Exception ex)
             {
                 ex.printStackTrace();
-                setOlapQuery( null );
+                setOlapResult( null );
                 lastError = I18n.getString("OlapBrowser.Message.Exception") +  ex.getMessage() +")";
             }
         

@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.components.list;
 
+import com.jaspersoft.ireport.components.ComponentDatasetRunPanel;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
@@ -65,7 +66,7 @@ public final class EditDatasetRunAction extends NodeAction {
         if (node.getElement() instanceof JRDesignComponentElement &&
             ((JRDesignComponentElement)node.getElement()).getComponent() instanceof StandardListComponent)
         {
-            ListDatasetRunPanel panel = new ListDatasetRunPanel();
+            ComponentDatasetRunPanel panel = new ComponentDatasetRunPanel();
             panel.setJasperDesign( node.getJasperDesign() );
             StandardListComponent component = (StandardListComponent)((JRDesignComponentElement)node.getElement()).getComponent();
             panel.setDatasetRun( (JRDesignDatasetRun)component.getDatasetRun()   );

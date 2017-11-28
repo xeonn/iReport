@@ -323,7 +323,8 @@ public class RepositoryJrxmlFile extends RepositoryFile {
             exp = Misc.string_replace("\\","\\\\",exp);
             exp = Misc.string_replace("","\"",exp);
 
-            if (exp.toLowerCase().startsWith("http://") ||
+            if (exp.toLowerCase().startsWith("repo:") ||
+                exp.toLowerCase().startsWith("http://") ||
                 exp.toLowerCase().startsWith("https://"))
             {
                 return null;

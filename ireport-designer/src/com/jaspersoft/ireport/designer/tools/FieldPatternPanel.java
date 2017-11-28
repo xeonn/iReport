@@ -25,12 +25,22 @@ package com.jaspersoft.ireport.designer.tools;
 
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
+import java.awt.Window;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -42,7 +52,7 @@ public class FieldPatternPanel extends javax.swing.JPanel {
     
     private int dialogResult = javax.swing.JOptionPane.CANCEL_OPTION;
     private int selectedCategory = -1;
-    private static String[] dateFormats = new String[]{
+    private List<String> dateFormats = new ArrayList<String>(Arrays.asList(
         "dd/MM/yyyy",
         "MM/dd/yyyy",
         "yyyy/MM/dd",
@@ -65,9 +75,9 @@ public class FieldPatternPanel extends javax.swing.JPanel {
         "yyyy.MMMMM.dd GGG hh:mm aaa",
         "EEE, d MMM yyyy HH:mm:ss Z",
         "yyMMddHHmmssZ"  
-    };
+    ));
     
-    private static String[] timeFormats = new String[]{
+    private List<String> timeFormats = new ArrayList<String>(Arrays.asList(
         "HH.mm",
         "h.mm a",
         "HH.mm.ss",
@@ -78,8 +88,7 @@ public class FieldPatternPanel extends javax.swing.JPanel {
         "yyyy.MMMMM.dd GGG hh:mm aaa",
         "yyyy.MM.dd G 'at' HH:mm:ss z",
         "EEE, d MMM yyyy HH:mm:ss Z",
-        "yyMMddHHmmssZ"  
-    };
+        "yyMMddHHmmssZ"));
     
     /** Creates new form FieldPatternPanel */
     public FieldPatternPanel() {
@@ -97,6 +106,7 @@ public class FieldPatternPanel extends javax.swing.JPanel {
         dlm.addElement( I18n.getString("Global.List.Currency") );    // 3
         dlm.addElement( I18n.getString("Global.List.Percentage") );  // 4
         dlm.addElement( I18n.getString("Global.List.Scientific") );  // 5
+        dlm.addElement( I18n.getString("Global.List.CustomFormat") );  // 6
         //dlm.addElement( "Custom" );      // 7
         
         jListNegatives.setModel( dlm2 );
@@ -118,6 +128,22 @@ public class FieldPatternPanel extends javax.swing.JPanel {
         updateListNegatives();
         updateListDateTypes();
         updateListTimeTypes();
+
+        jTextFieldCustomFormat.setText("");
+        jTextFieldCustomFormat.getDocument().addDocumentListener(new DocumentListener() {
+
+            public void insertUpdate(DocumentEvent e) {
+                updateSample();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                updateSample();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                updateSample();
+            }
+        });
         
         jPanel5.setVisible(false);
         //to make the default button ...
@@ -198,6 +224,10 @@ public class FieldPatternPanel extends javax.swing.JPanel {
         jLabel10 = new javax.swing.JLabel();
         jSpinnerNumberDecimals3 = new javax.swing.JSpinner();
         jPanel10 = new javax.swing.JPanel();
+        jPanelcustomFormat = new javax.swing.JPanel();
+        jLabelCustomFormat = new javax.swing.JLabel();
+        jTextFieldCustomFormat = new javax.swing.JTextField();
+        jPanel11 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabelSample = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
@@ -208,6 +238,8 @@ public class FieldPatternPanel extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
+        setMinimumSize(new java.awt.Dimension(400, 300));
+        setPreferredSize(new java.awt.Dimension(400, 300));
         setLayout(new java.awt.BorderLayout());
 
         mainPanel.setLayout(new java.awt.GridBagLayout());
@@ -226,7 +258,7 @@ public class FieldPatternPanel extends javax.swing.JPanel {
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(150, 277));
 
-        jListCategory.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
+        jListCategory.setFont(new java.awt.Font("SansSerif", 0, 11));
         jListCategory.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jListCategory.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -253,6 +285,7 @@ public class FieldPatternPanel extends javax.swing.JPanel {
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
+        jPanelSheets.setMinimumSize(new java.awt.Dimension(400, 442));
         jPanelSheets.setLayout(new java.awt.BorderLayout());
 
         jPanelNumber.setLayout(new java.awt.GridBagLayout());
@@ -271,17 +304,17 @@ public class FieldPatternPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         jPanelNumber.add(jLabel2, gridBagConstraints);
 
-        jSpinnerNumberDecimals.setFont(new java.awt.Font("SansSerif", 0, 11));
+        jSpinnerNumberDecimals.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
         jSpinnerNumberDecimals.setMinimumSize(new java.awt.Dimension(27, 22));
         jSpinnerNumberDecimals.setPreferredSize(new java.awt.Dimension(100, 22));
-        jSpinnerNumberDecimals.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                jSpinnerNumberDecimalsPropertyChange(evt);
-            }
-        });
         jSpinnerNumberDecimals.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSpinnerNumberDecimalsStateChanged(evt);
+            }
+        });
+        jSpinnerNumberDecimals.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jSpinnerNumberDecimalsPropertyChange(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -459,7 +492,7 @@ public class FieldPatternPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         jPanelCurrency.add(jLabel5, gridBagConstraints);
 
-        jSpinnerNumberDecimals1.setFont(new java.awt.Font("SansSerif", 0, 11));
+        jSpinnerNumberDecimals1.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
         jSpinnerNumberDecimals1.setMinimumSize(new java.awt.Dimension(27, 22));
         jSpinnerNumberDecimals1.setPreferredSize(new java.awt.Dimension(100, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -495,7 +528,7 @@ public class FieldPatternPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         jPanelPercentage.add(jLabel6, gridBagConstraints);
 
-        jSpinnerNumberDecimals2.setFont(new java.awt.Font("SansSerif", 0, 11));
+        jSpinnerNumberDecimals2.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
         jSpinnerNumberDecimals2.setMinimumSize(new java.awt.Dimension(27, 22));
         jSpinnerNumberDecimals2.setPreferredSize(new java.awt.Dimension(100, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -528,7 +561,7 @@ public class FieldPatternPanel extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         jPanelPercentage.add(jPanel3, gridBagConstraints);
 
-        jComboBoxPercentage.setFont(new java.awt.Font("SansSerif", 0, 12));
+        jComboBoxPercentage.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         jComboBoxPercentage.setPreferredSize(new java.awt.Dimension(100, 20));
         jComboBoxPercentage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -559,7 +592,7 @@ public class FieldPatternPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         jPanelScientific.add(jLabel10, gridBagConstraints);
 
-        jSpinnerNumberDecimals3.setFont(new java.awt.Font("SansSerif", 0, 11));
+        jSpinnerNumberDecimals3.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
         jSpinnerNumberDecimals3.setMinimumSize(new java.awt.Dimension(27, 22));
         jSpinnerNumberDecimals3.setPreferredSize(new java.awt.Dimension(100, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -582,6 +615,27 @@ public class FieldPatternPanel extends javax.swing.JPanel {
         jPanelScientific.add(jPanel10, gridBagConstraints);
 
         jPanelSheets.add(jPanelScientific, java.awt.BorderLayout.CENTER);
+
+        jPanelcustomFormat.setLayout(new java.awt.GridBagLayout());
+
+        jLabelCustomFormat.setText(org.openide.util.NbBundle.getMessage(FieldPatternPanel.class, "FieldPatternPanel.jLabelCustomFormat.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 0);
+        jPanelcustomFormat.add(jLabelCustomFormat, gridBagConstraints);
+
+        jTextFieldCustomFormat.setText(org.openide.util.NbBundle.getMessage(FieldPatternPanel.class, "FieldPatternPanel.jTextFieldCustomFormat.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanelcustomFormat.add(jTextFieldCustomFormat, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.weighty = 1.0;
+        jPanelcustomFormat.add(jPanel11, gridBagConstraints);
+
+        jPanelSheets.add(jPanelcustomFormat, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -724,6 +778,9 @@ public class FieldPatternPanel extends javax.swing.JPanel {
             } else if (i == 5) {
                 jPanelSheets.add(jPanelScientific);
                 updateSample();
+            } else if (i == 6) {
+                jPanelSheets.add(jPanelcustomFormat);
+                updateSample();
             } else {
                 updateSample();
             }
@@ -762,7 +819,6 @@ public class FieldPatternPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jComboBoxPercentageActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        this.setPattern( jLabelPattern.getText() );
         setDialogResult( javax.swing.JOptionPane.OK_OPTION);
         dialog.setVisible(false);
         dialog.dispose();
@@ -790,6 +846,7 @@ public class FieldPatternPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelCustomFormat;
     private javax.swing.JLabel jLabelPattern;
     private javax.swing.JLabel jLabelSample;
     private javax.swing.JList jListCategory;
@@ -798,6 +855,7 @@ public class FieldPatternPanel extends javax.swing.JPanel {
     private javax.swing.JList jListTimeTypes;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -813,6 +871,7 @@ public class FieldPatternPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanelScientific;
     private javax.swing.JPanel jPanelSheets;
     private javax.swing.JPanel jPanelTime;
+    private javax.swing.JPanel jPanelcustomFormat;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -822,6 +881,7 @@ public class FieldPatternPanel extends javax.swing.JPanel {
     private javax.swing.JSpinner jSpinnerNumberDecimals1;
     private javax.swing.JSpinner jSpinnerNumberDecimals2;
     private javax.swing.JSpinner jSpinnerNumberDecimals3;
+    private javax.swing.JTextField jTextFieldCustomFormat;
     private javax.swing.JPanel mainPanel;
     // End of variables declaration//GEN-END:variables
     
@@ -915,14 +975,14 @@ public class FieldPatternPanel extends javax.swing.JPanel {
         {
             if (jListDateTypes.getSelectedIndex() >= 0)
             {
-                format = dateFormats[jListDateTypes.getSelectedIndex()];
+                format = dateFormats.get(jListDateTypes.getSelectedIndex());
             }
         }
         else if (cat == 2)
         {
             if (jListTimeTypes.getSelectedIndex() >= 0)
             {
-                format = timeFormats[jListTimeTypes.getSelectedIndex()];
+                format = timeFormats.get(jListTimeTypes.getSelectedIndex());
             }
         }
         else if (cat == 3)
@@ -966,6 +1026,10 @@ public class FieldPatternPanel extends javax.swing.JPanel {
             }
             format += "E0";
         }
+        else if (cat == 6)
+        {
+            format = jTextFieldCustomFormat.getText();
+        }
         
         jLabelPattern.setText( format );
         return format;
@@ -1004,10 +1068,11 @@ public class FieldPatternPanel extends javax.swing.JPanel {
     private void updateListDateTypes()
     {
         javax.swing.DefaultListModel dlm = (javax.swing.DefaultListModel)jListDateTypes.getModel();
+        dlm.clear();
         
-        for (int i=0; i<dateFormats.length; ++i)
+        for (int i=0; i<dateFormats.size(); ++i)
         {
-            java.text.SimpleDateFormat nf = new java.text.SimpleDateFormat(dateFormats[i]);
+            java.text.SimpleDateFormat nf = new java.text.SimpleDateFormat(dateFormats.get(i));
             dlm.addElement( nf.format(new java.util.Date()) );
         }
         jListDateTypes.setSelectedIndex(0);
@@ -1017,10 +1082,11 @@ public class FieldPatternPanel extends javax.swing.JPanel {
      private void updateListTimeTypes()
     {
         javax.swing.DefaultListModel dlm = (javax.swing.DefaultListModel)jListTimeTypes.getModel();
+        dlm.clear();
         
-        for (int i=0; i<timeFormats.length; ++i)
+        for (int i=0; i<timeFormats.size(); ++i)
         {
-            java.text.SimpleDateFormat nf = new java.text.SimpleDateFormat(timeFormats[i]);
+            java.text.SimpleDateFormat nf = new java.text.SimpleDateFormat(timeFormats.get(i));
             dlm.addElement( nf.format(new java.util.Date()) );
         }
         jListTimeTypes.setSelectedIndex(0);
@@ -1058,6 +1124,83 @@ public class FieldPatternPanel extends javax.swing.JPanel {
       */
      public void setPattern(java.lang.String pattern) {
          this.jLabelPattern.setText(pattern);
+
+         if (pattern == null || pattern.trim().length() == 0) return;
+
+
+         try {
+             // Try to decode the pattern...
+
+             if (pattern.startsWith("0") && pattern.endsWith("E0"))
+             {
+                 jListCategory.setSelectedValue(I18n.getString("Global.List.Scientific"), true);
+                 DecimalFormat format = new DecimalFormat(pattern);
+                 ((SpinnerNumberModel)jSpinnerNumberDecimals3.getModel()).setValue( format.getMaximumFractionDigits() );
+             }
+             else if (pattern.startsWith("\u00A4"))
+             {
+                 jListCategory.setSelectedValue(I18n.getString("Global.List.Currency"), true);
+                 DecimalFormat format = new DecimalFormat(pattern);
+                 ((SpinnerNumberModel)jSpinnerNumberDecimals1.getModel()).setValue( format.getMaximumFractionDigits() );
+             }
+             else if (pattern.endsWith("%") || pattern.endsWith("\u2030"))
+             {
+                 jListCategory.setSelectedValue(I18n.getString("Global.List.Percentage"), true);
+                 DecimalFormat format = new DecimalFormat(pattern);
+                 ((SpinnerNumberModel)jSpinnerNumberDecimals2.getModel()).setValue( format.getMaximumFractionDigits() );
+
+                 if (pattern.endsWith("%")) jComboBoxPercentage.setSelectedIndex(0);
+                 else jComboBoxPercentage.setSelectedIndex(1);
+             }
+             else if (timeFormats.contains(pattern) || (!dateFormats.contains(pattern) && (pattern.indexOf("h") >= 0 || pattern.indexOf("m") >= 0 || pattern.indexOf("s")>=0)))
+             {
+                 jListCategory.setSelectedValue(I18n.getString("Global.Label.Time"), true);
+
+                 if (!timeFormats.contains(pattern))
+                 {
+                     timeFormats.add(pattern);
+                     updateListTimeTypes();
+                 }
+                 
+                 jListTimeTypes.setSelectedIndex(timeFormats.indexOf(pattern));
+                 jListTimeTypes.ensureIndexIsVisible(timeFormats.indexOf(pattern));
+             }
+             else if (dateFormats.contains(pattern) || pattern.indexOf("d") >= 0 || pattern.indexOf("y")>=0 || pattern.indexOf("M")>=0)
+             {
+                 jListCategory.setSelectedValue(I18n.getString("Global.List.Date"), true);
+
+                 if (!dateFormats.contains(pattern))
+                 {
+                     dateFormats.add(pattern);
+                     updateListDateTypes();
+                 }
+                 
+                 jListDateTypes.setSelectedIndex(dateFormats.indexOf(pattern));
+                 jListDateTypes.ensureIndexIsVisible(dateFormats.indexOf(pattern));
+             }
+             else // assuming it is a number...
+             {
+                 jListCategory.setSelectedValue(I18n.getString("Global.List.Number"), true);
+
+                 DecimalFormat format = new DecimalFormat(pattern);
+                 ((SpinnerNumberModel)jSpinnerNumberDecimals2.getModel()).setValue( format.getMaximumFractionDigits() );
+                 jCheckBox1.setSelected( format.isGroupingUsed());
+
+                 if (pattern.indexOf(";-") >= 0) jListNegatives.setSelectedIndex(0);
+                 else if (pattern.indexOf(";") >= 0 && pattern.endsWith("-")) jListNegatives.setSelectedIndex(1);
+                 else if (pattern.indexOf(";(-") >= 0 && pattern.endsWith(")")) jListNegatives.setSelectedIndex(3);
+                 else if (pattern.indexOf(";(") >= 0 && pattern.endsWith("-)")) jListNegatives.setSelectedIndex(4);
+                 else if (pattern.indexOf(";(") >= 0 && pattern.endsWith(")")) jListNegatives.setSelectedIndex(3);
+
+             }
+             jTextFieldCustomFormat.setText(pattern);
+         } catch (Exception ex)
+         {
+             jTextFieldCustomFormat.setText(pattern);
+             jListCategory.setSelectedValue(I18n.getString("Global.List.CustomFormat"), true);
+             
+             ex.printStackTrace();
+         }
      }
      
      public int getSelectedCategory()
@@ -1071,24 +1214,33 @@ public class FieldPatternPanel extends javax.swing.JPanel {
         if (category.equals(I18n.getString("Global.List.Currency") )) i = 3;  // 0
         if (category.equals(I18n.getString("Global.List.Percentage") )) i = 4;  // 0
         if (category.equals(I18n.getString("Global.List.Scientific") )) i = 5;  // 0
+        if (category.equals(I18n.getString("Global.List.CustomFormat") )) i = 6;  // 0
         
         return i;
      }
      
      
-     // 
+
      public String showFieldPatternDialog(Component parent)
      {
-         Object pWin = SwingUtilities.windowForComponent(parent);
+         Window pWin = null;
+         if (parent instanceof Window)
+         {
+             pWin = (Window)parent;
+         }
+         else
+         {
+             pWin = SwingUtilities.windowForComponent(parent);
+         }
          if (pWin instanceof Frame) dialog = new JDialog((Frame)pWin);
          else if (pWin instanceof Dialog) dialog = new JDialog((Dialog)pWin);
          else dialog = new JDialog();
 
          dialog.setModal(true);
          dialog.getContentPane().setLayout(new BorderLayout());
-         add(this, BorderLayout.CENTER);
+         dialog.add(this, BorderLayout.CENTER);
          jPanel5.setVisible(true);
-         dialog.setSize(520, 350);
+         dialog.pack();
          dialog.setLocationRelativeTo(null);
          
          dialog.getRootPane().setDefaultButton(this.jButton1);

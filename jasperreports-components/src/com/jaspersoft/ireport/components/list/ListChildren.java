@@ -72,7 +72,6 @@ public class ListChildren extends ElementContainerChildren implements PropertyCh
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
-        System.out.println("Event:  " + evt.getPropertyName());
         super.propertyChange(evt);
 
     }

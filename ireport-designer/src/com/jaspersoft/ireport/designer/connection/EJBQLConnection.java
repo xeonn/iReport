@@ -23,13 +23,13 @@
  */
 package com.jaspersoft.ireport.designer.connection;
 
+import com.jaspersoft.ireport.designer.IRURLClassLoader;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ReportClassLoader;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.designer.connection.gui.EJBQLConnectionEditor;
-import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.*;
@@ -121,7 +121,7 @@ public class EJBQLConnection extends IReportConnection {
                         {
                             urls[i] = new java.io.File(""+items.get(i)).toURI().toURL();
                         }
-                        URLClassLoader urlClassLoader = new URLClassLoader(urls,  cl );
+                        IRURLClassLoader urlClassLoader = new IRURLClassLoader(urls,  cl );
                         Thread.currentThread().setContextClassLoader(urlClassLoader  );
                     }
                     

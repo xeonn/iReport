@@ -79,6 +79,7 @@ import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignEllipse;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
+import net.sf.jasperreports.engine.design.JRDesignGenericElement;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignRectangle;
@@ -399,7 +400,13 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
             fireNameChange(null, getName());
             fireDisplayNameChange(null, getDisplayName());
         }
-        
+
+        if (evt.getPropertyName().equals(JRDesignGenericElement.PROPERTY_GENERIC_TYPE))
+        {
+            this.firePropertyChange(JRDesignGenericElement.PROPERTY_GENERIC_TYPE + "_name", evt.getOldValue(), evt.getNewValue() );
+            this.firePropertyChange(JRDesignGenericElement.PROPERTY_GENERIC_TYPE + "_namespace", evt.getOldValue(), evt.getNewValue() );
+        }
+
         if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_PARENT_STYLE))
         {
             this.firePropertyChange(JRDesignElement.PROPERTY_PARENT_STYLE_NAME_REFERENCE, evt.getOldValue(), evt.getNewValue() );

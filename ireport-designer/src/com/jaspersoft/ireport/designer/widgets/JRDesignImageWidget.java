@@ -65,7 +65,7 @@ public class JRDesignImageWidget extends JRDesignElementWidget implements Runnab
     @Override
     protected void paintWidgetImplementation() {
 
-        if (getElement().getHeight() == 0 || getElement().getWidth() == 0)
+        if (getElement().getHeight() <= 0 || getElement().getWidth() <= 0)
         {
                 return;
         }

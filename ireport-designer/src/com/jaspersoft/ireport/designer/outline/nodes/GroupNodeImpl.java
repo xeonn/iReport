@@ -24,6 +24,7 @@
 package com.jaspersoft.ireport.designer.outline.nodes;
 
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.actions.DeleteGroupAction;
 import com.jaspersoft.ireport.designer.actions.MoveGroupDownAction;
 import com.jaspersoft.ireport.designer.actions.MoveGroupUpAction;
@@ -94,8 +95,12 @@ public class GroupNodeImpl extends IRAbstractNode implements PropertyChangeListe
             Sheet.Set groupPropertiesSet = Sheet.createPropertiesSet();
             groupPropertiesSet.setName("GROUP_PROPERTIES");
             groupPropertiesSet.setDisplayName(I18n.getString("BandNode.Property.Groupproperties"));
-            groupPropertiesSet = BandNode.fillGroupPropertySet(groupPropertiesSet, getDataset(), group);
 
+            if (getDataset() != null)
+            {
+                groupPropertiesSet = BandNode.fillGroupPropertySet(groupPropertiesSet, getDataset(), group);
+            }
+            
             sheet.put(groupPropertiesSet);
         }
         return sheet;
@@ -130,6 +135,7 @@ public class GroupNodeImpl extends IRAbstractNode implements PropertyChangeListe
     public void destroy() throws IOException {
        
        JRDesignDataset dataset = getParentNode().getLookup().lookup(JRDesignDataset.class);
+       getGroup().getEventSupport().removePropertyChangeListener(this);
        dataset.removeGroup(getGroup());
        super.destroy();
     }
@@ -226,10 +232,13 @@ public class GroupNodeImpl extends IRAbstractNode implements PropertyChangeListe
         }
         
         // Update the sheet
-        this.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue() );
+        if (ModelUtils.containsProperty(this.getPropertySets(), evt.getPropertyName())) {
+            this.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+        }
     }
 
     public JRDesignDataset getDataset() {
+        if (getParentNode() == null) return null;
         return getParentNode().getLookup().lookup(JRDesignDataset.class);
     }
     

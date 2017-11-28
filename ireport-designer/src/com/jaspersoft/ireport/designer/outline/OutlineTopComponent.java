@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 import javax.swing.ActionMap;
 import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultEditorKit;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.awt.UndoRedo;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
@@ -317,6 +318,14 @@ final public class OutlineTopComponent extends TopComponent implements ExplorerM
 
             public void run() {
                 IReportManager.getInstance().fireJrxmlVisualViewActivatedListenerEvent(getCurrentJrxmlVisualView());
+                JasperDesign jd = null;
+                
+                if (getCurrentJrxmlVisualView() != null &&
+                    getCurrentJrxmlVisualView().getModel() != null)
+                {
+                    jd = getCurrentJrxmlVisualView().getModel().getJasperDesign();
+                }
+                IReportManager.getInstance().fireJasperDesignActivatedListenerEvent(jd);
             }
         });
         

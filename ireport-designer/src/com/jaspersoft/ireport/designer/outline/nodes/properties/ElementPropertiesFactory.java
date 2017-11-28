@@ -43,6 +43,11 @@ import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.outline.nodes.properties.charts.ChartPropertiesFactory;
 import com.jaspersoft.ireport.designer.sheet.PropertyExpressionsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.BreakTypeProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.GenericElementEvaluationGroupProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.GenericElementEvaluationTimeProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.GenericElementParametersProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.GenericElementTypeNameProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.GenericElementTypeNameSpaceProperty;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.engine.JRBox;
@@ -50,6 +55,7 @@ import net.sf.jasperreports.engine.design.JRDesignBreak;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignGenericElement;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JRDesignTextElement;
@@ -99,6 +105,22 @@ public class ElementPropertiesFactory {
         propertySet.setName("BREAK_PROPERTIES");
         propertySet.setDisplayName("Break properties");
         propertySet.put(new BreakTypeProperty(breakElement));
+
+        return propertySet;
+    }
+
+
+    public static Sheet.Set getGenericElementPropertySet(JRDesignGenericElement genericElement, JasperDesign jd)
+    {
+        JRDesignDataset dataset = ModelUtils.getElementDataset(genericElement, jd);
+        Sheet.Set propertySet = Sheet.createPropertiesSet();
+        propertySet.setName("GENERIC_ELEMENT_PROPERTIES");
+        propertySet.setDisplayName("Generic Element properties");
+        propertySet.put(new GenericElementTypeNameProperty(genericElement));
+        propertySet.put(new GenericElementTypeNameSpaceProperty(genericElement));
+        propertySet.put(new GenericElementEvaluationTimeProperty(genericElement,dataset));
+        propertySet.put(new GenericElementEvaluationGroupProperty(genericElement,dataset));
+        propertySet.put(new GenericElementParametersProperty(genericElement,dataset));
 
         return propertySet;
     }
@@ -173,6 +195,11 @@ public class ElementPropertiesFactory {
         if (element instanceof  JRBox)
         {
             sets.add( getBoxPropertySet((JRBox)element) );
+        }
+
+        if (element instanceof  JRDesignGenericElement)
+        {
+            sets.add(  getGenericElementPropertySet((JRDesignGenericElement)element, jd ) );
         }
         
         return sets;

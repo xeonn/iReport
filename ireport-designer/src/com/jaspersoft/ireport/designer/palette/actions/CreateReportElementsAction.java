@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer.palette.actions;
 
+import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.ReportObjectScene;
@@ -44,7 +45,6 @@ import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JRSubreport;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Scene;
@@ -63,7 +63,7 @@ public abstract class CreateReportElementsAction extends PaletteItemAction
      * @param p
      * @return
      */
-    private static JRDesignElementWidget findTopMostFrameAt(ReportObjectScene theScene, Point p) {
+    private static JRDesignElementWidget findTopMostFrameAt(AbstractReportObjectScene theScene, Point p) {
 
          LayerWidget layer = theScene.getElementsLayer();
          List<Widget> widgets = layer.getChildren();
@@ -221,6 +221,36 @@ public abstract class CreateReportElementsAction extends PaletteItemAction
                      AddElementUndoableEdit edit = new AddElementUndoableEdit(element,cell);
                      IReportManager.getInstance().addUndoableEdit(edit);
 
+                 }
+            }
+        }
+        else if (theScene instanceof AbstractReportObjectScene )
+        {
+
+            for (int k=0; k<elements.length; ++k)
+            {
+                try {
+
+                    JRDesignElement element = elements[k];
+                    Object parent = ((AbstractReportObjectScene)theScene).dropElementAt(element, location);
+                    if (parent == null) continue;
+                    
+                    adjustElement(elements,k,theScene, jasperDesign, parent, location);
+
+                    AddElementUndoableEdit edit = new AddElementUndoableEdit(element, parent);
+                    IReportManager.getInstance().addUndoableEdit(edit);
+
+
+                } catch (final RuntimeException ex)
+                {
+                    Runnable r = new Runnable() {
+                        public void run() {
+                            JOptionPane.showMessageDialog(Misc.getMainFrame(), ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
+                        }
+                    };
+
+                    Mutex.EVENT.readAccess(r);
+                    return;
                  }
             }
         }

@@ -50,7 +50,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -75,7 +74,6 @@ import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.JRProperties;
 import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
 import org.apache.xerces.parsers.DOMParser;
-import org.eclipse.jdt.internal.compiler.util.SuffixConstants;
 import org.netbeans.api.db.explorer.JDBCDriver;
 import org.netbeans.api.db.explorer.JDBCDriverManager;
 import org.openide.awt.StatusDisplayer;
@@ -235,6 +233,9 @@ public class IReportManager {
     private java.util.HashMap parameterValues = new java.util.HashMap();
     private List<Tag> customLinkTypes = new ArrayList<Tag>();
     private final Set<JrxmlVisualViewActivatedListener> listeners = new HashSet<JrxmlVisualViewActivatedListener>(1); // or can use ChangeSupport in NB 6.0
+
+    private final Set<JasperDesignActivatedListener> jasperDesignActivatedListeners = new HashSet<JasperDesignActivatedListener>(1);
+
     private java.util.List<IReportConnectionFactory> iReportConnectionFactories = null;
     private IReportConnection defaultConnection = null;
     private PropertyChangeSupport propertyChangeSupport = null;
@@ -350,12 +351,30 @@ public class IReportManager {
         DataFolder decoratorsDataFolder = DataFolder.findFolder(decoratorsFileObject);
         if (decoratorsDataFolder == null) return decorators;
 
+        List<String> list = new ArrayList<String>();
+
+        Collection<? extends ElementDecorator> elementDecoratorsInstances = Lookups.forPath("ireport/decorators/elements").lookupAll(ElementDecorator.class);
+        Iterator<? extends ElementDecorator> it = elementDecoratorsInstances.iterator();
+        while (it.hasNext ()) {
+
+            ElementDecorator decorator = it.next();
+            if (decorator.appliesTo(element))
+            {
+                decorators.add(decorator);
+                list.add(decorator.getClass().getName());
+            }
+        }
+
+
+
         Enumeration<DataObject> enObj = decoratorsDataFolder.children();
         while (enObj.hasMoreElements())
         {
             DataObject dataObject = enObj.nextElement();
             String name = dataObject.getName();
             name = name.replace('-', '.');
+
+            if (list.contains(name)) continue;
             try {
                 ElementDecorator decorator = (ElementDecorator) Class.forName(name).newInstance();
                 if (decorator.appliesTo(element))
@@ -367,6 +386,8 @@ public class IReportManager {
                 System.out.println("Unable to find element decorator class: " + name);
             }
         }
+
+        
         return decorators;
     }
     
@@ -1080,11 +1101,20 @@ public class IReportManager {
 
 //        private String str="";
 
+    public org.openide.nodes.Node findNodeOf(Object obj, org.openide.nodes.Node root)
+    {
+        return findNodeOf(obj, root, true);
+    }
+
     /**
-     *  Find the node that that has this object in his lookup, or the object is a well know object
+     * Find the node that that has this object in his lookup, or the object is a well know object
      *  and can be found using a GenericLookup instance...
+     * @param obj
+     * @param root
+     * @param recursive <- If tru, don't stop immediatly, but look for the most nested Node with this object in its lookup.
+     * @return
      */
-    public org.openide.nodes.Node findNodeOf(Object obj, org.openide.nodes.Node root) {
+    public org.openide.nodes.Node findNodeOf(Object obj, org.openide.nodes.Node root, boolean recursive) {
 
         //str +=" ";
         org.openide.nodes.Node candidate = null;
@@ -1095,8 +1125,8 @@ public class IReportManager {
         // Look in the lookup
         if (root.getLookup().lookup(obj.getClass()) == obj)
         {
-            //System.out.println(str + "Probably found " + obj + " in "+root);
-            //System.out.flush();
+            if (!recursive) return root;
+            
             candidate = root;
             if (obj instanceof JRDesignCrosstab &&
                 root instanceof CrosstabNode)
@@ -1108,7 +1138,7 @@ public class IReportManager {
         org.openide.nodes.Node[] children = root.getChildren().getNodes(true);
         for (int i=0; i<children.length; ++i)
         {
-            org.openide.nodes.Node res = findNodeOf(obj, children[i]);
+            org.openide.nodes.Node res = findNodeOf(obj, children[i],recursive);
             if (res != null)
             {
                 //System.out.println(str + "Found in " + res);
@@ -1571,6 +1601,30 @@ public class IReportManager {
     }
 
 
+    public final void addJasperDesignActivatedListener(JasperDesignActivatedListener l) {
+        synchronized (jasperDesignActivatedListeners) {
+            jasperDesignActivatedListeners.add(l);
+        }
+    }
+
+    public final void removeJasperDesignActivatedListener(JasperDesignActivatedListener l) {
+        synchronized (jasperDesignActivatedListeners) {
+            jasperDesignActivatedListeners.remove(l);
+        }
+    }
+
+    public final void fireJasperDesignActivatedListenerEvent(JasperDesign jd) {
+        Iterator<JasperDesignActivatedListener> it;
+        synchronized (jasperDesignActivatedListeners) {
+            it = new HashSet<JasperDesignActivatedListener>(jasperDesignActivatedListeners).iterator();
+        }
+
+        while (it.hasNext()) {
+            it.next().jasperDesignActivated(jd);
+        }
+    }
+
+
     public void createPaletteItem()
     {
 
@@ -1634,6 +1688,7 @@ public class IReportManager {
             exporterFactories.add(new DefaultExporterFactory("odt"));
             exporterFactories.add(new DefaultExporterFactory("ods"));
             exporterFactories.add(new DefaultExporterFactory("docx"));
+            exporterFactories.add(new DefaultExporterFactory("pptx"));
             exporterFactories.add(new DefaultExporterFactory("xml"));
         }
         return exporterFactories;

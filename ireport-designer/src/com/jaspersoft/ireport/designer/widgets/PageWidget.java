@@ -35,8 +35,11 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.TexturePaint;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import net.sf.jasperreports.engine.JRBand;
@@ -106,11 +109,6 @@ public class PageWidget extends Widget {
         //Draw the bands...
         Graphics2D g = this.getGraphics();
         
-        if (((ReportObjectScene)getScene()).isGridVisible())
-        {
-            paintGrid(g);
-        }
-        
         g.setColor(ReportObjectScene.DESIGN_LINE_COLOR);
         Stroke oldStroke = g.getStroke();
         //g.setStroke(new BasicStroke(0));
@@ -140,6 +138,12 @@ public class PageWidget extends Widget {
             // Paint the white document...
             g.setColor(Color.WHITE);
             g.fillRect(0,0,jd.getPageWidth(), dh);
+
+
+            if (((ReportObjectScene)getScene()).isGridVisible())
+            {
+                paintGrid(g, new Rectangle(0,0,jd.getPageWidth(), dh));
+            }
 
             g.setColor(ReportObjectScene.DESIGN_LINE_COLOR);
             // LEFT MARGINE LINE
@@ -239,6 +243,12 @@ public class PageWidget extends Widget {
                 // Paint a new page...
                 g.setColor(Color.WHITE);
                 g.fillRect(0,designHeight,jd.getPageWidth(), bgPageHeight);
+
+                if (((ReportObjectScene)getScene()).isGridVisible())
+                {
+                    paintGrid(g, new Rectangle(0,designHeight,jd.getPageWidth(), bgPageHeight));
+                }
+                
                 //g.setColor(Color.GREEN);
                 g.setColor(ReportObjectScene.DESIGN_LINE_COLOR);
 
@@ -268,6 +278,8 @@ public class PageWidget extends Widget {
             }
         }
         g.setStroke(oldStroke);
+
+        
     }
     
     private void paintBand(Graphics2D g, JasperDesign jd, String title, JRBand b, int bandBottom)
@@ -299,12 +311,18 @@ public class PageWidget extends Widget {
     }
     
     
-    protected void paintGrid(Graphics2D g) {
+    protected void paintGrid(Graphics2D g, Rectangle area) {
         Paint oldPaint = g.getPaint();
+
+        // The top/left corner of the textture must match where we are...
+        AffineTransform backT = g.getTransform();
+        g.translate(area.x, area.y);
+
         g.setPaint( getGridTexture() );
         
-        g.fill( getClientArea() );
+        g.fill( new Rectangle(0,0,area.width,area.height) );
         g.setPaint(oldPaint);
+        g.setTransform(backT);
     }
 
     private TexturePaint getGridTexture()

@@ -37,6 +37,7 @@ import com.jaspersoft.ireport.designer.fonts.InstallFontWizardDescriptor;
 import com.jaspersoft.ireport.designer.options.export.ExportOptionsPanel;
 import com.jaspersoft.ireport.designer.options.jasperreports.JROptionsPanel;
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.designer.tools.FieldPatternDialog;
 import com.jaspersoft.ireport.designer.tools.LocaleSelectorDialog;
 import com.jaspersoft.ireport.designer.tools.QueryExecuterDialog;
 import com.jaspersoft.ireport.designer.tools.TimeZoneDialog;
@@ -62,7 +63,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 import javax.swing.SpinnerNumberModel;
@@ -243,7 +246,8 @@ final class IReportPanel extends javax.swing.JPanel {
         //jTabbedPane1.remove(5);
 
         jComboBoxCompatibility.addItem(new Tag("", "Last version"));
-        jComboBoxCompatibility.addItem(new Tag("", "JasperReports 3.7.0"));
+        jComboBoxCompatibility.addItem(new Tag("3_7_1", "JasperReports 3.7.1"));
+        jComboBoxCompatibility.addItem(new Tag("3_6_2", "JasperReports 3.7.0"));
         jComboBoxCompatibility.addItem(new Tag("3_6_2", "JasperReports 3.6.2"));
         jComboBoxCompatibility.addItem(new Tag("3_6_1", "JasperReports 3.6.1"));
         jComboBoxCompatibility.addItem(new Tag("3_6_0", "JasperReports 3.6.0"));
@@ -312,6 +316,7 @@ final class IReportPanel extends javax.swing.JPanel {
         jCheckBoxAskConfirmationOnDelete = new javax.swing.JCheckBox();
         jCheckBoxDebugMode = new javax.swing.JCheckBox();
         jCheckBoxShowPositionErrors = new javax.swing.JCheckBox();
+        jCheckBoxSaveZoom = new javax.swing.JCheckBox();
         jPanel22 = new javax.swing.JPanel();
         jLabelExpressions = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -380,6 +385,9 @@ final class IReportPanel extends javax.swing.JPanel {
         jLabelDOCXViewer = new javax.swing.JLabel();
         jTextFieldDOCXViewer = new javax.swing.JTextField();
         jButtonDOCXViewer = new javax.swing.JButton();
+        jLabelPPTXViewer = new javax.swing.JLabel();
+        jTextFieldPPTXViewer = new javax.swing.JTextField();
+        jButtonPPTXViewer = new javax.swing.JButton();
         jPanel18 = new javax.swing.JPanel();
         jLabelClasspath1 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -411,6 +419,13 @@ final class IReportPanel extends javax.swing.JPanel {
         jButtonTimeZone = new javax.swing.JButton();
         jCheckBoxIgnorePagination = new javax.swing.JCheckBox();
         jCheckBoxVirtualizer = new javax.swing.JCheckBox();
+        jPanelParameterPromptOptions = new javax.swing.JPanel();
+        jLabelDateFormat = new javax.swing.JLabel();
+        jTextPromptFieldDateFormat = new javax.swing.JTextField();
+        jButtonDateFormat = new javax.swing.JButton();
+        jLabelDateTimeFormat = new javax.swing.JLabel();
+        jTextPromptFieldDateTimeFormat = new javax.swing.JTextField();
+        jButtonDateTimeFormat = new javax.swing.JButton();
         jPanelVirtualizer = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jComboBoxVirtualizer = new javax.swing.JComboBox();
@@ -517,7 +532,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jPanel24Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabelTimeZone2)
                     .add(jComboBoxTheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(200, Short.MAX_VALUE))
+                .addContainerGap(205, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Report defaults", jPanel24);
@@ -564,6 +579,14 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
 
+        jCheckBoxSaveZoom.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxSaveZoom, "Save designer zoom factor and main page location in the Jrxml");
+        jCheckBoxSaveZoom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxSaveZoomActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout jPanel26Layout = new org.jdesktop.layout.GroupLayout(jPanel26);
         jPanel26.setLayout(jPanel26Layout);
         jPanel26Layout.setHorizontalGroup(
@@ -576,7 +599,8 @@ final class IReportPanel extends javax.swing.JPanel {
                     .add(jCheckBoxShowBackgroundAsSeparatedDocument)
                     .add(jCheckBoxAskConfirmationOnDelete)
                     .add(jCheckBoxDebugMode)
-                    .add(jCheckBoxShowPositionErrors))
+                    .add(jCheckBoxShowPositionErrors)
+                    .add(jCheckBoxSaveZoom))
                 .addContainerGap(235, Short.MAX_VALUE))
         );
         jPanel26Layout.setVerticalGroup(
@@ -594,7 +618,9 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jCheckBoxDebugMode)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxShowPositionErrors)
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxSaveZoom)
+                .addContainerGap(94, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Designer", jPanel26);
@@ -702,7 +728,7 @@ final class IReportPanel extends javax.swing.JPanel {
                         .add(jButtonRemoveExpression, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonRestoreExpressions))
-                    .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
+                    .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -738,7 +764,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jComboBoxCompatibility, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(18, 18, 18)
                 .add(jCheckBoxShowCompatibilityWarning)
-                .addContainerGap(146, Short.MAX_VALUE))
+                .addContainerGap(151, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Compatibility", jPanelCompatibility);
@@ -760,7 +786,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jTabbedPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                .add(jTabbedPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -902,8 +928,8 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelClasspath)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
-                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE))
+                    .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
+                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -1308,6 +1334,31 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
         jPanel30.add(jButtonDOCXViewer, gridBagConstraints);
 
+        jLabelPPTXViewer.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelPPTXViewer, "PowerPoint (PPTX) Viewer");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jLabelPPTXViewer, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 0);
+        jPanel30.add(jTextFieldPPTXViewer, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonPPTXViewer, "Browse");
+        jButtonPPTXViewer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPPTXViewerActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel30.add(jButtonPPTXViewer, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -1430,8 +1481,8 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelClasspath1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel19, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
-                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE))
+                    .add(jPanel19, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
+                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -1636,6 +1687,63 @@ final class IReportPanel extends javax.swing.JPanel {
         );
 
         jTabbedPane2.addTab("Execution options", jPanel2);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelDateFormat, "Date format");
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonDateFormat, "Create...");
+        jButtonDateFormat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDateFormatActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelDateTimeFormat, "Time format");
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonDateTimeFormat, "Create...");
+        jButtonDateTimeFormat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDateTimeFormatActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanelParameterPromptOptionsLayout = new org.jdesktop.layout.GroupLayout(jPanelParameterPromptOptions);
+        jPanelParameterPromptOptions.setLayout(jPanelParameterPromptOptionsLayout);
+        jPanelParameterPromptOptionsLayout.setHorizontalGroup(
+            jPanelParameterPromptOptionsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanelParameterPromptOptionsLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanelParameterPromptOptionsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanelParameterPromptOptionsLayout.createSequentialGroup()
+                        .add(jLabelDateFormat)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jTextPromptFieldDateFormat, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 240, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButtonDateFormat))
+                    .add(jPanelParameterPromptOptionsLayout.createSequentialGroup()
+                        .add(jLabelDateTimeFormat)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jTextPromptFieldDateTimeFormat, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 240, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButtonDateTimeFormat)))
+                .addContainerGap(203, Short.MAX_VALUE))
+        );
+        jPanelParameterPromptOptionsLayout.setVerticalGroup(
+            jPanelParameterPromptOptionsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanelParameterPromptOptionsLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanelParameterPromptOptionsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabelDateFormat)
+                    .add(jTextPromptFieldDateFormat, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jButtonDateFormat))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanelParameterPromptOptionsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabelDateTimeFormat)
+                    .add(jTextPromptFieldDateTimeFormat, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jButtonDateTimeFormat))
+                .addContainerGap(139, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("Parameters prompt", jPanelParameterPromptOptions);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, "Use this virtualizer");
 
@@ -1881,7 +1989,7 @@ final class IReportPanel extends javax.swing.JPanel {
                         .add(jButtonModifyQueryExecuter, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonRemoveQueryExecuter, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE))
+                    .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -1895,7 +2003,7 @@ final class IReportPanel extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE)
+            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 404, Short.MAX_VALUE)
         );
 
         jTabbedPane1.getAccessibleContext().setAccessibleName("General");
@@ -2631,6 +2739,8 @@ private void jButtonInstallFontActionPerformed(java.awt.event.ActionEvent evt) {
         {
             // update fonts list...
             updateFontsList();
+            // Fire a preference changed event...
+            IReportManager.getPreferences().put("fontExtensions", "" + (new java.util.Date()).getTime());
         }
 }//GEN-LAST:event_jButtonInstallFontActionPerformed
 
@@ -2721,6 +2831,69 @@ private void jButtonExportFontsActionPerformed(java.awt.event.ActionEvent evt) {
 private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxShowPositionErrorsActionPerformed
     notifyChange();
 }//GEN-LAST:event_jCheckBoxShowPositionErrorsActionPerformed
+
+private void jButtonDateFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDateFormatActionPerformed
+    
+    FieldPatternDialog fpd = null;
+    Window win = SwingUtilities.getWindowAncestor(this);
+    if (win != null && win instanceof JFrame)
+    {
+        fpd = new FieldPatternDialog( (JFrame)win, true);
+    }
+    else fpd = new FieldPatternDialog( (JDialog)win, true);
+
+    fpd.setOnlyDate(true);
+    if (jTextPromptFieldDateFormat.getText().length() > 0)
+    {
+        fpd.setPattern(jTextPromptFieldDateFormat.getText());
+    }
+    fpd.setVisible(true);
+
+    if (fpd.getDialogResult() == JOptionPane.OK_OPTION)
+    {
+        jTextPromptFieldDateFormat.setText(fpd.getPattern());
+        notifyChange();
+    }
+}//GEN-LAST:event_jButtonDateFormatActionPerformed
+
+private void jButtonDateTimeFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDateTimeFormatActionPerformed
+    FieldPatternDialog fpd = null;
+    Window win = SwingUtilities.getWindowAncestor(this);
+    if (win != null && win instanceof JFrame)
+    {
+        fpd = new FieldPatternDialog( (JFrame)win, true);
+    }
+    else fpd = new FieldPatternDialog( (JDialog)win, true);
+
+    fpd.setOnlyDate(true);
+    fpd.setSelectedCategory("Global.Label.Time");
+    if (jTextPromptFieldDateTimeFormat.getText().length() > 0)
+    {
+        fpd.setPattern(jTextPromptFieldDateTimeFormat.getText());
+    }
+
+    fpd.setVisible(true);
+
+    if (fpd.getDialogResult() == JOptionPane.OK_OPTION)
+    {
+        jTextPromptFieldDateTimeFormat.setText(fpd.getPattern());
+        notifyChange();
+    }
+}//GEN-LAST:event_jButtonDateTimeFormatActionPerformed
+
+private void jCheckBoxSaveZoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxSaveZoomActionPerformed
+    notifyChange();
+}//GEN-LAST:event_jCheckBoxSaveZoomActionPerformed
+
+private void jButtonPPTXViewerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPPTXViewerActionPerformed
+    javax.swing.JFileChooser jfc = new javax.swing.JFileChooser();
+
+        jfc.setDialogTitle("Choose a PPTX viewer...");
+        jfc.setMultiSelectionEnabled(false);
+        if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            jTextFieldPPTXViewer.setText( jfc.getSelectedFile().getPath());
+        }
+}//GEN-LAST:event_jButtonPPTXViewerActionPerformed
     
             
     void load() {
@@ -2742,6 +2915,8 @@ private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEve
         jCheckBoxShowCompatibilityWarning.setSelected( pref.getBoolean("show_compatibility_warning", true) ); // NOI18N
         jCheckBoxCompileSubreports.setSelected( pref.getBoolean("compile_subreports", true) ); // NOI18N
         jCheckBoxDebugMode.setSelected( pref.getBoolean("designer_debug_mode", false) ); // NOI18N
+
+        jCheckBoxSaveZoom.setSelected( pref.getBoolean("save_zoom_and_location", true) ); // NOI18N
         
         jCheckBoxShowPositionErrors.setSelected( pref.getBoolean("showPositionErrors", true) ); // NOI18N
 
@@ -2829,7 +3004,12 @@ private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEve
         jTextFieldTXTViewer.setText(pref.get("ExternalTXTViewer", ""));
         jTextFieldHTMLViewer.setText(pref.get("ExternalHTMLViewer", ""));
         jTextFieldDOCXViewer.setText(pref.get("ExternalDOCXViewer", ""));
+        jTextFieldPPTXViewer.setText(pref.get("ExternalPPTXViewer", ""));
         jTextFieldExternalEditor.setText(pref.get("ExternalEditor", ""));
+
+        jTextPromptFieldDateFormat.setText(pref.get("PromptDateFormat", ""));
+        jTextPromptFieldDateTimeFormat.setText(pref.get("PromptDateTimeFormat", ""));
+
 
         this.jTextFieldVirtualizerDir.setText( pref.get("ReportVirtualizerDirectory", Misc.nvl(JRProperties.getProperty(JRProperties.COMPILER_TEMP_DIR),"")));
         this.jSpinnerVirtualizerSize.setValue(pref.getInt("ReportVirtualizerSize",100));
@@ -2980,6 +3160,8 @@ private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEve
             ((DefaultListModel)jListFonts.getModel()).addElement(obj);
         }
 
+        
+
     }
 
     void store() {
@@ -3009,6 +3191,7 @@ private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEve
         pref.putBoolean("designer_debug_mode", jCheckBoxDebugMode.isSelected());// NOI18N
 
         pref.putBoolean("showPositionErrors", jCheckBoxShowPositionErrors.isSelected());// NOI18N
+        pref.putBoolean("save_zoom_and_location", jCheckBoxSaveZoom.isSelected());// NOI18N
 
         if (getCurrentReportLocale() != null) pref.put("reportLocale", getCurrentReportLocale().toString());
         else pref.remove("reportLocale");
@@ -3055,6 +3238,9 @@ private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEve
 
         if (jTextFieldDOCXViewer.getText().length() > 0) pref.put("ExternalDOCXViewer", jTextFieldDOCXViewer.getText());
         else pref.remove("ExternalDOCXViewer");
+
+        if (jTextFieldPPTXViewer.getText().length() > 0) pref.put("ExternalPPTXViewer", jTextFieldPPTXViewer.getText());
+        else pref.remove("ExternalPPTXViewer");
 
         if (jTextFieldExternalEditor.getText().length() > 0) pref.put("ExternalEditor", jTextFieldExternalEditor.getText());
         else pref.remove("ExternalEditor");
@@ -3120,6 +3306,16 @@ private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEve
         IReportManager.getInstance().reloadQueryExecuters();
 
         pref.put("compatibility", ((Tag)jComboBoxCompatibility.getSelectedItem()).getValue()+"");
+        
+        if (jTextPromptFieldDateFormat.getText().length() > 0) pref.put("PromptDateFormat", this.jTextPromptFieldDateFormat.getText());
+        else {
+            pref.remove("PromptDateFormat");
+        }
+
+        if (jTextPromptFieldDateTimeFormat.getText().length() > 0) pref.put("PromptDateTimeFormat", this.jTextPromptFieldDateTimeFormat.getText());
+        else {
+            pref.remove("PromptDateTimeFormat");
+        }
     }
     
     private List<String> getClasspath(boolean relodable)
@@ -3158,6 +3354,8 @@ private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEve
     private javax.swing.JButton jButtonCSVViewer;
     private javax.swing.JButton jButtonCompilationDirectory;
     private javax.swing.JButton jButtonDOCXViewer;
+    private javax.swing.JButton jButtonDateFormat;
+    private javax.swing.JButton jButtonDateTimeFormat;
     private javax.swing.JButton jButtonDeselectAllFonts;
     private javax.swing.JButton jButtonEditFont;
     private javax.swing.JButton jButtonExportFonts;
@@ -3173,6 +3371,7 @@ private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEve
     private javax.swing.JButton jButtonODSViewer;
     private javax.swing.JButton jButtonPDFViewer;
     private javax.swing.JButton jButtonPDFViewer1;
+    private javax.swing.JButton jButtonPPTXViewer;
     private javax.swing.JButton jButtonRTFViewer;
     private javax.swing.JButton jButtonRemoveClasspathItem;
     private javax.swing.JButton jButtonRemoveExpression;
@@ -3194,6 +3393,7 @@ private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEve
     private javax.swing.JCheckBox jCheckBoxKeyInReportInspector;
     private javax.swing.JCheckBox jCheckBoxLimitRecordNumber;
     private javax.swing.JCheckBox jCheckBoxMagneticGuideLines;
+    private javax.swing.JCheckBox jCheckBoxSaveZoom;
     private javax.swing.JCheckBox jCheckBoxShowBackgroundAsSeparatedDocument;
     private javax.swing.JCheckBox jCheckBoxShowCompatibilityWarning;
     private javax.swing.JCheckBox jCheckBoxShowPositionErrors;
@@ -3212,6 +3412,8 @@ private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEve
     private javax.swing.JLabel jLabelClasspath1;
     private javax.swing.JLabel jLabelCompilationDirectory;
     private javax.swing.JLabel jLabelDOCXViewer;
+    private javax.swing.JLabel jLabelDateFormat;
+    private javax.swing.JLabel jLabelDateTimeFormat;
     private javax.swing.JLabel jLabelExpressions;
     private javax.swing.JLabel jLabelFontspath;
     private javax.swing.JLabel jLabelFontspath1;
@@ -3220,6 +3422,7 @@ private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEve
     private javax.swing.JLabel jLabelODFViewer;
     private javax.swing.JLabel jLabelODSViewer;
     private javax.swing.JLabel jLabelPDFViewer;
+    private javax.swing.JLabel jLabelPPTXViewer;
     private javax.swing.JLabel jLabelQueryExecuters;
     private javax.swing.JLabel jLabelRTFViewer;
     private javax.swing.JLabel jLabelReportLocale;
@@ -3256,6 +3459,7 @@ private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEve
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanelCompatibility;
+    private javax.swing.JPanel jPanelParameterPromptOptions;
     private javax.swing.JPanel jPanelVirtualizer;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -3281,12 +3485,15 @@ private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEve
     private javax.swing.JTextField jTextFieldODFViewer;
     private javax.swing.JTextField jTextFieldODSViewer;
     private javax.swing.JTextField jTextFieldPDFViewer;
+    private javax.swing.JTextField jTextFieldPPTXViewer;
     private javax.swing.JTextField jTextFieldRTFViewer;
     private javax.swing.JTextField jTextFieldReportLocale;
     private javax.swing.JTextField jTextFieldTXTViewer;
     private javax.swing.JTextField jTextFieldTimeZone;
     private javax.swing.JTextField jTextFieldVirtualizerDir;
     private javax.swing.JTextField jTextFieldXLSViewer;
+    private javax.swing.JTextField jTextPromptFieldDateFormat;
+    private javax.swing.JTextField jTextPromptFieldDateTimeFormat;
     // End of variables declaration//GEN-END:variables
 
     public Locale getCurrentReportLocale() {

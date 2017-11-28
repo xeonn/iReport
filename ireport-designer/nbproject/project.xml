@@ -247,6 +247,7 @@
                 <package>com.jaspersoft.ireport.designer.borders</package>
                 <package>com.jaspersoft.ireport.designer.charts</package>
                 <package>com.jaspersoft.ireport.designer.charts.datasets</package>
+                <package>com.jaspersoft.ireport.designer.charts.datasets.wizards</package>
                 <package>com.jaspersoft.ireport.designer.charts.multiaxis</package>
                 <package>com.jaspersoft.ireport.designer.compatibility</package>
                 <package>com.jaspersoft.ireport.designer.compiler</package>
@@ -337,11 +338,34 @@
                 <package>com.lowagie.tools</package>
                 <package>common</package>
                 <package>common.log</package>
+                <package>mondrian.calc</package>
+                <package>mondrian.calc.impl</package>
+                <package>mondrian.i18n</package>
+                <package>mondrian.mdx</package>
+                <package>mondrian.olap</package>
+                <package>mondrian.olap.fun</package>
+                <package>mondrian.olap.fun.extra</package>
+                <package>mondrian.olap.fun.vba</package>
+                <package>mondrian.olap.type</package>
+                <package>mondrian.olap4j</package>
+                <package>mondrian.recorder</package>
+                <package>mondrian.resource</package>
+                <package>mondrian.rolap</package>
+                <package>mondrian.rolap.agg</package>
+                <package>mondrian.rolap.aggmatcher</package>
+                <package>mondrian.rolap.cache</package>
+                <package>mondrian.rolap.sql</package>
+                <package>mondrian.spi</package>
+                <package>mondrian.spi.impl</package>
+                <package>mondrian.tui</package>
+                <package>mondrian.udf</package>
+                <package>mondrian.util</package>
                 <package>net.sf.jasperreports.ant</package>
                 <package>net.sf.jasperreports.charts</package>
                 <package>net.sf.jasperreports.charts.base</package>
                 <package>net.sf.jasperreports.charts.design</package>
                 <package>net.sf.jasperreports.charts.fill</package>
+                <package>net.sf.jasperreports.charts.type</package>
                 <package>net.sf.jasperreports.charts.util</package>
                 <package>net.sf.jasperreports.charts.xml</package>
                 <package>net.sf.jasperreports.chartthemes</package>
@@ -353,11 +377,14 @@
                 <package>net.sf.jasperreports.components.barbecue</package>
                 <package>net.sf.jasperreports.components.barcode4j</package>
                 <package>net.sf.jasperreports.components.list</package>
+                <package>net.sf.jasperreports.components.table</package>
+                <package>net.sf.jasperreports.components.table.fill</package>
                 <package>net.sf.jasperreports.crosstabs</package>
                 <package>net.sf.jasperreports.crosstabs.base</package>
                 <package>net.sf.jasperreports.crosstabs.design</package>
                 <package>net.sf.jasperreports.crosstabs.fill</package>
                 <package>net.sf.jasperreports.crosstabs.fill.calculation</package>
+                <package>net.sf.jasperreports.crosstabs.type</package>
                 <package>net.sf.jasperreports.crosstabs.xml</package>
                 <package>net.sf.jasperreports.engine</package>
                 <package>net.sf.jasperreports.engine.base</package>
@@ -379,6 +406,7 @@
                 <package>net.sf.jasperreports.engine.print</package>
                 <package>net.sf.jasperreports.engine.query</package>
                 <package>net.sf.jasperreports.engine.scriptlets</package>
+                <package>net.sf.jasperreports.engine.type</package>
                 <package>net.sf.jasperreports.engine.util</package>
                 <package>net.sf.jasperreports.engine.util.xml</package>
                 <package>net.sf.jasperreports.engine.xml</package>
@@ -633,8 +661,8 @@
                 <binary-origin>release/modules/ext/commons-collections-3.2.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/poi-3.2-FINAL-20081019.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/poi-3.2-FINAL-20081019.jar</binary-origin>
+                <runtime-relative-path>ext/poi-3.5-FINAL-20090928.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/poi-3.5-FINAL-20090928.jar</binary-origin>
             </class-path-extension>
             <!-- <class-path-extension>
                 <runtime-relative-path>ext/xml-apis.jar</runtime-relative-path>
@@ -673,20 +701,20 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-3.7.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-3.7.1.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-3.7.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-3.7.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-fonts-3.6.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-fonts-3.6.1.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-fonts-3.7.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-fonts-3.7.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jaxen-1.1.1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/jaxen-1.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/iText-2.1.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/iText-2.1.0.jar</binary-origin>
+                <runtime-relative-path>ext/iText-2.1.7.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/iText-2.1.7.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jxl-2.6.jar</runtime-relative-path>

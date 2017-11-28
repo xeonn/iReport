@@ -635,6 +635,7 @@ public class WSClient {
             ((org.apache.axis.client.Stub)managementService).setUsername( getUsername() );
             ((org.apache.axis.client.Stub)managementService).setPassword( getPassword() );
             ((org.apache.axis.client.Stub)managementService).setMaintainSession( true );
+            System.out.println("Client: "+ managementService);
         }
 
         int timeout = IReportManager.getPreferences().getInt("client_timeout", 0) * 1000;

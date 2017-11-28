@@ -52,7 +52,7 @@ public final class RadiusProperty extends PropertySupport {
         if (val == null || val instanceof Integer) {
             Integer oldValue = style.getOwnRadius();
             Integer newValue = (Integer) val;
-            if (newValue < 0) {
+            if (newValue != null && newValue < 0) {
                 IllegalArgumentException iae = annotateException(I18n.getString("RadiusPropertyRadius.Property.Message"));
                 throw iae;
             }

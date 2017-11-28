@@ -197,7 +197,7 @@ public class InstallFontWizardDescriptor extends WizardDescriptor {
 
                     String bean_xml = IRFontUtils.dumpBean(font);
 
-                    bean_xml += "</beans>\n\n";
+                    bean_xml += "</fontFamilies>\n\n";
 
                     File xmlFile = new File(fontsDir,"irfonts.xml");
                     StringBuffer buf = new StringBuffer("");
@@ -213,7 +213,19 @@ public class InstallFontWizardDescriptor extends WizardDescriptor {
 
                     String xmlContent = buf.toString();
 
-                    xmlContent = Misc.string_replace( bean_xml,"</beans>",  xmlContent);
+                    String replaceTag = "</fontFamilies>";
+                    if (xmlContent.indexOf(replaceTag) < 0)
+                    {
+                        replaceTag = "<fontFamilies/>";
+
+                        if (xmlContent.indexOf(replaceTag) >= 0)
+                        {
+
+                            bean_xml = "<fontFamilies>\n" + bean_xml;
+                        }
+                    }
+
+                    xmlContent = Misc.string_replace( bean_xml,replaceTag,  xmlContent);
 
                     FileWriter fos = new FileWriter(xmlFile);
                     fos.write(xmlContent);

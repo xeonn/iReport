@@ -264,6 +264,10 @@ public class HexColorChooserPanel extends javax.swing.colorchooser.AbstractColor
         }
         panels[i] = hcp;
         jcc.setChooserPanels( panels );
+        if (defColor != null)
+        {
+            jcc.setColor(defColor);
+        }
         
         JDialog theDialog = jcc.createDialog(c,title,true,jcc,
                 new ActionListener() {
@@ -280,6 +284,7 @@ public class HexColorChooserPanel extends javax.swing.colorchooser.AbstractColor
                     }
                 });
        hcp.setDialog( theDialog );
+       
        theDialog.setVisible(true);
        
        return hcp.getSelectedColor();

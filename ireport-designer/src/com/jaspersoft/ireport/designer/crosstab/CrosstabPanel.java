@@ -23,18 +23,22 @@
  */
 package com.jaspersoft.ireport.designer.crosstab;
 
+import com.jaspersoft.ireport.designer.GenericDesignerPanel;
 import com.jaspersoft.ireport.designer.dnd.DesignerDropTarget;
 import com.jaspersoft.ireport.designer.ruler.RulerPanel;
 import java.awt.BorderLayout;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  *
  * @author  gtoffoli
  */
-public class CrosstabPanel extends javax.swing.JPanel {
+public class CrosstabPanel extends javax.swing.JPanel implements GenericDesignerPanel {
     
     private CrosstabObjectScene scene = null;
     private JComponent myView = null;
@@ -113,7 +117,6 @@ public class CrosstabPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 400, Short.MAX_VALUE)
             .add(layout.createSequentialGroup()
                 .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 20, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(0, 0, 0)
@@ -123,7 +126,6 @@ public class CrosstabPanel extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 300, Short.MAX_VALUE)
             .add(layout.createSequentialGroup()
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(0, 0, 0)
@@ -139,5 +141,25 @@ public class CrosstabPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPaneMainReport;
     // End of variables declaration//GEN-END:variables
+
+    public JRDesignElement getElement() {
+        return this.crosstab;
+    }
+
+    public JComponent getComponent() {
+        return this;
+    }
+
+    public String getLabel() {
+        return "Crosstab {0}";
+    }
+
+    public Icon getIcon() {
+        return new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/crosstab-16.png"));
+    }
+
+    public JRDesignDataset getElementDataset(JRDesignElement element) {
+        return null;
+    }
     
 }

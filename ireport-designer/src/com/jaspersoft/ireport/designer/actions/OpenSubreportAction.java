@@ -25,18 +25,14 @@ package com.jaspersoft.ireport.designer.actions;
 
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlEditorSupport;
-import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import com.jaspersoft.ireport.designer.SubreportOpenerProvider;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
-import com.jaspersoft.ireport.designer.utils.ExpressionInterpreter;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.io.File;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Collection;
 import java.util.Iterator;
 import javax.swing.JOptionPane;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.cookies.OpenCookie;
@@ -88,127 +84,136 @@ public final class OpenSubreportAction extends NodeAction {
 
         // Find the jrxml pointed by this subreport expression...
 
-        if (subreport.getExpression() == null ||
-                subreport.getExpression().getValueClassName() == null ||
-                !subreport.getExpression().getValueClassName().equals("java.lang.String"))
-        {
-           // Return default image...
-           // Unable to resolve the subreoport jrxml file...
-            subreportNotFound("The subreport expression is empty or it is not of type String.");
-            return;
-        }
-
-        JRDesignDataset dataset =  jasperDesign.getMainDesignDataset();
-        ClassLoader classLoader = IReportManager.getReportClassLoader();
-
-        File fileToOpen = null;
-        JrxmlEditorSupport es = IReportManager.getInstance().getActiveVisualView().getEditorSupport();
-
-
-        String error = null;
+//        if (subreport.getExpression() == null ||
+//                subreport.getExpression().getValueClassName() == null ||
+//                !subreport.getExpression().getValueClassName().equals("java.lang.String"))
+//        {
+//           // Return default image...
+//           // Unable to resolve the subreoport jrxml file...
+//            subreportNotFound("The subreport expression is empty or it is not of type String.");
+//            return;
+//        }
+//
+//        JRDesignDataset dataset =  jasperDesign.getMainDesignDataset();
+//        ClassLoader classLoader = IReportManager.getReportClassLoader();
+//
+//        File fileToOpen = null;
+//        JrxmlEditorSupport es = IReportManager.getInstance().getActiveVisualView().getEditorSupport();
+//
+//
+//        String error = null;
+//        try {
+//
+//            // Try to process the expression...
+//            ExpressionInterpreter interpreter = new ExpressionInterpreter(dataset, classLoader);
+//            interpreter.setConvertNullParams(true);
+//
+//            Object ret = interpreter.interpretExpression( subreport.getExpression().getText() );
+//
+//            if (ret != null)
+//            {
+//                String resourceName = ret + "";
+//                if (resourceName.toLowerCase().endsWith(".jasper"))
+//                {
+//                    resourceName = resourceName.substring(0, resourceName.length() -  ".jasper".length());
+//                    resourceName += ".jrxml";
+//                }
+//
+//                if (!resourceName.toLowerCase().endsWith(".jrxml"))
+//                {
+//                    throw new Exception("Unable to resolve the jrxml file for this subreport expression");
+//                }
+//
+//                File f = new File(resourceName);
+//                if (!f.exists())
+//                {
+//                    String jrxmlFileName = f.getName();
+//                    File reportFolder = null;
+//                    JrxmlVisualView visualView = IReportManager.getInstance().getActiveVisualView();
+//                    if (visualView != null)
+//                    {
+//                        File file = FileUtil.toFile(visualView.getEditorSupport().getDataObject().getPrimaryFile());
+//                        if (file.getParentFile() != null)
+//                        {
+//                            reportFolder = file.getParentFile();
+//                        }
+//                    }
+//
+//                    URL[] urls = new URL[]{};
+//                    if (reportFolder != null)
+//                    {
+//                        urls = new URL[]{ reportFolder.toURI().toURL()};
+//                    }
+//                    IRURLClassLoader urlClassLoader = new IRURLClassLoader(urls, classLoader);
+//
+//                    URL url = urlClassLoader.getResource(resourceName);
+//                    if (url == null)
+//                    {
+//                        // try just the file name...
+//                        url = urlClassLoader.getResource(jrxmlFileName);
+//
+//                        if (url == null)
+//                        {
+//                            throw new Exception(resourceName + " not found.");
+//                        }
+//                    }
+//
+//                    f = new File(url.toURI().getPath());
+//                    if (f.exists())
+//                    {
+//                        fileToOpen = f;
+//                    }
+//                    else
+//                    {
+//                        throw new Exception(f + " not found.");
+//                    }
+//                }
+//                else
+//                {
+//                    fileToOpen = f;
+//                }
+//
+//             }
+//            else
+//            {
+//                throw new Exception();
+//            }
+//        } catch (Throwable ex) {
+//
+//            fileToOpen = null;
+//            error = ex.getMessage();
+//            ex.printStackTrace();
+//        }
+//
+//
+//        fileToOpen = notifySubreportProviders(es, subreport, fileToOpen);
+//
+//        if (fileToOpen != null)
+//        {
+//            try {
+//                openFile(fileToOpen);
+//            } catch (Throwable ex) {
+//                error = ex.getMessage();
+//                subreportNotFound(error);
+//                ex.printStackTrace();
+//            }
+//        }
+//        else
+//        {
+//            if (error == null)
+//            {
+//                error = "The subreport expression returned null. I'm unable to locate the subreport jrxml :-(";
+//            }
+//            subreportNotFound(error);
+//        }
+        
         try {
-
-            // Try to process the expression...
-            ExpressionInterpreter interpreter = new ExpressionInterpreter(dataset, classLoader);
-            interpreter.setConvertNullParams(true);
-
-            Object ret = interpreter.interpretExpression( subreport.getExpression().getText() );
-
-            if (ret != null)
-            {
-                String resourceName = ret + "";
-                if (resourceName.toLowerCase().endsWith(".jasper"))
-                {
-                    resourceName = resourceName.substring(0, resourceName.length() -  ".jasper".length());
-                    resourceName += ".jrxml";
-                }
-
-                if (!resourceName.toLowerCase().endsWith(".jrxml"))
-                {
-                    throw new Exception("Unable to resolve the jrxml file for this subreport expression");
-                }
-
-                File f = new File(resourceName);
-                if (!f.exists())
-                {
-                    String jrxmlFileName = f.getName();
-                    File reportFolder = null;
-                    JrxmlVisualView visualView = IReportManager.getInstance().getActiveVisualView();
-                    if (visualView != null)
-                    {
-                        File file = FileUtil.toFile(visualView.getEditorSupport().getDataObject().getPrimaryFile());
-                        if (file.getParentFile() != null)
-                        {
-                            reportFolder = file.getParentFile();
-                        }
-                    }
-
-                    URL[] urls = new URL[]{};
-                    if (reportFolder != null)
-                    {
-                        urls = new URL[]{ reportFolder.toURI().toURL()};
-                    }
-                    URLClassLoader urlClassLoader = new URLClassLoader(urls, classLoader);
-                    while (resourceName.startsWith("/")) resourceName = resourceName.substring(1);
-                    URL url = urlClassLoader.getResource(resourceName);
-                    if (url == null)
-                    {
-                        // try just the file name...
-                        url = urlClassLoader.getResource(jrxmlFileName);
-
-                        if (url == null)
-                        {
-                            throw new Exception(resourceName + " not found.");
-                        }
-                    }
-                        
-                    f = new File(url.toURI().getPath());
-                    if (f.exists())
-                    {
-                        fileToOpen = f;
-                    }
-                    else
-                    {
-                        throw new Exception(f + " not found.");
-                    }
-                }
-                else
-                {
-                    fileToOpen = f;
-                }
-
-             }
-            else
-            {
-                throw new Exception();
-            }
-        } catch (Throwable ex) {
-
-            fileToOpen = null;
-            error = ex.getMessage();
-            ex.printStackTrace();
-        }
-
-        
-        fileToOpen = notifySubreportProviders(es, subreport, fileToOpen);
-        
-        if (fileToOpen != null)
-        {
-            try {
-                openFile(fileToOpen);
-            } catch (Throwable ex) {
-                error = ex.getMessage();
-                subreportNotFound(error);
-                ex.printStackTrace();
-            }
-        }
-        else
-        {
-            if (error == null)
-            {
-                error = "The subreport expression returned null. I'm unable to locate the subreport jrxml :-(";
-            }
-            subreportNotFound(error);
+            JrxmlEditorSupport es = IReportManager.getInstance().getActiveVisualView().getEditorSupport();
+            File fileToOpen = Misc.locateFileFromExpression(jasperDesign, null, (JRDesignExpression) subreport.getExpression(), null, ".jrxml", null);
+            fileToOpen = notifySubreportProviders(es, subreport, fileToOpen);
+            openFile(fileToOpen);
+        } catch (Exception ex) {
+            subreportNotFound(ex.getMessage());
         }
     }
 

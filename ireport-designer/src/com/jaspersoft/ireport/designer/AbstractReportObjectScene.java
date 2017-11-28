@@ -44,15 +44,19 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.List;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
+import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextElement;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
@@ -489,4 +493,77 @@ public abstract class AbstractReportObjectScene extends ObjectScene implements G
     }
 
 
+    public Point getParentLocation(JasperDesign jd, JRDesignElement element, JRDesignElementWidget widget)
+    {
+        return ModelUtils.getParentLocationImpl(jd, element, widget);
+    }
+
+    public Rectangle getParentBounds(JasperDesign jd, JRDesignElement element, JRDesignElementWidget widget)
+    {
+        return ModelUtils.getParentBoundsImpl(jd, element, widget);
+    }
+
+
+
+    public JRDesignElementWidget findCustomComponentOwner(JRDesignElement element)
+    {
+        while (element.getElementGroup() != null &&
+               element.getElementGroup() instanceof JRDesignFrame)
+        {
+            element = (JRDesignFrame)element.getElementGroup();
+        }
+
+        List<Widget> widgets = elementsLayer.getChildren();
+        for (Widget widget : widgets)
+        {
+            if (widget instanceof JRDesignElementWidget)
+            {
+                    JRDesignElementWidget dew = (JRDesignElementWidget)widget;
+                    if (dew.getElement() instanceof JRDesignComponentElement &&
+                        dew.getChildrenElements() != null && dew.getChildrenElements().contains(element))
+                    {
+                        return dew;
+                    }
+            }
+        }
+        return null;
+    }
+
+/**
+     * Returns the container in which the element has been added
+     * p is where the element has been pasted (not in scene coordinates).
+     *
+     * @param element
+     * @return the container, or null if no drop action has been taken.
+     */
+    public Object dropElementAt(JRDesignElement element, Point location)
+    {
+        return null;
+    }
+
+
+    /**
+     * If the current location is a valid drop location, return true.
+     * @param location
+     * @return
+     */
+    public abstract boolean acceptDropAt(Point location);
+
+    public boolean isValidPosition(JRDesignElementWidget elementWidget)
+    {
+
+        Rectangle bounds = getParentBounds(getJasperDesign(), elementWidget.getElement(), elementWidget);
+        if (elementWidget.getElement().getElementGroup() instanceof JRBand)
+        {
+            return bounds.height >= elementWidget.getElement().getY() + elementWidget.getElement().getHeight();
+        }
+        else
+        {
+            // Check that the element is fully contained inside its parent...
+            return bounds.height >= elementWidget.getElement().getY() + elementWidget.getElement().getHeight() &&
+                   elementWidget.getElement().getX() >= 0 &&
+                   elementWidget.getElement().getY() >= 0 &&
+                   bounds.width >= elementWidget.getElement().getX() + elementWidget.getElement().getWidth();
+        }
+    }
 }

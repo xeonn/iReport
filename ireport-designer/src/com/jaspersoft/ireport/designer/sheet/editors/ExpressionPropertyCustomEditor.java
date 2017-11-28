@@ -25,17 +25,10 @@ package com.jaspersoft.ireport.designer.sheet.editors;
 
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.editor.ExpressionEditor;
-import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
-import javax.swing.BorderFactory;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.text.JTextComponent;
 import org.openide.explorer.propertysheet.PropertyEnv;
-import org.openide.util.NbBundle;
 
 /**
  *
@@ -75,9 +68,14 @@ public class ExpressionPropertyCustomEditor extends ExpressionEditor implements 
 
         this.env.setState(PropertyEnv.STATE_NEEDS_VALIDATION);
         this.env.addPropertyChangeListener(this);
-        
+
+
         ExpressionContext ec = (ExpressionContext)this.env.getFeatureDescriptor().getValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT);
+
+        
         if (ec != null) setExpressionContext(ec);
+
+        
         setExpression(value);
     }
     

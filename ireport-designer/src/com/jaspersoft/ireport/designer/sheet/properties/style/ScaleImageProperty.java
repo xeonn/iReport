@@ -65,12 +65,12 @@ public final class ScaleImageProperty extends PropertySupport {
     }
 
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
-        return style.getScaleImage();
+        return style.getScaleImageValue() == null ? null : style.getOwnScaleImage();
     }
 
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         if (val == null || val instanceof Byte) {
-            Byte oldValue = style.getOwnScaleImage();
+            Byte oldValue = style.getOwnScaleImageValue() == null ? null : style.getOwnScaleImage();
             Byte newValue = (Byte) val;
             style.setScaleImage(newValue);
             ObjectPropertyUndoableEdit urob = new ObjectPropertyUndoableEdit(style, "ScaleImage", Byte.class, oldValue, newValue);
@@ -80,7 +80,7 @@ public final class ScaleImageProperty extends PropertySupport {
 
     @Override
     public boolean isDefaultValue() {
-        return style.getOwnScaleImage() == null;
+        return style.getOwnScaleImageValue() == null;
     }
 
     @Override

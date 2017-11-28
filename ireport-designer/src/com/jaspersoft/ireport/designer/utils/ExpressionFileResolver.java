@@ -23,11 +23,11 @@
  */
 package com.jaspersoft.ireport.designer.utils;
 
+import com.jaspersoft.ireport.designer.IRURLClassLoader;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import java.io.File;
 import java.net.URL;
-import java.net.URLClassLoader;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -74,48 +74,55 @@ public class ExpressionFileResolver implements FileResolver {
     public File resolveFile(String arg0) {
         if (resolveFile)
         {
-            ClassLoader classLoader = IReportManager.getReportClassLoader();
-
             try {
-
-                // Try to process the expression...
-                ExpressionInterpreter interpreter = new ExpressionInterpreter(dataset, classLoader);
-
-                Object ret = interpreter.interpretExpression( Misc.getExpressionText(expression) );
-
-                if (ret != null)
-                {
-                    String resourceName = ret + "";
-                    File f = new File(resourceName);
-                    if (!f.exists())
-                    {
-                        URL[] urls = new URL[]{};
-                        if (reportFolder != null)
-                        {
-                            urls = new URL[]{ (new File(reportFolder)).toURI().toURL()};
-                        }
-                        URLClassLoader urlClassLoader = new URLClassLoader(urls, classLoader);
-                        URL url = urlClassLoader.findResource(resourceName);
-                        if (url != null)
-                        {
-                            f = new File(url.getPath());
-                            if (f.exists())
-                            {
-                                file = f;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        file = f;
-                    }
-
-                    resolveFile = false;
-                 }
-            } catch (Exception ex) {
-                resolveFile = false;
-                ex.printStackTrace();
+                file = Misc.locateFileFromExpression(jasperDesign, null, expression, new File(reportFolder), null, null);
+            } catch (Exception ex)
+            {
+                file = null;
             }
+
+//            ClassLoader classLoader = IReportManager.getReportClassLoader();
+//
+//            try {
+//
+//                // Try to process the expression...
+//                ExpressionInterpreter interpreter = new ExpressionInterpreter(dataset, classLoader);
+//
+//                Object ret = interpreter.interpretExpression( Misc.getExpressionText(expression) );
+//
+//                if (ret != null)
+//                {
+//                    String resourceName = ret + "";
+//                    File f = new File(resourceName);
+//                    if (!f.exists())
+//                    {
+//                        URL[] urls = new URL[]{};
+//                        if (reportFolder != null)
+//                        {
+//                            urls = new URL[]{ (new File(reportFolder)).toURI().toURL()};
+//                        }
+//                        IRURLClassLoader urlClassLoader = new IRURLClassLoader(urls, classLoader);
+//                        URL url = urlClassLoader.findResource(resourceName);
+//                        if (url != null)
+//                        {
+//                            f = new File(url.getPath());
+//                            if (f.exists())
+//                            {
+//                                file = f;
+//                            }
+//                        }
+//                    }
+//                    else
+//                    {
+//                        file = f;
+//                    }
+//
+//                    resolveFile = false;
+//                 }
+//            } catch (Exception ex) {
+//                resolveFile = false;
+//                ex.printStackTrace();
+//            }
         }
         return getFile();
     }

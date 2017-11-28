@@ -48,6 +48,7 @@ import com.jaspersoft.ireport.designer.sheet.properties.style.LineSpacingPropert
 import com.jaspersoft.ireport.designer.sheet.properties.style.PdfEncodingProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.PdfFontNameProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.RotationProperty;
+import com.jaspersoft.ireport.designer.styles.ResetStyleAction;
 import java.awt.datatransfer.Transferable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -232,6 +233,7 @@ public class AbstractStyleNode extends IRIndexedNode implements PropertyChangeLi
             SystemAction.get( CopyAction.class ),
             SystemAction.get( CutAction.class ),
             SystemAction.get( RenameAction.class ),
+            SystemAction.get( ResetStyleAction.class ),
             SystemAction.get( ReorderAction.class ),
             null,
             SystemAction.get( DeleteAction.class ) };

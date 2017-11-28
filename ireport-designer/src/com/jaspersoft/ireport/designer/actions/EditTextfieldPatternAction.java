@@ -36,6 +36,7 @@ import com.jaspersoft.ireport.designer.utils.Misc;
 import javax.swing.JOptionPane;
 import com.jaspersoft.ireport.designer.sheet.properties.AbstractProperty;
 import com.jaspersoft.ireport.designer.tools.FieldPatternDialog;
+import com.jaspersoft.ireport.designer.tools.FieldPatternPanel;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 
 public final class EditTextfieldPatternAction extends NodeAction {
@@ -66,15 +67,13 @@ public final class EditTextfieldPatternAction extends NodeAction {
 
         JRDesignTextField element = (JRDesignTextField)node.getElement();
 
-        FieldPatternDialog fpd = new FieldPatternDialog(Misc.getMainFrame(),true);
+        FieldPatternPanel fpd = new FieldPatternPanel();
         fpd.setPattern( element.getPattern() );
+        String newPattern = fpd.showFieldPatternDialog(Misc.getMainFrame());
 
-        fpd.setVisible(true);
-
-        if (fpd.getDialogResult() == JOptionPane.OK_OPTION)
+        if (newPattern != null)
         {
             String oldPattern = element.getOwnPattern();
-            String newPattern = fpd.getPattern();
             element.setPattern(newPattern);
 
             Object obj = ModelUtils.findProperty(node.getPropertySets(), JRBaseStyle.PROPERTY_PATTERN);

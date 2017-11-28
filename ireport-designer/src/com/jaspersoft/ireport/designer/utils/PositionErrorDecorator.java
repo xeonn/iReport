@@ -27,7 +27,6 @@ package com.jaspersoft.ireport.designer.utils;
 import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.ElementDecorator;
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.widgets.ErrorWidget;
 import com.jaspersoft.ireport.designer.widgets.ErrorsLayer;
 import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
@@ -41,7 +40,6 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.openide.nodes.Node;
@@ -66,9 +64,8 @@ public class PositionErrorDecorator implements ElementDecorator {
             if (jd == null) return;
 
             JRDesignElementWidget elementWidget = (JRDesignElementWidget)w;
-            Rectangle rect = ModelUtils.getParentBounds(jd, elementWidget.getElement(), elementWidget);
             if (IReportManager.getInstance().getPreferences().getBoolean("showPositionErrors", true) &&
-                rect.height < elementWidget.getElement().getY() + elementWidget.getElement().getHeight())
+                !((AbstractReportObjectScene)elementWidget.getScene()).isValidPosition(elementWidget))
             {
                 // Draw a red frame....
                 Graphics2D gr = w.getScene().getGraphics();

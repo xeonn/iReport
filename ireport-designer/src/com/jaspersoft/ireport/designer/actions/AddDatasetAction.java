@@ -27,8 +27,19 @@ import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.outline.nodes.ReportNode;
 import com.jaspersoft.ireport.designer.undo.AddDatasetUndoableEdit;
+import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.designer.wizards.DatasetWizardIterator;
+import java.awt.Dialog;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import org.openide.DialogDisplayer;
+import org.openide.WizardDescriptor;
 import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
@@ -80,18 +91,68 @@ public final class AddDatasetAction extends NodeAction {
         {
             try {
                 ReportNode node = (ReportNode) activatedNodes[0];
-                JRDesignDataset newDataset = new JRDesignDataset(false);
-                String name = "dataset";
-                for (int i = 1;; i++) {
-                    if (!node.getJasperDesign().getDatasetMap().containsKey(name + i)) {
-                        newDataset.setName(name + i);
-                        break;
-                    }
-                }
 
-                node.getJasperDesign().addDataset(newDataset);
-                AddDatasetUndoableEdit edit = new AddDatasetUndoableEdit(newDataset, node.getJasperDesign());
-                IReportManager.getInstance().addUndoableEdit(edit);
+
+
+                DatasetWizardIterator iterator = new DatasetWizardIterator();
+                WizardDescriptor wizardDescriptor = new WizardDescriptor(iterator);
+                iterator.initialize(wizardDescriptor, node.getJasperDesign() );
+                // {0} will be replaced by WizardDescriptor.Panel.getComponent().getName()
+                // {1} will be replaced by WizardDescriptor.Iterator.name()
+                wizardDescriptor.setTitleFormat(new MessageFormat("{0} ({1})"));
+                wizardDescriptor.setTitle("New Dataset");
+                Dialog dialog = DialogDisplayer.getDefault().createDialog(wizardDescriptor);
+                dialog.setVisible(true);
+                dialog.toFront();
+                boolean cancelled = wizardDescriptor.getValue() != WizardDescriptor.FINISH_OPTION;
+                if (!cancelled) {
+
+                    JRDesignDataset newDataset = new JRDesignDataset(false);
+                    newDataset.setName( (String) wizardDescriptor.getProperty("dataset_name"));
+
+                    List<JRDesignField> selectedFields = (List<JRDesignField>) wizardDescriptor.getProperty("selectedFields");
+                    List<JRDesignField> groupFields = (List<JRDesignField>) wizardDescriptor.getProperty("groupFields");
+                    String query = (String) wizardDescriptor.getProperty("query");
+                    String queryLanguage = (String) wizardDescriptor.getProperty("queryLanguage");
+
+                    if (selectedFields == null) selectedFields = new ArrayList<JRDesignField>();
+                    if (groupFields == null) groupFields = new ArrayList<JRDesignField>();
+
+                    // Adding fields
+                    for (JRDesignField f : selectedFields)
+                    {
+                        newDataset.addField(f);
+                    }
+
+                    // Query...
+                    if (query != null)
+                    {
+                        JRDesignQuery designQuery = new JRDesignQuery();
+                        designQuery.setText(query);
+                        if (queryLanguage != null)
+                        {
+                            designQuery.setLanguage(queryLanguage);
+                        }
+
+                        newDataset.setQuery(designQuery);
+                    }
+
+                    // Adjusting groups
+                    for (int i=0; i<groupFields.size(); ++i)
+                    {
+                          JRDesignGroup g =new JRDesignGroup();
+                          g.setName(groupFields.get(i).getName());
+                          g.setExpression(Misc.createExpression(groupFields.get(i).getValueClassName(), "$F{" + groupFields.get(i).getName() + "}"));
+                          newDataset.addGroup(g);
+                    }
+
+
+                    node.getJasperDesign().addDataset(newDataset);
+                    AddDatasetUndoableEdit edit = new AddDatasetUndoableEdit(newDataset, node.getJasperDesign());
+                    IReportManager.getInstance().addUndoableEdit(edit);
+
+                }
+                
             } catch (JRException ex) {
                 Exceptions.printStackTrace(ex);
             }

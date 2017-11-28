@@ -70,6 +70,7 @@ public class ExpressionEditor extends javax.swing.JPanel {
     private ExpressionContext expressionContext = null;
     private JDialog dialog = null;
     private int dialogResult = JOptionPane.CANCEL_OPTION;
+    private boolean refreshingContext = false;
     
     
     
@@ -112,7 +113,10 @@ public class ExpressionEditor extends javax.swing.JPanel {
     public void setExpressionContext(ExpressionContext expressionContext) {
         this.expressionContext = expressionContext;
         this.jEditorPane1.setExpressionContext(expressionContext);
-        refreshContext();
+
+         refreshContext();
+
+        
     }
     
     private static java.util.ArrayList<String> recentExpressions = new java.util.ArrayList<String>();
@@ -399,6 +403,7 @@ public class ExpressionEditor extends javax.swing.JPanel {
      */
     public void refreshContext()
     {
+        setRefreshingContext(true);
         jList2.removeAll();
         jList3.removeAll();
         jList1.removeAll();
@@ -434,6 +439,7 @@ public class ExpressionEditor extends javax.swing.JPanel {
         
         jList1.updateUI();
 
+        setRefreshingContext(false);
         // If there are fields, select the fields node by default
         try {
             if (dlm1.getSize() > 0)
@@ -671,12 +677,15 @@ public class ExpressionEditor extends javax.swing.JPanel {
 
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
 
-        DefaultListModel dlm2 = (DefaultListModel)jList2.getModel();
+        if (isRefreshingContext()) return;
+
+        setRefreshingContext(true);
+        DefaultListModel dlm2 = new DefaultListModel(); //(DefaultListModel)jList2.getModel();
         DefaultListModel dlm3 = (DefaultListModel)jList3.getModel();
         
         dlm2.removeAllElements();
         dlm3.removeAllElements();
-        
+
         if (jList1.getSelectedValue() != null)
         {
             NamedIconItem item = (NamedIconItem)jList1.getSelectedValue();
@@ -704,8 +713,9 @@ public class ExpressionEditor extends javax.swing.JPanel {
                 Iterator fields = ds.getFieldsList().iterator();
                 while (fields.hasNext())
                 {
-                    dlm2.addElement(new ExpObject(fields.next()));
-                }
+                    ExpObject eo = new ExpObject(fields.next());
+                    dlm2.addElement(eo);
+               }
             }
             else if (item.getItem().equals( VARIABLES))
             {
@@ -768,8 +778,10 @@ public class ExpressionEditor extends javax.swing.JPanel {
                 
             }
             // TODO -> Wizards
-            
-            
+            jList2.setModel(dlm2);
+
+            setRefreshingContext(false);
+
             if (dlm2.size() > 0)
             {
                 jList2.setSelectedIndex(0);
@@ -781,7 +793,8 @@ public class ExpressionEditor extends javax.swing.JPanel {
     }//GEN-LAST:event_jList1ValueChanged
 
     private void jList2ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList2ValueChanged
-        
+
+        if (isRefreshingContext()) return;
         DefaultListModel dlm = (DefaultListModel)jList3.getModel();
         dlm.removeAllElements();
         
@@ -792,14 +805,7 @@ public class ExpressionEditor extends javax.swing.JPanel {
             try {
                 clazz = IReportManager.getReportClassLoader().loadClass( ((ExpObject)jList2.getSelectedValue()).getClassType());
         
-            } catch (NoClassDefFoundError ex)
-            {
-                
-            }
-            catch (ClassNotFoundException ex2)
-            {
-                
-            }
+            } 
             catch (Throwable ex3)
             {
                 
@@ -964,6 +970,22 @@ public class ExpressionEditor extends javax.swing.JPanel {
         else dialog = new JDialog();
         
         dialog.setModal(true);
+        
+
+        javax.swing.KeyStroke escape =  javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0, false);
+        javax.swing.Action escapeAction = new javax.swing.AbstractAction() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                jButtonCancelActionPerformed(e);
+            }
+        };
+
+        dialog.getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        dialog.getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
+
+
+        //to make the default button ...
+        dialog.getRootPane().setDefaultButton(this.jButtonApply);
+
         dialog.getContentPane().add(this);
         dialog.pack();
         dialogResult = JOptionPane.CANCEL_OPTION;
@@ -982,6 +1004,20 @@ public class ExpressionEditor extends javax.swing.JPanel {
         if (isEnabled() && isFocusable()) {
             jEditorPane1.requestFocus();
         }
-    }    
+    }
+
+    /**
+     * @return the refreshingContext
+     */
+    public boolean isRefreshingContext() {
+        return refreshingContext;
+    }
+
+    /**
+     * @param refreshingContext the refreshingContext to set
+     */
+    public void setRefreshingContext(boolean refreshingContext) {
+        this.refreshingContext = refreshingContext;
+    }
 }
 

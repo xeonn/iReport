@@ -59,6 +59,7 @@ import javax.swing.event.*;
 import java.awt.datatransfer.*;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.base.JRBaseObjectFactory;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -1539,7 +1540,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
                     JRDesignField field = new JRDesignField();
                     field.setName(fieldName);
                     field.setValueClassName("java.lang.String");
-                    field.setDescription(""); //Field returned by " +methods[i].getName() + " (real type: "+ returnType +")");
+                    //field.setDescription(null); //Field returned by " +methods[i].getName() + " (real type: "+ returnType +")");
                     
                     Vector row = new Vector();
                     row.addElement(field);
@@ -1576,7 +1577,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
                 
                 
                 // Create a temporary JasperReports object...
-                net.sf.jasperreports.engine.JasperReport jr = new net.sf.jasperreports.engine.JasperReport(report,"",null,null,"");
+                net.sf.jasperreports.engine.JasperReport jr = new net.sf.jasperreports.engine.JasperReport(report,"",null,(JRBaseObjectFactory)null,"");
                 
             net.sf.jasperreports.engine.JRField[] jrfields = ic.getDataSourceProvider().getFields( jr );
             DefaultTableModel dtm = (DefaultTableModel)jTableFields.getModel();
@@ -1823,7 +1824,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
                     JRDesignField field = new JRDesignField();
                     field.setName(fieldName);
                     field.setValueClassName("java.lang.String");
-                    field.setDescription(""); //Field returned by " +methods[i].getName() + " (real type: "+ returnType +")");
+                    //field.setDescription(""); //Field returned by " +methods[i].getName() + " (real type: "+ returnType +")");
 
                     Vector row = new Vector();
                     row.addElement(field);

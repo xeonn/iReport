@@ -476,6 +476,8 @@ public class XlsDataSourceConnectionEditor extends javax.swing.JPanel implements
                 }
 
                 jTable1.updateUI();
+
+                jCheckBoxFirstRowAsHeader.setSelected(true);
             }
         } catch (Exception ex)
         {

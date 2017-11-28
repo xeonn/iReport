@@ -143,7 +143,7 @@ final public class FontNameProperty extends PropertySupport.ReadWrite  implement
     }
 
     public void preferenceChange(PreferenceChangeEvent evt) {
-        if (evt == null || evt.getKey() == null || evt.getKey().equals( IReportManager.IREPORT_CLASSPATH))
+        if (evt == null || evt.getKey() == null || evt.getKey().equals( IReportManager.IREPORT_CLASSPATH)|| evt.getKey().equals("fontExtensions"))
         {
             // Refresh the array...
             updateTags();

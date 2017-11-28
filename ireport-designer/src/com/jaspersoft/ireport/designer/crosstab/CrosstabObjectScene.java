@@ -36,6 +36,7 @@ import com.jaspersoft.ireport.designer.crosstab.widgets.CrosstabWidget;
 import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import com.jaspersoft.ireport.designer.widgets.JRDesignImageWidget;
 import com.jaspersoft.ireport.designer.widgets.visitor.ConfigurableDrawVisitor;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.beans.PropertyChangeEvent;
@@ -864,7 +865,28 @@ public class CrosstabObjectScene extends AbstractReportObjectScene implements Pr
     
     
     
-    
+    @Override
+    public boolean acceptDropAt(Point location)
+    {
+        Point p = convertViewToScene(location);
+
+        JRDesignCrosstab crosstab = getDesignCrosstab();
+        List<CellInfo> cells = ModelUtils.getCellInfos(crosstab);
+        int crosstabWidth = 0;
+        int crosstabHeight = 0;
+
+        for (int i=0; i<cells.size(); ++i)
+        {
+            CellInfo ci = cells.get(i);
+
+            int thisW = ci.getLeft() + ci.getCellContents().getWidth();
+            if (thisW > crosstabWidth) crosstabWidth = thisW;
+
+            int thisH = ci.getTop() + ci.getCellContents().getHeight();
+            if (thisH > crosstabHeight) crosstabHeight = thisH;
+        }
+        return (new Rectangle(0,0,crosstabWidth, crosstabHeight).contains(p));
+    }
     
 }
 

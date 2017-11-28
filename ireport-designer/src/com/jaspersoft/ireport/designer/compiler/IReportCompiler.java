@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer.compiler;
 
+import com.jaspersoft.ireport.designer.IRURLClassLoader;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlEditorSupport;
@@ -52,7 +53,6 @@ import java.util.*;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.sql.Connection;
 import java.util.prefs.Preferences;
 import javax.persistence.EntityManager;
@@ -63,6 +63,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JRJdtCompiler;
 import net.sf.jasperreports.engine.design.JRValidationException;
@@ -1370,44 +1371,47 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                    foundSubreport = true;
                 }
                 JRDesignSubreport subreport = (JRDesignSubreport)element;
+                File f = null;
 
-                File f = locateSubreport(jd, subreport, new File(reportDir), null);
-                if (f == null)
+                try {
+                    f = Misc.locateFileFromExpression(jd, null, (JRDesignExpression) subreport.getExpression(), new File(reportDir), ".jrxml", null);
+                } catch (Exception ex)
                 {
                     URL img_url_warning = this.getClass().getResource("/com/jaspersoft/ireport/designer/resources/errorhandler/warning.png");
                     getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\" color=\"#000000\"><img align=\"right\" src=\""+  img_url_warning  +"\"> &nbsp;" +
                                 "Unable to locate the subreport with expression: \"<code>" + Misc.getExpressionText(subreport.getExpression()) + "</code>\".</font>",true);
+
+                    return;
+                }
+                        //locateSubreport(jd, subreport, new File(reportDir), null);
+
+                long lastModified = f.lastModified();
+                String jasper = Misc.changeFileExtension(f.getPath(), ".jasper");
+                File jasperFile = new File(jasper);
+                if (jasperFile.exists() && jasperFile.lastModified() > lastModified)
+                {
+                    URL img_url_info = this.getClass().getResource("/com/jaspersoft/ireport/designer/resources/errorhandler/information.png");
+                    getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\" color=\"#000000\"><img align=\"right\" src=\""+  img_url_info  +"\"> &nbsp;" +
+                            "Subreport " + f.getPath() + " already compiled.</font>",true);
                 }
                 else
                 {
-                    long lastModified = f.lastModified();
-                    String jasper = Misc.changeFileExtension(f.getPath(), ".jasper");
-                    File jasperFile = new File(jasper);
-                    if (jasperFile.exists() && jasperFile.lastModified() > lastModified)
-                    {
+                    try {
+                        JasperCompileManager.compileReportToFile(f.getPath(), jasper);
                         URL img_url_info = this.getClass().getResource("/com/jaspersoft/ireport/designer/resources/errorhandler/information.png");
-                        getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\" color=\"#000000\"><img align=\"right\" src=\""+  img_url_info  +"\"> &nbsp;" +
-                                "Subreport " + f.getPath() + " already compiled.</font>",true);
-                    }
-                    else
-                    {
-                        try {
-                            JasperCompileManager.compileReportToFile(f.getPath(), jasper);
-                            URL img_url_info = this.getClass().getResource("/com/jaspersoft/ireport/designer/resources/errorhandler/information.png");
-                             getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\" color=\"#000000\"><img align=\"right\" src=\""+  img_url_info  +"\"> &nbsp;" +
-                                "Subreport " + f.getPath() + " compiled.</font>",true);
-                        } catch (JRException ex) {
+                         getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\" color=\"#000000\"><img align=\"right\" src=\""+  img_url_info  +"\"> &nbsp;" +
+                            "Subreport " + f.getPath() + " compiled.</font>",true);
+                    } catch (JRException ex) {
 
-                            URL img_url_error = this.getClass().getResource("/com/jaspersoft/ireport/designer/resources/errorhandler/error.png");
-                            try {
-                                getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\" color=\"#000000\"><img align=\"right\" src=\"" + img_url_error + "\"> &nbsp;" + "An error has accurred compiling the subreport: <a href=\"" + f.toURI().toURL() + "\">" + f.getPath() + "</a></font>", true);
-                            } catch (MalformedURLException ex1) {
-                            }
-                            
-                            throw new JRException("An error has accurred compiling the subreport: " + f.getPath(), ex);
+                        URL img_url_error = this.getClass().getResource("/com/jaspersoft/ireport/designer/resources/errorhandler/error.png");
+                        try {
+                            getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\" color=\"#000000\"><img align=\"right\" src=\"" + img_url_error + "\"> &nbsp;" + "An error has accurred compiling the subreport: <a href=\"" + f.toURI().toURL() + "\">" + f.getPath() + "</a></font>", true);
+                        } catch (MalformedURLException ex1) {
                         }
-                        compileSubreports(JRXmlLoader.load(f), f.getParent());
+
+                        throw new JRException("An error has accurred compiling the subreport: " + f.getPath(), ex);
                     }
+                    compileSubreports(JRXmlLoader.load(f), f.getParent());
                 }
             }
         }
@@ -1467,7 +1471,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                     {
                         urls = new URL[]{ reportFolder.toURI().toURL()};
                     }
-                    URLClassLoader urlClassLoader = new URLClassLoader(urls, cl);
+                    IRURLClassLoader urlClassLoader = new IRURLClassLoader(urls, cl);
                     URL url = urlClassLoader.getResource(resourceName);
                     if (url == null)
                     {
@@ -1738,13 +1742,13 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
           File reportCompileDirFile = new File(reportCompileDir);
           if ((reportCompileDirFile.exists()) && !IReportManager.getPreferences().getBoolean("useReportDirectoryToCompile", true))
           {
-              urlClassLoader = new URLClassLoader(new URL[]{
+              urlClassLoader = new IRURLClassLoader(new URL[]{
                    reportDirectoryUrl,reportCompileDirFile.toURI().toURL()},
                    IReportManager.getInstance().getReportClassLoader());
           }
           else
           {
-            urlClassLoader = new URLClassLoader(new URL[]{
+            urlClassLoader = new IRURLClassLoader(new URL[]{
 		  	  reportDirectoryUrl
             }, IReportManager.getInstance().getReportClassLoader());
           }

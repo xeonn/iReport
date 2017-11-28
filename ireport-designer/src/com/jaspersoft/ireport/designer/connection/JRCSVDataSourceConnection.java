@@ -25,18 +25,22 @@ package com.jaspersoft.ireport.designer.connection;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.connection.gui.CSVDataSourceConnectionEditor;
+import com.jaspersoft.ireport.designer.data.WizardFieldsProvider;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
+import net.sf.jasperreports.engine.design.JRDesignField;
 
 /**
  *
  * @author  Administrator
  */
-public class JRCSVDataSourceConnection extends IReportConnection {
+public class JRCSVDataSourceConnection extends IReportConnection implements WizardFieldsProvider {
     
     private String name;
     private String recordDelimiter = "\n";
@@ -265,6 +269,35 @@ public class JRCSVDataSourceConnection extends IReportConnection {
 		ex.printStackTrace();
                 return;	
             }        
+    }
+
+    public String getQueryLanguage() {
+        return null;
+    }
+
+    public List<JRDesignField> readFields(String query) throws Exception {
+        
+        List<JRDesignField> fields = new ArrayList<JRDesignField>();
+
+        Vector names = getColumnNames();
+
+        for (int nd =0; nd < names.size(); ++nd) {
+            String fieldName = ""+names.elementAt(nd);
+            JRDesignField field = new JRDesignField();
+            field.setName(fieldName);
+            field.setValueClassName("java.lang.String");
+            //field.setDescription(null); //Field returned by " +methods[i].getName() + " (real type: "+ returnType +")");
+            fields.add(field);
+        }
+        return  fields;
+    }
+
+    public boolean supportsDesign() {
+        return false;
+    }
+
+    public String designQuery(String query) {
+        return query;
     }
     
 }

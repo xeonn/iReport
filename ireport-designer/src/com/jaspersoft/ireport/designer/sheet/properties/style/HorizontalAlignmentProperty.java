@@ -66,12 +66,12 @@ public final class HorizontalAlignmentProperty extends PropertySupport {
     }
 
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
-        return style.getHorizontalAlignment();
+        return (style.getHorizontalAlignmentValue() == null) ? null : style.getOwnHorizontalAlignment();
     }
 
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         if (val == null || val instanceof Byte) {
-            Byte oldValue = style.getOwnHorizontalAlignment();
+            Byte oldValue = (style.getHorizontalAlignmentValue() == null) ? null : style.getOwnHorizontalAlignment();
             Byte newValue = (Byte) val;
             style.setHorizontalAlignment(newValue);
             ObjectPropertyUndoableEdit urob = new ObjectPropertyUndoableEdit(style, "HorizontalAlignment", Byte.class, oldValue, newValue);
@@ -81,7 +81,7 @@ public final class HorizontalAlignmentProperty extends PropertySupport {
 
     @Override
     public boolean isDefaultValue() {
-        return style.getOwnHorizontalAlignment() == null;
+        return (style.getHorizontalAlignmentValue() == null) ? true : false;
     }
 
     @Override

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Flower" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="687"/>
 	<style name="Title" isDefault="false" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" isDefault="false" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" isDefault="false" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -73,6 +76,7 @@ $V{REPORT_COUNT}]]></keyExpression>
 						<seriesColor seriesOrder="4" color="#004A94"/>
 						<seriesColor seriesOrder="5" color="#00356A"/>
 					</plot>
+					<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
 				</pie3DPlot>
 			</pie3DChart>
 			<image>
@@ -113,6 +117,7 @@ $V{REPORT_COUNT}]]></keyExpression>
 						<seriesColor seriesOrder="4" color="#004A94"/>
 						<seriesColor seriesOrder="5" color="#00356A"/>
 					</plot>
+					<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
 				</pie3DPlot>
 			</pie3DChart>
 			<pie3DChart>
@@ -141,6 +146,7 @@ $V{REPORT_COUNT}]]></keyExpression>
 						<seriesColor seriesOrder="4" color="#004A94"/>
 						<seriesColor seriesOrder="5" color="#00356A"/>
 					</plot>
+					<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
 				</pie3DPlot>
 			</pie3DChart>
 			<staticText>
@@ -158,9 +164,11 @@ $V{REPORT_COUNT}]]></keyExpression>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Each chart is populated on each page.
-There 3 pie charts are currently using an empty datasource and the values are ganarated using a random generator.
+The 3 pie charts are currently using an empty datasource and the values are
+generated using a random generator.
 
-These element is not printed (see the print when expression of this element)]]></text>
+This rectangle element is not printed (see the print when expression of this
+element)]]></text>
 			</staticText>
 			<line>
 				<reportElement x="201" y="431" width="117" height="1">

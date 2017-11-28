@@ -29,10 +29,11 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.borders.SimpleLineBorder;
-import com.jaspersoft.ireport.designer.utils.WrapperClassLoader;
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -46,6 +47,7 @@ import net.sf.jasperreports.charts.design.JRDesignPiePlot;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.base.JRBaseLine;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
@@ -55,6 +57,7 @@ import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
+import net.sf.jasperreports.engine.design.JRDesignGenericElement;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
@@ -73,6 +76,7 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
     private javax.swing.ImageIcon crosstabImage = null;
     private javax.swing.ImageIcon subreportImage = null;
     private javax.swing.ImageIcon multiaxisImage = null;
+    private javax.swing.ImageIcon genericElementImage = null;
 
     private boolean needCLRefresh = true;
 
@@ -101,6 +105,7 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
             if (crosstabImage == null) crosstabImage = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/crosstab-32.png"));
             if (subreportImage == null) subreportImage = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/subreport-32.png"));
             if (multiaxisImage == null) multiaxisImage = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/chartaxis-32.png"));
+            if (genericElementImage == null) genericElementImage = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/genericelement-48.png"));
         } catch (Exception ex) {  }
 
         selectionWidget = new SelectionWidget(scene, this);
@@ -346,6 +351,20 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
             gr.drawImage(subreportImage.getImage(), 4, 4, null);
             gr.setClip(oldClip);
         }
+        else if (e instanceof JRDesignGenericElement)
+        {
+            //Composite oldComposite = gr.getComposite();
+            Paint oldPaint = gr.getPaint();
+            gr.setPaint(new Color(196,200,162,64));
+            gr.fillRect(0, 0, element.getWidth(), element.getHeight());
+            gr.setPaint(oldPaint);
+            //gr.setComposite(oldComposite);
+            Shape oldClip = gr.getClip();
+            Shape rect = new Rectangle2D.Float(0,0,element.getWidth(), element.getHeight());
+            gr.clip(rect);
+            gr.drawImage(genericElementImage.getImage(), 4, 4, null);
+            gr.setClip(oldClip);
+        }
         else if (e instanceof JRDesignChart)
         {
             
@@ -424,6 +443,26 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
             setNeedCLRefresh(true);
         }
 
+        /*
+        if (propertyName.endsWith(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS))
+        {
+            JRPropertyExpression[] props = getElement().getPropertyExpressions();
+            for (int i=0;i<props.length; ++i)
+            {
+                JRPropertyExpression p = props[i];
+                if (p.getName() != null && p.getName().startsWith("ireport.layer."))
+                {
+                    IReportManager.getInstance().removeSelectedObject(this.getElement());
+                    this.setVisible(false);
+                    this.getSelectionWidget().setVisible(false);
+                    return;
+                }
+
+            }
+
+        }
+        */
+
         if (propertyName.equals( JRDesignElement.PROPERTY_HEIGHT) ||
             propertyName.equals( JRDesignElement.PROPERTY_WIDTH) ||
             propertyName.equals( JRDesignElement.PROPERTY_ELEMENT_GROUP) ||
@@ -460,7 +499,7 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
             propertyName.equals( JRBaseStyle.PROPERTY_FONT_SIZE) ||
             propertyName.equals( JRBaseStyle.PROPERTY_BOLD) ||
             propertyName.equals( JRBaseStyle.PROPERTY_ITALIC) ||
-            propertyName.equals( JRBaseStyle.PROPERTY_IS_STYLED_TEXT) ||
+            propertyName.equals( JRBaseStyle.PROPERTY_MARKUP) ||
             propertyName.equals( JRBaseStyle.PROPERTY_UNDERLINE) ||
             propertyName.equals( JRBaseStyle.PROPERTY_STRIKE_THROUGH) ||
             propertyName.equals( JRBaseStyle.PROPERTY_ROTATION) ||

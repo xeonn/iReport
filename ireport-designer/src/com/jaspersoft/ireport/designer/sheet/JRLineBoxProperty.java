@@ -24,18 +24,15 @@
 package com.jaspersoft.ireport.designer.sheet;
 
 import com.jaspersoft.ireport.designer.ModelUtils;
-import com.jaspersoft.ireport.designer.sheet.editors.JRPropertiesMapPropertyEditor;
 import com.jaspersoft.ireport.designer.sheet.editors.box.JRLineBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.sheet.properties.AbstractProperty;
 import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyEditor;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRLineBox;
-import net.sf.jasperreports.engine.JRPropertiesHolder;
-import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
-import org.openide.nodes.PropertySupport;
+import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
 
 /**
  *
@@ -93,6 +90,19 @@ public class JRLineBoxProperty  extends AbstractProperty {
         if (value != null && value instanceof JRLineBox)
         {
             ModelUtils.applyBoxProperties(container.getLineBox(), (JRLineBox)value);
+            // Check if we are able to fire an event....
+
+            try {
+                Method m = container.getClass().getMethod("getEventSupport", new Class[]{});
+                if (m != null)
+                {
+                    JRPropertyChangeSupport support = (JRPropertyChangeSupport) m.invoke(container, new Object[]{});
+                    support.firePropertyChange("linebox", null, value);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
         }
     }
     

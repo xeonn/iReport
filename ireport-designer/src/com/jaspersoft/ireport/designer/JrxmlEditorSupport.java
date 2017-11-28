@@ -218,9 +218,12 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
                     int x = scene.getView().getVisibleRect().x;
                     int y = scene.getView().getVisibleRect().y;
 
-                    jd.setProperty("ireport.zoom", ""+zoomFactor);
-                    jd.setProperty("ireport.x", ""+x);
-                    jd.setProperty("ireport.y", ""+y);
+                    if (IReportManager.getPreferences().getBoolean("save_zoom_and_location", true))
+                    {
+                        jd.setProperty("ireport.zoom", ""+zoomFactor);
+                        jd.setProperty("ireport.x", ""+x);
+                        jd.setProperty("ireport.y", ""+y);
+                    }
                 }
 
                 String content = null;

@@ -26,6 +26,7 @@ package com.jaspersoft.ireport.designer.outline.nodes;
 import com.jaspersoft.ireport.designer.actions.EditConditionalStyleExpressionBandAction;
 import com.jaspersoft.ireport.designer.editor.FullExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
+import com.jaspersoft.ireport.designer.styles.ResetStyleAction;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -174,6 +175,7 @@ public class ConditionalStyleNode extends AbstractStyleNode implements PropertyC
             SystemAction.get( CopyAction.class ),
             SystemAction.get( PasteAction.class),
             SystemAction.get( CutAction.class ),
+            SystemAction.get( ResetStyleAction.class ),
             SystemAction.get( ReorderAction.class ),
             null,
             SystemAction.get( DeleteAction.class ) };

@@ -1,3 +1,44 @@
+2010-04-12 Version 3.7.2 released
+_______________________________________________________________________________
+- New Wood template
+- Updated to JasperReports 3.7.1
+- Updated POI to poi-3.5-FINAL-20090928
+- New options to avoid to save zoom and position of the designer
+- Pluggable editors support
+- New Dataset Wizard
+- New ability to use CSV and Excel datasources with the report the wizard
+- New PPTX exporter
+- New fonts extension generator (no longer based on Spring)
+- Support for the new Table Component
+- Improved Expression Editor performaces when working with a large number of fields
+- Fixed bug 10403 JS plugin does not maintain a session
+- Fixed bug 17812 [Case #10545] Compiling sub-reports that are not in the same folder/subfolder as master report doesn't work
+- Fixed bug 17050 [Case #10772] Cannot open .jasper in version v3.6.2
+- Fixed bug 17727 invalid image height crashes iReport (reproducable)
+- Fixed bug 14912 [case #9151]The ability to reset styles default setting in iReport
+- Fixed bug 17907 iReport - prevent the use of the reloadbale flag when the path entry is not a jar
+- Fixed bug 17259 Chart Theme issue
+- Fixed bug 17334 [Case #11175] textField pattern dialog box displays incorrect values
+- Fixed bug 17383 [case # 11308]iReport creates blank fieldDescription causing AdHoc display blank field
+- Fixed bug 17697 [Case #12009] No validation on Remote XML connection in iReport
+- Fixed bug 17728 typo: columng footer
+- Fixed bug 17729 PieChart Dataset Others section instable
+- Fixed bug 17875 Report wizard resets the default data source
+- Fixed bug 17876 [case # 12422]iReports 3.7.0.1 UI does not show 3D Pie Chart max slice count setting correctly
+- Fixed bug 17879 Typos in descriptions in Flower template
+- Fixed bug 17884 Report wizard should gracefully handle a report template with now column header band
+- Fixed bug 17833 [case #12283]iReport incorrectly trying to fix a repository reference
+- Fixed bug 17189 [Case #10983] incorrect font family name sansserif
+- Fixed bug 17579 [case 11452] Wizard does not create a report with grouping on Blank template
+- Fixed bug 17880 Typo in Leaf Gray template
+- Fixed bug 0004485 [Bugs iReport - NB] ESC Key
+- Fixed bug 0004609 [Bugs iReport - NB] Connections / Datasources cant be modified
+- Fixed Show Grid action and Font size combo box.
+- Added visual support for Generic Elements
+- Added support for Layers to show/hide set of fields and set a common printWhenExpression
+- Added support for XML/A connections when using the mdx language and the mdx field mapping tool
+- Fixed bug 17221 - ReportExecution hyperlink parameters should expose report Fields, Params, Variables
+
 2010-02-02 Version 3.7.1 released
 _______________________________________________________________________________
 - Updated to JasperReports 3.7.1

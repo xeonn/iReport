@@ -31,6 +31,7 @@ import java.awt.Frame;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import java.text.SimpleDateFormat;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
@@ -118,11 +119,15 @@ public class PromptDialog
         
         if (param.getValueClassName().equals("java.util.Date"))//NOI18N
         {
-            format="";//NOI18N
+            format=IReportManager.getPreferences().get("PromptDateFormat","");//NOI18N
             jPanel4.removeAll();
             datePicker = new JXDatePicker();
             //datePicker.setLocale( I18n.getCurrentLocale() );
-            //SimpleDateFormat sdf = new SimpleDateFormat();
+            if (format.length() > 0)
+            {
+                datetimePicker.setDateFormat(new SimpleDateFormat(format));
+            }
+            
             try {
                 if (val instanceof java.util.Date)
                 {
@@ -137,9 +142,14 @@ public class PromptDialog
         else if (param.getValueClassName().equals("java.sql.Time") || 
             param.getValueClassName().equals("java.sql.Timestamp"))
         {
-            format="";//NOI18N
+            format=IReportManager.getPreferences().get("PromptDateTimeFormat","");//NOI18N
             jPanel4.removeAll();
             datetimePicker = new JDateTimePicker();
+
+            if (format.length() > 0)
+            {
+                datetimePicker.setDateFormat(new SimpleDateFormat(format));
+            }
             //datetimePicker.setLocale( I18n.getCurrentLocale() );
             
             try {
@@ -172,18 +182,12 @@ public class PromptDialog
 
         if (param.getValueClassName().equals("java.util.Date"))//NOI18N
         {
-            //format = " (" + 
-            //         it.businesslogic.ireport.gui.MainFrame.getMainInstance().getProperties()
-            //                          .getProperty("dateformat", "d/M/y") + 
-            //         ")";
+            format = " (" + IReportManager.getPreferences().get("PromptDateFormat", "d/M/y")+ ")";
         }
         else if (param.getValueClassName().equals("java.sql.Time") || 
             param.getValueClassName().equals("java.sql.Timestamp"))
         {
-            //format = " (" + 
-            //         it.businesslogic.ireport.gui.MainFrame.getMainInstance().getProperties()
-            //                          .getProperty("timeformat", "d/M/y H:m:s") + 
-            //         ")";
+            format = " (" + IReportManager.getPreferences().get("PromptDateTimeFormat", "d/M/y H:m:s")+ ")";
         }
         else if (param.getValueClassName().equals("java.lang.Boolean"))//NOI18N
         {

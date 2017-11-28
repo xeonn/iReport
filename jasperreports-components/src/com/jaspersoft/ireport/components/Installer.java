@@ -42,5 +42,7 @@ public class Installer extends ModuleInstall {
         I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/barcode/Bundle"));
         I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/barcode/barbecue/Bundle"));
         I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/barcode/barcode4j/Bundle"));
+        I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/table/Bundle"));
+        I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/genericelement/Bundle"));
     }
 }

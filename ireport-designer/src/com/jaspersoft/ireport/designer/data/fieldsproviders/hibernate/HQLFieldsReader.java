@@ -277,7 +277,7 @@ public class HQLFieldsReader {
                             JRDesignField field = new JRDesignField();
                             field.setName(fieldName);
                             field.setValueClassName(returnType);
-                            field.setDescription("");
+                            //field.setDescription("");
                             fields.add(field);
                     }
                 }

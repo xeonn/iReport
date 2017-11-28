@@ -187,11 +187,13 @@
                 <include name="build.xml"/>
                 <include name="LICENSE_ireport.txt"/>
                 <include name="nbproject/**"/>
-                <include name="ireport-standalone-specific/**"/>
+                <include name="ireport-addons/**"/>
                 <include name="ireport-designer/**"/>
-                <include name="jasperserver-plugin/**"/>
+                <include name="ireport-samples/**"/>
+                <include name="ireport-standalone-specific/**"/>
                 <include name="jasperreports-components/**"/>
                 <include name="jasperreports-extensions/**"/>
+                <include name="jasperserver-plugin/**"/>
                 <include name="heartbeat/**"/>
                 <include name="branding/**"/>
                 <include name="etc/**"/>
