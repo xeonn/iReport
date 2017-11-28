@@ -13,35 +13,35 @@ import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignTextElement;
 import org.openide.nodes.PropertySupport;
 
 /**
  *
  * Class to manage the JRBaseStyle.PROPERTY_PDF_ENCODING property
  */
-public class PdfEncodingProperty  extends PropertySupport.ReadWrite{
-
+public class PdfEncodingProperty  extends PropertySupport.ReadWrite
+{
     // FIXME: refactorize this
-    private final JRDesignTextElement element;
+    private final JRFont font;
     PropertyEditor editor = null;
 
     @SuppressWarnings("unchecked")
-    public PdfEncodingProperty(JRDesignTextElement element)
+    public PdfEncodingProperty(JRFont font)
     {
         super(JRBaseStyle.PROPERTY_PDF_ENCODING, String.class,
               I18n.getString("Global.Property.PdfEncoding"),
               I18n.getString("Global.Property.PdfEncoding"));
-        this.element = element;
+        this.font = font;
 
         setValue("canEditAsText",true);
         setValue("oneline",true);
-        setValue("suppressCustomEditor",false);
+        setValue("suppressCustomEditor",true);
     }
 
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
-        return element.getPdfEncoding();
+        return font.getPdfEncoding();
     }
 
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -50,14 +50,14 @@ public class PdfEncodingProperty  extends PropertySupport.ReadWrite{
         {
             if ((val+"").trim().length() == 0) val = null;
 
-            String oldValue = element.getOwnPdfEncoding();
+            String oldValue = font.getOwnPdfEncoding();
             String newValue = (String)val;
 
-            element.setPdfEncoding(newValue);
+            font.setPdfEncoding(newValue);
 
             ObjectPropertyUndoableEdit urob =
                     new ObjectPropertyUndoableEdit(
-                        element,
+                        font,
                         "PdfEncoding", 
                         String.class,
                         oldValue,newValue);
@@ -68,7 +68,7 @@ public class PdfEncodingProperty  extends PropertySupport.ReadWrite{
 
     @Override
     public boolean isDefaultValue() {
-        return element.getOwnPdfEncoding() == null;
+        return font.getOwnPdfEncoding() == null;
     }
 
     @Override

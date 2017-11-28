@@ -63,7 +63,13 @@ public class JDBCNBConnection extends com.jaspersoft.ireport.designer.IReportCon
     
     public JDBCNBConnection() {
     }
-    
+
+
+    public DatabaseConnection getDatabaseConnectionObject()
+    {
+        return ConnectionManager.getDefault().getConnection(url);
+    }
+
     /**  This method return an instanced connection to the database.
      *  If isJDBCConnection() return false => getConnection() return null
      *
@@ -98,6 +104,7 @@ public class JDBCNBConnection extends com.jaspersoft.ireport.designer.IReportCon
                                 }
                             });
                         }
+
                         c = dbconn.getJDBCConnection();
                         
                     }

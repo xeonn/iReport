@@ -35,6 +35,8 @@ package com.jaspersoft.ireport.designer.tools;
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Locale;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -70,6 +72,14 @@ public class LocaleSelectorDialog extends javax.swing.JDialog {
         Locale[] locales = Locale.getAvailableLocales();
         java.util.Vector v = new java.util.Vector();
         v.add( I18n.getString("LocaleSelectorDialog.Timezone.Default") ); //I18n.getString("timezone.default",
+        
+        Arrays.sort(locales, new Comparator<Locale>() {
+
+            public int compare(Locale o1, Locale o2) {
+                return o1.getDisplayName().compareTo(o2.getDisplayName());
+            }
+        });
+        
         for (int i=0; i<locales.length; ++i)
         {
             v.add(new Tag(locales[i], locales[i].getDisplayName() ));
@@ -353,6 +363,10 @@ public class LocaleSelectorDialog extends javax.swing.JDialog {
         if (jTextFieldLanguage.getText().trim().length() == 0)
         {
             jButton1.setEnabled(false);
+        }
+        else
+        {
+            jButton1.setEnabled(true);
         }
     }
     

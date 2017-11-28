@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.utils;
 
+import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.tools.JNumberComboBox;
@@ -16,15 +17,14 @@ import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Frame;
-import java.awt.Image;
 import java.awt.Window;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Connection;
 import java.text.MessageFormat;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -32,7 +32,6 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
@@ -42,6 +41,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreePath;
+import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import org.jdesktop.swingx.JXErrorPane;
@@ -96,6 +96,14 @@ public class Misc {
        File f = FileUtil.toFile (file);
        String path = f.getPath();
        return path;
+    }
+
+    public static String getLogFile() {
+        String userDir = System.getProperty("netbeans.user");
+        if (userDir == null)
+            userDir = "<iReport user directory>";
+        // FIXME the same as above
+        return "" + new File(userDir + "/var/log/messages.log"); // TEMP
     }
     
     /**
@@ -802,8 +810,8 @@ public class Misc {
 			}
 		}
                 
-                String dir = IReportManager.getPreferences().get( IReportManager.CURRENT_DIRECTORY, null);
-                if (dir != null) return new File(dir);
+        String dir = IReportManager.getPreferences().get( IReportManager.CURRENT_DIRECTORY, null);
+        if (dir != null) return new File(dir);
 		// Backup:
 		return new File(System.getProperty("user.home"));
 	}
@@ -944,6 +952,73 @@ public class Misc {
 	    }
 
             return false;
+    }
+
+    public static JRDataSource getDataSource(String name)
+    {
+        List<IReportConnection> conns = IReportManager.getInstance().getConnections();
+        for (IReportConnection con : conns)
+        {
+            if (con.getName() != null &&
+                con.getName().equals(name))
+            {
+                if (con.isJDBCConnection()) continue;
+                return con.getJRDataSource();
+            }
+        }
+        return null;
+    }
+
+    public static Connection getConnection(String name)
+    {
+        List<IReportConnection> conns = IReportManager.getInstance().getConnections();
+        for (IReportConnection con : conns)
+        {
+            if (con.getName() != null &&
+                con.getName().equals(name) && con.isJDBCConnection())
+            {
+                return con.getConnection();
+            }
+        }
+        return null;
+    }
+
+
+    public static boolean isNumeric(String type)
+    {
+        return type!=null && (type.equals("java.lang.Byte") ||
+            type.equals("java.lang.Short") ||
+            type.equals("java.lang.Integer") ||
+            type.equals("java.lang.Long") ||
+            type.equals("java.lang.Float") ||
+            type.equals("java.lang.Double") ||
+            type.equals("java.lang.Number") ||
+            type.equals("java.math.BigDecimal"));
+    }
+
+
+    public static void  showErrorMessage(final String errorMsg, final String title)
+    {
+        Runnable r = new Runnable() {
+                public void run() {
+                    JOptionPane.showMessageDialog(Misc.getMainWindow(),errorMsg,title,JOptionPane.ERROR_MESSAGE);
+                }
+            };
+
+        if (!SwingUtilities.isEventDispatchThread())
+        {
+            try {
+                SwingUtilities.invokeAndWait( r );
+            } catch (InvocationTargetException ex) {
+                ex.printStackTrace();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+        else
+        {
+                r.run();
+        }
     }
    
    

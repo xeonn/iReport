@@ -37,10 +37,19 @@ public final class DeleteAction extends NodeAction {
         return false;
     }
 
-    protected void performAction(org.openide.nodes.Node[] activatedNodes) {
+    public void performAction(org.openide.nodes.Node[] activatedNodes) {
         
         List<String> destroiedUris = new ArrayList<String>();
         
+        // Save the parents note before they are unassociated by the childrens...
+        Node[] parents = new Node[activatedNodes.length];
+        for (int i=0; i<activatedNodes.length; ++i)
+        {
+            parents[i] = activatedNodes[i].getParentNode();
+        }
+
+
+
         for (int i=0; i<activatedNodes.length; ++i)
         {
             ResourceNode node = (ResourceNode)activatedNodes[i];
@@ -105,15 +114,16 @@ public final class DeleteAction extends NodeAction {
             if (JOptionPane.showConfirmDialog(Misc.getMainFrame(),msg) == JOptionPane.YES_OPTION)
             {
                  try {
-
-                        rf.getServer().getWSClient().delete(rf.getDescriptor(), reportUnitUri); 
-
                         // Update the folder childrens...
-                        ResourceNode parentResourceNode = (ResourceNode)activatedNodes[i].getParentNode();
-                        RepositoryFolder parentFolder = parentResourceNode.getRepositoryObject();
-                        parentFolder.getDescriptor().getChildren().remove( rf.getDescriptor());
-                        parentFolder.getChildren().remove(rf);
-                        parentResourceNode.refreshChildrens(false);
+                        ResourceNode parentResourceNode = (ResourceNode)parents[i];
+                        rf.getServer().getWSClient().delete(rf.getDescriptor(), reportUnitUri);
+
+                        if (parentResourceNode != null)
+                        {
+                            RepositoryFolder parentFolder = parentResourceNode.getRepositoryObject();
+                            parentFolder.getDescriptor().getChildren().remove( rf.getDescriptor());
+                            parentResourceNode.refreshChildrens(false);
+                        }
                  
                 } catch (Exception ex)
                 {

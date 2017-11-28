@@ -16,6 +16,7 @@ import com.jaspersoft.ireport.designer.sheet.properties.ParametersMapExpressionP
 import com.jaspersoft.ireport.designer.sheet.properties.DataSourceExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.ConnectionExpressionProperty;
 import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.sheet.properties.RunToBottomProperty;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -45,6 +46,7 @@ public class SubreportPropertiesFactory {
         propertySet.put(new SubreportExpressionProperty(element, dataset));
         propertySet.put(new SubreportExpressionClassNameProperty(element));
         propertySet.put(new SubreportUsingCacheProperty(element));
+        propertySet.put(new RunToBottomProperty(element));
         propertySet.put(new ParametersMapExpressionProperty(element, dataset));
         propertySet.put(new ConnectionTypeProperty(element) );
         propertySet.put(new ConnectionExpressionProperty(element, dataset));

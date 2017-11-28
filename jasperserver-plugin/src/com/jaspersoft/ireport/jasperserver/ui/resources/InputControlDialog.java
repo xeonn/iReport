@@ -78,12 +78,12 @@ public class InputControlDialog extends javax.swing.JDialog {
         
         jComboBoxType.addItem( new Tag("1", JasperServerManager.getString("inputControlDialog.type.1","Boolean"))  );
         jComboBoxType.addItem( new Tag("2", JasperServerManager.getString("inputControlDialog.type.2","Single Value"))  );
-	jComboBoxType.addItem( new Tag("3", JasperServerManager.getString("inputControlDialog.type.3","Single Select List of Values"))  );
+        jComboBoxType.addItem( new Tag("3", JasperServerManager.getString("inputControlDialog.type.3","Single Select List of Values"))  );
         jComboBoxType.addItem( new Tag("8", JasperServerManager.getString("inputControlDialog.type.8","Single Select List of Values (Radio)"))  ); 
-	jComboBoxType.addItem( new Tag("6", JasperServerManager.getString("inputControlDialog.type.6","Multi Select List of Values"))  ); 
+        jComboBoxType.addItem( new Tag("6", JasperServerManager.getString("inputControlDialog.type.6","Multi Select List of Values"))  );
         jComboBoxType.addItem( new Tag("10",JasperServerManager.getString("inputControlDialog.type.10","Multi Select List of Values (Checkbox)"))  ); 
-	jComboBoxType.addItem( new Tag("4", JasperServerManager.getString("inputControlDialog.type.4","Single Select Query"))  ); 
-	jComboBoxType.addItem( new Tag("9", JasperServerManager.getString("inputControlDialog.type.9","Single Select Query (Radio)"))  ); 
+        jComboBoxType.addItem( new Tag("4", JasperServerManager.getString("inputControlDialog.type.4","Single Select Query"))  );
+        jComboBoxType.addItem( new Tag("9", JasperServerManager.getString("inputControlDialog.type.9","Single Select Query (Radio)"))  );
         jComboBoxType.addItem( new Tag("7", JasperServerManager.getString("inputControlDialog.type.7","Multi Select Query"))  );
         jComboBoxType.addItem( new Tag("11",JasperServerManager.getString("inputControlDialog.type.11","Multi Select Query (Checkbox)"))  );
         
@@ -223,6 +223,8 @@ public class InputControlDialog extends javax.swing.JDialog {
         jButtonAddColumn = new javax.swing.JButton();
         jButtonModColumn = new javax.swing.JButton();
         jButtonRemColumn = new javax.swing.JButton();
+        jLabelVisible = new javax.swing.JLabel();
+        jCheckBoxVisible = new javax.swing.JCheckBox();
         jPanel4 = new javax.swing.JPanel();
         jButtonSave = new javax.swing.JButton();
         jButtonClose = new javax.swing.JButton();
@@ -379,7 +381,7 @@ public class InputControlDialog extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 8, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         jPanel3.add(jLabelReadOnly, gridBagConstraints);
 
         jCheckBoxReadOnly.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -387,13 +389,14 @@ public class InputControlDialog extends javax.swing.JDialog {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 8, 20);
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 20);
         jPanel3.add(jCheckBoxReadOnly, gridBagConstraints);
 
         jSeparator4.setMinimumSize(new java.awt.Dimension(2, 2));
         jSeparator4.setPreferredSize(new java.awt.Dimension(2, 2));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -704,6 +707,24 @@ public class InputControlDialog extends javax.swing.JDialog {
         gridBagConstraints.weighty = 1.0;
         jPanel3.add(jPanel5, gridBagConstraints);
 
+        jLabelVisible.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabelVisible.setText("Visible");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 8, 0);
+        jPanel3.add(jLabelVisible, gridBagConstraints);
+
+        jCheckBoxVisible.setSelected(true);
+        jCheckBoxVisible.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 8, 20);
+        jPanel3.add(jCheckBoxVisible, gridBagConstraints);
+
         jTabbedPane1.addTab("Input Control details", jPanel3);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1002,6 +1023,10 @@ public class InputControlDialog extends javax.swing.JDialog {
 
         rd.setMandatory( jCheckBoxMandatory.isSelected() );
         rd.setReadOnly( jCheckBoxReadOnly.isSelected() );
+
+        // visible to be replaced with a proper constant
+        rd.setResourceProperty(ResourceDescriptor.PROP_INPUTCONTROL_IS_VISIBLE, jCheckBoxVisible.isSelected());
+
         rd.setControlType( Byte.parseByte( ((Tag)jComboBoxType.getSelectedItem()).getValue()+""));
         
         if ( (rd.getControlType() == rd.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES |
@@ -1243,13 +1268,20 @@ public class InputControlDialog extends javax.swing.JDialog {
     public void setResource(ResourceDescriptor descriptor)
     {
         if (descriptor == null) return;
+
+        setTitle( JasperServerManager.getFormattedString("properties.title", "{0} - Properties", new Object[]{descriptor.getName()}));
+
         jTextFieldName.setText( descriptor.getName());
         jTextFieldLabel.setText( descriptor.getLabel());
         jEditorPaneDescription.setText( descriptor.getDescription());
         
-        System.out.println("Mandatory: " + descriptor.isMandatory() );
-        System.out.println("ReadOnly: " + descriptor.isReadOnly() );
-        
+        //System.out.println("Mandatory: " + descriptor.isMandatory() );
+        //.out.println("ReadOnly: " + descriptor.isReadOnly() );
+        //System.out.println("Visible: " + descriptor.getResourcePropertyValueAsBoolean(ResourceDescriptor.PROP_INPUTCONTROL_IS_VISIBLE) );
+
+        Boolean b = descriptor.getResourcePropertyValueAsBoolean(ResourceDescriptor.PROP_INPUTCONTROL_IS_VISIBLE);
+        jCheckBoxVisible.setSelected(b == null || b.booleanValue());
+
         jCheckBoxMandatory.setSelected( descriptor.isMandatory());
         jCheckBoxReadOnly.setSelected( descriptor.isReadOnly());
         
@@ -1336,6 +1368,7 @@ public class InputControlDialog extends javax.swing.JDialog {
     private javax.swing.JButton jButtonSave;
     private javax.swing.JCheckBox jCheckBoxMandatory;
     private javax.swing.JCheckBox jCheckBoxReadOnly;
+    private javax.swing.JCheckBox jCheckBoxVisible;
     private javax.swing.JComboBox jComboBoxType;
     private javax.swing.JEditorPane jEditorPaneDescription;
     private javax.swing.JLabel jLabel1;
@@ -1350,6 +1383,7 @@ public class InputControlDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabelReadOnly;
     private javax.swing.JLabel jLabelType;
     private javax.swing.JLabel jLabelUriString;
+    private javax.swing.JLabel jLabelVisible;
     private javax.swing.JList jListColumns;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

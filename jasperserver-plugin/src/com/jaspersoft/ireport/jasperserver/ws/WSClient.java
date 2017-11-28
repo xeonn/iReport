@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.jasperserver.ws;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
@@ -493,7 +494,7 @@ public class WSClient {
     	else 
     	{
                 // patch jrxml files....
-                if (JasperServerManager.getPreferences().getBoolean("use_jrxml_DTD", false))
+                if (IReportManager.getPreferences().getBoolean("use_jrxml_DTD", false))
                 {
                     if (inputFile.getName().toLowerCase().endsWith(".jrxml"))
                     {
@@ -636,7 +637,7 @@ public class WSClient {
             ((org.apache.axis.client.Stub)managementService).setMaintainSession( true );
         }
 
-        int timeout = JasperServerManager.getPreferences().getInt("client_timeout", 0) * 1000;
+        int timeout = IReportManager.getPreferences().getInt("client_timeout", 0) * 1000;
         if (timeout != ((org.apache.axis.client.Stub)managementService).getTimeout())
         {
             ((org.apache.axis.client.Stub)managementService).setTimeout(timeout);

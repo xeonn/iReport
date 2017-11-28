@@ -37,6 +37,8 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.design.JRDesignFrame;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.action.WidgetAction.State;
 import org.netbeans.api.visual.action.WidgetAction.WidgetKeyEvent;
@@ -59,47 +61,51 @@ public class KeyboardElementMoveAction extends WidgetAction.Adapter {
     @Override
     public State keyPressed(Widget widget, WidgetKeyEvent event) {
         
-        
-        if (event.getKeyCode() == KeyEvent.VK_LEFT ||
-            event.getKeyCode() == KeyEvent.VK_RIGHT ||
-            event.getKeyCode() == KeyEvent.VK_UP ||
-            event.getKeyCode() == KeyEvent.VK_DOWN)
+        if (!event.isControlDown())
         {
-            int len = (event.isShiftDown()) ? 10 : 1;
-            
-            Point delta = new Point(0,0);
-            switch (event.getKeyCode())
+            if (event.getKeyCode() == KeyEvent.VK_LEFT ||
+                event.getKeyCode() == KeyEvent.VK_RIGHT ||
+                event.getKeyCode() == KeyEvent.VK_UP ||
+                event.getKeyCode() == KeyEvent.VK_DOWN)
             {
-                case KeyEvent.VK_LEFT: delta.x -= len; break;
-                case KeyEvent.VK_RIGHT: delta.x = len; break;
-                case KeyEvent.VK_UP: delta.y -= len; break;
-                case KeyEvent.VK_DOWN: delta.y = len; break;
-            }
-            
-            List<JRDesignElementWidget> widgets = new ArrayList<JRDesignElementWidget>();
-            AbstractReportObjectScene scene = (AbstractReportObjectScene)widget.getScene();
 
-            Iterator iterSelectedObject = scene.getSelectedObjects().iterator();
-            while (iterSelectedObject.hasNext())
-            {
-                Object obj = iterSelectedObject.next();
-                Widget w = scene.findWidget(obj);
-                if (w instanceof JRDesignElementWidget)
+                int len = (event.isShiftDown()) ? 10 : 1;
+
+                Point delta = new Point(0,0);
+                switch (event.getKeyCode())
                 {
-                    widgets.add((JRDesignElementWidget)w);
+                    case KeyEvent.VK_LEFT: delta.x -= len; break;
+                    case KeyEvent.VK_RIGHT: delta.x = len; break;
+                    case KeyEvent.VK_UP: delta.y -= len; break;
+                    case KeyEvent.VK_DOWN: delta.y = len; break;
                 }
+
+                List<JRDesignElementWidget> widgets = new ArrayList<JRDesignElementWidget>();
+                AbstractReportObjectScene scene = (AbstractReportObjectScene)widget.getScene();
+
+                Iterator iterSelectedObject = scene.getSelectedObjects().iterator();
+                while (iterSelectedObject.hasNext())
+                {
+                    Object obj = iterSelectedObject.next();
+                    Widget w = scene.findWidget(obj);
+                    if (w instanceof JRDesignElementWidget)
+                    {
+                        widgets.add((JRDesignElementWidget)w);
+                    }
+                }
+
+                move(widgets, delta);
+
+                return State.CHAIN_ONLY;
             }
-            
-            move(widgets, delta);
-            
-            return State.CHAIN_ONLY;
         }
-        
         return State.REJECTED;
     }
     
     private void move (List<JRDesignElementWidget> widgets, Point delta) {
-        
+
+        ArrayList<Widget> changedWidgets = new ArrayList<Widget>();
+
         for (JRDesignElementWidget dew : widgets)
         {
             Point dewloc = dew.getPreferredLocation();
@@ -113,10 +119,40 @@ public class KeyboardElementMoveAction extends WidgetAction.Adapter {
                 dew.setChanging(b);
             }
             dew.updateBounds();
-            
+
             // Sync the selection...
             dew.getSelectionWidget().updateBounds();
+            
+            changedWidgets.add(dew);
         }
+
+        for (JRDesignElementWidget dew : widgets)
+        {
+            if (dew.getElement() instanceof JRDesignFrame)
+            {
+                updateChildren((JRDesignFrame)dew.getElement(), (AbstractReportObjectScene)dew.getScene(), changedWidgets);
+            }
+        }
+    }
+
+
+    private void updateChildren(JRDesignFrame parent, AbstractReportObjectScene scene, ArrayList<Widget> changedWidgets)
+    {
+          JRElement[] elements = parent.getElements();
+          for (int i=0; i < elements.length; ++i)
+          {
+               JRDesignElementWidget w = (JRDesignElementWidget)scene.findWidget(elements[i]);
+               if (changedWidgets.contains(w)) continue;
+               w.updateBounds();
+               w.getSelectionWidget().updateBounds();
+
+               if (elements[i] instanceof JRDesignFrame)
+               {
+                   updateChildren((JRDesignFrame)elements[i], scene, changedWidgets);
+               }
+
+               changedWidgets.add(w);
+          }
     }
 }
 

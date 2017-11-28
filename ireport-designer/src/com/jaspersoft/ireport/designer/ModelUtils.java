@@ -112,23 +112,71 @@ public class ModelUtils {
     }
 
     public static JRDesignStyle cloneStyle(JRDesignStyle style) {
-        JRDesignStyle newStyle = new JRDesignStyle();
-        // TODO: duplicate the style for real...
-        newStyle.setName( style.getName());
+        JRDesignStyle newStyle = (JRDesignStyle)style.clone();
         return newStyle;
     }
 
-    public static List<JRDesignElement> getAllElements(JasperDesign jd) {
-        
+   /**
+    * Get all the elements in the report
+    * @param jd
+    * @param includeCrosstabs
+    * @return
+    */
+   public static List<JRDesignElement> getAllElements(JasperDesign jd, boolean includeCrosstabs) {
+
         List<JRDesignElement> list = new ArrayList<JRDesignElement>();
-        
+
         List<JRBand> bands = getBands(jd);
         for (JRBand band : bands)
         {
             list.addAll(getAllElements(band));
         }
+
+        if (includeCrosstabs)
+        {
+             List<JRDesignElement> list2 = new ArrayList<JRDesignElement>();
+            for (int i=0; i<list.size(); ++i)
+            {
+                JRDesignElement ele = list.get(i);
+                if (ele instanceof JRDesignCrosstab)
+                {
+                    list2.addAll(getAllElements((JRDesignCrosstab)ele));
+                }
+            }
+            list.addAll(list2);
+        }
         
         return list;
+    }
+
+    /**
+     * Return all the elements contained in the cells of the specified crosstab.
+     * @param crosstab
+     * @return
+     */
+    public static List<JRDesignElement> getAllElements(JRDesignCrosstab crosstab) {
+
+        List list = new ArrayList();
+        List<JRDesignCellContents> cells = getAllCells(crosstab);
+
+        for (JRDesignCellContents content : cells)
+        {
+            list.addAll(  getAllElements(content) );
+        }
+        return  list;
+    }
+
+
+
+    /**
+     * Get all the elements in the report
+     * Same as: getAllElements(jd, true);
+     * @param jd
+     * @return
+     */
+    public static List<JRDesignElement> getAllElements(JasperDesign jd) {
+        
+        return getAllElements(jd, true);
     }
     
     public static List<JRDesignElement> getAllElements(JRElementGroup group) {
@@ -413,20 +461,20 @@ public class ModelUtils {
  
             if (content == null || content == crosstab.getHeaderCell()) return new Point(0,0);
 
+           // System.out.println("We are looking for this cell contents: " + content + " ----- " + ModelUtils.nameOf(content) + " in " + crosstab);
+
+
             int header_width = getHeaderCellWidth(crosstab);
             int header_height = getHeaderCellHeight(crosstab);
 
             JRCrosstabRowGroup[] row_groups = crosstab.getRowGroups();
             JRCrosstabColumnGroup[] col_groups = crosstab.getColumnGroups();
             
-            
-            
             JRCrosstabCell[][] jr_cells = crosstab.getCells();
             JRCrosstabCell baseCell = jr_cells[jr_cells.length-1][jr_cells[0].length-1];
             
-            
             JRCrosstabCell[][] cells = normalizeCell(jr_cells,row_groups,col_groups);
-        
+
             int x = header_width;
             int y = header_height;
             
@@ -443,6 +491,9 @@ public class ModelUtils {
                     }
                     else
                     {
+                       // System.out.println("Cell " + i + "/" + k +" " + (cell.getContents() == content) + " "+ ModelUtils.nameOf((JRDesignCellContents)cell.getContents()) + " (" + x + "," + y + ") " + cell.getContents());
+                       // System.out.flush();
+
                         if (cell.getContents() == content) return new Point(x,y);
                         x += cell.getContents().getWidth();
                         height = cell.getContents().getHeight();
@@ -512,7 +563,10 @@ public class ModelUtils {
                     y += col_groups[i].getHeader().getHeight();
                 }
             }
-        
+
+            System.out.println("Unable to find the cell location of: " + content + ModelUtils.nameOf(content));
+            System.out.flush();
+
             return new Point(0,0);
     }
 
@@ -1340,7 +1394,7 @@ public class ModelUtils {
         if (element == null) return base;
         
         JRElementGroup grp = element.getElementGroup();
-        
+
         // I need to discover the first logical parent of this element
         while (grp != null)    // Element placed in a frame
         {
@@ -1355,6 +1409,7 @@ public class ModelUtils {
             {
                 // TODO: calculate cell position....
                 JRDesignCellContents cell = (JRDesignCellContents)grp;
+                
                 base = getCellLocation(cell.getOrigin().getCrosstab(),cell);
                 break;
             }

@@ -21,24 +21,26 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
     private IReportConnection iReportConnection = null;
 
     public static JDBCDriverDefinition[] definitions = new JDBCDriverDefinition[]{
-		new JDBCDriverDefinition("MySQL","org.gjt.mm.mysql.Driver","jdbc:mysql://{0}/{1}"),
-		new JDBCDriverDefinition("MySQL","com.mysql.jdbc.Driver","jdbc:mysql://{0}/{1}"),
-		new JDBCDriverDefinition("PostgreSQL","org.postgresql.Driver","jdbc:postgresql://{0}:5432/{1}"),
-		new JDBCDriverDefinition("HSQLDB (file)","org.hsqldb.jdbcDriver","jdbc:hsqldb:[PATH_TO_DB_FILES]/{1}"),
+         	new JDBCDriverDefinition("Cloudscape","COM.cloudscape.JDBCDriver","jdbc:cloudscape:/{1}"),
+                new JDBCDriverDefinition("IBM DB2","COM.ibm.db2.jdbc.app.DB2Driver","jdbc:db2:{0}/{1}"),
+		new JDBCDriverDefinition("inetdae7","com.inet.tds.TdsDriver","jdbc:inetdae7:{0}:1433/{1}"),
+                new JDBCDriverDefinition("Informix","com.informix.jdbc.IfxDriver","jdbc:informix-sqli://{0}:informixserver={1}"),
+		new JDBCDriverDefinition("Ingres","com.ingres.jdbc.IngresDriver","jdbc:ingres://{0}:II7/{1}"),
+                new JDBCDriverDefinition("HSQLDB (file)","org.hsqldb.jdbcDriver","jdbc:hsqldb:[PATH_TO_DB_FILES]/{1}"),
 		new JDBCDriverDefinition("HSQLDB (server)","org.hsqldb.jdbcDriver","jdbc:hsqldb:hsql://{0}"),
-                new JDBCDriverDefinition("MS SQLServer","com.internetcds.jdbc.tds.Driver","jdbc:freetds:sqlserver://{0}/{1}"),
+                new JDBCDriverDefinition("JDBC-ODBC Bridge","sun.jdbc.odbc.JdbcOdbcDriver","jdbc:odbc:{1}","DSNAME"),
+		new JDBCDriverDefinition("JDBC-ODBC Bridge","com.ms.jdbc.odbc.JdbcOdbcDriver","jdbc:odbc:{1}","DSNAME"),
+		new JDBCDriverDefinition("MS SQLServer","com.internetcds.jdbc.tds.Driver","jdbc:freetds:sqlserver://{0}/{1}"),
 		new JDBCDriverDefinition("MS SQLServer (2000)","com.microsoft.jdbc.sqlserver.SQLServerDriver","jdbc:microsoft:sqlserver://{0}:1433;DatabaseName={1}"),
 		new JDBCDriverDefinition("MS SQLServer (2005)","com.microsoft.sqlserver.jdbc.SQLServerDriver","jdbc:sqlserver://{0}:1433;databaseName={1}"),
 		new JDBCDriverDefinition("MS SQLServer","net.sourceforge.jtds.jdbc.Driver","jdbc:jtds:sqlserver://{0}/{1}"),
                 new JDBCDriverDefinition("MS SQLServer","com.merant.datadirect.jdbc.sqlserver.SQLServerDriver","jdbc:sqlserver://{0}:1433/{1}"),
-                new JDBCDriverDefinition("JDBC-ODBC Bridge","sun.jdbc.odbc.JdbcOdbcDriver","jdbc:odbc:{1}","DSNAME"),
-		new JDBCDriverDefinition("JDBC-ODBC Bridge","com.ms.jdbc.odbc.JdbcOdbcDriver","jdbc:odbc:{1}","DSNAME"),
+                new JDBCDriverDefinition("MySQL","org.gjt.mm.mysql.Driver","jdbc:mysql://{0}/{1}"),
+		new JDBCDriverDefinition("MySQL","com.mysql.jdbc.Driver","jdbc:mysql://{0}/{1}"),
 		new JDBCDriverDefinition("Oracle","oracle.jdbc.driver.OracleDriver","jdbc:oracle:thin:@{0}:1521:{1}"),
-		new JDBCDriverDefinition("IBM DB2","COM.ibm.db2.jdbc.app.DB2Driver","jdbc:db2:{0}/{1}"),
-		new JDBCDriverDefinition("Informix","com.informix.jdbc.IfxDriver","jdbc:informix-sqli://{0}:informixserver={1}"),
-		new JDBCDriverDefinition("Sybase","com.sybase.jdbc2.jdbc.SybDriver","jdbc:sybase:Tds:{0}:2638/{1}"),
-		new JDBCDriverDefinition("inetdae7","com.inet.tds.TdsDriver","jdbc:inetdae7:{0}:1433/{1}"),
-		new JDBCDriverDefinition("Cloudscape","COM.cloudscape.JDBCDriver","jdbc:cloudscape:/{1}")};
+		new JDBCDriverDefinition("PostgreSQL","org.postgresql.Driver","jdbc:postgresql://{0}:5432/{1}"),
+                new JDBCDriverDefinition("Sybase","com.sybase.jdbc2.jdbc.SybDriver","jdbc:sybase:Tds:{0}:2638/{1}")
+		};
 
     /** Creates new form JDBCConnectionEditor */
     public JDBCConnectionEditor() {
@@ -48,11 +50,11 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
         
         //Arrays.sort(definitions);
 
-        jComboBoxJDBCDriver.setRenderer(new JDBCDriverListRenderer());
-        jComboBoxJDBCDriver.setModel(new DefaultComboBoxModel(definitions));
-            
-         jComboBoxJDBCDriver.setSelectedIndex(0);
+         jComboBoxJDBCDriver.setRenderer(new JDBCDriverListRenderer());
+         jComboBoxJDBCDriver.setModel(new DefaultComboBoxModel(definitions));
+         // Select the first MySQL driver...
 
+         jComboBoxJDBCDriver.setSelectedIndex(15);
          jLabel1.setText(I18n.getString("XMLADataSourceConnectionEditor.Label.Warning"));
     }
     

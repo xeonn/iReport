@@ -6,8 +6,8 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.locale.I18n;
+import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignTextElement;
 
 /**
  * Class to manage the JRBaseStyle.PROPERTY_UNDERLINE property
@@ -16,13 +16,13 @@ import net.sf.jasperreports.engine.design.JRDesignTextElement;
 
 public class UnderlineProperty extends BooleanProperty{
 
-    private final JRDesignTextElement element;
+    private final JRFont font;
 
     @SuppressWarnings("unchecked")
-    public UnderlineProperty(JRDesignTextElement element)
+    public UnderlineProperty(JRFont font)
     {
-        super(element);
-        this.element = element;
+        super(font);
+        this.font = font;
     }
     @Override
     public String getName()
@@ -45,13 +45,13 @@ public class UnderlineProperty extends BooleanProperty{
     @Override
     public Boolean getBoolean()
     {
-        return element.isUnderline();
+        return font.isUnderline();
     }
 
     @Override
     public Boolean getOwnBoolean()
     {
-        return element.isOwnUnderline();
+        return font.isOwnUnderline();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class UnderlineProperty extends BooleanProperty{
     @Override
     public void setBoolean(Boolean isUnderline)
     {
-    	element.setUnderline(isUnderline);
+    	font.setUnderline(isUnderline);
     }
     
 }

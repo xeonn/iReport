@@ -64,9 +64,9 @@ public final class LazyProperty extends BooleanProperty
     }
 
     @Override
-    public void setBoolean(Boolean isUsingCache)
+    public void setBoolean(Boolean isLazy)
     {
-        image.setUsingCache(isUsingCache);
+        image.setLazy(isLazy);
     }
 
 }

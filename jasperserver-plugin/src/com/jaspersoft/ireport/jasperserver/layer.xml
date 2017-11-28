@@ -14,6 +14,8 @@
         </folder>
     </folder>
     <folder name="Menu">
+        <folder name="File">
+        </folder>
         <folder name="Window">
             <folder name="Report designer">
                 <file name="JRViewerAction.shadow" url="JRViewerAction.shadow">
@@ -25,7 +27,7 @@
                     <attr name="position" intvalue="350"/>
                 </file>
             </folder>
-            </folder>
+        </folder>
     </folder>
     <folder name="OptionsDialog">
         <folder name="iReport">

@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.URLMapper;
+import org.openide.util.actions.SystemAction;
 import org.openide.windows.WindowManager;
 
 /**
@@ -82,7 +83,7 @@ public final class RecentFiles {
             historyString += hItem + "\n"; // NOI18N
         }
         IReportManager.getPreferences().put("RecentFiles", historyString); // NOI18N
-        
+
     }
 
     
@@ -90,6 +91,7 @@ public final class RecentFiles {
      * if conditions are met.
      */ 
     private static void addFile (TopComponent tc) {
+
         if (tc instanceof CloneableTopComponent) {
             URL fileURL = obtainURL(tc);
             if (fileURL != null) {
@@ -167,13 +169,21 @@ public final class RecentFiles {
                 // add it to the beginning of the list ;-)
                 // Postpone this in to the end of the awt events...
                 // Sometime needs time to the lookup to get ready...
-                
+
+
+
                 final TopComponent tc = (TopComponent) evt.getNewValue();
+
                 SwingUtilities.invokeLater(new Runnable() {
 
                     public void run() {
                         addFile(tc);
                         storeHistory();
+                        if (RecentFileAction.getInstance() != null)
+                        {
+                            RecentFileAction.getInstance().updateSubMenu();
+                        }
+
                     }
                 });
             }

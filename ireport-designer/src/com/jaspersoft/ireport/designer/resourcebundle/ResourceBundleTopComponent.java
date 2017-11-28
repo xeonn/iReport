@@ -8,29 +8,20 @@ package com.jaspersoft.ireport.designer.resourcebundle;
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.Serializable;
 import java.util.logging.Logger;
 import javax.swing.ActionMap;
-import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultEditorKit;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
 import org.openide.explorer.view.BeanTreeView;
 import org.openide.explorer.view.TreeView;
-import org.openide.filesystems.FileAttributeEvent;
-import org.openide.filesystems.FileChangeListener;
-import org.openide.filesystems.FileEvent;
-import org.openide.filesystems.FileRenameEvent;
-import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
-import org.openide.nodes.FilterNode;
-import org.openide.util.Exceptions;
+import org.openide.nodes.AbstractNode;
+import org.openide.nodes.Children;
+import org.openide.text.DataEditorSupport;
 import org.openide.util.Lookup;
-import org.openide.util.LookupEvent;
-import org.openide.util.LookupListener;
 import org.openide.util.NbBundle;
-import org.openide.util.Utilities;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.util.lookup.ProxyLookup;
@@ -41,7 +32,7 @@ import org.openide.windows.WindowManager;
 /**
  * Top component which displays something.
  */
-final class ResourceBundleTopComponent extends TopComponent implements LookupListener, ExplorerManager.Provider, PropertyChangeListener, FileChangeListener {
+final class ResourceBundleTopComponent extends TopComponent implements ExplorerManager.Provider, PropertyChangeListener {
 
     private static ResourceBundleTopComponent instance;
 
@@ -60,7 +51,7 @@ final class ResourceBundleTopComponent extends TopComponent implements LookupLis
 
     private static final String PREFERRED_ID = "ResourceBundleTopComponent";
 
-    private final Lookup.Result <DataObject> result;
+    //private final Lookup.Result <DataObject> result;
 
     private ResourceBundleTopComponent() {
         initComponents();
@@ -80,15 +71,29 @@ final class ResourceBundleTopComponent extends TopComponent implements LookupLis
         view = new BeanTreeView();
         //view.setRootVisible(false);
         add(view, BorderLayout.CENTER);
+        //view.setRootVisible(false);
 
         setName(NbBundle.getMessage(ResourceBundleTopComponent.class, "CTL_ResourceBundleTopComponent"));
         setToolTipText(NbBundle.getMessage(ResourceBundleTopComponent.class, "HINT_ResourceBundleTopComponent"));
 //        setIcon(Utilities.loadImage(ICON_PATH, true));
-        result = Utilities.actionsGlobalContext().lookup(new Lookup.Template(DataObject.class));
-        result.addLookupListener(this);
-        result.allItems();
-        resultChanged(null);
+//        result = Utilities.actionsGlobalContext().lookup(new Lookup.Template(DataObject.class));
+//        result.addLookupListener(this);
+//        result.allItems();
+        //updateTree(false);
 
+        //WindowManager.getDefault().getRegistry().addPropertyChangeListener(this);
+
+    }
+
+    private DataObject findDataObject(TopComponent tc) {
+        if (tc ==null) return null;
+        System.out.println(tc.getLookup().lookupAll(Object.class));
+        System.out.flush();
+        DataObject dObj = tc.getLookup().lookup(DataObject.class);
+        if (dObj != null) return dObj;
+        DataEditorSupport des = tc.getLookup().lookup(DataEditorSupport.class);
+        if (des != null) return des.getDataObject();
+        return null;
     }
 
     /** This method is called from within the constructor to
@@ -160,139 +165,103 @@ final class ResourceBundleTopComponent extends TopComponent implements LookupLis
         // TODO add custom code on component closing
     }
 
-    /** replaces this in object stream */
-    @Override
-    public Object writeReplace() {
-        return new ResolvableHelper();
-    }
+    
 
     @Override
     protected String preferredID() {
         return PREFERRED_ID;
     }
 
-    /**
-     * @return the dataObject
-     */
-    public
 
-    DataObject getDataObject() {
-        return dataObject;
-    }
+    public void propertyChange(PropertyChangeEvent evt) {
 
-    /**
-     * @param dataObject the dataObject to set
-     */
-    public void setDataObject(DataObject dataObject) {
-        this.dataObject = dataObject;
-    }
-
-    final static class ResolvableHelper implements Serializable {
-
-        private static final long serialVersionUID = 1L;
-
-        public Object readResolve() {
-            return ResourceBundleTopComponent.getDefault();
-        }
-    }
-
-    private DataObject dataObject = null;
-    public void resultChanged(LookupEvent arg0) {
-
-        if (!result.allInstances().isEmpty())
+        if (evt.getPropertyName().equals(  Registry.PROP_ACTIVATED ))
         {
-            DataObject dobj = result.allInstances().iterator().next();
-            if (dobj == dataObject) return;
-            
-            if (getDataObject() != null)
+            System.out.println("TopComponent activated..." + " " + evt.getPropertyName() + " " + evt.getNewValue());
+            System.out.flush();
+            updateTree(false);
+        }
+        else if (evt.getPropertyName().equals(  Registry.PROP_OPENED ))
+        {
+            System.out.println("TopComponent opened..." + " " + evt.getPropertyName() + " " + evt.getNewValue());
+            System.out.flush();
+            updateTree(false);
+        }
+        else if (evt.getPropertyName().equals(  Registry.PROP_TC_OPENED))
+        {
+            System.out.println("TopComponent TC opened..." + " " + evt.getPropertyName() + " " + evt.getNewValue());
+            System.out.flush();
+            updateTree(false);
+        }
+        else if (evt.getPropertyName().equals(  Registry.PROP_TC_CLOSED))
+        {
+            lastSelectedTopComponent = null;
+            getExplorerManager().setRootContext(new AbstractNode(Children.LEAF));
+
+           
+            System.out.println("TopComponent TC closed..." + " " + evt.getPropertyName() + " " + evt.getNewValue());
+            System.out.println("Still open: " + WindowManager.getDefault().getRegistry().getOpened() + "");
+            System.out.flush();
+        }
+        
+    }
+
+    TopComponent lastSelectedTopComponent = null;
+    public void updateTree(boolean closing)
+    {
+        // Don't do anything if we have not selected an editor...
+        TopComponent selectedTc = WindowManager.getDefault().getRegistry().getActivated();
+        if (selectedTc != null &&
+            !WindowManager.getDefault().isEditorTopComponent(selectedTc))
+        {
+            System.out.println("Activated not an editor...");
+            lastSelectedTopComponent = null;
+            return;
+        }
+
+        if (lastSelectedTopComponent == null ||
+            WindowManager.getDefault().getRegistry().getActivated() != lastSelectedTopComponent && !closing)
+        {
+            lastSelectedTopComponent = WindowManager.getDefault().getRegistry().getActivated();
+            if (lastSelectedTopComponent != null)
             {
-                getDataObject().removePropertyChangeListener(this);
-                getDataObject().getPrimaryFile().getParent().removeFileChangeListener(this);
-            }
-          
-            setDataObject(dobj);
-            if (getDataObject() != null)
-            {
-                try {
-                    DataObject.find(getDataObject().getPrimaryFile().getParent());
-                } catch (DataObjectNotFoundException ex) {
-                    Exceptions.printStackTrace(ex);
+                DataObject dobj = findDataObject(lastSelectedTopComponent);
+                System.out.println("Found data object: " + dobj);
+                if (dobj != null)
+                {
+                    DataObject nDO = null;
+
+                    if (dobj.getPrimaryFile() != null &&
+                        dobj.getPrimaryFile().getParent() != null)
+                    {
+                        try {
+                            nDO = DataObject.find(dobj.getPrimaryFile().getParent());
+                            if (nDO != null)
+                            {
+                                getExplorerManager().setRootContext(nDO.getNodeDelegate());
+                                return;
+                            }
+                        } catch (DataObjectNotFoundException ex) {
+                            //Exceptions.printStackTrace(ex);
+                            ex.printStackTrace();
+                        }
+                    }
                 }
             }
-            final DataObject nDO = getDataObject();
-            
-            getDataObject().addPropertyChangeListener(this);
-
-            getExplorerManager().setRootContext(nDO.getNodeDelegate());
-            view.setRootVisible(true);
+            //getExplorerManager().setRootContext(new AbstractNode(Children.LEAF));
         }
-//        else
-//        {
-//            getExplorerManager().setRootContext(new AbstractNode(Children.LEAF));
-//            view.setRootVisible(false);
-//        }
+        
+        if (lastSelectedTopComponent == null ||
+            !lastSelectedTopComponent.isValid() ||
+            !lastSelectedTopComponent.isVisible())
+        {
+            getExplorerManager().setRootContext(new AbstractNode(Children.LEAF));
+        }
     }
+
 
     public ExplorerManager getExplorerManager() {
         return manager;
     }
-
-    public void propertyChange(PropertyChangeEvent evt) {
-
-        if (evt != null)
-        {
-            System.out.println("Data changed: " + evt.getPropertyName());
-            System.out.flush();
-        }
-        /*
-        final DataObject nDO = getDataObject();
-        if (nDO != null)
-        {
-            SwingUtilities.invokeLater(new Runnable() {
-
-                public void run()
-                {
-                    getExplorerManager().setRootContext(nDO.getNodeDelegate());
-                }
-            });
-        }
-        */
-    }
-
-    public void fileFolderCreated(FileEvent arg0) {
-    }
-
-    public void fileDataCreated(FileEvent evt) {
-        if (getDataObject() != null)
-        {
-            System.out.println("Locale added...?" + getDataObject().getNodeDelegate().getChildren());
-            System.out.flush();
-            //FileUtil.refreshFor( FileUtil.toFile(evt.getFile()) );
-        }
-    }
-
-    public void fileChanged(FileEvent arg0) {
-    }
-
-    public void fileDeleted(FileEvent evt) {
-        System.out.println("Locale deleted...?");
-        System.out.flush();
-        if (getDataObject() != null)
-        {
-            //FileUtil.refreshFor( FileUtil.toFile(evt.getFile()) );
-        }
-        //propertyChange(null);
-    }
-
-
-
-    public void fileRenamed(FileRenameEvent arg0) {
-        //propertyChange(null);
-    }
-
-    public void fileAttributeChanged(FileAttributeEvent arg0) {
-    }
-
-
 
 }

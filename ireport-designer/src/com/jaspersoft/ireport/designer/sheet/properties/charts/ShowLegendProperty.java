@@ -49,19 +49,19 @@ public final class ShowLegendProperty extends BooleanProperty {
     @Override
     public Boolean getBoolean()
     {
-        return element.isShowLegend();
+        return element.getShowLegend();
     }
 
     @Override
     public Boolean getOwnBoolean()
     {
-        return element.isShowLegend();
+        return element.getShowLegend();
     }
 
     @Override
     public Boolean getDefaultBoolean()
     {
-        return Boolean.TRUE;
+        return null;
     }
 
     @Override

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
 To change this template, choose Tools | Templates
 and open the template in the editor.
@@ -23,7 +23,7 @@ and open the template in the editor.
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jxl-2.6.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/png-encoder-1.5.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/poi-3.2-FINAL-20081019.jar!/</resource>
-        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-3.1.3.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-3.5.0!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/libs/xalan.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/xercesImpl.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/xml-apis.jar!/</resource>
@@ -43,7 +43,9 @@ and open the template in the editor.
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/iText-2.1.0.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/rhino-1.7R1.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/xml-apis-ext.jar!/</resource>
-        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-chart-themes-3.1.2.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-chart-themes-3.5.0.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/castor-1.2.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-dejavu-fonts.jar!/</resource>
 
     </volume>
     <volume>

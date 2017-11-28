@@ -91,9 +91,14 @@ public class JRDesignImageWidget extends JRDesignElementWidget implements Runnab
             else
             {
                 // check if something is changed...
-                resolver.setImageElement((JRDesignImage)getElement());
-                resolver.setJasperDesign(visualView.getModel().getJasperDesign());
-                resolver.setReportFolder(reportFolder+"");
+                try {
+                    resolver.setImageElement((JRDesignImage)getElement());
+                    resolver.setJasperDesign(visualView.getModel().getJasperDesign());
+                    resolver.setReportFolder(reportFolder+"");
+                } catch (Exception ex)
+                {
+                   ex.printStackTrace();
+                }
             }
 
             fileResolver.addResolver(resolver);

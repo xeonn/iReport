@@ -10,23 +10,17 @@
 package com.jaspersoft.ireport.designer.actions;
 
 import com.jaspersoft.ireport.designer.ModelUtils;
-import com.jaspersoft.ireport.designer.charts.*;
+import com.jaspersoft.ireport.designer.outline.nodes.CellNode;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.sheet.editors.box.BoxPanel;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
-import java.awt.Dialog;
-import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JDialog;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRLineBox;
-import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
-import net.sf.jasperreports.engine.base.JRBoxPen;
-import net.sf.jasperreports.engine.design.JRDesignChart;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
@@ -59,7 +53,16 @@ public final class PaddingAndBordersAction extends NodeAction {
 
     protected void performAction(org.openide.nodes.Node[] activatedNodes) {
         
-        JasperDesign design = ((ElementNode)activatedNodes[0]).getJasperDesign();
+        JasperDesign design = null;
+        if (activatedNodes[0] instanceof ElementNode)
+        {
+            design = ((ElementNode)activatedNodes[0]).getJasperDesign();
+        }
+        else if (activatedNodes[0] instanceof CellNode)
+        {
+            design = ((CellNode)activatedNodes[0]).getJasperDesign();
+        }
+
         List<JRLineBox> boxes = new ArrayList<JRLineBox>();
         
         JRBoxContainer firstContainer = null;
@@ -72,6 +75,14 @@ public final class PaddingAndBordersAction extends NodeAction {
                 if (firstContainer == null)
                 {
                     firstContainer = (JRBoxContainer) ((ElementNode)activatedNodes[i]).getElement();
+                }
+            }
+            else if (activatedNodes[i] instanceof CellNode)
+            {
+                boxes.add(((JRBoxContainer) ((CellNode)activatedNodes[i]).getCellContents()).getLineBox());
+                if (firstContainer == null)
+                {
+                    firstContainer = (JRBoxContainer)((CellNode)activatedNodes[i]).getCellContents();
                 }
             }
             
@@ -160,6 +171,11 @@ public final class PaddingAndBordersAction extends NodeAction {
         for (int i=0; i<activatedNodes.length; ++i)
         {
                 if (activatedNodes[i] instanceof ElementNode && ((ElementNode)activatedNodes[i]).getElement() instanceof JRBoxContainer)
+                {
+                    continue;
+                }
+
+                if (activatedNodes[i] instanceof CellNode)
                 {
                     continue;
                 }

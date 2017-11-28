@@ -5,8 +5,8 @@
 package com.jaspersoft.ireport.designer.standalone.menu;
 
 import com.jaspersoft.ireport.designer.standalone.IReportStandaloneManager;
-import com.jaspersoft.ireport.designer.standalone.wizards.CustomTemplateWizard;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.designer.wizards.CustomTemplateWizard;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Dialog;
 import java.io.File;

@@ -50,19 +50,19 @@ public final class MeterTickIntervalProperty extends DoubleProperty {
     @Override
     public Double getDouble()
     {
-        return plot.getTickInterval();
+        return plot.getTickIntervalDouble();
     }
 
     @Override
     public Double getOwnDouble()
     {
-        return plot.getTickInterval();
+        return plot.getTickIntervalDouble();
     }
 
     @Override
     public Double getDefaultDouble()
     {
-        return 10d;
+        return null;
     }
 
     @Override

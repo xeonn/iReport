@@ -42,6 +42,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import mondrian.olap.DriverManager;
+import mondrian.olap.Util;
 
 /**
  *
@@ -136,7 +137,9 @@ public class MondrianConnection extends IReportConnection {
             JDBCConnection con = getJDBCConnection();
 
             // Force opening connection...
+            ClassLoader originalCL = Thread.currentThread().getContextClassLoader();
 
+            
             try {
 
                Connection conn = null;
@@ -148,18 +151,33 @@ public class MondrianConnection extends IReportConnection {
                 if( conn!=null ) try{ conn.close(); } catch(Exception e) { /* anyone really care? */ }
             }
 
+
+            Thread.currentThread().setContextClassLoader( IReportManager.getReportClassLoader());
+            Util.PropertyList props = new Util.PropertyList();
+            props.put("Catalog", getCatalogUri());
+            props.put("Provider", "mondrian");
+
+            SimpleSQLDataSource ds = new SimpleSQLDataSource(con);
+
+            mondrianConnection = DriverManager.getConnection(props, null, ds, false);
+            /*
             mondrianConnection  = DriverManager.getConnection(
 					"Provider=mondrian;" + 
 					"JdbcDrivers=" + escapeProperty( con.getJDBCDriver() )  + ";" +
 					"Jdbc=" + escapeProperty( con.getUrl() ) + ";" +
 					"JdbcUser=" + escapeProperty( con.getUsername() ) + ";" +
 					"JdbcPassword=" + escapeProperty( con.getPassword() ) + ";" +
-					"Catalog=" + escapeProperty( getCatalogUri() ) + ";", 
+					"Catalog=" + escapeProperty( getCatalogUri() ) + ";",
 					null, false);
+            */
+            
             } catch (Exception ex) {
                 ex.printStackTrace();
                 throw ex;
             }
+
+            Thread.currentThread().setContextClassLoader( originalCL);
+
         }
         usedby++;
         return mondrianConnection;

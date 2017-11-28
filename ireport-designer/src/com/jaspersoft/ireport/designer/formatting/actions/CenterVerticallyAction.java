@@ -58,7 +58,7 @@ public class CenterVerticallyAction extends AbstractFormattingToolAction {
 
     @Override
     public String getName() {
-        return I18n.getString("formatting.tools.centerHorizontally");
+        return I18n.getString("formatting.tools.centerVertically");
     }
 
 

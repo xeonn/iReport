@@ -26,6 +26,7 @@ package com.jaspersoft.ireport.jasperserver.ui.resources;
 import com.jaspersoft.ireport.JrxmlDataObject;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlVisualView;
+import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
@@ -64,7 +65,13 @@ public class ReportUnitDialog extends javax.swing.JDialog {
     public ReportUnitDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
+        jComboBoxControlsLayout.addItem(new Tag( ""+ResourceDescriptor.RU_CONTROLS_LAYOUT_POPUP_SCREEN,
+                                                  JasperServerManager.getString("reportUnitDialog.controlLayout.popupScreen", "Popup screen")));
+        jComboBoxControlsLayout.addItem(new Tag( ""+ResourceDescriptor.RU_CONTROLS_LAYOUT_SEPARATE_PAGE,
+                                                  JasperServerManager.getString("reportUnitDialog.controlLayout.separatePage", "Separate page")));
+        jComboBoxControlsLayout.addItem(new Tag( ""+ResourceDescriptor.RU_CONTROLS_LAYOUT_TOP_OF_PAGE,
+                                                  JasperServerManager.getString("reportUnitDialog.controlLayout.topOfPage", "Top of page")));
         setLocationRelativeTo(null);
         this.jTextFieldLabel.getDocument().addDocumentListener( new javax.swing.event.DocumentListener() {
             public void changedUpdate(javax.swing.event.DocumentEvent evt) {
@@ -227,6 +234,9 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         jTextFieldInputControlRenderingView = new javax.swing.JTextField();
         jLabelReportRenderingView = new javax.swing.JLabel();
         jTextFieldReportRenderingView = new javax.swing.JTextField();
+        jLabelLayout = new javax.swing.JLabel();
+        jComboBoxControlsLayout = new javax.swing.JComboBox();
+        jCheckBoxAlwaysPrompt = new javax.swing.JCheckBox();
         jPanel10 = new javax.swing.JPanel();
         jSeparator4 = new javax.swing.JSeparator();
         jPanelButtons = new javax.swing.JPanel();
@@ -575,6 +585,27 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanelOther.add(jTextFieldReportRenderingView, gridBagConstraints);
+
+        jLabelLayout.setText("Controls Layout");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 4, 0, 4);
+        jPanelOther.add(jLabelLayout, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        jPanelOther.add(jComboBoxControlsLayout, gridBagConstraints);
+
+        jCheckBoxAlwaysPrompt.setText("Always prompt");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 4, 0, 4);
+        jPanelOther.add(jCheckBoxAlwaysPrompt, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.weighty = 1.0;
@@ -743,7 +774,8 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         rd.setLabel(jTextFieldLabel.getText().trim() ); //getResource().getDescriptor().getLabel()  );
         rd.setParentFolder( getParentFolder() );
         rd.setIsNew( resource == null );
-        
+        rd.setResourceProperty(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS, ""+jCheckBoxAlwaysPrompt.isSelected());
+
         if (jTextFieldInputControlRenderingView.getText().trim().length() > 0)
         {
             rd.setResourceProperty(rd.PROP_RU_INPUTCONTROL_RENDERING_VIEW, jTextFieldInputControlRenderingView.getText().trim() );
@@ -753,6 +785,9 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         {
             rd.setResourceProperty(rd.PROP_RU_REPORT_RENDERING_VIEW, jTextFieldReportRenderingView.getText().trim() );
         }
+
+
+        rd.setResourceProperty(ResourceDescriptor.PROP_RU_CONTROLS_LAYOUT, ""+((Tag)jComboBoxControlsLayout.getSelectedItem()).getValue() );
         
         // Add the datasource resource...
         if (JasperServerManager.getMainInstance().getBrandingProperties().getProperty("ireport.manage.datasources.enabled", "true").equals("true"))
@@ -931,12 +966,15 @@ public class ReportUnitDialog extends javax.swing.JDialog {
     private javax.swing.JButton jButtonPickJrxml;
     private javax.swing.JButton jButtonPickResource;
     private javax.swing.JButton jButtonSave;
+    private javax.swing.JCheckBox jCheckBoxAlwaysPrompt;
+    private javax.swing.JComboBox jComboBoxControlsLayout;
     private javax.swing.JComboBox jComboBoxDatasources;
     private javax.swing.JEditorPane jEditorPaneDescription;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelDescription;
     private javax.swing.JLabel jLabelInputControlRenderingView;
     private javax.swing.JLabel jLabelLabel;
+    private javax.swing.JLabel jLabelLayout;
     private javax.swing.JLabel jLabelName;
     private javax.swing.JLabel jLabelReportRenderingView;
     private javax.swing.JLabel jLabelResourceFile;
@@ -1015,10 +1053,10 @@ public class ReportUnitDialog extends javax.swing.JDialog {
      */
     public void setResource(ResourceDescriptor descriptor)
     {
-        System.out.println("Setting resource...");
-        System.out.flush();
-            
         if (descriptor == null) return;
+        
+        setTitle( JasperServerManager.getFormattedString("properties.title", "{0} - Properties", new Object[]{descriptor.getName()}));
+        
         jTextFieldName.setText( descriptor.getName());
         jTextFieldLabel.setText( descriptor.getLabel());
         jEditorPaneDescription.setText( descriptor.getDescription());
@@ -1029,10 +1067,21 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         if (descriptor.getResourcePropertyValue(descriptor.PROP_RU_REPORT_RENDERING_VIEW) != null)
             jTextFieldReportRenderingView.setText(descriptor.getResourcePropertyValue(descriptor.PROP_RU_REPORT_RENDERING_VIEW));
 
-        
-        System.out.println("Descriptor children: " + descriptor.getChildren().size());
-        System.out.flush();
-        
+
+        Boolean b = descriptor.getResourcePropertyValueAsBoolean(descriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS);
+        if (b != null)
+        {
+            jCheckBoxAlwaysPrompt.setSelected(b);
+        }
+
+        String controlsLayout = descriptor.getResourcePropertyValue(ResourceDescriptor.PROP_RU_CONTROLS_LAYOUT);
+        if (controlsLayout == null)
+        {
+            controlsLayout = ""+ResourceDescriptor.RU_CONTROLS_LAYOUT_POPUP_SCREEN;
+        }
+
+        Misc.setComboboxSelectedTagValue(jComboBoxControlsLayout, controlsLayout);
+
         // Update child descriptors...
         //if (descriptor.getChildren() == null ||
         //    descriptor.getChildren().size() == 0)

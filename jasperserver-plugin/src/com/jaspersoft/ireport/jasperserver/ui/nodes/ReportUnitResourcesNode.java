@@ -8,10 +8,15 @@ package com.jaspersoft.ireport.jasperserver.ui.nodes;
 import com.jaspersoft.ireport.designer.outline.nodes.IRIndexedNode;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
 import com.jaspersoft.ireport.jasperserver.RepositoryReportUnit;
+import com.jaspersoft.ireport.jasperserver.ui.actions.AddResourceAction;
+import com.jaspersoft.ireport.jasperserver.ui.actions.RunReportUnitAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.RunReportUnitCookieImpl;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.Action;
 import org.openide.util.Lookup;
+import org.openide.util.actions.SystemAction;
 import org.openide.util.lookup.Lookups;
 import org.openide.util.lookup.ProxyLookup;
 
@@ -45,15 +50,25 @@ public class ReportUnitResourcesNode extends IRIndexedNode implements ResourceNo
         this.reportUnit = reportUnit;
     }
     
-    @Override
-    public Action[] getActions(boolean arg0) {
-        if (getParentNode() != null)
-        {
-            return getParentNode().getActions(arg0);
-        }
-        
-        return new Action[]{
-        };
+       @Override
+    public Action[] getActions(boolean b) {
+
+        List<Action> actions = new ArrayList<Action>();
+
+        actions.add( SystemAction.get(AddResourceAction.class));
+        actions.add(null);
+        actions.add( SystemAction.get(RunReportUnitAction.class));
+
+//        if (getParentNode() != null)
+//        {
+//            Action[] parentActions = getParentNode().getActions(b);
+//            for (int i=0; i<parentActions.length; ++i)
+//            {
+//                actions.add(  parentActions[i] );
+//            }
+//        }
+
+        return actions.toArray(new Action[actions.size()]);
     }
     
     public ResourceDescriptor getResourceDescriptor() {

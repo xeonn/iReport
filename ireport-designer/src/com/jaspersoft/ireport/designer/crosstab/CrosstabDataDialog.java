@@ -389,7 +389,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
             if (jRTextExpressionAreaTextConnectionExpression.getText().trim().length() > 0)
             {
                 exp = new JRDesignExpression();
-                exp.setText(jRTextExpressionAreaMapExpression.getText());
+                exp.setText(jRTextExpressionAreaTextConnectionExpression.getText());
             }
             
             int index = jComboBoxDatasetConnectionType.getSelectedIndex();
@@ -924,8 +924,8 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         
         Object pWin = SwingUtilities.windowForComponent(this);
         JRDatasetParameterDialog jrpd = null;
-        if (pWin instanceof Dialog) jrpd = new JRDatasetParameterDialog((Dialog)pWin,map);
-        else jrpd = new JRDatasetParameterDialog((Frame)pWin,map);
+        if (pWin instanceof Dialog) jrpd = new JRDatasetParameterDialog((Dialog)pWin,map, (JRDesignDataset)getJasperDesign().getDatasetMap().get(currentSelectedCrosstabElement.getDataset().getDatasetRun().getDatasetName()));
+        else jrpd = new JRDatasetParameterDialog((Frame)pWin,map, (JRDesignDataset)getJasperDesign().getDatasetMap().get(currentSelectedCrosstabElement.getDataset().getDatasetRun().getDatasetName()));
 
         ExpressionContext docEc = new ExpressionContext( getJasperDesign().getMainDesignDataset() );
         jrpd.setExpressionContext(docEc);
@@ -968,8 +968,8 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         
         Object pWin = SwingUtilities.windowForComponent(this);
         JRDatasetParameterDialog jrpd = null;
-        if (pWin instanceof Dialog) jrpd = new JRDatasetParameterDialog((Dialog)pWin,map);
-        else jrpd = new JRDatasetParameterDialog((Frame)pWin,map);
+        if (pWin instanceof Dialog) jrpd = new JRDatasetParameterDialog((Dialog)pWin,map, (JRDesignDataset)getJasperDesign().getDatasetMap().get(currentSelectedCrosstabElement.getDataset().getDatasetRun().getDatasetName()));
+        else jrpd = new JRDatasetParameterDialog((Frame)pWin,map, (JRDesignDataset)getJasperDesign().getDatasetMap().get(currentSelectedCrosstabElement.getDataset().getDatasetRun().getDatasetName()));
 
         ExpressionContext docEc = new ExpressionContext( getJasperDesign().getMainDesignDataset() );
         jrpd.setExpressionContext(docEc);
@@ -1086,7 +1086,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         }
         else if (jComboBoxDatasetConnectionType.getSelectedIndex() == 2) {
             
-            jRTextExpressionAreaTextConnectionExpression.setText("$P{MyDataource}");
+            jRTextExpressionAreaTextConnectionExpression.setText("new net.sf.jasperreports.engine.JREmptyDataSource(1)");
             jRTextExpressionAreaTextConnectionExpression.setEnabled(true);
             jRTextExpressionAreaTextConnectionExpression.setBackground(Color.WHITE);
             

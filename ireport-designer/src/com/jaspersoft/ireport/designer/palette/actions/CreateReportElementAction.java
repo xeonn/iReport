@@ -9,81 +9,43 @@
 
 package com.jaspersoft.ireport.designer.palette.actions;
 
-import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.ModelUtils;
-import com.jaspersoft.ireport.designer.ReportObjectScene;
-import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
-import com.jaspersoft.ireport.designer.palette.PaletteItemAction;
-import com.jaspersoft.ireport.designer.undo.AddElementUndoableEdit;
-import com.jaspersoft.ireport.designer.utils.Misc;
-import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.dnd.DropTargetDropEvent;
-import java.util.List;
-import javax.swing.JOptionPane;
-import net.sf.jasperreports.crosstabs.JRCrosstab;
-import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
-import net.sf.jasperreports.engine.JRBreak;
-import net.sf.jasperreports.engine.JRChart;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.JRSubreport;
-import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignElementGroup;
-import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Scene;
-import org.netbeans.api.visual.widget.Widget;
-import org.openide.util.Mutex;
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  */
-public abstract class CreateReportElementAction extends PaletteItemAction 
+public abstract class CreateReportElementAction extends CreateReportElementsAction
 {
 
-    private static JRDesignFrame findTopMostFrameAt(ReportObjectScene theScene, Point p) {
-
-         LayerWidget layer = theScene.getElementsLayer();
-         List<Widget> widgets = layer.getChildren();
-
-         // Use revers order to find the top most...
-         for (int i= widgets.size()-1; i>=0; --i)
-         {
-             Widget w = widgets.get(i);
-             Point p2 = w.convertSceneToLocal(p);
-             if (w.isHitAt(p2))
-             {
-                 if (w instanceof JRDesignElementWidget)
-                 {
-                     JRDesignElement de =((JRDesignElementWidget)w).getElement();
-                     if (de instanceof JRDesignFrame)
-                     {
-                         return (JRDesignFrame)de;
-                     }
-                 }
-             }
-         }
-         return null;
+    @Override
+    public JRDesignElement[] createReportElements(JasperDesign jd) {
+        JRDesignElement ele = createReportElement(jd);
+        if (ele == null) return new JRDesignElement[0];
+        return new JRDesignElement[]{ele};
     }
 
-    public void drop(DropTargetDropEvent dtde) {
-        
-        JRDesignElement element = createReportElement(getJasperDesign());
-        
-        if (element == null) return;
-        // Find location...
-        dropElementAt(getScene(), getJasperDesign(), element, dtde.getLocation());
-    }
-    
+   
     public abstract JRDesignElement createReportElement(JasperDesign jd);
 
+    public static void dropElementAt(Scene theScene, JasperDesign jasperDesign, JRDesignElement element, Point location)
+    {
+        if (element != null)
+        {
+            CreateReportElementAction rea = new CreateReportElementAction() {
+
+                @Override
+                public JRDesignElement createReportElement(JasperDesign jd) {
+                    return null;
+                }
+            };
+            rea.dropElementsAt(theScene, jasperDesign, new JRDesignElement[]{element},location);
+        }
+    }
     // The main idea is to optimize the space of each element...
-    
+    /*
     public static void dropElementAt(Scene theScene, JasperDesign jasperDesign, JRDesignElement element, Point location)
     {
         if (theScene instanceof ReportObjectScene)
@@ -161,5 +123,6 @@ public abstract class CreateReportElementAction extends PaletteItemAction
              }
         }
     }
+     */
     
 }

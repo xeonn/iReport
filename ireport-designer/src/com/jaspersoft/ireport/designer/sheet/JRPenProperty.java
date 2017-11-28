@@ -94,7 +94,7 @@ public class JRPenProperty extends AbstractProperty {
 
     @Override
     public Object getDefaultValue() {
-        return new JRBasePen(null);
+        return new JRBasePen(null);//FIXME this is dangerous. check it
     }
 
     @Override

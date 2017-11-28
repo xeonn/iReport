@@ -35,11 +35,20 @@ package com.jaspersoft.ireport.designer.charts;
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.charts.ChartDescriptor;
 import com.jaspersoft.ireport.designer.charts.JListView;
+import java.awt.BorderLayout;
 import java.awt.Dialog;
 import java.awt.Frame;
 import javax.swing.*;
+import net.sf.jasperreports.charts.design.JRDesignChartAxis;
+import net.sf.jasperreports.charts.design.JRDesignDataRange;
+import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
+import net.sf.jasperreports.charts.design.JRDesignMultiAxisPlot;
+import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
+import net.sf.jasperreports.charts.design.JRDesignValueDataset;
 import net.sf.jasperreports.charts.design.JRDesignXyDataset;
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 /**
  *
@@ -115,6 +124,7 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
     {
         initComponents();
         //applyI18n();
+        this.getContentPane().remove(jLabel1);
         
         this.setDialogResult( javax.swing.JOptionPane.CANCEL_OPTION);
         jListView = new JListView();
@@ -167,6 +177,7 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jLabel1 = new javax.swing.JLabel();
         jPanelChartType = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabelChartNameVal = new javax.swing.JLabel();
@@ -177,6 +188,15 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
         jButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jLabel1.setBackground(new java.awt.Color(255, 255, 153));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/errorhandler/information.png"))); // NOI18N
+        jLabel1.setText("Please select a chart for the primary axis of the MultiAxis chart");
+        jLabel1.setMinimumSize(new java.awt.Dimension(196, 25));
+        jLabel1.setOpaque(true);
+        jLabel1.setPreferredSize(new java.awt.Dimension(196, 25));
+        getContentPane().add(jLabel1, java.awt.BorderLayout.NORTH);
 
         jPanelChartType.setLayout(new java.awt.BorderLayout());
 
@@ -209,7 +229,7 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         jPanel1.add(jPanel2, gridBagConstraints);
 
-        jButtonOk.setText(I18n.getString("Global.Button.Ok")); // NOI18N
+        jButtonOk.setText("OK");
         jButtonOk.setEnabled(false);
         jButtonOk.setMaximumSize(new java.awt.Dimension(200, 25));
         jButtonOk.setPreferredSize(new java.awt.Dimension(100, 25));
@@ -224,7 +244,7 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 2, 4, 4);
         jPanel1.add(jButtonOk, gridBagConstraints);
 
-        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
+        jButtonCancel.setText("Cancel");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -258,6 +278,52 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
             {
                 getChart().setDataset(new JRDesignXyDataset(getChart().getDataset()));
             }
+            else if (cd.getChartType() == JRDesignChart.CHART_TYPE_THERMOMETER)
+            {
+                JRDesignValueDataset vds = new JRDesignValueDataset( getChart().getDataset());
+                JRDesignExpression exp = new JRDesignExpression();
+                exp.setValueClass(Double.class);
+                vds.setValueExpression(exp);
+                getChart().setDataset(vds);
+                
+                ((JRDesignThermometerPlot)(getChart().getPlot())).setDataRange(createDataRange());
+                ((JRDesignThermometerPlot)(getChart().getPlot())).setLowRange(createDataRange());
+                ((JRDesignThermometerPlot)(getChart().getPlot())).setMediumRange(createDataRange());
+                ((JRDesignThermometerPlot)(getChart().getPlot())).setHighRange(createDataRange());
+
+            }
+            else if (cd.getChartType() == JRDesignChart.CHART_TYPE_METER)
+            {
+                JRDesignValueDataset vds = new JRDesignValueDataset( getChart().getDataset());
+                JRDesignExpression exp = new JRDesignExpression();
+                exp.setValueClass(Double.class);
+                vds.setValueExpression(exp);
+                getChart().setDataset(vds);
+
+                ((JRDesignMeterPlot)(getChart().getPlot())).setDataRange(createDataRange());
+            }
+            else if (cd.getChartType() == JRDesignChart.CHART_TYPE_MULTI_AXIS)
+            {
+
+                ChartSelectionJDialog dialog = null;
+                dialog = new ChartSelectionJDialog(this, true);
+                dialog.setJasperDesign(getJasperDesign());
+                dialog.setMultiAxisMode(true);
+                dialog.setVisible(true);
+
+                if (dialog.getDialogResult() == JOptionPane.OK_OPTION)
+                {
+                    JRDesignChart designChart = dialog.getChart();
+                    JRDesignChartAxis axis = new JRDesignChartAxis(getChart());
+                    axis.setChart(designChart);
+                    ((JRDesignMultiAxisPlot)getChart().getPlot()).setChart(getChart());
+                    ((JRDesignMultiAxisPlot)getChart().getPlot()).addAxis(axis);
+                }
+                else
+                {
+                    return;
+                }
+            }
         } catch (Exception ex)
         {
             ex.printStackTrace();
@@ -266,7 +332,17 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
         this.dispose();    
         
     }//GEN-LAST:event_jButtonOkActionPerformed
-    
+
+    private JRDesignDataRange createDataRange()
+    {
+        JRDesignDataRange dr = new JRDesignDataRange(null);
+        JRDesignExpression exp = new JRDesignExpression();
+        exp.setValueClass(Double.class);
+        dr.setHighExpression(exp);
+        dr.setLowExpression((JRExpression) exp.clone());
+        return dr;
+    }
+
     public int getDialogResult() {
         return dialogResult;
     }
@@ -278,6 +354,7 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonOk;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelChartNameVal;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -315,6 +392,15 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
 
     public void setMultiAxisMode(boolean multiAxisMode) {
         this.multiAxisMode = multiAxisMode;
+
+        if (multiAxisMode)
+        {
+            this.getContentPane().add(jLabel1, BorderLayout.NORTH);
+        }
+        else
+        {
+            this.getContentPane().remove(jLabel1);
+        }
         
         updateCharts();
     }

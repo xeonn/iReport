@@ -1,3 +1,99 @@
+2009-03-25 Version 3.5.0 released
+_______________________________________________________________________________
+- Ability to export a chart theme as jasperreports extension (jar)
+- New page format dialog
+- Support for Jrxml Java imports
+- Added JR Properties viewer in the options (for now read only)
+- Fixed bug 14199 Test button for Query Executer Mode Doesn't work
+- Fixed bug 14198 Field Provider Error
+- Fixed bug 14195 Using subdatasets in charts/crosstab
+- Fixed bug 14195 Unable to create a dummy group
+- Fixed bug 14193 Unable to change order style conditions
+- Added DnD support for conditional styles
+- Several chart theme editor bug fixeds and improvements
+- Copy and paste support for charts and crosstabs
+- Fixed a problem connecting to Mondrian (OLAP server)
+- New ability to open a file dragging it in the editor
+- New ability to open Jasper binary files (converting them in jrxmls)
+- Added support for opening file on command line
+- Fixed bug 3569  CSV Datasource setting saved incorrectly    
+- New option to disable crosstab cell auto-layout
+- New option to see only the element keys in the outline view
+- Added support to specify a compilation directory
+- Fixed bug 13841 Error when creating a domain report
+- Fixed bug 13842 iReport generates unrecognized file when using Report Wizard
+- Fixed bug 13557 Class not set for dataset
+- Fixed bug 13119 iReport should allow uploading NetBeans JDBC connections to JasperServer
+- Fixed bug 13128 Subreport not included
+- Fixed bug 13184 [Case #7768] missing bar chart orientation in 3.1.2
+- Fixed bug 13285 [Case #7746] jrxml config flaky - config value turns to null
+- Fixed bug 13309 [7767] special symbol causes iReport error
+- Fixed bug 13320 "ReportExecution" hyperlink type should be available in all hyperlinks in iReport
+- Fixed bug 13413 Opening Ad Hoc reports should give a warning in iReport
+- Fixed bug 13420 Regression: Subreport not added as a resource
+- Fixed bug 13425 Default evaluation time for a new chart should be "Report"
+- Fixed bug 13426 Thermometer and meter charts don't work
+- Fixed bug 13673 refresh issue wtih internationalized text and empty datasources
+- Fixed bug 13702 Can't delete scriptlets
+- Fixed bug 13703 It is possible to save invalid scriptlet references so a report cannot be reopened
+- Fixed bug 13749 Installer + iReport: CE version: JS Plugin Connect String has -pro in it
+- Fixed bug 13833 iReport Plugin- not able to link to existing input control
+- Fixed bug 13895 Report description should not be limited to 100 chars
+- Fixed bug 13920 [Case #8158] Class not set for database error when passing subdataset parameter
+- Fixed bug 13167 [Case #7750] Padding and Borders dialog not working properly
+- Fixed bug 13186 [Case #7749] text field tooltip incorrect
+- Fixed bug 12333 [Case #7100] Inapproriate error messages for ClassNotFoundExceptions
+- Fixed bug 8610  Enh: Admin User cannot move (or copy) a report to a different folder
+- Fixed bug 10987 iReport should take advantage of web services support of changing input control display types
+- Fixed bug 11812 [Case #6353] Need "always prompt" check box when using plugin in iReport
+- Fixed bug 12878 [Case #7489] Style library and Format Styles missing in 3.1.2
+- Fixed bug 12786 Refresh issue with frames
+- Fixed bug 13636 "Relodable" should be "Reloadable"
+- Fixed bug 12944 Print When Expressio should be Print When Expression
+- Fixed bug 13672 query executer drop down in report properties panel doesn't show new QEs
+- Fixed bug 13674 Minor typo in classpath dialog window
+- Added Page Number, Total Page Number, Page X of Y, Current date tools
+- Fixed bug 3552  Report wizard don't save file with a jrxml extension  
+- Fixed bug 3565 Styles - Vertical Alignment Property Bug
+- New styles library
+- Colored corners for element selection showing the element status (blue: primary selection,
+  gray: secondary selection, green: partial overlap, pink: total overlap)
+- New double click to fit the band height with the content
+- Added Remove horizontal and vertical space between elements
+- Added menu Format and several key accelerators
+- Added option to turn off magnetic attraction
+- Report preview set as "need refresh" when options are changed
+- Fixed locale selector dialog
+- Fixed JRCTX and JRTX designers close operation
+- Fixed a bug with TimeZone option setting
+
+2009-01-13 Version 3.1.4 released
+_______________________________________________________________________________
+- New Styles designer
+- New Chart Theme designer
+- New real time charts preview
+- Fixed bug 3400  "Close" keeps documents open in memory "Save all" then saves them
+- Fixed bug 3523  Column width property not updated when switching between portrait and landscape  
+- Fixed bug 3521  No way to set labelFormat and legendLabelFormat properties  
+- Fixed bug 3518  Wrong encoding of XML report file  
+- Fixed bug 3474  Crosstab Measure defined through wizard has always &quot;count&quot ; property  
+- Fixed bug 3473  Loading report with chart throws SAXParseException  
+- Fixed bug 3458  Crosstab data setting problem  
+- Fixed bug 3457  Greek Language Problems  
+- Fixed bug 3353  no way to change z-order of report elements  
+- Fixed bug 3352  no way to change order of groups  
+- Fixed bug 3346  &quot;Add Group&quot; Dialog iReport 3.1.2  
+- Fixed bug 3323  Subreport Parameterlist resets after cancel  
+- Fixed bug 3322  iReport-nb-3.1.2 cannot open Chart Data for multi-axis  
+- Fixed bug 3292  org.xml.sax.SAXParseExce ption : Invalid byte 1 of 1-byte UTF-8 sequence  
+- Fixed bug 3247  Invalid byte 1 of 1-byte UTF-8  
+- Fixed bug 3238  Save option disabled in xml editor  
+- Fixed bug 3237  switching to xml editor loses toolbuttons  
+- Fixed bug 3236  deleting filter does not remove &lt;filterExpression &gt;  
+- Fixed bug 3120  Chart data source being deleted  
+- Fixed bug 3105  Encoding changed using XML view and 3.1.0  
+ 
+
 
 2009-01-13 Version 3.1.3 released
 _______________________________________________________________________________

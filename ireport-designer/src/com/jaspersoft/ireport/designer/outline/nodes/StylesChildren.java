@@ -12,8 +12,11 @@ package com.jaspersoft.ireport.designer.outline.nodes;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.nodes.Index;
@@ -50,8 +53,15 @@ public class StylesChildren extends Index.KeysChildren implements PropertyChange
     
     
     protected Node[] createNodes(Object key) {
-        
-        return new Node[]{new StyleNode(jd, (JRDesignStyle)key, doLkp)};
+
+        if (key instanceof JRDesignStyle)
+        {
+            return new Node[]{new StyleNode(jd, (JRDesignStyle)key, doLkp)};
+        }
+        else //if (key instanceof JRReportTemplate)
+        {
+            return new Node[]{new TemplateReferenceNode(jd, (JRDesignReportTemplate)key, doLkp)};
+        }
     }
     
     
@@ -69,6 +79,7 @@ public class StylesChildren extends Index.KeysChildren implements PropertyChange
         List l = (List)lock();
         l.clear();
         List styles = null;
+        l.addAll( Arrays.asList(jd.getTemplates()));
         l.addAll(jd.getStylesList());
         update();
     }
@@ -86,7 +97,8 @@ public class StylesChildren extends Index.KeysChildren implements PropertyChange
 
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName() == null) return;
-        if (evt.getPropertyName().equals( JasperDesign.PROPERTY_STYLES ))
+        if (evt.getPropertyName().equals( JasperDesign.PROPERTY_STYLES ) ||
+            evt.getPropertyName().equals( JasperDesign.PROPERTY_TEMPLATES ))
         {
             recalculateKeys();
         }

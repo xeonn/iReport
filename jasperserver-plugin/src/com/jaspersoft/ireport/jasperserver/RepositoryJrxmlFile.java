@@ -325,9 +325,17 @@ public class RepositoryJrxmlFile extends RepositoryFile {
             {
                 exp = exp.substring(0, exp.lastIndexOf(".jasper")) + ".jrxml"; 
             }
-            
+
             File f = new File( exp );
-            if (!f.exists()) return null;
+            if (!f.exists())
+            {
+                // Let's see if it is looked in the right place...
+                if (f.getParent() == null || f.getParent().equals(""))
+                {
+                    f = new File(baseDir, f.getName());
+                    if (!f.exists()) return null;
+                }
+            }
             
             return f;
         }
@@ -340,7 +348,7 @@ public class RepositoryJrxmlFile extends RepositoryFile {
     {
             List elementValidationItems = new ArrayList();
             
-            List<JRDesignElement> elements = ModelUtils.getAllElements(report);
+            List<JRDesignElement> elements = ModelUtils.getAllElements(report, true);
             for (JRDesignElement re : elements)
             {
                 if (re instanceof JRDesignImage)
@@ -360,7 +368,7 @@ public class RepositoryJrxmlFile extends RepositoryFile {
                         String name = getValidName( f.getName(), parentDescriptor );
                         ievi.setParentFolder( parentDescriptor.getParentFolder());
                         ievi.setResourceName( name );
-                        ievi.setProposedExpression("repo:" + name );
+                        ievi.setProposedExpression("\"repo:" + name +"\"");
                         ievi.setReportElement(ire);
                         elementValidationItems.add(ievi);
                     }
@@ -374,6 +382,14 @@ public class RepositoryJrxmlFile extends RepositoryFile {
                           
                     File f = getFileFromExpression(fname, sre.getExpression().getValueClassName(), reportDir);
                     
+
+//                    if (f.getName().toUpperCase().endsWith(".jasper"))
+//                    {
+//                        // look for the jrxml...
+//                        String name = Misc.changeFileExtension( f.getName(), "jrxml");
+//                        f = new File(f.getParent(), name);
+//                    }
+
                         if (f != null)
                         {
                             SubReportElementValidationItem ievi = new SubReportElementValidationItem();
@@ -382,10 +398,11 @@ public class RepositoryJrxmlFile extends RepositoryFile {
                             String name = getValidName( f.getName(), parentDescriptor );
                             ievi.setParentFolder( parentDescriptor.getParentFolder());
                             ievi.setResourceName( name );
-                            ievi.setProposedExpression("repo:" + name );
+                            ievi.setProposedExpression("\"repo:" + name +"\"" );
                             ievi.setReportElement(sre);
                             elementValidationItems.add(ievi);
                         }
+
                 }
             }
             

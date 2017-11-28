@@ -21,6 +21,9 @@ import java.awt.datatransfer.Transferable;
 import java.io.IOException;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
+import org.openide.actions.CopyAction;
+import org.openide.actions.CutAction;
+import org.openide.actions.PasteAction;
 import org.openide.nodes.Node;
 import org.openide.util.Lookup;
 import org.openide.util.actions.SystemAction;
@@ -105,6 +108,8 @@ public class ReportUnitNode extends IRIndexedNode implements ResourceNode {
             SystemAction.get( RunReportUnitAction.class),
             SystemAction.get( AddResourceAction.class),
             null,
+            SystemAction.get( CopyAction.class),
+            SystemAction.get( CutAction.class),
             SystemAction.get( DeleteAction.class),
             null,
             SystemAction.get( RefreshAction.class),
@@ -152,5 +157,16 @@ public class ReportUnitNode extends IRIndexedNode implements ResourceNode {
                     getReportUnit()));
         return tras;
     }
-    
+
+
+    @Override
+    public boolean canCopy() {
+        return true;
+    }
+
+    @Override
+    public boolean canCut() {
+        return true;
+    }
+
 }

@@ -61,7 +61,7 @@ public final class ThermometerLowDataRangeHighExpressionProperty extends Express
     @Override
     public JRDesignExpression getExpression()
     {
-        JRDataRange dataRange = plot.getDataRange();
+        JRDataRange dataRange = plot.getLowRange();
         return dataRange == null ? null : (JRDesignExpression) dataRange.getHighExpression();
     }
 
@@ -105,7 +105,7 @@ public final class ThermometerLowDataRangeHighExpressionProperty extends Express
             ObjectPropertyUndoableEdit urob =
                         new ObjectPropertyUndoableEdit(
                             plot,
-                            JRDesignThermometerPlot.PROPERTY_LOW_RANGE, 
+                            "LowRange",
                             JRDataRange.class,
                             oldValue,
                             newValue

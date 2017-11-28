@@ -63,19 +63,19 @@ public final class ThermometerValueLocationProperty extends ByteProperty
     @Override
     public Byte getByte()
     {
-        return plot.getValueLocation();
+        return plot.getValueLocationByte();
     }
 
     @Override
     public Byte getOwnByte()
     {
-        return plot.getValueLocation();
+        return plot.getValueLocationByte();
     }
 
     @Override
     public Byte getDefaultByte()
     {
-        return JRDesignThermometerPlot.LOCATION_BULB;
+        return null;
     }
 
     @Override

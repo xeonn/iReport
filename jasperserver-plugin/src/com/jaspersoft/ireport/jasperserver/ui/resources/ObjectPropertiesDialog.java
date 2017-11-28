@@ -28,18 +28,12 @@ import com.jaspersoft.ireport.JrxmlDataObject;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import com.jaspersoft.ireport.designer.fonts.TTFFontsLoader;
-import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.RepositoryFile;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
-import com.jaspersoft.ireport.jasperserver.RepositoryJrxmlFile;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.awt.Image;
 import java.io.*;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Vector;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 /**
  *
@@ -741,6 +735,9 @@ public class ObjectPropertiesDialog extends javax.swing.JDialog {
     {
         this.resource = resource;
         ResourceDescriptor resourceDescriptor = resource.getDescriptor();
+
+        setTitle( JasperServerManager.getFormattedString("properties.title", "{0} - Properties", new Object[]{resourceDescriptor.getName()}));
+
         this.jTextFieldName.setText( resourceDescriptor.getName() );
         this.jTextFieldLabel.setText( resourceDescriptor.getLabel() );
         this.jTextFieldUriString.setText( resourceDescriptor.getUriString() );

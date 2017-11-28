@@ -33,11 +33,13 @@ package com.jaspersoft.ireport.designer;
 import com.jaspersoft.ireport.JrxmlDataObject;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.text.BadLocationException;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
+import org.netbeans.api.queries.FileEncodingQuery;
 import org.netbeans.core.spi.multiview.MultiViewDescription;
 import org.netbeans.core.spi.multiview.MultiViewFactory;
 import org.openide.cookies.EditCookie;
@@ -73,12 +75,9 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
                 saveDocument();
             }
         };
-        
-    final MultiViewDescription[] descriptions = {
-        new JrxmlVisualView(this),
-        new JrxmlTextView(this),
-        new JrxmlPreviewView(this)
-    };
+
+
+    final MultiViewDescription[] descriptions;
     
     private JasperDesign currentModel = null;
 
@@ -97,8 +96,17 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
     
     private JrxmlEditorSupport(JrxmlDataObject obj) {
         super(obj, new JrxmlEnv(obj));
+        
+        JrxmlVisualView visualview = new JrxmlVisualView(this);
+        descriptions = new MultiViewDescription[]{
+            visualview,
+            new JrxmlTextView(this),
+            new JrxmlPreviewView(this,visualview)
+        };
+        
         specialNodeLookupIC = new InstanceContent();
         specialNodeLookup = new AbstractLookup(specialNodeLookupIC);
+
     }
     
     public static JrxmlEditorSupport create(JrxmlDataObject obj) {
@@ -106,10 +114,12 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
          ed.setMIMEType("text/xml");
          return ed;
     }
-    
+
+
+
     protected CloneableEditorSupport.Pane createPane() {
         return (CloneableEditorSupport.Pane)MultiViewFactory.
-                createCloneableMultiView(descriptions, descriptions[0]);
+                createCloneableMultiView(descriptions, descriptions[0], new GenericCloseOperationHandler(this));
     }
     
     protected boolean notifyModified() {
@@ -142,7 +152,40 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
             //((JrxmlDataNode)obj.getNodeDelegate()).cookieSetChanged();
         }
     }
-    
+
+    @Override
+    public void saveAs(FileObject folder, String fileName) throws IOException {
+
+        if (getCurrentModel() != null)
+        {
+            //set the document content...
+            JasperDesign jd = getCurrentModel();
+            String content = null;
+            try {
+                content = JRXmlWriter.writeReport(jd, "UTF-8"); // IReportManager.getInstance().getProperty("jrxmlEncoding", System.getProperty("file.encoding") ));
+            } catch (Exception ex)
+            {
+                content = null;
+            }
+
+            if (content != null)
+            {
+                try {
+                    getDocument().remove(0, getDocument().getLength());
+                    getDocument().insertString(0, content, null);
+                } catch (BadLocationException ex) {
+
+                }
+            }
+        }
+
+
+        super.saveAs(folder, fileName);
+    }
+
+
+
+
     public DataEditorSupport.Env  getEnv()
     {
         return (Env)this.env;
@@ -175,8 +218,31 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
                     }
                 }
             }
+
+            System.out.println("Saved with the encoding: " + FileEncodingQuery.getEncoding(getDataObject().getPrimaryFile()) + "  system def: " + System.getProperty("file.encoding") );
+            System.out.flush();
             
-            super.saveDocument();
+            Charset cs = FileEncodingQuery.getDefaultEncoding();
+            String fileEncoding = System.getProperty("file.encoding", "UTF-8");
+            try {
+
+                FileEncodingQuery.setDefaultEncoding(Charset.forName("UTF-8"));
+                System.setProperty("file.encoding", "UTF-8");
+            } catch (Exception ex)
+            {
+                System.out.println("UTF-8 encoding not supported!");
+                System.out.flush();
+            }
+
+            //getDataObject().getPrimaryFile().setAttribute(EDITOR_MODE, this)
+            try {
+                super.saveDocument();
+            } finally
+            {
+                FileEncodingQuery.setDefaultEncoding(cs);
+                System.setProperty("file.encoding", fileEncoding);
+            }
+
         }
 
     public Lookup getSpecialNodeLookup() {

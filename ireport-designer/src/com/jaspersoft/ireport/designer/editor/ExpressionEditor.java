@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.editor;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Component;
@@ -17,6 +18,7 @@ import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.prefs.Preferences;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
@@ -58,12 +60,27 @@ public class ExpressionEditor extends javax.swing.JPanel {
         jEditorPane1.setText(expression);
     }
 
-    public static ArrayList<String> getDefaultExpressions() {
-        return defaultExpressions;
+    public static ArrayList<String> getPredefinedExpressions() {
+
+
+        ArrayList<String> exps = new ArrayList<String>();
+        Preferences pref = IReportManager.getPreferences();
+        if (pref.getBoolean("custom_expressions_set", false))
+        {
+            for (int i=0; pref.get("customexpression."+i, null) != null; ++i)
+            {
+                exps.add(pref.get("customexpression."+i, ""));
+            }
+        }
+        else
+        {
+            exps.addAll(getDefaultPredefinedExpressions());
+        }
+        return exps;
     }
 
-    public static void setDefaultExpressions(ArrayList<String> defaultExpressions) {
-        ExpressionEditor.defaultExpressions = defaultExpressions;
+    public static ArrayList<String> getDefaultPredefinedExpressions() {
+        return defaultExpressions;
     }
 
     public ExpressionContext getExpressionContext() {
@@ -366,7 +383,8 @@ public class ExpressionEditor extends javax.swing.JPanel {
             NamedIconItem item = (NamedIconItem)jList1.getSelectedValue();
             if (item.getItem().equals( USER_DEFINED_EXPRESSIONS))
             {
-                for (String s : defaultExpressions) dlm2.addElement(s);
+                ArrayList<String> exps = getPredefinedExpressions();
+                for (String s : exps) dlm2.addElement(s);
             }
             else if (item.getItem().equals( RECENT_EXPRESSIONS))
             {

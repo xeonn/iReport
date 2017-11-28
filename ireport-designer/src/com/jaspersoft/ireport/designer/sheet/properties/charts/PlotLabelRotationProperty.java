@@ -49,19 +49,19 @@ public final class PlotLabelRotationProperty extends DoubleProperty {
     @Override
     public Double getDouble()
     {
-        return plot.getLabelRotation();
+        return plot.getLabelRotationDouble();
     }
 
     @Override
     public Double getOwnDouble()
     {
-        return plot.getLabelRotation();
+        return plot.getLabelRotationDouble();
     }
 
     @Override
     public Double getDefaultDouble()
     {
-        return 0d;
+        return null;
     }
 
     @Override

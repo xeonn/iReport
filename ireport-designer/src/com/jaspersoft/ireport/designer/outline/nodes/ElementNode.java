@@ -20,6 +20,7 @@ import com.jaspersoft.ireport.designer.charts.ChartDataAction;
 import com.jaspersoft.ireport.designer.charts.multiaxis.AddAxisChartAction;
 import com.jaspersoft.ireport.designer.menu.HyperlinkAction;
 import com.jaspersoft.ireport.designer.undo.DeleteElementUndoableEdit;
+import com.jaspersoft.ireport.designer.utils.WeakPreferenceChangeListener;
 import java.awt.datatransfer.Transferable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -27,6 +28,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 import javax.swing.Action;
 import net.sf.jasperreports.charts.design.JRDesignDataRange;
 import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
@@ -68,7 +71,7 @@ import org.openide.util.lookup.ProxyLookup;
  *
  * @author gtoffoli
  */
-public class ElementNode extends IRIndexedNode implements PropertyChangeListener, ExpressionHolder {
+public class ElementNode extends IRIndexedNode implements PropertyChangeListener, ExpressionHolder, PreferenceChangeListener {
 
     JasperDesign jd = null;
     JRDesignElement element = null;
@@ -86,6 +89,10 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
         this.element = element;
     }
 
+    public void preferenceChange(PreferenceChangeEvent evt) {
+          fireDisplayNameChange(null, getDisplayName());
+    }
+
     public ElementNode(JasperDesign jd, JRDesignElement element, Children children, Index index, Lookup doLkp)
     {
         super (children, index, new ProxyLookup( doLkp, Lookups.fixed(jd,element)));
@@ -94,6 +101,8 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
         this.element = element;
         
         element.getEventSupport().addPropertyChangeListener(this);
+
+        IReportManager.getInstance().getPreferences().addPreferenceChangeListener(new WeakPreferenceChangeListener(this,IReportManager.getInstance().getPreferences()));
         
         if (element instanceof JRDesignGraphicElement)
         {

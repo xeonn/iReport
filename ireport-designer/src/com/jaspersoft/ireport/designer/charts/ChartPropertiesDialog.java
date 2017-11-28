@@ -479,7 +479,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
             if (jRTextExpressionAreaTextConnectionExpression.getText().trim().length() > 0)
             {
                 exp = new JRDesignExpression();
-                exp.setText(jRTextExpressionAreaMapExpression.getText());
+                exp.setText(jRTextExpressionAreaTextConnectionExpression.getText());
             }
             
             int index = jComboBoxDatasetConnectionType.getSelectedIndex();
@@ -1062,8 +1062,8 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         
         Object pWin = SwingUtilities.windowForComponent(this);
         JRDatasetParameterDialog jrpd = null;
-        if (pWin instanceof Dialog) jrpd = new JRDatasetParameterDialog((Dialog)pWin,map);
-        else jrpd = new JRDatasetParameterDialog((Frame)pWin,map);
+        if (pWin instanceof Dialog) jrpd = new JRDatasetParameterDialog((Dialog)pWin,map, (JRDesignDataset)getJasperDesign().getDatasetMap().get(currentSelectedChartElement.getDataset().getDatasetRun().getDatasetName()) );
+        else jrpd = new JRDatasetParameterDialog((Frame)pWin,map, (JRDesignDataset)getJasperDesign().getDatasetMap().get(currentSelectedChartElement.getDataset().getDatasetRun().getDatasetName()));
 
         ExpressionContext docEc = new ExpressionContext( getJasperDesign().getMainDesignDataset() );
         jrpd.setExpressionContext(docEc);
@@ -1106,8 +1106,8 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         
         Object pWin = SwingUtilities.windowForComponent(this);
         JRDatasetParameterDialog jrpd = null;
-        if (pWin instanceof Dialog) jrpd = new JRDatasetParameterDialog((Dialog)pWin,map);
-        else jrpd = new JRDatasetParameterDialog((Frame)pWin,map);
+        if (pWin instanceof Dialog) jrpd = new JRDatasetParameterDialog((Dialog)pWin,map, (JRDesignDataset)getJasperDesign().getDatasetMap().get(currentSelectedChartElement.getDataset().getDatasetRun().getDatasetName()));
+        else jrpd = new JRDatasetParameterDialog((Frame)pWin,map, (JRDesignDataset)getJasperDesign().getDatasetMap().get(currentSelectedChartElement.getDataset().getDatasetRun().getDatasetName()));
 
         ExpressionContext docEc = new ExpressionContext( getJasperDesign().getMainDesignDataset() );
         jrpd.setExpressionContext(docEc);
@@ -1128,7 +1128,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonAddParameterActionPerformed
 
     private void jComboBoxSubDatasetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSubDatasetActionPerformed
-        
+
         if (this.isInit()) return; 
 
         if (currentSelectedChartElement != null)
@@ -1136,6 +1136,10 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
             // If we selected a goof dataset....
             if (this.jComboBoxSubDataset.getSelectedIndex() > 0)
             {
+                    // Check subdataset parameters....
+                    ExpressionContext ec = new ExpressionContext((JRDesignDataset)getJasperDesign().getDatasetMap().get(""+jComboBoxSubDataset.getSelectedItem()));
+                    setExpressionContext( ec );
+
                     if (currentSelectedChartElement.getDataset().getDatasetRun() == null ||
                         !("" + jComboBoxSubDataset.getSelectedItem()).equals(currentSelectedChartElement.getDataset().getDatasetRun().getDatasetName()) )//NOI18N
                     {
@@ -1167,8 +1171,6 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
                             jPanel7.updateUI();
                         }
                         datasetRun.setDatasetName("" + jComboBoxSubDataset.getSelectedItem());//NOI18N
-                        
-                        // Check subdataset parameters.... (TODO)
                     }
             }
             else
@@ -1224,10 +1226,9 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         }
         else if (jComboBoxDatasetConnectionType.getSelectedIndex() == 2) {
             
-            jRTextExpressionAreaTextConnectionExpression.setText("$P{MyDataource}");//NOI18N
+            jRTextExpressionAreaTextConnectionExpression.setText("new net.sf.jasperreports.engine.JREmptyDataSource(1)");//NOI18N
             jRTextExpressionAreaTextConnectionExpression.setEnabled(true);
             jRTextExpressionAreaTextConnectionExpression.setBackground(Color.WHITE);
-            
             datasetRun.setConnectionExpression(null);
 
             JRDesignExpression exp = new JRDesignExpression();

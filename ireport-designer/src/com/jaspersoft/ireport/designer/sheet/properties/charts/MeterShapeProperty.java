@@ -58,25 +58,26 @@ public final class MeterShapeProperty extends ByteProperty
         tags.add(new Tag(new Byte(JRDesignMeterPlot.SHAPE_PIE), I18n.getString("Pie")));
         tags.add(new Tag(new Byte(JRDesignMeterPlot.SHAPE_CIRCLE), I18n.getString("Circle")));
         tags.add(new Tag(new Byte(JRDesignMeterPlot.SHAPE_CHORD), I18n.getString("Chord")));
+        tags.add(new Tag(new Byte(JRDesignMeterPlot.SHAPE_DIAL), I18n.getString("Dial")));
         return tags;
     }
 
     @Override
     public Byte getByte()
     {
-        return element.getShape();
+        return element.getShapeByte();
     }
 
     @Override
     public Byte getOwnByte()
     {
-        return element.getShape();
+        return element.getShapeByte();
     }
 
     @Override
     public Byte getDefaultByte()
     {
-        return JRDesignMeterPlot.SHAPE_PIE;
+        return null;
     }
 
     @Override

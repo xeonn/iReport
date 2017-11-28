@@ -42,14 +42,33 @@ import org.openide.util.Utilities;
  */
 public class ElementSelectedBorder implements Border {
 
-    public static final BasicStroke STROKE = new BasicStroke(1f);
-    public static final Insets INSETS = new Insets(5, 5, 5, 5); //new Insets(9, 8, 10, 9);
-    public static Color COLOR_1 = Color.LIGHT_GRAY;
-    public static Color COLOR_2 = new Color(255,175,0, 200);
+    public static int STATUS_NONE = 0;
+    public static int STATUS_PRIMARY_SELECTION = 1;  // blue
+    public static int STATUS_SECONDARY_SELECTION = 2;  // gray
+    public static int STATUS_PARTIAL_OVERLAP = 3; // green
+    public static int STATUS_TOTAL_OVERLAP = 4; // pink
+    
+    protected static final BasicStroke STROKE = new BasicStroke(1f);
+    protected static final Insets INSETS = new Insets(5, 5, 5, 5); //new Insets(9, 8, 10, 9);
+    protected Color COLOR_1 = Color.LIGHT_GRAY;
+    protected Color COLOR_2 = new Color(255,175,0, 200);
     private static final ImageIcon gripIcon = new ImageIcon(Utilities.loadImage("com/jaspersoft/ireport/designer/borders/grip.png"));
     
+    private int status = 0;
+
+    protected Color[] colors = new Color[]{
+                                        Color.WHITE,
+                                        new Color(70,130,180), //new Color(162,185,206)
+                                        Color.LIGHT_GRAY,
+                                        Color.GREEN,
+                                        Color.PINK
+                                    };
+
+
     public ElementSelectedBorder() {
     }
+
+
 
     public Insets getInsets () {
         return INSETS;
@@ -107,17 +126,31 @@ public class ElementSelectedBorder implements Border {
         
         Rectangle2D r = new Rectangle2D.Double(x+ 0.5, y + 0.5, 4, 4);
         
-        GradientPaint gp = new GradientPaint(0,0,Color.WHITE,3,3, new Color(194,209,219));
+        GradientPaint gp = new GradientPaint((float)x,(float)y,Color.WHITE,(float)x+3,(float)y+3, colors[getStatus()]); //new Color(194,209,219));
         g.setPaint(gp);
         
         g.fill(r);
         
-        g.setPaint(new Color(162,185,206));
+        g.setPaint(colors[getStatus()].darker());  //new Color(162,185,206));
         g.setStroke(new BasicStroke(1));
         g.draw(r);
         
         g.setPaint(oldPain);
         g.setStroke(oldStroke);
+    }
+
+    /**
+     * @return the status
+     */
+    public int getStatus() {
+        return status;
+    }
+
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
 

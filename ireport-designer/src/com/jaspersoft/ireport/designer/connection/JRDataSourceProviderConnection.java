@@ -37,9 +37,12 @@ import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.connection.gui.JRDataSourceProviderConnectionEditor;
 import com.jaspersoft.ireport.designer.utils.Misc;
-import java.lang.reflect.InvocationTargetException;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.*;
 import javax.swing.*;
+import org.openide.util.Mutex;
+
+
 /**
  *
  * @author  Administrator
@@ -64,16 +67,17 @@ public class JRDataSourceProviderConnection extends IReportConnection {
                                 "No class definition found error!!\nCheck your classpath!",
                                 "Exception"); //I18n.getString("message.title.exception",
             } 
-	    catch (ClassNotFoundException ex)
-	    {
-		showErrorMessage(
+            catch (ClassNotFoundException ex)
+            {
+            showErrorMessage(
                         //I18n.getString("messages.JRDataSourceProviderConnection.classNotFoundError",
                                 "Class not found error!!\nCheck your classpath!",
                         "Exception"); //I18n.getString("message.title.exception",
             } 
             catch (Exception ex)
             {
-                showErrorMessage("" + ex.getMessage(),
+
+                showErrorMessage( I18n.getString("unexpected.datasource.error"  ,ex.getMessage(), Misc.getLogFile()),
                         "Exception"); //I18n.getString("message.title.exception",
             }
         }
@@ -81,29 +85,7 @@ public class JRDataSourceProviderConnection extends IReportConnection {
         return dsp;
     }
     
-    private void  showErrorMessage(final String errorMsg, final String title)
-    {
-        Runnable r = new Runnable() {
-                public void run() {
-                    JOptionPane.showMessageDialog(Misc.getMainWindow(),errorMsg,title,JOptionPane.ERROR_MESSAGE);
-                }
-            };
-
-        if (!SwingUtilities.isEventDispatchThread())
-        {
-            try {
-                SwingUtilities.invokeAndWait( r );
-            } catch (InvocationTargetException ex) {
-                ex.printStackTrace();
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        }
-        else
-        {
-                r.run();
-        }
-    }
+    
      
     
     /** Creates a new instance of JRDataSourceProviderConnection */
@@ -131,11 +113,16 @@ public class JRDataSourceProviderConnection extends IReportConnection {
         
         try {
             ds = getDataSourceProvider().create(jasper);
-        } catch (Exception ex)
+        } catch (final Exception ex)
         {
-            JOptionPane.showMessageDialog(Misc.getMainWindow(),
+            Mutex.EVENT.readAccess(new Runnable() {
+
+                public void run() {
+                    JOptionPane.showMessageDialog(Misc.getMainWindow(),
                     Misc.formatString("Problems occurred creating the new datasource!!\n{0}", new Object[]{""+ex.getMessage()}), //"messages.JRDataSourceProviderConnection.problemsCreatingDatasource"
                     "Error",JOptionPane.ERROR_MESSAGE);
+                }
+            });
         }
         
         return ds;

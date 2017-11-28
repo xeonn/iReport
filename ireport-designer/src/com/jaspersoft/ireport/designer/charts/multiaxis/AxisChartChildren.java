@@ -57,6 +57,9 @@ public class AxisChartChildren  extends Index.KeysChildren implements PropertyCh
     {
         JRDesignChartAxis axis = (JRDesignChartAxis)key;
 
+        System.out.println("Lookup: " + doLkp + " " + axis.getChart());
+        System.out.flush();
+
         AxisChartNode axisNode = new AxisChartNode(jasperDesign, axis, doLkp);
         
         return new Node[]{axisNode};

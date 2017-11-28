@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.JRPen;
+import net.sf.jasperreports.engine.util.JRPenUtil;
 
 /**
  *
@@ -342,6 +343,7 @@ public class BoxBorderSelectionPanel extends javax.swing.JPanel {
      * 
      * @param pen
      * @return
+     * @deprecated Replaced by {@link JRPenUtil#getStroke(JRPen, int)}
      */
     public static Stroke createStroke(JRPen pen)
     {

@@ -24,6 +24,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.Set;
 import javax.swing.JComponent;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRExpression;
@@ -40,6 +41,10 @@ import org.netbeans.api.visual.action.AlignWithMoveDecorator;
 import org.netbeans.api.visual.action.TextFieldInplaceEditor;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.model.ObjectScene;
+import org.netbeans.api.visual.model.ObjectSceneEvent;
+import org.netbeans.api.visual.model.ObjectSceneEventType;
+import org.netbeans.api.visual.model.ObjectSceneListener;
+import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Scene;
@@ -54,6 +59,14 @@ public abstract class AbstractReportObjectScene extends ObjectScene implements G
     public static Color DESIGN_LINE_COLOR = new Color(170,170,255);
     public static Color EDITING_DESIGN_LINE_COLOR = Color.DARK_GRAY;
     public static Color GRID_LINE_COLOR = new Color(230,230,230);
+
+    private ObjectSceneSelectionManager selectionManager = null;
+
+    public AbstractReportObjectScene()
+    {
+        super();
+        selectionManager = new ObjectSceneSelectionManager(this);
+    }
 
     public void assureVisible(Object object) {
     
@@ -382,12 +395,23 @@ public abstract class AbstractReportObjectScene extends ObjectScene implements G
         if (jComponent == null)
         {
             jComponent = createView();
+
         }
+
         return jComponent;
     }
     
-    
+
+
+
     protected java.util.HashMap elementGroupListeners = new HashMap();
+
+    /**
+     * @return the selectionManager
+     */
+    public ObjectSceneSelectionManager getSelectionManager() {
+        return selectionManager;
+    }
     
     protected final class GroupChangeListener implements PropertyChangeListener
     {
@@ -417,4 +441,10 @@ public abstract class AbstractReportObjectScene extends ObjectScene implements G
     public void setUpdatingView(boolean updatingView) {
         this.updatingView = updatingView;
     }
+
+    
+
+
+
+
 }

@@ -44,6 +44,7 @@ import com.jaspersoft.ireport.designer.undo.UndoRedoManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Image;
 import java.beans.BeanInfo;
 import java.beans.PropertyChangeEvent;
@@ -51,12 +52,14 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import javax.swing.ActionMap;
+import javax.swing.FocusManager;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
@@ -68,6 +71,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
+import org.netbeans.api.queries.FileEncodingQuery;
 import org.netbeans.api.visual.model.ObjectSceneEvent;
 import org.netbeans.api.visual.model.ObjectSceneListener;
 import org.netbeans.api.visual.model.ObjectState;
@@ -78,6 +82,7 @@ import org.netbeans.core.spi.multiview.CloseOperationState;
 import org.netbeans.core.spi.multiview.MultiViewDescription;
 import org.netbeans.core.spi.multiview.MultiViewElement;
 import org.netbeans.core.spi.multiview.MultiViewElementCallback;
+import org.netbeans.core.spi.multiview.MultiViewFactory;
 import org.netbeans.spi.navigator.NavigatorLookupHint;
 import org.netbeans.spi.palette.PaletteController;
 import org.openide.awt.UndoRedo;
@@ -89,6 +94,7 @@ import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
+import org.openide.util.Mutex;
 import org.openide.util.RequestProcessor;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
@@ -215,6 +221,7 @@ public class JrxmlVisualView extends TopComponent
                 explorerManager = new ExplorerManager();
 
                 ActionMap map = getActionMap();
+               
                 verifyerThread = new DesignVerifyerThread(this);
                 //setActionMap(map);
                 map.put(DefaultEditorKit.copyAction, ExplorerUtils.actionCopy(explorerManager));
@@ -286,7 +293,9 @@ public class JrxmlVisualView extends TopComponent
         }
         return toolbar;
     }
-    
+
+
+
     @Override
     public void componentOpened() {
         setNeedModelRefresh(false);
@@ -307,13 +316,15 @@ public class JrxmlVisualView extends TopComponent
         }
         else
         {
-            support.setCurrentModel( jasperDesign  );
+            support.setCurrentModel(jasperDesign);
+            
         }
         
         if (OutlineTopComponent.getDefault() != null) {
              OutlineTopComponent.getDefault().setCurrentJrxmlVisualView(this);
+
+
         }
-        
     }
     
     private static Boolean groupVisible = null;
@@ -381,7 +392,19 @@ public class JrxmlVisualView extends TopComponent
         }
         //
         if (isVisualViewSelected && !Boolean.TRUE.equals(groupVisible)) {
+            
             group.open();
+
+            final TopComponent props = wm.findTopComponent("properties");
+            if (props != null && props.isVisible())
+            {
+                try {
+                    props.getClass().getMethod("setNodes", new Class[]{(new Node[0]).getClass()}).invoke(props, new Object[]{getExplorerManager().getSelectedNodes()});
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
         } else if (!isVisualViewSelected && !Boolean.FALSE.equals(groupVisible)) {
             group.close();
         }
@@ -420,7 +443,7 @@ public class JrxmlVisualView extends TopComponent
     
     @Override
     public void componentActivated() {
-        
+
         ic.add(this.getReportDesignerPanel());
         updateGroupVisibility();
         if (getReportDesignerPanel() != null &&
@@ -445,6 +468,10 @@ public class JrxmlVisualView extends TopComponent
     }
     
     public CloseOperationState canCloseElement() {
+        if(getEditorSupport().isModified()){
+            return MultiViewFactory.createUnsafeCloseState(PREFERRED_ID,
+                    null,null);
+        }
         return CloseOperationState.STATE_OK;
     }
    
@@ -485,6 +512,9 @@ public class JrxmlVisualView extends TopComponent
             Thread.currentThread().setContextClassLoader(new ReportClassLoader(IReportManager.getReportClassLoader()));
             JrxmlLoader jrxmlLoader = new JrxmlLoader();
 
+            System.out.println("Loading file with encoding: " + FileEncodingQuery.getEncoding(getEditorSupport().getDataObject().getPrimaryFile()));
+            System.out.flush();
+
             jasperDesign = jrxmlLoader.reloadJasperDesign(support.getInputStream());
             
             if (jasperDesign == null)
@@ -500,7 +530,8 @@ public class JrxmlVisualView extends TopComponent
             {
                 javax.swing.SwingUtilities.invokeAndWait(new java.lang.Runnable() {
                     public void run() {
-                        
+
+                            if (reportDesignerPanel == null) return;
                             reportDesignerPanel.setJasperDesign(jasperDesign);
                             
                             model = new ReportNode(jasperDesign, support.getSpecialNodeLookup());

@@ -49,7 +49,7 @@ public final class ThermometerValueMaskProperty extends PropertySupport
         if (val == null || val instanceof String)
         {
             JRValueDisplay oldValue = element.getValueDisplay();
-            JRDesignValueDisplay newValue = new JRDesignValueDisplay( element.getValueDisplay());
+            JRDesignValueDisplay newValue = new JRDesignValueDisplay( element.getValueDisplay(), element.getChart());
             newValue.setMask((String)val);
             element.setValueDisplay(newValue);
             ObjectPropertyUndoableEdit urob =

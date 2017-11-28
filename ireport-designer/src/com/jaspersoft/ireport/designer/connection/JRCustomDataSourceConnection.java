@@ -36,6 +36,7 @@ import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.connection.gui.JRCustomDataSourceConnectionEditor;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.locale.I18n;
 import javax.swing.JOptionPane;
 
 /**
@@ -131,10 +132,13 @@ public class JRCustomDataSourceConnection extends IReportConnection {
     public net.sf.jasperreports.engine.JRDataSource getJRDataSource()
     { 
         try {
-        Object obj = Class.forName( factoryClass, true, Thread.currentThread().getContextClassLoader() ).newInstance();
-        return (net.sf.jasperreports.engine.JRDataSource) obj.getClass().getMethod( methodToCall, new Class[0]).invoke(obj,new Object[0]);                
-        } catch (Exception ex)
+            Object obj = Class.forName( factoryClass, true, Thread.currentThread().getContextClassLoader() ).newInstance();
+            return (net.sf.jasperreports.engine.JRDataSource) obj.getClass().getMethod( methodToCall, new Class[0]).invoke(obj,new Object[0]);
+        } catch (Throwable ex)
         {
+            showErrorMessage( I18n.getString("unexpected.datasource.error"  ,ex.getMessage(), Misc.getLogFile()),
+                        "Exception"); //I18n.getString("message.title.exception",
+
             ex.printStackTrace();
             return super.getJRDataSource();
         }
@@ -174,7 +178,7 @@ public class JRCustomDataSourceConnection extends IReportConnection {
         } 
         catch (Exception ex)
         {
-
+            ex.printStackTrace();
         JOptionPane.showMessageDialog(Misc.getMainWindow(),
                 Misc.formatString( //"messages.connection.generalError2",
                 "{0}\nGeneral problem:\n {1}",

@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.Action;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRReportTemplate;
+import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.actions.NewAction;
@@ -73,17 +75,41 @@ public class StylesNode extends IRIndexedNode implements PropertyChangeListener 
             public void childrenReordered(NodeReorderEvent ev) {
 
                 List list = getJasperDesign().getStylesList();
+
                 ArrayList newList = new ArrayList();
+                ArrayList<JRReportTemplate> newList2 = new ArrayList<JRReportTemplate>();
 
                 Node[] nodes = getChildren().getNodes();
                 for (int i = 0; i < nodes.length; ++i) {
-                   JRDesignStyle s = ((StyleNode) nodes[i]).getDesignStyle();
-                   newList.add(s);
+
+                    if (nodes[i] instanceof StyleNode)
+                    {
+                        JRDesignStyle s = ((StyleNode) nodes[i]).getDesignStyle();
+                        newList.add(s);
+                    }
+                    else if (nodes[i] instanceof TemplateReferenceNode)
+                    {
+                        JRReportTemplate s = ((TemplateReferenceNode) nodes[i]).getTemplate();
+                        newList2.add(s);
+                    }
                 }
 
                 list.clear();
                 list.addAll(newList);
-                
+
+                // remove all the old templates...
+                JRReportTemplate[] oldTemplates = getJasperDesign().getTemplates();
+                for (int i=0; i<oldTemplates.length; ++i)
+                {
+                    getJasperDesign().removeTemplate(oldTemplates[i]);
+                }
+
+                // add all the new templates...
+                for (JRReportTemplate t : newList2)
+                {
+                    getJasperDesign().addTemplate(t);
+                }
+
                 getJasperDesign().getEventSupport().firePropertyChange(
                         new PropertyChangeEvent(getJasperDesign(), JasperDesign.PROPERTY_STYLES, null, null ) );
                 com.jaspersoft.ireport.designer.IReportManager.getInstance().notifyReportChange();
@@ -166,29 +192,27 @@ public class StylesNode extends IRIndexedNode implements PropertyChangeListener 
                                 AddStyleUndoableEdit undo = new AddStyleUndoableEdit(style, getJasperDesign()); //newIndex
                                 IReportManager.getInstance().addUndoableEdit(undo);
                             } 
-                            
-                            
-//                            else // Adding a copy to the list 
-//                            {
-//                                try {
-//                                    JRDesignStyle newStyle = style.clone()
-//                                    Map map = getJasperDesign().getStylesMap();
-//                                    int k = 1;
-//                                    while (map.containsKey(newStyle.getName())) {
-//                                        newStyle.setName(style.getName() + "_" + k);
-//                                        k++;
-//                                    }
-//                                    (getJasperDesign()).addStyle(newStyle);
-//                                    
-//                                } catch (JRException ex) {
-//                                    Exceptions.printStackTrace(ex);
-//                                }
-//                            }
+                            else // Adding a copy to the list 
+                            {
+                                try {
+                                    JRDesignStyle newStyle = (JRDesignStyle)style.clone();
+                                    Map map = getJasperDesign().getStylesMap();
+                                    int k = 1;
+                                    while (map.containsKey(newStyle.getName())) {
+                                        newStyle.setName(style.getName() + "_" + k);
+                                        k++;
+                                    }
+                                    (getJasperDesign()).addStyle(newStyle);
+                                    
+                                } catch (JRException ex) {
+                                    Exceptions.printStackTrace(ex);
+                                }
+                            }
                         }
                         else // Duplicating
                         {
                             try {
-                                JRDesignStyle newStyle = ModelUtils.cloneStyle(style);
+                                JRDesignStyle newStyle = (JRDesignStyle)style.clone();
                                 Map map = getJasperDesign().getStylesMap();
                                 int k = 1;
                                 while (map.containsKey(newStyle.getName())) {
@@ -257,7 +281,7 @@ public class StylesNode extends IRIndexedNode implements PropertyChangeListener 
     @Override
     public NewType[] getNewTypes()
     {
-        return NewTypesUtils.getNewType(this, NewTypesUtils.STYLE);
+        return NewTypesUtils.getNewType(this, NewTypesUtils.STYLE, NewTypesUtils.REPORT_TEMPLATE);
     }
 
     public void propertyChange(PropertyChangeEvent evt) {

@@ -48,19 +48,19 @@ public final class LineShowLinesProperty extends BooleanProperty {
     @Override
     public Boolean getBoolean()
     {
-        return plot.isShowLines();
+        return plot.getShowLines();
     }
 
     @Override
     public Boolean getOwnBoolean()
     {
-        return plot.isShowLines();
+        return plot.getShowLines();
     }
 
     @Override
     public Boolean getDefaultBoolean()
     {
-        return Boolean.TRUE;
+        return null;
     }
 
     @Override

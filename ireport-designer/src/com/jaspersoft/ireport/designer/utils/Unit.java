@@ -109,6 +109,28 @@ public class Unit {
         return getUnitName();
     }
 
+    /**
+     * convert from pixel to the unit represented by this class
+     *
+     * @param pixel
+     * @return
+     */
+    public double convert(int pixels)
+    {
+        return ((double)pixels)/conversionValue;
+    }
+
+    /**
+     * convert from pixel to the unit represented by this class
+     *
+     * @param pixel
+     * @return
+     */
+    public long toPixel(double val)
+    {
+        return (long)(val*conversionValue);
+    }
+
     static public double convertPixelsToInches(long pixels)
 	{
 		return ((double)pixels)/INCHES;

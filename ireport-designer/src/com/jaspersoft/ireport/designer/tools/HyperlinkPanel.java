@@ -80,7 +80,13 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         jComboBoxLinkType.addItem(new Tag( JRHyperlinkHelper.HYPERLINK_TYPE_LOCAL_PAGE) );
         jComboBoxLinkType.addItem(new Tag( JRHyperlinkHelper.HYPERLINK_TYPE_REMOTE_ANCHOR) );
         jComboBoxLinkType.addItem(new Tag( JRHyperlinkHelper.HYPERLINK_TYPE_REMOTE_PAGE) );
-       
+
+        // Adding extra link types...
+        for (Tag t : IReportManager.getInstance().getCustomLinkTypes())
+        {
+            jComboBoxLinkType.addItem(t);
+        }
+
         JRHyperlinkParametersTableCellRenderer cre = new JRHyperlinkParametersTableCellRenderer();
         jTableLinkParameters.getColumnModel().getColumn(0).setCellRenderer(cre);
         jTableLinkParameters.getColumnModel().getColumn(1).setCellRenderer(cre);

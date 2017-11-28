@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.actions;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Arrays;
@@ -41,6 +42,9 @@ public class AlignWithSupport {
 
     protected Point locationSuggested (Widget widget, Rectangle sceneWidgetBounds, Point suggestedLocation, boolean horizontal, boolean vertical, boolean bothSides, boolean snapHack) {
         Point point = new Point (suggestedLocation);
+        
+        if (IReportManager.getPreferences().getBoolean("noMagnetic", false)) return point;
+
         Collection<Rectangle> regions = collector.getRegions (widget);
 
         if (horizontal) {
@@ -198,6 +202,9 @@ public class AlignWithSupport {
     
     public Point snapToGrid(Point suggestedLocation, int sizeGrid)
     {
+        
+        if (IReportManager.getPreferences().getBoolean("noMagnetic", false)) return suggestedLocation;
+        
         int d = (suggestedLocation.x)%sizeGrid;
         if (d < sizeGrid/2)
         {

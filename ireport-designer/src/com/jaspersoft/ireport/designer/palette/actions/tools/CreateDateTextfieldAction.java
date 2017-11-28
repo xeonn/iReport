@@ -20,10 +20,18 @@ import net.sf.jasperreports.engine.design.JasperDesign;
  */
 public class CreateDateTextfieldAction extends CreateTextFieldAction {
 
+
+
     @Override
     public JRDesignElement createReportElement(JasperDesign jd)
     {
         JRDesignTextField element = (JRDesignTextField)super.createReportElement( jd );
+
+        // get field and reset type...
+
+        
+
+
 
         ((JRDesignExpression)element.getExpression()).setText("new java.util.Date()");
         ((JRDesignExpression)element.getExpression()).setValueClassName("java.util.Date");

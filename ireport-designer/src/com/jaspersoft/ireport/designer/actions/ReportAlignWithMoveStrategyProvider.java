@@ -84,6 +84,8 @@ public class ReportAlignWithMoveStrategyProvider extends AlignWithSupport implem
                 return originalLocation;
             }
         }
+
+        if (IReportManager.getPreferences().getBoolean("noMagnetic", false)) return suggestedLocation;
         
         Point widgetLocation = widget.getLocation();
         Rectangle widgetBounds = outerBounds ? widget.getBounds () : widget.getClientArea();

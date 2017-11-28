@@ -15,6 +15,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import java.awt.Component;
 import java.awt.Dialog;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -211,6 +212,10 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
                     // This call should be not lock... we should put it in a new thread...
                     // and maybe add a window to show the progress...
                     newResourceDescriptor = getServer().getWSClient().addOrModifyResource(rd, resourceFile);
+                    
+                    System.out.println("resourceFile = " + resourceFile);
+                    System.out.flush();
+
                     if (resourceFile != null)
                     {
                         addRequiredResources(resourceFile, newResourceDescriptor);
@@ -229,13 +234,17 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
         JasperDesign report = JRXmlLoader.load(resourceFile);
         List children = RepositoryJrxmlFile.identifyElementValidationItems(report, rd, resourceFile.getParent());
         
+        
         if (children.size() > 0)
         {
             // We will create a temporary file somewhere else...
             String tmpFileName = JasperServerManager.createTmpFileName("newfile",".jrxml");
-            JRXmlWriter.writeReport(report, tmpFileName);
+            JRXmlWriter.writeReport(report, new java.io.FileOutputStream(tmpFileName), "UTF-8");
             resourceFile = new File(tmpFileName);
             long modified = resourceFile.lastModified();
+
+            System.out.println("Temporary file: " + resourceFile + " " + resourceFile.lastModified() + " " + resourceFile.exists());
+            System.out.flush();
             
             JrxmlValidationDialog jvd = new JrxmlValidationDialog(Misc.getMainFrame(),true);
             jvd.setElementVelidationItems( children );
@@ -250,13 +259,13 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
                 // Look for the main jrxml...
                 if (modified != resourceFile.lastModified())
                 {
+                    System.out.println("Jrxml modified....");
+                    System.out.flush();
                     for (int i=0; i<rd.getChildren().size(); ++i)
                     {
                         ResourceDescriptor rdMainJrxml = (ResourceDescriptor)rd.getChildren().get(i);
                         if (rdMainJrxml.getWsType().equals(rdMainJrxml.TYPE_JRXML) && rdMainJrxml.isMainReport())
                         {
-                            System.out.println("JRXML to modify is: " + rdMainJrxml.getUriString());
-                            System.out.flush();
                             
                             rdMainJrxml.setIsNew(false);
                             rdMainJrxml.setHasData(true);
@@ -266,6 +275,11 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
                             break;
                         }
                     }
+                }
+                else
+                {
+                    System.out.println("Not modified...." + modified + " != " + resourceFile.lastModified());
+                    System.out.flush();
                 }
             }
         }

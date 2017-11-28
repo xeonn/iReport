@@ -236,7 +236,7 @@ public final class CustomChooserVisualPanel extends JPanel {
         File finalFile = new File(dir,fname);
         if (finalFile.exists())
         {
-            throw new IllegalArgumentException(I18n.getString("CustomChooserVisualPanel.Message.Exception4") + fname );
+            throw new IllegalArgumentException(I18n.getString("CustomChooserVisualPanel.Message.Exception4",  fname));
         }
     }
 

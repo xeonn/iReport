@@ -48,8 +48,8 @@ public class AlignedTableCellRenderer extends DefaultTableCellRenderer {
     /** Creates a new instance of AlignedTableCellRenderer */
     public AlignedTableCellRenderer(int alignment) {
         super();
-        if (subreportIcon == null) subreportIcon = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/subreport-16.png"));
-        if (imageIcon == null) imageIcon = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/image-16.png"));
+        if (subreportIcon == null) subreportIcon = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/jasperserver/ui/resources/subreport-16.png"));
+        if (imageIcon == null) imageIcon = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/jasperserver/ui/resources/image-16.png"));
         this.alignment = alignment;
     }
     
@@ -62,10 +62,12 @@ public class AlignedTableCellRenderer extends DefaultTableCellRenderer {
                     if (value instanceof ImageElementValidationItem)
                     {
                          ((JLabel)c).setIcon( imageIcon );
+                         ((JLabel)c).setText( "Image" );
                     }
                     else if (value instanceof SubReportElementValidationItem)
                     {
                          ((JLabel)c).setIcon( subreportIcon );
+                         ((JLabel)c).setText( "Subreport" );
                     }
                 }
                 

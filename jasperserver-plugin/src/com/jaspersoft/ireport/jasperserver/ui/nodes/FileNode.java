@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
+import org.openide.actions.CopyAction;
+import org.openide.actions.CutAction;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 import org.openide.util.Lookup;
@@ -137,20 +139,27 @@ public class FileNode extends IRAbstractNode implements ResourceNode {
     public void setFile(RepositoryFile file) {
         this.file = file;
     }
-    
-    
+
+
+
+
     @Override
     public Action[] getActions(boolean arg0) {
         
         List<Action> actions = new ArrayList<Action>();
-        
-        
         
         actions.add(SystemAction.get( OpenFileAction.class));
         if (getFile().getDescriptor().getWsType().equals(ResourceDescriptor.TYPE_JRXML))
         {
             actions.add(SystemAction.get( ReplaceFileAction.class));
         }
+        
+        if (ReportUnitNode.getParentReportUnit(this) == null)
+        {
+            actions.add(SystemAction.get( CopyAction.class));
+            actions.add(SystemAction.get( CutAction.class));
+        }
+
         actions.add(SystemAction.get( DeleteAction.class));
         if (ReportUnitNode.getParentReportUnit(this) != null)
         {
@@ -171,6 +180,11 @@ public class FileNode extends IRAbstractNode implements ResourceNode {
 
     @Override
     public Action getPreferredAction() {
+        if (getFile().getDescriptor().getWsType().equals(ResourceDescriptor.TYPE_JRXML))
+        {
+            return SystemAction.get( OpenFileAction.class);
+        }
+
         return SystemAction.get( PropertiesAction.class);
     }
 
@@ -208,5 +222,13 @@ public class FileNode extends IRAbstractNode implements ResourceNode {
         return tras;
     }
     
-    
+    @Override
+    public boolean canCopy() {
+        return ReportUnitNode.getParentReportUnit(this) == null;
+    }
+
+    @Override
+    public boolean canCut() {
+        return ReportUnitNode.getParentReportUnit(this) == null;
+    }
 }

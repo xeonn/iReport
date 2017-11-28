@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.palette.actions;
 
 import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.crosstab.wizard.CrosstabWizardPanel1;
 import com.jaspersoft.ireport.designer.crosstab.wizard.CrosstabWizardPanel2;
 import com.jaspersoft.ireport.designer.crosstab.wizard.CrosstabWizardPanel3;
@@ -20,9 +21,12 @@ import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
+import java.awt.Point;
+import java.awt.dnd.DropTargetDropEvent;
 import java.text.MessageFormat;
 import java.util.List;
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 import net.sf.jasperreports.crosstabs.JRCrosstabGroup;
 import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
@@ -34,6 +38,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.fill.calculation.BucketDefinition;
 import net.sf.jasperreports.engine.JRAlignment;
+import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRPen;
@@ -47,6 +52,9 @@ import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextElement;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import org.netbeans.api.visual.animator.SceneAnimator;
+import org.netbeans.api.visual.widget.Scene;
+import org.netbeans.api.visual.widget.Widget;
 import org.openide.DialogDisplayer;
 import org.openide.WizardDescriptor;
 import org.openide.util.Exceptions;
@@ -477,4 +485,58 @@ public class CreateCrosstabAction extends CreateReportElementAction
         
         return new_name;
     }
+
+    @Override
+    public void adjustElement(JRDesignElement[] elements, int index, Scene theScene, JasperDesign jasperDesign, Object parent, Point dropLocation) {
+
+        elements[index].setX(0);
+        elements[index].setY(0);
+        elements[index].setWidth(jasperDesign.getPageWidth() - jasperDesign.getLeftMargin() - jasperDesign.getRightMargin());
+        if (parent instanceof JRBand)
+        {
+            elements[index].setHeight( ((JRBand)parent).getHeight() );
+        }
+    }
+
+
+
+    /*
+    @Override
+    public void drop(DropTargetDropEvent dtde) {
+
+        // at this point we should have all done....
+        // let's try to adjust the size...
+        JRDesignElement element = createReportElement(getJasperDesign());
+
+        if (element == null) return;
+        // Find location...
+        dropElementAt(getScene(), getJasperDesign(), element, dtde.getLocation());
+
+        final Widget w = ((ReportObjectScene)getScene()).findElementWidget(element);
+        final JRBand b = ModelUtils.bandOfElement(element, getJasperDesign());
+
+        if (w != null)
+        {
+            SwingUtilities.invokeLater( new Runnable() {
+
+                   public void run() {
+
+                            SceneAnimator sc = new  SceneAnimator(getScene());
+
+                            Point p = new Point( getJasperDesign().getLeftMargin(),
+                                                 ModelUtils.getBandLocation(b, getJasperDesign()));
+
+                            sc.animatePreferredLocation(w, p);
+
+                            // set the final position here....
+                            //sc.animatePreferredLocation(arg0, arg1);
+                    }
+               });
+        }
+
+    }
+    */
+
+
+
 }

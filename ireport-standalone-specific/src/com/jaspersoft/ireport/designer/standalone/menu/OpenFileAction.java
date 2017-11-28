@@ -56,24 +56,14 @@ public class OpenFileAction extends CallableSystemAction {
 		FileUtil.preventFileChooserSymlinkTraversal(chooser, currDir);
 		HelpCtx.setHelpIDString(chooser, getHelpCtx().getHelpID());
 
-		chooser.addChoosableFileFilter(new javax.swing.filechooser.FileFilter() {
+        FileFilterAdapter mainFilter = new FileFilterAdapter(".jrxml", "JasperReports Template (.jrxml)");
+		chooser.addChoosableFileFilter(mainFilter);
+        chooser.addChoosableFileFilter(new FileFilterAdapter(".jrctx", "Chart Theme file (.jrctx)"));
+        chooser.addChoosableFileFilter(new FileFilterAdapter(".jrtx", "Style Template file (.jrtx)"));
+        chooser.addChoosableFileFilter(new FileFilterAdapter(".properties", "Resource Bundle (.properties)"));
+        chooser.addChoosableFileFilter(new FileFilterAdapter(".jasper", "Compiled JasperReport (.jasper)"));
 
-                        @Override
-                        public boolean accept(File f) {
-                            
-                            if (f.isDirectory()) return true;
-                            if (f.exists() && f.getName().toLowerCase().endsWith(".jrxml")) // NOI18N
-                            {
-                                return true;
-                            }
-                            return false;
-                        }
-
-                        @Override
-                        public String getDescription() {
-                            return "Report template file (.jrxml)";
-                        }
-                    });
+        chooser.setFileFilter(mainFilter);
 
 		chooser.setMultiSelectionEnabled(true);
 		return chooser;

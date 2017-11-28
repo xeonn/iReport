@@ -12,9 +12,11 @@ package com.jaspersoft.ireport.designer;
 import com.jaspersoft.ireport.designer.connection.JREmptyDatasourceConnection;
 import com.jaspersoft.ireport.designer.fonts.TTFFontsLoader;
 import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
+import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
 import com.jaspersoft.ireport.designer.fonts.TTFFontsLoaderMonitor;
 import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
+import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.undo.AggregatedUndoableEdit;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
@@ -52,6 +54,7 @@ import org.apache.xerces.parsers.DOMParser;
 import org.netbeans.api.db.explorer.JDBCDriver;
 import org.netbeans.api.db.explorer.JDBCDriverManager;
 import org.openide.awt.StatusDisplayer;
+import org.openide.awt.UndoRedo;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.Repository;
 import org.openide.loaders.DataFolder;
@@ -91,6 +94,9 @@ public class IReportManager {
     
     private static ReportClassLoader reportClassLoader = null;
     private static IReportManager mainInstance = null;
+
+    private List<Tag> customLinkTypes = new ArrayList<Tag>();
+
 
     public static ElementNode getComponentNode(JasperDesign jd, JRDesignComponentElement componentElement, Lookup lkp) {
 
@@ -132,8 +138,8 @@ public class IReportManager {
             FileObject fileObject = dataObject.getPrimaryFile();
             String name = dataObject.getName();
             boolean instance = false;
-            System.out.println("Found: " + name + " ." + fileObject.getExt());
-            System.out.flush();
+            //System.out.println("Found: " + name + " ." + fileObject.getExt());
+            //System.out.flush();
             if (fileObject.getExt().equals("instance"))
             {
                 instance = true;
@@ -224,6 +230,77 @@ public class IReportManager {
         return fonts;
     }
 
+    public void reloadQueryExecuters() {
+
+        // Clear not built-in query executers...
+        //for (int i=0; i<queryExecuters.size(); ++i)
+        //{
+        //    QueryExecuterDef qe = queryExecuters.get(i);
+        //    if (!qe.isBuiltin())
+        //    {
+        //        net.sf.jasperreports.engine.util.JRProperties.setProperty("net.sf.jasperreports.query.executer.factory." + qe.getLanguage(), null);
+        //        queryExecuters.remove(qe);
+        //   }
+        //}
+
+
+        queryExecuters.clear();
+
+        // Adding defaults....
+        addQueryExecuterDef(new QueryExecuterDef("sql",
+                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.sql"),
+                    "com.jaspersoft.ireport.designer.data.fieldsproviders.SQLFieldsProvider", true), true);
+
+        addQueryExecuterDef(new QueryExecuterDef("SQL",
+                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.SQL"),
+                    "com.jaspersoft.ireport.designer.data.fieldsproviders.SQLFieldsProvider", true), true);
+
+        addQueryExecuterDef(new QueryExecuterDef("xPath",
+                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.xPath"),
+                    "com.jaspersoft.ireport.designer.data.fieldsproviders.XMLFieldsProvider", true), true);
+
+        addQueryExecuterDef(new QueryExecuterDef("XPath",
+                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.XPath"),
+                    "com.jaspersoft.ireport.designer.data.fieldsproviders.XMLFieldsProvider", true), true);
+
+        addQueryExecuterDef(new QueryExecuterDef("hql",
+                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.hql"),
+                    "com.jaspersoft.ireport.designer.data.fieldsproviders.HQLFieldsProvider", true), true);
+
+        addQueryExecuterDef(new QueryExecuterDef("mdx",
+                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.mdx"),
+                    "com.jaspersoft.ireport.designer.data.fieldsproviders.MDXFieldsProvider", true), true);
+
+        addQueryExecuterDef(new QueryExecuterDef("MDX",
+                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.MDX"),
+                    "com.jaspersoft.ireport.designer.data.fieldsproviders.MDXFieldsProvider", true), true);
+
+        addQueryExecuterDef(new QueryExecuterDef("ejbql",
+                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.ejbql"),
+                    "com.jaspersoft.ireport.designer.data.fieldsproviders.EJBQLFieldsProvider", true), true);
+
+        addQueryExecuterDef(new QueryExecuterDef("EJBQL",
+                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.EJBQL"),
+                    "com.jaspersoft.ireport.designer.data.fieldsproviders.EJBQLFieldsProvider", true), true);
+
+        addQueryExecuterDef(new QueryExecuterDef("xmla-mdx",
+                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.xmla-mdx"),
+                    "com.jaspersoft.ireport.designer.data.fieldsproviders.CincomMDXFieldsProvider", true), true);
+
+        // Reload all the qe from the preferences...
+        int k=0;
+        Preferences pref = getPreferences();
+        while (pref.get("queryExecuter."+k+".language", null) != null)
+        {
+            String lang = pref.get("queryExecuter."+k+".language", "");
+            String clazz = pref.get("queryExecuter."+k+".class", "");
+            String provider = pref.get("queryExecuter."+k+".provider", "");
+            QueryExecuterDef qe = new QueryExecuterDef(lang, clazz, provider, false);
+            addQueryExecuterDef(qe, true);
+            k++;
+        }
+    }
+
     public void setFonts(List<IRFont> fonts) {
         this.fonts = fonts;
     }
@@ -266,7 +343,7 @@ public class IReportManager {
             System.out.println(I18n.getString("IReportManager.Error.WarningJRXmla") +ex.getMessage());
             System.out.flush();
         }
-        
+
         try {
             net.sf.jasperreports.engine.util.JRProperties.setProperty("net.sf.jasperreports.xpath.executer.factory",
                     "net.sf.jasperreports.engine.util.xml.JaxenXPathExecuterFactory");
@@ -275,8 +352,9 @@ public class IReportManager {
             System.out.println(I18n.getString("IReportManager.Error.ErrorJaxenXP") +ex.getMessage());
             System.out.flush();
         }
-        
-        
+
+        // This initialize the query executers.
+        getQueryExecuters();
     
         // Loading fonts...
         RequestProcessor.getDefault().post(new Runnable()
@@ -867,48 +945,8 @@ public class IReportManager {
         if (queryExecuters == null)
         {
             queryExecuters = new java.util.ArrayList<QueryExecuterDef>();
-            // Adding defaults....
-            addQueryExecuterDef(new QueryExecuterDef("sql", 
-                        JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.sql"),
-                        "com.jaspersoft.ireport.designer.data.fieldsproviders.SQLFieldsProvider"), true);
-
-            addQueryExecuterDef(new QueryExecuterDef("SQL", 
-                        JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.SQL"),
-                        "com.jaspersoft.ireport.designer.data.fieldsproviders.SQLFieldsProvider"), true);
             
-            addQueryExecuterDef(new QueryExecuterDef("xPath", 
-                        JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.xPath"),
-                        "com.jaspersoft.ireport.designer.data.fieldsproviders.XMLFieldsProvider"), true);
-            
-            addQueryExecuterDef(new QueryExecuterDef("XPath", 
-                        JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.XPath"),
-                        "com.jaspersoft.ireport.designer.data.fieldsproviders.XMLFieldsProvider"), true);
-
-            addQueryExecuterDef(new QueryExecuterDef("hql", 
-                        JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.hql"),
-                        "com.jaspersoft.ireport.designer.data.fieldsproviders.HQLFieldsProvider"), true);
-            
-            addQueryExecuterDef(new QueryExecuterDef("mdx", 
-                        JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.mdx"),
-                        "com.jaspersoft.ireport.designer.data.fieldsproviders.MDXFieldsProvider"), true);
-            
-            addQueryExecuterDef(new QueryExecuterDef("MDX", 
-                        JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.MDX"),
-                        "com.jaspersoft.ireport.designer.data.fieldsproviders.MDXFieldsProvider"), true);
-            
-            addQueryExecuterDef(new QueryExecuterDef("ejbql", 
-                        JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.ejbql"),
-                        "com.jaspersoft.ireport.designer.data.fieldsproviders.EJBQLFieldsProvider"), true);
-            
-            addQueryExecuterDef(new QueryExecuterDef("EJBQL", 
-                        JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.EJBQL"),
-                        "com.jaspersoft.ireport.designer.data.fieldsproviders.EJBQLFieldsProvider"), true);
-            
-            addQueryExecuterDef(new QueryExecuterDef("xmla-mdx", 
-                        JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.xmla-mdx"),
-                        "com.jaspersoft.ireport.designer.data.fieldsproviders.CincomMDXFieldsProvider"), true);
-            
-            
+            reloadQueryExecuters();
             
         }
         return queryExecuters;
@@ -1096,7 +1134,19 @@ public class IReportManager {
         }
         lastUndoableEditTime = System.currentTimeMillis();
         lastUndoableEdit = edit;
-        getActiveVisualView().getUndoRedoManager().undoableEditHappened(new UndoableEditEvent(this, edit));
+        if (getActiveVisualView() != null)
+        {
+            getActiveVisualView().getUndoRedoManager().undoableEditHappened(new UndoableEditEvent(this, edit));
+        }
+        else
+        {
+            // Check if the current lookup contains an undo manager...
+            UndoRedo.Manager manager = Lookup.getDefault().lookup(UndoRedo.Manager.class);
+            if (manager != null)
+            {
+                manager.undoableEditHappened(new UndoableEditEvent(this, edit));
+            }
+        }
     }
     
     public UndoableEdit getLastUndoableEdit()
@@ -1175,5 +1225,24 @@ public class IReportManager {
     {
 
         //PaletteItem item = CreatePageNumberTextfieldAction.createPaletteItem();
+    }
+
+    /**
+     * @return the customLinkTypes
+     */
+    public List<Tag> getCustomLinkTypes() {
+        return customLinkTypes;
+    }
+
+    /**
+     * @param customLinkTypes the customLinkTypes to set
+     */
+    public void setCustomLinkTypes(List<Tag> customLinkTypes) {
+        this.customLinkTypes = customLinkTypes;
+    }
+
+    public void addCustomLinkType(String value, String desc)
+    {
+        customLinkTypes.add(new Tag(value, desc));
     }
 }

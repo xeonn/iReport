@@ -194,6 +194,8 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
         
 
         init = false;
+
+        selectionPanel.addBorderSelectionListener(this);
     }
 
     

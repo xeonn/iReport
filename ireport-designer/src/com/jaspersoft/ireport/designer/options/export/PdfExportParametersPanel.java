@@ -227,7 +227,7 @@ public class PdfExportParametersPanel extends javax.swing.JPanel implements Opti
         jLabelTagLanguage = new javax.swing.JLabel();
         jTextFieldTagLanguage = new javax.swing.JTextField();
 
-        jLabelTitle.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabelTitle.setFont(new java.awt.Font("Tahoma", 1, 12));
         jLabelTitle.setText("PDF Export parameters");
 
         jLabelPDFVersion.setText("PDF Version");
@@ -381,7 +381,7 @@ public class PdfExportParametersPanel extends javax.swing.JPanel implements Opti
                         .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jTextFieldUserPassword, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 143, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(jTextFieldOwnerPassword, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 143, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -459,7 +459,7 @@ public class PdfExportParametersPanel extends javax.swing.JPanel implements Opti
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabelMetadataCreator)
                     .add(jTextFieldMetadataCreator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(213, Short.MAX_VALUE))
+                .addContainerGap(112, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Metadata", jPanel3);
@@ -527,7 +527,7 @@ public class PdfExportParametersPanel extends javax.swing.JPanel implements Opti
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jLabelPDFJavascript)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -571,7 +571,7 @@ public class PdfExportParametersPanel extends javax.swing.JPanel implements Opti
                     .add(jCheckBoxCreatingBatchModeBookmarks)
                     .add(jCheckBoxCompressed))
                 .add(5, 5, 5)
-                .add(jTabbedPane1))
+                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 275, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

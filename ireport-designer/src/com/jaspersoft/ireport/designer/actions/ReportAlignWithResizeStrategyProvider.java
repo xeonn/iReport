@@ -76,6 +76,8 @@ public class ReportAlignWithResizeStrategyProvider extends AlignWithSupport impl
         int minx = insets.left + insets.right;
         int miny = insets.top + insets.bottom;
 
+        if (IReportManager.getPreferences().getBoolean("noMagnetic", false)) return suggestedBounds;
+
         
 
         // If we have a multiselection, the minimum size is given by the smallset object of

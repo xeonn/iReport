@@ -41,12 +41,19 @@ public class QueryExecuterDef {
     private String language="";
     private String className="";
     private String fieldsProvider="";
-    
-    /** Creates a new instance of JRProperty */
+
+    private boolean builtin = false;
+
     public QueryExecuterDef(String language, String className, String fieldsProvider) {
+
+            this(language, className, fieldsProvider, false);
+    }
+    /** Creates a new instance of JRProperty */
+    public QueryExecuterDef(String language, String className, String fieldsProvider, boolean isBuiltin) {
         this.language = language;
         this.className = className;
         this.fieldsProvider = fieldsProvider;
+        this.builtin = isBuiltin;
     }
     
     /** Creates a new instance of JRProperty */
@@ -87,5 +94,30 @@ public class QueryExecuterDef {
 
     public void setFieldsProvider(String fieldsProvider) {
         this.fieldsProvider = fieldsProvider;
+    }
+
+    /**
+     * @return the builtin
+     */
+    public boolean isBuiltin() {
+        return builtin;
+    }
+
+    /**
+     * @param builtin the builtin to set
+     */
+    public void setBuiltin(boolean builtin) {
+        this.builtin = builtin;
+    }
+
+    public QueryExecuterDef cloneMe()
+    {
+        QueryExecuterDef copy = new QueryExecuterDef();
+        copy.setLanguage(this.language);
+        copy.setBuiltin(builtin);
+        copy.setClassName(className);
+        copy.setFieldsProvider(fieldsProvider);
+
+        return copy;
     }
 }

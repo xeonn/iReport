@@ -9,73 +9,58 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
-import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.sheet.JRFontProperty;
-import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.designer.sheet.properties.AbstractFontProperty;
 import com.jaspersoft.ireport.locale.I18n;
-import java.lang.reflect.InvocationTargetException;
-import net.sf.jasperreports.charts.JRValueDisplay;
 import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
 import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
 import net.sf.jasperreports.engine.JRFont;
-import net.sf.jasperreports.engine.design.JRDesignFont;
 import net.sf.jasperreports.engine.design.JasperDesign;
     
     
 /**
- *  Class to manage the JRDesignChart.PROPERTY_TITLE_FONT property
+ * Class to manage the JRDesignValueDisplay.PROPERTY_FONT
  */
-public final class MeterValueFontProperty extends JRFontProperty
+public final class MeterValueFontProperty extends AbstractFontProperty
 {
-        private final JasperDesign jd;
-        private final JRDesignMeterPlot element;
+    private final JRDesignMeterPlot plot;
         
-        
-        public MeterValueFontProperty(JRDesignMeterPlot element, JasperDesign jd)
-        {
-            // TODO: Replace WhenNoDataType with the right constant
-            super( JRDesignValueDisplay.PROPERTY_FONT, I18n.getString("Value_Font"), I18n.getString("Value_Font"), jd);
-            this.element = element;
-            this.jd = jd;
-        }
-
-    @Override
-        public Object getValue() throws IllegalAccessException, InvocationTargetException {
-            return (element.getValueDisplay() == null || element.getValueDisplay().getFont() == null) ? null : element.getValueDisplay().getFont();
-         }
-
-    @Override
-        public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-            if (val == null || val instanceof JRFont)
-            {
-                JRValueDisplay oldValue = element.getValueDisplay();
-                JRDesignValueDisplay newValue = new JRDesignValueDisplay( element.getValueDisplay());
-                newValue.setFont((JRDesignFont)val);
-
-                element.setValueDisplay(newValue);
-                ObjectPropertyUndoableEdit urob =
-                        new ObjectPropertyUndoableEdit(
-                            element,
-                            I18n.getString("ValueDisplay"), 
-                            JRValueDisplay.class,
-                            oldValue,newValue);
-                // Find the undoRedo manager...
-                IReportManager.getInstance().addUndoableEdit(urob);
-            }
-        }
+    public MeterValueFontProperty(JRDesignMeterPlot plot, JasperDesign jasperDesign)
+    {
+        super(plot, jasperDesign);
+        this.plot = plot;
+    }
     
-        @Override
-        public boolean isDefaultValue() {
-            return null == element.getValueDisplay() || null == element.getValueDisplay().getFont();
-        }
+    @Override
+    public String getName()
+    {
+        return JRDesignValueDisplay.PROPERTY_FONT;
+    }
 
-        @Override
-        public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
-            setValue(null);
-        }
+    @Override
+    public String getDisplayName()
+    {
+        return I18n.getString("Value_Font");
+    }
 
-        @Override
-        public boolean supportsDefaultValue() {
-            return true;
-        }
+    @Override
+    public String getShortDescription()
+    {
+        return I18n.getString("Value_Font");
+    }
+
+    @Override
+    public JRFont getFont()
+    {
+        return plot.getValueDisplay() == null ? null : plot.getValueDisplay().getFont();
+    }
+
+    @Override
+    public void setFont(JRFont font)
+    {
+        JRDesignValueDisplay newValue = 
+            new JRDesignValueDisplay(plot.getValueDisplay(), plot.getChart());
+        newValue.setFont(font);
+        plot.setValueDisplay(newValue);
+    }
+
 }

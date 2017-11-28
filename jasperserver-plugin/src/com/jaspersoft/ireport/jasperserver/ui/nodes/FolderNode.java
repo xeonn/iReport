@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.jasperserver.ui.nodes;
 
+import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.outline.nodes.IRIndexedNode;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
 import com.jaspersoft.ireport.jasperserver.ui.actions.AddResourceAction;
@@ -14,15 +15,28 @@ import com.jaspersoft.ireport.jasperserver.ui.actions.ModifyServerAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.NewServerAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.PropertiesAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.RefreshAction;
+import com.jaspersoft.ireport.jasperserver.ui.nodes.dnd.FolderPasteType;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.awt.Image;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
+import org.openide.actions.CopyAction;
+import org.openide.actions.CutAction;
+import org.openide.actions.PasteAction;
 import org.openide.nodes.Node;
+import org.openide.nodes.NodeEvent;
+import org.openide.nodes.NodeListener;
+import org.openide.nodes.NodeMemberEvent;
+import org.openide.nodes.NodeReorderEvent;
+import org.openide.nodes.NodeTransfer;
 import org.openide.util.Lookup;
 import org.openide.util.actions.SystemAction;
+import org.openide.util.datatransfer.PasteType;
 import org.openide.util.lookup.Lookups;
 import org.openide.util.lookup.ProxyLookup;
 
@@ -57,6 +71,8 @@ public class FolderNode extends IRIndexedNode implements ResourceNode {
         this.root = root;
         this.folder = folder;
     }
+
+    
 
     public boolean isRoot() {
         return root;
@@ -138,9 +154,13 @@ public class FolderNode extends IRIndexedNode implements ResourceNode {
             list.add(SystemAction.get( ModifyServerAction.class));
             list.add(SystemAction.get( DeleteServerAction.class));
             list.add(SystemAction.get( AddResourceAction.class));
+            list.add(SystemAction.get( PasteAction.class ));
         }
         else
         {
+            list.add(SystemAction.get( CopyAction.class ));
+            list.add(SystemAction.get( CutAction.class ));
+            list.add(SystemAction.get( PasteAction.class ));
             list.add(SystemAction.get( DeleteAction.class));
         }
         list.add(null);
@@ -173,6 +193,38 @@ public class FolderNode extends IRIndexedNode implements ResourceNode {
     
     public void updateDisplayName() {
         fireDisplayNameChange(null,null);
+    }
+
+
+    @Override
+    public PasteType getDropType(Transferable t, final int action, int index) {
+
+        Node dropNode = NodeTransfer.node(t, DnDConstants.ACTION_COPY_OR_MOVE + NodeTransfer.CLIPBOARD_CUT);
+    
+        return FolderPasteType.createFolderPasteType( DnDUtilities.getTransferAction(t), this, dropNode);
+
+    }
+
+    @Override
+    public boolean canCopy() {
+        return !isRoot();
+    }
+
+    @Override
+    public boolean canCut() {
+        return !isRoot();
+    }
+
+
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected void createPasteTypes(Transferable t, List s) {
+        super.createPasteTypes(t, s);
+        PasteType paste = getDropType(t, DnDConstants.ACTION_MOVE, -1);
+        if (null != paste) {
+            s.add(paste);
+        }
     }
     
 }

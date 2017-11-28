@@ -22,6 +22,13 @@ public abstract class BooleanProperty extends AbstractProperty
     }
 
     @Override
+    public Object getValue()
+    {
+        Object value = getPropertyValue();
+        return value == null ? null : value;
+    }
+
+    @Override
     public Object getPropertyValue()
     {
         return getBoolean();

@@ -48,19 +48,19 @@ public final class Bar3DYOffsetProperty extends DoubleProperty {
     @Override
     public Double getDouble()
     {
-        return plot.getYOffset();
+        return plot.getYOffsetDouble();
     }
 
     @Override
     public Double getOwnDouble()
     {
-        return plot.getYOffset();
+        return plot.getYOffsetDouble();
     }
 
     @Override
     public Double getDefaultDouble()
     {
-        return null;//FIXME is this a fair default?
+        return null;
     }
 
     @Override

@@ -37,6 +37,9 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignImage;
+import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
@@ -70,7 +73,8 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
                 updateContinue();
             }
         } );
-        
+       
+
         dtcm = jTable1.getColumnModel().getColumn(1);
         dtcm.setMinWidth(100);
         dtcm.setPreferredWidth(100);
@@ -358,7 +362,10 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
                 selectedItems.add(jTable1.getValueAt(i,1));
             }
         }
-        
+
+        System.out.println("Items selected: " + selectedItems.size());
+        System.out.flush();
+
         if (selectedItems.size() > 0)
         {
              UploadResourcesDialog urd = new UploadResourcesDialog(Misc.getMainFrame(), true);
@@ -366,12 +373,28 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
              urd.setValidationDialog( this );
              urd.setVisible(true);
 
+             JasperDesign jd = getReport();
+             for (int i=0; i<selectedItems.size(); ++i)
+             {
+                 System.out.println("Replacing the expressions...");
+                 System.out.flush();
+                 ElementValidationItem iev = (ElementValidationItem)selectedItems.get(i);
+                 JRDesignElement element = iev.getReportElement();
+                 if (element instanceof JRDesignImage)
+                 {
+                     ((JRDesignImage)element).setExpression(Misc.createExpression("java.lang.String", iev.getProposedExpression()));
+                 }
+                 else if (element instanceof JRDesignSubreport)
+                 {
+                     ((JRDesignSubreport)element).setExpression(Misc.createExpression("java.lang.String", iev.getProposedExpression()));
+                 }
+             }
+             saveReport();
              return;
         }
-        
+
+        // We need to modify the expression requested...
         elaborationFinished(true);
-          
-        
         
     }//GEN-LAST:event_jButtonOkActionPerformed
 
@@ -504,7 +527,7 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
     {
         try {
             
-            JRXmlWriter.writeReport(getReport(), getFileName());
+            JRXmlWriter.writeReport(getReport(), new java.io.FileOutputStream(getFileName()), "UTF-8");
             
         } catch (Exception ex)
         {

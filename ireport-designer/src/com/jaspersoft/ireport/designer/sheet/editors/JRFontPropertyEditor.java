@@ -25,6 +25,7 @@ import java.beans.PropertyEditorSupport;
 import org.openide.explorer.propertysheet.ExPropertyEditor;
 import org.openide.explorer.propertysheet.PropertyEnv;
 import java.beans.FeatureDescriptor;
+import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.design.JRDesignFont;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.nodes.Node;
@@ -59,7 +60,7 @@ public class JRFontPropertyEditor extends PropertyEditorSupport implements ExPro
 
     @Override
     public String getAsText() {
-        JRDesignFont font = (JRDesignFont)getValue();
+        JRFont font = (JRFont)getValue();
         if (font != null)
         {
             return font.getFontName() + " " + font.getFontSize();
@@ -79,7 +80,7 @@ public class JRFontPropertyEditor extends PropertyEditorSupport implements ExPro
         return 
             new JRFontPropertyCustomEditor(
                 jasperDesign,
-                (JRDesignFont)val, 
+                (JRFont)val, 
                 isEditable(), 
                 false, 
                 null, 

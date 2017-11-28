@@ -3,20 +3,24 @@ package com.jaspersoft.ireport.jasperserver.ui.actions;
 import com.jaspersoft.ireport.designer.logpane.IRConsoleTopComponent;
 import com.jaspersoft.ireport.designer.logpane.LogTextArea;
 import com.jaspersoft.ireport.designer.utils.Misc;
-import com.jaspersoft.ireport.jasperserver.JSDataProvider;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.ReportRunner;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
 import com.jaspersoft.ireport.jasperserver.RepositoryReportUnit;
 import com.jaspersoft.ireport.jasperserver.ui.ReportUnitRunDialog;
+import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.ListItemWrapper;
 import com.jaspersoft.ireport.jasperserver.ui.nodes.ResourceNode;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.InputControlQueryDataRow;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import org.openide.nodes.Node;
 import org.openide.util.HelpCtx;
@@ -173,20 +177,17 @@ public final class RunReportUnitAction extends NodeAction {
                             for (int k=0; dsUriQuery == null && k<ic.getChildren().size(); ++k)
                             {
                                 ResourceDescriptor sub_ic = (ResourceDescriptor)ic.getChildren().get(k);
-                                System.out.println("Found child..." + sub_ic.getName() + " (" + sub_ic.getWsType() +")");
                                 if (sub_ic.getWsType().equals(ResourceDescriptor.TYPE_QUERY) )
                                 {
                                     language = sub_ic.getResourceProperty(ResourceDescriptor.PROP_QUERY_LANGUAGE).getValue();
                                     query = sub_ic.getResourceProperty(ResourceDescriptor.PROP_QUERY).getValue();
 
-                                    System.out.println("Found the query child...");
                                     // Look in the query detail
                                     for (int k2=0; k2<sub_ic.getChildren().size(); ++k2)
                                     {
                                         ResourceDescriptor sub_sub_ic = (ResourceDescriptor)sub_ic.getChildren().get(k2);
                                         if (RepositoryFolder.isDataSource( sub_sub_ic) )
                                         {
-                                            System.out.println("Found the ds child...");
                                             dsUriQuery = sub_sub_ic.getUriString();
                                             
                                             break;
@@ -213,6 +214,64 @@ public final class RunReportUnitAction extends NodeAction {
 //                            {
                                 args.add(new Argument( Argument.IC_GET_QUERY_DATA, dsUriQuery));
                                 ic = server.getWSClient().get(ic, null, args);
+
+                                // Filter query data....
+                                /*
+                                Map<Object,List> valueMap = new HashMap<Object, List>();
+
+                                for (int k=0; k<ic.getQueryData().size(); ++k)
+                                {
+                                    Object itemObject = ic.getQueryData().get(k);
+                                    if (itemObject instanceof InputControlQueryDataRow)
+                                    {
+                                        InputControlQueryDataRow qd =  (InputControlQueryDataRow)itemObject;
+                                        List itemColumnValues = qd.getColumnValues();
+
+                                        if (valueMap.containsKey(qd.getValue()))
+                                        {
+                                            List<List> records = valueMap.get(itemObject);
+                                            boolean duplicatedRecord = false;
+                                            for (int li = 0; li<records.size(); ++i)
+                                            {
+                                                List currentRecord = records.get(li);
+                                                // Check if this record is equal to the current one...
+                                                boolean different = false;
+                                                for (int ri = 0; ri<itemColumnValues.size(); ++ri)
+                                                {
+                                                    Object field1 = itemColumnValues.get(ri);
+                                                    Object field2 = currentRecord.get(ri);
+
+                                                    if (field1 == field2 ||
+                                                        (null != field1 && null != field2 && field1.equals(field2)) )
+                                                    {
+                                                        continue;
+                                                    }
+                                                    different = true; break;
+                                                }
+                                                if (!different)
+                                                {
+                                                    ic.getQueryData().remove(itemObject);
+                                                    k--;
+                                                    duplicatedRecord = true;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (!duplicatedRecord)
+                                            {
+                                                records.add(itemColumnValues);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            List<List> records = new ArrayList<List>();
+                                            records.add(itemColumnValues);
+                                            valueMap.put(itemObject, records);
+                                        }
+                                    }
+
+                                }*/
+
 //                            }
                             inputcontrols.add(i, ic);
                         }

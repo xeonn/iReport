@@ -61,7 +61,7 @@ public final class ThermometerMediumDataRangeHighExpressionProperty extends Expr
     @Override
     public JRDesignExpression getExpression()
     {
-        JRDataRange dataRange = plot.getDataRange();
+        JRDataRange dataRange = plot.getMediumRange();
         return dataRange == null ? null : (JRDesignExpression) dataRange.getHighExpression();
     }
 
@@ -105,7 +105,7 @@ public final class ThermometerMediumDataRangeHighExpressionProperty extends Expr
             ObjectPropertyUndoableEdit urob =
                         new ObjectPropertyUndoableEdit(
                             plot,
-                            JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE, 
+                            "MediumRange",
                             JRDataRange.class,
                             oldValue,
                             newValue

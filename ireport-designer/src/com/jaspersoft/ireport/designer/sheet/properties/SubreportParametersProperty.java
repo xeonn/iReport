@@ -46,6 +46,9 @@ public final class SubreportParametersProperty  extends PropertySupport {
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         if (val == null || !(val instanceof Map)) throw new IllegalArgumentException();
 
+        // If val is the same as the old map, the user pressed cancel
+        // in the editor.. so nothing to do...
+        if (val == element.getParametersMap()) return;
         // Fill this map with the content of the map we got here...
         // TODO: manage UNDO for a map object...
         Map parameters = (Map)val;

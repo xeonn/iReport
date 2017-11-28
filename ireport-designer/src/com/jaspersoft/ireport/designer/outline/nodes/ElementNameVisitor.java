@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.outline.nodes;
 
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.designer.IReportManager;
 import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.engine.JRBreak;
 import net.sf.jasperreports.engine.JRChart;
@@ -58,11 +59,19 @@ public class ElementNameVisitor implements JRVisitor {
         // We can choose to show the key...
         if (visitable instanceof JRElement)
         {
+
             JRElement ele = (JRElement)visitable;
-            if (name != null && ele.getKey() != null)
+            
+            if ( ele.getKey() != null && IReportManager.getPreferences().getBoolean("showKeyInReportInspector", false))
+            {
+                    name = ""+ele.getKey();
+            }
+            else if (name != null && ele.getKey() != null)
             {
                 name += " (" + ele.getKey() + ")";
             }
+
+
         }
         
         return name;

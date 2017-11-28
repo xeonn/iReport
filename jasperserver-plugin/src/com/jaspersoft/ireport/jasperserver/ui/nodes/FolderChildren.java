@@ -12,19 +12,16 @@ package com.jaspersoft.ireport.jasperserver.ui.nodes;
 import com.jaspersoft.ireport.jasperserver.RepositoryFile;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
 import com.jaspersoft.ireport.jasperserver.RepositoryReportUnit;
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.SwingUtilities;
 import org.openide.nodes.AbstractNode;
-import org.openide.nodes.Children;
 import org.openide.nodes.Index;
 import org.openide.nodes.Node;
 import org.openide.util.Lookup;
 import org.openide.util.Mutex;
-import sun.misc.Perf.GetPerfAction;
 
 /**
  *
@@ -42,6 +39,11 @@ public class FolderChildren extends Index.KeysChildren implements PropertyChange
         this.doLkp = doLkp;
     }
 
+    @Override
+    protected void reorder(int[] permutations) {
+        // reordering does nothing...
+    }
+
     /*
     @Override
     protected List<Node> initCollection() {
@@ -49,7 +51,8 @@ public class FolderChildren extends Index.KeysChildren implements PropertyChange
     }
     */
     
-    
+
+
     protected Node[] createNodes(Object key) {
         
         if (key instanceof RepositoryFile)

@@ -64,19 +64,19 @@ public final class TitlePositionProperty extends ByteProperty
     @Override
     public Byte getByte()
     {
-        return chart.getTitlePosition();
+        return chart.getTitlePositionByte();
     }
 
     @Override
     public Byte getOwnByte()
     {
-        return chart.getTitlePosition();
+        return chart.getTitlePositionByte();
     }
 
     @Override
     public Byte getDefaultByte()
     {
-        return JRDesignChart.EDGE_TOP;
+        return null;
     }
 
     @Override

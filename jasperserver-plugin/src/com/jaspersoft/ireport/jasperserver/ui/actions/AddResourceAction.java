@@ -33,7 +33,7 @@ import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.NodeAction;
 
-public final class AddResourceAction extends NodeAction {
+public class AddResourceAction extends NodeAction {
 
     JMenu jMenuAdd = null;
     JSeparator jSeparator1 = null;
@@ -282,7 +282,7 @@ public final class AddResourceAction extends NodeAction {
         return false;
     }
 
-    private void addChild(ResourceNode parentNode, JServer server, ResourceDescriptor newResourceDescriptor) {
+    protected void addChild(ResourceNode parentNode, JServer server, ResourceDescriptor newResourceDescriptor) {
         RepositoryFolder obj = RepositoryFolder.createRepositoryObject(server, newResourceDescriptor);
         if (parentNode.getRepositoryObject().isLoaded())
         {
@@ -292,7 +292,7 @@ public final class AddResourceAction extends NodeAction {
         }
     }
     
-    private void addResource(String resourceType)
+    protected void addResource(String resourceType)
     {
         Node[] activatedNodes = getActivatedNodes();
         if (activatedNodes == null ||

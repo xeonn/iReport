@@ -9,10 +9,12 @@
 
 package com.jaspersoft.ireport.designer.outline.nodes;
 
+import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.crosstab.CrosstabDataAction;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.CrosstabParametersMapExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.IntegerProperty;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
@@ -129,7 +131,8 @@ public class CrosstabNode extends ElementNode {
         propertySet.put(new RepeatRowHeadersProperty(getCrosstab()));
         propertySet.put(new ColumnBreakOffsetProperty(getCrosstab()));
         propertySet.put(new RunDirectionProperty(getCrosstab()));
-        
+        propertySet.put(new CrosstabParametersMapExpressionProperty(getCrosstab(), ModelUtils.getElementDataset(crosstab, jd)));
+
         sheet.put( propertySet );
         
         return sheet;

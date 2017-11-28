@@ -13,7 +13,7 @@ import com.jaspersoft.ireport.designer.fonts.JRFontPanel;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
-import net.sf.jasperreports.engine.design.JRDesignFont;
+import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.explorer.propertysheet.PropertyEnv;
 
@@ -38,7 +38,7 @@ public class JRFontPropertyCustomEditor extends JRFontPanel implements PropertyC
      */
     public JRFontPropertyCustomEditor(
         JasperDesign jasperDesign,
-        JRDesignFont value, 
+        JRFont value, 
         boolean editable, 
         boolean oneline, 
         String instructions, 

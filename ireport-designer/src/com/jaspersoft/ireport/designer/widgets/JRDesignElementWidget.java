@@ -56,6 +56,7 @@ import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.base.JRBaseStaticText;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
@@ -75,6 +76,8 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
     private SelectionWidget selectionWidget = null;
     private javax.swing.ImageIcon crosstabImage = null;
     private javax.swing.ImageIcon subreportImage = null;
+    private javax.swing.ImageIcon multiaxisImage = null;
+
     
     public JRDesignElement getElement() {
         return element;
@@ -99,6 +102,7 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
         try {
             if (crosstabImage == null) crosstabImage = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/crosstab-32.png"));
             if (subreportImage == null) subreportImage = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/subreport-32.png"));
+            if (multiaxisImage == null) multiaxisImage = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/chartaxis-32.png"));
         } catch (Exception ex) {  }
 
         selectionWidget = new SelectionWidget(scene, this);
@@ -260,6 +264,8 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
     {
         JasperDesign jd = ((AbstractReportObjectScene)getScene()).getJasperDesign();
         Point base = ModelUtils.getParentLocation(jd, getElement());
+
+        
         
         // I need to discover the first logical parent of this element
         return new Point(base.x + p.x, base.y + p.y);
@@ -323,6 +329,18 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
             gr.drawImage(subreportImage.getImage(), 4, 4, null);
             gr.setClip(oldClip);
         }
+        else if (e instanceof JRDesignChart &&
+                 ((JRDesignChart)e).getChartType() == JRDesignChart.CHART_TYPE_MULTI_AXIS )
+        {
+            Composite oldComposite = gr.getComposite();
+            gr.fillRect(0, 0, element.getWidth(), element.getHeight());
+            gr.setComposite(oldComposite);
+            Shape oldClip = gr.getClip();
+            Shape rect = new Rectangle2D.Float(0,0,element.getWidth(), element.getHeight());
+            gr.clip(rect);
+            gr.drawImage(multiaxisImage.getImage(), 4, 4, null);
+            gr.setClip(oldClip);
+        }
         else
         {
             dv.setGraphics2D(gr);
@@ -344,6 +362,7 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
         
         if (isChanging()) return;
         String propertyName = evt.getPropertyName();
+
         if (propertyName == null) return;
         if (propertyName.equals( JRDesignElement.PROPERTY_HEIGHT) ||
             propertyName.equals( JRDesignElement.PROPERTY_WIDTH) ||
@@ -402,6 +421,7 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
             updateBounds();
             this.repaint(); 
             this.getSelectionWidget().updateBounds();
+            this.getSelectionWidget().revalidate(true);
             getScene().validate();
         }
         

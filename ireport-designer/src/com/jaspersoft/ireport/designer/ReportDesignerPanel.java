@@ -14,6 +14,7 @@ import com.jaspersoft.ireport.designer.ruler.RulerPanel;
 import com.jaspersoft.ireport.designer.utils.MultilineToolbarLayout;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -26,12 +27,14 @@ import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import org.netbeans.api.visual.animator.SceneAnimator;
 import org.netbeans.api.visual.model.ObjectSceneEvent;
 import org.netbeans.api.visual.model.ObjectSceneEventType;
 import org.netbeans.api.visual.model.ObjectSceneListener;
 import org.netbeans.api.visual.model.ObjectState;
+import org.openide.explorer.ExplorerManager;
+import org.openide.nodes.Node;
 
         
 /**
@@ -192,7 +195,7 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
         
         scene = new ReportObjectScene();
         myView = scene.getJComponent();
-        
+
         jScrollPaneMainReport.setViewportView(myView);
         
         hRuler = new RulerPanel(scene);
@@ -496,6 +499,34 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
         {
             jPanelContainer.add(crosstabs.get(cIndex), BorderLayout.CENTER);
             ((JToggleButton)jToolBar1.getComponent(cIndex+1)).setSelected(true);
+        }
+
+        try {
+            if (getActiveScene() != null)
+            {
+                // TODO: this piece of code essentially clear the selection.
+                // this is to avoid problems when using formatting tool with
+                // several elements selected...
+                List<JRDesignElement> elements = getActiveScene().getSelectionManager().getSelectedElements();
+                if (elements != null)
+                {
+                    // sync the selection with the scene selection...
+                    ExplorerManager manager = ExplorerManager.find(this);
+                    
+                    ArrayList<Node> nodeList = new ArrayList<Node>();
+                    
+                    for (JRDesignElement ele : elements)
+                    {
+                        Node node = IReportManager.getInstance().findNodeOf(ele, manager.getRootContext());
+                        if (node != null) nodeList.add(node);
+                    }
+                    
+                    manager.setSelectedNodes(nodeList.toArray(new Node[nodeList.size()]));
+                }
+            }
+
+        } catch (Exception ex){
+            ex.printStackTrace();
         }
         
         jPanelContainer.updateUI();

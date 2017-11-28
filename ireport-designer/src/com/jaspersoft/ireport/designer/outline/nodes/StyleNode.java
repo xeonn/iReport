@@ -10,20 +10,28 @@
 package com.jaspersoft.ireport.designer.outline.nodes;
 
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
+import com.jaspersoft.ireport.designer.dnd.ReportObjectPaletteTransferable;
 import com.jaspersoft.ireport.designer.outline.NewTypesUtils;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.DeleteStyleUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import com.jaspersoft.ireport.locale.I18n;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Action;
 import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.ErrorManager;
@@ -34,13 +42,22 @@ import org.openide.actions.NewAction;
 import org.openide.actions.PasteAction;
 import org.openide.actions.RenameAction;
 import org.openide.actions.ReorderAction;
+import org.openide.nodes.Node;
+import org.openide.nodes.NodeEvent;
+import org.openide.nodes.NodeListener;
+import org.openide.nodes.NodeMemberEvent;
+import org.openide.nodes.NodeReorderEvent;
+import org.openide.nodes.NodeTransfer;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
 import org.openide.nodes.Sheet.Set;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.WeakListeners;
 import org.openide.util.actions.SystemAction;
+import org.openide.util.datatransfer.ExTransferable;
 import org.openide.util.datatransfer.NewType;
+import org.openide.util.datatransfer.PasteType;
 
 /**
  * ParameterNode detects the events fired by the subtended parameter.
@@ -55,6 +72,51 @@ public class StyleNode extends AbstractStyleNode  {
     public StyleNode(JasperDesign jd, JRDesignStyle style, Lookup doLkp)
     {
         super (jd, style, doLkp);
+
+        addNodeListener(new NodeListener() {
+
+            public void childrenAdded(NodeMemberEvent ev) {
+                //System.out.println("childrenAdded");
+            }
+
+            public void childrenRemoved(NodeMemberEvent ev) {
+                //System.out.println("childrenRemoved");
+            }
+
+            @SuppressWarnings("unchecked")
+            public void childrenReordered(NodeReorderEvent ev) {
+
+                List list = ((JRDesignStyle)getStyle()).getConditionalStyleList();
+
+                ArrayList newList = new ArrayList();
+                ArrayList<JRDesignConditionalStyle> newList2 = new ArrayList<JRDesignConditionalStyle>();
+
+                Node[] nodes = getChildren().getNodes();
+                for (int i = 0; i < nodes.length; ++i) {
+
+                    if (nodes[i] instanceof ConditionalStyleNode)
+                    {
+                        JRDesignConditionalStyle s = ((ConditionalStyleNode) nodes[i]).getConditionalStyle();
+                        newList.add(s);
+                    }
+                }
+
+                list.clear();
+                list.addAll(newList);
+
+                getJasperDesign().getEventSupport().firePropertyChange(
+                        new PropertyChangeEvent(getJasperDesign(), JasperDesign.PROPERTY_STYLES, null, null ) );
+                com.jaspersoft.ireport.designer.IReportManager.getInstance().notifyReportChange();
+            }
+
+            public void nodeDestroyed(NodeEvent ev) {
+                //System.out.println("nodeDestroyed");
+            }
+
+            public void propertyChange(PropertyChangeEvent evt) {
+                //System.out.println("propertyChange " + evt.getPropertyName());
+            }
+        });
     }
     
     public JRDesignStyle getDesignStyle()
@@ -104,7 +166,17 @@ public class StyleNode extends AbstractStyleNode  {
        
           int index = jd.getStylesList().indexOf(getStyle());
           jd.removeStyle(getStyle());
-          
+
+          // Find all the references to this style..
+          List<JRDesignElement> elements = ModelUtils.getAllElements(jd);
+          for (JRDesignElement element : elements)
+          {
+              if (element.getStyle() == getStyle())
+              {
+                  element.setStyle(null);
+              }
+          }
+
           DeleteStyleUndoableEdit undo = new DeleteStyleUndoableEdit(getDesignStyle(), jd,index); //newIndex
           IReportManager.getInstance().addUndoableEdit(undo);
           
@@ -159,7 +231,111 @@ public class StyleNode extends AbstractStyleNode  {
     {
         return NewTypesUtils.getNewType(this, NewTypesUtils.CONDITIONAL_STYLE);
     }
+
+    @Override
+    public Transferable drag() throws IOException {
+
+        ExTransferable tras = ExTransferable.create(clipboardCut());
+        tras.put(new ReportObjectPaletteTransferable(
+                    "com.jaspersoft.ireport.designer.styles.DragStyleAction",
+                    getStyle()));
+
+        return tras;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected void createPasteTypes(Transferable t, List s) {
+        super.createPasteTypes(t, s);
+        PasteType paste = getDropType(t, DnDConstants.ACTION_MOVE, -1);
+        if (null != paste) {
+            s.add(paste);
+        }
+    }
     
+    @Override
+    public PasteType getDropType(Transferable t, final int action, int index) {
+
+        final Node dropNode = NodeTransfer.node(t, DnDConstants.ACTION_COPY_OR_MOVE + NodeTransfer.CLIPBOARD_CUT);
+        final int dropAction = DnDUtilities.getTransferAction(t);
+
+        final int insertAt = index;
+        if (null != dropNode) {
+            final JRDesignConditionalStyle conditionalStyle = dropNode.getLookup().lookup(JRDesignConditionalStyle.class);
+            if (null != conditionalStyle) {
+                return new PasteType() {
+
+                    @SuppressWarnings("unchecked")
+                    public Transferable paste() throws IOException {
+
+                        List list = ((JRDesignStyle)getStyle()).getConditionalStyleList();
+                        int currentIndex = -1; //Current position in the list
+
+                        for (int i = 0; i < list.size(); ++i) {
+                            JRDesignConditionalStyle f = (JRDesignConditionalStyle) list.get(i);
+                            if (f == conditionalStyle) {
+                                currentIndex = i;
+                            }
+                        }
+
+                        if( (dropAction & NodeTransfer.MOVE) != 0 ) // Moving field...
+                        {
+                            int newIndex = -1;
+                            if (currentIndex != -1) { // Case 1: Moving in the list...
+                                // Put the field in a valid position...
+                                // Find the position of the node...
+                                Node[] nodes = getChildren().getNodes();
+                                for (int i = 0; i < nodes.length; ++i) {
+                                    if (((ConditionalStyleNode) nodes[i]).getStyle() == conditionalStyle) {
+                                        newIndex = i;
+                                        break;
+                                    }
+                                }
+
+                                list.remove(conditionalStyle);
+                                if (newIndex == -1)
+                                {
+                                    list.add(conditionalStyle);
+                                }
+                                else
+                                {
+                                    list.add(newIndex, conditionalStyle );
+                                }
+                            }
+                            else // Adding a copy to the list
+                            {
+                                try {
+                                    JRDesignConditionalStyle newConditionalStyle = (JRDesignConditionalStyle)conditionalStyle.clone();
+
+                                    ((JRDesignStyle)getStyle()).addConditionalStyle(newConditionalStyle);
+                                    // Remove the field from the old list...
+                                    if (dropNode.getParentNode() instanceof StyleNode) {
+                                        StyleNode pn = (StyleNode) dropNode.getParentNode();
+                                        ((JRDesignStyle)pn.getStyle()).removeConditionalStyle(conditionalStyle);
+                                    }
+
+                                } catch (Exception ex) {
+                                    Exceptions.printStackTrace(ex);
+                                }
+                            }
+                        }
+                        else // Duplicating
+                        {
+                            try {
+                                JRDesignConditionalStyle newConditionalStyle = (JRDesignConditionalStyle)conditionalStyle.clone();
+                                ((JRDesignStyle)getStyle()).addConditionalStyle(newConditionalStyle);
+                            } catch (Exception ex) {
+                                Exceptions.printStackTrace(ex);
+                            }
+                        }
+                        return null;
+                    }
+                };
+            }
+        }
+        return null;
+    }
+
     
     /***************  SHEET PROPERTIES DEFINITIONS **********************/
     

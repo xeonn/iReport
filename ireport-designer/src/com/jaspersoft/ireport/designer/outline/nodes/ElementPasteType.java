@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.outline.nodes;
 
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.undo.AddElementGroupUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.AddElementUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.AggregatedUndoableEdit;
@@ -18,17 +19,20 @@ import com.jaspersoft.ireport.designer.undo.DeleteElementUndoableEdit;
 import java.awt.datatransfer.Transferable;
 import java.io.IOException;
 import java.util.List;
-import javax.swing.undo.UndoableEdit;
+import net.sf.jasperreports.crosstabs.JRCellContents;
+import net.sf.jasperreports.crosstabs.JRCrosstabCell;
+import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
+import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRCloneable;
-import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
 import org.openide.nodes.Node;
 import org.openide.nodes.NodeTransfer;
-import org.openide.util.Exceptions;
 import org.openide.util.datatransfer.PasteType;
 
 /**
@@ -149,11 +153,58 @@ public class ElementPasteType extends PasteType {
            {
                 Object newElement = ((JRCloneable) element).clone();
 
+                /*
+                if (newElement instanceof JRDesignCrosstab)
+                {
+                    ((JRDesignCrosstab)newElement).preprocess();
+                }
+
+
+                if (newElement instanceof JRDesignCrosstab)
+                {
+
+                    JasperDesign jd = IReportManager.getInstance().getActiveReport();
+                    JRDesignCrosstab ct1= (JRDesignCrosstab)element;
+                    JRDesignCrosstab ct2= (JRDesignCrosstab)newElement;
+
+                    ct2.getEventSupport().firePropertyChange( ct1.PROPERTY_CELLS , null, null);
+
+                    JRCrosstabCell[][] jr_cells1 = ct1.getCells();
+                    JRCrosstabCell[][] jr_cells2 = ct2.getCells();
+
+                    System.out.println("[" +jr_cells1+ "/" + jr_cells2 + "]");
+
+                    for (int i=0; i<jr_cells1.length; ++i)
+                    {
+                        for (int k=0; k<jr_cells1[i].length; ++k)
+                        {
+                            System.out.print("[" + i + "/" + k + "] " + jr_cells1[i][k].getContents() + " (" + ModelUtils.getCellLocation(ct1, (JRDesignCellContents)jr_cells1[i][k].getContents()) + ")" );
+                            System.out.println("" + jr_cells2[i][k].getContents() + " (" + ModelUtils.getCellLocation(ct1, (JRDesignCellContents)jr_cells1[i][k].getContents()) + "-> Origin crosstab: " + ((JRDesignCellContents) jr_cells2[i][k].getContents()).getOrigin().getCrosstab() + " == " + ct2);
+
+                            // Fix the origin...
+                            JRCrosstabOrigin origin = ((JRDesignCellContents)jr_cells2[i][k].getContents()).getOrigin();
+                            ((JRDesignCellContents)jr_cells2[i][k].getContents()).setOrigin(new JRCrosstabOrigin(ct2,origin.getType(), origin.getRowGroupName(), origin.getColumnGroupName() ));
+
+
+                            //for (int u=0; u<contents.getChildren().size(); ++u)
+                            //{
+
+
+                            //    System.out.println("-" + ((JRDesignElement)contents.getChildren().get(u)).getElementGroup() + " " + ((JRDesignElement)content2.getChildren().get(u)).getElementGroup());
+                            //}
+
+                            System.out.flush();
+                        }
+                    }
+                }
+         */
                 if (newElement instanceof JRDesignElement) {
                     addElement(newContainer, (JRDesignElement) newElement);
                 } else if (newElement instanceof JRDesignElementGroup) {
                     addElementGroup(newContainer, (JRDesignElementGroup) newElement);
                 }
+
+                
            }
             
             

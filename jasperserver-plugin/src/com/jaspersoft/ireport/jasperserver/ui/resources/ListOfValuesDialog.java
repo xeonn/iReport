@@ -611,8 +611,8 @@ public class ListOfValuesDialog extends javax.swing.JDialog {
         
         this.resource = resource;
         jTextFieldName.setText( descriptor.getName());
-        
-        
+        setTitle( JasperServerManager.getFormattedString("properties.title", "{0} - Properties", new Object[]{descriptor.getName()}));
+
         jTextFieldLabel.setText( descriptor.getLabel());
         jEditorPaneDescription.setText( descriptor.getDescription());
                 

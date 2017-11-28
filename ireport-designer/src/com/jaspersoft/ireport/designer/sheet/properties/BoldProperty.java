@@ -6,23 +6,23 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.locale.I18n;
+import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignTextElement;
 
 /**
  * Class to manage the JRBaseStyle.PROPERTY_BOLD property
  * @author sanda zaharia (shertage@users.sourceforge.net)
  */
 
-public class BoldProperty extends BooleanProperty{
-
-    private final JRDesignTextElement element;
+public class BoldProperty extends BooleanProperty
+{
+    private final JRFont font;
 
     @SuppressWarnings("unchecked")
-    public BoldProperty(JRDesignTextElement element)
+    public BoldProperty(JRFont font)
     {
-        super(element);
-        this.element = element;
+        super(font);
+        this.font = font;
     }
     @Override
     public String getName()
@@ -45,13 +45,13 @@ public class BoldProperty extends BooleanProperty{
     @Override
     public Boolean getBoolean()
     {
-        return element.isBold();
+        return font.isBold();
     }
 
     @Override
     public Boolean getOwnBoolean()
     {
-        return element.isOwnBold();
+        return font.isOwnBold();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class BoldProperty extends BooleanProperty{
     @Override
     public void setBoolean(Boolean isBold)
     {
-    	element.setBold(isBold);
+    	font.setBold(isBold);
     }
     
 }

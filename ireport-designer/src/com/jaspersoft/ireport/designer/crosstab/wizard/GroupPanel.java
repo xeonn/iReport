@@ -233,7 +233,7 @@ public class GroupPanel extends javax.swing.JPanel {
         String classtype = "java.lang.String";
         List functions = new ArrayList();
         
-        functions.add(new Tag(JRVariable.CALCULATION_COUNT,I18n.getString("GroupPanel.Label.Count")));
+        functions.add(new Tag(new Byte(JRVariable.CALCULATION_COUNT),I18n.getString("GroupPanel.Label.Count")));
         
         Object obj = jComboBoxGroup.getSelectedItem();
         
@@ -255,27 +255,27 @@ public class GroupPanel extends javax.swing.JPanel {
             
             if (java.lang.Number.class.isAssignableFrom( clazz ))
             {
-                functions.add(new Tag(JRVariable.CALCULATION_SUM,I18n.getString("GroupPanel.Function.Sum")));
-                functions.add(new Tag(JRVariable.CALCULATION_COUNT,I18n.getString("GroupPanel.Function.Count")));
-                functions.add(new Tag(JRVariable.CALCULATION_DISTINCT_COUNT,I18n.getString("GroupPanel.Function.DistinctCount")));
-                functions.add(new Tag(JRVariable.CALCULATION_AVERAGE,I18n.getString("GroupPanel.Function.Average")));
-                functions.add(new Tag(JRVariable.CALCULATION_STANDARD_DEVIATION,I18n.getString("GroupPanel.Function.StandardDeviation")));
-                functions.add(new Tag(JRVariable.CALCULATION_VARIANCE,I18n.getString("GroupPanel.Function.Variance")));
+                functions.add(new Tag(new Byte(JRVariable.CALCULATION_SUM),I18n.getString("GroupPanel.Function.Sum")));
+                functions.add(new Tag(new Byte(JRVariable.CALCULATION_COUNT),I18n.getString("GroupPanel.Function.Count")));
+                functions.add(new Tag(new Byte(JRVariable.CALCULATION_DISTINCT_COUNT),I18n.getString("GroupPanel.Function.DistinctCount")));
+                functions.add(new Tag(new Byte(JRVariable.CALCULATION_AVERAGE),I18n.getString("GroupPanel.Function.Average")));
+                functions.add(new Tag(new Byte(JRVariable.CALCULATION_STANDARD_DEVIATION),I18n.getString("GroupPanel.Function.StandardDeviation")));
+                functions.add(new Tag(new Byte(JRVariable.CALCULATION_VARIANCE),I18n.getString("GroupPanel.Function.Variance")));
             }
             
             if ( java.util.Date.class.isAssignableFrom( clazz ) || 
                  java.lang.Number.class.isAssignableFrom( clazz ))
             {
-                functions.add(new Tag(JRVariable.CALCULATION_LOWEST,I18n.getString("GroupPanel.Function.Lowest")));
-                functions.add(new Tag(JRVariable.CALCULATION_HIGHEST,I18n.getString("GroupPanel.Function.Highest")));
+                functions.add(new Tag(new Byte(JRVariable.CALCULATION_LOWEST),I18n.getString("GroupPanel.Function.Lowest")));
+                functions.add(new Tag(new Byte(JRVariable.CALCULATION_HIGHEST),I18n.getString("GroupPanel.Function.Highest")));
             }
             
             
         } catch (Exception ex)
         {}
         
-        functions.add(new Tag(JRVariable.CALCULATION_FIRST,I18n.getString("GroupPanel.Function.First")));
-        functions.add(new Tag(JRVariable.CALCULATION_NOTHING,I18n.getString("GroupPanel.Function.Nothing")));
+        functions.add(new Tag(new Byte(JRVariable.CALCULATION_FIRST),I18n.getString("GroupPanel.Function.First")));
+        functions.add(new Tag(new Byte(JRVariable.CALCULATION_NOTHING),I18n.getString("GroupPanel.Function.Nothing")));
         
       return functions;
     }
@@ -384,9 +384,9 @@ public class GroupPanel extends javax.swing.JPanel {
     {
        byte b = JRVariable.CALCULATION_COUNT;
        Object gb = jComboBoxGroupBy.getSelectedItem();
-       if (gb != null && gb instanceof Tag && ((Tag)gb).getValue() instanceof Byte)
+       if (gb != null && gb instanceof Tag)
        {
-           b = (Byte)((Tag)gb).getValue();
+           b = (Byte)((Tag)gb).getValue(); //(Byte)((Tag)gb).getValue();
        }
        return b;
     }

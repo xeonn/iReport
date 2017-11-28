@@ -55,7 +55,7 @@ public final class VerticalAlignmentProperty extends ByteProperty
         tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_TOP), I18n.getString("Global.Property.Top")));
         tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_MIDDLE), I18n.getString("Global.Property.Middle")));
         tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_BOTTOM), I18n.getString("Global.Property.Bottom")));
-        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_JUSTIFIED), I18n.getString("Global.Property.Justified")));
+        //tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_JUSTIFIED), I18n.getString("Global.Property.Justified")));
         return tags;
     }
 

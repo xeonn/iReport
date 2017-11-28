@@ -48,19 +48,19 @@ public final class BarShowTickMarksProperty extends BooleanProperty {
     @Override
     public Boolean getBoolean()
     {
-        return plot.isShowTickMarks();
+        return plot.getShowTickMarks();
     }
 
     @Override
     public Boolean getOwnBoolean()
     {
-        return plot.isShowTickMarks();
+        return plot.getShowTickMarks();
     }
 
     @Override
     public Boolean getDefaultBoolean()
     {
-        return Boolean.TRUE;
+        return null;
     }
 
     @Override

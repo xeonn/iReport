@@ -25,6 +25,10 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 import javax.swing.Action;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -193,7 +197,7 @@ public class DatasetNode extends IRAbstractNode implements PropertyChangeListene
                                 oldValue,newValue);
                     // Find the undoRedo manager...
                     IReportManager.getInstance().addUndoableEdit(urob);
-            
+                    dataset.getEventSupport().firePropertyChange( JRDesignDataset.PROPERTY_SCRIPTLETS, 0, 0);
                 }
             }
     }
@@ -296,7 +300,7 @@ public class DatasetNode extends IRAbstractNode implements PropertyChangeListene
     /**
      *  Class to manage the WhenResourceMissingType property
      */
-    private static final class QueryLanguageProperty extends PropertySupport
+    private static final class QueryLanguageProperty extends PropertySupport implements PreferenceChangeListener
     {
             private final JRDesignDataset dataset;
             private ComboBoxPropertyEditor editor;
@@ -312,6 +316,7 @@ public class DatasetNode extends IRAbstractNode implements PropertyChangeListene
                 setValue("suppressCustomEditor", Boolean.TRUE);
                 this.setValue("oneline", Boolean.TRUE);
                 this.setValue("canEditAsText", Boolean.TRUE);
+                IReportManager.getPreferences().addPreferenceChangeListener(this);
             }
 
             @Override
@@ -320,37 +325,69 @@ public class DatasetNode extends IRAbstractNode implements PropertyChangeListene
 
                 if (editor == null)
                 {
-                    java.util.ArrayList list = new java.util.ArrayList();
-                    
+                    editor = new ComboBoxPropertyEditor(true, new ArrayList());
+                    updateLanguages();
+                }
+                return editor;
+            }
+
+            protected void updateLanguages()
+            {
+                java.util.ArrayList list = new java.util.ArrayList();
+
+                /*
                     list.add( new Tag("sql","SQL"));
                     list.add( new Tag("hql","Hibernate Query Language (HQL)"));
                     list.add( new Tag("xPath","XPath"));
                     list.add( new Tag("ejbql","EJBQL"));
                     list.add( new Tag("mdx","MDX"));
                     list.add( new Tag("xmla-mdx","XMLA-MDX"));
+                 */
 
-                    java.util.List<QueryExecuterDef> queryExecuters = IReportManager.getInstance().getQueryExecuters();
+                    List<QueryExecuterDef> quxecuters = IReportManager.getInstance().getQueryExecuters();
 
-                    for (QueryExecuterDef qe : queryExecuters)
+                    synchronized(this)
                     {
-                        String s = qe.getLanguage();
-                        boolean found = false;
-                        for (int i=0; i<list.size(); ++i)
+                        for (int i=0; i<quxecuters.size(); ++i)
                         {
-                            Tag t = (Tag)list.get(i);
-                            if (s.toLowerCase().equals( (t.getValue()+"").toLowerCase() ) )
+                            QueryExecuterDef qe = quxecuters.get(i);
+                            String s = I18n.getString("language."+qe.getLanguage());
+                            if (s == null || s.equals("language."+qe.getLanguage()))
                             {
-                                found = true;
+                                s = qe.getLanguage();
                             }
-                        }
-                        if (!found)
-                        {
-                            list.add( new Tag(qe.getLanguage()));
+                            list.add( new Tag(qe.getLanguage(),s));
                         }
                     }
-                    editor = new ComboBoxPropertyEditor(true, list);
-                }
-                return editor;
+                    
+                    java.util.List<QueryExecuterDef> queryExecuters = IReportManager.getInstance().getQueryExecuters();
+
+                    synchronized(this)
+                    {
+                        for (int k=0; k<queryExecuters.size(); ++k)
+                        {
+                            QueryExecuterDef qe = quxecuters.get(k);
+                            String s = qe.getLanguage();
+                            boolean found = false;
+                            for (int i=0; i<list.size(); ++i)
+                            {
+                                Tag t = (Tag)list.get(i);
+                                if (s.toLowerCase().equals( (t.getValue()+"").toLowerCase() ) )
+                                {
+                                    found = true;
+                                }
+                            }
+                            if (!found)
+                            {
+                                list.add( new Tag(qe.getLanguage()));
+                            }
+                        }
+                    }
+
+                    if (editor != null)
+                    {
+                        editor.setTagValues(list);
+                    }
             }
             
             public Object getValue() throws IllegalAccessException, InvocationTargetException {
@@ -385,6 +422,15 @@ public class DatasetNode extends IRAbstractNode implements PropertyChangeListene
                     // Find the undoRedo manager...
                     IReportManager.getInstance().addUndoableEdit(urob);
             }
+
+        public void preferenceChange(PreferenceChangeEvent evt) {
+
+            try {
+                updateLanguages();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
     
     /**

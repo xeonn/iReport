@@ -65,13 +65,6 @@ public final class AddAxisChartAction extends NodeAction {
             JRDesignChartAxis axis = new JRDesignChartAxis(theChart);
             axis.setChart(designChart);
             ((JRDesignMultiAxisPlot)theChart.getPlot()).setChart(theChart);
-            System.out.println("theChart in plot..." +((JRDesignMultiAxisPlot)theChart.getPlot()).getChart());
-            System.out.flush();
-            System.out.println("axis.getChart..." + axis.getChart());
-            System.out.flush();
-            System.out.println("axis.getChart().getDataset..." + axis.getChart().getDataset());
-            System.out.flush();
-
             ((JRDesignMultiAxisPlot)theChart.getPlot()).addAxis(axis);
         }
     }

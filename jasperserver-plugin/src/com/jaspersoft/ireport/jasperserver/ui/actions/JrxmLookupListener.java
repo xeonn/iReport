@@ -9,6 +9,7 @@ import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.ReportObjectScene;
+import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.RepoImageCache;
@@ -17,10 +18,13 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
+import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRExpressionUtil;
+import org.openide.cookies.CloseCookie;
+import org.openide.cookies.EditorCookie;
 import org.openide.loaders.DataObject;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
@@ -75,7 +79,7 @@ public class JrxmLookupListener implements LookupListener {
             Runnable run = new Runnable() {
 
                 public void run() {
-                    List<JRDesignElement> elements = ModelUtils.getAllElements(jd);
+                    List<JRDesignElement> elements = ModelUtils.getAllElements(jd, true);
                     for (JRDesignElement ele : elements)
                     {
                         if (ele instanceof JRDesignImage)
@@ -115,6 +119,52 @@ public class JrxmLookupListener implements LookupListener {
                             try {
                                 ReportObjectScene scene = IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel().getScene();
                                 scene.refreshBands();
+
+
+                                // Display warning in case of Ad Hoc document...
+
+                                if (jd.getProperty("com.jaspersoft.ji.adhoc") != null &&
+                                    jd.getProperty("com.jaspersoft.ji.adhoc").equals("1"))
+                                {
+                                    try {
+
+                                        SwingUtilities.invokeLater( new Runnable() {
+
+                                           public void run()
+                                           {
+                                               if (javax.swing.JOptionPane.showConfirmDialog(Misc.getMainFrame(),
+                                                JasperServerManager.getString("messages.adhoc", "You have selected to edit an Ad Hoc report.\n" +
+                                               "If you continue, the report will lose its sorting and grouping.\n" +
+                                               "Furthermore, any changes you make in iReport will be lost\n" +
+                                               "next Time you edit it via the Ad Hoc report editor.\nContinue anyway?"),
+                                               JasperServerManager.getString("alert","Alert!"),
+                                               javax.swing.JOptionPane.YES_NO_OPTION,
+                                               javax.swing.JOptionPane.WARNING_MESSAGE) == javax.swing.JOptionPane.NO_OPTION)
+                                               {
+                                                   // Close the document...
+                                                   DataObject dobj = IReportManager.getInstance().getActiveVisualView().getLookup().lookup(DataObject.class);
+                                                   EditorCookie cc = dobj.getCookie(EditorCookie.class);
+                                                   if (cc != null)
+                                                   {
+                                                        cc.close();
+                                                   }
+                                                   else
+                                                   {
+                                                       System.out.println("Unable to close the window!!!");
+                                                       System.out.flush();
+                                                   }
+                                               }
+                                           }
+
+                                        });
+
+                                    } catch (Exception ex)
+                                    {
+
+                                    }
+
+                                }
+
                             } catch (Exception ex) { }
                         }
                     });

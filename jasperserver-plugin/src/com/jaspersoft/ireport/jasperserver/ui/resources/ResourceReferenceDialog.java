@@ -483,9 +483,11 @@ public class ResourceReferenceDialog extends javax.swing.JDialog {
         if (rc.showDialog(this, null) == JOptionPane.OK_OPTION)
         {
             ResourceDescriptor rd = rc.getSelectedDescriptor();
-        
-            jTextFieldReferenceUri.setText( rd.getUriString() );
-            updateSaveButton();
+            if (rd != null)
+            {
+                jTextFieldReferenceUri.setText( rd.getUriString() );
+                updateSaveButton();
+            }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -592,6 +594,9 @@ public class ResourceReferenceDialog extends javax.swing.JDialog {
         
         this.referenceResource = referenceResource;
         jTextFieldName.setText( referenceResource.getDescriptor().getName());
+
+        setTitle( JasperServerManager.getFormattedString("properties.title", "{0} - Properties", new Object[]{referenceResource.getDescriptor().getName()}));
+
         jTextFieldName.setEditable(false);
         jTextFieldName.setOpaque(false);
         

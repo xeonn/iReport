@@ -1305,7 +1305,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
             jButtonOpenDesigner.setEnabled( false );
             automaticlyReadFieldsCheckBox.setEnabled(false);
             automaticlyReadFieldsCheckBox.setSelected(autoReadFields);
-            getJLabelStatusSQL().setText(I18n.getString("ReportQueryDialog.Label.StatusSQL4")  +  language + I18n.getString("ReportQueryDialog.Label.StatusSQL4B"));
+            getJLabelStatusSQL().setText(I18n.getString("ReportQueryDialog.Label.StatusSQL4", language));
         }
         else
         {
@@ -1325,7 +1325,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
             {
                 setSpecialLanguageComponent( null );
             }
-            getJLabelStatusSQL().setText(I18n.getString("ReportQueryDialog.Label.StatusSQL5")  +  language + I18n.getString("ReportQueryDialog.Label.StatusSQL5B"));
+            getJLabelStatusSQL().setText(I18n.getString("ReportQueryDialog.Label.StatusSQL5", language));
         }
         isSettingSQLExpression = isSettingSQLExpressionOldValue;
         

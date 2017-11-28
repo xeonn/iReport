@@ -55,6 +55,8 @@ public final class ScaleImageProperty extends ByteProperty
         tags.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_CLIP), I18n.getString("Global.Property.Clip")));
         tags.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_FILL_FRAME), I18n.getString("Global.Property.FillFrame")));
         tags.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_RETAIN_SHAPE), I18n.getString("Global.Property.RetainShape")));
+        tags.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_REAL_SIZE), I18n.getString("Global.Property.RealSize")));
+        tags.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_REAL_HEIGHT), I18n.getString("Global.Property.RealHeight")));
         return tags;
     }
 

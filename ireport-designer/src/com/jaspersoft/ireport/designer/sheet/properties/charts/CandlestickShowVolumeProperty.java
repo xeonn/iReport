@@ -48,19 +48,19 @@ public final class CandlestickShowVolumeProperty extends BooleanProperty {
     @Override
     public Boolean getBoolean()
     {
-        return plot.isShowVolume();
+        return plot.getShowVolume();
     }
 
     @Override
     public Boolean getOwnBoolean()
     {
-        return plot.isShowVolume();
+        return plot.getShowVolume();
     }
 
     @Override
     public Boolean getDefaultBoolean()
     {
-        return Boolean.TRUE;
+        return null;
     }
 
     @Override

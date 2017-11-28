@@ -37,7 +37,7 @@ public final class ThermometerHighDataRangeLowExpressionProperty extends Express
     @Override
     public String getName()
     {
-        return I18n.getString("HIGH_RANGE_") + JRDesignDataRange.PROPERTY_LOW_EXPRESSION;//FIXMETD concatenation?
+        return "HIGH_RANGE_" + JRDesignDataRange.PROPERTY_LOW_EXPRESSION;//FIXMETD concatenation?
     }
 
     @Override
@@ -61,7 +61,7 @@ public final class ThermometerHighDataRangeLowExpressionProperty extends Express
     @Override
     public JRDesignExpression getExpression()
     {
-        JRDataRange dataRange = plot.getDataRange();
+        JRDataRange dataRange = plot.getHighRange();
         return dataRange == null ? null : (JRDesignExpression) dataRange.getLowExpression();
     }
 
@@ -105,7 +105,7 @@ public final class ThermometerHighDataRangeLowExpressionProperty extends Express
             ObjectPropertyUndoableEdit urob =
                         new ObjectPropertyUndoableEdit(
                             plot,
-                            JRDesignThermometerPlot.PROPERTY_HIGH_RANGE, 
+                            "HighRange",
                             JRDataRange.class,
                             oldValue,
                             newValue

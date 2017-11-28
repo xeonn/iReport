@@ -105,7 +105,7 @@ public final class ThermometerDataRangeHighExpressionProperty extends Expression
             ObjectPropertyUndoableEdit urob =
                         new ObjectPropertyUndoableEdit(
                             plot,
-                            JRDesignThermometerPlot.PROPERTY_DATA_RANGE, 
+                            "DataRange",
                             JRDataRange.class,
                             oldValue,
                             newValue

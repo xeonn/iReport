@@ -35,6 +35,9 @@ package com.jaspersoft.ireport.designer.connection;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.connection.gui.QueryExecuterConnectionEditor;
+import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.locale.I18n;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -49,6 +52,11 @@ public class QueryExecuterConnection extends IReportConnection {
     /** Creates a new instance of JDBCConnection */
     public QueryExecuterConnection() {
         map = new java.util.HashMap();
+    }
+
+    @Override
+    public void test() throws Exception {
+        JOptionPane.showMessageDialog( Misc.getMainFrame() ,I18n.getString("messages.connectionDialog.connectionTestSuccessful"),"",JOptionPane.INFORMATION_MESSAGE);
     }
     
     /**  This method return an instanced connection to the database.

@@ -64,19 +64,19 @@ public final class LegendPositionProperty extends ByteProperty
     @Override
     public Byte getByte()
     {
-        return chart.getLegendPosition();
+        return chart.getLegendPositionByte();
     }
 
     @Override
     public Byte getOwnByte()
     {
-        return chart.getLegendPosition();
+        return chart.getLegendPositionByte();
     }
 
     @Override
     public Byte getDefaultByte()
     {
-        return JRDesignChart.EDGE_TOP;
+        return null;
     }
 
     @Override

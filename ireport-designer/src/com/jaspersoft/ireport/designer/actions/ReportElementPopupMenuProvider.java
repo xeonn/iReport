@@ -11,6 +11,7 @@ package com.jaspersoft.ireport.designer.actions;
 
 import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import com.jaspersoft.ireport.designer.widgets.SelectionWidget;
 import java.awt.Point;
@@ -65,6 +66,13 @@ public class ReportElementPopupMenuProvider implements PopupMenuProvider {
                         actionsMap.put( actions[i].getValue( Action.ACTION_COMMAND_KEY), actions[i]);
                 }
                 
+                if (node instanceof ElementNode)
+                {
+                    // Add format tools action...
+                    
+                }
+
+
                 List<Lookup> allLookups = new ArrayList<Lookup>();
                 allLookups.add(node.getLookup());
                 allLookups.add(Utilities.actionsGlobalContext());

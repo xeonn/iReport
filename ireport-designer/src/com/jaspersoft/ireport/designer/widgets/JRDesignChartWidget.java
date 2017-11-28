@@ -17,6 +17,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import net.sf.jasperreports.engine.base.JRBaseChartPlot;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -32,10 +33,17 @@ public class JRDesignChartWidget extends JRDesignElementWidget {
     
     public JRDesignChartWidget(ReportObjectScene scene, JRDesignChart element) {
         super(scene, element);
-        ((JRBaseChartPlot)element.getPlot()).getEventSupport().addPropertyChangeListener(this);
+        ((JRBaseChartPlot)element.getPlot()).getEventSupport().addPropertyChangeListener(new PropertyChangeListener() {
+
+            public void propertyChange(PropertyChangeEvent evt) {
+                JRDesignChartWidget.this.revalidate(true);
+                //JRDesignChartWidget.this.repaint();
+                JRDesignChartWidget.this.getScene().validate();
+            }
+        });
     }
     
-    
+    /*
     @Override
     protected void paintWidgetImplementation() {
         
@@ -88,10 +96,7 @@ public class JRDesignChartWidget extends JRDesignElementWidget {
     }
     
     
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        super.propertyChange(evt);
-    }
+   
     
     
     private Image recreateChartImage()
@@ -173,8 +178,15 @@ public class JRDesignChartWidget extends JRDesignElementWidget {
         
         return chartImage;
     }
+
+     */
     
-    
+     @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        super.propertyChange(evt);
+        JRDesignChartWidget.this.revalidate(true);
+        JRDesignChartWidget.this.getScene().validate();
+    }
     
     
 }

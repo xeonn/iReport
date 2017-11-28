@@ -31,9 +31,11 @@
 package com.jaspersoft.ireport.designer;
 
 import com.jaspersoft.ireport.designer.connection.gui.BasicIReportConnectionEditor;
+import com.jaspersoft.ireport.designer.utils.Misc;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import javax.swing.JOptionPane;
-import org.openide.util.Utilities;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -170,6 +172,31 @@ public abstract class IReportConnection {
     public IReportConnectionEditor getIReportConnectionEditor()
     {
         return new BasicIReportConnectionEditor();
+    }
+
+
+    public void  showErrorMessage(final String errorMsg, final String title)
+    {
+        Runnable r = new Runnable() {
+                public void run() {
+                    JOptionPane.showMessageDialog(Misc.getMainWindow(),errorMsg,title,JOptionPane.ERROR_MESSAGE);
+                }
+            };
+
+        if (!SwingUtilities.isEventDispatchThread())
+        {
+            try {
+                SwingUtilities.invokeAndWait( r );
+            } catch (InvocationTargetException ex) {
+                ex.printStackTrace();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+        else
+        {
+                r.run();
+        }
     }
 }
 

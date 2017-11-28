@@ -48,19 +48,19 @@ public final class Pie3DCircularProperty extends BooleanProperty {
     @Override
     public Boolean getBoolean()
     {
-        return plot.isCircular();
+        return plot.getCircular();
     }
 
     @Override
     public Boolean getOwnBoolean()
     {
-        return plot.isCircular();
+        return plot.getCircular();
     }
 
     @Override
     public Boolean getDefaultBoolean()
     {
-        return Boolean.FALSE;
+        return null;
     }
 
     @Override

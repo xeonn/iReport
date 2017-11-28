@@ -13,6 +13,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.connection.JRCSVDataSourceConnection;
 import com.jaspersoft.ireport.designer.connection.JRCsvDataSourceInspector;
 import com.jaspersoft.ireport.designer.tools.FieldPatternDialog;
+import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -63,6 +64,8 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
                 jRadioButtonCVSSeparatorOther1.setSelected(true);
             }
         });
+
+        jLabelSpecialCharacters.setText(I18n.getString("CSVExportParametersPanel.jLabelSpecialCharacters.text"));
     }
     
     /** This method is called from within the constructor to
@@ -113,6 +116,8 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         jRadioButtonCVSSeparatorNewLine1 = new javax.swing.JRadioButton();
         jRadioButtonCVSSeparatorOther1 = new javax.swing.JRadioButton();
         jTextFieldCVSSeparatorText1 = new javax.swing.JTextField();
+        jRadioButtonCVSSeparatorNewLine3 = new javax.swing.JRadioButton();
+        jLabelSpecialCharacters = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
 
         setLayout(new java.awt.BorderLayout());
@@ -120,7 +125,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         jPanelCSV.setPreferredSize(new java.awt.Dimension(1, 30));
         jPanelCSV.setLayout(new java.awt.GridBagLayout());
 
-        jLabel15.setText(I18n.getString("CSVDataSourceConnectionEditor.Label.CSVFile")); // NOI18N
+        jLabel15.setText("CSV file");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -136,7 +141,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 0, 0);
         jPanelCSV.add(jTextFieldCSVFilename, gridBagConstraints);
 
-        jButtonCSVFilename.setText(I18n.getString("Global.Button.Browse")); // NOI18N
+        jButtonCSVFilename.setText("Browse");
         jButtonCSVFilename.setMargin(new java.awt.Insets(2, 4, 2, 4));
         jButtonCSVFilename.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -180,7 +185,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         jPanel9.setPreferredSize(new java.awt.Dimension(71, 200));
         jPanel9.setLayout(new java.awt.GridBagLayout());
 
-        jButtonNewParameter.setText(I18n.getString("Global.Button.New")); // NOI18N
+        jButtonNewParameter.setText("New");
         jButtonNewParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonNewParameterActionPerformed1(evt);
@@ -194,7 +199,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel9.add(jButtonNewParameter, gridBagConstraints);
 
-        jButtonModifyParameter.setText(I18n.getString("Global.Button.Modify")); // NOI18N
+        jButtonModifyParameter.setText("Modify");
         jButtonModifyParameter.setEnabled(false);
         jButtonModifyParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -209,7 +214,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         gridBagConstraints.insets = new java.awt.Insets(0, 3, 5, 3);
         jPanel9.add(jButtonModifyParameter, gridBagConstraints);
 
-        jButtonDeleteParameter.setText(I18n.getString("Global.Button.Delete")); // NOI18N
+        jButtonDeleteParameter.setText("Delete");
         jButtonDeleteParameter.setEnabled(false);
         jButtonDeleteParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -239,7 +244,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 4, 4);
         jPanel8.add(jPanel9, gridBagConstraints);
 
-        jButtonNewParameter1.setText(I18n.getString("CSVDataSourceConnectionEditor.Button.NewParameter")); // NOI18N
+        jButtonNewParameter1.setText("Get columns name from the first row of the file");
         jButtonNewParameter1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonNewParameterActionPerformed11(evt);
@@ -376,7 +381,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         jPanel4.add(jRadioButtonCVSSeparatorSemicolon, gridBagConstraints);
 
         buttonGroup1.add(jRadioButtonCVSSeparatorOther);
-        jRadioButtonCVSSeparatorOther.setText(I18n.getString("CSVDataSourceConnectionEditor.Pane.Other")); // NOI18N
+        jRadioButtonCVSSeparatorOther.setText("Other");
         jRadioButtonCVSSeparatorOther.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         jRadioButtonCVSSeparatorOther.setMargin(new java.awt.Insets(0, 0, 0, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -401,7 +406,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         jPanel4.add(jTextFieldCVSSeparatorText, gridBagConstraints);
 
         buttonGroup1.add(jRadioButtonCVSSeparatorNewLine);
-        jRadioButtonCVSSeparatorNewLine.setText("New line");
+        jRadioButtonCVSSeparatorNewLine.setText("New line (Unix)");
         jRadioButtonCVSSeparatorNewLine.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         jRadioButtonCVSSeparatorNewLine.setMargin(new java.awt.Insets(0, 0, 0, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -471,8 +476,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         jPanel5.add(jRadioButtonCVSSeparatorSemicolon1, gridBagConstraints);
 
         buttonGroup2.add(jRadioButtonCVSSeparatorNewLine1);
-        jRadioButtonCVSSeparatorNewLine1.setSelected(true);
-        jRadioButtonCVSSeparatorNewLine1.setText("New line");
+        jRadioButtonCVSSeparatorNewLine1.setText("New line (Unix)");
         jRadioButtonCVSSeparatorNewLine1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         jRadioButtonCVSSeparatorNewLine1.setMargin(new java.awt.Insets(0, 0, 0, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -484,7 +488,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         jPanel5.add(jRadioButtonCVSSeparatorNewLine1, gridBagConstraints);
 
         buttonGroup2.add(jRadioButtonCVSSeparatorOther1);
-        jRadioButtonCVSSeparatorOther1.setText(I18n.getString("CSVDataSourceConnectionEditor.Pane.Other")); // NOI18N
+        jRadioButtonCVSSeparatorOther1.setText("Other");
         jRadioButtonCVSSeparatorOther1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         jRadioButtonCVSSeparatorOther1.setMargin(new java.awt.Insets(0, 0, 0, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -508,6 +512,19 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
         jPanel5.add(jTextFieldCVSSeparatorText1, gridBagConstraints);
 
+        buttonGroup2.add(jRadioButtonCVSSeparatorNewLine3);
+        jRadioButtonCVSSeparatorNewLine3.setSelected(true);
+        jRadioButtonCVSSeparatorNewLine3.setText("New line (Windows)");
+        jRadioButtonCVSSeparatorNewLine3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        jRadioButtonCVSSeparatorNewLine3.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel5.add(jRadioButtonCVSSeparatorNewLine3, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 3;
@@ -515,6 +532,12 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanel7.add(jPanel5, gridBagConstraints);
+
+        jLabelSpecialCharacters.setText("<html>Special characters:<br><b>\\n</b>\tfor newline<br><b>\\r</b>\tfor carriage return<br><b>\\t</b>\tfor tab and<br><b>\\\\</b>\tfor a single backslash");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.insets = new java.awt.Insets(8, 8, 8, 8);
+        jPanel7.add(jLabelSpecialCharacters, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.weighty = 1.0;
@@ -546,6 +569,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
     private javax.swing.JCheckBox jCheckBoxCVSDateFormat;
     private javax.swing.JCheckBox jCheckBoxCVSFirstRowAsHeader;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabelSpecialCharacters;
     private javax.swing.JList jListCVSColumns;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -561,6 +585,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
     private javax.swing.JRadioButton jRadioButtonCVSSeparatorComma1;
     private javax.swing.JRadioButton jRadioButtonCVSSeparatorNewLine;
     private javax.swing.JRadioButton jRadioButtonCVSSeparatorNewLine1;
+    private javax.swing.JRadioButton jRadioButtonCVSSeparatorNewLine3;
     private javax.swing.JRadioButton jRadioButtonCVSSeparatorOther;
     private javax.swing.JRadioButton jRadioButtonCVSSeparatorOther1;
     private javax.swing.JRadioButton jRadioButtonCVSSeparatorSemicolon;
@@ -604,7 +629,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
             else if (fieldSeparator.equals("\n")) this.jRadioButtonCVSSeparatorNewLine.setSelected(true);
             else {
                 this.jRadioButtonCVSSeparatorOther.setSelected(true);
-                this.jTextFieldCVSSeparatorText.setText(fieldSeparator);
+                this.jTextFieldCVSSeparatorText.setText( Misc.addSlashesString(fieldSeparator));
             }
             
             String rowSeparator = con.getRecordDelimiter();
@@ -613,9 +638,10 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
             else if (rowSeparator.equals(" ")) this.jRadioButtonCVSSeparatorSpace1.setSelected(true);
             else if (rowSeparator.equals(";")) this.jRadioButtonCVSSeparatorSemicolon1.setSelected(true);
             else if (rowSeparator.equals("\n")) this.jRadioButtonCVSSeparatorNewLine1.setSelected(true);
+            else if (rowSeparator.equals("\r\n")) this.jRadioButtonCVSSeparatorNewLine3.setSelected(true);
             else {
                 this.jRadioButtonCVSSeparatorOther1.setSelected(true);
-                this.jTextFieldCVSSeparatorText1.setText(rowSeparator);
+                this.jTextFieldCVSSeparatorText1.setText(Misc.addSlashesString(rowSeparator));
             }
             
             DefaultListModel dlm = (DefaultListModel)this.jListCVSColumns.getModel();
@@ -644,15 +670,22 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
             if (jRadioButtonCVSSeparatorSpace.isSelected()) ((JRCSVDataSourceConnection)irConn).setFieldDelimiter(" ");
             if (jRadioButtonCVSSeparatorSemicolon.isSelected()) ((JRCSVDataSourceConnection)irConn).setFieldDelimiter(";");
             if (jRadioButtonCVSSeparatorNewLine.isSelected()) ((JRCSVDataSourceConnection)irConn).setFieldDelimiter("\n");
-            if (jRadioButtonCVSSeparatorOther.isSelected()) ((JRCSVDataSourceConnection)irConn).setFieldDelimiter(jTextFieldCVSSeparatorText.getText());
-            
+            if (jRadioButtonCVSSeparatorOther.isSelected())
+            {
+                ((JRCSVDataSourceConnection)irConn).setFieldDelimiter( Misc.removeSlashesString( jTextFieldCVSSeparatorText.getText() ));
+            }
+
             if (jRadioButtonCVSSeparatorComma1.isSelected()) ((JRCSVDataSourceConnection)irConn).setRecordDelimiter(",");
             if (jRadioButtonCVSSeparatorTab1.isSelected()) ((JRCSVDataSourceConnection)irConn).setRecordDelimiter("\t");
             if (jRadioButtonCVSSeparatorSpace1.isSelected()) ((JRCSVDataSourceConnection)irConn).setRecordDelimiter(" ");
             if (jRadioButtonCVSSeparatorSemicolon1.isSelected()) ((JRCSVDataSourceConnection)irConn).setRecordDelimiter(";");
             if (jRadioButtonCVSSeparatorNewLine1.isSelected()) ((JRCSVDataSourceConnection)irConn).setRecordDelimiter("\n");
-            if (jRadioButtonCVSSeparatorOther1.isSelected()) ((JRCSVDataSourceConnection)irConn).setRecordDelimiter(jTextFieldCVSSeparatorText1.getText());
-            
+            if (jRadioButtonCVSSeparatorNewLine3.isSelected()) ((JRCSVDataSourceConnection)irConn).setRecordDelimiter("\r\n");
+            if (jRadioButtonCVSSeparatorOther1.isSelected())
+            {
+                ((JRCSVDataSourceConnection)irConn).setRecordDelimiter( Misc.removeSlashesString( jTextFieldCVSSeparatorText1.getText() ));
+            }
+
             ((JRCSVDataSourceConnection)irConn).setCustomDateFormat( jCheckBoxCVSDateFormat.isSelected() ?  jTextFieldCVSDateFormat.getText() : "");
             ((JRCSVDataSourceConnection)irConn).setUseFirstRowAsHeader( jCheckBoxCVSFirstRowAsHeader.isSelected() );
             
@@ -784,14 +817,15 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
             if (jRadioButtonCVSSeparatorSpace.isSelected()) ds.setFieldDelimiter(' ');
             if (jRadioButtonCVSSeparatorSemicolon.isSelected()) ds.setFieldDelimiter(';');
             if (jRadioButtonCVSSeparatorNewLine.isSelected()) ds.setFieldDelimiter('\n');
-            if (jRadioButtonCVSSeparatorOther.isSelected()) ds.setFieldDelimiter((jTextFieldCVSSeparatorText.getText()+" ").charAt(0));
+            if (jRadioButtonCVSSeparatorOther.isSelected()) ds.setFieldDelimiter(( Misc.removeSlashesString(jTextFieldCVSSeparatorText.getText()+" ")).charAt(0));
             
             if (jRadioButtonCVSSeparatorComma1.isSelected()) ds.setRecordDelimiter(",");
             if (jRadioButtonCVSSeparatorTab1.isSelected()) ds.setRecordDelimiter("\t");
             if (jRadioButtonCVSSeparatorSpace1.isSelected()) ds.setRecordDelimiter(" ");
             if (jRadioButtonCVSSeparatorSemicolon1.isSelected()) ds.setRecordDelimiter(";");
             if (jRadioButtonCVSSeparatorNewLine1.isSelected()) ds.setRecordDelimiter("\n");
-            if (jRadioButtonCVSSeparatorOther1.isSelected()) ds.setRecordDelimiter(jTextFieldCVSSeparatorText1.getText());
+            if (jRadioButtonCVSSeparatorNewLine3.isSelected()) ds.setRecordDelimiter("\n\r");
+            if (jRadioButtonCVSSeparatorOther1.isSelected()) ds.setRecordDelimiter(Misc.removeSlashesString(jTextFieldCVSSeparatorText1.getText()));
             
             DefaultListModel dlm = (DefaultListModel)jListCVSColumns.getModel();
             dlm.removeAllElements();

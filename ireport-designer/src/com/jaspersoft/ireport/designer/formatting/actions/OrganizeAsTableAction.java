@@ -10,6 +10,7 @@ import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Rectangle;
 import java.util.List;
 import javax.swing.Action;
+import javax.swing.KeyStroke;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.nodes.Node;
@@ -26,6 +27,7 @@ public class OrganizeAsTableAction extends AbstractFormattingToolAction {
     {
         super();
         putValue(Action.NAME, getName());
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
     }
     
     @Override
@@ -65,5 +67,12 @@ public class OrganizeAsTableAction extends AbstractFormattingToolAction {
     public String getName() {
         return I18n.getString("formatting.tools.organizeAsTable");
     }
+
+    @Override
+    protected boolean asynchronous() {
+        return false;
+    }
+
+    
 
 }

@@ -552,7 +552,8 @@ public class XMLAConnectionDialog extends javax.swing.JDialog {
     public void setResource(ResourceDescriptor descriptor)
     {
         if (descriptor == null) return;
-        
+
+        setTitle( JasperServerManager.getFormattedString("properties.title", "{0} - Properties", new Object[]{descriptor.getName()}));
         jTextFieldName.setText( descriptor.getName());
         jTextFieldLabel.setText( descriptor.getLabel());
         jEditorPaneDescription.setText( descriptor.getDescription());

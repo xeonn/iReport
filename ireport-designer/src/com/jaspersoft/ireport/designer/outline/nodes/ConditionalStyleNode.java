@@ -9,9 +9,7 @@
 
 package com.jaspersoft.ireport.designer.outline.nodes;
 
-import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.actions.EditConditionalStyleExpressionBandAction;
-import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.editor.FullExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.utils.Misc;
@@ -23,10 +21,18 @@ import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import org.openide.actions.CopyAction;
+import org.openide.actions.CutAction;
+import org.openide.actions.DeleteAction;
+import org.openide.actions.NewAction;
+import org.openide.actions.PasteAction;
+import org.openide.actions.ReorderAction;
 import org.openide.nodes.Sheet;
 import org.openide.nodes.Sheet.Set;
 import org.openide.util.Lookup;
 import org.openide.util.actions.SystemAction;
+import org.openide.util.lookup.Lookups;
+import org.openide.util.lookup.ProxyLookup;
 
 /**
  * ParameterNode detects the events fired by the subtended parameter.
@@ -42,11 +48,10 @@ public class ConditionalStyleNode extends AbstractStyleNode implements PropertyC
     
     public ConditionalStyleNode(JasperDesign jd, JRDesignConditionalStyle style, Lookup doLkp, JRDesignStyle parentStyle)
     {
-        super (jd, style, doLkp);
+        super(jd, style, new ProxyLookup( Lookups.singleton(style), doLkp));
         this.parentStyle = parentStyle;
         style.getEventSupport().addPropertyChangeListener(this);
         this.setName("conditionalStyle");
-        
     }
     
     public JRDesignConditionalStyle getConditionalStyle()
@@ -99,7 +104,14 @@ public class ConditionalStyleNode extends AbstractStyleNode implements PropertyC
     public boolean canRename() {
         return false;
     }
-    
+
+    @Override
+    public boolean canCut() {
+        return true;
+    }
+
+
+
     
     @Override
     public void destroy() throws IOException {
@@ -139,6 +151,19 @@ public class ConditionalStyleNode extends AbstractStyleNode implements PropertyC
         return SystemAction.get(EditConditionalStyleExpressionBandAction.class); 
     }
 
+
+    @Override
+    public Action[] getActions(boolean popup) {
+        return new Action[] {
+            SystemAction.get(EditConditionalStyleExpressionBandAction.class),null,
+            SystemAction.get( NewAction.class),
+            SystemAction.get( CopyAction.class ),
+            SystemAction.get( PasteAction.class),
+            SystemAction.get( CutAction.class ),
+            SystemAction.get( ReorderAction.class ),
+            null,
+            SystemAction.get( DeleteAction.class ) };
+    }
     
     
     

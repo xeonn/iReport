@@ -6,8 +6,8 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.locale.I18n;
+import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignTextElement;
 
 /**
  * Class to manage the JRBaseStyle.PROPERTY_ITALIC property
@@ -16,13 +16,13 @@ import net.sf.jasperreports.engine.design.JRDesignTextElement;
 
 public class ItalicProperty extends BooleanProperty{
 
-    private final JRDesignTextElement element;
+    private final JRFont font;
 
     @SuppressWarnings("unchecked")
-    public ItalicProperty(JRDesignTextElement element)
+    public ItalicProperty(JRFont font)
     {
-        super(element);
-        this.element = element;
+        super(font);
+        this.font = font;
     }
     @Override
     public String getName()
@@ -45,13 +45,13 @@ public class ItalicProperty extends BooleanProperty{
     @Override
     public Boolean getBoolean()
     {
-        return element.isItalic();
+        return font.isItalic();
     }
 
     @Override
     public Boolean getOwnBoolean()
     {
-        return element.isOwnItalic();
+        return font.isOwnItalic();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class ItalicProperty extends BooleanProperty{
     @Override
     public void setBoolean(Boolean isItalic)
     {
-    	element.setItalic(isItalic);
+    	font.setItalic(isItalic);
     }
     
 }

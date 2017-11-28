@@ -15,14 +15,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.SwingUtilities;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
-import org.openide.awt.DynamicMenuContent;
 import org.openide.cookies.OpenCookie;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
@@ -45,18 +43,34 @@ public class RecentFileAction extends AbstractAction implements Presenter.Menu, 
             
     private JMenu menu;
     
+    private static RecentFileAction theInstance = null;
+    
+    public static RecentFileAction getInstance()
+    {
+        return theInstance;
+    }
+
     public RecentFileAction() {
         super(I18n.getString( IReportStandaloneManager.class,"LBL_RecentFileAction_Name")); // NOI18N
         RecentFiles.init();
+        theInstance = this;
     }
     
     /********* Presenter.Menu impl **********/
     
     public JMenuItem getMenuPresenter() {
         if (menu == null) {
-            menu = new UpdatingMenu(this);
+            menu = new JMenu(this);
             menu.setMnemonic(I18n.getString(IReportStandaloneManager.class,"MNE_RecentFileAction_Name").charAt(0)); // NOI18N
-            menu.getPopupMenu().addPopupMenuListener(this);
+            //menu.getPopupMenu().addPopupMenuListener(this);
+
+            SwingUtilities.invokeLater(new Runnable() {
+
+                public void run() {
+                    updateSubMenu();
+                    menu.updateUI();
+                }
+            });
         }
         return menu;
     }
@@ -64,7 +78,7 @@ public class RecentFileAction extends AbstractAction implements Presenter.Menu, 
     /******* PopupMenuListener impl *******/
     
     public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-        fillSubMenu();
+        updateSubMenu();
     }
     
     public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
@@ -75,9 +89,11 @@ public class RecentFileAction extends AbstractAction implements Presenter.Menu, 
     }
     
     /** Fills submenu with recently closed files got from RecentFiles support */
-    private void fillSubMenu () {
+    public void updateSubMenu () {
         List<String> files = RecentFiles.getRecentFiles();
 
+        menu.removeAll();
+        menu.setEnabled(files.size() != 0);
         int counter = 0;
         for (String hItem : files) {
             try {
@@ -138,24 +154,35 @@ public class RecentFileAction extends AbstractAction implements Presenter.Menu, 
         }
     }
     
-    /** Menu that checks its enabled state just before is populated */
-    private static class UpdatingMenu extends JMenu implements DynamicMenuContent {
-        
-        private final JComponent[] content = new JComponent[] { this };
-        
-        public UpdatingMenu (Action action) {
-            super(action);
-        }
-    
-        public JComponent[] getMenuPresenters() {
-            setEnabled(!RecentFiles.getRecentFiles().isEmpty());
-            return content;
-        }
-
-        public JComponent[] synchMenuPresenters(JComponent[] items) {
-            return getMenuPresenters();
-        }
-    }
+//    /** Menu that checks its enabled state just before is populated */
+//    private static class UpdatingMenu extends JMenu implements DynamicMenuContent {
+//
+//        private final JComponent[] content = new JComponent[] { this };
+//
+//        public UpdatingMenu (Action action) {
+//            super(action);
+//        }
+//
+//        public JComponent[] getMenuPresenters() {
+//            setEnabled(!RecentFiles.getRecentFiles().isEmpty());
+//
+//            PopupMenuListener[] listeners = getPopupMenu().getPopupMenuListeners();
+//            for (int i=0; i<listeners.length; ++i)
+//            {
+//                System.out.println("popupWillBecomeVisible...on " + listeners[i]);
+//                System.out.flush();
+//                listeners[i].popupMenuWillBecomeInvisible(null);
+//                System.out.println("content: " + getSubElements());
+//                System.out.flush();
+//            }
+//            this.updateUI();
+//            return content;
+//        }
+//
+//        public JComponent[] synchMenuPresenters(JComponent[] items) {
+//            return getMenuPresenters();
+//        }
+//    }
     
 }
 

@@ -249,7 +249,7 @@ public final class ReportGroupVisualPanel1 extends JPanel {
         }
             
         if (jRadioButton1.isSelected() && jComboBoxObject.getSelectedItem() != null) return true;
-        if (jRadioButton2.isSelected() && jRTextExpressionArea.getText().trim().length() > 0) return true;
+        if (jRadioButton2.isSelected()) return true;
         
         return false;
     }

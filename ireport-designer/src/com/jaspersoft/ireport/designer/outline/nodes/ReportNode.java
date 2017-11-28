@@ -15,8 +15,10 @@ import com.jaspersoft.ireport.designer.sheet.properties.WhenNoDataTypeProperty;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.actions.AddDatasetAction;
+import com.jaspersoft.ireport.designer.menu.EditPageFormatAction;
 import com.jaspersoft.ireport.designer.menu.EditQueryAction;
 import com.jaspersoft.ireport.designer.menu.OpenReportDirectoryInFavoritesAction;
+import com.jaspersoft.ireport.designer.sheet.JRImportsProperty;
 import com.jaspersoft.ireport.designer.sheet.JRPropertiesMapProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
@@ -154,6 +156,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         moreSet.put(new WhenNoDataTypeProperty( jd ));
         moreSet.put(new LanguageProperty( jd ));
         moreSet.put(new FormatFactoryClassProperty( jd ));
+        moreSet.put(new JRImportsProperty( jd ));
         sheet.put(moreSet);
         
         return sheet;
@@ -164,6 +167,11 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         
         Action[] actions = super.getActions(context);
         java.util.ArrayList<Action> myactions = new java.util.ArrayList<Action>();
+
+
+        myactions.add(SystemAction.get(EditPageFormatAction.class));
+        myactions.add(null);
+
         for (int i=0; i<actions.length; ++i)
         {
             myactions.add(actions[i]);
@@ -765,7 +773,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
                         IReportManager.getInstance().addUndoableEdit(urob2, true);
                         
                         // Adjust the columns width...
-                        if (jasperDesign.getColumnCount() > 1)
+                        if (jasperDesign.getColumnCount() > 0) // Do it always...
                         {
                             int availableSpace = jasperDesign.getPageWidth() - jasperDesign.getLeftMargin() - jasperDesign.getRightMargin();
                             availableSpace -= (jasperDesign.getColumnCount()-1) * jasperDesign.getColumnSpacing();

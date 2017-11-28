@@ -13,8 +13,8 @@ import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignTextElement;
 import org.openide.nodes.PropertySupport;
 
 /**
@@ -23,24 +23,24 @@ import org.openide.nodes.PropertySupport;
 public class FontSizeProperty extends PropertySupport.ReadWrite {
     
     // FIXME: refactorize this
-    private final JRDesignTextElement element;
+    private final JRFont font;
     PropertyEditor editor = null;
 
     @SuppressWarnings("unchecked")
-    public FontSizeProperty(JRDesignTextElement element)
+    public FontSizeProperty(JRFont font)
     {
         super(JRBaseStyle.PROPERTY_FONT_SIZE, Integer.class,
               I18n.getString("Global.Property.Size"),
               I18n.getString("Global.Property.Size"));
-        this.element = element;
+        this.font = font;
 
         setValue("canEditAsText",true);
         setValue("oneline",true);
-        setValue("suppressCustomEditor",false);
+        setValue("suppressCustomEditor",true);
     }
 
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
-        return element.getFontSize();
+        return font.getFontSize();
     }
 
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -59,13 +59,13 @@ public class FontSizeProperty extends PropertySupport.ReadWrite {
 
         if (val == null || val instanceof Integer)
         {
-            Integer oldValue = element.getOwnFontSize();
+            Integer oldValue = font.getOwnFontSize();
             Integer newValue =   (Integer)val;
-            element.setFontSize(newValue);
+            font.setFontSize(newValue);
 
             ObjectPropertyUndoableEdit urob =
                     new ObjectPropertyUndoableEdit(
-                        element,
+                        font,
                         "FontSize", 
                         Integer.class,
                         oldValue,newValue);
@@ -76,7 +76,7 @@ public class FontSizeProperty extends PropertySupport.ReadWrite {
 
     @Override
     public boolean isDefaultValue() {
-        return element.getOwnFontSize() == null;
+        return font.getOwnFontSize() == null;
     }
 
     @Override

@@ -248,7 +248,7 @@ public class SubreportReturnValuesPanel extends javax.swing.JPanel {
         {
             int row = jTable.getSelectedRow();
             row = ((JXTable)jTable).convertRowIndexToModel(row);
-            returnValues.remove( model.getValueAt(0, row) );
+            returnValues.remove( model.getValueAt(row,0) );
             model.removeRow(row);
         }
         
@@ -263,7 +263,7 @@ public class SubreportReturnValuesPanel extends javax.swing.JPanel {
         if (row < 0) return;
         row = ((JXTable)jTable).convertRowIndexToModel(row);
         
-        JRDesignSubreportReturnValue oldReturnValue = (JRDesignSubreportReturnValue)model.getValueAt(0, row);
+        JRDesignSubreportReturnValue oldReturnValue = (JRDesignSubreportReturnValue)model.getValueAt(row,0);
         
         Window pWin = SwingUtilities.windowForComponent(this);
         

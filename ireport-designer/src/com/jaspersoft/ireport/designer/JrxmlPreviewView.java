@@ -20,6 +20,8 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.beans.BeanInfo;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -29,7 +31,9 @@ import org.netbeans.core.spi.multiview.CloseOperationState;
 import org.netbeans.core.spi.multiview.MultiViewDescription;
 import org.netbeans.core.spi.multiview.MultiViewElement;
 import org.netbeans.core.spi.multiview.MultiViewElementCallback;
+import org.openide.explorer.ExplorerUtils;
 import org.openide.nodes.Node;
+import org.openide.util.lookup.ProxyLookup;
 import org.openide.windows.TopComponent;
 
 /**
@@ -47,9 +51,18 @@ public class JrxmlPreviewView extends TopComponent
     JrxmlPreviewToolbar viewerToolbar = new JrxmlPreviewToolbar(this, viewerContext);
     
     private JrxmlEditorSupport support;
-    
-    public JrxmlPreviewView(JrxmlEditorSupport ed) {
+    private JrxmlVisualView visualView = null;
+
+    public JrxmlPreviewView(JrxmlEditorSupport ed, JrxmlVisualView visualView ) {
         this.support = ed;
+
+        IReportManager.getPreferences().addPreferenceChangeListener(new PreferenceChangeListener() {
+
+            public void preferenceChange(PreferenceChangeEvent evt) {
+                setNeedRefresh(true);
+            }
+        });
+        this.visualView = visualView;
     }
     
     @Override
@@ -130,6 +143,9 @@ public class JrxmlPreviewView extends TopComponent
     
     public MultiViewElement createElement() {
         this.setLayout(new BorderLayout());
+        try {
+            associateLookup( visualView.getLookup() );
+        } catch (Throwable ex) {}
         return this;
     }
 
@@ -211,6 +227,21 @@ public class JrxmlPreviewView extends TopComponent
         
         currentStatus = e.getStatus();
     
+    }
+
+
+    /**
+     * @return the visualView
+     */
+    public JrxmlVisualView getVisualView() {
+        return visualView;
+    }
+
+    /**
+     * @param visualView the visualView to set
+     */
+    public void setVisualView(JrxmlVisualView visualView) {
+        this.visualView = visualView;
     }
 
     

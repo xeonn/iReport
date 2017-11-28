@@ -102,8 +102,6 @@ public class ReportUnitChildren extends Index.KeysChildren implements PropertyCh
                 {
                     
                     RepositoryFolder item = (RepositoryFolder)children.get(i);
-                    System.out.println("Item found: " + item.getDescriptor().getUriString());
-                    System.out.flush();
                     
                     if (item.isDataSource()) continue;
                     if (item.getDescriptor().isMainReport())

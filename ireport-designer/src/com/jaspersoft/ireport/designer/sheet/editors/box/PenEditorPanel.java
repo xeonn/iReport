@@ -53,7 +53,7 @@ public class PenEditorPanel extends javax.swing.JPanel  {
         public void stateChanged(ChangeEvent e) {
                 if (!isInit() && pen != null)
                 {
-                    pen.setLineWidth( spinnedModel.getNumber().intValue() );
+                    pen.setLineWidth( spinnedModel.getNumber().floatValue() );
                 }
             }
 

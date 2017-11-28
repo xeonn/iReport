@@ -15,26 +15,26 @@ import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignTextElement;
 import org.openide.nodes.PropertySupport;
 
 /**
  * Class to manage the JRBaseStyle.PROPERTY_FONT_NAME property
  */
-public class PdfFontNameProperty extends PropertySupport.ReadWrite {
-    
+public class PdfFontNameProperty extends PropertySupport.ReadWrite 
+{
     // FIXME: refactorize this
-    private final JRDesignTextElement element;
+    private final JRFont font;
     PropertyEditor editor = null;
 
     @SuppressWarnings("unchecked")
-    public PdfFontNameProperty(JRDesignTextElement element)
+    public PdfFontNameProperty(JRFont font)
     {
         super(JRBaseStyle.PROPERTY_PDF_FONT_NAME, String.class,
               I18n.getString("Global.Property.PdfFontname"),
               I18n.getString("Global.Property.PdfFontname"));
-        this.element = element;
+        this.font = font;
 
         setValue("canEditAsText",true);
         setValue("oneline",true);
@@ -42,21 +42,21 @@ public class PdfFontNameProperty extends PropertySupport.ReadWrite {
     }
 
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
-        return element.getPdfFontName();
+        return font.getPdfFontName();
     }
 
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         if (val == null || val instanceof String)
         {
-            String oldValue = element.getOwnPdfFontName();
+            String oldValue = font.getOwnPdfFontName();
             String newValue =   (String)val;
 
-            element.setPdfFontName(newValue);
+            font.setPdfFontName(newValue);
 
             ObjectPropertyUndoableEdit urob =
                     new ObjectPropertyUndoableEdit(
-                        element,
+                        font,
                         "PdfFontName", 
                         String.class,
                         oldValue,newValue);
@@ -67,7 +67,7 @@ public class PdfFontNameProperty extends PropertySupport.ReadWrite {
 
     @Override
     public boolean isDefaultValue() {
-        return element.getOwnPdfFontName() == null;
+        return font.getOwnPdfFontName() == null;
     }
 
     @Override

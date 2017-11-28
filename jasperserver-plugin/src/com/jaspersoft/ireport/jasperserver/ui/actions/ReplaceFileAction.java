@@ -6,16 +6,14 @@ import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.RepositoryFile;
-import com.jaspersoft.ireport.jasperserver.RepositoryJrxmlFile;
 import com.jaspersoft.ireport.jasperserver.ui.nodes.ResourceNode;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.io.File;
 import javax.swing.JOptionPane;
-import org.openide.loaders.DataObject;
+import org.openide.filesystems.FileUtil;
 import org.openide.util.HelpCtx;
 import org.openide.util.Mutex;
 import org.openide.util.NbBundle;
-import org.openide.util.Utilities;
 import org.openide.util.actions.NodeAction;
 
 public final class ReplaceFileAction extends NodeAction {
@@ -65,7 +63,7 @@ public final class ReplaceFileAction extends NodeAction {
                 JrxmlDataObject dobject = view.getLookup().lookup(JrxmlDataObject.class);
                 if (dobject != null)
                 {
-                    final String fileName = dobject.getPrimaryFile().getPath();
+                    final String fileName = FileUtil.toFile(dobject.getPrimaryFile()).getPath();
                     final String ruUri = reportUnitUri;
                     Thread t = new Thread(new Runnable() {
 

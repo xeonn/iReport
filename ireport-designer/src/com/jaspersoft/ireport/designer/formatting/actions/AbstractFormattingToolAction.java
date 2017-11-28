@@ -50,6 +50,7 @@ public abstract class AbstractFormattingToolAction extends NodeAction {
     public List<JRDesignElement> getSelectedElements(Node[] nodes)
     {
         List<JRDesignElement> elements = new ArrayList<JRDesignElement>();
+
         for (int i=0; i<nodes.length; ++i)
         {
             if (nodes[i] instanceof ElementNode)
@@ -57,7 +58,23 @@ public abstract class AbstractFormattingToolAction extends NodeAction {
                 elements.add( ((ElementNode)nodes[i]).getElement());
             }
         }
+
+        if (elements.size() > 0)
+        {
+            try {
+                  JRDesignElement firstSelected = IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel().getActiveScene().getSelectionManager().getSelectedElements().get(0);
+                  if (firstSelected != null &&
+                      elements.contains(firstSelected))
+                  {
+                      elements.remove(firstSelected);
+                      elements.add(0, firstSelected);
+                  }
+            } catch (Exception ex){}
+            // if possible, set the correct first element selected...
+        }
+
         
+
         return elements;
     }
 

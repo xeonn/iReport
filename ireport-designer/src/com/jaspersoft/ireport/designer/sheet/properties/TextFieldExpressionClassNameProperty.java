@@ -71,7 +71,7 @@ public class TextFieldExpressionClassNameProperty  extends PropertySupport.ReadW
         ObjectPropertyUndoableEdit urob =
                     new ObjectPropertyUndoableEdit(
                         element,
-                        I18n.getString("Global.Property.Expression"), 
+                        "Expression",
                         JRExpression.class,
                         oldExp,newExp);
             // Find the undoRedo manager...

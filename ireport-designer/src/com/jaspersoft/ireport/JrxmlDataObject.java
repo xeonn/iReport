@@ -2,14 +2,11 @@ package com.jaspersoft.ireport;
 
 import com.jaspersoft.ireport.designer.JrxmlEditorSupport;
 import java.io.IOException;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObjectExistsException;
 import org.openide.loaders.MultiDataObject;
 import org.openide.nodes.Node;
 import org.openide.util.Lookup;
-import org.openide.util.LookupEvent;
-import org.openide.util.LookupListener;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 

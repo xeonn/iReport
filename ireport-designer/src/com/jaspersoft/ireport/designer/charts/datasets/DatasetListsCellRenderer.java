@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import net.sf.jasperreports.charts.design.JRDesignCategorySeries;
 import net.sf.jasperreports.charts.design.JRDesignGanttSeries;
+import net.sf.jasperreports.charts.design.JRDesignPieSeries;
 import net.sf.jasperreports.charts.design.JRDesignTimePeriodSeries;
 import net.sf.jasperreports.charts.design.JRDesignTimeSeries;
 import net.sf.jasperreports.charts.design.JRDesignXySeries;
@@ -56,6 +57,17 @@ public class DatasetListsCellRenderer extends DefaultListCellRenderer {
          else if (value instanceof JRDesignGanttSeries)
          {
                   label.setText( "Gantt series [" + Misc.getExpressionText( ((JRDesignGanttSeries)value).getSeriesExpression() ) +"]");
+         }
+         else if (value instanceof JRDesignPieSeries)
+         {
+                  if (list.getModel().getSize() <= 1)
+                  {
+                      label.setText( "Default pie series");
+                  }
+                  else
+                  {
+                      label.setText( "Pie series [" + (index+1) + "]");
+                  }
          }
          
          return this;

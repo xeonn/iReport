@@ -523,7 +523,8 @@ public class DataTypeDialog extends javax.swing.JDialog {
         if (descriptor == null) return;
         
         jTextFieldName.setText( descriptor.getName());
-        
+        setTitle( JasperServerManager.getFormattedString("properties.title", "{0} - Properties", new Object[]{descriptor.getName()}));
+
         
         jTextFieldLabel.setText(descriptor.getLabel());
         jEditorPaneDescription.setText( descriptor.getDescription());

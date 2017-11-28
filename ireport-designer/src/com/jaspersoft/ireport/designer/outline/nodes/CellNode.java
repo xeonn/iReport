@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.outline.nodes;
 
 import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.actions.PaddingAndBordersAction;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.outline.nodes.properties.CrosstabCellPropertiesFactory;
 import java.awt.datatransfer.Transferable;
@@ -198,8 +199,10 @@ public class CellNode extends IRIndexedNode implements PropertyChangeListener {
     @Override
     public Action[] getActions(boolean popup) {
         java.util.List<Action> list = new ArrayList<Action>();
-        
+
+        list.add( SystemAction.get(PaddingAndBordersAction.class));
         list.add( SystemAction.get(PasteAction.class));
+
         return list.toArray(new Action[list.size()]);
     }
 

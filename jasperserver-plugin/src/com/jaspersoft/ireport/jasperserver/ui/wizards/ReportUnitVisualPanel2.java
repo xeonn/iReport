@@ -16,6 +16,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import org.openide.filesystems.FileUtil;
 
 public final class ReportUnitVisualPanel2 extends JPanel {
 
@@ -285,7 +286,7 @@ public final class ReportUnitVisualPanel2 extends JPanel {
             JrxmlDataObject dobject = view.getLookup().lookup(JrxmlDataObject.class);
             if (dobject != null)
             {
-                jTextFieldFile.setText( dobject.getPrimaryFile().getPath() );
+                jTextFieldFile.setText(  FileUtil.toFile( dobject.getPrimaryFile() ) +"" );
             }
         }
 

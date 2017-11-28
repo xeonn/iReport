@@ -11,6 +11,7 @@ package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.editors.JRFontPropertyEditor;
 import java.beans.PropertyEditor;
+import java.util.prefs.PreferenceChangeListener;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.design.JasperDesign;
 

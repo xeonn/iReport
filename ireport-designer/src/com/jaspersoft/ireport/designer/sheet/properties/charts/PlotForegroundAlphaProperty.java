@@ -49,19 +49,19 @@ public final class PlotForegroundAlphaProperty extends FloatProperty {
     @Override
     public Float getFloat()
     {
-        return plot.getForegroundAlpha();
+        return plot.getForegroundAlphaFloat();
     }
 
     @Override
     public Float getOwnFloat()
     {
-        return plot.getForegroundAlpha();
+        return plot.getForegroundAlphaFloat();
     }
 
     @Override
     public Float getDefaultFloat()
     {
-        return 1f;
+        return null;
     }
 
     @Override
@@ -73,7 +73,7 @@ public final class PlotForegroundAlphaProperty extends FloatProperty {
     @Override
     public void validateFloat(Float foregroundAlpha)
     {
-        if (foregroundAlpha < 0f || foregroundAlpha > 1f)
+        if (foregroundAlpha != null && (foregroundAlpha < 0f || foregroundAlpha > 1f))
         {
             throw annotateException(I18n.getString("The_value_must_be_between_0_and_1."));
         }

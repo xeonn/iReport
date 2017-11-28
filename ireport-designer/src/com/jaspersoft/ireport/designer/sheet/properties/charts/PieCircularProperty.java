@@ -9,11 +9,8 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
-import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
-import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import com.jaspersoft.ireport.locale.I18n;
-import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.charts.design.JRDesignPiePlot;
     
     
@@ -51,19 +48,19 @@ public final class PieCircularProperty extends BooleanProperty {
     @Override
     public Boolean getBoolean()
     {
-        return plot.isCircular();
+        return plot.getCircular();
     }
 
     @Override
     public Boolean getOwnBoolean()
     {
-        return plot.isCircular();
+        return plot.getCircular();
     }
 
     @Override
     public Boolean getDefaultBoolean()
     {
-        return Boolean.TRUE;
+        return null;
     }
 
     @Override

@@ -21,7 +21,7 @@ public class ValidationUtils {
 
     	public static final int MAX_LENGTH_NAME = 100;
 	public static final int MAX_LENGTH_LABEL = 100;
-	public static final int MAX_LENGTH_DESC = 100;
+	public static final int MAX_LENGTH_DESC = 250;
         private static final Pattern PATTERN_NAME = Pattern.compile("(\\p{L}|\\p{N}|(\\_)|(\\.)|(\\-)|[;@])+");
         
         

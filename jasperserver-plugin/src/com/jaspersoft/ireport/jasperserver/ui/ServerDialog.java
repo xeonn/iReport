@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.jasperserver.ui;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import java.util.Locale;
@@ -42,7 +43,6 @@ public class ServerDialog extends javax.swing.JDialog {
     private int dialogResult = JOptionPane.CANCEL_OPTION;
     
     
-    
     /** Creates new form ServerDialog */
     public ServerDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -51,7 +51,12 @@ public class ServerDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         
         jTextFieldURL.setText(JasperServerManager.getMainInstance().getBrandingProperties().getProperty("irplugin.server.url")  );
-        
+        if (IReportManager.getPreferences().getBoolean("proMode", false))
+        {
+            jTextFieldURL.setText(JasperServerManager.getMainInstance().getBrandingProperties().getProperty("irplugin.server.url_pro"));
+        }
+
+
         jTextFieldServerName.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
                 updateButtons();
@@ -75,8 +80,12 @@ public class ServerDialog extends javax.swing.JDialog {
                 updateButtons();
             }
         });
+
+        jPanelPro.setVisible( IReportManager.getPreferences().getBoolean("proMode", false) );
         
         applyI18n();
+
+        // check is the domains plugin is installed...
     }
     
     
@@ -90,6 +99,7 @@ public class ServerDialog extends javax.swing.JDialog {
         jLabel4.setText( JasperServerManager.getString("serverDialog.labelURL","JasperServer URL"));
         jLabel5.setText( JasperServerManager.getString("serverDialog.labelUsername","Username"));
         jLabel6.setText( JasperServerManager.getString("serverDialog.labelPassword","Password"));
+        jLabelOrganization.setText( JasperServerManager.getString("serverDialog.labelOrganization","Organization"));
         
         ((TitledBorder)jPanel2.getBorder()).setTitle( JasperServerManager.getString("serverDialog.account","Account") );
         ((TitledBorder)jPanel3.getBorder()).setTitle( JasperServerManager.getString("serverDialog.serverInformation","Server information") );
@@ -130,6 +140,9 @@ public class ServerDialog extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         jTextFieldURL = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
+        jPanelPro = new javax.swing.JPanel();
+        jLabelOrganization = new javax.swing.JLabel();
+        jTextFieldOrganization = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jTextFieldUsername = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -213,8 +226,31 @@ public class ServerDialog extends javax.swing.JDialog {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Account"));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
+        jPanelPro.setLayout(new java.awt.GridBagLayout());
+
+        jLabelOrganization.setText("Organization");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanelPro.add(jLabelOrganization, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        jPanelPro.add(jTextFieldOrganization, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanel2.add(jPanelPro, gridBagConstraints);
+
         jLabel5.setText("Username");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
@@ -223,18 +259,18 @@ public class ServerDialog extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanel2.add(jTextFieldUsername, gridBagConstraints);
 
         jLabel6.setText("Password");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
         jPanel2.add(jLabel6, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
@@ -302,7 +338,12 @@ public class ServerDialog extends javax.swing.JDialog {
         jServer = new JServer();
         jServer.setName(  jTextFieldServerName.getText() );
         jServer.setUrl( jTextFieldURL.getText());
-        jServer.setUsername( jTextFieldUsername.getText());
+        String username = jTextFieldUsername.getText();
+        if (jTextFieldOrganization.getText().length() > 0)
+        {
+            username += "|" + jTextFieldOrganization.getText();
+        }
+        jServer.setUsername(username);
         jServer.setPassword( new String(jPasswordField.getPassword()));
         jServer.setLocale( Locale.getDefault().toString() );
 
@@ -340,7 +381,23 @@ public class ServerDialog extends javax.swing.JDialog {
         
         this.jTextFieldServerName.setText(  jServer.getName());
         this.jTextFieldURL.setText(  jServer.getUrl());
-        this.jTextFieldUsername.setText(  jServer.getUsername());
+        String username = jServer.getUsername();
+        String organization = "";
+        if (username.indexOf("|") > 0)
+        {
+            organization = username.substring(username.indexOf("|")+1);
+            username = username.substring(0, username.indexOf("|"));
+        }
+        if (IReportManager.getPreferences().getBoolean("proMode", false))
+        {
+            this.jTextFieldUsername.setText( username );
+            this.jTextFieldOrganization.setText( organization );
+        }
+        else
+        {
+            this.jTextFieldUsername.setText( username + "|" + organization);
+            this.jTextFieldOrganization.setText("");
+        }
         this.jPasswordField.setText(  jServer.getPassword());
         
     }
@@ -353,13 +410,16 @@ public class ServerDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabelOrganization;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanelPro;
     private javax.swing.JPasswordField jPasswordField;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTextField jTextFieldOrganization;
     private javax.swing.JTextField jTextFieldServerName;
     private javax.swing.JTextField jTextFieldURL;
     private javax.swing.JTextField jTextFieldUsername;

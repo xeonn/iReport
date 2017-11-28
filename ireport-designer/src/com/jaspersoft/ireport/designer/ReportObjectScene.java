@@ -34,6 +34,7 @@ package com.jaspersoft.ireport.designer;
  *
  * @author gtoffoli
  */
+import com.jaspersoft.ireport.designer.actions.BandDblClickResizeAction;
 import com.jaspersoft.ireport.designer.actions.BandMoveAction;
 import com.jaspersoft.ireport.designer.actions.BandSelectionAction;
 import com.jaspersoft.ireport.designer.actions.KeyboardElementMoveAction;
@@ -41,28 +42,21 @@ import com.jaspersoft.ireport.designer.actions.ReportAlignWithMoveStrategyProvid
 import com.jaspersoft.ireport.designer.actions.ReportAlignWithResizeStrategyProvider;
 import com.jaspersoft.ireport.designer.actions.ReportAlignWithWidgetCollector;
 import com.jaspersoft.ireport.designer.actions.TranslucentRectangularSelectDecorator;
-import com.jaspersoft.ireport.designer.ruler.GuideLine;
 import com.jaspersoft.ireport.designer.widgets.BandSeparatorWidget;
 import com.jaspersoft.ireport.designer.widgets.BandWidget;
-import com.jaspersoft.ireport.designer.widgets.GuideLineWidget;
 import com.jaspersoft.ireport.designer.widgets.JRDesignChartWidget;
 import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import com.jaspersoft.ireport.designer.widgets.JRDesignImageWidget;
 import com.jaspersoft.ireport.designer.widgets.PageWidget;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import javax.swing.JComponent;
 import javax.swing.UIManager;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
@@ -96,7 +90,7 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
     private ReportAlignWithResizeStrategyProvider reportAlignWithResizeStrategyProvider = null;
     private KeyboardElementMoveAction keyboardElementMoveAction = null;
     private BandSelectionAction bandSelectionAction = null;
-    
+
     
     
     @Override
@@ -181,6 +175,7 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
         BandSeparatorWidget bbw = new BandSeparatorWidget(this, b);
         bbw.getActions().addAction( new BandMoveAction(true, InputEvent.SHIFT_DOWN_MASK) );
         bbw.getActions().addAction( new BandMoveAction() );
+        bbw.getActions().addAction( new BandDblClickResizeAction());
         bandSeparatorsLayer.addChild(bbw);
         
         bandLayer.addChild(new BandWidget(this, b));

@@ -491,7 +491,7 @@ public class ResourceChooser extends javax.swing.JPanel {
     private void jButtonCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCloseActionPerformed
 
         selectedDescriptor = null;
-        this.setDialogResult( JOptionPane.OK_OPTION);
+        this.setDialogResult( JOptionPane.CANCEL_OPTION);
         dialog.setVisible(false);
         dialog.dispose();
         

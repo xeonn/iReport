@@ -56,7 +56,7 @@ public class SeriesColorsPropertyEditor extends PropertyEditorSupport implements
         if (colors == null) super.paintValue(gfx, box);
         else
         {
-            gfx.clearRect(box.x, box.y, box.width, box.height);
+            //gfx.clearRect(box.x, box.y, box.width, box.height);
             int cols = colors.size();
             int bw = 10;
             

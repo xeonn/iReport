@@ -256,10 +256,9 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
 
 
           File f = new File(fileName);
-          if (properties.get(IReportCompiler.OUTPUT_DIRECTORY) != null)
+          if (!IReportManager.getPreferences().getBoolean("useReportDirectoryToCompile", true))
           {
-                    //by Egon - DEBUG: .\FirstJasper.jasper
-             fileName = (String)properties.get(IReportCompiler.OUTPUT_DIRECTORY);
+             fileName = (String)IReportManager.getPreferences().get("reportDirectoryToCompile", ".");
              if (!fileName.endsWith(File.separator))
              {
                     fileName += File.separator;
@@ -286,6 +285,8 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
 
 
            String reportDirectory = new File(JRXML_FILE_NAME).getParent();
+
+
            //String classpath = System.getProperty("jasper.reports.compile.class.path");
            String classpath = net.sf.jasperreports.engine.util.JRProperties.getProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASSPATH);
 
@@ -297,7 +298,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
             classpath = System.getProperty("java.class.path");
             classpath += File.pathSeparator + reportDirectory;
             System.setProperty("java.class.path", classpath);
-            }
+           }
            reportDirectory = reportDirectory.replace('\\', '/');
            if(!reportDirectory.endsWith("/")){
                 reportDirectory += "/";//the file path separator must be present
@@ -715,8 +716,8 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                    {
                        net.sf.jasperreports.engine.util.JRProperties.setProperty("net.sf.jasperreports.query.executer.factory." + qe.getLanguage(), qe.getClassName());
                        getLogTextArea().logOnConsole(
-                                        Misc.formatString("Setting {0} as Query Executer Factory for language: {1}\n",
-                                        new Object[]{qe.getClassName(), ""+qe.getLanguage() }));
+                                        Misc.formatString("<font face=\"SansSerif\" size=\"3\" color=\"#000000\">Setting {0} as Query Executer Factory for language: {1}</font>\n",
+                                        new Object[]{qe.getClassName(), ""+qe.getLanguage() }),true);
 
                        break;
                    }
@@ -742,7 +743,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                      Misc.formatString("Locale: <b>{0}</b>",
                      new Object[]{Misc.getLocaleFromString(IReportManager.getInstance().getProperty("reportLocale", null)).getDisplayName()}) + "</font>",true);
 
-             String reportTimeZoneId = IReportManager.getInstance().getProperty("reportTimeZoneId","");
+             String reportTimeZoneId = IReportManager.getInstance().getProperty("reportTimeZone","");
              String timeZoneName = "Default";
              if (reportTimeZoneId != null && reportTimeZoneId.length() > 0 )
              {
@@ -1734,16 +1735,25 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
 			  reportDirectory = "/" + reportDirectory;//it's important to JVM 1.4.2 especially if contains windows drive letter
 		  }
 
-                  ClassLoader urlClassLoader = new URLClassLoader(new URL[]{
+          ClassLoader urlClassLoader = null;
+          String reportCompileDir = (String)IReportManager.getPreferences().get("reportDirectoryToCompile", ".");
+          File reportCompileDirFile = new File(reportCompileDir);
+          if ((reportCompileDirFile.exists()) && !IReportManager.getPreferences().getBoolean("useReportDirectoryToCompile", true))
+          {
+              urlClassLoader = new URLClassLoader(new URL[]{
+                   new URL("file://"+reportDirectory),reportCompileDirFile.toURI().toURL()},
+                   IReportManager.getInstance().getReportClassLoader());
+          }
+          else
+          {
+            urlClassLoader = new URLClassLoader(new URL[]{
 		  	  new URL("file://"+reportDirectory)
-		  }, IReportManager.getInstance().getReportClassLoader());
+            }, IReportManager.getInstance().getReportClassLoader());
+          }
+
 
 		  Thread.currentThread().setContextClassLoader(urlClassLoader);
 
-                  System.out.println("file://"+reportDirectory);
-                  System.out.flush();
-
-                 
                  if (getJrxmlPreviewView() != null)
                  {
                      this.addCompilationStatusListener(getJrxmlPreviewView());

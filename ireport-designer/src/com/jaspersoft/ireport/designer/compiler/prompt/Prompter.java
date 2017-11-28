@@ -62,6 +62,7 @@ public class Prompter
         Runnable runner = new Runnable() {
 
             public void run() {
+                if (report == null) return;
                 List<JRDesignParameter> params = (List<JRDesignParameter>)report.getParametersList();
         for (JRDesignParameter param : params)
         {

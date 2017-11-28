@@ -49,19 +49,19 @@ public final class Pie3DDepthFactorProperty extends DoubleProperty {
     @Override
     public Double getDouble()
     {
-        return plot.getDepthFactor();
+        return plot.getDepthFactorDouble();
     }
 
     @Override
     public Double getOwnDouble()
     {
-        return plot.getDepthFactor();
+        return plot.getDepthFactorDouble();
     }
 
     @Override
     public Double getDefaultDouble()
     {
-        return 0.2;
+        return null;
     }
 
     @Override
@@ -73,7 +73,7 @@ public final class Pie3DDepthFactorProperty extends DoubleProperty {
     @Override
     public void validateDouble(Double depth)
     {
-        if (depth < 0)
+        if (depth != null && depth < 0)
         {
             throw annotateException(I18n.getString("The_depth_factor_must_be_a_positive_value."));
         }

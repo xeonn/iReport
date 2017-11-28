@@ -5,6 +5,7 @@
 package com.jaspersoft.ireport.designer.wizards;
 
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.designer.IReportManager;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import javax.swing.event.ChangeListener;
 import org.openide.WizardDescriptor;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataFolder;
+import org.openide.loaders.DataObject;
 import org.openide.loaders.TemplateWizard;
 import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
@@ -105,9 +107,32 @@ public class CustomChooserWizardPanel implements WizardDescriptor.Panel {
                     String name = //((TemplateWizard) settings).getTargetName();
                             ((TemplateWizard) settings).getTemplate().getPrimaryFile().getNameExt();
 
-                    if (name != null && name.toLowerCase().endsWith(".properties"))
+                    
+                    // check by extension...
+                    if (name == null) name = "file";
+
+
+                    String ext = "";
+
+
+
+                    if (name.lastIndexOf(".") > 0)
                     {
-                        for (int i=0; i<100; ++i)
+                        ext = name.substring(name.lastIndexOf("."), name.length());
+                        name = name.substring(0,name.lastIndexOf("."));
+                    }
+                    
+                    DataObject dObj = ((TemplateWizard) settings).getTemplate();
+                    if (dObj != null && dObj.getPrimaryFile().getAttribute("extension") != null)
+                    {
+                        ext = ""+dObj.getPrimaryFile().getAttribute("extension");
+                        if (!ext.startsWith(".")) ext = "." + ext;
+                    }
+                    
+
+                    if (ext.toLowerCase().equals(".properties"))
+                    {
+                        for (int i=0; i<1000; ++i)
                         {
                             String tmpName = "Bundle" + ((i>0) ? i+"" : "") ;
                             File f = new File( Misc.getDataFolderPath(  ((TemplateWizard) settings).getTargetFolder()), tmpName + ".properties");
@@ -118,10 +143,10 @@ public class CustomChooserWizardPanel implements WizardDescriptor.Panel {
                             break;
                         }
                     }
-                    else
+                    else if (ext.toLowerCase().equals(".jrxml"))
                     {
                         // Look for the first available reportX.jrxml
-                        for (int i=1; i<100; ++i)
+                        for (int i=1; i<1000; ++i)
                         {
                             // get the file extension...\
                             File f = new File( Misc.getDataFolderPath(  ((TemplateWizard) settings).getTargetFolder()), "report" + i + ".jrxml");
@@ -129,6 +154,19 @@ public class CustomChooserWizardPanel implements WizardDescriptor.Panel {
 
                             component.setReportName("report" + i);
                             component.setExtension(".jrxml");
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        for (int i=1; i<1000; ++i)
+                        {
+                            // get the file extension...\
+                            File f = new File( Misc.getDataFolderPath(  ((TemplateWizard) settings).getTargetFolder()), name + i + ext);
+                            if (f.exists()) continue;
+
+                            component.setReportName(name + i);
+                            component.setExtension(ext);
                             break;
                         }
                     }
@@ -147,9 +185,14 @@ public class CustomChooserWizardPanel implements WizardDescriptor.Panel {
         if (settings instanceof TemplateWizard)
         {
             File f = new File(component.getFileName());
+            if (f.getParentFile() != null && f.getParentFile().exists())
+            {
+                IReportManager.getPreferences().put( IReportManager.CURRENT_DIRECTORY, f.getParent());
+            }
+
             try {
-            ((TemplateWizard)settings).setTargetFolder(DataFolder.findFolder( FileUtil.toFileObject(f.getParentFile())));
-            ((TemplateWizard)settings).setTargetName(component.getReportName());
+                ((TemplateWizard)settings).setTargetFolder(DataFolder.findFolder( FileUtil.toFileObject(f.getParentFile())));
+                ((TemplateWizard)settings).setTargetName(component.getReportName());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

@@ -95,6 +95,8 @@ public class JasperServerManager {
         }
         
         IReportManager.getInstance().getFileResolvers().add(RepoImageCache.getInstance());
+        IReportManager.getInstance().addCustomLinkType("ReportExecution", "ReportExecution");
+
     }
     
     

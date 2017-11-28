@@ -27,12 +27,14 @@ import com.jaspersoft.ireport.jasperserver.ui.*;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.connection.JDBCConnection;
+import com.jaspersoft.ireport.designer.connection.JDBCNBConnection;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.util.List;
 import javax.swing.JOptionPane;
+import org.netbeans.api.db.explorer.DatabaseConnection;
 
 /**
  *
@@ -527,7 +529,8 @@ public class DataSourceDialog extends javax.swing.JDialog {
         java.util.Vector validConnections = new java.util.Vector();
         for (IReportConnection conn : iReportConnections)
         {
-            if (conn instanceof JDBCConnection)
+            if (conn instanceof JDBCConnection ||
+                conn instanceof JDBCNBConnection)
             {
                 validConnections.add(conn);
             }
@@ -539,22 +542,36 @@ public class DataSourceDialog extends javax.swing.JDialog {
                     );
             return;
         }
-        JDBCConnection[] connections = new JDBCConnection[validConnections.size()];
+        IReportConnection[] connections = new IReportConnection[validConnections.size()];
         for (int i=0; i<connections.length; ++i)
         {
-            connections[i] = (JDBCConnection)(validConnections.elementAt(i));
+            connections[i] = (IReportConnection)(validConnections.elementAt(i));
         }
         
-        JDBCConnection selectedCon = (JDBCConnection)JOptionPane.showInputDialog(this,
+        IReportConnection selectedCon = (IReportConnection)JOptionPane.showInputDialog(this,
                 JasperServerManager.getString("dataSourceDialog.message.selectJDBC","Select a JDBC datasource:"),
                 JasperServerManager.getString("dataSourceDialog.message.import","Import..."),
-                0,null,connections, connections[0]);
+                JOptionPane.QUESTION_MESSAGE,null,connections, connections[0]);
         if (selectedCon != null)
         {
-            jTextFieldDriver.setText( selectedCon.getJDBCDriver() );
-            jTextFieldURL.setText( selectedCon.getUrl() );
-            jTextFieldUsername.setText( selectedCon.getUsername() );
-            jPasswordField.setText( selectedCon.getPassword() );
+            if (selectedCon instanceof JDBCConnection)
+            {
+                jTextFieldDriver.setText( ((JDBCConnection)selectedCon).getJDBCDriver() );
+                jTextFieldURL.setText( ((JDBCConnection)selectedCon).getUrl() );
+                jTextFieldUsername.setText( ((JDBCConnection)selectedCon).getUsername() );
+                jPasswordField.setText( ((JDBCConnection)selectedCon).getPassword() );
+            }
+            else if (selectedCon instanceof JDBCNBConnection)
+            {
+                DatabaseConnection dbconn = ((JDBCNBConnection)selectedCon).getDatabaseConnectionObject();
+                if (dbconn != null)
+                {
+                    jTextFieldDriver.setText( dbconn.getDriverClass() );
+                    jTextFieldURL.setText( dbconn.getDatabaseURL() );
+                    jTextFieldUsername.setText( dbconn.getUser());
+                    jPasswordField.setText( dbconn.getPassword() );
+                }
+            }
         }
         
     }//GEN-LAST:event_jButtonImportConnectionActionPerformed
@@ -676,6 +693,8 @@ public class DataSourceDialog extends javax.swing.JDialog {
            jTextFieldName.setEditable(false);
            jTextFieldName.setOpaque(false);
         }
+
+
     }
         
     /**
@@ -685,6 +704,8 @@ public class DataSourceDialog extends javax.swing.JDialog {
     {
         if (descriptor == null) return;
         
+        setTitle( JasperServerManager.getFormattedString("properties.title", "{0} - Properties", new Object[]{descriptor.getName()}));
+
         jTextFieldName.setText( descriptor.getName());
         jTextFieldLabel.setText( descriptor.getLabel());
         jEditorPaneDescription.setText( descriptor.getDescription());

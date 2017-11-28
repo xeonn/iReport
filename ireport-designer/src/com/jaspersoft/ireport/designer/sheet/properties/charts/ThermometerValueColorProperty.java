@@ -52,7 +52,7 @@ public final class ThermometerValueColorProperty extends PropertySupport.ReadWri
         if (val == null || val instanceof Color)
         {
             JRValueDisplay oldValue = element.getValueDisplay();
-            JRDesignValueDisplay newValue = new JRDesignValueDisplay( element.getValueDisplay());
+            JRDesignValueDisplay newValue = new JRDesignValueDisplay( element.getValueDisplay(), element.getChart());
             newValue.setColor((Color)val);
             element.setValueDisplay(newValue);
             ObjectPropertyUndoableEdit urob =

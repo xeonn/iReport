@@ -73,7 +73,7 @@ public final class RadiusProperty extends IntegerProperty
     @Override
     public void validateInteger(Integer radius)
     {
-        if (radius < 0)
+        if (radius != null && radius < 0)
         {
             throw annotateException(I18n.getString("Global.Property.Radiusexception"));
         }

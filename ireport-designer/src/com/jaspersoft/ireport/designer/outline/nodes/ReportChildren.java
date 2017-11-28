@@ -10,7 +10,6 @@
 package com.jaspersoft.ireport.designer.outline.nodes;
 
 import java.util.ArrayList;
-import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.design.JRDesignBand;
@@ -38,7 +37,7 @@ public class ReportChildren extends Children.Keys {
     }
     
     protected Node[] createNodes(Object key) {
-        
+
         if (key.equals("styles"))
         {
             return new Node[]{new StylesNode(jd,doLkp)};
@@ -54,6 +53,10 @@ public class ReportChildren extends Children.Keys {
         else if (key.equals("variables"))
         {
             return new Node[]{new VariablesNode(jd, jd.getMainDesignDataset(),doLkp)};
+        }
+        else if (key.equals("scriptlets"))
+        {
+            return new Node[]{new ScriptletsNode(jd,doLkp)};
         }
         else if (key instanceof JRDesignDataset)
         {
@@ -87,6 +90,7 @@ public class ReportChildren extends Children.Keys {
         children.add("parameters");
         children.add("fields");
         children.add("variables");
+        children.add("scriptlets");
         children.addAll( jd.getDatasetsList() );
         //children.addAll( ModelUtils.getBands(jd) );
         children.add( ( jd.getBackground() != null) ? jd.getBackground() : new NullBand(new JROrigin(jd.getName(), JROrigin.BACKGROUND )) );

@@ -48,19 +48,19 @@ public final class HighLowShowOpenTicksProperty extends BooleanProperty {
     @Override
     public Boolean getBoolean()
     {
-        return plot.isShowOpenTicks();
+        return plot.getShowOpenTicks();
     }
 
     @Override
     public Boolean getOwnBoolean()
     {
-        return plot.isShowOpenTicks();
+        return plot.getShowOpenTicks();
     }
 
     @Override
     public Boolean getDefaultBoolean()
     {
-        return Boolean.TRUE;
+        return null;
     }
 
     @Override

@@ -338,3 +338,11 @@ proprietary programs.  If your program is a subroutine library, you may
 consider it more useful to permit linking proprietary applications with the
 library.  If this is what you want to do, use the GNU Library General
 Public License instead of this License.
+
+---------------------------------------------------------------------------
+Note about data collection policy
+
+The Heartbeat enables iReport to collect anonymous system information and may
+be disabled at any time. The Heartbeat data is used for the purposes set forth
+in the JasperServer Heartbeat web page at www.jaspersoft.com/heartbeat.
+

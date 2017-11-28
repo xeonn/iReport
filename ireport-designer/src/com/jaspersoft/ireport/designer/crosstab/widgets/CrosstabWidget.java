@@ -536,7 +536,7 @@ public class CrosstabWidget extends Widget implements PropertyChangeListener {
                    // TODO: refresh groups....
                     ((CrosstabObjectScene)getScene()).refreshCells();
                     // Recalculate spaces...
-                    if (cellContent != null)
+                    if (cellContent != null && !IReportManager.getPreferences().getBoolean("disableCrosstabAutoLayout", false))
                     {
                         DefaultCellElementsLayout.doLayout(cellContent, (CrosstabObjectScene)getScene());
                     }

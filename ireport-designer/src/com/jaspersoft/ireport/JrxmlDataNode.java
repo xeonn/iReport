@@ -27,5 +27,6 @@ public class JrxmlDataNode extends DataNode {
         setIconBaseWithExtension(IMAGE_ICON_BASE);
         setShortDescription(  FileUtil.toFile( obj.getPrimaryFile() ) +"" );
     }
-    
+
+       
 }

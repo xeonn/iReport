@@ -14,6 +14,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.dnd.ReportObjectPaletteTransferable;
 import com.jaspersoft.ireport.designer.sheet.JRPropertiesMapProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.CrosstabParameterValueExpressionProperty;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import java.awt.datatransfer.Transferable;
 import java.beans.PropertyChangeListener;
@@ -71,11 +72,12 @@ public class CrosstabParameterNode extends ParameterNode implements PropertyChan
         
         JRDesignDataset dataset = getParentNode().getLookup().lookup(JRDesignDataset.class);
         
-        set.put(new NameProperty( getParameter(),crosstab));
+        set.put(new NameProperty(getParameter(),crosstab));
         set.put(new ParameterNode.ValueClassNameProperty( getParameter()));
         if (!getParameter().isSystemDefined())
         {
             // set.put(new ForPromptingProperty( getParameter())); // This not really useful for the Crosstab parameters...
+            set.put(new CrosstabParameterValueExpressionProperty((JRDesignCrosstabParameter)getParameter(), ModelUtils.getElementDataset(crosstab, jd) ));
             set.put(new DefaultValueExpressionProperty(getParameter(), ModelUtils.getElementDataset(crosstab, jd) ));
             set.put(new DescriptionProperty(getParameter()));
             set.put(new JRPropertiesMapProperty( getParameter()) );

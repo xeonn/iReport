@@ -9,18 +9,11 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
-import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.editor.ExpressionContext;
-import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
-import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import com.jaspersoft.ireport.locale.I18n;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
-import org.openide.ErrorManager;
 
     
 /**

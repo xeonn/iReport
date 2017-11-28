@@ -32,12 +32,16 @@
 
 package com.jaspersoft.ireport.designer.tools;
 
+import com.jaspersoft.ireport.designer.editor.ExpObjectCellRenderer;
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignDatasetParameter;
 
@@ -51,28 +55,32 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
     private String oldName = null;
     private Map currentParameters = null;
     
-    public JRDatasetParameterDialog(Dialog parent, Map currentParameters) 
+    public JRDatasetParameterDialog(Dialog parent, Map currentParameters, JRDesignDataset dataset)
     {
          super(parent);
-         initAll(currentParameters);
+         initAll(currentParameters, dataset);
     }
 
     /** Creates new form ReportQueryFrame */
-    public JRDatasetParameterDialog(Frame parent, Map currentParameters) 
+    public JRDatasetParameterDialog(Frame parent, Map currentParameters,JRDesignDataset dataset)
     {
          super(parent);
-         initAll(currentParameters);
+         initAll(currentParameters, dataset);
     }
 
     
-    public void initAll(Map currentParameters) {
+    public void initAll(Map currentParameters, JRDesignDataset dataset) {
         
         setModal(true);
         initComponents();
         this.currentParameters = currentParameters;
         //applyI18n();
         this.jRTextExpressionAreaDefaultExpression.setText("");   
-        
+
+
+        jComboBox1.setModel(new DefaultComboBoxModel(dataset.getParameters()));
+        jComboBox1.setRenderer( new ExpObjectCellRenderer() );
+
         // we have to force the context of the parameter.
         setLocationRelativeTo(null);
         
@@ -105,12 +113,12 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
         jButtonCancel = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextFieldName = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
         jRTextExpressionAreaDefaultExpression = new com.jaspersoft.ireport.designer.editor.ExpressionEditorArea();
         jSeparator1 = new javax.swing.JSeparator();
 
-        setTitle(I18n.getString("JRDatasetParameterDialog.Title.AddModParam")); // NOI18N
+        setTitle("Add/modify parameter");
         setModal(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -121,7 +129,7 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         jButtonOK.setMnemonic('o');
-        jButtonOK.setText(I18n.getString("Global.Button.Ok")); // NOI18N
+        jButtonOK.setText("OK");
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOKActionPerformed(evt);
@@ -130,7 +138,7 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
         jPanel1.add(jButtonOK);
 
         jButtonCancel.setMnemonic('c');
-        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
+        jButtonCancel.setText("Cancel");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -143,20 +151,19 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
         jPanel2.setPreferredSize(new java.awt.Dimension(350, 250));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText(I18n.getString("JRDatasetParameterDialog.Label.DatasetParamName")); // NOI18N
+        jLabel1.setText("Dataset parameter name");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 0, 3);
         jPanel2.add(jLabel1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 3, 3, 3);
-        jPanel2.add(jTextFieldName, gridBagConstraints);
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        jPanel2.add(jComboBox1, gridBagConstraints);
 
-        jLabel3.setText(I18n.getString("JRDatasetParameterDialog.Label.ValExpre")); // NOI18N
+        jLabel3.setText("Value expression");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -195,8 +202,8 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
 
     private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKActionPerformed
         
-        String newName = this.jTextFieldName.getText().trim();
-        if (newName.length() <= 0)
+        JRParameter param = (JRParameter) this.jComboBox1.getSelectedItem();
+        if (param == null)
         {
             javax.swing.JOptionPane.showMessageDialog(this,
                     I18n.getString("JRDatasetParameterDialog.Message.Warning"),
@@ -205,6 +212,8 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
             return;
         }
         
+        String newName = param.getName();
+
         if (oldName != null && 
             !oldName.equals(newName) &&
             currentParameters != null &&
@@ -219,9 +228,10 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
         
         tmpParameter = new JRDesignDatasetParameter();
 
-        tmpParameter.setName(this.jTextFieldName.getText().trim());
+        tmpParameter.setName(newName);
         JRDesignExpression exp = new JRDesignExpression();
         exp.setText(this.jRTextExpressionAreaDefaultExpression.getText());
+        exp.setValueClassName(param.getValueClassName());
         tmpParameter.setExpression(exp);
         setVisible(false);
         this.setDialogResult( javax.swing.JOptionPane.OK_OPTION);
@@ -248,7 +258,19 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
      *
      */
     public void setParameter(JRDesignDatasetParameter tmpParameter) {
-        this.jTextFieldName.setText( tmpParameter.getName() );
+        
+        for (int i=0; i<jComboBox1.getItemCount(); ++i)
+        {
+            JRParameter p = (JRParameter) jComboBox1.getItemAt(i);
+            if (p.getName().equals(tmpParameter.getName()))
+            {
+                jComboBox1.setSelectedItem(p);
+                break;
+            }
+        }
+
+
+        //this.jTextFieldName.setText( tmpParameter.getName() );
         
         oldName =tmpParameter.getName();
         
@@ -282,13 +304,13 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonOK;
+    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private com.jaspersoft.ireport.designer.editor.ExpressionEditorArea jRTextExpressionAreaDefaultExpression;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextFieldName;
     // End of variables declaration//GEN-END:variables
 
     private int dialogResult;    
@@ -326,7 +348,7 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
                     Misc.selectTextAndFocusArea(jRTextExpressionAreaDefaultExpression);
                     break;
                 case COMPONENT_PARAM_NAME:
-                    Misc.selectTextAndFocusArea(jTextFieldName);
+                    //Misc.selectTextAndFocusArea(jTextFieldName);
                     break;  
             }
         } catch (Exception ex) { }

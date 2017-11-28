@@ -10,16 +10,12 @@
 package com.jaspersoft.ireport.designer.sheet.editors;
 
 import com.jaspersoft.ireport.designer.sheet.editors.box.BoxBorderSelectionPanel;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Stroke;
-import java.beans.FeatureDescriptor;
-import java.beans.PropertyEditorSupport;
-import org.openide.explorer.propertysheet.ExPropertyEditor;
-import org.openide.explorer.propertysheet.PropertyEnv;
-import org.openide.nodes.Node;
 
 /**
  *
@@ -31,10 +27,11 @@ import java.beans.PropertyEditorSupport;
 import org.openide.explorer.propertysheet.ExPropertyEditor;
 import org.openide.explorer.propertysheet.PropertyEnv;
 import java.beans.FeatureDescriptor;
-import java.util.Iterator;
-import java.util.SortedSet;
-import net.sf.jasperreports.engine.JRChartPlot;
 import net.sf.jasperreports.engine.JRPen;
+import net.sf.jasperreports.engine.JRPrintLine;
+import net.sf.jasperreports.engine.base.JRBasePrintLine;
+import net.sf.jasperreports.engine.export.draw.LineDrawer;
+import net.sf.jasperreports.engine.util.JRPenUtil;
 import org.openide.nodes.Node;
 
 
@@ -54,20 +51,33 @@ public class JRPenPropertyEditor extends PropertyEditorSupport implements ExProp
     }
 
     @Override
-    public void paintValue(Graphics gfx, Rectangle box) {
-        
-        JRPen pen = (JRPen)getValue();
-        if (pen == null) super.paintValue(gfx, box);
+    public void paintValue(Graphics grx, Rectangle box) 
+    {
+        JRPen pen = getValue() instanceof JRPen ? (JRPen)getValue() : null;
+        if (pen == null)
+        {
+            super.paintValue(grx, box);
+        }
         else
         {
-            gfx.clearRect(box.x, box.y, box.width, box.height);
-            gfx.setColor( pen.getLineColor() == null ? Color.BLACK : pen.getLineColor());
-            Stroke s = BoxBorderSelectionPanel.createStroke(pen);
-            if (s != null)
-            {
-                ((Graphics2D)gfx).setStroke(s);
-                gfx.drawLine(box.x+4, box.y + box.height/2, box.x+box.width-4, box.y + box.height/2);
-            }
+//            //grx.clearRect(box.x, box.y, box.width, box.height);
+//            grx.setColor(pen.getLineColor() == null ? Color.BLACK : pen.getLineColor());
+//            //Stroke s = BoxBorderSelectionPanel.createStroke(pen);
+//            Stroke stroke = JRPenUtil.getStroke(pen, BasicStroke.CAP_SQUARE);
+//            if (stroke != null)
+//            {
+//                ((Graphics2D)grx).setStroke(stroke);
+//                grx.drawLine(box.x + 4, box.y + box.height / 2, box.x + box.width - 4, box.y + box.height / 2);
+//            }
+            JRPrintLine line = new JRBasePrintLine(null);
+            line.setX(box.x + 4);
+            line.setY(box.y + box.height / 2);
+            line.setWidth(box.width - 8);
+            line.setHeight(1);
+            line.getLinePen().setLineColor(pen.getLineColor());
+            line.getLinePen().setLineStyle(pen.getLineStyle());
+            line.getLinePen().setLineWidth(pen.getLineWidth());
+            new LineDrawer().draw((Graphics2D)grx, line, 0, 0);
         }
         
     }
@@ -90,9 +100,10 @@ public class JRPenPropertyEditor extends PropertyEditorSupport implements ExProp
     }
 
     @Override
-    public java.awt.Component getCustomEditor () {
-        JRPen val = (JRPen)getValue();
-        return new JRPenPropertyCustomEditor(val, false, null, this, env); // NOI18N
+    public java.awt.Component getCustomEditor () 
+    {
+        JRPen pen = getValue() instanceof JRPen ? (JRPen)getValue() : null;
+        return new JRPenPropertyCustomEditor(pen, false, null, this, env); // NOI18N
     }
 
     //private String instructions=null;
