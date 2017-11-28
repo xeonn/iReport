@@ -111,6 +111,11 @@ public class BandSeparatorWidget extends SeparatorWidget implements PropertyChan
             Rectangle2D r = new Rectangle2D.Double(0.0,0.0,0.0,bounds.height - insets.top - insets.bottom );
             gr.draw(r);
         }
+
+//        if (getBand() != null)
+//        {
+//            gr.drawString("" + ModelUtils.getMaxBandHeight((JRDesignBand)getBand(), ((ReportObjectScene)getScene()).getJasperDesign()), 0, 0);
+//        }
     }
 
     public void propertyChange(PropertyChangeEvent evt) {

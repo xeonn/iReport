@@ -47,6 +47,8 @@ import java.awt.TexturePaint;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JROrigin;
+import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.netbeans.api.visual.widget.Widget;
 
@@ -74,11 +76,11 @@ public class PageWidget extends Widget {
                 new Insets(10,10,10,10), 
                 new Insets(14,14,14,14), Utilities.loadImage("com/jaspersoft/ireport/designer/widgets/pageborder.png") ));
         */
-        setBorder(new ReportBorder());
+        setBorder(new ReportBorder(scene));
         
         
         setBackground(Color.WHITE);
-        setOpaque(true);
+        setOpaque(false);
         setCheckClipping(true);
         updateBounds();
     }
@@ -124,18 +126,37 @@ public class PageWidget extends Widget {
         Stroke bs = Java2DUtils.getInvertedZoomedStroke(oldStroke, getScene().getZoomFactor());
         g.setStroke(bs);
         
-        // LEFT MARGINE LINE
+        
         JasperDesign jd = getJasperDesign();
         if (jd != null)
         {
             int dh = ModelUtils.getDesignHeight(jd);
+
+            // Detached background...
+            // Draw the background band
+            if (IReportManager.getInstance().isBackgroundSeparated() &&
+                jd.getBackground() != null &&
+                jd.getBackground().getHeight() > 0)
+            {
+                dh -= jd.getBackground().getHeight();
+                dh -= jd.getTopMargin();
+                dh -= jd.getBottomMargin();
+                dh -= 40;
+            }
+
+            // Paint the white document...
+            g.setColor(Color.WHITE);
+            g.fillRect(0,0,jd.getPageWidth(), dh);
+
+            g.setColor(ReportObjectScene.DESIGN_LINE_COLOR);
+            // LEFT MARGINE LINE
             g.drawLine( jd.getLeftMargin(),0,
                         jd.getLeftMargin(),
                         dh);
 
             // RIGHT MARGIN LINE
             g.drawLine(jd.getPageWidth() - jd.getRightMargin(),0,
-                       jd.getPageWidth() - jd.getRightMargin(),ModelUtils.getDesignHeight(jd));
+                       jd.getPageWidth() - jd.getRightMargin(),dh);
 
             g.drawLine( 0, jd.getTopMargin(),
                         jd.getPageWidth(), jd.getTopMargin());
@@ -179,11 +200,79 @@ public class PageWidget extends Widget {
 
                 for (JRBand b : bands)
                 {
+                    // Detached background...
+                    if (b instanceof JRDesignBand &&
+                        ((JRDesignBand)b).getOrigin().getBandType() == JROrigin.BACKGROUND &&
+                        IReportManager.getInstance().isBackgroundSeparated())
+                    {
+                        continue;
+                    }
+
                     designHeight += b.getHeight();
                     paintBand(g, jd, ModelUtils.nameOf(b, jd) , b, designHeight);
                 }
             }
-            
+
+
+
+            oldStroke = g.getStroke();
+            g.setStroke(bs);
+
+            // Detached background...
+            // Draw the background band
+            if (IReportManager.getInstance().isBackgroundSeparated() &&
+                jd.getBackground() != null &&
+                jd.getBackground().getHeight() > 0)
+            {
+
+                designHeight += jd.getBottomMargin();
+
+                Color oldC = g.getColor();
+//                g.setColor(Color.RED);
+//                g.drawLine( 0,designHeight,
+//                            jd.getPageWidth(),
+//                            designHeight);
+
+                // new page 0 position
+                designHeight += 40; // space before the background...
+
+//                g.drawLine( 0,designHeight,
+//                            jd.getPageWidth(),
+//                            designHeight);
+
+
+                
+                int bgPageHeight = jd.getBackground().getHeight() + jd.getTopMargin() + jd.getBottomMargin();
+                // Paint a new page...
+                g.setColor(Color.WHITE);
+                g.fillRect(0,designHeight,jd.getPageWidth(), bgPageHeight);
+                //g.setColor(Color.GREEN);
+                g.setColor(ReportObjectScene.DESIGN_LINE_COLOR);
+
+                // LEFT MARGINE LINE
+                g.drawLine( jd.getLeftMargin(),designHeight,
+                            jd.getLeftMargin(),
+                            designHeight+bgPageHeight);
+
+                // RIGHT MARGIN LINE
+                g.drawLine(jd.getPageWidth() - jd.getRightMargin(),designHeight,
+                           jd.getPageWidth() - jd.getRightMargin(),designHeight+bgPageHeight);
+
+                g.drawLine( 0, designHeight + jd.getTopMargin(),
+                            jd.getPageWidth(), designHeight + jd.getTopMargin());
+
+                g.drawLine( 0,
+                        designHeight + bgPageHeight - jd.getBottomMargin(),
+                        jd.getPageWidth(),
+                        designHeight + bgPageHeight - jd.getBottomMargin());
+
+
+                designHeight += jd.getTopMargin();
+                g.setStroke(oldStroke);
+                
+                paintBand(g, jd, ModelUtils.nameOf(jd.getBackground(), jd) , jd.getBackground(), designHeight + jd.getBackground().getHeight());
+                g.setColor(oldC);
+            }
         }
         g.setStroke(oldStroke);
     }

@@ -8,6 +8,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
 import java.net.URLConnection;
+import java.util.UUID;
 import java.util.prefs.Preferences;
 import javax.swing.JOptionPane;
 import org.openide.modules.ModuleInstall;
@@ -19,7 +20,7 @@ import org.openide.windows.WindowManager;
  */
 public class Installer extends ModuleInstall implements Runnable {
 
-    public static final String VERSION = "3.5.1";//"3.5.0";//"3.4.0";
+    public static final String VERSION = "3.5.2";//"3.5.1";//"3.5.0";//"3.4.0";
     
     @Override
     public void restored() {
@@ -56,8 +57,18 @@ public class Installer extends ModuleInstall implements Runnable {
                 
             }
             */
-            java.net.URL url = new java.net.URL("http://ireport.sf.net/lastversion.php?version=" + VERSION + "&nb=1");
+            String uuid = IReportManager.getPreferences().get("UUID",null);
+            int newInstallation = 0;
+            if (uuid == null || uuid.length() == 0)
+            {
+                newInstallation = 1;
+                uuid = UUID.randomUUID().toString();
+                IReportManager.getPreferences().put("UUID",uuid);
+            }
 
+            System.out.println("Invoking URL " + "http://ireport.sf.net/lastversion.php?version=" + VERSION + "&nb=1&uuid=" + uuid + "&new="+newInstallation);
+            System.out.flush();
+            java.net.URL url = new java.net.URL("http://ireport.sf.net/lastversion.php?version=" + VERSION + "&nb=1&uuid=" + uuid + "&new="+newInstallation);
             
             byte[] webBuffer = new byte[400];
             URLConnection uConn = url.openConnection();

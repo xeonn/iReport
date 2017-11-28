@@ -194,10 +194,12 @@ public class CrosstabObjectScene extends AbstractReportObjectScene implements Pr
         //widget.getSelectionWidget().setLayout(new ResizeHandleLayout());
         //widget.getSelectionWidget().getActions().addAction(createSelectAction());
         
-        widget.getActions().addAction (createSelectAction());
+        //widget.getActions().addAction (createSelectAction());
+        widget.getActions().addAction (getReportSelectAction());
         
         widget.getSelectionWidget().getActions().addAction( keyboardElementMoveAction );
-        
+
+        widget.getSelectionWidget().getActions().addAction (getReportSelectAction());
         widget.getSelectionWidget().getActions().addAction(createObjectHoverAction());
         
         

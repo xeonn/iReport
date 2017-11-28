@@ -12,6 +12,7 @@ import javax.swing.undo.CannotUndoException;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
@@ -46,9 +47,14 @@ public class AddBandUndoableEdit extends AggregatedUndoableEdit {
                     jasperDesign.setPageHeader(null); break;
                 case JROrigin.COLUMN_HEADER: 
                     jasperDesign.setColumnHeader(null); break;
-                case JROrigin.DETAIL: 
-                    jasperDesign.setDetail(null); break;
-                case JROrigin.COLUMN_FOOTER: 
+                case JROrigin.DETAIL:
+                {
+                    JRDesignSection section = (JRDesignSection)jasperDesign.getDetailSection();
+                    section.removeBand(band);
+                    break;
+                    //jasperDesign.setDetail(null); break;
+                }
+                case JROrigin.COLUMN_FOOTER:
                     jasperDesign.setColumnFooter(null); break;
                 case JROrigin.PAGE_FOOTER: 
                     jasperDesign.setPageFooter(null); break;
@@ -59,9 +65,22 @@ public class AddBandUndoableEdit extends AggregatedUndoableEdit {
                 case JROrigin.NO_DATA: 
                     jasperDesign.setNoData(null); break;
                 case JROrigin.GROUP_HEADER:
-                    ((JRDesignGroup)jasperDesign.getGroupsMap().get(origin.getGroupName())).setGroupHeader(null); break;
+                {
+                    JRDesignGroup group = ((JRDesignGroup)jasperDesign.getGroupsMap().get(origin.getGroupName()));
+                    JRDesignSection section = (JRDesignSection)group.getGroupHeaderSection();
+                    section.removeBand(band);
+                    break;
+                    //setGroupHeader(null); break;
+                }
                 case JROrigin.GROUP_FOOTER:
-                    ((JRDesignGroup)jasperDesign.getGroupsMap().get(origin.getGroupName())).setGroupFooter(null); break;
+                {
+                    JRDesignGroup group = ((JRDesignGroup)jasperDesign.getGroupsMap().get(origin.getGroupName()));
+                    JRDesignSection section = (JRDesignSection)group.getGroupFooterSection();
+                    section.removeBand(band);
+                    break;
+                    //((JRDesignGroup)jasperDesign.getGroupsMap().get(origin.getGroupName())).setGroupFooter(null); break;
+                }
+                    
             }
         }
         
@@ -86,9 +105,13 @@ public class AddBandUndoableEdit extends AggregatedUndoableEdit {
                     jasperDesign.setPageHeader(band); break;
                 case JROrigin.COLUMN_HEADER: 
                     jasperDesign.setColumnHeader(band); break;
-                case JROrigin.DETAIL: 
-                    jasperDesign.setDetail(band); break;
-                case JROrigin.COLUMN_FOOTER: 
+                case JROrigin.DETAIL:
+                {
+                    //jasperDesign.setDetail(band);
+                    ((JRDesignSection)jasperDesign.getDetailSection()).addBand(band);
+                    break;
+                }
+                case JROrigin.COLUMN_FOOTER:
                     jasperDesign.setColumnFooter(band); break;
                 case JROrigin.PAGE_FOOTER: 
                     jasperDesign.setPageFooter(band); break;
@@ -99,9 +122,17 @@ public class AddBandUndoableEdit extends AggregatedUndoableEdit {
                 case JROrigin.NO_DATA: 
                     jasperDesign.setNoData(band); break;
                 case JROrigin.GROUP_HEADER:
-                    ((JRDesignGroup)jasperDesign.getGroupsMap().get(origin.getGroupName())).setGroupHeader(band); break;
+                {
+                    JRDesignGroup group = (JRDesignGroup)jasperDesign.getGroupsMap().get(origin.getGroupName());
+                    ((JRDesignSection)group.getGroupHeaderSection()).addBand(band);
+                    break;
+                }
                 case JROrigin.GROUP_FOOTER:
-                    ((JRDesignGroup)jasperDesign.getGroupsMap().get(origin.getGroupName())).setGroupFooter(band); break;
+                {
+                    JRDesignGroup group = (JRDesignGroup)jasperDesign.getGroupsMap().get(origin.getGroupName());
+                    ((JRDesignSection)group.getGroupFooterSection()).addBand(band);
+                    break;
+                }
             }
         }
     }

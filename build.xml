@@ -12,7 +12,7 @@
                 <include name="platform7/**/*_fr.jar"/>
                 <include name="platform7/**/*_it.jar"/>
                 <include name="platform7/**/*_pl.jar"/>
-                <include name="platform7/**/*_pt_BR.jar"/>
+                <!-- <include name="platform7/**/*_pt_BR.jar"/> -->
                 <include name="platform7/**/*_sq.jar"/>
 
                 <include name="ide8/**/*_de.jar"/>
@@ -20,7 +20,7 @@
                 <include name="ide8/**/*_fr.jar"/>
                 <include name="ide8/**/*_it.jar"/>
                 <include name="ide8/**/*_pl.jar"/>
-                <include name="ide8/**/*_pt_BR.jar"/>
+                <!-- <include name="ide8/**/*_pt_BR.jar"/> -->
                 <include name="ide8/**/*_sq.jar"/>
 
                 <include name="nb6.0/**/*_de.jar"/>
@@ -28,7 +28,7 @@
                 <include name="nb6.0/**/*_fr.jar"/>
                 <include name="nb6.0/**/*_it.jar"/>
                 <include name="nb6.0/**/*_pl.jar"/>
-                <include name="nb6.0/**/*_pt_BR.jar"/>
+                <!-- <include name="nb6.0/**/*_pt_BR.jar"/> -->
                 <include name="nb6.0/**/*_sq.jar"/>
     </patternset>
 
@@ -84,7 +84,7 @@
       Create the regular zip distributions for iReport NB
     ============================================================= -->
     <target name="create-ireport-distro-zip" depends="pre-distro" description="Creates an unzipped platform from the suite, launchers, and selected modules from the platform.">
-        <zip destfile="dist/${distro.zipfilename}.zip">
+        <zip duplicate="preserve" destfile="dist/${distro.zipfilename}.zip">
             <zipfileset dir="${build.launcher.dir}/bin/" filemode="755" prefix="${distro.zipfilename}/bin"/>
             <zipfileset dir="${build.launcher.dir}/etc/" prefix="${distro.zipfilename}/etc"/>
             <zipfileset dir="${netbeans.dest.dir}" filemode="755" prefix="${distro.zipfilename}">
@@ -146,6 +146,8 @@
             </tarfileset>
             <tarfileset  dir="${netbeans.dest.dir}" prefix="${distro.zipfilename}">
                 <patternset refid="locale.platform.included.files"/>
+                <exclude name="**/*Test*"/>
+
             </tarfileset>
 
             <!-- Yes, the doubled app.name is a bit ugly, but better than the alternative; cf. #66441: -->
@@ -162,7 +164,7 @@
       Create the regular source code distribution for iReport
     ============================================================= -->
     <target name="create-ireport-distro-src-zip" depends="pre-distro" description="Creates an unzipped platform from the suite, launchers, and selected modules from the platform.">
-        <zip destfile="dist/${distro.zipfilename}-src.zip">
+        <zip duplicate="preserve" destfile="dist/${distro.zipfilename}-src.zip">
             <!-- <zipfileset dir="${build.launcher.dir}/bin/" filemode="755" prefix="${distro.zipfilename}-src/bin"/>
              <zipfileset dir="${build.launcher.dir}/etc/" prefix="${distro.zipfilename}-src/etc"/>
              <zipfileset dir="${netbeans.dest.dir}" filemode="755" prefix="${distro.zipfilename}-src">

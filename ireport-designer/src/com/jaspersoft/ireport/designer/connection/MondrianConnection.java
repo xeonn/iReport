@@ -39,6 +39,7 @@ import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.designer.connection.gui.MondrianConnectionEditor;
 import java.sql.Connection;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import mondrian.olap.DriverManager;
@@ -156,10 +157,11 @@ public class MondrianConnection extends IReportConnection {
             Util.PropertyList props = new Util.PropertyList();
             props.put("Catalog", getCatalogUri());
             props.put("Provider", "mondrian");
+            props.put("Locale", Locale.getDefault().getLanguage());
 
             SimpleSQLDataSource ds = new SimpleSQLDataSource(con);
 
-            mondrianConnection = DriverManager.getConnection(props, null, ds, false);
+            mondrianConnection = DriverManager.getConnection(props, null, ds);
             /*
             mondrianConnection  = DriverManager.getConnection(
 					"Provider=mondrian;" + 

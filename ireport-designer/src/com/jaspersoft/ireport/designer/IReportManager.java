@@ -9,12 +9,17 @@
 
 package com.jaspersoft.ireport.designer;
 
+import com.jaspersoft.ireport.designer.connection.IReportConnectionFactory;
+import com.jaspersoft.ireport.designer.connection.DefaultIReportConnectionFactory;
 import com.jaspersoft.ireport.designer.connection.JREmptyDatasourceConnection;
 import com.jaspersoft.ireport.designer.fonts.TTFFontsLoader;
 import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
 import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
+import com.jaspersoft.ireport.designer.export.DefaultExporterFactory;
+import com.jaspersoft.ireport.designer.export.ExporterFactory;
 import com.jaspersoft.ireport.designer.fonts.TTFFontsLoaderMonitor;
 import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
+import com.jaspersoft.ireport.designer.outline.nodes.CrosstabNode;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.undo.AggregatedUndoableEdit;
@@ -43,6 +48,7 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoableEdit;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignChartDataset;
@@ -96,8 +102,25 @@ public class IReportManager {
     private static ReportClassLoader reportClassLoader = null;
     private static IReportManager mainInstance = null;
 
-    private List<Tag> customLinkTypes = new ArrayList<Tag>();
+    public static HashMap<String, ElementNodeFactory> elementNodeFactories = new HashMap<String, ElementNodeFactory>();
 
+    private java.util.ArrayList<IReportConnection> connections = null;
+    private java.util.ArrayList<QueryExecuterDef> queryExecuters = null;
+    private java.util.List<IRFont> fonts = null;
+    private java.util.List<FileResolver> fileResolvers = null;
+    private java.util.HashMap parameterValues = new java.util.HashMap();
+    private List<Tag> customLinkTypes = new ArrayList<Tag>();
+    private final Set<JrxmlVisualViewActivatedListener> listeners = new HashSet<JrxmlVisualViewActivatedListener>(1); // or can use ChangeSupport in NB 6.0
+    private java.util.List<IReportConnectionFactory> iReportConnectionFactories = null;
+    private IReportConnection defaultConnection = null;
+    private PropertyChangeSupport propertyChangeSupport = null;
+    private JRDesignChartDataset chartDatasetClipBoard = null;
+    private java.util.List chartSeriesClipBoard = null;
+    private boolean forceAggregateUndo = false;
+    private UndoableEdit lastUndoableEdit = null;
+    private long lastUndoableEditTime = 0;
+    private java.util.List<ExporterFactory> exporterFactories = null;
+    
 
     public static ElementNode getComponentNode(JasperDesign jd, JRDesignComponentElement componentElement, Lookup lkp) {
 
@@ -119,7 +142,6 @@ public class IReportManager {
         return null;
     }
 
-    public static HashMap<String, ElementNodeFactory> elementNodeFactories = new HashMap<String, ElementNodeFactory>();
     public static ElementNodeFactory getElementNodeFactory(String componentClassName)
     {
 
@@ -177,11 +199,7 @@ public class IReportManager {
                     elementNodeFactories.put(componentClassName, enf);
                     return enf;
                 }
-                else
-                {
-                    System.out.println("Name not equals: " + name +  " != " + componentClassName);
-                            System.out.flush();
-                }
+               
             } catch (Throwable ex)
             {
                 System.out.println("Unable to find element node Factory for the component class: " + name);
@@ -227,11 +245,7 @@ public class IReportManager {
         return decorators;
     }
     
-    private java.util.ArrayList<IReportConnection> connections = null;
-    private java.util.ArrayList<QueryExecuterDef> queryExecuters = null;
-    private java.util.List<IRFont> fonts = null;
-    private java.util.List<FileResolver> fileResolvers = null;
-    private java.util.HashMap parameterValues = new java.util.HashMap();
+    
 
     public List<IRFont> getFonts() {
         return fonts;
@@ -311,10 +325,8 @@ public class IReportManager {
     public void setFonts(List<IRFont> fonts) {
         this.fonts = fonts;
     }
-    private java.util.List connectionImplementations = null;
-    private IReportConnection defaultConnection = null;
-    private PropertyChangeSupport propertyChangeSupport = null;
-
+    
+    
     public PropertyChangeSupport getPropertyChangeSupport() {
         return propertyChangeSupport;
     }
@@ -609,25 +621,26 @@ public class IReportManager {
         }
     }
     
-    /**
-     *  Lazy initialization of the available implementations
-     */
-    public List getConnectionImplementations()
-    {
-        if (connectionImplementations == null)
-        {
-            connectionImplementations = new java.util.ArrayList();
-            addDefaultConnectionImplementations();
-        }
-        return connectionImplementations;
-    }
     
+
+    /**
+     * This method provides the preferred way to register a new connection type
+     */
+    @SuppressWarnings("unchecked")
+    public void addConnectionImplementationFactory(IReportConnectionFactory factory)
+    {
+        getIReportConnectionFactories().add(factory);
+    }
     /** 
      * This method provides the preferred way to register a new connection type
      */
     @SuppressWarnings("unchecked")
     public boolean addConnectionImplementation(String className)
     {
+
+        DefaultIReportConnectionFactory connectionFactory = new DefaultIReportConnectionFactory(className);
+        getIReportConnectionFactories().add(connectionFactory);
+        /*
         if (getConnectionImplementations().contains(className)) return true;
         
         try {
@@ -639,7 +652,8 @@ public class IReportManager {
         {
             t.printStackTrace();
         }
-        return false;
+        */
+        return true;
     }
 
     public static ClassLoader getReportClassLoader()
@@ -726,7 +740,7 @@ public class IReportManager {
         {
             File f = new File(path);
             try {
-                urls.add(f.toURL());
+                urls.add(f.toURI().toURL());
             } catch (MalformedURLException ex) {
                 //Exceptions.printStackTrace(ex);
             }
@@ -842,14 +856,15 @@ public class IReportManager {
         
     }
 
+//        private String str="";
+
     /**
      *  Find the node that that has this object in his lookup, or the object is a well know object
      *  and can be found using a GenericLookup instance...
      */
-    public String str="";
     public org.openide.nodes.Node findNodeOf(Object obj, org.openide.nodes.Node root) {
 
-        str +=" ";
+        //str +=" ";
         org.openide.nodes.Node candidate = null;
         //System.out.println(str + "Looking for " + obj + " in "+root);
         //System.out.flush();
@@ -861,8 +876,13 @@ public class IReportManager {
             //System.out.println(str + "Probably found " + obj + " in "+root);
             //System.out.flush();
             candidate = root;
+            if (obj instanceof JRDesignCrosstab &&
+                root instanceof CrosstabNode)
+            {
+                return candidate;
+            }
         }
-        
+
         org.openide.nodes.Node[] children = root.getChildren().getNodes(true);
         for (int i=0; i<children.length; ++i)
         {
@@ -873,7 +893,7 @@ public class IReportManager {
                 //System.out.flush();
                 return res;
             }
-            str = str.substring(0, str.length()-1);
+            //str = str.substring(0, str.length()-1);
         }
         return candidate;
     }
@@ -1162,10 +1182,7 @@ public class IReportManager {
     }
     
     
-    private JRDesignChartDataset chartDatasetClipBoard = null;
-    private java.util.List chartSeriesClipBoard = null;
-    
-    /**
+     /**
      * Copy of a dataset
      */
     public JRDesignChartDataset getChartDatasetClipBoard() {
@@ -1193,19 +1210,16 @@ public class IReportManager {
         chartSeriesClipBoard = list;
     }
     
-    private UndoableEdit lastUndoableEdit = null;
     
-    // This is a trick to aggregate undo operations done on a set of nodes...
-    // We try to add all to the last undo op if it was created in the last
-    // 100 milliseconds...
-    private long lastUndoableEditTime = 0;
-    
+    /** This is a trick to aggregate undo operations done on a set of nodes...
+     * We try to add all to the last undo op if it was created in the last
+     * 100 milliseconds...
+     */
     public void addUndoableEdit(UndoableEdit edit)
     {
         addUndoableEdit(edit, false);
     }
     
-    private boolean forceAggregateUndo = false;
     public void setForceAggregateUndo(boolean b)
     {
         forceAggregateUndo = b;
@@ -1289,9 +1303,6 @@ public class IReportManager {
         this.fileResolvers = fileResolvers;
     }
     
-    
-    
-    private final Set<JrxmlVisualViewActivatedListener> listeners = new HashSet<JrxmlVisualViewActivatedListener>(1); // or can use ChangeSupport in NB 6.0
     public final void addJrxmlVisualViewActivatedListener(JrxmlVisualViewActivatedListener l) {
         synchronized (listeners) {
             listeners.add(l);
@@ -1338,4 +1349,44 @@ public class IReportManager {
     {
         customLinkTypes.add(new Tag(value, desc));
     }
+
+    public boolean isBackgroundSeparated()
+    {
+        return getPreferences().getBoolean("ShowBackgroundAsSeparatedDocument",true);
+    }
+
+    /**
+     * @return the iReportConnectionFactories
+     */
+    public final java.util.List<IReportConnectionFactory> getIReportConnectionFactories() {
+        if (iReportConnectionFactories == null)
+        {
+            iReportConnectionFactories = new ArrayList<IReportConnectionFactory>();
+            addDefaultConnectionImplementations();
+        }
+        return iReportConnectionFactories;
+    }
+
+
+    /**
+     * @return the exporterFactories
+     */
+    public java.util.List<ExporterFactory> getExporterFactories() {
+        if (exporterFactories == null)
+        {
+            exporterFactories = new ArrayList<ExporterFactory>();
+            exporterFactories.add(new DefaultExporterFactory("pdf"));
+            exporterFactories.add(new DefaultExporterFactory("csv"));
+            exporterFactories.add(new DefaultExporterFactory("html"));
+            exporterFactories.add(new DefaultExporterFactory("xls"));
+            exporterFactories.add(new DefaultExporterFactory("xls2"));
+            exporterFactories.add(new DefaultExporterFactory("java2D"));
+            exporterFactories.add(new DefaultExporterFactory("txt"));
+            exporterFactories.add(new DefaultExporterFactory("rtf"));
+            exporterFactories.add(new DefaultExporterFactory("odf"));
+        }
+        return exporterFactories;
+    }
+
+
 }

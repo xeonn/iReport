@@ -8,6 +8,7 @@ import com.jaspersoft.ireport.designer.undo.AddBandUndoableEdit;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
@@ -70,7 +71,11 @@ public final class AddBandAction extends NodeAction {
                     else if (band.getOrigin().getBandType() == JROrigin.TITLE) jd.setTitle(b);
                     else if (band.getOrigin().getBandType() == JROrigin.PAGE_HEADER) jd.setPageHeader(b);
                     else if (band.getOrigin().getBandType() == JROrigin.COLUMN_HEADER) jd.setColumnHeader(b);
-                    else if (band.getOrigin().getBandType() == JROrigin.DETAIL) jd.setDetail(b);
+                    else if (band.getOrigin().getBandType() == JROrigin.DETAIL)
+                    {
+                        ((JRDesignSection)jd.getDetailSection()).addBand(b);
+                        //jd.setDetail(b);
+                    }
                     else if (band.getOrigin().getBandType() == JROrigin.COLUMN_FOOTER) jd.setColumnFooter(b);
                     else if (band.getOrigin().getBandType() == JROrigin.PAGE_FOOTER) jd.setPageFooter(b);
                     else if (band.getOrigin().getBandType() == JROrigin.LAST_PAGE_FOOTER) jd.setLastPageFooter(b);
@@ -79,12 +84,14 @@ public final class AddBandAction extends NodeAction {
                     else if (band.getOrigin().getBandType() == JROrigin.GROUP_HEADER)
                     {
                         JRDesignGroup g = (JRDesignGroup)jd.getGroupsMap().get( band.getOrigin().getGroupName());
-                        g.setGroupHeader(b);
+                        ((JRDesignSection)g.getGroupHeaderSection()).addBand(b);
+                        //g.setGroupHeader(b);
                     }
                     else if (band.getOrigin().getBandType() == JROrigin.GROUP_FOOTER)
                     {
                         JRDesignGroup g = (JRDesignGroup)jd.getGroupsMap().get( band.getOrigin().getGroupName());
-                        g.setGroupFooter(b);
+                        ((JRDesignSection)g.getGroupFooterSection()).addBand(b);
+                        //g.setGroupFooter(b);
                     }
                     
                     AddBandUndoableEdit edit = new AddBandUndoableEdit(b,jd);

@@ -8,9 +8,11 @@ package com.jaspersoft.ireport.designer.jrtx;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.outline.nodes.IRIndexedNode;
+import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -151,13 +153,39 @@ public class TemplateNode extends IRIndexedNode {
 
                 @Override
                 public void create() throws IOException {
-                    JRTemplateReference reference = new JRTemplateReference();
-                    // Find the first available name...
-                    template.addIncludedTemplate(reference);
-                    ((StylesChildren)getChildren()).recalculateKeys();
-                    JRTXEditorSupport ed = getLookup().lookup(JRTXEditorSupport.class);
-                    if (ed != null) ed.notifyModelChangeToTheView();
+                    
 
+                    javax.swing.JFileChooser jfc = new javax.swing.JFileChooser( Misc.findStartingDirectory()  );
+                    jfc.setDialogTitle("Select a JRTX file....");
+                    jfc.setFileFilter( new javax.swing.filechooser.FileFilter() {
+                        public boolean accept(java.io.File file) {
+                            String filename = file.getName();
+                            return (filename.endsWith(".jrtx") ||
+                                    file.isDirectory()) ;
+                        }
+                        public String getDescription() {
+                            return "JasperReports Template (JRTX) *.jrtx";
+                        }
+                    });
+
+                    jfc.setMultiSelectionEnabled(true);
+
+                    jfc.setDialogType( javax.swing.JFileChooser.OPEN_DIALOG);
+                    if  (jfc.showOpenDialog( Misc.getMainFrame()) == javax.swing.JOptionPane.OK_OPTION)
+                    {
+                        File[] files = jfc.getSelectedFiles();
+
+                        for (int i=0; i<files.length; ++i)
+                        {
+                        // Find the first available name...
+                            JRTemplateReference reference = new JRTemplateReference();
+                            reference.setLocation( files[i].getPath());
+                            template.addIncludedTemplate(reference);
+                        }
+                        ((StylesChildren)getChildren()).recalculateKeys();
+                        JRTXEditorSupport ed = getLookup().lookup(JRTXEditorSupport.class);
+                        if (ed != null) ed.notifyModelChangeToTheView();
+                    }
                 }
 
                 @Override
@@ -260,6 +288,7 @@ public class TemplateNode extends IRIndexedNode {
                     @SuppressWarnings("unchecked")
                     public Transferable paste() throws IOException {
 
+                        
                         List list = new ArrayList();
                         JRStyle[] ss = template.getStyles();
                         for (int i=0; i<ss.length; ++i)
@@ -280,6 +309,9 @@ public class TemplateNode extends IRIndexedNode {
                         // At this point lastSystemDefinedParameterIndex contains the first valid index
                         // to add a parameter and currentIndex contains the index of the parameter in the list
                         // if present
+
+                        System.out.println("Duplicating style in " + getDisplayName() + " " + dropAction + " " + (dropAction & NodeTransfer.MOVE));
+                            System.out.flush();
 
                         if( (dropAction & NodeTransfer.MOVE) != 0 ) // Moving parameter...
                         {
@@ -316,6 +348,9 @@ public class TemplateNode extends IRIndexedNode {
                         }
                         else // Duplicating
                         {
+                            
+
+
                             try {
                                 JRDesignStyle newStyle = ModelUtils.cloneStyle(style);
 

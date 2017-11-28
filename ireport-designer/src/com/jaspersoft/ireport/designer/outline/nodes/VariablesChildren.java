@@ -9,10 +9,14 @@
 
 package com.jaspersoft.ireport.designer.outline.nodes;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
+import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -25,7 +29,7 @@ import org.openide.util.Mutex;
  *
  * @author gtoffoli
  */
-public class VariablesChildren extends Index.KeysChildren implements PropertyChangeListener {
+public class VariablesChildren extends Index.KeysChildren implements PropertyChangeListener, PreferenceChangeListener {
 
     JasperDesign jd = null;
     private JRDesignDataset dataset = null;
@@ -42,6 +46,7 @@ public class VariablesChildren extends Index.KeysChildren implements PropertyCha
         if (dataset == null) dataset = jd.getMainDesignDataset();
         this.dataset = dataset;
         this.dataset.getEventSupport().addPropertyChangeListener(this);
+        IReportManager.getPreferences().addPreferenceChangeListener(this);
     }
 
     /*
@@ -71,7 +76,23 @@ public class VariablesChildren extends Index.KeysChildren implements PropertyCha
         
         List l = (List)lock();
         l.clear();
-        l.addAll(dataset.getVariablesList());
+
+        if (IReportManager.getPreferences().getBoolean("filter_variables",false))
+        {
+            List varsAll = dataset.getVariablesList();
+            for (int i=0; i<varsAll.size(); ++i)
+            {
+                JRVariable p = (JRVariable)varsAll.get(i);
+                if (!p.isSystemDefined())
+                {
+                    l.add(p);
+                }
+            }
+        }
+        else
+        {
+            l.addAll(dataset.getVariablesList());
+        }
         update();
     }
     
@@ -89,6 +110,13 @@ public class VariablesChildren extends Index.KeysChildren implements PropertyCha
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName() == null) return;
         if (evt.getPropertyName().equals( JRDesignDataset.PROPERTY_VARIABLES))
+        {
+            recalculateKeys();
+        }
+    }
+
+    public void preferenceChange(PreferenceChangeEvent evt) {
+        if (evt.getKey().equals("filter_variables"))
         {
             recalculateKeys();
         }

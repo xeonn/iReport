@@ -800,19 +800,22 @@ public class Misc {
 	 * use that directory; else just stick to the user's home directory.
 	 */
 	public static File findStartingDirectory() {
-		org.openide.nodes.Node[] nodes = TopComponent.getRegistry().getActivatedNodes();
-		for (int i = 0; i < nodes.length; i++) {
-			DataObject d = (DataObject) nodes[i].getCookie(DataObject.class);
-			if (d != null) {
-				File f = FileUtil.toFile(d.getPrimaryFile());
-				if (f != null) {
-					if (f.isFile()) {
-						f = f.getParentFile();
-					}
-					return f;
-				}
-			}
-		}
+
+        try {
+            org.openide.nodes.Node[] nodes = TopComponent.getRegistry().getActivatedNodes();
+            for (int i = 0; i < nodes.length; i++) {
+                DataObject d = (DataObject) nodes[i].getCookie(DataObject.class);
+                if (d != null) {
+                    File f = FileUtil.toFile(d.getPrimaryFile());
+                    if (f != null) {
+                        if (f.isFile()) {
+                            f = f.getParentFile();
+                        }
+                        return f;
+                    }
+                }
+            }
+        } catch (Throwable tr) {};
                 
         String dir = IReportManager.getPreferences().get( IReportManager.CURRENT_DIRECTORY, null);
         if (dir != null)

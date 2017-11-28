@@ -52,7 +52,7 @@ public class TemplateReferenceNode extends AbstractNode implements PropertyChang
 
     public TemplateReferenceNode(JasperDesign jd, JRDesignReportTemplate template, Lookup doLkp)
     {
-        super (Children.LEAF, new ProxyLookup(doLkp, Lookups.fixed(jd, template)));
+        super (new TemplateReferenceChildren(jd, template, doLkp), new ProxyLookup(doLkp, Lookups.fixed(jd, template)));
         this.jd = jd;
         this.template = template;
         init();

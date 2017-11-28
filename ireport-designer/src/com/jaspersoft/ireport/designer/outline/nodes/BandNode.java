@@ -13,33 +13,40 @@ import com.jaspersoft.ireport.designer.sheet.properties.GroupExpressionProperty;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.NotRealElementNode;
+import com.jaspersoft.ireport.designer.actions.AddAnotherDetailBandAction;
+import com.jaspersoft.ireport.designer.actions.AddAnotherGroupFooterBandAction;
+import com.jaspersoft.ireport.designer.actions.AddAnotherGroupHeaderBandAction;
 import com.jaspersoft.ireport.designer.actions.DeleteBandAction;
 import com.jaspersoft.ireport.designer.actions.DeleteGroupAction;
+import com.jaspersoft.ireport.designer.actions.MaximizeBackgroundAction;
+import com.jaspersoft.ireport.designer.actions.MaximizeBandAction;
 import com.jaspersoft.ireport.designer.actions.MoveGroupDownAction;
 import com.jaspersoft.ireport.designer.actions.MoveGroupUpAction;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
-import com.jaspersoft.ireport.designer.editor.ExpressionContext;
+import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.sheet.properties.BandPrintWhenExpressionProperty;
-import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Action;
 import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.base.JRBaseBand;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.ErrorManager;
@@ -93,11 +100,19 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
         }
         
         this.band.getEventSupport().addPropertyChangeListener(this);
+        
+        if (band.getOrigin().getBandType() == JROrigin.DETAIL)
+        {
+            ((JRDesignSection)jd.getDetailSection()).getEventSupport().addPropertyChangeListener(this);
+        }
+
         this.group = ModelUtils.getGroupFromBand(jd, band);
         
         if (group != null)
         {
              group.getEventSupport().addPropertyChangeListener(this);
+             ((JRDesignSection)group.getGroupHeaderSection()).getEventSupport().addPropertyChangeListener(this);
+             ((JRDesignSection)group.getGroupFooterSection()).getEventSupport().addPropertyChangeListener(this);
         }
         
         setDisplayName ( ModelUtils.nameOf(band, jd));
@@ -183,8 +198,10 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
         bandPropertiesSet.setDisplayName(I18n.getString("BandNode.Property.Bandproperties"));
         bandPropertiesSet.put(new HeightProperty(band, jd));
         bandPropertiesSet.put(new BandPrintWhenExpressionProperty(band, jd.getMainDesignDataset()));
+        bandPropertiesSet.put(new SplitTypeProperty(band));
         bandPropertiesSet.put(new SplitAllowedProperty(band));
         
+
         sheet.put(bandPropertiesSet);
         
         if (group != null)
@@ -233,15 +250,22 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
         
         if (ModelUtils.containsProperty(  this.getPropertySets(), evt.getPropertyName()))
         {
+            if (evt.getPropertyName().equals(JRBaseBand.PROPERTY_SPLIT_TYPE))
+            {
+                this.firePropertyChange(JRBaseBand.PROPERTY_SPLIT_ALLOWED, evt.getOldValue(), evt.getNewValue() );
+            }
             this.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue() );
         }
         
-        if (evt.getPropertyName().equals(  JRDesignGroup.PROPERTY_NAME))
+        if (evt.getPropertyName().equals(  JRDesignGroup.PROPERTY_NAME) ||
+            evt.getPropertyName().equals( JRDesignSection.PROPERTY_BANDS))
         {
             String s = ModelUtils.nameOf(band, jd);
             setDisplayName( s );
             this.fireNameChange(null, getDisplayName());
         }
+
+        
     }
     
     @SuppressWarnings("unchecked")
@@ -262,13 +286,31 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
         list.add( SystemAction.get(PasteAction.class));
         list.add( SystemAction.get(RefreshNodes.class));
         
+        if (getBand().getOrigin().getBandType() == JROrigin.BACKGROUND)
+        {
+            list.add(SystemAction.get(MaximizeBackgroundAction.class));
+        }
+        else
+        {
+            list.add(SystemAction.get(MaximizeBandAction.class));
+        }
+
+        if (getBand().getOrigin().getBandType() == JROrigin.DETAIL)
+        {
+            list.add(SystemAction.get(AddAnotherDetailBandAction.class));
+        }
+
         if (group != null)
         {
             list.add( null );
             list.add( SystemAction.get(MoveGroupUpAction.class));
             list.add( SystemAction.get(MoveGroupDownAction.class));
             list.add( DeleteGroupAction.getInstance() );
+            list.add(null);
+            list.add( SystemAction.get(AddAnotherGroupHeaderBandAction.class));
+            list.add( SystemAction.get(AddAnotherGroupFooterBandAction.class));
         }
+        
         list.add( DeleteBandAction.getInstance());
         
         return list.toArray(new Action[list.size()]);
@@ -412,7 +454,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
     /**
      *  Class to manage the JasperDesign.PROPERTY_IGNORE_PAGINATION property
      */
-    private static final class SplitAllowedProperty extends PropertySupport
+    private final class SplitAllowedProperty extends PropertySupport
     {
             private final JRDesignBand band;
         
@@ -422,7 +464,13 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
                 super(JRBaseBand.PROPERTY_SPLIT_ALLOWED,Boolean.class, I18n.getString("BandNode.Property.Splitallowed"), I18n.getString("BandNode.Property.Splitalloweddetail"), true, true);
                 this.band = band;
             }
-            
+
+        @Override
+        public String getHtmlDisplayName() {
+            return "<html><s>" + getDisplayName()+"</s>";
+        }
+
+
             public Object getValue() throws IllegalAccessException, InvocationTargetException {
                 return band.isSplitAllowed();
             }
@@ -462,6 +510,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
                                 Boolean.TYPE,
                                 oldValue,newValue);
                     // Find the undoRedo manager...
+                BandNode.this.firePropertyChange(JRDesignBand.PROPERTY_SPLIT_TYPE, oldValue, newValue);
                 IReportManager.getInstance().addUndoableEdit(urob);
             }
     }
@@ -851,6 +900,63 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
     }
 
     
-    
+    private static final class SplitTypeProperty extends PropertySupport
+    {
+
+        private final JRDesignBand band;
+        private ComboBoxPropertyEditor editor;
+
+        @SuppressWarnings(value = "unchecked")
+        public SplitTypeProperty(JRDesignBand band) {
+            super(JRDesignBand.PROPERTY_SPLIT_TYPE, Byte.class,
+                    I18n.getString("band.property.splitType.name"),
+                    I18n.getString("band.property.splitType.description"), true, true);
+            this.band = band;
+            setValue("suppressCustomEditor", Boolean.TRUE);
+        }
+
+        @Override
+        @SuppressWarnings(value = "unchecked")
+        public PropertyEditor getPropertyEditor() {
+            if (editor == null) {
+                ArrayList l = new ArrayList();
+                l.add(new Tag(null, "<Default>"));
+                l.add(new Tag(new Byte(JRDesignBand.SPLIT_TYPE_IMMEDIATE), I18n.getString("band.property.splitType.immediate")));
+                l.add(new Tag(new Byte(JRDesignBand.SPLIT_TYPE_PREVENT), I18n.getString("band.property.splitType.prevent")));
+                l.add(new Tag(new Byte(JRDesignBand.SPLIT_TYPE_STRETCH), I18n.getString("band.property.splitType.stretch")));
+                editor = new ComboBoxPropertyEditor(false, l);
+            }
+            return editor;
+        }
+
+        public Object getValue() throws IllegalAccessException, InvocationTargetException {
+            return band.getSplitType();
+        }
+
+        public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+            if (val == null || val instanceof Byte) {
+                Byte oldValue = band.getSplitType();
+                Byte newValue = (Byte) val;
+                band.setSplitType(newValue);
+                ObjectPropertyUndoableEdit urob = new ObjectPropertyUndoableEdit(band, "SplitType", Byte.class, oldValue, newValue);
+                IReportManager.getInstance().addUndoableEdit(urob);
+            }
+        }
+
+        @Override
+        public boolean isDefaultValue() {
+            return band.getSplitType() == null;
+        }
+
+        @Override
+        public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
+            setValue(null);
+        }
+
+        @Override
+        public boolean supportsDefaultValue() {
+            return true;
+        }
+    }
     
 }

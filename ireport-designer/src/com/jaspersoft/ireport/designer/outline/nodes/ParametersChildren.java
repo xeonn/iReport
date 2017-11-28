@@ -9,10 +9,14 @@
 
 package com.jaspersoft.ireport.designer.outline.nodes;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -25,7 +29,7 @@ import org.openide.util.Mutex;
  *
  * @author gtoffoli
  */
-public class ParametersChildren extends Index.KeysChildren implements PropertyChangeListener {
+public class ParametersChildren extends Index.KeysChildren implements PropertyChangeListener, PreferenceChangeListener {
 
     JasperDesign jd = null;
     private JRDesignDataset dataset = null;
@@ -34,6 +38,7 @@ public class ParametersChildren extends Index.KeysChildren implements PropertyCh
     public ParametersChildren(JasperDesign jd, Lookup doLkp) {
         this(jd, jd.getMainDesignDataset(),doLkp);
     }
+
     @SuppressWarnings("unchecked")
     public ParametersChildren(JasperDesign jd, JRDesignDataset dataset, Lookup doLkp) {
         super(new ArrayList());
@@ -42,6 +47,8 @@ public class ParametersChildren extends Index.KeysChildren implements PropertyCh
         if (dataset == null) dataset = jd.getMainDesignDataset();
         this.dataset = dataset;
         this.dataset.getEventSupport().addPropertyChangeListener(this);
+        IReportManager.getPreferences().addPreferenceChangeListener(this);
+
     }
 
     /*
@@ -71,8 +78,22 @@ public class ParametersChildren extends Index.KeysChildren implements PropertyCh
         
         List l = (List)lock();
         l.clear();
-        List params = null;
-        l.addAll(dataset.getParametersList());
+        if (IReportManager.getPreferences().getBoolean("filter_parameters",false))
+        {
+            List paramsAll = dataset.getParametersList();
+            for (int i=0; i<paramsAll.size(); ++i)
+            {
+                JRParameter p = (JRParameter)paramsAll.get(i);
+                if (!p.isSystemDefined())
+                {
+                    l.add(p);
+                }
+            }
+        }
+        else
+        {
+            l.addAll(dataset.getParametersList());
+        }
         update();
     }
     
@@ -90,6 +111,13 @@ public class ParametersChildren extends Index.KeysChildren implements PropertyCh
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName() == null) return;
         if (evt.getPropertyName().equals( JRDesignDataset.PROPERTY_PARAMETERS))
+        {
+            recalculateKeys();
+        }
+    }
+
+    public void preferenceChange(PreferenceChangeEvent evt) {
+        if (evt.getKey().equals("filter_parameters"))
         {
             recalculateKeys();
         }

@@ -7,6 +7,7 @@ import com.jaspersoft.ireport.designer.undo.DeleteBandUndoableEdit;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
@@ -68,7 +69,12 @@ public final class DeleteBandAction extends NodeAction {
                     else if (band.getOrigin().getBandType() == JROrigin.TITLE) jd.setTitle(null);
                     else if (band.getOrigin().getBandType() == JROrigin.PAGE_HEADER) jd.setPageHeader(null);
                     else if (band.getOrigin().getBandType() == JROrigin.COLUMN_HEADER) jd.setColumnHeader(null);
-                    else if (band.getOrigin().getBandType() == JROrigin.DETAIL) jd.setDetail(null);
+                    else if (band.getOrigin().getBandType() == JROrigin.DETAIL)
+                    {
+                        JRDesignSection section = (JRDesignSection)jd.getDetailSection();
+                        section.removeBand(band);
+                        //jasperDesign.setDetail(null);
+                    }
                     else if (band.getOrigin().getBandType() == JROrigin.COLUMN_FOOTER) jd.setColumnFooter(null);
                     else if (band.getOrigin().getBandType() == JROrigin.PAGE_FOOTER) jd.setPageFooter(null);
                     else if (band.getOrigin().getBandType() == JROrigin.LAST_PAGE_FOOTER) jd.setLastPageFooter(null);
@@ -76,13 +82,20 @@ public final class DeleteBandAction extends NodeAction {
                     else if (band.getOrigin().getBandType() == JROrigin.NO_DATA) jd.setNoData(null);
                     else if (band.getOrigin().getBandType() == JROrigin.GROUP_HEADER)
                     {
-                        JRDesignGroup g = (JRDesignGroup)jd.getGroupsMap().get( band.getOrigin().getGroupName());
-                        g.setGroupHeader(null);
+                        JRDesignGroup group = ((JRDesignGroup)jd.getGroupsMap().get(band.getOrigin().getGroupName()));
+                        JRDesignSection section = (JRDesignSection)group.getGroupHeaderSection();
+                        section.removeBand(band);
+                        //  JRDesignGroup g = (JRDesignGroup)jd.getGroupsMap().get( band.getOrigin().getGroupName());
+                        //  g.setGroupHeader(null);
+
                     }
                     else if (band.getOrigin().getBandType() == JROrigin.GROUP_FOOTER)
                     {
-                        JRDesignGroup g = (JRDesignGroup)jd.getGroupsMap().get( band.getOrigin().getGroupName());
-                        g.setGroupFooter(null);
+                        JRDesignGroup group = ((JRDesignGroup)jd.getGroupsMap().get(band.getOrigin().getGroupName()));
+                        JRDesignSection section = (JRDesignSection)group.getGroupHeaderSection();
+                        section.removeBand(band);
+                        //  JRDesignGroup g = (JRDesignGroup)jd.getGroupsMap().get( band.getOrigin().getGroupName());
+                        //  g.setGroupFooter(null);
                     }
                     
                     DeleteBandUndoableEdit edit = new DeleteBandUndoableEdit(band,jd);

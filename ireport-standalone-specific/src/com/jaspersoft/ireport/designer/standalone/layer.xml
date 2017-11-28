@@ -117,7 +117,7 @@
             <file name="com-jaspersoft-ireport-designer-standalone-menu-GoToBugsAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Designer/com-jaspersoft-ireport-designer-standalone-menu-GoToBugsAction.instance"/>
             </file>
-            <file name="iReport.url" url="nbresloc:/com/jaspersoft/ireport/designer/standalone/bugs.url"/>
+            <file name="iReport.url" url="nbresloc:/com/jaspersoft/ireport/designer/standalone/ireport.url"/>
             <file name="netbeans-kb.url_hidden"/>
             <file name="shortcuts.xml_hidden"/>
         </folder>

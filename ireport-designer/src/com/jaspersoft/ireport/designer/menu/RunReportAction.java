@@ -5,7 +5,6 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlEditorSupport;
 import com.jaspersoft.ireport.designer.compiler.IReportCompiler;
 import java.util.HashMap;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.cookies.SaveCookie;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
@@ -22,10 +21,15 @@ public final class RunReportAction extends CallableSystemAction {
             runReport(IReportManager.getInstance().getActiveVisualView().getEditorSupport());
 
     }
-    
-    
+
     @SuppressWarnings("unchecked")
     public static void runReport(JrxmlEditorSupport support)
+    {
+        runReport(support, false);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static void runReport(JrxmlEditorSupport support, boolean compileOnly)
     {
             try {
                 SaveCookie save = support.getDataObject().getCookie(SaveCookie.class);
@@ -37,7 +41,9 @@ public final class RunReportAction extends CallableSystemAction {
         
             IReportCompiler ic = new IReportCompiler();
 
-            ic.setCommand( IReportCompiler.CMD_COMPILE | IReportCompiler.CMD_EXPORT);
+            int options = IReportCompiler.CMD_COMPILE;
+            if (!compileOnly) options |= IReportCompiler.CMD_EXPORT;
+            ic.setCommand( options );
 
 //            if (jrf.getReport().getScriptletHandling() == jrf.getReport().SCRIPTLET_IREPORT_INTERNAL_HANDLING) {
 //                ic.setCommand( ic.getCommand()  | IReportCompiler.CMD_COMPILE_SCRIPTLET);

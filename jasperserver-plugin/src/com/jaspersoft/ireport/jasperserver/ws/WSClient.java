@@ -494,13 +494,13 @@ public class WSClient {
     	else 
     	{
                 // patch jrxml files....
-                if (IReportManager.getPreferences().getBoolean("use_jrxml_DTD", false))
-                {
-                    if (inputFile.getName().toLowerCase().endsWith(".jrxml"))
-                    {
-                        inputFile = patchJRXML(inputFile);
-                    }
-                }
+                //if (IReportManager.getPreferences().getBoolean("use_jrxml_DTD", false))
+                //{
+                //    if (inputFile.getName().toLowerCase().endsWith(".jrxml"))
+                //    {
+                //        inputFile = patchJRXML(inputFile);
+                //    }
+                //}
 
     		FileDataSource fileDataSource = new FileDataSource(inputFile);
     		RequestAttachment attachment = new RequestAttachment(fileDataSource);

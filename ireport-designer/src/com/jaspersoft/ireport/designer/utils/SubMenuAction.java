@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
@@ -92,7 +93,11 @@ public class SubMenuAction extends AbstractAction implements HelpCtx.Provider, P
                 Object obj =it.next();
                 if (obj instanceof Action)
                 {
-                    menu.add(new JMenuItem((Action)obj));
+                    JMenuItem mi = new JMenuItem();
+                    org.openide.awt.Actions.connect(mi, (Action)obj, true);
+                    Icon icon = (Icon) ((Action)obj).getValue( Action.SMALL_ICON );
+                    if (icon != null) mi.setIcon(icon);
+                    menu.add(mi);
                 }
                 else if (obj instanceof JSeparator)
                 {

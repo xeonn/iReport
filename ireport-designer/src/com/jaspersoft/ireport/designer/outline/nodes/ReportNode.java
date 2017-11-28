@@ -15,6 +15,9 @@ import com.jaspersoft.ireport.designer.sheet.properties.WhenNoDataTypeProperty;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.actions.AddDatasetAction;
+import com.jaspersoft.ireport.designer.actions.CompileReportAction;
+import com.jaspersoft.ireport.designer.actions.RemoveMarginsAction;
+import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.menu.EditPageFormatAction;
 import com.jaspersoft.ireport.designer.menu.EditQueryAction;
 import com.jaspersoft.ireport.designer.menu.OpenReportDirectoryInFavoritesAction;
@@ -25,24 +28,33 @@ import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import com.jaspersoft.ireport.designer.wizards.ReportGroupWizardAction;
 import com.jaspersoft.ireport.locale.I18n;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import javax.swing.Action;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.ErrorManager;
+import org.openide.actions.PasteAction;
 import org.openide.cookies.SaveCookie;
 import org.openide.nodes.Node;
+import org.openide.nodes.NodeTransfer;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
 import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 import org.openide.util.actions.NodeAction;
 import org.openide.util.actions.SystemAction;
+import org.openide.util.datatransfer.PasteType;
 import org.openide.util.lookup.Lookups;
 import org.openide.util.lookup.ProxyLookup;
 
@@ -86,12 +98,32 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         super (new ReportChildren(jd,doLkp), new ProxyLookup(Lookups.singleton(jd), doLkp) );
         this.jd = jd;
         jd.getEventSupport().addPropertyChangeListener(this);
+        
+        updateSectionListeners();
+        setIconBaseWithExtension("com/jaspersoft/ireport/designer/resources/report-16.png");
+    }
+
+    public void updateSectionListeners()
+    {
+        ((JRDesignSection)jd.getDetailSection()).getEventSupport().removePropertyChangeListener(this);
+        ((JRDesignSection)jd.getDetailSection()).getEventSupport().addPropertyChangeListener(this);
+        
         for (int i=0; i<this.jd.getGroupsList().size(); ++i)
         {
             JRDesignGroup grp = (JRDesignGroup)this.jd.getGroupsList().get(i);
+            grp.getEventSupport().removePropertyChangeListener(this);
             grp.getEventSupport().addPropertyChangeListener(this);
+            if (((JRDesignSection)grp.getGroupHeaderSection() != null))
+            {
+                ((JRDesignSection)grp.getGroupHeaderSection()).getEventSupport().removePropertyChangeListener(this);
+                ((JRDesignSection)grp.getGroupHeaderSection()).getEventSupport().addPropertyChangeListener(this);
+            }
+            if (((JRDesignSection)grp.getGroupFooterSection() != null))
+            {
+                ((JRDesignSection)grp.getGroupFooterSection()).getEventSupport().removePropertyChangeListener(this);
+                ((JRDesignSection)grp.getGroupFooterSection()).getEventSupport().addPropertyChangeListener(this);
+            }
         }
-        setIconBaseWithExtension("com/jaspersoft/ireport/designer/resources/report-16.png");
     }
 
     public JasperDesign getJasperDesign() {
@@ -104,7 +136,54 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         //return "Report " + jd.getName();
         return "" + jd.getName();
     }
-    
+
+    @Override
+    public PasteType getDropType(Transferable t, final int action, int index) {
+
+        final Node dropNode = NodeTransfer.node(t, DnDConstants.ACTION_COPY_OR_MOVE + NodeTransfer.CLIPBOARD_CUT);
+        final int dropAction = DnDUtilities.getTransferAction(t);
+
+        if (null != dropNode && dropNode instanceof DatasetNode) {
+            final JRDesignDataset dataset = ((DatasetNode)dropNode).getDataset();
+            if (null != dataset) {
+                return new PasteType() {
+
+                    @SuppressWarnings("unchecked")
+                    public Transferable paste() throws IOException {
+                        try {
+
+                            JRDesignDataset newDataset = (JRDesignDataset) dataset.clone();
+
+                            String name = newDataset.getName();
+                            for (int i = 1;; i++) {
+                                if (!getJasperDesign().getDatasetMap().containsKey(name + "_" + i)) {
+                                newDataset.setName(name + "_" + i);
+                                break;
+                                }
+                            }
+
+                            getJasperDesign().addDataset(newDataset);
+
+                        } catch (JRException ex) {
+                            ex.printStackTrace();
+                        }
+                       return null;
+                    };
+                };
+            }
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected void createPasteTypes(Transferable t, List s) {
+        super.createPasteTypes(t, s);
+        PasteType paste = getDropType(t, DnDConstants.ACTION_MOVE, -1);
+        if (null != paste) {
+            s.add(paste);
+        }
+    }
 
     @Override
     protected Sheet createSheet() {
@@ -170,8 +249,10 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
 
 
         myactions.add(SystemAction.get(EditPageFormatAction.class));
+        myactions.add(SystemAction.get(RemoveMarginsAction.class));
         myactions.add(null);
-
+        myactions.add(SystemAction.get(CompileReportAction.class));
+        myactions.add(null);
         for (int i=0; i<actions.length; ++i)
         {
             myactions.add(actions[i]);
@@ -182,6 +263,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         myactions.add(null);
         myactions.add(SystemAction.get(ReportGroupWizardAction.class));
         myactions.add(SystemAction.get(AddDatasetAction.class));
+        myactions.add(SystemAction.get(PasteAction.class));
         myactions.add(null);
         myactions.add(SystemAction.get(OpenReportDirectoryInFavoritesAction.class));
         //testPropertiesAction);
@@ -1065,8 +1147,11 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             evt.getPropertyName().equals(JRDesignDataset.PROPERTY_GROUPS) ||
             evt.getPropertyName().equals(JRDesignGroup.PROPERTY_GROUP_HEADER) ||
             evt.getPropertyName().equals(JRDesignGroup.PROPERTY_GROUP_FOOTER) ||
-            evt.getPropertyName().equals(JasperDesign.PROPERTY_DATASETS))
+            evt.getPropertyName().equals(JasperDesign.PROPERTY_DATASETS) ||
+            evt.getPropertyName().equals(JRDesignSection.PROPERTY_BANDS)
+            )
         {
+            updateSectionListeners();
             ((ReportChildren)getChildren()).updateChildren();
         }
         

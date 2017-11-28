@@ -12,8 +12,6 @@
 package com.jaspersoft.ireport.designer.options.export;
 
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.options.IReportOptionsPanelController;
-import com.jaspersoft.ireport.designer.options.OptionsPanel;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.prefs.Preferences;
 import javax.swing.JFileChooser;
@@ -24,13 +22,10 @@ import net.sf.jasperreports.engine.util.JRProperties;
  *
  * @author gtoffoli
  */
-public class HtmlExportParametersPanel extends javax.swing.JPanel implements OptionsPanel {
-
-    IReportOptionsPanelController controller = null;
+public class HtmlExportParametersPanel extends AbstractExportParametersPanel {
 
     /** Creates new form HtmlExportParametersPanel */
-    public HtmlExportParametersPanel(IReportOptionsPanelController ctlr) {
-        this.controller = ctlr;
+    public HtmlExportParametersPanel() {
         initComponents();
 
         javax.swing.event.DocumentListener textfieldListener =  new javax.swing.event.DocumentListener()
@@ -56,14 +51,6 @@ public class HtmlExportParametersPanel extends javax.swing.JPanel implements Opt
          jTextAreaHtmlHeader.getDocument().addDocumentListener(textfieldListener);
 
          applyI18n();
-    }
-
-    public void notifyChange()
-    {
-        if (this.controller != null)
-        {
-            controller.changed();
-        }
     }
 
     public void applyI18n()
@@ -480,5 +467,10 @@ public class HtmlExportParametersPanel extends javax.swing.JPanel implements Opt
     private javax.swing.JTextField jTextFieldImagesDirectory;
     private javax.swing.JTextField jTextFieldImagesDirectory1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public String getDisplayName() {
+        return I18n.getString("HtmlExportParametersPanel.title");
+    }
 
 }

@@ -64,6 +64,8 @@ public final class ReportGroupWizardAction extends CallableSystemAction {
                         JRDesignBand b = new JRDesignBand();
                         b.setHeight(50);
                         grp.setGroupHeader(b);
+                        System.out.println("Band origin: " + b.getOrigin());
+                        System.out.flush();
                     }
                     
                     if (wizardDescriptor.getProperty("footer") != null &&
@@ -72,6 +74,8 @@ public final class ReportGroupWizardAction extends CallableSystemAction {
                         JRDesignBand b = new JRDesignBand();
                         b.setHeight(50);
                         grp.setGroupFooter(b);
+                        System.out.println("Band origin: " + b.getOrigin());
+                        System.out.flush();
                     }
                     
                     jd.addGroup(grp);

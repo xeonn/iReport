@@ -12,9 +12,7 @@ package com.jaspersoft.ireport.designer.outline.nodes;
 import com.jaspersoft.ireport.designer.sheet.properties.FilterExpressionProperty;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
-import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.menu.EditQueryAction;
-import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.DeleteDatasetUndoableEdit;
@@ -30,11 +28,10 @@ import java.util.List;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 import javax.swing.Action;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import org.openide.actions.CopyAction;
 import org.openide.actions.DeleteAction;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
@@ -111,6 +108,7 @@ public class DatasetNode extends IRAbstractNode implements PropertyChangeListene
         
         myactions.add(SystemAction.get(EditQueryAction.class));
         myactions.add(null);
+        myactions.add(SystemAction.get(CopyAction.class));
         myactions.add(SystemAction.get(DeleteAction.class));
         
         return myactions.toArray(new Action[myactions.size()]);

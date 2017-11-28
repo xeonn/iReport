@@ -43,6 +43,8 @@ import net.sf.jasperreports.charts.design.JRDesignChartAxis;
 import net.sf.jasperreports.charts.design.JRDesignDataRange;
 import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
 import net.sf.jasperreports.charts.design.JRDesignMultiAxisPlot;
+import net.sf.jasperreports.charts.design.JRDesignPieDataset;
+import net.sf.jasperreports.charts.design.JRDesignPieSeries;
 import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
 import net.sf.jasperreports.charts.design.JRDesignValueDataset;
 import net.sf.jasperreports.charts.design.JRDesignXyDataset;
@@ -50,6 +52,7 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import org.jfree.data.general.PieDataset;
 /**
  *
  * @author  Administrator
@@ -274,7 +277,24 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
         ChartDescriptor cd = (ChartDescriptor)jList1.getSelectedValue();
         try {
             this.setChart(new JRDesignChart(getJasperDesign(), cd.getChartType()) );
-            if (cd.getChartType() == JRDesignChart.CHART_TYPE_XYBAR)
+            if (cd.getChartType() == JRDesignChart.CHART_TYPE_PIE ||
+                cd.getChartType() == JRDesignChart.CHART_TYPE_PIE3D)
+            {
+                JRDesignPieDataset pd = (JRDesignPieDataset) getChart().getDataset();
+                JRDesignPieSeries dps = new JRDesignPieSeries();
+                JRDesignExpression keyExp = new JRDesignExpression();
+                keyExp.setValueClassName("java.lang.Object");
+                keyExp.setText("\"\"");
+                dps.setKeyExpression(keyExp);
+
+                JRDesignExpression valueExp = new JRDesignExpression();
+                valueExp.setValueClassName("java.lang.Number");
+                valueExp.setText("new Double(0)");
+                dps.setValueExpression(valueExp);
+
+                pd.addPieSeries(dps);
+            }
+            else if (cd.getChartType() == JRDesignChart.CHART_TYPE_XYBAR)
             {
                 getChart().setDataset(new JRDesignXyDataset(getChart().getDataset()));
             }

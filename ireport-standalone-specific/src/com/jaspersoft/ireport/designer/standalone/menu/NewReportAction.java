@@ -18,7 +18,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import org.openide.DialogDisplayer;
+import org.openide.filesystems.FileAttributeEvent;
+import org.openide.filesystems.FileChangeListener;
+import org.openide.filesystems.FileEvent;
 import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileRenameEvent;
 import org.openide.filesystems.FileUtil;
 import org.openide.filesystems.Repository;
 import org.openide.loaders.DataFolder;
@@ -32,6 +36,7 @@ public final class NewReportAction extends CallableSystemAction {
 
 
     static final String TEMPLATES_DIR="Templates/Report/";
+    private FileObject nodesFileObject = null;
 
     private JMenu menu = null;
 
@@ -75,6 +80,7 @@ public final class NewReportAction extends CallableSystemAction {
         super.initialize();
         // see org.openide.util.actions.SystemAction.iconResource() Javadoc for more details
         putValue("noIconInMenu", Boolean.TRUE); // NOI18N
+
     }
 
     public HelpCtx getHelpCtx() {
@@ -83,38 +89,79 @@ public final class NewReportAction extends CallableSystemAction {
 
     @Override
     public JMenuItem getMenuPresenter() {
+        
+        refreshMenu();
+
+        return menu;
+    }
+
+    public void refreshMenu()
+    {
+
         if (menu == null)
         {
             menu = new JMenu(I18n.getString( IReportStandaloneManager.class, "CTL_NewReportAction"));
-
-            // Load all the templates available under Templates/Report....
-            FileObject nodesFileObject = Repository.getDefault().getDefaultFileSystem().getRoot().getFileObject(TEMPLATES_DIR);
-            if (nodesFileObject == null) return null;
-            DataFolder nodesDataFolder = DataFolder.findFolder(nodesFileObject);
-            if (nodesDataFolder == null) return null;
-
-            Enumeration<DataObject> enObj = nodesDataFolder.children();
-            while (enObj.hasMoreElements())
+            if (nodesFileObject == null)
             {
-                DataObject dataObject = enObj.nextElement();
-                FileObject fileObject = dataObject.getPrimaryFile();
-                final String name = fileObject.getNameExt();
+                nodesFileObject = Repository.getDefault().getDefaultFileSystem().getRoot().getFileObject(TEMPLATES_DIR);
+                
+                if (nodesFileObject != null)
+                {
+                    nodesFileObject.addFileChangeListener(new FileChangeListener() {
 
-                final String filePath= TEMPLATES_DIR + fileObject.getNameExt();
+                        public void fileFolderCreated(FileEvent arg0) {
+                        }
 
-                JMenuItem subMenu = new JMenuItem(I18n.getString(filePath));
-                subMenu.setIcon( new ImageIcon( dataObject.getNodeDelegate().getIcon( BeanInfo.ICON_COLOR_16x16)));
-                subMenu.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        performAction(name,filePath);
-                    }
-                });
+                        public void fileDataCreated(FileEvent arg0) {
+                        }
 
-                menu.add(subMenu);
+                        public void fileChanged(FileEvent arg0) {
+                            refreshMenu();
+                        }
+
+                        public void fileDeleted(FileEvent arg0) {
+                            refreshMenu();
+                        }
+
+                        public void fileRenamed(FileRenameEvent arg0) {
+                            refreshMenu();
+                        }
+
+                        public void fileAttributeChanged(FileAttributeEvent arg0) {
+                        }
+                    });
+                }
             }
         }
 
-        return menu;
+        if (menu == null) return;
+        
+        menu.removeAll();
+        // Load all the templates available under Templates/Report....
+        
+        if (nodesFileObject == null) return;
+        DataFolder nodesDataFolder = DataFolder.findFolder(nodesFileObject);
+        if (nodesDataFolder == null) return;
+
+        Enumeration<DataObject> enObj = nodesDataFolder.children();
+        while (enObj.hasMoreElements())
+        {
+            DataObject dataObject = enObj.nextElement();
+            FileObject fileObject = dataObject.getPrimaryFile();
+            final String name = fileObject.getNameExt();
+
+            final String filePath= TEMPLATES_DIR + fileObject.getNameExt();
+
+            JMenuItem subMenu = new JMenuItem(I18n.getString(filePath));
+            subMenu.setIcon( new ImageIcon( dataObject.getNodeDelegate().getIcon( BeanInfo.ICON_COLOR_16x16)));
+            subMenu.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    performAction(name,filePath);
+                }
+            });
+
+            menu.add(subMenu);
+        }
     }
 
 

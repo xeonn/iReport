@@ -95,6 +95,6 @@ public final class CopyFormatAction extends NodeAction {
     protected boolean enable(org.openide.nodes.Node[] activatedNodes) {
         if (activatedNodes == null || activatedNodes.length != 1) return false;
         if (!(activatedNodes[0] instanceof ElementNode)) return false;
-        return false;
+        return true;
     }
 }

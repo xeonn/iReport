@@ -12,8 +12,6 @@
 package com.jaspersoft.ireport.designer.options.export;
 
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.options.IReportOptionsPanelController;
-import com.jaspersoft.ireport.designer.options.OptionsPanel;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.prefs.Preferences;
 import javax.swing.SpinnerNumberModel;
@@ -27,13 +25,10 @@ import net.sf.jasperreports.engine.util.JRProperties;
  *
  * @author gtoffoli
  */
-public class XlsExportParametersPanel extends javax.swing.JPanel implements OptionsPanel {
-
-    IReportOptionsPanelController controller = null;
+public class XlsExportParametersPanel extends AbstractExportParametersPanel {
 
     /** Creates new form XlsExportParametersPanel */
-    public XlsExportParametersPanel(IReportOptionsPanelController ctlr) {
-        this.controller = ctlr;
+    public XlsExportParametersPanel() {
         initComponents();
         SpinnerNumberModel snm = new SpinnerNumberModel(0,0, Integer.MAX_VALUE,1);
         jSpinnerMaximumRowsPerSheet.setModel(snm);
@@ -71,13 +66,6 @@ public class XlsExportParametersPanel extends javax.swing.JPanel implements Opti
         jTabbedPane1.setTitleAt(2, I18n.getString("XlsExportParametersPanel.jPanel3.TabConstraints.tabTitle")); // NOI18N
     }
 
-     public void notifyChange()
-    {
-        if (this.controller != null)
-        {
-            controller.changed();
-        }
-    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -494,5 +482,10 @@ public class XlsExportParametersPanel extends javax.swing.JPanel implements Opti
 
     public boolean valid() {
         return true;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return I18n.getString("XlsExportParametersPanel.title");
     }
 }

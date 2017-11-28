@@ -44,6 +44,7 @@ import com.jaspersoft.ireport.designer.undo.UndoRedoManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.Image;
 import java.beans.BeanInfo;
 import java.beans.PropertyChangeEvent;
@@ -168,7 +169,7 @@ public class JrxmlVisualView extends TopComponent
     public static PaletteController getPaletteFromMimeType( String mimeType ) {
         MimePath path = MimePath.get( mimeType );
         Lookup lkp = MimeLookup.getLookup( path );
-        return (PaletteController) lkp.lookup(org.netbeans.spi.palette.PaletteController.class);
+        return lkp.lookup(org.netbeans.spi.palette.PaletteController.class);
     }
     
     public JrxmlVisualView(JrxmlEditorSupport ed) {
@@ -347,10 +348,9 @@ public class JrxmlVisualView extends TopComponent
                     selectedObjects.add( ((CellNode)selectedNodes[i]).getCellContents() );
                 }
             }
-            
             // We have to find the scene with this object...
             getReportDesignerPanel().setSelectedObjects(selectedObjects);
-                        
+                         
         } catch (PropertyVetoException ex) {
             Exceptions.printStackTrace(ex);
         } finally {
@@ -499,6 +499,7 @@ public class JrxmlVisualView extends TopComponent
     public void run()
     {
         loading = true;
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             //
             support.setCurrentModel( null );
@@ -599,6 +600,7 @@ public class JrxmlVisualView extends TopComponent
         finally{
             
             loading = false;
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
     }
     
@@ -669,7 +671,7 @@ public class JrxmlVisualView extends TopComponent
             //if (newSelection.size() == 0 && previousSelection.size() == 0) return; // selection is not changed...
             
             setSettingSelection(true);
-            
+
             if (newSelection.size() == 0 &&
                 getExplorerManager().getRootContext() != null)
             {

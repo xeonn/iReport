@@ -5,16 +5,14 @@ import com.jaspersoft.ireport.designer.outline.nodes.ElementGroupNode;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import java.util.Arrays;
 import java.util.List;
-import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
-import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import org.openide.nodes.Children;
 import org.openide.nodes.Index;
 import org.openide.nodes.Node;
 import org.openide.util.HelpCtx;
-import org.openide.util.Utilities;
 import org.openide.util.actions.NodeAction;
 
 public final class SendElementBackwardAction extends NodeAction {
@@ -180,6 +178,17 @@ public final class SendElementBackwardAction extends NodeAction {
             if (activatedNodes[i].getParentNode() != parent) 
             {
                 return false;
+            }
+
+            if (activatedNodes[i].getParentNode() != null &&
+                activatedNodes[i].getParentNode() instanceof ElementNode)
+            {
+                    JRDesignElement multiaxischart = ((ElementNode)activatedNodes[i].getParentNode()).getElement();
+                    if (multiaxischart instanceof JRDesignChart &&
+                        ((JRDesignChart)multiaxischart).getChartType() == JRDesignChart.CHART_TYPE_MULTI_AXIS)
+                    {
+                        return false;
+                    }
             }
             
             if (activatedNodes[i] instanceof ElementNode)

@@ -17,13 +17,16 @@ import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.NotRealElementNode;
 import com.jaspersoft.ireport.designer.actions.BringElementForwardAction;
 import com.jaspersoft.ireport.designer.actions.BringElementToFrontAction;
+import com.jaspersoft.ireport.designer.actions.CopyFormatAction;
 import com.jaspersoft.ireport.designer.actions.EditTextfieldExpressionAction;
 import com.jaspersoft.ireport.designer.actions.EditTextfieldPatternAction;
 import com.jaspersoft.ireport.designer.actions.GroupElementsAction;
 import com.jaspersoft.ireport.designer.actions.OpenSubreportAction;
 import com.jaspersoft.ireport.designer.actions.PaddingAndBordersAction;
+import com.jaspersoft.ireport.designer.actions.PasteFormatAction;
 import com.jaspersoft.ireport.designer.actions.SendElementBackwardAction;
 import com.jaspersoft.ireport.designer.actions.SendElementToBackAction;
+import com.jaspersoft.ireport.designer.actions.TransformElementAction;
 import com.jaspersoft.ireport.designer.actions.UnGroupElementsAction;
 import com.jaspersoft.ireport.designer.charts.ChartDataAction;
 import com.jaspersoft.ireport.designer.charts.multiaxis.AddAxisChartAction;
@@ -59,10 +62,13 @@ import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
+import net.sf.jasperreports.engine.design.JRDesignEllipse;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
+import net.sf.jasperreports.engine.design.JRDesignRectangle;
+import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -119,7 +125,7 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
         
         element.getEventSupport().addPropertyChangeListener(this);
 
-        IReportManager.getInstance().getPreferences().addPreferenceChangeListener(new WeakPreferenceChangeListener(this,IReportManager.getInstance().getPreferences()));
+        IReportManager.getPreferences().addPreferenceChangeListener(new WeakPreferenceChangeListener(this,IReportManager.getInstance().getPreferences()));
         
         if (element instanceof JRDesignGraphicElement)
         {
@@ -306,23 +312,52 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
         if (canPaste()) list.add( SystemAction.get( PasteAction.class ) );
         list.add( SystemAction.get( DeleteAction.class ) );
         list.add( null  );
+        list.add( SystemAction.get( CopyFormatAction.class ) );
+        list.add( SystemAction.get( PasteFormatAction.class ) );
+
+        if (getElement() instanceof JRDesignRectangle ||
+            getElement() instanceof JRDesignEllipse ||
+            getElement() instanceof JRDesignTextField ||
+            getElement() instanceof JRDesignStaticText ||
+            getElement() instanceof JRDesignChart)
+        {
+            list.add( SystemAction.get(TransformElementAction.class) );
+        }
+        list.add( null );
+
         list.add( SystemAction.get( GroupElementsAction.class ) );
         list.add( SystemAction.get( UnGroupElementsAction.class ) );
         
         //list.add( SystemAction.get( ReorderAction.class ) );
-        list.add( SystemAction.get(BringElementToFrontAction.class) );
-        list.add( SystemAction.get(BringElementForwardAction.class) );
-        list.add( SystemAction.get(SendElementBackwardAction.class) );
-        list.add( SystemAction.get(SendElementToBackAction.class) );
-        list.add( null  );
-        list.add(  SubMenuAction.getAction("Menu/Format/Align"));
-        list.add(  SubMenuAction.getAction("Menu/Format/Size"));
-        list.add(  SubMenuAction.getAction("Menu/Format/Position"));
-        list.add( null  );
-        list.add(  SubMenuAction.getAction("Menu/Format/Horizontal Spacing"));
-        list.add(  SubMenuAction.getAction("Menu/Format/Vertical Spacing"));
-        list.add( null  );
-        list.add( SystemAction.get(OrganizeAsTableAction.class) );
+        boolean showFormattingTools = true;
+
+        if (this.getParentNode() != null &&
+            this.getParentNode() instanceof ElementNode)
+        {
+                JRDesignElement multiaxischart = ((ElementNode)this.getParentNode()).getElement();
+                if (multiaxischart instanceof JRDesignChart &&
+                    ((JRDesignChart)multiaxischart).getChartType() == JRDesignChart.CHART_TYPE_MULTI_AXIS)
+                {
+                    showFormattingTools = false;
+                }
+        }
+
+        if (showFormattingTools)
+        {
+            list.add( SystemAction.get(BringElementToFrontAction.class) );
+            list.add( SystemAction.get(BringElementForwardAction.class) );
+            list.add( SystemAction.get(SendElementBackwardAction.class) );
+            list.add( SystemAction.get(SendElementToBackAction.class) );
+            list.add( null  );
+            list.add(  SubMenuAction.getAction("Menu/Format/Align"));
+            list.add(  SubMenuAction.getAction("Menu/Format/Size"));
+            list.add(  SubMenuAction.getAction("Menu/Format/Position"));
+            list.add( null  );
+            list.add(  SubMenuAction.getAction("Menu/Format/Horizontal Spacing"));
+            list.add(  SubMenuAction.getAction("Menu/Format/Vertical Spacing"));
+            list.add( null  );
+            list.add( SystemAction.get(OrganizeAsTableAction.class) );
+        }
         
 
         // Looks for decorators supporting this element type...
@@ -598,5 +633,16 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
             s.add(paste);
         }
     }
-    
+
+    @Override
+    public Object getValue(String attributeName) {
+        if ("customDelete".equals(attributeName))
+        {
+            return new Boolean(IReportManager.getPreferences().getBoolean("noConfirmElementDelete", true));
+        }
+        return super.getValue(attributeName);
+    }
+
+
+
 }

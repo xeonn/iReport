@@ -199,7 +199,7 @@ public class PenEditorPanel extends javax.swing.JPanel  {
         this.pen = pen;
         boolean oldInit = setInit(true);
         
-        jSpinnerLineWidth.setValue(new Integer(0));
+        jSpinnerLineWidth.setValue(new Double(0));
         jList1.clearSelection();
         colorSelector.setColor(null);
 

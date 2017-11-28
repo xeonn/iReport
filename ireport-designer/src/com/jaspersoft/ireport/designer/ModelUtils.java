@@ -67,6 +67,7 @@ import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRPropertyExpression;
+import net.sf.jasperreports.engine.JRSection;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignChartDataset;
@@ -225,24 +226,60 @@ public class ModelUtils {
         
         JRGroup[] groups = jd.getGroups();
         
-        if (null != jd.getBackground()) list.add(jd.getBackground());
+        
         if (null != jd.getTitle()) list.add(jd.getTitle());
         if (null != jd.getPageHeader()) list.add(jd.getPageHeader());
         if (null != jd.getColumnHeader()) list.add(jd.getColumnHeader());
         for (int i=0; i<groups.length; ++i)
         {
-            if (null != groups[i].getGroupHeader()) list.add(groups[i].getGroupHeader());
+            //if (null != groups[i].getGroupHeader()) list.add(groups[i].getGroupHeader());
+            if (groups[i].getGroupHeaderSection() != null)
+            {
+                JRBand[] bandsList = groups[i].getGroupHeaderSection().getBands();
+                for (int k=0; bandsList != null && k<bandsList.length; ++k)
+                {
+                    if (bandsList[k] != null)
+                    {
+                        list.add(bandsList[k]);
+                    }
+                }
+            }
+            
         }
-        if (null != jd.getDetail()) list.add(jd.getDetail());
+        //if (null != jd.getDetail()) list.add(jd.getDetail());
+        if (jd.getDetailSection() != null)
+        {
+            JRBand[] bandsList = jd.getDetailSection().getBands();
+            for (int k=0; bandsList != null && k<bandsList.length; ++k)
+            {
+                if (bandsList[k] != null)
+                {
+                    list.add(bandsList[k]);
+                }
+            }
+        }
+ 
         for (int i=groups.length-1; i>=0; --i)
         {
-            if (null != groups[i].getGroupFooter()) list.add(groups[i].getGroupFooter());
+            //if (null != groups[i].getGroupFooter()) list.add(groups[i].getGroupFooter());
+            if (groups[i].getGroupFooterSection() != null)
+            {
+                JRBand[] bandsList = groups[i].getGroupFooterSection().getBands();
+                for (int k=0; bandsList != null && k<bandsList.length; ++k)
+                {
+                    if (bandsList[k] != null)
+                    {
+                        list.add(bandsList[k]);
+                    }
+                }
+            }
         }
         if (null != jd.getColumnFooter()) list.add(jd.getColumnFooter());
         if (null != jd.getPageFooter()) list.add(jd.getPageFooter());
         if (null != jd.getLastPageFooter()) list.add(jd.getLastPageFooter());
         if (null != jd.getSummary()) list.add(jd.getSummary());
         if (null != jd.getNoData()) list.add(jd.getNoData());
+        if (null != jd.getBackground()) list.add(jd.getBackground());
         
         return list;
     }
@@ -873,23 +910,25 @@ public class ModelUtils {
     public static boolean isGroupHeader(JRBand b, JasperDesign jd) {
         
         if (b == null) return false;
-        JRGroup[] groups = jd.getGroups();
-        for (int i=0; i<groups.length; ++i)
-        {
-            if (b == groups[i].getGroupHeader()) return true;
-        }
-        return false;
+        return ((JRDesignBand)b).getOrigin().getBandType() == JROrigin.GROUP_HEADER;
+//        JRGroup[] groups = jd.getGroups();
+//        for (int i=0; i<groups.length; ++i)
+//        {
+//            if (b == groups[i].getGroupHeader()) return true;
+//        }
+//        return false;
     }
     
     public static boolean isGroupFooter(JRBand b, JasperDesign jd) {
         
         if (b == null) return false;
-        JRGroup[] groups = jd.getGroups();
-        for (int i=0; i<groups.length; ++i)
-        {
-            if (b == groups[i].getGroupFooter()) return true;
-        }
-        return false;
+        return ((JRDesignBand)b).getOrigin().getBandType() == JROrigin.GROUP_FOOTER;
+//        JRGroup[] groups = jd.getGroups();
+//        for (int i=0; i<groups.length; ++i)
+//        {
+//            if (b == groups[i].getGroupFooter()) return true;
+//        }
+//        return false;
     }
 
     public static String nameOf(JROrigin origin) {
@@ -908,9 +947,14 @@ public class ModelUtils {
                 case JROrigin.SUMMARY: return I18n.getString("band.name.summary");
                 case JROrigin.NO_DATA: return I18n.getString("band.name.noData");
                 case JROrigin.GROUP_HEADER:
+                {
+                    // Find the section number
                     return  I18n.getString("band.name.GroupHeader", origin.getGroupName());
+                }
                 case JROrigin.GROUP_FOOTER:
+                {
                     return  I18n.getString("band.name.GroupFooter", origin.getGroupName());
+                }
             }
         }
         
@@ -938,7 +982,45 @@ public class ModelUtils {
             if (b == groups[i].getGroupFooter()) return groups[i].getName() + "GroupFooter";
         }
         */
-        return nameOf( ((JRDesignBand)b).getOrigin() );
+        JROrigin origin = ((JRDesignBand)b).getOrigin();
+        if (origin.getBandType() == JROrigin.GROUP_HEADER)
+        {
+                JRGroup group = (JRGroup)jd.getGroupsMap().get(origin.getGroupName());
+                int index = getBandIndex(group.getGroupHeaderSection(), b);
+                return  I18n.getString("band.name.GroupHeaderSection", origin.getGroupName(),index+1);
+        }
+        else if (origin.getBandType() == JROrigin.DETAIL)
+        {
+                int index = getBandIndex(jd.getDetailSection(), b);
+                return  I18n.getString("band.name.detailSection", index+1);
+        }
+        else if (origin.getBandType() == JROrigin.GROUP_FOOTER)
+        {
+                JRGroup group = (JRGroup)jd.getGroupsMap().get(origin.getGroupName());
+                int index = getBandIndex(group.getGroupFooterSection(), b);
+                return  I18n.getString("band.name.GroupFooterSection", origin.getGroupName(),index+1);
+        }
+
+        return nameOf( ((JRDesignBand)b).getOrigin());
+    }
+
+    /**
+     * Return the index of band in the section.
+     * It return -1 if the band is not found in this section
+     *
+     * @param section
+     * @param band
+     * @return
+     */
+    public static int getBandIndex(JRSection section, JRBand band)
+    {
+        JRBand[] bands = section.getBands();
+        for (int i=0;bands != null && i<bands.length; ++i)
+        {
+            if (bands[i] == band) return i;
+        }
+        return -1;
+
     }
     
     /**
@@ -968,10 +1050,23 @@ public class ModelUtils {
             
         for (JRBand tmpBand : bands)
         {
+            // Detached background...
+            if (tmpBand instanceof JRDesignBand)
+            {
+                if (((JRDesignBand)tmpBand).getOrigin().getBandType() == JROrigin.BACKGROUND)
+                {
+                    if (IReportManager.getInstance().isBackgroundSeparated())
+                    {
+                        yLocation += jd.getTopMargin();
+                        yLocation += jd.getBottomMargin();
+                        yLocation += 40;
+                    }
+                }
+            }
             if (tmpBand == b) return yLocation;
             yLocation += tmpBand.getHeight();
         }
-        
+
         return yLocation;
     }
     
@@ -998,7 +1093,7 @@ public class ModelUtils {
         int topBottomMargins = jd.getTopMargin() + jd.getBottomMargin();
         
         if ( (origin.getBandType() == JROrigin.TITLE && jd.isTitleNewPage()) ||
-             (origin.getBandType() == JROrigin.SUMMARY && jd.isSummaryNewPage()) ||
+             (origin.getBandType() == JROrigin.SUMMARY) ||  // && jd.isSummaryNewPage()
              origin.getBandType() == JROrigin.BACKGROUND ||
              origin.getBandType() == JROrigin.NO_DATA)
         {
@@ -1006,24 +1101,80 @@ public class ModelUtils {
         }
         
         int basicBandsHeight = 0;
-        int titleHeight = jd.getTitle() != null ? jd.getTitle().getHeight() : 0;
-        
+
         basicBandsHeight += topBottomMargins;
         basicBandsHeight += jd.getPageHeader() != null ? jd.getPageHeader().getHeight() : 0;
         basicBandsHeight += jd.getColumnHeader() != null ? jd.getColumnHeader().getHeight() : 0;
         basicBandsHeight += jd.getColumnFooter() != null ? jd.getColumnFooter().getHeight() : 0;
+
+        if (b.getOrigin().getBandType() == JROrigin.LAST_PAGE_FOOTER)
+        {
+            return  jd.getPageHeight() - basicBandsHeight;
+        }
+
         basicBandsHeight += jd.getPageFooter() != null ? jd.getPageFooter().getHeight() : 0;
-        
+
+        int heighestGroupHeader = 0;
+        int heighestGroupFooter = 0;
+
+        for (int i=0; i<jd.getGroupsList().size(); ++i)
+        {
+            JRDesignGroup grp = (JRDesignGroup)jd.getGroupsList().get(i);
+            JRBand[] bands = grp.getGroupHeaderSection().getBands();
+            for (int k=0; bands != null && k<bands.length; ++k)
+            {
+                heighestGroupHeader = Math.max(heighestGroupHeader, bands[k].getHeight());
+            }
+            bands = grp.getGroupFooterSection().getBands();
+            for (int k=0; bands != null && k<bands.length; ++k)
+            {
+                heighestGroupFooter = Math.max(heighestGroupFooter, bands[k].getHeight());
+            }
+        }
+
+        if (b.getOrigin().getBandType() == JROrigin.TITLE)
+        {
+            return  jd.getPageHeight() - basicBandsHeight - Math.max(heighestGroupFooter, heighestGroupHeader);
+        }
+
+        if (b.getOrigin().getBandType() == JROrigin.DETAIL)
+        {
+            return jd.getPageHeight() - basicBandsHeight;
+        }
+
+        int titleHeight = jd.getTitle() != null ? jd.getTitle().getHeight() : 0;
+        if (jd.isTitleNewPage()) titleHeight = 0;
+
         if (origin.getBandType() == JROrigin.GROUP_FOOTER ||
             origin.getBandType() == JROrigin.GROUP_HEADER)
         {
-            return jd.getPageHeight() - basicBandsHeight - (jd.isTitleNewPage() ? 0 : titleHeight);
+            return jd.getPageHeight() - basicBandsHeight - titleHeight;
         }
-        
-        int detailHeight = jd.getDetail() != null ? jd.getDetail().getHeight() : 0;
-        
+
+        //int summaryHeight = jd.getSummary() != null ? jd.getSummary().getHeight() : 0;
+        //if (!jd.isSummaryNewPage()) basicBandsHeight += summaryHeight;
+
+        int detailHeight = 0;
+
+        if (jd.getDetailSection() != null)
+        {
+            JRBand[] bandsList = jd.getDetailSection().getBands();
+            for (int k=0; bandsList != null && k<bandsList.length; ++k)
+            {
+                detailHeight = Math.max(detailHeight,bandsList[k].getHeight());
+            }
+        }
+
+        int maxAlternativeSection = Math.max( detailHeight,  Math.max(heighestGroupFooter, heighestGroupHeader) + titleHeight);
+
+        basicBandsHeight += maxAlternativeSection;
+
+        int res = jd.getPageHeight() - basicBandsHeight + b.getHeight();
+        res = Math.min(res, jd.getPageHeight()-topBottomMargins);
+        res = Math.max(res, 0);
+
         // Calcolate the design page without extra bands and the current band...
-        return jd.getPageHeight() - basicBandsHeight + b.getHeight() - detailHeight;
+        return res;
     }
     
     public static JRBand bandOfElement(JRElement element, JasperDesign jd)
@@ -1063,7 +1214,17 @@ public class ModelUtils {
             
             designHeight += jd.getBottomMargin();
         }
-        
+
+        // Detached background...
+        if (IReportManager.getInstance().isBackgroundSeparated() &&
+            jd.getBackground() != null &&
+            jd.getBackground().getHeight() > 0)
+        {
+            designHeight += jd.getTopMargin();
+            designHeight += jd.getBottomMargin();
+            designHeight += 40;
+        }
+
         return designHeight;
     }
     
@@ -1764,8 +1925,30 @@ public class ModelUtils {
         int currentHeight = jd.getTopMargin();
         for (JRBand tmpBand : bands)
         {
+            if (tmpBand instanceof JRDesignBand)
+            {
+                if (((JRDesignBand)tmpBand).getOrigin().getBandType() == JROrigin.BACKGROUND &&
+                    IReportManager.getInstance().isBackgroundSeparated())
+                {
+                    continue;
+                }
+
+            }
+
             currentHeight += tmpBand.getHeight();
             if (p.y < currentHeight) return (JRDesignBand)tmpBand;
+        }
+
+        if (IReportManager.getInstance().isBackgroundSeparated() &&
+            jd.getBackground() != null &&
+            jd.getBackground().getHeight() > 0 )
+        {
+            currentHeight += 40 + jd.getTopMargin() + jd.getBottomMargin();
+            if (p.y >= currentHeight &&
+                p.y < jd.getBackground().getHeight() + currentHeight)
+            {
+                return (JRDesignBand)jd.getBackground();
+            }
         }
         
         return null;
@@ -1812,9 +1995,12 @@ public class ModelUtils {
             List parameters = getHyperlinkParametersList(to);
             parameters.clear();
 
-            for (int i=0; i<params.length; ++i)
+            if (params != null)
             {
-                parameters.add( params[i].clone() );
+                for (int i=0; i<params.length; ++i)
+                {
+                    parameters.add( params[i].clone() );
+                }
             }
             
         } catch (Throwable t)

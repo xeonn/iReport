@@ -13,7 +13,6 @@ package com.jaspersoft.ireport.designer.options.export;
 
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.options.IReportOptionsPanelController;
-import com.jaspersoft.ireport.designer.options.OptionsPanel;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.prefs.Preferences;
@@ -24,13 +23,12 @@ import net.sf.jasperreports.engine.util.JRProperties;
  *
  * @author gtoffoli
  */
-public class CSVExportParametersPanel extends javax.swing.JPanel  implements OptionsPanel {
+public class CSVExportParametersPanel extends AbstractExportParametersPanel {
 
     IReportOptionsPanelController controller = null;
 
     /** Creates new form CSVExportParametersPanel */
-    public CSVExportParametersPanel(IReportOptionsPanelController ctlr) {
-        this.controller = ctlr;
+    public CSVExportParametersPanel() {
         initComponents();
 
         javax.swing.event.DocumentListener textfieldListener =  new javax.swing.event.DocumentListener()
@@ -62,14 +60,6 @@ public class CSVExportParametersPanel extends javax.swing.JPanel  implements Opt
         jLabelRecordDelimiter.setText(I18n.getString("CSVExportParametersPanel.jLabelRecordDelimiter.text")); // NOI18N
         jLabelSpecialCharacters.setText(I18n.getString("CSVExportParametersPanel.jLabelSpecialCharacters.text")); // NOI18N
         jButtonReset.setText(I18n.getString("CSVExportParametersPanel.jButtonReset.text"));
-    }
-
-    public void notifyChange()
-    {
-        if (this.controller != null)
-        {
-            controller.changed();
-        }
     }
 
     /** This method is called from within the constructor to
@@ -191,6 +181,11 @@ public class CSVExportParametersPanel extends javax.swing.JPanel  implements Opt
 
     public boolean valid() {
         return true;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return I18n.getString("CSVExportParametersPanel.title");
     }
 
 }

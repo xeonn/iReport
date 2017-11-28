@@ -43,7 +43,7 @@ public class ReportObjectSelectProvider implements SelectProvider {
                 widget = ((SelectionWidget)widget).getRealWidget();
             }
 
-            Object object = scene.findObject (widget);
+            Object object = scene.findObject(widget);
 
             scene.setFocusedObject (object);
             

@@ -10,6 +10,7 @@ import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.connection.IReportConnectionFactory;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import java.awt.Dialog;
 import java.awt.Frame;
@@ -54,13 +55,14 @@ public class ConnectionDialog extends javax.swing.JDialog {
         {
             this.setStep(0);
             DefaultListModel dlm = new DefaultListModel();
-            List types = IReportManager.getInstance().getConnectionImplementations();
-            for (int i=0; i<types.size(); ++i)
+            List<IReportConnectionFactory> types = IReportManager.getInstance().getIReportConnectionFactories(); //ConnectionImplementations();
+            for (IReportConnectionFactory factory : types) //int i=0; i<types.size(); ++i)
             {
-                String cName = "" + types.get(i);
+                //String cName = "" + types.get(i);
 
                 try {
-                    IReportConnection c = (IReportConnection)Class.forName(cName,true, IReportManager.getInstance().getReportClassLoader()).newInstance();
+                    //IReportConnection c = (IReportConnection)Class.forName(cName,true, IReportManager.getInstance().getReportClassLoader()).newInstance();
+                    IReportConnection c = factory.createConnection();
                     String sName = c.getDescription(); 
                             //(String)c.getMethod("getConnectionTypeName",new Class[]{}).invoke(null, new Object[]{});
                     dlm.addElement(new Tag(c, sName));

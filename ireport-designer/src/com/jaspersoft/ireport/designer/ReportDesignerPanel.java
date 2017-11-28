@@ -13,12 +13,18 @@ import com.jaspersoft.ireport.designer.dnd.DesignerDropTarget;
 import com.jaspersoft.ireport.designer.ruler.RulerPanel;
 import com.jaspersoft.ireport.designer.utils.MultilineToolbarLayout;
 import java.awt.BorderLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 import javax.swing.JComponent;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
@@ -65,7 +71,10 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
         }
         
         while (it.hasNext()) {
-            it.next().selectionChanged(arg0,arg1,arg2);
+            if (!isAdjustingSelection())
+            {
+                it.next().selectionChanged(arg0,arg1,arg2);
+            }
         }
     }
     
@@ -197,6 +206,20 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
         myView = scene.getJComponent();
 
         jScrollPaneMainReport.setViewportView(myView);
+        myView.addMouseWheelListener(new MouseWheelListener() {
+
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                if (e.getModifiers() == 0)
+                {
+
+                    int units = e.getUnitsToScroll()*16;
+                    int v = jScrollPaneMainReport.getVerticalScrollBar().getValue();
+                    v = Math.max(v, jScrollPaneMainReport.getVerticalScrollBar().getMinimum());
+                    v = Math.min(v, jScrollPaneMainReport.getVerticalScrollBar().getMaximum());
+                    jScrollPaneMainReport.getVerticalScrollBar().setValue( v + units);
+                }
+            }
+        });
         
         hRuler = new RulerPanel(scene);
         myView.addMouseMotionListener(hRuler);
@@ -214,7 +237,15 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
         scene.addObjectSceneListener(this, ObjectSceneEventType.OBJECT_REMOVED);
         scene.addObjectSceneListener(this, ObjectSceneEventType.OBJECT_ADDED);
         
-        
+        IReportManager.getPreferences().addPreferenceChangeListener(new PreferenceChangeListener() {
+
+            public void preferenceChange(PreferenceChangeEvent evt) {
+                try {
+                    getScene().refreshDocument();
+                    getScene().validate();
+                } catch (Exception ex) {}
+            }
+        });
     }
 
     static private double[] zoomSteps = new double[]{0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0};
@@ -502,7 +533,7 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
         }
 
         try {
-            if (getActiveScene() != null)
+            if (getActiveScene() != null && !isAdjustingSelection())
             {
                 // TODO: this piece of code essentially clear the selection.
                 // this is to avoid problems when using formatting tool with
@@ -617,7 +648,7 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
     }
 
     public void selectionChanged(ObjectSceneEvent se, Set<Object> arg1, Set<Object> arg2) {
-    
+
         if (isAdjustingSelection()) return; // Ignore this event...
         fireSelectionChangeEvent(se,arg1,arg2);
     }

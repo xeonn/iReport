@@ -5,19 +5,17 @@
 
 package com.jaspersoft.ireport.designer.crosstab.actions;
 
-import com.jaspersoft.ireport.designer.actions.*;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
-import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
+import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
 import java.awt.event.MouseEvent;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
-import net.sf.jasperreports.engine.JRBand;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.widget.Widget;
+import org.openide.nodes.Node;
 
 /**
  *
@@ -37,7 +35,14 @@ public class CellSelectionAction extends WidgetAction.Adapter {
             {
                     JRDesignCellContents cellContent = ModelUtils.getCellAt(crosstab, event.getPoint());
                     // If the cell is null, the document root is selected.
-                    IReportManager.getInstance().setSelectedObject(cellContent == null ? crosstab : cellContent);
+                    Node node = IReportManager.getInstance().findNodeOf(cellContent == null ? crosstab : cellContent, OutlineTopComponent.getDefault().getExplorerManager().getRootContext());
+                try {
+                    IReportManager.getInstance().getActiveVisualView().getExplorerManager().setSelectedNodes(new Node[]{node});
+                    //IReportManager.getInstance().setSelectedObject(cellContent == null ? crosstab : cellContent);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                    //IReportManager.getInstance().setSelectedObject(cellContent == null ? crosstab : cellContent);
             }
         }
         

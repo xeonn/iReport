@@ -6,7 +6,9 @@
 package com.jaspersoft.ireport.locale;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import org.openide.util.NbBundle;
 
@@ -28,10 +30,12 @@ public class I18n {
         }
     }
 
+    public static Map<String, ResourceBundle> cachedBundles = new HashMap<String, ResourceBundle>();
+
     //This is the default Resource Boundle for all the keys of the project.
     static final String DEFAULT_PACKAGE = "com/jaspersoft/ireport/locale";
 
-    private static void printMissingResourceMessage(String key, Exception ex)
+    private static void printMissingResourceMessage(String key)
     {
         System.out.println("Missing resouce key: " + key);
     }
@@ -126,22 +130,39 @@ public class I18n {
     public static String getString(Class clazz, String key){
         //return java.util.ResourceBundle.getBundle(DEFAULT_PACKAGE).getString(key);
 
-        try {
-            return NbBundle.getMessage(clazz, key);
-        } catch (Exception ex) {
+            String bundleName = findName(clazz);
+            if (!cachedBundles.containsKey(bundleName))
+            {
+                try {
+                    cachedBundles.put(bundleName, NbBundle.getBundle(clazz));
+                } catch (Exception ex) {
+                    System.out.println("Bundle: " + bundleName + " not found...");
+                }
+            }
+
+            ResourceBundle rb = cachedBundles.get(bundleName);
+            if (rb != null)
+            {
+                try {
+                    return rb.getString(key);
+                } catch (Exception ex) {
+                    // Missing resource...
+                }
+            }
 
             // Locate the message somewhere else...
             for (ResourceBundle bundle : bundleLocations)
             {
                 try {
                     return bundle.getString(key);
-                } catch (Exception ex2) {
-                    ex.printStackTrace();
+                } catch (Exception ex) {
+                    // Missing resource...
                 }
             }
-            printMissingResourceMessage(key, ex);
-        }
-        return key;
+
+            printMissingResourceMessage(key);
+
+            return key;
     }
 
     /**
@@ -165,4 +186,17 @@ public class I18n {
     }
 
 
+    private static String findName(Class clazz) {
+        String pref = clazz.getName();
+        int last = pref.lastIndexOf('.');
+
+        if (last >= 0) {
+            pref = pref.substring(0, last + 1);
+
+            return pref + "Bundle"; // NOI18N
+        } else {
+            // base package, search for bundle
+            return "Bundle"; // NOI18N
+        }
+    }
 }

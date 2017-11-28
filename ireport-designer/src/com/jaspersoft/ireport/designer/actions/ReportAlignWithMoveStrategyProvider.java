@@ -11,8 +11,12 @@ package com.jaspersoft.ireport.designer.actions;
 
 import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.undo.AggregatedUndoableEdit;
+import com.jaspersoft.ireport.designer.undo.BandChangeUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.designer.undo.UndoMoveChildrenUndoableEdit;
 import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import com.jaspersoft.ireport.designer.widgets.SelectionWidget;
 import java.awt.Insets;
@@ -21,13 +25,17 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import org.netbeans.api.visual.action.ActionFactory;
 import org.netbeans.api.visual.action.AlignWithMoveDecorator;
 import org.netbeans.api.visual.action.AlignWithWidgetCollector;
 import org.netbeans.api.visual.action.MoveProvider;
 import org.netbeans.api.visual.action.MoveStrategy;
+import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
 
@@ -123,11 +131,11 @@ public class ReportAlignWithMoveStrategyProvider extends AlignWithSupport implem
         return widget.getParentWidget().convertSceneToLocal (point);
     }
 
-    java.util.List<ObjectPropertyUndoableEdit> undoEdits = null; 
+    java.util.List<AggregatedUndoableEdit> undoEdits = null;
     public void movementStarted (Widget widget) {
         moveEnabled = false;
 
-        undoEdits = new java.util.ArrayList<ObjectPropertyUndoableEdit>();
+        undoEdits = new java.util.ArrayList<AggregatedUndoableEdit>();
         
         List<Widget> selectedElements = ((AbstractReportObjectScene)widget.getScene()).getSelectionLayer().getChildren();
         
@@ -137,6 +145,7 @@ public class ReportAlignWithMoveStrategyProvider extends AlignWithSupport implem
            if (w.isVisible())
            {
                 JRDesignElementWidget dew = ((SelectionWidget)w).getRealWidget();
+                JasperDesign jd = ((AbstractReportObjectScene)dew.getScene()).getJasperDesign();
                 undoEdits.add(new ObjectPropertyUndoableEdit(dew.getElement(), "X", Integer.TYPE, new Integer(dew.getElement().getX()), new Integer(dew.getElement().getX())));
                 undoEdits.add(new ObjectPropertyUndoableEdit(dew.getElement(), "Y", Integer.TYPE, new Integer(dew.getElement().getY()), new Integer(dew.getElement().getY())));
            }
@@ -146,25 +155,91 @@ public class ReportAlignWithMoveStrategyProvider extends AlignWithSupport implem
 
     public void movementFinished (Widget widget) {
 
+        List<Widget> selectedElements = ((AbstractReportObjectScene)widget.getScene()).getSelectionLayer().getChildren();
+
+        // Change the band if the direct parent is a band...
+        List<JRDesignElement> elementsToAddToSelection = new ArrayList<JRDesignElement>();
+
+        for (Widget w : selectedElements)
+        {
+            if (w.isVisible())
+            {
+                JRDesignElementWidget dew = ((SelectionWidget)w).getRealWidget();
+                elementsToAddToSelection.add(dew.getElement());
+
+                if (dew.getElement().getElementGroup() instanceof JRDesignBand)
+                {
+                    JRDesignBand oldBand = (JRDesignBand)dew.getElement().getElementGroup();
+                    JasperDesign jd = ((ReportObjectScene)dew.getScene()).getJasperDesign();
+                    Point localLocation = dew.convertModelToLocalLocation(new Point( dew.getElement().getX(), dew.getElement().getY() ));
+                    JRDesignBand newBand = ModelUtils.getBandAt(jd, localLocation);
+                    if (newBand != null && newBand != oldBand)
+                    {
+                        int y1 = ModelUtils.getBandLocation(newBand, jd);
+                        int y0 = ModelUtils.getBandLocation(oldBand, jd);
+
+                        int deltaBand = y0 - y1;
+                        // Update element band...
+                        oldBand.getChildren().remove(dew.getElement());
+                        //oldBand.removeElement(dew.getElement());
+
+                        // Update the element coordinates...
+                        dew.getElement().setElementGroup(newBand);
+                        dew.getElement().setY(dew.getElement().getY() + deltaBand);
+                        newBand.getChildren().add(dew.getElement());
+                        newBand.getEventSupport().firePropertyChange(JRDesignBand.PROPERTY_CHILDREN, null, null);
+                        oldBand.getEventSupport().firePropertyChange(JRDesignBand.PROPERTY_CHILDREN, null, null);
+                        BandChangeUndoableEdit bcUndo = new BandChangeUndoableEdit(
+                            jd,  oldBand, newBand, dew.getElement());
+                        undoEdits.add(bcUndo);
+                        
+                    }
+                }
+
+                if (dew.getChildrenElements() != null)
+                {
+                    undoEdits.add(0,new UndoMoveChildrenUndoableEdit(dew));
+                }
+            }
+        }
 
         // add the undo operation...
+
+
+
         for (int i=0;i<undoEdits.size(); ++i)
         {
-            ObjectPropertyUndoableEdit edit = undoEdits.get(i);
-            if (edit.getNewValue() == null &&
-                edit.getOldValue() == null) 
+            AggregatedUndoableEdit theEdit = undoEdits.get(i);
+            if (theEdit instanceof ObjectPropertyUndoableEdit)
             {
-                undoEdits.remove(edit);
-                i--;
-                continue;
+                ObjectPropertyUndoableEdit edit = (ObjectPropertyUndoableEdit)theEdit;
+                if (edit.getNewValue() == null &&
+                    edit.getOldValue() == null)
+                {
+                    undoEdits.remove(edit);
+                    i--;
+                    continue;
+                }
+                if (edit.getNewValue() != null &&
+                    edit.getOldValue() != null &&
+                    edit.getNewValue().equals(edit.getOldValue()))
+                {
+                    undoEdits.remove(edit);
+                    i--;
+                    continue;
+                }
             }
-            if (edit.getNewValue() != null &&
-                edit.getOldValue() != null &&
-                edit.getNewValue().equals(edit.getOldValue()))
+            else if (theEdit instanceof BandChangeUndoableEdit)
             {
-                undoEdits.remove(edit);
-                i--;
-                continue;
+                BandChangeUndoableEdit edit = (BandChangeUndoableEdit)theEdit;
+                if (edit.getOldBand() == null ||
+                    edit.getNewBand() == null ||
+                    edit.getNewBand() == edit.getOldBand())
+                {
+                    undoEdits.remove(edit);
+                    i--;
+                    continue;
+                }
             }
         }
         
@@ -174,10 +249,26 @@ public class ReportAlignWithMoveStrategyProvider extends AlignWithSupport implem
             
             for (int i=0;i<undoEdits.size(); ++i)
             {
-                ObjectPropertyUndoableEdit edit = undoEdits.get(i);
+                AggregatedUndoableEdit edit = undoEdits.get(i);
                 masterEdit.concatenate(edit);
             }
-            
+            if (elementsToAddToSelection.size() == 0)
+            {
+                IReportManager.getInstance().setSelectedObject(null);
+            }
+            boolean first = true;
+            for (JRDesignElement ele : elementsToAddToSelection)
+            {
+                if (first)
+                {
+                    IReportManager.getInstance().setSelectedObject(ele);
+                    first = false;
+                }
+                else
+                {
+                    IReportManager.getInstance().addSelectedObject(ele);
+                }
+            }
             IReportManager.getInstance().addUndoableEdit(masterEdit);
         }
         
@@ -209,7 +300,7 @@ public class ReportAlignWithMoveStrategyProvider extends AlignWithSupport implem
                 JRDesignElementWidget dew = ((SelectionWidget)w).getRealWidget();
                 
                 if (changedWidgets.contains(dew)) continue;
-                
+
                 Point loc = w.getPreferredLocation();
                 loc.translate(delta.x, delta.y);
                 w.setPreferredLocation(loc);
@@ -235,17 +326,20 @@ public class ReportAlignWithMoveStrategyProvider extends AlignWithSupport implem
                 changedWidgets.add(dew);
            }
         }
-        
     }
     
     private ObjectPropertyUndoableEdit findEdit(Object obj, String property)
     {
-        for (ObjectPropertyUndoableEdit edit : undoEdits)
+        for (AggregatedUndoableEdit theEdit : undoEdits)
         {
-            if (edit.getObject() == obj &&
-                edit.getProperty().equals(property))
+
+            if (theEdit instanceof ObjectPropertyUndoableEdit)
             {
-                return edit;
+                ObjectPropertyUndoableEdit edit = (ObjectPropertyUndoableEdit)theEdit;
+                if (edit.getObject() == obj && edit.getProperty().equals(property))
+                {
+                    return edit;
+                }
             }
         }
         return null;

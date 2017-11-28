@@ -395,7 +395,11 @@ public class ServerDialog extends javax.swing.JDialog {
         }
         else
         {
-            this.jTextFieldUsername.setText( username + "|" + organization);
+            if (organization.length() > 0)
+            {
+                username = username + "|" + organization;
+            }
+            this.jTextFieldUsername.setText(username);
             this.jTextFieldOrganization.setText("");
         }
         this.jPasswordField.setText(  jServer.getPassword());

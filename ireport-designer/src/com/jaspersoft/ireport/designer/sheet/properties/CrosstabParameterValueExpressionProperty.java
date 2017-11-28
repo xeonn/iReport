@@ -9,12 +9,10 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
-import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 
 /**

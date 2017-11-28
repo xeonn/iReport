@@ -36,6 +36,8 @@ import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JROrigin;
+import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.netbeans.api.visual.widget.Scene.SceneListener;
 
@@ -251,6 +253,22 @@ public class RulerPanel extends javax.swing.JPanel implements MouseListener, Mou
                 for (JRBand b :  bands)
                 {
                     if (b == null || b.getHeight() == 0) continue;
+
+                    if (b instanceof JRDesignBand &&
+                        ((JRDesignBand)b).getOrigin().getBandType() == JROrigin.BACKGROUND &&
+                        IReportManager.getInstance().isBackgroundSeparated())
+                    {
+                        // Print some extra gray stuff...
+                        int y_g1 = (int)Math.round((40+jd.getTopMargin() + jd.getBottomMargin())*getZoomFactor() );
+                        Paint oldC = g.getPaint();
+                        g.setPaint(new Color(128,128,128,128));
+                        g.fillRect(0,y0, getWidth(),y_g1);
+                        g.setPaint(oldC);
+
+                        lastY+=40+jd.getTopMargin() + jd.getBottomMargin();
+                        y0 += y_g1;
+                    }
+
                     lastY += b.getHeight();
                     int y1 = (int)Math.round(lastY*getZoomFactor() ) - scroll;
                     
@@ -330,8 +348,26 @@ public class RulerPanel extends javax.swing.JPanel implements MouseListener, Mou
                 for (JRBand b :  bands)
                 {
                     if (b == null || b.getHeight() == 0) continue;
+
+                    int y1 = 0;
+                  if (b instanceof JRDesignBand &&
+                        ((JRDesignBand)b).getOrigin().getBandType() == JROrigin.BACKGROUND &&
+                        IReportManager.getInstance().isBackgroundSeparated())
+                    {
+                        // Print some extra gray stuff...
+                        lastY +=40+jd.getTopMargin() + jd.getBottomMargin();
+                        y1 = (int)Math.round(lastY*getZoomFactor() ) - scroll;
+                        for (double unit=0; ; unit += interval)
+                        {
+                            double pos = unit*unitPixels*zoomFactor + newZeroPos;
+                            if (pos > y1) break;
+                            paintUnitTicks(g,unit,pos,interval_len, (unit%(interval*interval2)) == 0 && ( unit == 0 || (y1 - pos) > 30), Math.max(1, y1) );
+                        }
+                        newZeroPos = y1;
+                    }
+
                     lastY += b.getHeight();
-                    int y1 = (int)Math.round(lastY*getZoomFactor() ) - scroll;
+                    y1 = (int)Math.round(lastY*getZoomFactor() ) - scroll;
                     
                     for (double unit=0; ; unit += interval)
                     {

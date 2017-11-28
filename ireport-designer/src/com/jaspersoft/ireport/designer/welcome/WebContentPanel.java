@@ -14,6 +14,7 @@ package com.jaspersoft.ireport.designer.welcome;
 import com.jaspersoft.ireport.locale.I18n;
 import java.io.IOException;
 import java.net.URL;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.HyperlinkEvent;
@@ -67,8 +68,13 @@ public class WebContentPanel extends javax.swing.JPanel {
             public void run() {
                 try {
                     jEditorPane1.setPage(url);
-                } catch (IOException ex) {
-                    jEditorPane1.setText("<html><body><br><br><font face=\"Arial\" size=\"-1\" color=\"888888\">" + I18n.getString("error.loading.web.resource") + "</font><br><br></body></html>");
+                } catch (Throwable ex) {
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                        public void run() {
+                            jEditorPane1.setText("<html><body><br><br><font face=\"Arial\" size=\"-1\" color=\"888888\">" + I18n.getString("error.loading.web.resource") + "</font><br><br></body></html>");
+                        }
+                    });
                 }
             }
         }).start();
@@ -127,8 +133,13 @@ public class WebContentPanel extends javax.swing.JPanel {
             public void run() {
                 try {
                     jEditorPane1.setPage(getContentUrl());
-                } catch (IOException ex) {
-                    jEditorPane1.setText("<html><body><br><br><font face=\"Arial\" size=\"-1\" color=\"888888\">" + I18n.getString("error.loading.web.resource") + "</font><br><br></body></html>");
+                } catch (Throwable ex) {
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                        public void run() {
+                            jEditorPane1.setText("<html><body><br><br><font face=\"Arial\" size=\"-1\" color=\"888888\">" + I18n.getString("error.loading.web.resource") + "</font><br><br></body></html>");
+                        }
+                    });
                 }
             }
         }).start();

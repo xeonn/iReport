@@ -100,7 +100,7 @@ public class BandMoveProvider implements MoveProvider {
         ((JRDesignBand)b).setHeight( newValue );
                 
         ObjectPropertyUndoableEdit edit = new ObjectPropertyUndoableEdit(
-                b, I18n.getString("Global.Property.Height"), Integer.TYPE, originalHight,  newValue);
+                b, "Height", Integer.TYPE, originalHight,  newValue); // NOI18N
         IReportManager.getInstance().addUndoableEdit(edit);
         
         ((PageWidget)scene.getPageLayer().getChildren().get(0)).updateBounds();

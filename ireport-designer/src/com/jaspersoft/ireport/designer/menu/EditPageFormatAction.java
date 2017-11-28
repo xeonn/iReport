@@ -1,6 +1,6 @@
 package com.jaspersoft.ireport.designer.menu;
 
-import com.jaspersoft.ireport.designer.outline.nodes.ReportNode;
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.tools.PageFormatPanel;
 import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -13,16 +13,14 @@ public final class EditPageFormatAction extends NodeAction {
     @Override
     protected void performAction(Node[] nodes) {
         
-        Node node = nodes[0];
-        if (node instanceof ReportNode)
+        JasperDesign jd = IReportManager.getInstance().getActiveReport();
+        if (jd != null)
         {
-            JasperDesign jd = ((ReportNode)node).getJasperDesign();
 
             PageFormatPanel pfp = new PageFormatPanel();
             pfp.setJasperDesign(jd);
             pfp.showDialog(null, true);
-        }
-        
+        }  
     }
 
     @Override
@@ -48,6 +46,6 @@ public final class EditPageFormatAction extends NodeAction {
 
     @Override
     protected boolean enable(Node[] nodes) {
-        return (nodes != null && nodes.length == 1 && (nodes[0] instanceof ReportNode));
+        return IReportManager.getInstance().getActiveReport() != null;
     }
 }

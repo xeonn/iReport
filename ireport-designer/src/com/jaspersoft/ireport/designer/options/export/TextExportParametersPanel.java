@@ -12,8 +12,6 @@
 package com.jaspersoft.ireport.designer.options.export;
 
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.options.IReportOptionsPanelController;
-import com.jaspersoft.ireport.designer.options.OptionsPanel;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.prefs.Preferences;
@@ -26,13 +24,10 @@ import net.sf.jasperreports.engine.util.JRProperties;
  *
  * @author gtoffoli
  */
-public class TextExportParametersPanel extends javax.swing.JPanel implements OptionsPanel {
-
-    IReportOptionsPanelController controller = null;
+public class TextExportParametersPanel extends AbstractExportParametersPanel {
 
     /** Creates new form OpenOfficeExportParametersPanel */
-    public TextExportParametersPanel(IReportOptionsPanelController ctlr) {
-        this.controller = ctlr;
+    public TextExportParametersPanel() {
         initComponents();
 
         ChangeListener snmcl = new ChangeListener() {
@@ -94,14 +89,6 @@ public class TextExportParametersPanel extends javax.swing.JPanel implements Opt
         jLabelDefault4.setText(I18n.getString("TextExportParametersPanel.jLabelDefault4.text")); // NOI18N
         jLabelDefault5.setText(I18n.getString("TextExportParametersPanel.jLabelDefault5.text")); // NOI18N
 
-    }
-
-     public void notifyChange()
-    {
-        if (this.controller != null)
-        {
-            controller.changed();
-        }
     }
 
     /** This method is called from within the constructor to
@@ -315,5 +302,10 @@ public class TextExportParametersPanel extends javax.swing.JPanel implements Opt
 
     public boolean valid() {
         return true;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return I18n.getString("TextExportParametersPanel.title");
     }
 }

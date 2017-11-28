@@ -104,7 +104,7 @@ public class OlapBrowser extends javax.swing.JPanel implements FieldsProviderEdi
         int hCount = 0;
         for (int i = 0; i < axes.length; i++)
         {
-                queryHierarchies[i] = query.getMdxHierarchiesOnAxis(AxisOrdinal.forLogicalOrdinal(i));
+                queryHierarchies[i] = query.getMdxHierarchiesOnAxis(AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(i));
                 
                 DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(new WalkableWrapper(axes[i],root));
                 

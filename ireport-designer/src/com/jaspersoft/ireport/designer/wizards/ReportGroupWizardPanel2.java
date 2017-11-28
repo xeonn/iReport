@@ -93,7 +93,7 @@ public class ReportGroupWizardPanel2 implements WizardDescriptor.Panel {
         
         ReportGroupVisualPanel2 panel = (ReportGroupVisualPanel2)this.getComponent();
         ((WizardDescriptor)settings).putProperty("header", panel.hasHeader()+"");
-        ((WizardDescriptor)settings).putProperty("footer", panel.hasHeader()+"" );
+        ((WizardDescriptor)settings).putProperty("footer", panel.hasFooter()+"" );
     }
 
     public JasperDesign getJasperDesign() {

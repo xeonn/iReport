@@ -1,3 +1,42 @@
+2009-06-03 Version 3.5.2 released
+_______________________________________________________________________________
+- Fixed bug 3785: [Bugs iReport - NB] Right-click OPEN SUBREPORT does nothing
+- Fixed bug 964:  [Bugs iReport - NB] Barcode not work in netbeans plugin
+- Fixed bug 3781: [Bugs iReport - NB] Ad Hoc Available Fields missing field names
+- Fixed bug 3958: [Bugs iReport - NB] Timeseries chart and subdataset grouping
+- Fixed bug 3973: [Bugs iReport - NB] Exception thrown when trying to set a rectangle's pen property
+- Fixed bug 3974: [Bugs iReport - NB] Error when creating multi-axis chart
+- Fixed bug 3982: [Bugs iReport - NB] iReport 3.5.1 freezes during update
+- Fixed bug 3991: [Bugs iReport - NB] ClassPath Library for JasperReports netBeans plugin missing files.
+- Fixed bug 3937: [Bugs iReport - NB] Add group wizard creates mysterious header/footer combos
+- Fixed bug 3915: [Bugs iReport - NB] Repository Navigator retrieves username in properties box incorrectly
+- Added a Wait cursor while loading a jrxml
+- Subreport directory is persisted when using the subreport wizard
+- Added ability to copy and paste subdatasets
+- Inspector view filters for built-in variables and parameters
+- Added ability to see the styles in a jrtx file in the inspector view
+- Improved styles library
+- Fixed cell selection in Crosstab
+- Added iReport TXT exporter
+- Added support for pluggable exporters
+- Added XPath2 support (a special datasuorce for remote XML files)
+- New ability to generate jrxml compatible with old versions of JasperReports
+- Support for Barcode4J component
+- Updated to JasperReports 3.5.2
+- Support for Barbecue component
+- Support for sections (multiple bands) for detail, group headers and group footers
+- Added Remove Margins feature to remove the document margins when editing report to be used as subreports
+- Added Transform in feature to transform several elements in other elements
+- Removed confirmation dialog on element delete (added an option to activate it in the options panel)
+- Added the compile action (to compile a report without preview it) on the visual view toolbar and as menu item for the report inspector root node
+- Fixed undo operation for element gruops on move
+- Fixed bands size check
+- New auto stick-to-band feature (elements are moved in the most suitable band when moved with the mouse)
+- Added Maximize Band Height context menu action
+- Fixed band height constraints verifier (based on the JasperReports JRVerifier rules)
+- The background band is now shown on a different page in the designer window and at the end of the bands list 
+- Added mouse wheel support to vertically scroll the design view
+
 2009-05-04 Version 3.5.1 released
 _______________________________________________________________________________
 - Fixed bug 14367 Fields, parameters and variables missing in hyperlink anchor expression editor

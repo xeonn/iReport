@@ -12,8 +12,6 @@
 package com.jaspersoft.ireport.designer.options.export;
 
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.options.IReportOptionsPanelController;
-import com.jaspersoft.ireport.designer.options.OptionsPanel;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.prefs.Preferences;
 import javax.swing.SpinnerNumberModel;
@@ -26,13 +24,10 @@ import net.sf.jasperreports.engine.util.JRProperties;
  *
  * @author gtoffoli
  */
-public class CommonExportParametersPanel extends javax.swing.JPanel implements OptionsPanel {
-
-    IReportOptionsPanelController controller = null;
+public class CommonExportParametersPanel extends AbstractExportParametersPanel {
 
     /** Creates new form CommonExportParametersPanel */
-    public CommonExportParametersPanel(IReportOptionsPanelController ctlr) {
-        this.controller = ctlr;
+    public CommonExportParametersPanel() {
         initComponents();
         SpinnerNumberModel snmX = new SpinnerNumberModel(0,0,Integer.MAX_VALUE,1);
         SpinnerNumberModel snmY = new SpinnerNumberModel(0,0,Integer.MAX_VALUE,1);
@@ -433,12 +428,9 @@ public class CommonExportParametersPanel extends javax.swing.JPanel implements O
         return true;
     }
 
-    public void notifyChange()
-    {
-        if (this.controller != null)
-        {
-            controller.changed();
-        }
+    @Override
+    public String getDisplayName() {
+        return I18n.getString("CommonExportParametersPanel.title");
     }
 
 }

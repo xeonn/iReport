@@ -491,9 +491,17 @@ public class ExpressionEditor extends javax.swing.JPanel {
         if (jList2.getSelectedValue() instanceof ExpObject)
         {
             try {
-                clazz = this.getClass().getClassLoader().loadClass( ((ExpObject)jList2.getSelectedValue()).getClassType());
+                clazz = IReportManager.getReportClassLoader().loadClass( ((ExpObject)jList2.getSelectedValue()).getClassType());
         
-            } catch (Throwable ex)
+            } catch (NoClassDefFoundError ex)
+            {
+                
+            }
+            catch (ClassNotFoundException ex2)
+            {
+                
+            }
+            catch (Throwable ex3)
             {
                 
             }

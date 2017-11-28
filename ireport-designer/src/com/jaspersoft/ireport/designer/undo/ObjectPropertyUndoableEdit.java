@@ -41,6 +41,8 @@ public class ObjectPropertyUndoableEdit extends AggregatedUndoableEdit {
         this.oldValue = oldValue;
         this.newValue = newValue;
         this.propertyClass = propertyClass;
+
+        setPresentationName(getProperty() + " of " + getObject());
     }
     
     @Override
@@ -66,10 +68,6 @@ public class ObjectPropertyUndoableEdit extends AggregatedUndoableEdit {
         } catch (Exception ex) {
             throw new CannotUndoException();
         }
-    }
-
-    public String getPresentationName() {
-        return "" + getProperty() + " of " + getObject();
     }
 
     public Object getObject() {

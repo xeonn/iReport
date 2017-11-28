@@ -61,6 +61,7 @@ import javax.swing.UIManager;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignChart;
@@ -71,6 +72,7 @@ import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignImage;
+import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 import org.netbeans.api.visual.action.ActionFactory;
@@ -148,17 +150,10 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
                 this.rebuildDocument();
                 return;
             }
-
             
             jasperDesign.getEventSupport().addPropertyChangeListener(this);
-            
-            // Adding listeners for groups...
-            for (int i=0; i<this.jasperDesign.getGroupsList().size(); ++i)
-            {
-                JRDesignGroup grp = (JRDesignGroup)this.jasperDesign.getGroupsList().get(i);
-                grp.getEventSupport().addPropertyChangeListener(this);
-            }
-            
+            updateSectionListeners();
+
             this.drawVisitor = 
                     new ConfigurableDrawVisitor(new ReportConverter(jasperDesign, true, false), null);
             ThreadUtils.invokeInAWTThread(new Runnable() {
@@ -170,16 +165,51 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
         
         
     }
+
+    public void updateSectionListeners()
+    {
+        ((JRDesignSection)getJasperDesign().getDetailSection()).getEventSupport().removePropertyChangeListener(this);
+        ((JRDesignSection)getJasperDesign().getDetailSection()).getEventSupport().addPropertyChangeListener(this);
+
+
+        for (int i=0; i<getJasperDesign().getGroupsList().size(); ++i)
+        {
+            JRDesignGroup grp = (JRDesignGroup)getJasperDesign().getGroupsList().get(i);
+            grp.getEventSupport().removePropertyChangeListener(this);
+            grp.getEventSupport().addPropertyChangeListener(this);
+            if (((JRDesignSection)grp.getGroupHeaderSection() != null))
+            {
+                ((JRDesignSection)grp.getGroupHeaderSection()).getEventSupport().removePropertyChangeListener(this);
+                ((JRDesignSection)grp.getGroupHeaderSection()).getEventSupport().addPropertyChangeListener(this);
+            }
+            if (((JRDesignSection)grp.getGroupFooterSection() != null))
+            {
+                ((JRDesignSection)grp.getGroupFooterSection()).getEventSupport().removePropertyChangeListener(this);
+                ((JRDesignSection)grp.getGroupFooterSection()).getEventSupport().addPropertyChangeListener(this);
+            }
+        }
+    }
     
     public void addBandSeparatorWidget(JRBand b, int yLocation)
     {
         if (b == null) return;
+
+        if (b instanceof JRDesignBand &&
+            ((JRDesignBand)b).getOrigin().getBandType() == JROrigin.BACKGROUND)
+        {
+            ((JRDesignBand)b).getEventSupport().removePropertyChangeListener(JRDesignBand.PROPERTY_HEIGHT, this);
+            if (IReportManager.getInstance().isBackgroundSeparated() && b.getHeight() == 0)
+            {
+                ((JRDesignBand)b).getEventSupport().addPropertyChangeListener(JRDesignBand.PROPERTY_HEIGHT, this);
+                return;
+            }
+        }
+        
         BandSeparatorWidget bbw = new BandSeparatorWidget(this, b);
         bbw.getActions().addAction( new BandMoveAction(true, InputEvent.SHIFT_DOWN_MASK) );
         bbw.getActions().addAction( new BandMoveAction() );
         bbw.getActions().addAction( new BandDblClickResizeAction());
         bandSeparatorsLayer.addChild(bbw);
-        
         bandLayer.addChild(new BandWidget(this, b));
     }
     
@@ -404,7 +434,7 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
             {
                     JRDesignElementWidget dew = (JRDesignElementWidget)widget;
                     if (dew.getElement() instanceof JRDesignComponentElement &&
-                        dew.getChildrenElements().contains(element))
+                        dew.getChildrenElements() != null && dew.getChildrenElements().contains(element))
                     {
                         return dew;
                     }
@@ -729,8 +759,12 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
             evt.getPropertyName().equals(JasperDesign.PROPERTY_COLUMN_WIDTH) ||
             evt.getPropertyName().equals(JRDesignGroup.PROPERTY_GROUP_HEADER) ||
             evt.getPropertyName().equals(JRDesignGroup.PROPERTY_GROUP_FOOTER) ||
-            evt.getPropertyName().equals(JRDesignDataset.PROPERTY_GROUPS))
+            evt.getPropertyName().equals(JRDesignDataset.PROPERTY_GROUPS) ||
+            evt.getPropertyName().equals(JRDesignSection.PROPERTY_BANDS) ||
+            // PROPERTY_HEIGHT is used only for the background band when it is detached...
+            evt.getPropertyName().equals(JRDesignBand.PROPERTY_HEIGHT))
         {
+            updateSectionListeners();
              r = new Runnable(){  
                  public void run()  {
                     refreshDocument();

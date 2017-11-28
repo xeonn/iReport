@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.actions;
 
 import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
@@ -26,6 +27,8 @@ import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.fill.calculation.BucketDefinition;
 import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JROrigin;
+import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -159,6 +162,13 @@ public class ReportAlignWithWidgetCollector implements AlignWithWidgetCollector 
             {
                 if (band.getHeight() > 0)
                 {
+                    if (band instanceof JRDesignBand &&
+                        ((JRDesignBand)band).getOrigin().getBandType() == JROrigin.BACKGROUND &&
+                        IReportManager.getInstance().isBackgroundSeparated())
+                    {
+                        bandLocation += 40 + jd.getTopMargin() + jd.getBottomMargin();
+                        regions.add( new Rectangle(jd.getLeftMargin(), bandLocation, jd.getPageWidth() - jd.getRightMargin() - jd.getLeftMargin(), 0 ) );
+                    }
                     bandLocation += band.getHeight();
                     regions.add( new Rectangle(jd.getLeftMargin(), bandLocation, jd.getPageWidth() - jd.getRightMargin() - jd.getLeftMargin(), 0 ) );
                 }

@@ -185,8 +185,25 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
 
+        jCheckBoxShowBackgroundAsSeparatedDocument.setText(I18n.getString("optionsPanel.checkBoxShowBackgroundAsSeparatedDocument"));
+        jCheckBoxAskConfirmationOnDelete.setText(I18n.getString("optionsPanel.checkBoxAskConfirmationOnDelete"));
         //jTabbedPane1.remove(6);
         //jTabbedPane1.remove(5);
+
+        jComboBoxCompatibility.addItem(new Tag("", "Last version"));
+        jComboBoxCompatibility.addItem(new Tag("3_5_1", "JasperReports 3.5.1"));
+        jComboBoxCompatibility.addItem(new Tag("3_5_0", "JasperReports 3.5.0"));
+        jComboBoxCompatibility.addItem(new Tag("3_1_4", "JasperReports 3.1.4"));
+        jComboBoxCompatibility.addItem(new Tag("3_1_3", "JasperReports 3.1.3"));
+        jComboBoxCompatibility.addItem(new Tag("3_1_2", "JasperReports 3.1.2"));
+        jComboBoxCompatibility.addItem(new Tag("3_1_0", "JasperReports 3.1.0"));
+        jComboBoxCompatibility.addItem(new Tag("3_0_1", "JasperReports 3.0.1"));
+        jComboBoxCompatibility.addItem(new Tag("3_0_0", "JasperReports 3.0.0"));
+        jComboBoxCompatibility.addItem(new Tag("2_0_5", "JasperReports 2.0.5"));
+        jComboBoxCompatibility.addItem(new Tag("2_0_4", "JasperReports 2.0.4"));
+        jComboBoxCompatibility.addItem(new Tag("2_0_3", "JasperReports 2.0.3"));
+        jComboBoxCompatibility.addItem(new Tag("2_0_2", "JasperReports 2.0.2"));
+
     }
 
     public void jTableQueryExecutersSelectionChanged()
@@ -230,6 +247,8 @@ final class IReportPanel extends javax.swing.JPanel {
         jPanel26 = new javax.swing.JPanel();
         jCheckBoxKeyInReportInspector = new javax.swing.JCheckBox();
         jCheckBoxCrosstabAutoLayout = new javax.swing.JCheckBox();
+        jCheckBoxShowBackgroundAsSeparatedDocument = new javax.swing.JCheckBox();
+        jCheckBoxAskConfirmationOnDelete = new javax.swing.JCheckBox();
         jPanel22 = new javax.swing.JPanel();
         jLabelExpressions = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -238,6 +257,10 @@ final class IReportPanel extends javax.swing.JPanel {
         jButtonModifyExpression = new javax.swing.JButton();
         jButtonRemoveExpression = new javax.swing.JButton();
         jButtonRestoreExpressions = new javax.swing.JButton();
+        jPanelCompatibility = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jComboBoxCompatibility = new javax.swing.JComboBox();
+        jCheckBoxShowCompatibilityWarning = new javax.swing.JCheckBox();
         jPanel4 = new javax.swing.JPanel();
         jLabelClasspath = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -365,7 +388,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jComboBoxUnits, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 72, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(18, 18, 18)
                 .add(jCheckBoxMagneticGuideLines)
-                .addContainerGap(270, Short.MAX_VALUE))
+                .addContainerGap(428, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -408,7 +431,7 @@ final class IReportPanel extends javax.swing.JPanel {
                     .add(jPanel24Layout.createSequentialGroup()
                         .add(jLabelTimeZone2)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jComboBoxTheme, 0, 514, Short.MAX_VALUE)))
+                        .add(jComboBoxTheme, 0, 672, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel24Layout.setVerticalGroup(
@@ -441,6 +464,20 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxShowBackgroundAsSeparatedDocument, "Show Background as separated document");
+        jCheckBoxShowBackgroundAsSeparatedDocument.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxShowBackgroundAsSeparatedDocumentActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxAskConfirmationOnDelete, "Show confirmation dialog when deleting an element");
+        jCheckBoxAskConfirmationOnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxAskConfirmationOnDeleteActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout jPanel26Layout = new org.jdesktop.layout.GroupLayout(jPanel26);
         jPanel26.setLayout(jPanel26Layout);
         jPanel26Layout.setHorizontalGroup(
@@ -449,8 +486,10 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel26Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jCheckBoxKeyInReportInspector)
-                    .add(jCheckBoxCrosstabAutoLayout))
-                .addContainerGap(235, Short.MAX_VALUE))
+                    .add(jCheckBoxCrosstabAutoLayout)
+                    .add(jCheckBoxShowBackgroundAsSeparatedDocument)
+                    .add(jCheckBoxAskConfirmationOnDelete))
+                .addContainerGap(393, Short.MAX_VALUE))
         );
         jPanel26Layout.setVerticalGroup(
             jPanel26Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -459,7 +498,11 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jCheckBoxKeyInReportInspector)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxCrosstabAutoLayout)
-                .addContainerGap(183, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxShowBackgroundAsSeparatedDocument)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxAskConfirmationOnDelete)
+                .addContainerGap(137, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Designer", jPanel26);
@@ -538,13 +581,12 @@ final class IReportPanel extends javax.swing.JPanel {
         jPanel22.setLayout(jPanel22Layout);
         jPanel22Layout.setHorizontalGroup(
             jPanel22Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 598, Short.MAX_VALUE)
             .add(jPanel22Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel22Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabelExpressions, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
+                    .add(jLabelExpressions, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel22Layout.createSequentialGroup()
-                        .add(jScrollPane6)
+                        .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel22Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
                             .add(jButtonAddExpression, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -555,7 +597,6 @@ final class IReportPanel extends javax.swing.JPanel {
         );
         jPanel22Layout.setVerticalGroup(
             jPanel22Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 236, Short.MAX_VALUE)
             .add(jPanel22Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jLabelExpressions)
@@ -575,6 +616,41 @@ final class IReportPanel extends javax.swing.JPanel {
 
         jTabbedPane3.addTab("Expression editor", jPanel22);
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, "<html>Set the compatibility of the produced jrxml source code when the report is saved. If you don't use the last version, you risk to loose part the report content.");
+
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxShowCompatibilityWarning, "Show compatibility warning dialog");
+        jCheckBoxShowCompatibilityWarning.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxShowCompatibilityWarningActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanelCompatibilityLayout = new org.jdesktop.layout.GroupLayout(jPanelCompatibility);
+        jPanelCompatibility.setLayout(jPanelCompatibilityLayout);
+        jPanelCompatibilityLayout.setHorizontalGroup(
+            jPanelCompatibilityLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanelCompatibilityLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanelCompatibilityLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jComboBoxCompatibility, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 397, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 418, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jCheckBoxShowCompatibilityWarning))
+                .addContainerGap(328, Short.MAX_VALUE))
+        );
+        jPanelCompatibilityLayout.setVerticalGroup(
+            jPanelCompatibilityLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanelCompatibilityLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(jLabel3)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jComboBoxCompatibility, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(18, 18, 18)
+                .add(jCheckBoxShowCompatibilityWarning)
+                .addContainerGap(125, Short.MAX_VALUE))
+        );
+
+        jTabbedPane3.addTab("Compatibility", jPanelCompatibility);
+
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -582,7 +658,7 @@ final class IReportPanel extends javax.swing.JPanel {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jTabbedPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jTabbedPane3)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -719,12 +795,12 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
+                        .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 122, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .add(jPanel4Layout.createSequentialGroup()
-                        .add(jLabelClasspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+                        .add(jLabelClasspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
                         .add(387, 387, 387))))
         );
         jPanel4Layout.setVerticalGroup(
@@ -798,10 +874,10 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel7Layout.createSequentialGroup()
-                        .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE)
+                        .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 635, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jLabelFontspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE))
+                    .add(jLabelFontspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -1159,9 +1235,9 @@ final class IReportPanel extends javax.swing.JPanel {
             .add(jPanel18Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabelClasspath1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+                    .add(jLabelClasspath1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel18Layout.createSequentialGroup()
-                        .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
+                        .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel19, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 122, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -1211,11 +1287,11 @@ final class IReportPanel extends javax.swing.JPanel {
             .add(jPanel27Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel27Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jCheckBoxUseReportDirectoryToCompile, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
+                    .add(jCheckBoxUseReportDirectoryToCompile, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
                     .add(jPanel27Layout.createSequentialGroup()
                         .add(jLabelCompilationDirectory)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jTextFieldCompilationDirectory, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)))
+                        .add(jTextFieldCompilationDirectory, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jButtonCompilationDirectory))
         );
@@ -1318,7 +1394,7 @@ final class IReportPanel extends javax.swing.JPanel {
                             .add(370, 370, 370))
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jPanel2Layout.createSequentialGroup()
-                                .add(jCheckBoxLimitRecordNumber, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                                .add(jCheckBoxLimitRecordNumber, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
                                 .add(311, 311, 311))
                             .add(jPanel2Layout.createSequentialGroup()
                                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1329,8 +1405,8 @@ final class IReportPanel extends javax.swing.JPanel {
                                             .add(jLabelReportLocale))
                                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldReportLocale, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
-                                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldTimeZone, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE))
+                                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldReportLocale, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
+                                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldTimeZone, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE))
                                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                             .add(jButtonReportLocale)
@@ -1408,7 +1484,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelReportVirtualizerMinGrowCount)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jSpinnerVirtualizerGrownCount, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(148, Short.MAX_VALUE))
+                .addContainerGap(306, Short.MAX_VALUE))
         );
         jPanel23Layout.setVerticalGroup(
             jPanel23Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1458,10 +1534,10 @@ final class IReportPanel extends javax.swing.JPanel {
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel23, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jLabelReportVirtualizerDirectory)
                     .add(jPanelVirtualizerLayout.createSequentialGroup()
-                        .add(jTextFieldVirtualizerDir, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
+                        .add(jTextFieldVirtualizerDir, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 687, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonVirtualizerDirBrowse))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jComboBoxVirtualizer, 0, 578, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jComboBoxVirtualizer, 0, 736, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel2)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jLabelReportVirtualizerSize, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 578, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jSpinnerVirtualizerSize, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
@@ -1499,7 +1575,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel21Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel27, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE))
+                    .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel21Layout.setVerticalGroup(
@@ -1586,9 +1662,9 @@ final class IReportPanel extends javax.swing.JPanel {
             .add(jPanel25Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel25Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabelQueryExecuters, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+                    .add(jLabelQueryExecuters, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 761, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel25Layout.createSequentialGroup()
-                        .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE)
+                        .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 635, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel25Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                             .add(jButtonAddQueryExecuter, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1619,7 +1695,7 @@ final class IReportPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
+            .add(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -2302,6 +2378,18 @@ private void jButtonRestoreExpressionsActionPerformed(java.awt.event.ActionEvent
     controller.changed();
 
 }//GEN-LAST:event_jButtonRestoreExpressionsActionPerformed
+
+private void jCheckBoxAskConfirmationOnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxAskConfirmationOnDeleteActionPerformed
+    controller.changed();
+}//GEN-LAST:event_jCheckBoxAskConfirmationOnDeleteActionPerformed
+
+private void jCheckBoxShowBackgroundAsSeparatedDocumentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxShowBackgroundAsSeparatedDocumentActionPerformed
+    controller.changed();
+}//GEN-LAST:event_jCheckBoxShowBackgroundAsSeparatedDocumentActionPerformed
+
+private void jCheckBoxShowCompatibilityWarningActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxShowCompatibilityWarningActionPerformed
+    // TODO add your handling code here:
+}//GEN-LAST:event_jCheckBoxShowCompatibilityWarningActionPerformed
     
             
     void load() {
@@ -2317,6 +2405,11 @@ private void jButtonRestoreExpressionsActionPerformed(java.awt.event.ActionEvent
         jCheckBoxMagneticGuideLines.setSelected( pref.getBoolean("noMagnetic", false)  );  // NOI18N
         jCheckBoxIgnorePagination.setSelected( pref.getBoolean("isIgnorePagination", false)  );  // NOI18N
         jCheckBoxVirtualizer.setSelected( pref.getBoolean("isUseReportVirtualizer", false)  );  // NOI18N
+        jCheckBoxShowBackgroundAsSeparatedDocument.setSelected( pref.getBoolean("ShowBackgroundAsSeparatedDocument", true) ); // NOI18N
+        jCheckBoxAskConfirmationOnDelete.setSelected( !pref.getBoolean("noConfirmElementDelete", true) ); // NOI18N
+        jCheckBoxShowCompatibilityWarning.setSelected( pref.getBoolean("show_compatibility_warning", true) ); // NOI18N
+
+
 
         jCheckBoxKeyInReportInspector.setSelected( pref.getBoolean("showKeyInReportInspector", false)  );  // NOI18N
         jCheckBoxCrosstabAutoLayout.setSelected( pref.getBoolean("disableCrosstabAutoLayout", false)  );  // NOI18N
@@ -2458,6 +2551,8 @@ private void jButtonRestoreExpressionsActionPerformed(java.awt.event.ActionEvent
             ((DefaultTableModel)jTableExpressions.getModel()).addRow(new Object[]{pref.get("customexpression."+i, "")});
         }
 
+        Misc.setComboboxSelectedTagValue(jComboBoxCompatibility, pref.get("compatibility", "") );
+
         jTableExpressionsSelectionChanged();
 
         exportOptionsPanel.load();
@@ -2480,6 +2575,9 @@ private void jButtonRestoreExpressionsActionPerformed(java.awt.event.ActionEvent
         pref.putBoolean("isIgnorePagination"  , jCheckBoxIgnorePagination.isSelected() );
         pref.putBoolean("isUseReportVirtualizer"  , jCheckBoxVirtualizer.isSelected() );
         pref.putBoolean("noMagnetic"  , jCheckBoxMagneticGuideLines.isSelected() );
+        pref.putBoolean("ShowBackgroundAsSeparatedDocument"  , jCheckBoxShowBackgroundAsSeparatedDocument.isSelected() );
+        pref.putBoolean("noConfirmElementDelete"  , !jCheckBoxAskConfirmationOnDelete.isSelected() );
+        pref.putBoolean("show_compatibility_warning"  ,jCheckBoxShowCompatibilityWarning.isSelected() );
 
         pref.putBoolean("showKeyInReportInspector"  , jCheckBoxKeyInReportInspector.isSelected() );
         pref.putBoolean("disableCrosstabAutoLayout"  , jCheckBoxCrosstabAutoLayout.isSelected() );
@@ -2586,6 +2684,8 @@ private void jButtonRestoreExpressionsActionPerformed(java.awt.event.ActionEvent
 
         exportOptionsPanel.store();
         jrOptionsPanel.store();
+
+        pref.put("compatibility", ((Tag)jComboBoxCompatibility.getSelectedItem()).getValue()+"");
     }
     
     private List<String> getClasspath(boolean relodable)
@@ -2645,19 +2745,24 @@ private void jButtonRestoreExpressionsActionPerformed(java.awt.event.ActionEvent
     private javax.swing.JButton jButtonTimeZone;
     private javax.swing.JButton jButtonVirtualizerDirBrowse;
     private javax.swing.JButton jButtonXLSViewer;
+    private javax.swing.JCheckBox jCheckBoxAskConfirmationOnDelete;
     private javax.swing.JCheckBox jCheckBoxCrosstabAutoLayout;
     private javax.swing.JCheckBox jCheckBoxIgnorePagination;
     private javax.swing.JCheckBox jCheckBoxKeyInReportInspector;
     private javax.swing.JCheckBox jCheckBoxLimitRecordNumber;
     private javax.swing.JCheckBox jCheckBoxMagneticGuideLines;
+    private javax.swing.JCheckBox jCheckBoxShowBackgroundAsSeparatedDocument;
+    private javax.swing.JCheckBox jCheckBoxShowCompatibilityWarning;
     private javax.swing.JCheckBox jCheckBoxUseReportDirectoryToCompile;
     private javax.swing.JCheckBox jCheckBoxVirtualizer;
+    private javax.swing.JComboBox jComboBoxCompatibility;
     private javax.swing.JComboBox jComboBoxLanguage;
     private javax.swing.JComboBox jComboBoxTheme;
     private javax.swing.JComboBox jComboBoxUnits;
     private javax.swing.JComboBox jComboBoxVirtualizer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelCSVViewer;
     private javax.swing.JLabel jLabelClasspath;
     private javax.swing.JLabel jLabelClasspath1;
@@ -2709,6 +2814,7 @@ private void jButtonRestoreExpressionsActionPerformed(java.awt.event.ActionEvent
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JPanel jPanelCompatibility;
     private javax.swing.JPanel jPanelVirtualizer;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

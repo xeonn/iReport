@@ -74,7 +74,7 @@ public class TemplateReferenceNode extends AbstractNode implements PropertyChang
     @Override
     public void destroy() throws IOException {
 
-          template.removeIncludedTemplate( getReference() );
+          getTemplate().removeIncludedTemplate( getReference() );
 
           // we need to notify the change...
           JRTXEditorSupport ed = getLookup().lookup(JRTXEditorSupport.class);
@@ -99,7 +99,7 @@ public class TemplateReferenceNode extends AbstractNode implements PropertyChang
 
         Sheet.Set set = Sheet.createPropertiesSet();
 
-        set.put(new LocationProperty(getReference(), template, this));
+        set.put(new LocationProperty(getReference(),getTemplate(), this));
 
         sheet.put(set);
         return sheet;
@@ -212,6 +212,20 @@ public class TemplateReferenceNode extends AbstractNode implements PropertyChang
      */
     public void setReference(JRTemplateReference reference) {
         this.reference = reference;
+    }
+
+    /**
+     * @return the template
+     */
+    public JRSimpleTemplate getTemplate() {
+        return template;
+    }
+
+    /**
+     * @param template the template to set
+     */
+    public void setTemplate(JRSimpleTemplate template) {
+        this.template = template;
     }
 
 

@@ -16,7 +16,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jTabbedPane1" alignment="0" pref="628" max="32767" attributes="0"/>
+          <Component id="jTabbedPane1" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -51,7 +51,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jTabbedPane3" alignment="0" pref="603" max="32767" attributes="0"/>
+                          <Component id="jTabbedPane3" alignment="0" max="32767" attributes="0"/>
                           <Component id="jPanel1" alignment="0" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -94,7 +94,7 @@
                           <Component id="jComboBoxUnits" min="-2" pref="72" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jCheckBoxMagneticGuideLines" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="270" max="32767" attributes="0"/>
+                          <EmptySpace pref="428" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -159,7 +159,7 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabelTimeZone2" min="-2" max="-2" attributes="1"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jComboBoxTheme" pref="514" max="32767" attributes="0"/>
+                                      <Component id="jComboBoxTheme" pref="672" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -222,13 +222,15 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
+                          <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jCheckBoxKeyInReportInspector" min="-2" max="-2" attributes="0"/>
                                   <Component id="jCheckBoxCrosstabAutoLayout" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jCheckBoxShowBackgroundAsSeparatedDocument" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jCheckBoxAskConfirmationOnDelete" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="235" max="32767" attributes="0"/>
+                              <EmptySpace pref="393" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -239,7 +241,11 @@
                               <Component id="jCheckBoxKeyInReportInspector" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jCheckBoxCrosstabAutoLayout" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="183" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jCheckBoxShowBackgroundAsSeparatedDocument" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jCheckBoxAskConfirmationOnDelete" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="137" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -261,6 +267,22 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxCrosstabAutoLayoutActionPerformed"/>
                       </Events>
                     </Component>
+                    <Component class="javax.swing.JCheckBox" name="jCheckBoxShowBackgroundAsSeparatedDocument">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Show Background as separated document"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxShowBackgroundAsSeparatedDocumentActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JCheckBox" name="jCheckBoxAskConfirmationOnDelete">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Show confirmation dialog when deleting an element"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxAskConfirmationOnDeleteActionPerformed"/>
+                      </Events>
+                    </Component>
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="jPanel22">
@@ -275,13 +297,12 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="598" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabelExpressions" alignment="0" pref="578" max="32767" attributes="0"/>
+                                  <Component id="jLabelExpressions" alignment="0" pref="736" max="32767" attributes="0"/>
                                   <Group type="102" alignment="1" attributes="0">
-                                      <Component id="jScrollPane6" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane6" pref="610" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                           <Component id="jButtonAddExpression" alignment="1" max="32767" attributes="1"/>
@@ -297,7 +318,6 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="236" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabelExpressions" min="-2" max="-2" attributes="0"/>
@@ -408,6 +428,61 @@
                     </Component>
                   </SubComponents>
                 </Container>
+                <Container class="javax.swing.JPanel" name="jPanelCompatibility">
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                      <JTabbedPaneConstraints tabName="Compatibility">
+                        <Property name="tabTitle" type="java.lang.String" value="Compatibility"/>
+                      </JTabbedPaneConstraints>
+                    </Constraint>
+                  </Constraints>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jComboBoxCompatibility" alignment="0" min="-2" pref="397" max="-2" attributes="0"/>
+                                  <Component id="jLabel3" alignment="0" min="-2" pref="418" max="-2" attributes="0"/>
+                                  <Component id="jCheckBoxShowCompatibilityWarning" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace pref="328" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="jComboBoxCompatibility" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jCheckBoxShowCompatibilityWarning" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="125" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                  <SubComponents>
+                    <Component class="javax.swing.JLabel" name="jLabel3">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="&lt;html&gt;Set the compatibility of the produced jrxml source code when the report is saved. If you don&apos;t use the last version, you risk to loose part the report content."/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JComboBox" name="jComboBoxCompatibility">
+                    </Component>
+                    <Component class="javax.swing.JCheckBox" name="jCheckBoxShowCompatibilityWarning">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Show compatibility warning dialog"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxShowCompatibilityWarningActionPerformed"/>
+                      </Events>
+                    </Component>
+                  </SubComponents>
+                </Container>
               </SubComponents>
             </Container>
           </SubComponents>
@@ -428,13 +503,13 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
-                              <Component id="jScrollPane4" pref="475" max="32767" attributes="0"/>
+                              <Component id="jScrollPane4" pref="633" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jPanel5" min="-2" pref="122" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabelClasspath" pref="226" max="32767" attributes="0"/>
+                              <Component id="jLabelClasspath" pref="384" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="387" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -633,11 +708,11 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="jScrollPane2" pref="477" max="32767" attributes="0"/>
+                              <Component id="jScrollPane2" pref="635" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jPanel8" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jLabelFontspath" alignment="0" pref="603" max="32767" attributes="0"/>
+                          <Component id="jLabelFontspath" alignment="0" pref="761" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -1068,9 +1143,9 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabelClasspath1" alignment="0" pref="603" max="32767" attributes="0"/>
+                          <Component id="jLabelClasspath1" alignment="0" pref="761" max="32767" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
-                              <Component id="jScrollPane3" pref="475" max="32767" attributes="0"/>
+                              <Component id="jScrollPane3" pref="633" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jPanel19" min="-2" pref="122" max="-2" attributes="0"/>
                           </Group>
@@ -1265,7 +1340,7 @@
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jPanel27" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jTabbedPane2" alignment="0" pref="603" max="32767" attributes="0"/>
+                          <Component id="jTabbedPane2" alignment="0" pref="761" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -1303,11 +1378,11 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jCheckBoxUseReportDirectoryToCompile" alignment="0" pref="508" max="32767" attributes="0"/>
+                              <Component id="jCheckBoxUseReportDirectoryToCompile" alignment="0" pref="666" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabelCompilationDirectory" min="-2" max="-2" attributes="1"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jTextFieldCompilationDirectory" pref="403" max="32767" attributes="0"/>
+                                  <Component id="jTextFieldCompilationDirectory" pref="561" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -1396,7 +1471,7 @@
                                       </Group>
                                       <Group type="103" alignment="0" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jCheckBoxLimitRecordNumber" pref="277" max="32767" attributes="0"/>
+                                              <Component id="jCheckBoxLimitRecordNumber" pref="435" max="32767" attributes="0"/>
                                               <EmptySpace min="-2" pref="311" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
@@ -1409,8 +1484,8 @@
                                                       </Group>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Group type="103" groupAlignment="1" attributes="0">
-                                                          <Component id="jTextFieldReportLocale" alignment="0" pref="410" max="32767" attributes="0"/>
-                                                          <Component id="jTextFieldTimeZone" alignment="0" pref="410" max="32767" attributes="0"/>
+                                                          <Component id="jTextFieldReportLocale" alignment="0" pref="568" max="32767" attributes="0"/>
+                                                          <Component id="jTextFieldTimeZone" alignment="0" pref="568" max="32767" attributes="0"/>
                                                       </Group>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -1559,11 +1634,11 @@
                                   <Component id="jPanel23" alignment="0" max="32767" attributes="0"/>
                                   <Component id="jLabelReportVirtualizerDirectory" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Group type="102" alignment="1" attributes="0">
-                                      <Component id="jTextFieldVirtualizerDir" pref="529" max="32767" attributes="0"/>
+                                      <Component id="jTextFieldVirtualizerDir" pref="687" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jButtonVirtualizerDirBrowse" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="jComboBoxVirtualizer" alignment="0" pref="578" max="32767" attributes="0"/>
+                                  <Component id="jComboBoxVirtualizer" alignment="0" pref="736" max="32767" attributes="0"/>
                                   <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabelReportVirtualizerSize" alignment="0" min="-2" pref="578" max="-2" attributes="0"/>
                                   <Component id="jSpinnerVirtualizerSize" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -1633,7 +1708,7 @@
                                   <Component id="jLabelReportVirtualizerMinGrowCount" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="jSpinnerVirtualizerGrownCount" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="148" max="32767" attributes="0"/>
+                                  <EmptySpace pref="306" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1751,9 +1826,9 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabelQueryExecuters" alignment="0" pref="603" max="32767" attributes="0"/>
+                          <Component id="jLabelQueryExecuters" alignment="0" pref="761" max="32767" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
-                              <Component id="jScrollPane5" pref="477" max="32767" attributes="0"/>
+                              <Component id="jScrollPane5" pref="635" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="jButtonAddQueryExecuter" alignment="0" max="32767" attributes="1"/>

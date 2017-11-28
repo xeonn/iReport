@@ -31,11 +31,13 @@
 package com.jaspersoft.ireport.designer;
 
 import com.jaspersoft.ireport.JrxmlDataObject;
+import com.jaspersoft.ireport.designer.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
@@ -54,6 +56,7 @@ import org.openide.text.CloneableEditorSupport;
 import org.openide.text.DataEditorSupport;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
+import org.openide.util.Mutex;
 import org.openide.util.Task;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
@@ -162,7 +165,17 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
             JasperDesign jd = getCurrentModel();
             String content = null;
             try {
-                content = JRXmlWriter.writeReport(jd, "UTF-8"); // IReportManager.getInstance().getProperty("jrxmlEncoding", System.getProperty("file.encoding") ));
+
+                final String compatibility = IReportManager.getPreferences().get("compatibility", "");
+
+                if (compatibility.length() == 0)
+                {
+                    content = JRXmlWriter.writeReport(jd, "UTF-8"); // IReportManager.getInstance().getProperty("jrxmlEncoding", System.getProperty("file.encoding") ));
+                }
+                else
+                {
+                    content = JRXmlWriterHelper.writeReport(jd, "UTF-8", compatibility);
+                }
             } catch (Exception ex)
             {
                 content = null;
@@ -199,7 +212,18 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
                 JasperDesign jd = getCurrentModel();
                 String content = null;
                 try {
-                    content = JRXmlWriter.writeReport(jd, "UTF-8"); // IReportManager.getInstance().getProperty("jrxmlEncoding", System.getProperty("file.encoding") ));
+                    // Check the compatibility...
+                    final String compatibility = IReportManager.getPreferences().get("compatibility", "");
+
+                    if (compatibility.length() == 0)
+                    {
+                        content = JRXmlWriter.writeReport(jd, "UTF-8"); // IReportManager.getInstance().getProperty("jrxmlEncoding", System.getProperty("file.encoding") ));
+                    }
+                    else
+                    {
+                        content = JRXmlWriterHelper.writeReport(jd, "UTF-8", compatibility);
+                    }
+                    
                 } catch (Exception ex)
                 {
                     JOptionPane.showMessageDialog(Misc.getMainWindow(), "Error saving the JRXML: " + ex.getMessage() + "\nSee the log file for more details.", "Error saving", JOptionPane.ERROR_MESSAGE);

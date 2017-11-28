@@ -12,6 +12,7 @@ package com.jaspersoft.ireport.designer.outline.nodes;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.actions.AddBandAction;
 import com.jaspersoft.ireport.designer.actions.DeleteGroupAction;
+import com.jaspersoft.ireport.designer.actions.MaximizeBackgroundAction;
 import com.jaspersoft.ireport.designer.actions.MoveGroupDownAction;
 import com.jaspersoft.ireport.designer.actions.MoveGroupUpAction;
 import com.jaspersoft.ireport.locale.I18n;
@@ -85,6 +86,11 @@ public class NullBandNode extends IRAbstractNode implements GroupNode {
 
         java.util.List<Action> list = new ArrayList<Action>();
         list.add( SystemAction.get(AddBandAction.class));
+
+        if (band.getOrigin().getBandType() == JROrigin.BACKGROUND)
+        {
+            list.add(SystemAction.get(MaximizeBackgroundAction.class));
+        }
 
         JRDesignGroup group = getGroup();
 

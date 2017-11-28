@@ -12,8 +12,6 @@
 package com.jaspersoft.ireport.designer.options.export;
 
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.options.IReportOptionsPanelController;
-import com.jaspersoft.ireport.designer.options.OptionsPanel;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.prefs.Preferences;
@@ -26,13 +24,10 @@ import net.sf.jasperreports.engine.util.JRProperties;
  *
  * @author gtoffoli
  */
-public class PdfExportParametersPanel extends javax.swing.JPanel implements OptionsPanel {
-
-    IReportOptionsPanelController controller = null;
+public class PdfExportParametersPanel extends AbstractExportParametersPanel {
 
     /** Creates new form PdfExportParametersPanel */
-    public PdfExportParametersPanel(IReportOptionsPanelController ctlr) {
-        this.controller = ctlr;
+    public PdfExportParametersPanel() {
         initComponents();
         applyI18n();
         
@@ -40,15 +35,15 @@ public class PdfExportParametersPanel extends javax.swing.JPanel implements Opti
                 {
                     public void changedUpdate(javax.swing.event.DocumentEvent evt)
                     {
-                        controller.changed();
+                        notifyChange();
                     }
                     public void insertUpdate(javax.swing.event.DocumentEvent evt)
                     {
-                        controller.changed();
+                        notifyChange();
                     }
                     public void removeUpdate(javax.swing.event.DocumentEvent evt)
                     {
-                        controller.changed();
+                        notifyChange();
                     }
                 };
 
@@ -72,14 +67,6 @@ public class PdfExportParametersPanel extends javax.swing.JPanel implements Opti
          jComboBoxPDFVersion.addItem(new Tag(""+JRPdfExporterParameter.PDF_VERSION_1_4, "1.4")); //NOI18N
          jComboBoxPDFVersion.addItem(new Tag(""+JRPdfExporterParameter.PDF_VERSION_1_5, "1.5")); //NOI18N
          jComboBoxPDFVersion.addItem(new Tag(""+JRPdfExporterParameter.PDF_VERSION_1_6, "1.6")); //NOI18N
-    }
-
-    public void notifyChange()
-    {
-        if (this.controller != null)
-        {
-            controller.changed();
-        }
     }
 
     public void load() {
@@ -715,5 +702,10 @@ public class PdfExportParametersPanel extends javax.swing.JPanel implements Opti
         jLabelEncryption.setText(I18n.getString( "PdfExportParametersPanel.jLabelEncryption.text")); // NOI18N
         jLabelOwnerPassword.setText(I18n.getString( "PdfExportParametersPanel.jLabelOwnerPassword.text")); // NOI18N
         jLabelUserPassword.setText(I18n.getString( "PdfExportParametersPanel.jLabelUserPassword.text")); // NOI18N
+    }
+
+    @Override
+    public String getDisplayName() {
+        return I18n.getString("PdfExportParametersPanel.title");
     }
 }

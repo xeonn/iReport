@@ -13,6 +13,7 @@ import java.awt.event.WindowListener;
 import java.io.Serializable;
 import java.util.logging.Logger;
 import javax.swing.ActionMap;
+import javax.swing.JScrollPane;
 import javax.swing.text.DefaultEditorKit;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
@@ -48,7 +49,9 @@ final class StylesLibraryTopComponent extends TopComponent implements ExplorerMa
 
     private static final String PREFERRED_ID = "StylesLibraryTopComponent";
 
-    private BeanTreeView view;
+    //private BeanTreeView view;
+    //private StyleJList view;
+    private StyleListView view;
     private final ExplorerManager manager = new ExplorerManager();
     private AbstractNode noReportNode = null;
     /** Dynamic Lookup content */
@@ -99,9 +102,14 @@ final class StylesLibraryTopComponent extends TopComponent implements ExplorerMa
         associateLookup( new ProxyLookup(lookup, ExplorerUtils.createLookup(manager, map)) );
 
         setLayout(new BorderLayout());
-        view = new BeanTreeView();
+        //view = new StyleBeanTreeView();
+        view = new StyleListView(); //StyleJList();
+        //JScrollPane scrollPane1 = new JScrollPane(view);
+
         //view.setRootVisible(false);
-        add(view, BorderLayout.CENTER);
+
+        add(view , BorderLayout.CENTER); //scrollPane1
+
 
 
         getExplorerManager().setRootContext(noReportNode);
@@ -131,7 +139,7 @@ final class StylesLibraryTopComponent extends TopComponent implements ExplorerMa
             }
         }
 
-        view.setRootVisible(false);
+        //view.setRootVisible(false);
         getExplorerManager().setRootContext(new TemplateNode(new StylesLibraryChildren(library, lookup), library, lookup));
 
     }

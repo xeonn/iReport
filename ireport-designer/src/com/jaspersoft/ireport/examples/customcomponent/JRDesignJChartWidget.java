@@ -53,7 +53,7 @@ public class JRDesignJChartWidget extends JRDesignElementWidget {
             new_af.concatenate(translate);
             gr.setTransform(new_af);
 
-            JRDesignElement e = (JRDesignElement)this.getElement();
+            JRDesignElement e = this.getElement();
 
             Java2DUtils.setClip(gr,getClientArea());
             gr.drawImage(image, 0, 0, e.getWidth(), e.getHeight(),

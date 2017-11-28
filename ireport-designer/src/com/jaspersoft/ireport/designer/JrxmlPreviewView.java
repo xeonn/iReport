@@ -31,9 +31,7 @@ import org.netbeans.core.spi.multiview.CloseOperationState;
 import org.netbeans.core.spi.multiview.MultiViewDescription;
 import org.netbeans.core.spi.multiview.MultiViewElement;
 import org.netbeans.core.spi.multiview.MultiViewElementCallback;
-import org.openide.explorer.ExplorerUtils;
 import org.openide.nodes.Node;
-import org.openide.util.lookup.ProxyLookup;
 import org.openide.windows.TopComponent;
 
 /**

@@ -5,6 +5,8 @@
 
 package com.jaspersoft.ireport.designer.subreport;
 
+import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
 import java.io.File;
 import javax.swing.JFileChooser;
@@ -222,11 +224,29 @@ public final class SubreportSelectionVisualPanel extends JPanel {
                 return "Jasper and JRXML files (.jasper, .jrxml)";
             }
         });
+
+        String dir = IReportManager.getPreferences().get("subreports_default_dir", null);
+        File dirFile = Misc.findStartingDirectory();
+
+        if (dir != null)
+        {
+            File f = new File(dir);
+            if (f.exists())
+            {
+                dirFile = f;
+            }
+        }
         
+        fileChooser.setCurrentDirectory(dirFile);
+
         int status = fileChooser.showOpenDialog(this);
         if (status == JFileChooser.APPROVE_OPTION) {
              File selectedFile = fileChooser.getSelectedFile();
              jTextFieldReportName.setText(selectedFile.getPath());
+             if (selectedFile.exists())
+             {
+                IReportManager.getPreferences().put("subreports_default_dir", selectedFile.getParent());
+             }
         }
         
         // Open the file in the directory of the selected report...

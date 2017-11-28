@@ -130,7 +130,7 @@ public class DesignVerifyerThread implements Runnable, ModelChangeListener {
         
        for (int i=0; i<getJrxmlVisualView().getReportProblems().size(); ++i)
        {
-           ProblemItem pii = (ProblemItem)getJrxmlVisualView().getReportProblems().get(i);
+           ProblemItem pii = getJrxmlVisualView().getReportProblems().get(i);
            if (pii.getProblemType() == ProblemItem.WARNING ||
                pii.getProblemType() == ProblemItem.INFORMATION)
            {

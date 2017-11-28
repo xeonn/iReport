@@ -78,6 +78,8 @@
                 <file name="com-jaspersoft-ireport-designer-formatting-actions-SameWidthAction.instance"/>
                 <file name="com-jaspersoft-ireport-designer-formatting-actions-SameWidthMaxAction.instance"/>
                 <file name="com-jaspersoft-ireport-designer-formatting-actions-SameWidthMinAction.instance"/>
+                <file name="com-jaspersoft-ireport-designer-actions-RemoveMarginsAction.instance"/>
+                <file name="com-jaspersoft-ireport-designer-menu-EditPageFormatAction.instance"/>
             </folder>
         </folder>
         <folder name="Data">
@@ -549,6 +551,22 @@
                 <attr name="originalFile" stringvalue="Actions/Designer/Format/com-jaspersoft-ireport-designer-formatting-actions-OrganizeAsTableAction.instance"/>
                 <attr name="position" intvalue="70"/>
             </file>
+
+            <file name="com-jaspersoft-ireport-designer-standalone-actions-separatorAfter.instance">
+                    <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                    <attr name="position" intvalue="80"/>
+            </file>
+
+            <file name="com-jaspersoft-ireport-designer-standalone-menu-EditPageFormatAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Designer/Format/com-jaspersoft-ireport-designer-menu-EditPageFormatAction.instance"/>
+                <attr name="position" intvalue="90"/>
+            </file>
+
+            <file name="com-jaspersoft-ireport-designer-standalone-menu-RemoveMarginsAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Designer/Format/com-jaspersoft-ireport-designer-actions-RemoveMarginsAction.instance"/>
+                <attr name="position" intvalue="100"/>
+            </file>
+            
         </folder>
         <folder name="Preview">
             <attr name="SystemFileSystem.localizingBundle" stringvalue="com.jaspersoft.ireport.locale.Bundle"/>
@@ -875,6 +893,14 @@
             <folder name="elements">
                <file name="com-jaspersoft-ireport-designer-pdf508-Pdf508TagDecorator"/>
             </folder>
+       </folder>
+       <folder name="export_options">
+            <file name="com-jaspersoft-ireport-designer-options-export-CommonExportParametersPanel.instance"><attr name="position" intvalue="10"/></file>
+            <file name="com-jaspersoft-ireport-designer-options-export-PdfExportParametersPanel.instance"><attr name="position" intvalue="20"/></file>
+            <file name="com-jaspersoft-ireport-designer-options-export-HtmlExportParametersPanel.instance"><attr name="position" intvalue="30"/></file>
+            <file name="com-jaspersoft-ireport-designer-options-export-XlsExportParametersPanel.instance"><attr name="position" intvalue="40"/></file>
+            <file name="com-jaspersoft-ireport-designer-options-export-CSVExportParametersPanel.instance"><attr name="position" intvalue="50"/></file>
+            <file name="com-jaspersoft-ireport-designer-options-export-TextExportParametersPanel.instance"><attr name="position" intvalue="60"/></file>
        </folder>
        <!-- <folder name="components">
             <folder name="nodes">

@@ -28,17 +28,9 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jCheckBoxJS30Compatibility = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
         jSpinner1 = new javax.swing.JSpinner();
         jCheckBoxProMode = new javax.swing.JCheckBox();
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxJS30Compatibility, org.openide.util.NbBundle.getMessage(JasperServerRepositoryPanel.class, "JasperServerRepositoryPanel.jCheckBoxJS30Compatibility.text")); // NOI18N
-        jCheckBoxJS30Compatibility.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxJS30CompatibilityActionPerformed(evt);
-            }
-        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(JasperServerRepositoryPanel.class, "JasperServerRepositoryPanel.jLabel1.text")); // NOI18N
 
@@ -59,47 +51,39 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
                     .add(layout.createSequentialGroup()
                         .add(jLabel1)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jSpinner1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 82, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jCheckBoxJS30Compatibility, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE))
+                        .add(jSpinner1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 82, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 46, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .add(2, 2, 2)
+                        .add(jCheckBoxProMode, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)))
                 .addContainerGap())
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .add(12, 12, 12)
-                .add(jCheckBoxProMode, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jCheckBoxJS30Compatibility)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jSpinner1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel1))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jCheckBoxProMode)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jCheckBoxJS30CompatibilityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxJS30CompatibilityActionPerformed
-
-        controller.changed();
-
-}//GEN-LAST:event_jCheckBoxJS30CompatibilityActionPerformed
 
     private void jCheckBoxProModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxProModeActionPerformed
         controller.changed();
 }//GEN-LAST:event_jCheckBoxProModeActionPerformed
 
     void load() {
-        jCheckBoxJS30Compatibility.setSelected(IReportManager.getPreferences().getBoolean("use_jrxml_DTD", false));
+        //jCheckBoxJS30Compatibility.setSelected(IReportManager.getPreferences().getBoolean("use_jrxml_DTD", false));
         int timeout = IReportManager.getPreferences().getInt("client_timeout", 0);
         jSpinner1.setValue(new Integer(timeout));
         jCheckBoxProMode.setSelected(IReportManager.getPreferences().getBoolean("proMode", false));
     }
 
     void store() {
-        IReportManager.getPreferences().putBoolean("use_jrxml_DTD", jCheckBoxJS30Compatibility.isSelected());
+        //IReportManager.getPreferences().putBoolean("use_jrxml_DTD", jCheckBoxJS30Compatibility.isSelected());
         IReportManager.getPreferences().putInt("client_timeout", ((SpinnerNumberModel)jSpinner1.getModel()).getNumber().intValue() );
         IReportManager.getPreferences().putBoolean("proMode", jCheckBoxProMode.isSelected());
     }
@@ -110,7 +94,6 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox jCheckBoxJS30Compatibility;
     private javax.swing.JCheckBox jCheckBoxProMode;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JSpinner jSpinner1;

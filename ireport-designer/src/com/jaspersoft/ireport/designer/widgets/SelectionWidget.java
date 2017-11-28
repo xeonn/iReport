@@ -32,7 +32,6 @@ package com.jaspersoft.ireport.designer.widgets;
 
 import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.ModelUtils;
-import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.borders.ElementSelectedBorder;
 import java.awt.Cursor;
 import java.awt.Insets;

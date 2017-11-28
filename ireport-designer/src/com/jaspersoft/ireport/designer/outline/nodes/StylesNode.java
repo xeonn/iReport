@@ -10,7 +10,6 @@
 package com.jaspersoft.ireport.designer.outline.nodes;
 
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 
 import com.jaspersoft.ireport.designer.outline.NewTypesUtils;
@@ -27,7 +26,6 @@ import java.util.Map;
 import javax.swing.Action;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRReportTemplate;
-import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.actions.NewAction;

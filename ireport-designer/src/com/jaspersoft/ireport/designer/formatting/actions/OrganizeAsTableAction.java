@@ -46,6 +46,9 @@ public class OrganizeAsTableAction extends AbstractFormattingToolAction {
         
         List<JRDesignElement> elements = getSelectedElements(nodes);
 
+
+        elements = this.sortXY(elements);
+        
         IReportManager.getInstance().setForceAggregateUndo(true);
         SystemAction.get(AlignMarginTopAction.class).performAction(nodes);
         

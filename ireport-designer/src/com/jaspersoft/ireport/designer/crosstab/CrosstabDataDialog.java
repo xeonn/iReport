@@ -448,6 +448,10 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         jComboBoxSubDataset = new javax.swing.JComboBox();
         jPanel7 = new javax.swing.JPanel();
         jTabbedPaneSubDataset = new javax.swing.JTabbedPane();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel41 = new javax.swing.JLabel();
+        jComboBoxDatasetConnectionType = new javax.swing.JComboBox();
+        jRTextExpressionAreaTextConnectionExpression = new com.jaspersoft.ireport.designer.editor.ExpressionEditorArea();
         jPanel4 = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -459,14 +463,10 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         jPanel5 = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
         jRTextExpressionAreaMapExpression = new com.jaspersoft.ireport.designer.editor.ExpressionEditorArea();
-        jPanel6 = new javax.swing.JPanel();
-        jLabel41 = new javax.swing.JLabel();
-        jComboBoxDatasetConnectionType = new javax.swing.JComboBox();
-        jRTextExpressionAreaTextConnectionExpression = new com.jaspersoft.ireport.designer.editor.ExpressionEditorArea();
         jPanel8 = new javax.swing.JPanel();
         jButtonClose = new javax.swing.JButton();
 
-        setTitle(I18n.getString("CrosstabDataDialog.Title.CrosstabData")); // NOI18N
+        setTitle("Crosstab data");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -480,7 +480,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
 
         jPanelDataset.setLayout(new java.awt.GridBagLayout());
 
-        jCheckBoxPreSorted.setText(I18n.getString("CrosstabDataDialog.CheckBox.DataPreSorted")); // NOI18N
+        jCheckBoxPreSorted.setText("Data is pre-sorted");
         jCheckBoxPreSorted.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxPreSortedActionPerformed(evt);
@@ -494,7 +494,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Dataset"));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabelResetType.setText(I18n.getString("CrosstabDataDialog.Label.ResetType")); // NOI18N
+        jLabelResetType.setText("Reset type");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -516,7 +516,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jComboBoxResetType, gridBagConstraints);
 
-        jLabelResetGroup.setText(I18n.getString("CrosstabDataDialog.Label.ResetGroup")); // NOI18N
+        jLabelResetGroup.setText("Reset group");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -538,7 +538,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jComboBoxResetGroup, gridBagConstraints);
 
-        jLabelIncrementType.setText(I18n.getString("CrosstabDataDialog.Label.IncrementType")); // NOI18N
+        jLabelIncrementType.setText("Increment type");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -560,7 +560,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jComboBoxIncrementType, gridBagConstraints);
 
-        jLabelIncrementGroup.setText(I18n.getString("CrosstabDataDialog.Label.IncrementGroup")); // NOI18N
+        jLabelIncrementGroup.setText("Increment group");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
@@ -582,7 +582,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jComboBoxIncrementGroup, gridBagConstraints);
 
-        jLabelIncrementType2.setText(I18n.getString("CrosstabDataDialog.Label.IncrementWhenExp")); // NOI18N
+        jLabelIncrementType2.setText("Increment When expression");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -614,7 +614,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         jPanel1.setPreferredSize(new java.awt.Dimension(329, 192));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabelIncrementType1.setText(I18n.getString("CrosstabDataDialog.Label.SubDataset")); // NOI18N
+        jLabelIncrementType1.setText("Sub dataset");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -637,6 +637,48 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         jPanel1.add(jComboBoxSubDataset, gridBagConstraints);
 
         jPanel7.setLayout(new java.awt.GridBagLayout());
+
+        jPanel6.setLayout(new java.awt.GridBagLayout());
+
+        jLabel41.setText("Connection / Datasource Expression");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
+        jPanel6.add(jLabel41, gridBagConstraints);
+
+        jComboBoxDatasetConnectionType.setMinimumSize(new java.awt.Dimension(300, 20));
+        jComboBoxDatasetConnectionType.setPreferredSize(new java.awt.Dimension(300, 20));
+        jComboBoxDatasetConnectionType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxDatasetConnectionTypeActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 6);
+        jPanel6.add(jComboBoxDatasetConnectionType, gridBagConstraints);
+
+        jRTextExpressionAreaTextConnectionExpression.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jRTextExpressionAreaTextConnectionExpression.setEnabled(false);
+        jRTextExpressionAreaTextConnectionExpression.setMinimumSize(new java.awt.Dimension(300, 50));
+        jRTextExpressionAreaTextConnectionExpression.setPreferredSize(new java.awt.Dimension(300, 50));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 4, 4, 4);
+        jPanel6.add(jRTextExpressionAreaTextConnectionExpression, gridBagConstraints);
+
+        jTabbedPaneSubDataset.addTab("Connection/Datasource exp", jPanel6);
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
@@ -682,7 +724,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         jPanel10.setPreferredSize(new java.awt.Dimension(100, 69));
         jPanel10.setLayout(new java.awt.GridBagLayout());
 
-        jButtonAddParameter.setText(I18n.getString("Global.Button.Add")); // NOI18N
+        jButtonAddParameter.setText("Add");
         jButtonAddParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddParameterActionPerformed(evt);
@@ -694,7 +736,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         jPanel10.add(jButtonAddParameter, gridBagConstraints);
 
-        jButtonModParameter.setText(I18n.getString("Global.Button.Modify")); // NOI18N
+        jButtonModParameter.setText("Modify");
         jButtonModParameter.setEnabled(false);
         jButtonModParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -707,7 +749,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         jPanel10.add(jButtonModParameter, gridBagConstraints);
 
-        jButtonRemParameter.setText(I18n.getString("Global.Button.Remove")); // NOI18N
+        jButtonRemParameter.setText("Remove");
         jButtonRemParameter.setEnabled(false);
         jButtonRemParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -741,7 +783,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
         jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel26.setText(I18n.getString("CrosstabDataDialog.Label.ParamMapExpr")); // NOI18N
+        jLabel26.setText("Parameters Map Expression");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -765,48 +807,6 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         jPanel5.add(jRTextExpressionAreaMapExpression, gridBagConstraints);
 
         jTabbedPaneSubDataset.addTab("Parameters map exp", jPanel5);
-
-        jPanel6.setLayout(new java.awt.GridBagLayout());
-
-        jLabel41.setText(I18n.getString("CrosstabDataDialog.Label.ConnDatasourceExp")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
-        jPanel6.add(jLabel41, gridBagConstraints);
-
-        jComboBoxDatasetConnectionType.setMinimumSize(new java.awt.Dimension(300, 20));
-        jComboBoxDatasetConnectionType.setPreferredSize(new java.awt.Dimension(300, 20));
-        jComboBoxDatasetConnectionType.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxDatasetConnectionTypeActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 6);
-        jPanel6.add(jComboBoxDatasetConnectionType, gridBagConstraints);
-
-        jRTextExpressionAreaTextConnectionExpression.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jRTextExpressionAreaTextConnectionExpression.setEnabled(false);
-        jRTextExpressionAreaTextConnectionExpression.setMinimumSize(new java.awt.Dimension(300, 50));
-        jRTextExpressionAreaTextConnectionExpression.setPreferredSize(new java.awt.Dimension(300, 50));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 4, 4, 4);
-        jPanel6.add(jRTextExpressionAreaTextConnectionExpression, gridBagConstraints);
-
-        jTabbedPaneSubDataset.addTab("Connection/Datasource exp", jPanel6);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
@@ -843,7 +843,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
 
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
-        jButtonClose.setText(I18n.getString("Global.Button.Close")); // NOI18N
+        jButtonClose.setText("Close");
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCloseActionPerformed(evt);
@@ -1035,6 +1035,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
                         datasetRun.setDatasetName("" + jComboBoxSubDataset.getSelectedItem());
                         
                         // Check subdataset parameters.... (TODO)
+                        updateGroups();
                     }
             }
             else
@@ -1061,16 +1062,9 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
             }
 
             updateGroups();
-            List groups = getJasperDesign().getGroupsList();
+            List groups = getCrosstabDataset().getGroupsList();
 
-            if (currentSelectedCrosstabElement != null &&
-                currentSelectedCrosstabElement.getDataset() != null &&
-                currentSelectedCrosstabElement.getDataset().getDatasetRun() != null &&
-                currentSelectedCrosstabElement.getDataset().getDatasetRun().getDatasetName() != null)
-            {
-                String dsName = currentSelectedCrosstabElement.getDataset().getDatasetRun().getDatasetName();
-                groups = ((JRDesignDataset)getJasperDesign().getDatasetMap().get(dsName)).getGroupsList();
-            }
+            
 
             if (groups.size() == 0)
             {
@@ -1152,7 +1146,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         
         if (name != null && name.trim().length() != 0)
         {
-            ((JRDesignCrosstabDataset)currentSelectedCrosstabElement.getDataset()).setIncrementGroup( (JRGroup)getJasperDesign().getGroupsMap().get(name));
+            ((JRDesignCrosstabDataset)currentSelectedCrosstabElement.getDataset()).setIncrementGroup( (JRGroup)getCrosstabDataset().getGroupsMap().get(name));
         }
         else
         {
@@ -1169,7 +1163,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         
         if (val == JRVariable.RESET_TYPE_GROUP)
         {
-            if (getJasperDesign().getGroupsList().size() == 0)
+            if (getCrosstabDataset().getGroupsList().size() == 0)
             {
                 setInit(true);
                 Misc.setComboboxSelectedTagValue(jComboBoxIncrementType, new Byte(currentSelectedCrosstabElement.getDataset().getIncrementType()));
@@ -1206,7 +1200,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         
         if (name != null && name.trim().length() != 0)
         {
-            ((JRDesignCrosstabDataset)currentSelectedCrosstabElement.getDataset()).setResetGroup( (JRGroup)getJasperDesign().getGroupsMap().get(name));
+            ((JRDesignCrosstabDataset)currentSelectedCrosstabElement.getDataset()).setResetGroup( (JRGroup)getCrosstabDataset().getGroupsMap().get(name));
         }
         else
         {
@@ -1223,7 +1217,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         
         if (val == JRVariable.RESET_TYPE_GROUP)
         {
-            if (getJasperDesign().getGroupsList().size() == 0)
+            if (getCrosstabDataset().getGroupsList().size() == 0)
             {
                 setInit(true);
                 Misc.setComboboxSelectedTagValue(jComboBoxResetType, new Byte(currentSelectedCrosstabElement.getDataset().getResetType()));
@@ -1321,17 +1315,9 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         {
             List<String> groupNames = new ArrayList<String>();
 
-            List groups = getJasperDesign().getGroupsList();
+            List groups = getCrosstabDataset().getGroupsList();
 
-            if (currentSelectedCrosstabElement != null &&
-                currentSelectedCrosstabElement.getDataset() != null &&
-                currentSelectedCrosstabElement.getDataset().getDatasetRun() != null &&
-                currentSelectedCrosstabElement.getDataset().getDatasetRun().getDatasetName() != null)
-            {
-                String dsName = currentSelectedCrosstabElement.getDataset().getDatasetRun().getDatasetName();
-                groups = ((JRDesignDataset)getJasperDesign().getDatasetMap().get(dsName)).getGroupsList();
-            }
-
+            
             for (int i=0; i<groups.size(); ++i)
             {
                 groupNames.add( ((JRGroup)groups.get(i)).getName());
@@ -1514,4 +1500,18 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         }
     }
     */
+
+   public JRDesignDataset getCrosstabDataset()
+   {
+       if (currentSelectedCrosstabElement != null &&
+           currentSelectedCrosstabElement.getDataset() != null &&
+           currentSelectedCrosstabElement.getDataset().getDatasetRun() != null &&
+           currentSelectedCrosstabElement.getDataset().getDatasetRun().getDatasetName() != null)
+       {
+           String dn = currentSelectedCrosstabElement.getDataset().getDatasetRun().getDatasetName();
+           JRDesignDataset ds = (JRDesignDataset) getJasperDesign().getDatasetMap().get(dn);
+           if (ds != null) return ds;
+       }
+       return getJasperDesign().getMainDesignDataset();
+   }
 }

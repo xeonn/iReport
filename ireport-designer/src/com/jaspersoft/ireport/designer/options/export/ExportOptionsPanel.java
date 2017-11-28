@@ -14,9 +14,12 @@ package com.jaspersoft.ireport.designer.options.export;
 import com.jaspersoft.ireport.designer.options.OptionsPanel;
 import com.jaspersoft.ireport.designer.options.IReportOptionsPanelController;
 import com.jaspersoft.ireport.designer.sheet.Tag;
-import com.jaspersoft.ireport.locale.I18n;
+import java.util.Collection;
+import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.Lookups;
 
 /**
  *
@@ -31,12 +34,18 @@ public class ExportOptionsPanel extends javax.swing.JPanel implements OptionsPan
         this.controller = controller;
 
         DefaultListModel dlm = new DefaultListModel();
-        dlm.addElement(new Tag(new CommonExportParametersPanel(controller), I18n.getString("CommonExportParametersPanel.title") ));
-        dlm.addElement(new Tag(new PdfExportParametersPanel(controller), I18n.getString("PdfExportParametersPanel.title") ));
-        dlm.addElement(new Tag(new HtmlExportParametersPanel(controller), I18n.getString("HtmlExportParametersPanel.title") ));
-        dlm.addElement(new Tag(new XlsExportParametersPanel(controller), I18n.getString("XlsExportParametersPanel.title") ));
-        dlm.addElement(new Tag(new CSVExportParametersPanel(controller), I18n.getString("CSVExportParametersPanel.title") ));
-        dlm.addElement(new Tag(new TextExportParametersPanel(controller), I18n.getString("TextExportParametersPanel.title") ));
+        Lookup lookup = Lookups.forPath("ireport/export_options"); // NOI18N
+        if (lookup != null)
+        {
+            Collection<? extends AbstractExportParametersPanel> paramPanels = lookup.lookupAll(AbstractExportParametersPanel.class);
+            Iterator<? extends AbstractExportParametersPanel> it = paramPanels.iterator();
+            while (it.hasNext ()) {
+
+                AbstractExportParametersPanel panel = it.next();
+                panel.setController(controller);
+                dlm.addElement(new Tag(panel, panel.getDisplayName()));
+            }
+        }
 /*
 Common
 PDF

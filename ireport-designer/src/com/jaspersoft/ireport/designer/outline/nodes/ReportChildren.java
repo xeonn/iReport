@@ -10,10 +10,13 @@
 package com.jaspersoft.ireport.designer.outline.nodes;
 
 import java.util.ArrayList;
+import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
+import net.sf.jasperreports.engine.JRSection;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
@@ -93,7 +96,6 @@ public class ReportChildren extends Children.Keys {
         children.add("scriptlets");
         children.addAll( jd.getDatasetsList() );
         //children.addAll( ModelUtils.getBands(jd) );
-        children.add( ( jd.getBackground() != null) ? jd.getBackground() : new NullBand(new JROrigin(jd.getName(), JROrigin.BACKGROUND )) );
         children.add( ( jd.getTitle() != null) ? jd.getTitle() : new NullBand(new JROrigin(jd.getName(), JROrigin.TITLE )) );
         children.add( ( jd.getPageHeader() != null) ? jd.getPageHeader() : new NullBand(new JROrigin(jd.getName(), JROrigin.PAGE_HEADER )) );
         children.add( ( jd.getColumnHeader() != null) ? jd.getColumnHeader() : new NullBand(new JROrigin(jd.getName(), JROrigin.COLUMN_HEADER )) );
@@ -101,23 +103,61 @@ public class ReportChildren extends Children.Keys {
         JRGroup[] groups = jd.getGroups();
         for (int i=0 ;i<groups.length; ++i)
         {
-            children.add( (groups[i].getGroupHeader() != null) ? groups[i].getGroupHeader() : 
-                new NullBand(new JROrigin(jd.getName(),groups[i].getName(), JROrigin.GROUP_HEADER )) );
-        
+            if (groups[i].getGroupHeaderSection() == null ||
+                groups[i].getGroupHeaderSection().getBands().length == 0)
+            {
+                children.add( new NullBand(new JROrigin(jd.getName(),groups[i].getName(), JROrigin.GROUP_HEADER )));
+            }
+            else
+            {
+                JRSection section = groups[i].getGroupHeaderSection();
+                JRBand[] bands = section.getBands();
+                for (int k=0; k<bands.length; ++k)
+                {
+                    children.add(bands[k]);
+                }
+            }
         }
-        children.add( ( jd.getDetail() != null) ? jd.getDetail() : new NullBand(new JROrigin(jd.getName(), JROrigin.DETAIL )) );
+        if (jd.getDetailSection() == null ||
+            jd.getDetailSection().getBands().length == 0)
+        {
+            children.add(new NullBand(new JROrigin(jd.getName(),JROrigin.DETAIL )));
+        }
+        else
+        {
+            JRSection section = jd.getDetailSection();
+            JRBand[] bands = section.getBands();
+            for (int k=0; k<bands.length; ++k)
+            {
+                children.add(bands[k]);
+            }
+        }
+        //children.add( ( jd.getDetail() != null) ? jd.getDetail() : new NullBand(new JROrigin(jd.getName(), JROrigin.DETAIL )) );
+
         // Group footers...
         for (int i=groups.length-1; i>=0; --i)
         {
-            children.add( (groups[i].getGroupFooter() != null) ? groups[i].getGroupFooter() : 
-                new NullBand(new JROrigin(jd.getName(),groups[i].getName(), JROrigin.GROUP_FOOTER )) );
-        
+            if (groups[i].getGroupFooterSection() == null ||
+                groups[i].getGroupFooterSection().getBands().length == 0)
+            {
+                children.add( new NullBand(new JROrigin(jd.getName(),groups[i].getName(), JROrigin.GROUP_FOOTER )));
+            }
+            else
+            {
+                JRSection section = groups[i].getGroupFooterSection();
+                JRBand[] bands = section.getBands();
+                for (int k=0; k<bands.length; ++k)
+                {
+                    children.add(bands[k]);
+                }
+            }
         }
         children.add( ( jd.getColumnFooter() != null) ? jd.getColumnFooter() : new NullBand(new JROrigin(jd.getName(), JROrigin.COLUMN_FOOTER )) );
         children.add( ( jd.getPageFooter() != null) ? jd.getPageFooter() : new NullBand(new JROrigin(jd.getName(), JROrigin.PAGE_FOOTER )) );
         children.add( ( jd.getLastPageFooter() != null) ? jd.getLastPageFooter() : new NullBand(new JROrigin(jd.getName(), JROrigin.LAST_PAGE_FOOTER )) );
         children.add( ( jd.getSummary() != null) ? jd.getSummary() : new NullBand(new JROrigin(jd.getName(), JROrigin.SUMMARY )) );
         children.add( ( jd.getNoData() != null) ? jd.getNoData() : new NullBand(new JROrigin(jd.getName(), JROrigin.NO_DATA )) );
+        children.add( ( jd.getBackground() != null) ? jd.getBackground() : new NullBand(new JROrigin(jd.getName(), JROrigin.BACKGROUND )) );
         
         setKeys(children);
     }

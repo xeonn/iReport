@@ -9,6 +9,9 @@
 
 package com.jaspersoft.ireport.designer.borders;
 
+import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.utils.RoundGradientPaint;
 import java.awt.Color;
 import java.awt.Component;
@@ -19,6 +22,7 @@ import java.awt.Insets;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import javax.swing.border.Border;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  *
@@ -26,11 +30,51 @@ import javax.swing.border.Border;
  */
 public class ReportBorder implements Border {
 
+    private ReportObjectScene scene = null;
+
     private static Insets insets = new Insets(10, 10, 10, 10);
-    
+
+    public ReportBorder()
+    {
+        this(null);
+    }
+
+    public ReportBorder(ReportObjectScene scene)
+    {
+        super();
+        this.setScene(scene);
+    }
+
+
     public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
         
-        
+        if (getScene() != null &&
+             IReportManager.getInstance().isBackgroundSeparated())
+        {
+            JasperDesign jd = getScene().getJasperDesign();
+            if (jd.getBackground() != null &&
+                jd.getBackground().getHeight() > 0)
+            {
+                int dh = ModelUtils.getDesignHeight(jd);
+                int bdh = jd.getBackground().getHeight();
+                bdh += jd.getTopMargin();
+                bdh += jd.getBottomMargin();
+
+                dh -= bdh;
+                dh -= 20;
+                
+                paintShadowBorder(g, x, y, width, dh);
+                paintShadowBorder(g, x, y+dh+20, width, bdh+20);
+                
+                return;
+            }
+        }
+
+        paintShadowBorder(g, x, y, width, height);
+    }
+
+    public void paintShadowBorder(Graphics g, int x, int y, int width, int height) {
+
         // TOP ______________________________________________
         Rectangle2D r = new Rectangle2D.Double(x+10, y, width-20, 10);
         GradientPaint gp = new GradientPaint(
@@ -108,6 +152,20 @@ public class ReportBorder implements Border {
 
     public boolean isBorderOpaque() {
         return true;
+    }
+
+    /**
+     * @return the scene
+     */
+    public ReportObjectScene getScene() {
+        return scene;
+    }
+
+    /**
+     * @param scene the scene to set
+     */
+    public void setScene(ReportObjectScene scene) {
+        this.scene = scene;
     }
 
 }

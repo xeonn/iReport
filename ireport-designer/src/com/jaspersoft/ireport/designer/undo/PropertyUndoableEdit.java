@@ -10,14 +10,13 @@
 package com.jaspersoft.ireport.designer.undo;
 
 import com.jaspersoft.ireport.designer.sheet.properties.AbstractProperty;
-import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  */
-public class PropertyUndoableEdit extends AbstractUndoableEdit
+public class PropertyUndoableEdit extends AggregatedUndoableEdit
 {
     private AbstractProperty property = null;
     private Object oldValue = null;
