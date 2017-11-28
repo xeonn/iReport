@@ -42,6 +42,7 @@ import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.JRHyperlinkHelper;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignHyperlinkParameter;
+import net.sf.jasperreports.engine.type.HyperlinkTargetEnum;
 
 
 /**
@@ -1018,7 +1019,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         
         if (target != null && target instanceof Tag)
         {
-            setHyperlinkAttribute("HyperlinkTarget", Byte.TYPE, (Byte)((Tag)target).getValue());
+            setHyperlinkAttribute("LinkTarget",String.class, JRHyperlinkHelper.getLinkTarget( HyperlinkTargetEnum.getByValue( (Byte)((Tag)target).getValue()) ) );
         }
         else if (target != null)
         {
@@ -1027,7 +1028,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         }
         else
         {
-            setHyperlinkAttribute("HyperlinkTarget", Byte.TYPE, JRHyperlink.HYPERLINK_TARGET_SELF);
+            setHyperlinkAttribute("LinkTarget", String.class,JRHyperlinkHelper.getLinkTarget( HyperlinkTargetEnum.SELF ));
         }
         
         fireHyperlinkChanged();
@@ -1264,7 +1265,9 @@ public class HyperlinkPanel extends javax.swing.JPanel {
             m.invoke(hyperlink, value);
             IReportManager.getInstance().notifyReportChange();
         }
-        catch (Throwable t) { t.printStackTrace(); }
+        catch (Throwable t) { 
+            t.printStackTrace();
+        }
     }    
     
     public void setAnchorNameVisible(boolean b)

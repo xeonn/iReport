@@ -191,14 +191,7 @@ public class RepositoryFolder {
     
     public boolean isDataSource()
     {
-       ResourceDescriptor rd = getDescriptor();
-      if (rd == null) return false;
-      if (rd.getWsType() == null) return false;
-      if (rd.getWsType().equals( rd.TYPE_DATASOURCE) ||
-          rd.getWsType().equals( rd.TYPE_DATASOURCE_JDBC) ||
-          rd.getWsType().equals( rd.TYPE_DATASOURCE_JNDI) ||
-          rd.getWsType().equals( rd.TYPE_DATASOURCE_BEAN)) return true;        
-      return false;
+       return isDataSource(getDescriptor());
     }
     
     public static boolean isDataSource(ResourceDescriptor rd)
@@ -208,7 +201,8 @@ public class RepositoryFolder {
       if (rd.getWsType().equals( rd.TYPE_DATASOURCE) ||
           rd.getWsType().equals( rd.TYPE_DATASOURCE_JDBC) ||
           rd.getWsType().equals( rd.TYPE_DATASOURCE_JNDI) ||
-          rd.getWsType().equals( rd.TYPE_DATASOURCE_BEAN)) return true;        
+          rd.getWsType().equals( rd.TYPE_DATASOURCE_BEAN) ||
+          rd.getWsType().equals( "Domain")) return true;
       return false;
     }
     

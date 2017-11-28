@@ -23,8 +23,13 @@
  */
 package com.jaspersoft.ireport.components;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.locale.I18n;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.List;
 import java.util.ResourceBundle;
+import org.openide.modules.InstalledFileLocator;
 import org.openide.modules.ModuleInstall;
 
 /**
@@ -44,5 +49,35 @@ public class Installer extends ModuleInstall {
         I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/barcode/barcode4j/Bundle"));
         I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/table/Bundle"));
         I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/genericelement/Bundle"));
+        I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/spiderchart/Bundle"));
+
+
+        // Adding the fusion maps jar to the iReport classpath...
+        List<String> classpath = IReportManager.getInstance().getClasspath();
+        File libDir = InstalledFileLocator.getDefault().locate("modules/ext", null, false);
+
+        // find a jar called jasperreports-extensions-*.jar
+        if (libDir != null && libDir.isDirectory())
+        {
+            File[] jars = libDir.listFiles(new FilenameFilter() {
+
+                public boolean accept(File dir, String name) {
+                    if (name.toLowerCase().startsWith("jasperreports-spiderchart") &&
+                        name.toLowerCase().endsWith(".jar"))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+            for (int i=0; i<jars.length; ++i)
+            {
+                if (classpath.contains(jars[i].getPath())) continue;
+                classpath.add(jars[i].getPath());
+            }
+            IReportManager.getInstance().setClasspath(classpath);
+        }
+
     }
 }

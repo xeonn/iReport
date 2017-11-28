@@ -319,6 +319,7 @@
                 <package>com.jaspersoft.ireport.locale</package>
                 <package>com.keypoint</package>
                 <package>com.lowagie.text</package>
+                <package>com.lowagie.text.exceptions</package>
                 <package>com.lowagie.text.factories</package>
                 <package>com.lowagie.text.html</package>
                 <package>com.lowagie.text.html.simpleparser</package>
@@ -377,6 +378,8 @@
                 <package>net.sf.jasperreports.components.barbecue</package>
                 <package>net.sf.jasperreports.components.barcode4j</package>
                 <package>net.sf.jasperreports.components.list</package>
+                <package>net.sf.jasperreports.components.spiderchart</package>
+                <package>net.sf.jasperreports.components.spiderchart.type</package>
                 <package>net.sf.jasperreports.components.table</package>
                 <package>net.sf.jasperreports.components.table.fill</package>
                 <package>net.sf.jasperreports.crosstabs</package>
@@ -605,6 +608,59 @@
                 <package>org.jdesktop.swingx.tree</package>
                 <package>org.jdesktop.swingx.treetable</package>
                 <package>org.jdesktop.swingx.util</package>
+                <package>org.jfree</package>
+                <package>org.jfree.base</package>
+                <package>org.jfree.base.config</package>
+                <package>org.jfree.base.log</package>
+                <package>org.jfree.base.modules</package>
+                <package>org.jfree.chart</package>
+                <package>org.jfree.chart.annotations</package>
+                <package>org.jfree.chart.axis</package>
+                <package>org.jfree.chart.block</package>
+                <package>org.jfree.chart.demo</package>
+                <package>org.jfree.chart.editor</package>
+                <package>org.jfree.chart.encoders</package>
+                <package>org.jfree.chart.entity</package>
+                <package>org.jfree.chart.event</package>
+                <package>org.jfree.chart.imagemap</package>
+                <package>org.jfree.chart.labels</package>
+                <package>org.jfree.chart.needle</package>
+                <package>org.jfree.chart.plot</package>
+                <package>org.jfree.chart.plot.dial</package>
+                <package>org.jfree.chart.renderer</package>
+                <package>org.jfree.chart.renderer.category</package>
+                <package>org.jfree.chart.renderer.xy</package>
+                <package>org.jfree.chart.resources</package>
+                <package>org.jfree.chart.servlet</package>
+                <package>org.jfree.chart.title</package>
+                <package>org.jfree.chart.urls</package>
+                <package>org.jfree.chart.util</package>
+                <package>org.jfree.data</package>
+                <package>org.jfree.data.category</package>
+                <package>org.jfree.data.contour</package>
+                <package>org.jfree.data.function</package>
+                <package>org.jfree.data.gantt</package>
+                <package>org.jfree.data.general</package>
+                <package>org.jfree.data.io</package>
+                <package>org.jfree.data.jdbc</package>
+                <package>org.jfree.data.resources</package>
+                <package>org.jfree.data.statistics</package>
+                <package>org.jfree.data.time</package>
+                <package>org.jfree.data.time.ohlc</package>
+                <package>org.jfree.data.xml</package>
+                <package>org.jfree.data.xy</package>
+                <package>org.jfree.date</package>
+                <package>org.jfree.io</package>
+                <package>org.jfree.layout</package>
+                <package>org.jfree.resources</package>
+                <package>org.jfree.text</package>
+                <package>org.jfree.threads</package>
+                <package>org.jfree.ui</package>
+                <package>org.jfree.ui.about</package>
+                <package>org.jfree.ui.about.resources</package>
+                <package>org.jfree.ui.action</package>
+                <package>org.jfree.ui.tabbedui</package>
+                <package>org.jfree.util</package>
                 <package>org.krysalis.barcode4j</package>
                 <package>org.krysalis.barcode4j.cli</package>
                 <package>org.krysalis.barcode4j.impl</package>
@@ -701,12 +757,12 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-3.7.3.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-3.7.3.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-3.7.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-3.7.4.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-fonts-3.7.3.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-fonts-3.7.3.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-fonts-3.7.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-fonts-3.7.4.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jaxen-1.1.1.jar</runtime-relative-path>
@@ -833,8 +889,8 @@
                 <binary-origin>release/modules/ext/rhino-1.7R1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-chart-themes-3.7.3.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-chart-themes-3.7.3.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-chart-themes-3.7.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-chart-themes-3.7.4.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/castor-1.2.jar</runtime-relative-path>

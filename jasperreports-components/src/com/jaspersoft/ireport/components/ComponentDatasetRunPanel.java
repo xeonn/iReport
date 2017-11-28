@@ -538,7 +538,7 @@ public class ComponentDatasetRunPanel extends javax.swing.JPanel {
         if (this.isInit() || datasetRun == null) return;
 
         int rowNumber = jTableDatasetParameters.getSelectedRow();
-        JRDesignDatasetParameter parameter = (JRDesignDatasetParameter)jTableDatasetParameters.getValueAt( jTableDatasetParameters.getSelectedRow(), 0);
+        JRDesignDatasetParameter parameter = (JRDesignDatasetParameter)jTableDatasetParameters.getValueAt(rowNumber, 0);
 
         java.util.HashMap map = new java.util.HashMap();
         java.util.List<JRDatasetParameter> params = Arrays.asList(datasetRun.getParameters());
@@ -571,6 +571,13 @@ public class ComponentDatasetRunPanel extends javax.swing.JPanel {
             dtm.setValueAt(parameter, rowNumber, 0);
             dtm.setValueAt(parameter.getExpression(), rowNumber, 1);
             jTableDatasetParameters.updateUI();
+
+            // Print all the parameters in the dataset...
+            params = Arrays.asList(datasetRun.getParameters());
+            for (JRDatasetParameter p : params) {
+                System.out.println(p.getName() + " = "  + Misc.getExpressionText( p.getExpression() ) + "  " + parameter + "  " + p + " " + (p==parameter) );
+            }
+            System.out.flush();
         }
     }//GEN-LAST:event_jButtonModParameterActionPerformed
 
@@ -672,11 +679,11 @@ public class ComponentDatasetRunPanel extends javax.swing.JPanel {
     /**
      * @param datasetRun the datasetRun to set
      */
-    public void setDatasetRun(JRDesignDatasetRun datasetRun) {
+    public void setDatasetRun(JRDesignDatasetRun datasetRunOriginal) {
 
         setInit(true);
 
-        this.datasetRun = (JRDesignDatasetRun) datasetRun.clone();
+        this.datasetRun = (JRDesignDatasetRun) datasetRunOriginal.clone();
         jComboBoxSubDataset.setSelectedItem(datasetRun.getDatasetName());
         //jPanel7.remove(jTabbedPaneSubDataset);
         //jTabbedPaneSubDataset.setVisible(true);

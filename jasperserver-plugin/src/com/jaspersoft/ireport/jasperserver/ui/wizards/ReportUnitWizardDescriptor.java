@@ -183,6 +183,7 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
                     rd.setLabel(((String)getProperty("label")).trim() ); //getResource().getDescriptor().getLabel()  );
                     rd.setParentFolder( getParentFolder() );
                     rd.setIsNew( true );
+                    rd.setResourceProperty( ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS, true);
 
                     // Add the datasource resource...
                     if (JasperServerManager.getMainInstance().getBrandingProperties().getProperty("ireport.manage.datasources.enabled", "true").equals("true"))

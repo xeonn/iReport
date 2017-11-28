@@ -39,6 +39,7 @@ import com.jaspersoft.ireport.designer.sheet.properties.style.VerticalAlignmentP
 import com.jaspersoft.ireport.designer.sheet.properties.style.ModeProperty;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.sheet.JRPenProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.style.MarkupProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.StylePatternProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.FontNameProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.FontSizeProperty;
@@ -60,13 +61,11 @@ import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import org.apache.commons.math.stat.inference.ChiSquareTest;
 import org.openide.actions.CopyAction;
 import org.openide.actions.CutAction;
 import org.openide.actions.DeleteAction;
 import org.openide.actions.RenameAction;
 import org.openide.actions.ReorderAction;
-import org.openide.nodes.Children;
 import org.openide.nodes.NodeTransfer;
 import org.openide.nodes.Sheet;
 import org.openide.util.Lookup;
@@ -193,6 +192,7 @@ public class AbstractStyleNode extends IRIndexedNode implements PropertyChangeLi
         set.put(new PdfFontNameProperty( getStyle() ));
         set.put(new PdfEmbeddedProperty( getStyle() ));
         set.put(new PdfEncodingProperty( getStyle() ));
+        set.put(new MarkupProperty( getStyle() ));
         
         set.put(new StylePatternProperty( getStyle() ));
         set.put(new BlankWhenNullProperty( getStyle() ));

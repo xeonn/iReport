@@ -5,7 +5,13 @@
 package com.jaspersoft.ireport.jasperserver;
 
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.jasperserver.ws.IReportSSLSocketFactory;
+import com.jaspersoft.ireport.jasperserver.ws.IReportTrustManager;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
 import net.sf.jasperreports.engine.util.JRProperties;
+import org.apache.commons.httpclient.protocol.Protocol;
 import org.openide.modules.ModuleInstall;
 
 /**
@@ -31,5 +37,16 @@ public class Installer extends ModuleInstall {
         {
             IReportManager.getInstance().setJRProperty("net.sf.jasperreports.query.executer.factory.domain", "net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory");
         }
+
+
+        try {
+            IReportTrustManager tm = new IReportTrustManager();
+
+            Protocol protocol = new Protocol("https", new IReportSSLSocketFactory(), 443);
+            Protocol.registerProtocol("https", protocol);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

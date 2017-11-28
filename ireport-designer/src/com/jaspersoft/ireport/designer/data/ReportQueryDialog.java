@@ -203,6 +203,11 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         
         for (QueryExecuterDef qe : queryExecuters)
         {
+            if (qe == null || qe.getLanguage() == null)
+            {
+                System.out.println("Query excuter found which is null!");
+                continue;
+            }
             String s = qe.getLanguage();
             boolean found = false;
             for (int i=0; i<jComboBoxQueryType.getItemCount(); ++i)
@@ -1532,7 +1537,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
         List<QueryExecuterDef> qexecuters = IReportManager.getInstance().getQueryExecuters();
         for (QueryExecuterDef qed : qexecuters)
         {
-            if (qed.getLanguage().equals(language) && qed.getFieldsProvider() != null && qed.getFieldsProvider().length() > 0)
+            if (qed != null && qed.getLanguage() != null && qed.getLanguage().equals(language) && qed.getFieldsProvider() != null && qed.getFieldsProvider().length() > 0)
             {
                 try {
 

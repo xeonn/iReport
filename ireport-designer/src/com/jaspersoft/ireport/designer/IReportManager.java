@@ -383,7 +383,7 @@ public class IReportManager {
                 }
             } catch (Throwable ex)
             {
-                System.out.println("Unable to find element decorator class: " + name);
+                //System.out.println("Unable to find element decorator class: " + name);
             }
         }
 

@@ -24,6 +24,10 @@
 package com.jaspersoft.ireport.jasperserver.options;
 
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.jasperserver.JasperServerManager;
+import com.jaspersoft.ireport.jasperserver.ws.IReportTrustManager;
+import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 
 final class JasperServerRepositoryPanel extends javax.swing.JPanel {
@@ -73,6 +77,7 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jSpinner1 = new javax.swing.JSpinner();
         jCheckBoxProMode = new javax.swing.JCheckBox();
+        jButtonClearCertificatesCache = new javax.swing.JButton();
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(JasperServerRepositoryPanel.class, "JasperServerRepositoryPanel.jLabel1.text")); // NOI18N
 
@@ -86,6 +91,13 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
         jCheckBoxProMode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxProModeActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonClearCertificatesCache, org.openide.util.NbBundle.getMessage(JasperServerRepositoryPanel.class, "JasperServerRepositoryPanel.jButtonClearCertificatesCache.text")); // NOI18N
+        jButtonClearCertificatesCache.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonClearCertificatesCacheActionPerformed(evt);
             }
         });
 
@@ -103,7 +115,8 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 46, Short.MAX_VALUE))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(2, 2, 2)
-                        .add(jCheckBoxProMode, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)))
+                        .add(jCheckBoxProMode, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE))
+                    .add(jButtonClearCertificatesCache))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -115,7 +128,9 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
                     .add(jLabel1))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jCheckBoxProMode)
-                .addContainerGap(62, Short.MAX_VALUE))
+                .add(18, 18, 18)
+                .add(jButtonClearCertificatesCache)
+                .addContainerGap(21, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -126,6 +141,13 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
         notifyChange();
     }//GEN-LAST:event_jSpinner1StateChanged
+
+    private void jButtonClearCertificatesCacheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearCertificatesCacheActionPerformed
+        
+        JasperServerManager.getPreferences().remove(IReportTrustManager.TRUSTED_CERTIFICATE_FINGERPRINTS);
+
+        JOptionPane.showMessageDialog(Misc.getMainFrame(), "All the trusted certificate fingerprints have been removed from the cache.");
+    }//GEN-LAST:event_jButtonClearCertificatesCacheActionPerformed
 
     void load() {
         setInit(true);
@@ -148,6 +170,7 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonClearCertificatesCache;
     private javax.swing.JCheckBox jCheckBoxProMode;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JSpinner jSpinner1;

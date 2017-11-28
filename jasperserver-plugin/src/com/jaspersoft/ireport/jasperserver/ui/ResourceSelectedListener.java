@@ -24,6 +24,7 @@
 package com.jaspersoft.ireport.jasperserver.ui;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import java.util.List;
 
 /**
  *
@@ -31,6 +32,6 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
  */
 public interface ResourceSelectedListener {
 
-    public void resourceSelected(ResourceDescriptor res);
+    public void resourceSelected(List<ResourceDescriptor> res);
     
 }

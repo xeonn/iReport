@@ -29,6 +29,7 @@ import com.jaspersoft.ireport.jasperserver.RepositoryFile;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
 import com.jaspersoft.ireport.jasperserver.ui.actions.DeleteAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.ImportDatasourceAction;
+import com.jaspersoft.ireport.jasperserver.ui.actions.ImportXMLADatasourceAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.OpenFileAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.PropertiesAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.RefreshAction;
@@ -197,6 +198,13 @@ public class FileNode extends IRAbstractNode implements ResourceNode {
         {
             actions.add(SystemAction.get( ImportDatasourceAction.class));
         }
+
+        if (getFile().getDescriptor().getWsType().equals(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION))
+        {
+            actions.add(SystemAction.get( ImportXMLADatasourceAction.class));
+        }
+
+
         actions.add(null);
         actions.add(SystemAction.get( RefreshAction.class));
         actions.add(SystemAction.get( PropertiesAction.class));

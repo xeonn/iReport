@@ -30,6 +30,7 @@ import com.jaspersoft.ireport.jasperserver.RepositoryReportUnit;
 import com.jaspersoft.ireport.jasperserver.ui.ResourceChooser;
 import com.jaspersoft.ireport.jasperserver.ui.nodes.ReportUnitInputControlsNode;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import java.util.List;
 import javax.swing.JOptionPane;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
@@ -68,6 +69,7 @@ public final class AddExistingInputControlAction extends NodeAction {
 
             // In this case we choose an input control from the repository....
             ResourceChooser rc = new ResourceChooser();
+            rc.setMultipleSelection(true);
 
             String reportUnitUri = null;
             reportUnitUri = ru.getDescriptor().getUriString();
@@ -75,41 +77,45 @@ public final class AddExistingInputControlAction extends NodeAction {
 
             if (rc.showDialog(Misc.getMainFrame(), null) == JOptionPane.OK_OPTION)
             {
-                ResourceDescriptor rd = rc.getSelectedDescriptor();
-                if (rd == null || rd.getUriString() == null)
+                List<ResourceDescriptor> rds = rc.getSelectedDescriptors();
+                if (rds.size() == 0)
                 {
                     return;
                 }
 
-                if (!rd.getWsType().equals( ResourceDescriptor.TYPE_INPUT_CONTROL))
+                for (ResourceDescriptor rd : rds)
                 {
-                    JOptionPane.showMessageDialog(Misc.getMainFrame(),
-                            JasperServerManager.getFormattedString("repositoryExplorer.message.invalidInputControl","{0} is not an Input Control!",new Object[]{rd.getName()}),
-                                 "",JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                ResourceDescriptor newRd = new ResourceDescriptor();
-                newRd.setWsType( ResourceDescriptor.TYPE_INPUT_CONTROL);
-                newRd.setIsReference(true);
-                newRd.setReferenceUri( rd.getUriString() );
-                newRd.setIsNew(true);
-                newRd.setUriString(reportUnitUri+"/<cotnrols>");
-                try {
-                    newRd = ru.getServer().getWSClient().modifyReportUnitResource(reportUnitUri, newRd, null);
-
-                    RepositoryFolder obj = RepositoryFolder.createRepositoryObject(ru.getServer(), newRd);
-                    if (ruicn.getRepositoryObject().isLoaded())
+                    if (!rd.getWsType().equals( ResourceDescriptor.TYPE_INPUT_CONTROL))
                     {
-                        ruicn.getResourceDescriptor().getChildren().add( newRd );
-                        ruicn.getRepositoryObject().getChildren().add(obj);
-                        ruicn.refreshChildrens(false);
+                        JOptionPane.showMessageDialog(Misc.getMainFrame(),
+                                JasperServerManager.getFormattedString("repositoryExplorer.message.invalidInputControl","{0} is not an Input Control!",new Object[]{rd.getName()}),
+                                     "",JOptionPane.ERROR_MESSAGE);
+                        continue;
                     }
 
-                } catch (Exception ex)
-                {
-                    JOptionPane.showMessageDialog(Misc.getMainFrame(),JasperServerManager.getFormattedString("messages.error.3", "Error:\n {0}", new Object[] {ex.getMessage()}));
-                    ex.printStackTrace();
+
+                    ResourceDescriptor newRd = new ResourceDescriptor();
+                    newRd.setWsType( ResourceDescriptor.TYPE_INPUT_CONTROL);
+                    newRd.setIsReference(true);
+                    newRd.setReferenceUri( rd.getUriString() );
+                    newRd.setIsNew(true);
+                    newRd.setUriString(reportUnitUri+"/<cotnrols>");
+                    try {
+                        newRd = ru.getServer().getWSClient().modifyReportUnitResource(reportUnitUri, newRd, null);
+
+                        RepositoryFolder obj = RepositoryFolder.createRepositoryObject(ru.getServer(), newRd);
+                        if (ruicn.getRepositoryObject().isLoaded())
+                        {
+                            ruicn.getResourceDescriptor().getChildren().add( newRd );
+                            ruicn.getRepositoryObject().getChildren().add(obj);
+                            ruicn.refreshChildrens(false);
+                        }
+
+                    } catch (Exception ex)
+                    {
+                        JOptionPane.showMessageDialog(Misc.getMainFrame(),JasperServerManager.getFormattedString("messages.error.3", "Error:\n {0}", new Object[] {ex.getMessage()}));
+                        ex.printStackTrace();
+                    }
                 }
             }
 

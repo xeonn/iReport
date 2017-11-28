@@ -783,11 +783,11 @@ public class ObjectPropertiesDialog extends javax.swing.JDialog {
         }
 
 //      Show the XML for debug porpuses.
-//      jTabbedPane1.add("Descriptor", jPanelDescriptor);
+      jTabbedPane1.add("Descriptor", jPanelDescriptor);
 //      jTabbedPane1.setTitleAt(1, IRPlugin.getString("objectPropertiesDialog.tabDescriptor","Descriptor"));
 //
-//      com.jaspersoft.jasperserver.ws.xml.Marshaller marshaller = new com.jaspersoft.jasperserver.ws.xml.Marshaller();
-//      jTextPaneDescriptor.setText( marshaller.writeResourceDescriptor( resourceDescriptor )  );
+      com.jaspersoft.jasperserver.ws.xml.Marshaller marshaller = new com.jaspersoft.jasperserver.ws.xml.Marshaller();
+      jTextPaneDescriptor.setText( marshaller.writeResourceDescriptor( resourceDescriptor )  );
         
         if (getResource().getDescriptor().getWsType().equals(ResourceDescriptor.TYPE_IMAGE))
         {

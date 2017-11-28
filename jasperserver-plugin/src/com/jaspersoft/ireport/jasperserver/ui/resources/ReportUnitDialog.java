@@ -619,6 +619,7 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         jPanelOther.add(jComboBoxControlsLayout, gridBagConstraints);
 
+        jCheckBoxAlwaysPrompt.setSelected(true);
         jCheckBoxAlwaysPrompt.setText("Always prompt");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

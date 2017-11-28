@@ -163,8 +163,10 @@ public class XMLAConnectionDialog extends javax.swing.JDialog {
         jTextFieldUsername = new javax.swing.JTextField();
         jLabelPassword = new javax.swing.JLabel();
         jPasswordField = new javax.swing.JPasswordField();
-        jButtonImportConnection = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jButtonImportConnection = new javax.swing.JButton();
+        jButtonImportConnection1 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jButtonSave = new javax.swing.JButton();
         jButtonClose = new javax.swing.JButton();
@@ -341,6 +343,12 @@ public class XMLAConnectionDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 8);
         jPanel3.add(jPasswordField, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel3.add(jPanel5, gridBagConstraints);
+
+        jPanel6.setLayout(new java.awt.GridBagLayout());
 
         jButtonImportConnection.setText("Import from iReport");
         jButtonImportConnection.addActionListener(new java.awt.event.ActionListener() {
@@ -349,15 +357,29 @@ public class XMLAConnectionDialog extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        jPanel6.add(jButtonImportConnection, gridBagConstraints);
+
+        jButtonImportConnection1.setText("Import to iReport");
+        jButtonImportConnection1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonImportConnection1ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 8);
-        jPanel3.add(jButtonImportConnection, gridBagConstraints);
+        jPanel6.add(jButtonImportConnection1, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
         gridBagConstraints.weighty = 1.0;
-        jPanel3.add(jPanel5, gridBagConstraints);
+        jPanel3.add(jPanel6, gridBagConstraints);
 
         jTabbedPane1.addTab("Connection details", jPanel3);
 
@@ -500,6 +522,50 @@ public class XMLAConnectionDialog extends javax.swing.JDialog {
             return;
         }
     }//GEN-LAST:event_jButtonSaveActionPerformed
+
+    private void jButtonImportConnection1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImportConnection1ActionPerformed
+
+        JRXMLADataSourceConnection conn = new JRXMLADataSourceConnection();
+
+        String name = jTextFieldLabel.getText();
+        if (name.trim().length() == 0)
+        {
+            name = "XMLA Connection";
+        }
+
+        List<IReportConnection> connections = IReportManager.getInstance().getConnections();
+        for (int i=0; ; i++)
+        {
+            String tmpName = name + ((i>0) ? " (" + i + ")" : "");
+            boolean found = false;
+            for (IReportConnection c : connections)
+            {
+                if (c.getName().equals(tmpName))
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                name = tmpName;
+                break;
+            }
+        }
+
+        conn.setName(name);
+        conn.setUsername( jTextFieldUsername.getText() );
+        conn.setPassword( new String(jPasswordField.getPassword()) );
+        conn.setUrl( jTextFieldURL.getText() );
+        conn.setCatalog(jTextFieldCatalog.getText() );
+        conn.setDatasource( jTextFieldDatasource.getText() );
+        conn.setSavePassword(true);
+
+        IReportManager.getInstance().addConnection(conn);
+        IReportManager.getInstance().setDefaultConnection(conn);
+        JOptionPane.showMessageDialog(this, "XML/A Connection succesfully imported (" + name + ")" );
+    }//GEN-LAST:event_jButtonImportConnection1ActionPerformed
     
 
     public int getDialogResult() {
@@ -574,6 +640,7 @@ public class XMLAConnectionDialog extends javax.swing.JDialog {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonClose;
     private javax.swing.JButton jButtonImportConnection;
+    private javax.swing.JButton jButtonImportConnection1;
     private javax.swing.JButton jButtonSave;
     private javax.swing.JEditorPane jEditorPaneDescription;
     private javax.swing.JLabel jLabel1;
@@ -591,6 +658,7 @@ public class XMLAConnectionDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPasswordField jPasswordField;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;

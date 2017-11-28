@@ -90,6 +90,7 @@
                  <file name="JRBarcode.irpitem" url="barcode/jrbarcode.irpitem"/>
                  <file name="JRTable.irpitem" url="table/jrtable.irpitem"/>
                  <file name="JRGenericElement.irpitem" url="genericelement/jrgenericelement.irpitem"/>
+                 <file name="JRSpiderChart.irpitem" url="spiderchart/jrspiderchart.irpitem"/>
             </folder>
         </folder>
 
@@ -151,6 +152,9 @@
                </file>
                <file name="net-sf-jasperreports-components-table-StandardTable.instance">
                    <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.table.TableElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-spiderchart-SpiderChartComponent.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.spiderchart.SpiderChartElementNodeFactory"/>
                </file>
             </folder>
             <folder name="designers">

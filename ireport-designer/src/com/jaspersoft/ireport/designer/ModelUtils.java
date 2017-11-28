@@ -51,6 +51,7 @@ import net.sf.jasperreports.crosstabs.fill.calculation.BucketDefinition;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementDataset;
 import net.sf.jasperreports.engine.JRElementGroup;
@@ -66,6 +67,7 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.JRSection;
 import net.sf.jasperreports.engine.JRVariable;
+import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -1155,7 +1157,7 @@ public class ModelUtils {
 
         JRElementGroup group = getTopElementGroup(element);
         
-        if (group instanceof JRDesignCellContents) {  // Main datasource
+        if (group != null && group instanceof JRDesignCellContents) {  // Main datasource
             // Check if this crosstab is using a different dataset...
             JRDesignCellContents cellContent = (JRDesignCellContents)group;
             if (cellContent.getOrigin().getCrosstab().getDataset() != null)
@@ -1184,6 +1186,48 @@ public class ModelUtils {
                     if (dataset != null) return dataset;
                 }
             }
+            
+            // Not found yet... try to check if a component can be found in the main designer...
+            // Here iReport uses some tricks. It doesn't know anything about the components, but
+            // it assumes that if a component uses a special sub dataset, it must be a method called
+            // getDatasetRun. Of course this is a big assumption, but it still good enough for what
+            // we can do. The following code looks a parent of the current element which is a component
+            // (it can be the component itself which can be inside another component, this last assumption
+            //  may be not optimal)...
+            // If the method getDatasetRun exists, and it points to a valid dataset, this is the dataset
+            // returned by the method. The method stops at the first component (this should be a good
+            // enough assumption.
+            Node enode = findElementNode(view.getExplorerManager().getRootContext(), element);
+            while (enode != null && enode instanceof ElementNode)
+            {
+                if (((ElementNode)enode).getElement() instanceof JRDesignComponentElement)
+                {
+                    JRDesignComponentElement component = (JRDesignComponentElement) ((ElementNode)enode).getElement();
+                    Component componentImpl = component.getComponent();
+                    if (componentImpl != null)
+                    {
+                        try {
+                            Method m = componentImpl.getClass().getMethod("getDatasetRun");
+                            if (m != null)
+                            {
+                                JRDatasetRun dr = (JRDatasetRun) m.invoke(componentImpl, new Object[]{});
+
+                                if (dr != null && jd.getDatasetMap().containsKey(dr.getDatasetName()) )
+                                {
+                                    return (JRDesignDataset)jd.getDatasetMap().get( dr.getDatasetName()  );
+                                }
+                            }
+
+                        } catch (Throwable t){
+                            break;
+                        }
+                    }
+                    break;
+                }
+
+                enode = enode.getParentNode();
+            }
+
         }
         
             

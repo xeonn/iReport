@@ -536,8 +536,10 @@ public class WSClient {
             	descriptor.setHasData(true);
 
         		//Tell the stub that the message being formed also contains an attachment, and it is of type MIME encoding.
-        		((org.apache.axis.client.Stub)ms)._setProperty(Call.ATTACHMENT_ENCAPSULATION_FORMAT, Call.ATTACHMENT_ENCAPSULATION_FORMAT_DIME);
-            	
+        		//((org.apache.axis.client.Stub)ms)._setProperty(Call.ATTACHMENT_ENCAPSULATION_FORMAT, Call.ATTACHMENT_ENCAPSULATION_FORMAT_DIME);
+
+                ((org.apache.axis.client.Stub)ms)._setProperty(Call.ATTACHMENT_ENCAPSULATION_FORMAT, Call.ATTACHMENT_ENCAPSULATION_FORMAT_MIME);
+
             	for (int i = 0; i < attachments.length; i++) {
 			RequestAttachment attachment = attachments[i];
 	                DataHandler attachmentHandler = new DataHandler(attachment.getDataSource());
@@ -635,7 +637,6 @@ public class WSClient {
             ((org.apache.axis.client.Stub)managementService).setUsername( getUsername() );
             ((org.apache.axis.client.Stub)managementService).setPassword( getPassword() );
             ((org.apache.axis.client.Stub)managementService).setMaintainSession( true );
-            System.out.println("Client: "+ managementService);
         }
 
         int timeout = IReportManager.getPreferences().getInt("client_timeout", 0) * 1000;
@@ -702,5 +703,8 @@ public class WSClient {
 
         return inputFile;
     }
+
+
+    
 }
 

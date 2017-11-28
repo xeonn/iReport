@@ -1,3 +1,15 @@
+2010-07-20 Version 3.7.4 released
+_______________________________________________________________________________
+- Updated to JasperReports 3.7.4
+- Support for the Spider Chart component of JasperReports 3.7.4
+- Added ability to import an XML/A data source from JasperServer to iReport
+- Support for server certificates when connecting to an https instance of JasperServer.
+- Fixed Bug 9809 - TOE - Shouldn't manditory in the plug-in for a input control apply always prompt in JasperServer?
+- Fixed 0004754: Can not modify parameters of Table component
+- Fixed Bug 17473 - Domain Plugin: can't select domain as data source in add report unit wizard
+- Fixed Bug 17276 - [Case #11062] Allow multiple input controls to be linked at a time in JS plugin
+- Added support for Markup property in styles
+
 2010-06-02 Version 3.7.3 released
 _______________________________________________________________________________
 - Mew massive processing tool to compile a set of jrxml or make changes to a jrxml

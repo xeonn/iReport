@@ -246,7 +246,8 @@ final class IReportPanel extends javax.swing.JPanel {
         //jTabbedPane1.remove(5);
 
         jComboBoxCompatibility.addItem(new Tag("", "Last version"));
-        jComboBoxCompatibility.addItem(new Tag("3_7_1", "JasperReports 3.7.1"));
+        jComboBoxCompatibility.addItem(new Tag("3_7_3", "JasperReports 3.7.3"));
+        jComboBoxCompatibility.addItem(new Tag("3_7_1", "JasperReports 3.7.1-3.7.2"));
         jComboBoxCompatibility.addItem(new Tag("3_6_2", "JasperReports 3.7.0"));
         jComboBoxCompatibility.addItem(new Tag("3_6_2", "JasperReports 3.6.2"));
         jComboBoxCompatibility.addItem(new Tag("3_6_1", "JasperReports 3.6.1"));
