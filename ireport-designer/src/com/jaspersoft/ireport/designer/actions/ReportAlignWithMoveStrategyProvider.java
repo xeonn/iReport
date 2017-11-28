@@ -1,0 +1,266 @@
+/*
+ * ReportAlignWithMoveStrategyProvider.java
+ * 
+ * Created on Aug 30, 2007, 3:24:02 PM
+ * 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package com.jaspersoft.ireport.designer.actions;
+
+import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.ReportObjectScene;
+import com.jaspersoft.ireport.designer.undo.AggregatedUndoableEdit;
+import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
+import com.jaspersoft.ireport.designer.widgets.SelectionWidget;
+import java.awt.Cursor;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
+import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.design.JRDesignFrame;
+import org.netbeans.api.visual.action.ActionFactory;
+import org.netbeans.api.visual.action.AlignWithMoveDecorator;
+import org.netbeans.api.visual.action.AlignWithWidgetCollector;
+import org.netbeans.api.visual.action.MoveProvider;
+import org.netbeans.api.visual.action.MoveStrategy;
+import org.netbeans.api.visual.widget.LayerWidget;
+import org.netbeans.api.visual.widget.Widget;
+
+/**
+ *
+ * @author gtoffoli
+ */
+public class ReportAlignWithMoveStrategyProvider extends AlignWithSupport implements MoveStrategy, MoveProvider {
+
+    private boolean outerBounds;
+    private boolean moveEnabled = false;
+    private boolean snapToGrid = false;
+
+    public int getGridSize() {
+        return gridSize;
+    }
+
+    public void setGridSize(int gridSize) {
+        this.gridSize = gridSize;
+    }
+
+    public boolean isOuterBounds() {
+        return outerBounds;
+    }
+
+    public void setOuterBounds(boolean outerBounds) {
+        this.outerBounds = outerBounds;
+    }
+
+    public boolean isSnapToGrid() {
+        return snapToGrid;
+    }
+
+    public void setSnapToGrid(boolean snapToGrid) {
+        this.snapToGrid = snapToGrid;
+    }
+    private int gridSize = 13;
+    
+    public ReportAlignWithMoveStrategyProvider (AlignWithWidgetCollector collector, LayerWidget interractionLayer, AlignWithMoveDecorator decorator, boolean outerBounds) {
+        super (collector, interractionLayer, decorator);
+        this.outerBounds = outerBounds;
+    }
+
+    public Point locationSuggested (Widget widget, Point originalLocation, Point suggestedLocation) {
+        
+        if (!moveEnabled)
+        {
+            if (Math.abs(suggestedLocation.x-originalLocation.x) > 5 || 
+                Math.abs(suggestedLocation.y-originalLocation.y) > 5)
+            {
+                moveEnabled = true;
+            }
+            else
+            {
+                return originalLocation;
+            }
+        }
+        
+        Point widgetLocation = widget.getLocation();
+        Rectangle widgetBounds = outerBounds ? widget.getBounds () : widget.getClientArea();
+        Rectangle bounds = widget.convertLocalToScene (widgetBounds);
+        bounds.translate (suggestedLocation.x - widgetLocation.x, suggestedLocation.y - widgetLocation.y);
+        Insets insets = widget.getBorder ().getInsets ();
+        
+        if (!outerBounds) {
+            suggestedLocation.x += insets.left;
+            suggestedLocation.y += insets.top;
+        }
+        
+        Point point = new Point(suggestedLocation);
+        if (isSnapToGrid())
+        {
+            
+            point = snapToGrid(point, getGridSize());
+            //System.out.println("Snapping....x:" + widget.getBounds().x + " " +suggestedLocation + " " + widgetLocation + "=> " + point + " " + bounds);
+            
+            point.x += insets.left;
+            point.y += insets.top;
+        }
+        else
+        {
+            //System.out.println("Free movements");
+            //System.out.flush();
+            point = super.locationSuggested(widget, bounds, point, true, true, true, true);
+        }
+        
+        if (! outerBounds) {
+            point.x -= insets.left;
+            point.y -= insets.top;
+        }
+        return widget.getParentWidget().convertSceneToLocal (point);
+    }
+
+    java.util.List<ObjectPropertyUndoableEdit> undoEdits = null; 
+    public void movementStarted (Widget widget) {
+        moveEnabled = false;
+        
+        undoEdits = new java.util.ArrayList<ObjectPropertyUndoableEdit>();
+        
+        List<Widget> selectedElements = ((ReportObjectScene)widget.getScene()).getSelectionLayer().getChildren();
+        
+        // for each element, let's save x and y...
+        for (Widget w : selectedElements)
+        {
+           if (w.isVisible())
+           {
+                JRDesignElementWidget dew = ((SelectionWidget)w).getRealWidget();
+                undoEdits.add(new ObjectPropertyUndoableEdit(dew.getElement(), "X", Integer.TYPE, new Integer(dew.getElement().getX()), new Integer(dew.getElement().getX())));
+                undoEdits.add(new ObjectPropertyUndoableEdit(dew.getElement(), "Y", Integer.TYPE, new Integer(dew.getElement().getY()), new Integer(dew.getElement().getY())));
+           }
+        }
+        show ();
+    }
+
+    public void movementFinished (Widget widget) {
+        
+        // add the undo operation...
+        for (int i=0;i<undoEdits.size(); ++i)
+        {
+            ObjectPropertyUndoableEdit edit = undoEdits.get(i);
+            if (edit.getNewValue() == null &&
+                edit.getOldValue() == null) 
+            {
+                undoEdits.remove(edit);
+                continue;
+            }
+            if (edit.getNewValue() != null &&
+                edit.getOldValue() != null &&
+                edit.getNewValue().equals(edit.getOldValue()))
+            {
+                undoEdits.remove(edit);
+                continue;
+            }
+        }
+        
+        if (undoEdits.size() > 0)
+        {
+            AggregatedUndoableEdit masterEdit = new AggregatedUndoableEdit("Move");
+            for (int i=0;i<undoEdits.size(); ++i)
+            {
+                ObjectPropertyUndoableEdit edit = undoEdits.get(i);
+                masterEdit.concatenate(edit);
+            }
+            
+            IReportManager.getInstance().addUndoableEdit(masterEdit);
+        }
+        
+        
+        hide ();
+    }
+
+    public Point getOriginalLocation (Widget widget) {
+        return ActionFactory.createDefaultMoveProvider ().getOriginalLocation (widget);
+    }
+
+    public void setNewLocation (Widget widget, Point location) 
+    {
+        // Calculating movement delta...
+        Point p = widget.getPreferredLocation();
+        Point delta = new Point(location);
+        delta.translate(-p.x, -p.y);
+        if (delta.x == 0 && delta.y == 0) return; //Nothing to do...
+        //ActionFactory.createDefaultMoveProvider().setNewLocation(widget, location);
+        // Update all the selected objects...
+        
+        List<Widget> selectedElements = ((ReportObjectScene)widget.getScene()).getSelectionLayer().getChildren();
+        ArrayList<Widget> changedWidgets = new ArrayList<Widget>();
+        
+        for (Widget w : selectedElements)
+        {
+           if (w.isVisible())
+           {
+                JRDesignElementWidget dew = ((SelectionWidget)w).getRealWidget();
+                
+                if (changedWidgets.contains(dew)) continue;
+                
+                Point loc = w.getPreferredLocation();
+                loc.translate(delta.x, delta.y);
+                w.setPreferredLocation(loc);
+                
+                Point dewloc = dew.getPreferredLocation();
+                dewloc.translate(delta.x, delta.y);
+                dewloc = dew.convertLocalToModelLocation(dewloc);
+                boolean b = dew.setChanging(true);
+                try {
+                    dew.getElement().setX( dewloc.x);
+                    dew.getElement().setY( dewloc.y);
+                    findEdit(dew.getElement(),"X").setNewValue(dewloc.x);
+                    findEdit(dew.getElement(),"Y").setNewValue(dewloc.y);
+                } finally {
+                    dew.setChanging(b);
+                }
+                dew.updateBounds();
+                if (dew.getElement() instanceof JRDesignFrame)
+                {
+                    updateChildren((JRDesignFrame)dew.getElement(), (ReportObjectScene)dew.getScene(), changedWidgets);
+                }
+                
+                changedWidgets.add(dew);
+           }
+        }
+        
+    }
+    
+    private ObjectPropertyUndoableEdit findEdit(Object obj, String property)
+    {
+        for (ObjectPropertyUndoableEdit edit : undoEdits)
+        {
+            if (edit.getObject() == obj &&
+                edit.getProperty().equals(property))
+            {
+                return edit;
+            }
+        }
+        return null;
+    }
+    
+    private void updateChildren(JRDesignFrame parent, ReportObjectScene scene, ArrayList<Widget> changedWidgets)
+    {
+          JRElement[] elements = parent.getElements();
+          for (int i=0; i < elements.length; ++i)
+          {
+               JRDesignElementWidget w = (JRDesignElementWidget)scene.findWidget(elements[i]);
+               if (changedWidgets.contains(w)) continue;
+               w.updateBounds();
+               w.getSelectionWidget().updateBounds();
+
+               if (elements[i] instanceof JRDesignFrame)
+               {
+                   updateChildren((JRDesignFrame)elements[i], scene, changedWidgets);
+               }
+               
+               changedWidgets.add(w);
+          }
+    }
+}

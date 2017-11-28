@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="com.jaspersoft.ireport/1">
+    <module_version install_time="1203304854237" last="true" origin="installer" specification_version="1.0">
+        <file crc="2425646588" name="config/Modules/com-jaspersoft-ireport.xml"/>
+        <file crc="1905470813" name="modules/com-jaspersoft-ireport.jar"/>
+        <file crc="2050849624" name="modules/ext/ant-1.5.1.jar"/>
+        <file crc="1663336707" name="modules/ext/antlr-2.7.5.jar"/>
+        <file crc="1656749251" name="modules/ext/asm-attrs.jar"/>
+        <file crc="1662521808" name="modules/ext/asm.jar"/>
+        <file crc="4180749261" name="modules/ext/bsh-2.0b4.jar"/>
+        <file crc="695153507" name="modules/ext/cglib-2.1.jar"/>
+        <file crc="681046774" name="modules/ext/cincom-jr-xmla.jar"/>
+        <file crc="350195758" name="modules/ext/commons-beanutils-1.7.jar"/>
+        <file crc="2172135688" name="modules/ext/commons-collections-2.1.jar"/>
+        <file crc="3014320569" name="modules/ext/commons-dbcp-1.2.1.jar"/>
+        <file crc="2794300200" name="modules/ext/commons-digester-1.7.jar"/>
+        <file crc="1712146089" name="modules/ext/commons-javaflow-20060411.jar"/>
+        <file crc="3364403761" name="modules/ext/commons-logging-1.0.2.jar"/>
+        <file crc="1982769518" name="modules/ext/commons-logging-api-1.0.2.jar"/>
+        <file crc="194177091" name="modules/ext/commons-math-1.0.jar"/>
+        <file crc="843270898" name="modules/ext/commons-pool-1.3.jar"/>
+        <file crc="4163230234" name="modules/ext/commons-vfs-1.0.jar"/>
+        <file crc="2479777717" name="modules/ext/dom4j-1.6.jar"/>
+        <file crc="655765739" name="modules/ext/ehcache-1.1.jar"/>
+        <file crc="631414938" name="modules/ext/eigenbase-properties.jar"/>
+        <file crc="1787729400" name="modules/ext/eigenbase-resgen.jar"/>
+        <file crc="1053104977" name="modules/ext/eigenbase-xom.jar"/>
+        <file crc="814369756" name="modules/ext/groovy-all-1.0.jar"/>
+        <file crc="360201894" name="modules/ext/hibernate3.jar"/>
+        <file crc="3833901688" name="modules/ext/hsqldb-1.7.1.jar"/>
+        <file crc="1854174290" name="modules/ext/itext-1.3.1.jar"/>
+        <file crc="1545701264" name="modules/ext/jakarta-bcel-20050813.jar"/>
+        <file crc="3534912169" name="modules/ext/jasperreports-2.0.5.jar"/>
+        <file crc="4248097675" name="modules/ext/javacup.jar"/>
+        <file crc="409387958" name="modules/ext/jaxen-1.1.1.jar"/>
+        <file crc="69686959" name="modules/ext/jcommon-1.0.0.jar"/>
+        <file crc="2659592228" name="modules/ext/jdt-compiler-3.1.1.jar"/>
+        <file crc="1737573325" name="modules/ext/jfreechart-1.0.0.jar"/>
+        <file crc="3870944862" name="modules/ext/jpa.jar"/>
+        <file crc="190545487" name="modules/ext/jta.jar"/>
+        <file crc="3654587812" name="modules/ext/jxl-2.6.jar"/>
+        <file crc="2880301230" name="modules/ext/log4j-1.2.9.jar"/>
+        <file crc="353568572" name="modules/ext/mondrian-2.3.2.8944.jar"/>
+        <file crc="288180244" name="modules/ext/png-encoder-1.5.jar"/>
+        <file crc="3065545554" name="modules/ext/poi-3.0.1-FINAL-20070705.jar"/>
+        <file crc="779064023" name="modules/ext/rex-20070125.jar"/>
+        <file crc="2898765198" name="modules/ext/saaj-api-1.3.jar"/>
+        <file crc="2214162376" name="modules/ext/servlet.jar"/>
+        <file crc="995093325" name="modules/ext/spring-2.0-m2.jar"/>
+        <file crc="1312484038" name="modules/ext/spring-context-2.0-m2.jar"/>
+        <file crc="2232358648" name="modules/ext/spring-hibernate3-2.0-m2.jar"/>
+        <file crc="1158755212" name="modules/ext/sqleonardo-2007.03.jar"/>
+        <file crc="1581659028" name="modules/ext/swingx-2007_10_07.jar"/>
+        <file crc="2826085111" name="modules/ext/xercesImpl.jar"/>
+        <file crc="3187697746" name="modules/ext/xml-apis.jar"/>
+    </module_version>
+</module>
