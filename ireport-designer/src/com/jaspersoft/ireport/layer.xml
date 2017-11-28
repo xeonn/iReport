@@ -406,6 +406,13 @@
                <file name="com-jaspersoft-ireport-designer-pdf508-Pdf508TagDecorator"/>
             </folder>
        </folder>
+       <!-- <folder name="components">
+            <folder name="nodes">
+               <file name="jcharts-AxisChartComponent">
+                   <attr name="elementFactory" stringvalue="com.jaspersoft.ireport.examples.customcomponent.VirtualComponentElementFactory"/>
+               </file>
+            </folder>
+       </folder> -->
      </folder>
 
     <folder name="Windows2">

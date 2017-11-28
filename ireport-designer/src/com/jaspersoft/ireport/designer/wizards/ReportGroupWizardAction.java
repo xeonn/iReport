@@ -40,7 +40,7 @@ public final class ReportGroupWizardAction extends CallableSystemAction {
         
         // {0} will be replaced by WizardDesriptor.Panel.getComponent().getName()
         wizardDescriptor.setTitleFormat(new MessageFormat("{0}"));
-        wizardDescriptor.setTitle("Your wizard dialog title here");
+        wizardDescriptor.setTitle("New group wizard");
         Dialog dialog = DialogDisplayer.getDefault().createDialog(wizardDescriptor);
         dialog.setVisible(true);
         dialog.toFront();

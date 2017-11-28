@@ -7,7 +7,9 @@ package com.jaspersoft.ireport.jasperserver.ui.actions;
 
 import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.palette.PaletteItemAction;
+import com.jaspersoft.ireport.designer.tools.HyperlinkPanel;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import com.jaspersoft.ireport.jasperserver.RepositoryReportUnit;
@@ -21,6 +23,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignHyperlinkParameter;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
 
@@ -99,6 +102,13 @@ public class CreateDrillDownAction extends PaletteItemAction  {
                         }
                     
                         ModelUtils.copyHyperlink(newHl, hl);
+
+                        JasperDesign design = getJasperDesign();
+
+                        HyperlinkPanel pd = new HyperlinkPanel();
+                        pd.setExpressionContext(new ExpressionContext( ModelUtils.getElementDataset(element, design)) );
+                        pd.setHyperlink((JRHyperlink)element);
+                        pd.showDialog( Misc.getMainFrame() );
                     }
                 }
             }

@@ -11,6 +11,7 @@ import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
 import com.jaspersoft.ireport.designer.crosstab.CrosstabPanel;
 import com.jaspersoft.ireport.designer.dnd.DesignerDropTarget;
 import com.jaspersoft.ireport.designer.ruler.RulerPanel;
+import com.jaspersoft.ireport.designer.utils.MultilineToolbarLayout;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -440,12 +441,13 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
         {
             jToolBar1.removeAll();
             jToolBar1.add(jToggleButtonMain);
+            jToolBar1.setLayout(new MultilineToolbarLayout());
             
             for (int i=0; i<crosstabs.size(); ++i)
             {
                 JToggleButton jToggleButton = new JToggleButton();
                 buttonGroup1.add(jToggleButton);
-                jToggleButton.setText("Corsstab " + (i+1)); // NOI18N
+                jToggleButton.setText("Crosstab " + (i+1)); // NOI18N
                 jToggleButton.setFocusable(false);
                 jToggleButton.setActionCommand(""+i);
                 jToggleButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);

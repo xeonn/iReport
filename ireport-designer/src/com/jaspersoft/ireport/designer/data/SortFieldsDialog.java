@@ -332,11 +332,11 @@ public class SortFieldsDialog extends javax.swing.JDialog {
             JRDesignSortField field = (JRDesignSortField)jList1.getModel().getElementAt(items[i]);
             if (field.getOrder() == JRDesignSortField.SORT_ORDER_ASCENDING)
             {
-                field.setOrder( JRDesignSortField.SORT_ORDER_ASCENDING);
+                field.setOrder( JRDesignSortField.SORT_ORDER_DESCENDING);
             }
             else
             {
-                field.setOrder( JRDesignSortField.SORT_ORDER_DESCENDING);
+                field.setOrder( JRDesignSortField.SORT_ORDER_ASCENDING);
             }
         }
         updateDatasetSortFieldList();

@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.data;
 
+import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,6 +56,10 @@ public class SortFieldDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         jComboBoxSortBy.setEditable(false);
+
+        jComboBoxSortType.addItem(new Tag(JRDesignSortField.SORT_ORDER_ASCENDING,"Ascending"));
+        jComboBoxSortType.addItem(new Tag(JRDesignSortField.SORT_ORDER_DESCENDING,"Descending"));
+
         
         javax.swing.KeyStroke escape =  javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0, false);
         javax.swing.Action escapeAction = new javax.swing.AbstractAction() {

@@ -10,9 +10,7 @@ import com.jaspersoft.ireport.designer.outline.nodes.IRAbstractNode;
 import com.jaspersoft.ireport.jasperserver.RepositoryFile;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
 import com.jaspersoft.ireport.jasperserver.ui.actions.DeleteAction;
-import com.jaspersoft.ireport.jasperserver.ui.actions.DeleteServerAction;
-import com.jaspersoft.ireport.jasperserver.ui.actions.ModifyServerAction;
-import com.jaspersoft.ireport.jasperserver.ui.actions.NewServerAction;
+import com.jaspersoft.ireport.jasperserver.ui.actions.ImportDatasourceAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.OpenFileAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.PropertiesAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.RefreshAction;
@@ -159,10 +157,11 @@ public class FileNode extends IRAbstractNode implements ResourceNode {
             actions.add(null);
             actions.add(SystemAction.get( RunReportUnitAction.class));
         }
-        actions.add(null);
-        actions.add(SystemAction.get( NewServerAction.class));
-        actions.add(SystemAction.get( ModifyServerAction.class));
-        actions.add(SystemAction.get( DeleteServerAction.class));
+
+        if (getFile().getDescriptor().getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_JDBC))
+        {
+            actions.add(SystemAction.get( ImportDatasourceAction.class));
+        }
         actions.add(null);
         actions.add(SystemAction.get( RefreshAction.class));
         actions.add(SystemAction.get( PropertiesAction.class));

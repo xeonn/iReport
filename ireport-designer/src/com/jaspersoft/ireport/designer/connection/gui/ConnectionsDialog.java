@@ -54,6 +54,7 @@ import org.w3c.dom.*;
  */
 public class ConnectionsDialog extends javax.swing.JDialog {
 
+    boolean updating_row = false;
     /** Creates new form ValuesDialog */
     public ConnectionsDialog(Dialog parent, boolean modal) 
     {
@@ -85,15 +86,36 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         });
 
         DefaultTableModel dtm = (DefaultTableModel)jTableParameters.getModel();
+        dtm.addTableModelListener(new TableModelListener() {
 
+            public void tableChanged(TableModelEvent e) {
+                if (updating_row) return;
+                if (e.getType()== TableModelEvent.UPDATE && e.getColumn()==2)
+                {
+                    if (jTableParameters.getValueAt(e.getFirstRow(), 2).equals(Boolean.TRUE))
+                    {
+                        jButtonSetDefaultActionPerformed(null);
+                    }
+                    else
+                    {
+                        updating_row = true;
+                        IReportConnection con = (IReportConnection)jTableParameters.getValueAt(e.getFirstRow(), 0);
+                        jTableParameters.setValueAt(con == IReportManager.getInstance().getDefaultConnection(), e.getFirstRow(), 2 );
+                        updating_row = false;
+                    }
+                }
+
+            }
+        });
         List<IReportConnection> connections = IReportManager.getInstance().getConnections();
         IReportConnection default_irc = IReportManager.getInstance().getDefaultConnection();
 
+        updating_row = true;
         for (IReportConnection con : connections)
         {
             dtm.addRow( new Object[]{con, con.getDescription(), new Boolean(default_irc == con) });
         }
-        
+        updating_row = false;
         
         javax.swing.KeyStroke escape =  javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0, false);
         javax.swing.Action escapeAction = new javax.swing.AbstractAction() {
@@ -148,7 +170,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         jButtonExport = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(I18n.getString("ConnectionsDialog.Title.ConnDatasource")); // NOI18N
+        setTitle("Connections / Datasources");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
@@ -171,7 +193,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
                 java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -200,7 +222,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         jPanelButtons.setPreferredSize(new java.awt.Dimension(100, 10));
         jPanelButtons.setLayout(new java.awt.GridBagLayout());
 
-        jButtonNewParameter.setText(I18n.getString("Global.Button.New")); // NOI18N
+        jButtonNewParameter.setText("New");
         jButtonNewParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonNewParameterActionPerformed(evt);
@@ -214,7 +236,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanelButtons.add(jButtonNewParameter, gridBagConstraints);
 
-        jButtonModifyParameter.setText(I18n.getString("Global.Button.Modify")); // NOI18N
+        jButtonModifyParameter.setText("Modify");
         jButtonModifyParameter.setEnabled(false);
         jButtonModifyParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -229,7 +251,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 3, 5, 3);
         jPanelButtons.add(jButtonModifyParameter, gridBagConstraints);
 
-        jButtonDeleteParameter.setText(I18n.getString("Global.Button.Delete")); // NOI18N
+        jButtonDeleteParameter.setText("Delete");
         jButtonDeleteParameter.setEnabled(false);
         jButtonDeleteParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -245,8 +267,8 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 3, 5, 3);
         jPanelButtons.add(jButtonDeleteParameter, gridBagConstraints);
 
-        jButtonDefault.setText(I18n.getString("Global.Button.Set_as_default")); // NOI18N
-        jButtonDefault.setActionCommand(I18n.getString("Global.Button.Set_as_active")); // NOI18N
+        jButtonDefault.setText("Set as default");
+        jButtonDefault.setActionCommand("Set as active");
         jButtonDefault.setEnabled(false);
         jButtonDefault.setMargin(new java.awt.Insets(2, 4, 2, 4));
         jButtonDefault.addActionListener(new java.awt.event.ActionListener() {
@@ -263,8 +285,8 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(8, 3, 5, 3);
         jPanelButtons.add(jButtonDefault, gridBagConstraints);
 
-        jButtonImport.setText(I18n.getString("Global.Button.Import")); // NOI18N
-        jButtonImport.setActionCommand(I18n.getString("Global.Button.Set_as_active")); // NOI18N
+        jButtonImport.setText("Import...");
+        jButtonImport.setActionCommand("Set as active");
         jButtonImport.setMargin(new java.awt.Insets(2, 4, 2, 4));
         jButtonImport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -280,8 +302,8 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(8, 3, 5, 3);
         jPanelButtons.add(jButtonImport, gridBagConstraints);
 
-        jButtonExport.setText(I18n.getString("Global.Button.Export")); // NOI18N
-        jButtonExport.setActionCommand(I18n.getString("Global.Button.Set_as_active")); // NOI18N
+        jButtonExport.setText("Export...");
+        jButtonExport.setActionCommand("Set as active");
         jButtonExport.setMargin(new java.awt.Insets(2, 4, 2, 4));
         jButtonExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -409,12 +431,14 @@ public class ConnectionsDialog extends javax.swing.JDialog {
                     {
                         DefaultTableModel dtm = (DefaultTableModel)jTableParameters.getModel();
                         int i = 0;
+                        updating_row = true;
                         for (i=0; i<new_cons.size(); ++i)
                         {
                             IReportConnection con = (IReportConnection)new_cons.elementAt(i);
                             dtm.addRow( new Object[]{con, con.getDescription() });
                             IReportManager.getInstance().addConnection(con);
                         }
+                        updating_row = false;
                         IReportManager.getInstance().saveiReportConfiguration();
                         
                         JOptionPane.showMessageDialog(this,
@@ -437,6 +461,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
 
         if (jTableParameters.getSelectedRowCount() > 0)
         {
+            updating_row = true;
             IReportConnection irc = null;
             try {
                 irc = (IReportConnection)jTableParameters.getModel().getValueAt(jTableParameters.getSelectedRow(), 0);
@@ -450,6 +475,9 @@ public class ConnectionsDialog extends javax.swing.JDialog {
                     }
                 }
             } catch (Exception ex) { return; }
+            finally {
+                updating_row = false;
+            }
         }
 }//GEN-LAST:event_jButtonSetDefaultActionPerformed
 
@@ -516,6 +544,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
                 jTableParameters.getModel().setValueAt(new Boolean(true) ,jTableParameters.getSelectedRow(), 2);
             } catch (Exception ex) { return; }
 
+            updating_row = true;
             for (int i=0; i<jTableParameters.getRowCount(); ++i)
             {
                 if (i != jTableParameters.getSelectedRow())
@@ -523,6 +552,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
                     jTableParameters.getModel().setValueAt(new Boolean(false) ,i, 2);
                 }
             }
+            updating_row = false;
             
             IReportManager.getInstance().updateConnection(
                     IReportManager.getInstance().getConnections().indexOf(irc), con);
@@ -546,6 +576,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
             
             IReportConnection con = cd.getIReportConnection();
             DefaultTableModel dtm = (DefaultTableModel)jTableParameters.getModel();
+            updating_row = true;
             dtm.addRow( new Object[]{con, con.getDescription(), new Boolean(true) });
             
             for (int i=0; i<jTableParameters.getRowCount(); ++i)
@@ -555,6 +586,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
                     jTableParameters.getModel().setValueAt(new Boolean(false) ,i, 2);
                 }
             }
+            updating_row = false;
             
             IReportManager.getInstance().addConnection(con);
             IReportManager.getInstance().setDefaultConnection(con);
@@ -674,6 +706,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
                             JOptionPane.showMessageDialog(this,
                                 Misc.formatString(I18n.getString("ConnectionsDialog.Message.Error"), new Object[]{connectionName}), //"messages.connectionsDialog.errorLoadingConnection"
                                 I18n.getString("ConnectionsDialog.Message.Err"), JOptionPane.ERROR_MESSAGE);
+                           ex.printStackTrace();
                         }
                 }
              }

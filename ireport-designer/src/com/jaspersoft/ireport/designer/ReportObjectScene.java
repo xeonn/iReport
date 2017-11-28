@@ -69,6 +69,7 @@ import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
@@ -189,8 +190,13 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
     {
         if (de == null) return;
         JRDesignElementWidget widget = null;
-        
-        if (de instanceof JRDesignImage)
+
+        if (de instanceof JRDesignComponentElement)
+        {
+            widget = IReportManager.getComponentWidget(this, (JRDesignComponentElement)de);
+        }
+
+        else if (de instanceof JRDesignImage)
         {
             widget = new JRDesignImageWidget(this, (JRDesignImage)de);
         }
@@ -198,7 +204,8 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
         {
             widget = new JRDesignChartWidget(this, (JRDesignChart)de);
         }
-        else
+
+        if (widget == null) // Default...
         {
             widget = new JRDesignElementWidget(this, de);
         }
@@ -376,6 +383,10 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
         for (int i=0; i<children.size(); ++i)
             {
                 Object obj = children.get(i);
+
+
+
+
                 if (obj instanceof JRDesignElementGroup)
                 {
                     if (!elementGroupListeners.containsKey(obj))
@@ -387,7 +398,8 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
                     
                     addElements( ((JRDesignElementGroup)obj).getChildren() );
                 }
-            
+
+
                 if (obj instanceof JRDesignElement)
                 {
                     JRDesignElement de = (JRDesignElement)obj;
@@ -395,6 +407,8 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
                     if (w != null)
                     {
                         w.updateBounds();
+                        // put it at the end of the list of childrens...
+                        w.bringToFront();
                     }
                     else
                     {
@@ -464,6 +478,7 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
                         // all the time. Add elements will take care to correctly discover
                         // if an element is already present in the band and will update it...
                         //ModelUtils.isElementChildOf(dw.getElement(),group) )
+                        // Re Giulio: this would not take care of an order change...
                     
                         toRemove.add(dw);
                         JRDesignElement element = dw.getElement();
@@ -505,7 +520,11 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
             //JRElement[] elements = group.getElements();
             addElements( group.getChildren() );
             
-            // Remove the widgets..
+            // We should reorder the children in case the update is just about
+            // the z-order...
+
+
+
 
             // Update all the report elements children...
             if (selectedObjects != null)

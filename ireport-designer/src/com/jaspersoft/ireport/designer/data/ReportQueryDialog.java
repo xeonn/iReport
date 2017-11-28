@@ -44,25 +44,23 @@ import com.jaspersoft.ireport.designer.*;
 //import com.jaspersoft.ireport.designer.data.SQLFieldsProvider;
 //import com.jaspersoft.ireport.designer.data.XMLFieldsProvider;
 import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
-import com.jaspersoft.ireport.designer.data.FilterExpressionDialog;
 import com.jaspersoft.ireport.designer.data.SortFieldsDialog;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.table.*;
 import javax.swing.*;
 import java.util.*;
-import java.sql.*;
 import bsh.Interpreter;
 import com.jaspersoft.ireport.designer.connection.JRCSVDataSourceConnection;
 import com.jaspersoft.ireport.designer.connection.JRDataSourceProviderConnection;
+import com.jaspersoft.ireport.designer.editor.ExpressionContext;
+import com.jaspersoft.ireport.designer.editor.ExpressionEditor;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.utils.CustomColumnControlButton;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Dialog;
 import java.awt.Frame;
-import java.awt.Window;
 import javax.swing.event.*;
-import javax.swing.tree.*;
 import java.awt.datatransfer.*;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRPropertiesMap;
@@ -714,6 +712,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         jPanelQueryArea = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
         jPanel7 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPane1 = new javax.swing.JEditorPane();
         jLabelStatusSQL = new org.jdesktop.swingx.JXBusyLabel();
         automaticlyReadFieldsCheckBox = new javax.swing.JCheckBox();
@@ -835,17 +834,21 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
 
         jPanel7.setLayout(new java.awt.GridBagLayout());
 
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(661, 340));
+
         jEditorPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jEditorPane1.setFont(new java.awt.Font("Courier New", 0, 12));
+        jEditorPane1.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
         jEditorPane1.setMinimumSize(new java.awt.Dimension(50, 200));
         jEditorPane1.setPreferredSize(new java.awt.Dimension(661, 340));
+        jScrollPane1.setViewportView(jEditorPane1);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel7.add(jEditorPane1, gridBagConstraints);
+        jPanel7.add(jScrollPane1, gridBagConstraints);
 
         jLabelStatusSQL.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1198,7 +1201,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        openFilterExpressionDialog(false);    
+         openFilterExpressionDialog(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButtonSaveQueryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveQueryActionPerformed
@@ -1766,6 +1769,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
     private javax.swing.JPanel jPanel9;
     private javax.swing.JPanel jPanelQueryArea;
     private javax.swing.JPanel jPanelSQL;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
@@ -1997,26 +2001,34 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
      */
     public void openFilterExpressionDialog(boolean showAsError) {
         if (getDataset() == null) return;
-        FilterExpressionDialog fed = new FilterExpressionDialog(this, true);
+        ExpressionEditor fed = new ExpressionEditor();
+        fed.setExpressionContext(new ExpressionContext(this.getDataset()));
+        //FilterExpressionDialog fed = new FilterExpressionDialog(this, true);
         String expText = "";
         if (this.getDataset().getFilterExpression() != null)
         {
             expText = this.getDataset().getFilterExpression().getText();
         }
-        fed.setFilterExpression( expText, getDataset() );
+        fed.setExpression( expText);
         
-        if (showAsError)
-        {
-            fed.setFocusedExpression( FilterExpressionDialog.COMPONENT_EXPRESSION);
-        }
+//        if (showAsError)
+//        {
+//            fed.setFocusedExpression( FilterExpressionDialog.COMPONENT_EXPRESSION);
+//        }
         
-        fed.setVisible(true);
-        if (fed.getDialogResult() == JOptionPane.OK_OPTION)
+        if (fed.showDialog(this) == JOptionPane.OK_OPTION)
         {
-            JRDesignExpression exp = new JRDesignExpression();
-            exp.setText(fed.getFilterExpression());
-            exp.setValueClassName("java.lang.Boolean");
-            getDataset().setFilterExpression( exp );
+            if (fed.getExpression().trim().length() == 0)
+            {
+                 getDataset().setFilterExpression(null);
+            }
+            else
+            {
+                JRDesignExpression exp = new JRDesignExpression();
+                exp.setText(fed.getExpression());
+                exp.setValueClassName("java.lang.Boolean");
+                getDataset().setFilterExpression( exp );
+            }
         }
     }
 

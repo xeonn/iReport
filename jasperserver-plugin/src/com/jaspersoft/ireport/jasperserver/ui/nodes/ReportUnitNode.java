@@ -11,9 +11,6 @@ import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
 import com.jaspersoft.ireport.jasperserver.RepositoryReportUnit;
 import com.jaspersoft.ireport.jasperserver.ui.actions.AddResourceAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.DeleteAction;
-import com.jaspersoft.ireport.jasperserver.ui.actions.DeleteServerAction;
-import com.jaspersoft.ireport.jasperserver.ui.actions.ModifyServerAction;
-import com.jaspersoft.ireport.jasperserver.ui.actions.NewServerAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.PropertiesAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.RefreshAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.RunReportUnitAction;
@@ -109,10 +106,6 @@ public class ReportUnitNode extends IRIndexedNode implements ResourceNode {
             SystemAction.get( AddResourceAction.class),
             null,
             SystemAction.get( DeleteAction.class),
-            null,
-            SystemAction.get( NewServerAction.class),
-            SystemAction.get( ModifyServerAction.class),
-            SystemAction.get( DeleteServerAction.class),
             null,
             SystemAction.get( RefreshAction.class),
             SystemAction.get( PropertiesAction.class)

@@ -1,3 +1,24 @@
+
+2009-01-13 Version 3.1.3 released
+_______________________________________________________________________________
+- Fixed a problem with the subreport parameters
+- Improved support for custom components
+- Fixed "Import..." and "Export..." button in the editor dialog
+- Fixed some MacOS related bugs
+- Fixed crosstab buttons
+- New feature to reorder groups
+- Support for dataset groups
+- Configurable options for exporters
+- New reloadable option for classpath paths
+- Ability to add an element to a frame just dragging the element into it
+- Fixed element z-ordering and z-order display
+- Added scrollbars to the query text area.
+- Replaced filter expression dialog.
+- Fixed Import/export expression feature
+- Fixed textfield pattern dialog
+- Fixed Field Sorting
+- Fixed Crosstab Preorder checkbox
+
 2008-11-04 Version 3.1.2 released
 _______________________________________________________________________________
 

@@ -12,8 +12,11 @@ package com.jaspersoft.ireport.designer.outline.nodes;
 import com.jaspersoft.ireport.designer.sheet.properties.GroupExpressionProperty;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.NotRealElementNode;
 import com.jaspersoft.ireport.designer.actions.DeleteBandAction;
 import com.jaspersoft.ireport.designer.actions.DeleteGroupAction;
+import com.jaspersoft.ireport.designer.actions.MoveGroupDownAction;
+import com.jaspersoft.ireport.designer.actions.MoveGroupUpAction;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.properties.BandPrintWhenExpressionProperty;
@@ -37,6 +40,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.ErrorManager;
 import org.openide.actions.PasteAction;
@@ -60,7 +64,7 @@ import org.openide.util.lookup.ProxyLookup;
  *
  * @author gtoffoli
  */
-public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
+public class BandNode  extends IRIndexedNode implements PropertyChangeListener, GroupNode {
 
     private final JasperDesign jd;
     private final JRDesignBand band;
@@ -132,6 +136,19 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
     public String getHtmlDisplayName()
     {
         return getDisplayName();
+    }
+
+    public JRDesignDataset getDataset() {
+       return jd.getMainDesignDataset();
+    }
+
+    public JRDesignGroup getGroup() {
+
+        if (band.getOrigin().getGroupName() != null)
+        {
+            return (JRDesignGroup) getDataset().getGroupsMap().get(band.getOrigin().getGroupName());
+        }
+        return null;
     }
 
     /*
@@ -248,6 +265,8 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
         if (group != null)
         {
             list.add( null );
+            list.add( SystemAction.get(MoveGroupUpAction.class));
+            list.add( SystemAction.get(MoveGroupDownAction.class));
             list.add( DeleteGroupAction.getInstance() );
         }
         list.add( DeleteBandAction.getInstance());
@@ -304,7 +323,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
         Node dropNode = NodeTransfer.node(t, DnDConstants.ACTION_COPY_OR_MOVE + NodeTransfer.CLIPBOARD_CUT);
         int dropAction = DnDUtilities.getTransferAction(t);
                
-        if (null != dropNode) {
+        if (null != dropNode && !(dropNode instanceof NotRealElementNode)) {
             JRDesignElement element = dropNode.getLookup().lookup(JRDesignElement.class);
             
             if (null != element) {
@@ -494,14 +513,20 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
                 }
             }
             
-            
-            
             String oldName = group.getName();
             group.setName(s);
+
             dataset.getGroupsMap().remove(oldName);
             dataset.getGroupsMap().put(s, group);
 
-            
+            JRDesignVariable var = (JRDesignVariable) dataset.getVariablesMap().get(oldName + "_COUNT");
+            var.setName(s + "_COUNT");
+            dataset.getVariablesMap().remove(oldName + "_COUNT");
+            dataset.getVariablesMap().put(s + "_COUNT", var);
+
+            dataset.getEventSupport().firePropertyChange(JRDesignDataset.PROPERTY_VARIABLES, null, null);
+
+
             ObjectPropertyUndoableEdit opue = new ObjectPropertyUndoableEdit(
                     group, "Name", String.class, oldName, group.getName());
 
@@ -824,6 +849,8 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
                 return iae;
             }
     }
+
+    
     
     
 }

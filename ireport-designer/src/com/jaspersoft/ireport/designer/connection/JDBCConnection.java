@@ -55,7 +55,48 @@ import org.jdesktop.swingx.error.ErrorInfo;
  * @author  Administrator
  */
 public class JDBCConnection extends com.jaspersoft.ireport.designer.IReportConnection implements WizardFieldsProvider {
-    
+
+    private static final ArrayList<Driver> drivers = new ArrayList<Driver>();
+    public static void loadDriver(String driverClass) throws ClassNotFoundException {
+
+            if (driverClass == null) return;
+
+            try {
+                    Driver theDriver = (Driver)Class.forName(driverClass, false, IReportManager.getInstance().getReportClassLoader()).newInstance();
+                    if (!isDriverLoaded(theDriver)) {
+                            synchronized (drivers) {
+                                    drivers.add(theDriver);
+                            }
+                    }
+            } catch (Throwable t) {
+                    throw new ClassNotFoundException(driverClass);
+            }
+    }
+
+    private static boolean isDriverLoaded(Driver theDriver) {
+		int version = (theDriver.getMajorVersion()*10) + theDriver.getMinorVersion();
+
+		for (Driver driver : drivers) {
+			int thisVersion = (driver.getMajorVersion()*10) + driver.getMinorVersion();
+			if (thisVersion == version && (driver.getClass().getName().equals(theDriver.getClass().getName())))
+				return true;
+		}
+		return false;
+	}
+
+    public static Driver getSuitableDriver(String jdbcURL) throws SQLException {
+
+		for (Driver driver : drivers)
+                {
+			try {
+				if (driver.acceptsURL(jdbcURL)) return driver;
+			} catch (Throwable t) {
+                            // Do nothing....
+			}
+                }
+		return null;
+	}
+
     private String JDBCDriver;
     
     private String username;
@@ -91,14 +132,9 @@ public class JDBCConnection extends com.jaspersoft.ireport.designer.IReportConne
             // Try the java connection...
             try {
                 
-                    try {
-                    	DriverPool.registerDriver( this.getJDBCDriver(), IReportManager.getInstance().getReportClassLoader() );
-                    } catch (Exception ex)
-                    {
-                    	DriverPool.registerDriver( this.getJDBCDriver(), this.getClass().getClassLoader() );
-                    }
+                    loadDriver( this.getJDBCDriver());
                     
-                    java.sql.Driver driver = DriverPool.getDriver( url );
+                    java.sql.Driver driver = getSuitableDriver( url );
                     
                     java.util.Properties connectProps = new java.util.Properties();
                     

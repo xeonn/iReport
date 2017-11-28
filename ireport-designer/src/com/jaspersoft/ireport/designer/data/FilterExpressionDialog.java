@@ -35,10 +35,9 @@ package com.jaspersoft.ireport.designer.data;
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
-import com.jaspersoft.ireport.designer.editor.ExpressionEditorPane;
+import com.jaspersoft.ireport.designer.editor.ExpressionEditor;
 import com.jaspersoft.ireport.designer.utils.Misc;
-import javax.swing.text.EditorKit;
-import org.openide.text.CloneableEditorSupport;
+import java.awt.BorderLayout;
 
 /**
  *
@@ -47,6 +46,7 @@ import org.openide.text.CloneableEditorSupport;
 public class FilterExpressionDialog extends javax.swing.JDialog {
 	/** Creates new form JRParameterDialog */
 	private String filterExpression = "";
+        private ExpressionEditor editorPane = null;
 	
 	public FilterExpressionDialog(java.awt.Frame parent, boolean modal) {
 		super(parent, modal);
@@ -63,11 +63,9 @@ public class FilterExpressionDialog extends javax.swing.JDialog {
         {
             initComponents();
             //applyI18n();
-            
-            EditorKit kit = CloneableEditorSupport.getEditorKit("text/jrxml-expression");
-            jEditorPaneFilterExpression.setEditorKit(kit);
-        
-            this.pack();
+            editorPane = new ExpressionEditor();
+            jPanel2.add(editorPane, BorderLayout.CENTER);
+            //this.pack();
                 
             javax.swing.KeyStroke escape =  javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0, false);
             javax.swing.Action escapeAction = new javax.swing.AbstractAction() {
@@ -94,47 +92,29 @@ public class FilterExpressionDialog extends javax.swing.JDialog {
 	 */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jLabel1 = new javax.swing.JLabel();
-        jEditorPaneFilterExpression = new com.jaspersoft.ireport.designer.editor.ExpressionEditorPane();
+        jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jButtonOK = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
 
-        setTitle(I18n.getString("FilterExpressionDialog.Title.Add/modifyField")); // NOI18N
+        setTitle("Add/modify field");
         setModal(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
             }
         });
-        getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText(I18n.getString("FilterExpressionDialog.Label.FilterExpr")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        getContentPane().add(jLabel1, gridBagConstraints);
+        jLabel1.setText("Filter expression");
 
-        jEditorPaneFilterExpression.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jEditorPaneFilterExpression.setMinimumSize(new java.awt.Dimension(657, 50));
-        jEditorPaneFilterExpression.setPreferredSize(new java.awt.Dimension(600, 200));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 3, 3, 3);
-        getContentPane().add(jEditorPaneFilterExpression, gridBagConstraints);
+        jPanel2.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
+        jButtonOK.setText("OK");
         jButtonOK.setMnemonic('o');
-        jButtonOK.setText(I18n.getString("Global.Button.Ok")); // NOI18N
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOKActionPerformed(evt);
@@ -142,8 +122,8 @@ public class FilterExpressionDialog extends javax.swing.JDialog {
         });
         jPanel1.add(jButtonOK);
 
+        jButtonCancel.setText("Cancel");
         jButtonCancel.setMnemonic('c');
-        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -151,14 +131,31 @@ public class FilterExpressionDialog extends javax.swing.JDialog {
         });
         jPanel1.add(jButtonCancel);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHEAST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
-        getContentPane().add(jPanel1, gridBagConstraints);
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                        .addContainerGap())))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jLabel1)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 33, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+        );
 
         pack();
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -174,7 +171,7 @@ public class FilterExpressionDialog extends javax.swing.JDialog {
     
     private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKActionPerformed
 	    
-	    filterExpression = jEditorPaneFilterExpression.getText();
+	    filterExpression = editorPane.getExpression();
 	    setVisible(false);
 	    this.setDialogResult( javax.swing.JOptionPane.OK_OPTION);
 	    dispose();
@@ -208,9 +205,9 @@ public class FilterExpressionDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonOK;
-    private com.jaspersoft.ireport.designer.editor.ExpressionEditorPane jEditorPaneFilterExpression;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 	
 	private int dialogResult;
@@ -225,9 +222,9 @@ public class FilterExpressionDialog extends javax.swing.JDialog {
     
     public void setFilterExpression(String filterExpression, JRDesignDataset subDataset) {
         this.filterExpression = filterExpression;
-        jEditorPaneFilterExpression.setText(filterExpression);
+        editorPane.setExpression(filterExpression);
         if (subDataset != null) 
-            jEditorPaneFilterExpression.setExpressionContext( new ExpressionContext( subDataset) );
+            editorPane.setExpressionContext( new ExpressionContext( subDataset) );
     }
 	
     /*
@@ -260,7 +257,7 @@ public class FilterExpressionDialog extends javax.swing.JDialog {
         switch (expID)
         {
             case COMPONENT_EXPRESSION:
-                Misc.selectTextAndFocusArea(jEditorPaneFilterExpression);
+                Misc.selectTextAndFocusArea(editorPane);
                 break;
         }
         

@@ -17,7 +17,7 @@ import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.Lookups;
 
-final class IReportOptionsPanelController extends OptionsPanelController {
+final public class IReportOptionsPanelController extends OptionsPanelController {
 
     private IReportPanel panel;
     private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
@@ -110,7 +110,7 @@ final class IReportOptionsPanelController extends OptionsPanelController {
         return panel;
     }
 
-    void changed() {
+    public void changed() {
         if (!changed) {
             changed = true;
             pcs.firePropertyChange(OptionsPanelController.PROP_CHANGED, false, true);

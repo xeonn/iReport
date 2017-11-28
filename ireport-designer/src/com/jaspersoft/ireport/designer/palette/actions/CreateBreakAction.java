@@ -38,7 +38,12 @@ public class CreateBreakAction extends CreateReportElementAction
         }
         
         JRDesignBreak element = new JRDesignBreak();
+
+        BreakTypeDialog dialog = new BreakTypeDialog(Misc.getMainFrame(), true);
+        dialog.setVisible(true);
+
         element.setWidth(100);
+        element.setType(  dialog.getBreakType()  );
         return element;
     }
     

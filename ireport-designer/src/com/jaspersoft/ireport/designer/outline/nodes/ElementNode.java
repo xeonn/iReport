@@ -17,8 +17,8 @@ import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.actions.OpenSubreportAction;
 import com.jaspersoft.ireport.designer.actions.PaddingAndBordersAction;
 import com.jaspersoft.ireport.designer.charts.ChartDataAction;
+import com.jaspersoft.ireport.designer.charts.multiaxis.AddAxisChartAction;
 import com.jaspersoft.ireport.designer.menu.HyperlinkAction;
-import com.jaspersoft.ireport.designer.pdf508.Pdf508TagDecorator;
 import com.jaspersoft.ireport.designer.undo.DeleteElementUndoableEdit;
 import java.awt.datatransfer.Transferable;
 import java.beans.PropertyChangeEvent;
@@ -247,6 +247,13 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
             ((JRDesignChart)getElement()).getChartType() != JRDesignChart.CHART_TYPE_MULTI_AXIS)
         {
             list.add( ChartDataAction.getInstance() );
+            list.add( null );
+        }
+
+        if (getElement() instanceof JRDesignChart &&
+            ((JRDesignChart)getElement()).getChartType() == JRDesignChart.CHART_TYPE_MULTI_AXIS)
+        {
+            list.add( AddAxisChartAction.getInstance() );
             list.add( null );
         }
         

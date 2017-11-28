@@ -59,6 +59,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.prefs.Preferences;
 import javax.persistence.EntityManager;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -76,6 +77,7 @@ import net.sf.jasperreports.olap.JRMondrianQueryExecuterFactory;
 import net.sf.jasperreports.engine.export.*;
 import net.sf.jasperreports.engine.query.JRHibernateQueryExecuterFactory;
 import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.util.JRProperties;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.hibernate.Transaction;
@@ -303,16 +305,19 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
            if(!reportDirectory.startsWith("/")){
                 reportDirectory = "/" + reportDirectory;//it's important to JVM 1.4.2 especially if contains windows drive letter
            }
-           ReportClassLoader reportClassLoader = new ReportClassLoader(IReportManager.getInstance().getReportClassLoader());
-           reportClassLoader.setRelodablePaths( reportDirectory );
+
+           //sClassLoader reportClassLoader = IReportManager.getInstance().getReportClassLoader();
+           //reportClassLoader.setRelodablePaths( reportDirectory );
 
            /******************/
 
+           /*
            try{
                 Thread.currentThread().setContextClassLoader(new URLClassLoader(new URL[]{new URL("file://"+reportDirectory)},  reportClassLoader));
            } catch (MalformedURLException mue){
                 mue.printStackTrace();
            }
+           */
 
            if (Thread.interrupted()) throw new InterruptedException();
            
@@ -529,7 +534,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                 }
                 else
                 {
-                    JasperCompileManager.compileReportToFile(jd, fileName);
+                         JasperCompileManager.compileReportToFile(jd, fileName);
                 }
 
                 if (errorsCollector != null && getJrxmlVisualView() != null)
@@ -1062,26 +1067,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                    {
                       exporter = new  net.sf.jasperreports.engine.export.JRPdfExporter();
 
-                      if (IReportManager.getInstance().getProperty("PDF_IS_ENCRYPTED") != null)
-                      {
-                          exporter.setParameter( JRPdfExporterParameter.IS_ENCRYPTED, new Boolean( IReportManager.getInstance().getProperty("PDF_IS_ENCRYPTED") ) );
-                      }
-                      if (IReportManager.getInstance().getProperty("PDF_IS_128_BIT_KEY") != null)
-                      {
-                          exporter.setParameter( JRPdfExporterParameter.IS_128_BIT_KEY, new Boolean( IReportManager.getInstance().getProperty("PDF_IS_128_BIT_KEY") ) );
-                      }
-                      if (IReportManager.getInstance().getProperty("PDF_USER_PASSWORD") != null)
-                      {
-                          exporter.setParameter( JRPdfExporterParameter.USER_PASSWORD, IReportManager.getInstance().getProperty("PDF_USER_PASSWORD"));
-                      }
-                      if (IReportManager.getInstance().getProperty("PDF_OWNER_PASSWORD") != null)
-                      {
-                          exporter.setParameter( JRPdfExporterParameter.OWNER_PASSWORD, IReportManager.getInstance().getProperty("PDF_OWNER_PASSWORD"));
-                      }
-                      if (IReportManager.getInstance().getProperty("PDF_PERMISSIONS") != null)
-                      {
-                          exporter.setParameter( JRPdfExporterParameter.PERMISSIONS, new Integer( IReportManager.getInstance().getProperty("PDF_PERMISSIONS")));
-                      }
+                      configurePdfExporter(exporter);
 
                       fileName = Misc.changeFileExtension(fileName,"pdf");
                       exportingMessage = Misc.formatString("Exporting pdf to file (using iText)...  {0}!",  new Object[]{fileName});
@@ -1091,10 +1077,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                    {
                       exporter = new  net.sf.jasperreports.engine.export.JRCsvExporter();
 
-                      if (IReportManager.getInstance().getProperty("CSV_FIELD_DELIMITER") != null)
-                      {
-                          exporter.setParameter( JRCsvExporterParameter.FIELD_DELIMITER, IReportManager.getInstance().getProperty("CSV_FIELD_DELIMITER") );
-                      }
+                      configureCsvExporter(exporter);
 
                       fileName = Misc.changeFileExtension(fileName,"csv");
                       exportingMessage = Misc.formatString("Exporting CSV to file... {0}!",  new Object[]{fileName});
@@ -1104,24 +1087,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                    {
                       exporter = new  net.sf.jasperreports.engine.export.JRHtmlExporter();
 
-                      if (IReportManager.getInstance().getProperty("HTML_IMAGES_DIR_NAME") != null)
-                      { exporter.setParameter( JRHtmlExporterParameter.IMAGES_DIR_NAME, IReportManager.getInstance().getProperty("HTML_IMAGES_DIR_NAME") ); }
-                      if (IReportManager.getInstance().getProperty("HTML_IS_OUTPUT_IMAGES_TO_DIR") != null)
-                      { exporter.setParameter( JRHtmlExporterParameter.IS_OUTPUT_IMAGES_TO_DIR, new Boolean( IReportManager.getInstance().getProperty("HTML_IS_OUTPUT_IMAGES_TO_DIR")) ); }
-                      if (IReportManager.getInstance().getProperty("HTML_IMAGES_URI") != null)
-                      { exporter.setParameter( JRHtmlExporterParameter.IMAGES_URI, IReportManager.getInstance().getProperty("HTML_IMAGES_URI") ); }
-                      if (IReportManager.getInstance().getProperty("HTML_HTML_HEADER") != null)
-                      { exporter.setParameter( JRHtmlExporterParameter.HTML_HEADER, IReportManager.getInstance().getProperty("HTML_HTML_HEADER") ); }
-                      if (IReportManager.getInstance().getProperty("HTML_BETWEEN_PAGES_HTML") != null)
-                      { exporter.setParameter( JRHtmlExporterParameter.BETWEEN_PAGES_HTML, IReportManager.getInstance().getProperty("HTML_BETWEEN_PAGES_HTML") ); }
-                      if (IReportManager.getInstance().getProperty("HTML_HTML_FOOTER") != null)
-                      { exporter.setParameter( JRHtmlExporterParameter.HTML_FOOTER, IReportManager.getInstance().getProperty("HTML_HTML_FOOTER") ); }
-                      if (IReportManager.getInstance().getProperty("HTML_IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS") != null)
-                      { exporter.setParameter( JRHtmlExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, new Boolean(IReportManager.getInstance().getProperty("HTML_IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS"))); }
-                      if (IReportManager.getInstance().getProperty("HTML_IS_WHITE_PAGE_BACKGROUND") != null)
-                      { exporter.setParameter( JRHtmlExporterParameter.IS_WHITE_PAGE_BACKGROUND, new Boolean(IReportManager.getInstance().getProperty("HTML_IS_WHITE_PAGE_BACKGROUND")) ); }
-                      if (IReportManager.getInstance().getProperty("HTML_IS_USING_IMAGES_TO_ALIGN") != null)
-                      { exporter.setParameter( JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN, new Boolean(IReportManager.getInstance().getProperty("HTML_IS_USING_IMAGES_TO_ALIGN")) ); }
+                      configureHtmlExporter(exporter);
 
                       fileName = Misc.changeFileExtension(fileName,"html");
                       exportingMessage = Misc.formatString("Exporting HTML to file... {0}!",  new Object[]{fileName});
@@ -1133,15 +1099,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
 
                       exporter = new  net.sf.jasperreports.engine.export.JRXlsExporter();
 
-                      if (IReportManager.getInstance().getProperty("XLS_IS_ONE_PAGE_PER_SHEET") != null)
-                      { exporter.setParameter( JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, new Boolean( IReportManager.getInstance().getProperty("XLS_IS_ONE_PAGE_PER_SHEET")) ); }
-                      if (IReportManager.getInstance().getProperty("XLS_IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS") != null)
-                      { exporter.setParameter( JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, new Boolean(IReportManager.getInstance().getProperty("XLS_IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS"))); }
-                      if (IReportManager.getInstance().getProperty("XLS_IS_WHITE_PAGE_BACKGROUND") != null)
-                      { exporter.setParameter( JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, new Boolean(IReportManager.getInstance().getProperty("XLS_IS_WHITE_PAGE_BACKGROUND")) ); }
-                      if (IReportManager.getInstance().getProperty("XLS_IS_DETECT_CELL_TYPE") != null)
-                      { exporter.setParameter( JRXlsExporterParameter.IS_DETECT_CELL_TYPE, new Boolean(IReportManager.getInstance().getProperty("XLS_IS_DETECT_CELL_TYPE")) ); }
-
+                      configureXlsExporter(exporter);
 
                       fileName = Misc.changeFileExtension(fileName,"xls");
                       exportingMessage = Misc.formatString("Exporting xls to file (using POI)... {0}!",  new Object[]{fileName});
@@ -1153,18 +1111,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
 
                       exporter = new  net.sf.jasperreports.engine.export.JExcelApiExporter();
 
-                      if (IReportManager.getInstance().getProperty("XLS_IS_ONE_PAGE_PER_SHEET") != null)
-                      { exporter.setParameter( JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, new Boolean( IReportManager.getInstance().getProperty("XLS_IS_ONE_PAGE_PER_SHEET")) ); }
-                      if (IReportManager.getInstance().getProperty("XLS_IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS") != null)
-                      { exporter.setParameter( JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, new Boolean(IReportManager.getInstance().getProperty("XLS_IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS"))); }
-                      if (IReportManager.getInstance().getProperty("XLS_IS_WHITE_PAGE_BACKGROUND") != null)
-                      { exporter.setParameter( JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, new Boolean(IReportManager.getInstance().getProperty("XLS_IS_WHITE_PAGE_BACKGROUND")) ); }
-                      if (IReportManager.getInstance().getProperty("XLS_IS_DETECT_CELL_TYPE") != null)
-                      { exporter.setParameter( JRXlsExporterParameter.IS_DETECT_CELL_TYPE, new Boolean(IReportManager.getInstance().getProperty("XLS_IS_DETECT_CELL_TYPE")) ); }
-
-
-                      if (IReportManager.getInstance().getProperty("XLS2_IS_FONT_SIZE_FIX_ENABLED") != null)
-                      { exporter.setParameter( JExcelApiExporterParameter.IS_FONT_SIZE_FIX_ENABLED, new Boolean( IReportManager.getInstance().getProperty("XLS2_IS_FONT_SIZE_FIX_ENABLED")) ); }
+                      configureXlsExporter(exporter);
 
                       fileName = Misc.changeFileExtension(fileName,"xls");
                       exportingMessage = Misc.formatString("Exporting xls to file (using JExcelApi)... {0}!",  new Object[]{fileName});
@@ -1204,16 +1151,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                    {
                       exporter = new  net.sf.jasperreports.engine.export.JRTextExporter();
 
-                      if (IReportManager.getInstance().getProperty("JRTXT_PAGE_WIDTH") != null)
-                      { exporter.setParameter( net.sf.jasperreports.engine.export.JRTextExporterParameter.PAGE_WIDTH, new Integer( IReportManager.getInstance().getProperty("JRTXT_PAGE_WIDTH")) ); }
-                      if (IReportManager.getInstance().getProperty("JRTXT_PAGE_HEIGHT") != null)
-                      { exporter.setParameter( net.sf.jasperreports.engine.export.JRTextExporterParameter.PAGE_HEIGHT, new Integer( IReportManager.getInstance().getProperty("JRTXT_PAGE_HEIGHT")) ); }
-                      if (IReportManager.getInstance().getProperty("JRTXT_CHARACTER_WIDTH") != null)
-                      { exporter.setParameter( net.sf.jasperreports.engine.export.JRTextExporterParameter.CHARACTER_WIDTH, new Integer( IReportManager.getInstance().getProperty("JRTXT_CHARACTER_WIDTH")) ); }
-                      if (IReportManager.getInstance().getProperty("JRTXT_CHARACTER_HEIGHT") != null)
-                      { exporter.setParameter( net.sf.jasperreports.engine.export.JRTextExporterParameter.CHARACTER_HEIGHT, new Integer( IReportManager.getInstance().getProperty("JRTXT_CHARACTER_HEIGHT")) ); }
-                      if (IReportManager.getInstance().getProperty("JRTXT_BETWEEN_PAGES_TEXT") != null)
-                      { exporter.setParameter( net.sf.jasperreports.engine.export.JRTextExporterParameter.BETWEEN_PAGES_TEXT, IReportManager.getInstance().getProperty("JRTXT_BETWEEN_PAGES_TEXT") ); }
+                      configureTextExporter(exporter);
 
                       fileName = Misc.changeFileExtension(fileName,"txt");
                       exportingMessage = Misc.formatString("Exporting txt (jasperReports) to file... {0}!",  new Object[]{fileName});
@@ -1274,33 +1212,14 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                    
                    if (exporter != null)
                    {
+                      //Adding final common properties...
+                      configureExporter(exporter);
+
                       exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME,fileName);
                       exporter.setParameter(JRExporterParameter.JASPER_PRINT,print);
                       exporter.setParameter(JRExporterParameter.PROGRESS_MONITOR, this);
 
-                      String reportEncoding = Misc.nvl( IReportManager.getInstance().getProperty("CHARACTER_ENCODING"),"");
-                      if (reportEncoding.trim().length() > 0)
-                      {
-                          exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, reportEncoding);
-                      }
-
-                      String offsetX = Misc.nvl( IReportManager.getInstance().getProperty("OFFSET_X"),"");
-                      if (offsetX.trim().length() > 0)
-                      {
-                          try {
-                              exporter.setParameter(JRExporterParameter.OFFSET_X, new Integer(offsetX));
-                          } catch (Exception ex) {}
-                      }
-
-                      String offsetY = Misc.nvl( IReportManager.getInstance().getProperty("OFFSET_Y"),"");
-                      if (offsetY.trim().length() > 0)
-                      {
-                          try {
-                              exporter.setParameter(JRExporterParameter.OFFSET_Y,new Integer( offsetY));
-                          } catch (Exception ex) {}
-                      }
-
-
+                      
                       exporter.exportReport();
                       getLogTextArea().logOnConsole(outputBuffer.toString());
                       outputBuffer = new StringBuffer();
@@ -1481,6 +1400,206 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
       return status;
    }
 
+    private void configureExporter(JRExporter exporter) {
+
+        Preferences pref = IReportManager.getPreferences();
+
+        exporter.setParameter(JRExporterParameter.IGNORE_PAGE_MARGINS, pref.getBoolean(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS, JRProperties.getBooleanProperty(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS)));
+        int pageMode = pref.getInt(JRProperties.PROPERTY_PREFIX + "export.printrange", 0);
+
+        if (pageMode == 1)
+        {
+            exporter.setParameter(JRExporterParameter.PAGE_INDEX,  pref.getInt(JRProperties.PROPERTY_PREFIX + "export.printrange.index", 1));
+        }
+        else if (pageMode == 2)
+        {
+            exporter.setParameter(JRExporterParameter.START_PAGE_INDEX,  pref.getInt(JRProperties.PROPERTY_PREFIX + "export.printrange.from", 1));
+            exporter.setParameter(JRExporterParameter.END_PAGE_INDEX,  pref.getInt(JRProperties.PROPERTY_PREFIX + "export.printrange.to", 1));
+        }
+
+        String encoding = pref.get(JRExporterParameter.PROPERTY_CHARACTER_ENCODING, JRProperties.getProperty(JRExporterParameter.PROPERTY_CHARACTER_ENCODING));
+        if (encoding != null)
+        {
+            exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, encoding);
+        }
+
+        if (pref.getInt(JRProperties.PROPERTY_PREFIX + "export.offset.x", 0) > 0)
+        {
+            exporter.setParameter(JRExporterParameter.OFFSET_X, pref.getInt(JRProperties.PROPERTY_PREFIX + "export.offset.x", 0));
+        }
+        if (pref.getInt(JRProperties.PROPERTY_PREFIX + "export.offset.y", 0) > 0)
+        {
+            exporter.setParameter(JRExporterParameter.OFFSET_Y, pref.getInt(JRProperties.PROPERTY_PREFIX + "export.offset.y", 0));
+        }
+    }
+
+    private void configureTextExporter(JRExporter exporter) {
+
+        Preferences pref = IReportManager.getPreferences();
+
+        int val = pref.getInt(JRProperties.PROPERTY_PREFIX + "export.txt.characterHeight", 0);
+        if (val > 0) exporter.setParameter( JRTextExporterParameter.CHARACTER_HEIGHT, new Integer(val));
+
+        val = pref.getInt(JRProperties.PROPERTY_PREFIX + "export.txt.characterWidth", 0);
+        if (val > 0) exporter.setParameter( JRTextExporterParameter.CHARACTER_WIDTH, new Integer(val));
+
+        val = pref.getInt(JRProperties.PROPERTY_PREFIX + "export.txt.pageHeight", 0);
+        if (val > 0) exporter.setParameter( JRTextExporterParameter.PAGE_HEIGHT, new Integer(val));
+
+        val = pref.getInt(JRProperties.PROPERTY_PREFIX + "export.txt.pageWidth", 0);
+        if (val > 0) exporter.setParameter( JRTextExporterParameter.PAGE_WIDTH, new Integer(val));
+
+        String s = pref.get(JRProperties.PROPERTY_PREFIX + "export.txt.betweenPagesText", "");
+        if (s.length() > 0) exporter.setParameter( JRTextExporterParameter.BETWEEN_PAGES_TEXT, s);
+
+        s = pref.get(JRProperties.PROPERTY_PREFIX + "export.txt.lineSeparator", "");
+        if (s.length() > 0) exporter.setParameter( JRTextExporterParameter.LINE_SEPARATOR, s);
+
+    }
+
+    private void configureXlsExporter(JRExporter exporter) {
+
+        Preferences pref = IReportManager.getPreferences();
+
+        exporter.setParameter( JExcelApiExporterParameter.CREATE_CUSTOM_PALETTE , new Boolean(pref.getBoolean(JExcelApiExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE, JRProperties.getBooleanProperty(JExcelApiExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE))));
+
+        String password = pref.get(JExcelApiExporterParameter.PROPERTY_PASSWORD, JRProperties.getProperty(JExcelApiExporterParameter.PROPERTY_PASSWORD));
+        if (password != null && password.length() > 0)
+        {
+            exporter.setParameter( JExcelApiExporterParameter.PASSWORD ,password);
+        }
+
+        exporter.setParameter( JRXlsAbstractExporterParameter.IS_COLLAPSE_ROW_SPAN , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN))));
+        exporter.setParameter( JRXlsAbstractExporterParameter.IS_DETECT_CELL_TYPE , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE))));
+        exporter.setParameter( JRXlsAbstractExporterParameter.IS_FONT_SIZE_FIX_ENABLED , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED))));
+        exporter.setParameter( JRXlsAbstractExporterParameter.IS_IGNORE_CELL_BORDER , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER))));
+        exporter.setParameter( JRXlsAbstractExporterParameter.IS_IGNORE_GRAPHICS , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS))));
+        exporter.setParameter( JRXlsAbstractExporterParameter.IS_IMAGE_BORDER_FIX_ENABLED , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED))));
+        exporter.setParameter( JRXlsAbstractExporterParameter.IS_ONE_PAGE_PER_SHEET , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET))));
+        exporter.setParameter( JRXlsAbstractExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS))));
+        exporter.setParameter( JRXlsAbstractExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS))));
+        exporter.setParameter( JRXlsAbstractExporterParameter.IS_WHITE_PAGE_BACKGROUND , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND))));
+
+        int maxRowsPerSheet = pref.getInt(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET, JRProperties.getIntegerProperty(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET));
+        if (maxRowsPerSheet > 0)
+        {
+            exporter.setParameter( JRXlsAbstractExporterParameter.MAXIMUM_ROWS_PER_SHEET, new Integer(maxRowsPerSheet));
+        }
+        if (pref.getBoolean(JRProperties.PROPERTY_PREFIX + "export.xls.useSheetNames", false))
+        {
+            String sheetNames = pref.get(JRProperties.PROPERTY_PREFIX + "export.xls.sheetNames", "");
+            exporter.setParameter( JRXlsAbstractExporterParameter.SHEET_NAMES,  sheetNames.split("\n"));
+        }
+    }
+
+    private void configurePdfExporter(JRExporter exporter) {
+
+        Preferences pref = IReportManager.getPreferences();
+
+        String pdfVersion = pref.get(JRPdfExporterParameter.PROPERTY_PDF_VERSION, null);
+        if (pdfVersion != null && pdfVersion.length()==1) exporter.setParameter( JRPdfExporterParameter.PDF_VERSION  , new Character(pdfVersion.charAt(0)));
+
+        boolean b = pref.getBoolean(JRPdfExporterParameter.PROPERTY_CREATE_BATCH_MODE_BOOKMARKS, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_CREATE_BATCH_MODE_BOOKMARKS));
+        exporter.setParameter( JRPdfExporterParameter.IS_CREATING_BATCH_MODE_BOOKMARKS , new Boolean(b));
+
+        exporter.setParameter( JRPdfExporterParameter.IS_COMPRESSED , new Boolean(pref.getBoolean(JRPdfExporterParameter.PROPERTY_COMPRESSED, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_COMPRESSED))));
+        exporter.setParameter( JRPdfExporterParameter.FORCE_LINEBREAK_POLICY , new Boolean(pref.getBoolean(JRPdfExporterParameter.PROPERTY_FORCE_LINEBREAK_POLICY, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_FORCE_LINEBREAK_POLICY))));
+        exporter.setParameter( JRPdfExporterParameter.FORCE_SVG_SHAPES , new Boolean(pref.getBoolean(JRPdfExporterParameter.PROPERTY_FORCE_SVG_SHAPES, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_FORCE_SVG_SHAPES))));
+        exporter.setParameter( JRPdfExporterParameter.IS_TAGGED , new Boolean(pref.getBoolean(JRPdfExporterParameter.PROPERTY_TAGGED, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_TAGGED))));
+        exporter.setParameter( JRPdfExporterParameter.IS_CREATING_BATCH_MODE_BOOKMARKS , new Boolean(pref.getBoolean(JRPdfExporterParameter.PROPERTY_COMPRESSED, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_COMPRESSED))));
+        exporter.setParameter( JRPdfExporterParameter.IS_ENCRYPTED , new Boolean(pref.getBoolean(JRPdfExporterParameter.PROPERTY_ENCRYPTED, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_ENCRYPTED))));
+        exporter.setParameter( JRPdfExporterParameter.IS_128_BIT_KEY , new Boolean(pref.getBoolean(JRPdfExporterParameter.PROPERTY_128_BIT_KEY, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_128_BIT_KEY))));
+
+        if (pref.get("export.pdf.METADATA_AUTHOR", "").length() > 0)
+        {
+            exporter.setParameter( JRPdfExporterParameter.METADATA_AUTHOR , pref.get("export.pdf.METADATA_AUTHOR", ""));
+        }
+        if (pref.get("export.pdf.METADATA_CREATOR", "").length() > 0)
+        {
+            exporter.setParameter( JRPdfExporterParameter.METADATA_CREATOR , pref.get("export.pdf.METADATA_CREATOR", ""));
+        }
+        if (pref.get("export.pdf.METADATA_KEYWORDS", "").length() > 0)
+        {
+            exporter.setParameter( JRPdfExporterParameter.METADATA_KEYWORDS , pref.get("export.pdf.METADATA_KEYWORDS", ""));
+        }
+        if (pref.get("export.pdf.METADATA_SUBJECT", "").length() > 0)
+        {
+            exporter.setParameter( JRPdfExporterParameter.METADATA_SUBJECT , pref.get("export.pdf.METADATA_SUBJECT", ""));
+        }
+        if (pref.get("export.pdf.METADATA_TITLE", "").length() > 0)
+        {
+            exporter.setParameter( JRPdfExporterParameter.METADATA_TITLE , pref.get("export.pdf.METADATA_TITLE", ""));
+        }
+        if (pref.get("export.pdf.OWNER_PASSWORD", "").length() > 0)
+        {
+            exporter.setParameter( JRPdfExporterParameter.OWNER_PASSWORD , pref.get("export.pdf.OWNER_PASSWORD", ""));
+        }
+        if (pref.get("export.pdf.USER_PASSWORD", "").length() > 0)
+        {
+            exporter.setParameter( JRPdfExporterParameter.USER_PASSWORD , pref.get("export.pdf.USER_PASSWORD", ""));
+        }
+        if (pref.get("export.pdf.TAG_LANGUAGE", JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_TAG_LANGUAGE)) != null)
+        {
+            exporter.setParameter( JRPdfExporterParameter.TAG_LANGUAGE ,pref.get("export.pdf.TAG_LANGUAGE", JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_TAG_LANGUAGE)));
+        }
+        if (pref.get("export.pdf.PDF_JAVASCRIPT", JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDF_JAVASCRIPT)) != null)
+        {
+            exporter.setParameter( JRPdfExporterParameter.PDF_JAVASCRIPT ,pref.get("export.pdf.PDF_JAVASCRIPT", JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDF_JAVASCRIPT)));
+        }
+        if (pref.getInt("export.pdf.PERMISSIONS",0) != 0)
+        {
+            exporter.setParameter( JRPdfExporterParameter.PERMISSIONS ,pref.getInt("export.pdf.PERMISSIONS",0));
+        }
+    }
+
+
+    private void configureHtmlExporter(JRExporter exporter) {
+
+        Preferences pref = IReportManager.getPreferences();
+
+        exporter.setParameter( JRHtmlExporterParameter.FRAMES_AS_NESTED_TABLES, pref.getBoolean(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES, JRProperties.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES)));
+        exporter.setParameter( JRHtmlExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, pref.getBoolean(JRHtmlExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, JRProperties.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS)));
+        exporter.setParameter( JRHtmlExporterParameter.IS_OUTPUT_IMAGES_TO_DIR, pref.getBoolean(JRProperties.PROPERTY_PREFIX + "export.html.saveImages", true));
+        exporter.setParameter( JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN, pref.getBoolean(JRHtmlExporterParameter.PROPERTY_USING_IMAGES_TO_ALIGN, JRProperties.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_USING_IMAGES_TO_ALIGN)));
+        exporter.setParameter( JRHtmlExporterParameter.IS_WHITE_PAGE_BACKGROUND, pref.getBoolean(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND, JRProperties.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND)));
+        exporter.setParameter( JRHtmlExporterParameter.IS_WRAP_BREAK_WORD, pref.getBoolean(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD, JRProperties.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD)));
+
+        if (pref.get(JRProperties.PROPERTY_PREFIX + "export.html.imagesDirectory","").length() > 0)
+        {
+            exporter.setParameter( JRHtmlExporterParameter.IMAGES_DIR_NAME , pref.get(JRProperties.PROPERTY_PREFIX + "export.html.imagesDirectory",""));
+        }
+        if (pref.get(JRProperties.PROPERTY_PREFIX + "export.html.imagesUri","").length() > 0)
+        {
+            exporter.setParameter( JRHtmlExporterParameter.IMAGES_URI , pref.get(JRProperties.PROPERTY_PREFIX + "export.html.imagesUri",""));
+        }
+        if (pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlHeader","").length() > 0)
+        {
+            exporter.setParameter( JRHtmlExporterParameter.HTML_HEADER , pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlHeader",""));
+        }
+        if (pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlBetweenPages","").length() > 0)
+        {
+            exporter.setParameter( JRHtmlExporterParameter.BETWEEN_PAGES_HTML , pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlBetweenPages",""));
+        }
+        if (pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlFooter","").length() > 0)
+        {
+            exporter.setParameter( JRHtmlExporterParameter.HTML_FOOTER , pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlFooter",""));
+        }
+        if (pref.get(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT, JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT)).length() > 0)
+        {
+            exporter.setParameter( JRHtmlExporterParameter.SIZE_UNIT , pref.get(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT, JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT)));
+        }
+
+    }
+
+
+    private void configureCsvExporter(JRExporter exporter) {
+
+        Preferences pref = IReportManager.getPreferences();
+
+        exporter.setParameter( JRCsvExporterParameter.FIELD_DELIMITER, pref.get(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER, JRProperties.getProperty(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER)));
+        exporter.setParameter( JRCsvExporterParameter.RECORD_DELIMITER, pref.get(JRCsvExporterParameter.PROPERTY_RECORD_DELIMITER, JRProperties.getProperty(JRCsvExporterParameter.PROPERTY_RECORD_DELIMITER)));
+    }
+
     private void updateHandleStatus(String status) {
         handle.setDisplayName( file.getName() + " (" + status + ")");
         fireCompilationStatus(CompilationStatusEvent.STATUS_RUNNING, status);
@@ -1538,13 +1657,14 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
        
        //using the report directory to load classes and resources
 	try{
-		  String reportDirectory = FileUtil.toFile(getFile()).getPath();
+		  String reportDirectory = FileUtil.toFile(getFile()).getParent();
 
 		  //set classpath
 		  //String classpath = System.getProperty("jasper.reports.compile.class.path");
                   String classpath = net.sf.jasperreports.engine.util.JRProperties.getProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASSPATH );
 
 
+                  /*
 		  if(classpath != null){
 
 			  classpath += File.pathSeparator + reportDirectory;
@@ -1557,6 +1677,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
 			  classpath += File.pathSeparator + reportDirectory;
 			  System.setProperty("java.class.path", classpath);
 		  }
+                  */
 
 		  // Add all the hidden files.... (needed only by JWS)
 //		  if (MainFrame.getMainInstance().isUsingWS())
@@ -1613,9 +1734,14 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
 			  reportDirectory = "/" + reportDirectory;//it's important to JVM 1.4.2 especially if contains windows drive letter
 		  }
 
-		  Thread.currentThread().setContextClassLoader(new URLClassLoader(new URL[]{
+                  ClassLoader urlClassLoader = new URLClassLoader(new URL[]{
 		  	  new URL("file://"+reportDirectory)
-		  }, IReportManager.getInstance().getReportClassLoader()));
+		  }, IReportManager.getInstance().getReportClassLoader());
+
+		  Thread.currentThread().setContextClassLoader(urlClassLoader);
+
+                  System.out.println("file://"+reportDirectory);
+                  System.out.flush();
 
                  
                  if (getJrxmlPreviewView() != null)

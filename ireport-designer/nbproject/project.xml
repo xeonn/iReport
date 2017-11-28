@@ -210,8 +210,8 @@
                 <binary-origin>release/modules/ext/commons-javaflow-20060411.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jfreechart-1.0.10.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jfreechart-1.0.10.jar</binary-origin>
+                <runtime-relative-path>ext/jfreechart-1.0.12.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jfreechart-1.0.12.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/xercesImpl.jar</runtime-relative-path>
@@ -238,8 +238,8 @@
                 <binary-origin>release/modules/ext/commons-collections-2.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/poi-3.0.1-FINAL-20070705.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/poi-3.0.1-FINAL-20070705.jar</binary-origin>
+                <runtime-relative-path>ext/poi-3.2-FINAL-20081019.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/poi-3.2-FINAL-20081019.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/xml-apis.jar</runtime-relative-path>
@@ -262,8 +262,8 @@
                 <binary-origin>release/modules/ext/groovy-all-1.5.5.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jcommon-1.0.13.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jcommon-1.0.13.jar</binary-origin>
+                <runtime-relative-path>ext/jcommon-1.0.15.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jcommon-1.0.15.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/antlr-2.7.5.jar</runtime-relative-path>
@@ -278,8 +278,8 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-3.1.2.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-3.1.2.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-3.1.3.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-3.1.3.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jaxen-1.1.1.jar</runtime-relative-path>
@@ -442,8 +442,8 @@
                 <binary-origin>release/modules/ext/eigenbase-properties.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/commons-dbcp-1.2.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/commons-dbcp-1.2.1.jar</binary-origin>
+                <runtime-relative-path>ext/commons-dbcp-1.2.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/commons-dbcp-1.2.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/commons-math-1.0.jar</runtime-relative-path>

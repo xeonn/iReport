@@ -48,10 +48,10 @@ class DatasetChildren extends Children.Keys {
         {
             return new Node[]{new VariablesNode(jd, dataset, doLkp)};
         }
-        //else if (key.equals("groups"))
-        //{
-        //    return new Node[]{new VariablesNode(jd, dataset)};
-        //}
+        else if (key.equals("groups"))
+        {
+            return new Node[]{new GroupsNode(jd, dataset, doLkp)};
+        }
         
         AbstractNode node = new AbstractNode(LEAF, Lookups.singleton(key));
         node.setName(key+"");
@@ -66,7 +66,7 @@ class DatasetChildren extends Children.Keys {
         children.add("parameters");
         children.add("fields");
         children.add("variables");
-        //children.add("groups");
+        children.add("groups");
         setKeys(children);
     }
 

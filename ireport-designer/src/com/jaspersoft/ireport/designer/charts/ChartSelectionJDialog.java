@@ -37,11 +37,7 @@ import com.jaspersoft.ireport.designer.charts.ChartDescriptor;
 import com.jaspersoft.ireport.designer.charts.JListView;
 import java.awt.Dialog;
 import java.awt.Frame;
-import java.awt.Window;
-import javax.swing.tree.*;
-import javax.swing.table.*;
 import javax.swing.*;
-import java.util.*;
 import net.sf.jasperreports.charts.design.JRDesignXyDataset;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -264,7 +260,7 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
             }
         } catch (Exception ex)
         {
-            
+            ex.printStackTrace();
         }
         this.setVisible(true);
         this.dispose();    

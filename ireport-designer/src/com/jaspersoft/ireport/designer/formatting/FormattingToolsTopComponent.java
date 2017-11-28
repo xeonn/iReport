@@ -109,7 +109,7 @@ final class FormattingToolsTopComponent extends TopComponent implements Explorer
         toolsPanel.add( SystemAction.get(CenterInParentAction.class).createContextAwareInstance(Utilities.actionsGlobalContext()));
         
         
-        toolsPanel.setTextLabels(true);
+        toolsPanel.setTextLabels(IReportManager.getPreferences().getBoolean("formatting_tools_show_labels",true));
         associateLookup( ExplorerUtils.createLookup(getExplorerManager(), new ActionMap()) );
         
     

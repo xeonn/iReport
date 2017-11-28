@@ -36,6 +36,7 @@ import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
@@ -62,6 +63,8 @@ public class NewTypesUtils {
     public static final int CROSSTAB_ROW_GROUP = 7;
     public static final int CROSSTAB_COLUMN_GROUP = 8;
     public static final int CONDITIONAL_STYLE = 9;
+    public static final int DATASET_GROUP = 10;
+
     
     
     private static final NewType[] NO_NEW_TYPES = {  };
@@ -108,6 +111,10 @@ public class NewTypesUtils {
         if ( Arrays.binarySearch( types, CONDITIONAL_STYLE) >= 0)
         {
             newTypes.add(new NewObjectType(CONDITIONAL_STYLE, node));
+        }
+        if ( Arrays.binarySearch( types, DATASET_GROUP) >= 0)
+        {
+            newTypes.add(new NewObjectType(DATASET_GROUP, node));
         }
         
 
@@ -229,7 +236,35 @@ class NewObjectType extends NewType {
                     Exceptions.printStackTrace(ex);
                 }
                 break;
-            } 
+            }
+            case NewTypesUtils.DATASET_GROUP:
+            {
+                try {
+                    JRDesignGroup v = new JRDesignGroup();
+                    String baseName = "group"; // NOI18N
+                    String new_name = baseName;
+
+                    List list = dataset.getGroupsList();
+                    boolean found = true;
+                    for (int j = 1; found; j++) {
+                        found = false;
+                        new_name = baseName + j;
+                        for (int i = 0; i < list.size(); ++i) {
+                            JRDesignGroup tmpP = (JRDesignGroup) list.get(i);
+                            if (tmpP.getName().equals(new_name)) {
+                                found = true;
+                            }
+                        }
+                    }
+                    v.setName(new_name);
+                    obj = v;
+                    dataset.addGroup(v);
+
+                } catch (JRException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
+                break;
+            }
             case NewTypesUtils.STYLE:
             {
                 try {
@@ -491,6 +526,7 @@ class NewObjectType extends NewType {
             case NewTypesUtils.CROSSTAB_MEASURE: return I18n.getString("NewType.Measure");
             case NewTypesUtils.CROSSTAB_ROW_GROUP: return I18n.getString("NewType.RowGroup");
             case NewTypesUtils.CROSSTAB_COLUMN_GROUP: return I18n.getString("NewType.ColumnGroup");
+            case NewTypesUtils.DATASET_GROUP: return I18n.getString("NewType.DatasetGroup");
         }
         return super.getName();
     }

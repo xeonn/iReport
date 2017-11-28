@@ -14,8 +14,10 @@ import com.jaspersoft.ireport.designer.fonts.TTFFontsLoader;
 import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
 import com.jaspersoft.ireport.designer.fonts.TTFFontsLoaderMonitor;
 import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
+import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.undo.AggregatedUndoableEdit;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyChangeSupport;
 import java.beans.PropertyVetoException;
@@ -23,8 +25,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,7 +41,9 @@ import java.util.prefs.Preferences;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoableEdit;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignChartDataset;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.FileResolver;
@@ -54,6 +61,7 @@ import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbPreferences;
 import org.openide.util.RequestProcessor;
+import org.openide.util.lookup.Lookups;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -73,6 +81,7 @@ public class IReportManager {
     
     public static final String CURRENT_DIRECTORY = "CURRENT_DIRECTORY";
     public static final String IREPORT_CLASSPATH = "IREPORT_CLASSPATH";
+    public static final String IREPORT_RELODABLE_CLASSPATH = "IREPORT_RELODABLE_CLASSPATH";
     public static final String IREPORT_FONTPATH = "IREPORT_FONTPATH";
     public static final String DEFAULT_CONNECTION_NAME = "DEFAULT_CONNECTION_NAME";
     
@@ -82,6 +91,93 @@ public class IReportManager {
     
     private static ReportClassLoader reportClassLoader = null;
     private static IReportManager mainInstance = null;
+
+    public static ElementNode getComponentNode(JasperDesign jd, JRDesignComponentElement componentElement, Lookup lkp) {
+
+        ElementNodeFactory factory = getElementNodeFactory(componentElement.getComponent().getClass().getName());
+        if (factory != null)
+        {
+            return factory.createElementNode(jd, componentElement, lkp);
+        }
+        return null;
+    }
+
+    public static JRDesignElementWidget getComponentWidget(AbstractReportObjectScene scene, JRDesignComponentElement componentElement) {
+
+        ElementNodeFactory factory = getElementNodeFactory(componentElement.getComponent().getClass().getName());
+        if (factory != null)
+        {
+            return factory.createElementWidget(scene, componentElement);
+        }
+        return null;
+    }
+
+    public static HashMap<String, ElementNodeFactory> elementNodeFactories = new HashMap<String, ElementNodeFactory>();
+    public static ElementNodeFactory getElementNodeFactory(String componentClassName)
+    {
+        if (elementNodeFactories.containsKey(componentClassName))
+        {
+            return elementNodeFactories.get(componentClassName);
+        }
+
+        FileObject nodesFileObject = Repository.getDefault().getDefaultFileSystem().getRoot().getFileObject("ireport/components/nodes");
+        if (nodesFileObject == null) return null;
+        DataFolder nodesDataFolder = DataFolder.findFolder(nodesFileObject);
+        if (nodesDataFolder == null) return null;
+
+        Enumeration<DataObject> enObj = nodesDataFolder.children();
+        while (enObj.hasMoreElements())
+        {
+            DataObject dataObject = enObj.nextElement();
+            FileObject fileObject = dataObject.getPrimaryFile();
+            String name = dataObject.getName();
+            boolean instance = false;
+            System.out.println("Found: " + name + " ." + fileObject.getExt());
+            System.out.flush();
+            if (fileObject.getExt().equals("instance"))
+            {
+                instance = true;
+            }
+            name = name.replace('-', '.');
+
+            try {
+                if (name.equals(componentClassName))
+                {
+                    ElementNodeFactory enf = null;
+                    if (instance)
+                    {
+                        Lookup lookup = Lookups.forPath("ireport/components/nodes"); // NOI18N
+                        String elementFactoryClassName = (String)fileObject.getAttribute("instanceClass");
+                        Collection<? extends ElementNodeFactory> elementNodeFactories = lookup.lookupAll(ElementNodeFactory.class);
+                        Iterator<? extends ElementNodeFactory> it = elementNodeFactories.iterator();
+                        while (it.hasNext ()) {
+
+                            ElementNodeFactory tmp_enf = it.next();
+                            if (tmp_enf.getClass().getName().equals(elementFactoryClassName))
+                            {
+                                enf = tmp_enf;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        String elementFactoryClassName = (String)fileObject.getAttribute("elementFactory");
+                        enf =((ElementNodeFactory)Class.forName(elementFactoryClassName).newInstance());
+
+                    }
+                    elementNodeFactories.put(componentClassName, enf);
+                    return enf;
+                }
+            } catch (Throwable ex)
+            {
+                System.out.println("Unable to find element node Factory for the component class: " + name);
+                ex.printStackTrace();
+            }
+        }
+        return null;
+    }
+
 
     /**
      * Look into the virtual file system for element decorators...
@@ -187,7 +283,7 @@ public class IReportManager {
         {
             public void run()
             {
-                ((ReportClassLoader)getReportClassLoader()).rescanAdditionalClasspath();
+                //((ReportClassLoader)getReportClassLoader()).rescanAdditionalClasspath();
                 Thread.currentThread().setContextClassLoader( getReportClassLoader() );
                 // Stuff to load the fonts...
                 setFonts( TTFFontsLoader.loadTTFFonts(new TTFFontsLoaderMonitor() {
@@ -465,7 +561,13 @@ public class IReportManager {
     {
         return getReportClassLoader(false);
     }
+
     public static ClassLoader getReportClassLoader(boolean recreate)
+    {
+        return IReportManager.getInstance().getReportClassLoaderImpl(recreate);
+    }
+
+    private ClassLoader getReportClassLoaderImpl(boolean recreate)
     {
         if (recreate || reportClassLoader == null)
         {
@@ -518,7 +620,35 @@ public class IReportManager {
             }
         }
         reportClassLoader.rescanAdditionalClasspath();
-        return reportClassLoader;
+
+        // set the not cached classpath...
+        //
+
+        String separator = System.getProperty("path.separator");
+        List<String> rcp = getRelodableClasspath();
+        /* THIS DOES NOT WORK... let's use a brand new classloader...
+        String fullRcp = "";
+        for (String path : rcp)
+        {
+            fullRcp += path + separator;
+        }
+        reportClassLoader.setRelodablePaths(fullRcp);
+        */
+        List<URL> urls = new ArrayList<URL>();
+        int i=0;
+        for (String path : rcp)
+        {
+            File f = new File(path);
+            try {
+                urls.add(f.toURL());
+            } catch (MalformedURLException ex) {
+                //Exceptions.printStackTrace(ex);
+            }
+        }
+        
+        URLClassLoader urlCl = new URLClassLoader( urls.toArray(new URL[urls.size()]) , reportClassLoader);
+
+        return urlCl;
     }
 
     /**
@@ -554,23 +684,36 @@ public class IReportManager {
      *  Find the node that that has this object in his lookup, or the object is a well know object
      *  and can be found using a GenericLookup instance...
      */
+    public String str="";
     public org.openide.nodes.Node findNodeOf(Object obj, org.openide.nodes.Node root) {
-        
+
+        str +=" ";
+        org.openide.nodes.Node candidate = null;
+        //System.out.println(str + "Looking for " + obj + " in "+root);
+        //System.out.flush();
         if (obj == null || root == null) return null;
         
         // Look in the lookup
         if (root.getLookup().lookup(obj.getClass()) == obj)
         {
-            return root;
+            //System.out.println(str + "Probably found " + obj + " in "+root);
+            //System.out.flush();
+            candidate = root;
         }
         
         org.openide.nodes.Node[] children = root.getChildren().getNodes(true);
         for (int i=0; i<children.length; ++i)
         {
             org.openide.nodes.Node res = findNodeOf(obj, children[i]);
-            if (res != null) return res;
+            if (res != null)
+            {
+                //System.out.println(str + "Found in " + res);
+                //System.out.flush();
+                return res;
+            }
+            str = str.substring(0, str.length()-1);
         }
-        return null;
+        return candidate;
     }
     
     private void addDefaultConnectionImplementations()
@@ -669,6 +812,18 @@ public class IReportManager {
         }
         return cp;
     }
+
+    /**
+     *  Return the user defined set of additional paths for the classpath.
+     */
+    public List<String> getRelodableClasspath() {
+        ArrayList<String> cp = new ArrayList<String>();
+        String[] paths = getPreferences().get(IREPORT_RELODABLE_CLASSPATH, "").split(";");
+        for (int idx = 0; idx < paths.length; idx++) {
+            cp.add(paths[idx]);
+        }
+        return cp;
+    }
     
     /**
      *  Save the new classpath
@@ -680,8 +835,20 @@ public class IReportManager {
             classpathString += path + ";";
         }
         getPreferences().put(IREPORT_CLASSPATH, classpathString);
-        
-        ((ReportClassLoader)getReportClassLoader()).rescanAdditionalClasspath();
+
+        if (reportClassLoader != null)
+        {
+            reportClassLoader.rescanAdditionalClasspath();
+        }
+    }
+
+    public void setRelodableClasspath(List<String> cp) {
+        String classpathString = "";
+        for (String path : cp)
+        {
+            classpathString += path + ";";
+        }
+        getPreferences().put(IREPORT_RELODABLE_CLASSPATH, classpathString);
     }
 
     public void updateConnection(int i, IReportConnection con) {
@@ -723,7 +890,7 @@ public class IReportManager {
             
             addQueryExecuterDef(new QueryExecuterDef("mdx", 
                         JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.mdx"),
-                        "com.jaspersoft.ireport.designer.data.fieldsproviders.HQLFieldsProvider"), true);
+                        "com.jaspersoft.ireport.designer.data.fieldsproviders.MDXFieldsProvider"), true);
             
             addQueryExecuterDef(new QueryExecuterDef("MDX", 
                         JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.MDX"),

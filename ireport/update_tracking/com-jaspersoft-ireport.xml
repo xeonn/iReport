@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="com.jaspersoft.ireport/1">
-    <module_version install_time="1225833403323" last="true" origin="installer" specification_version="1.0">
+    <module_version install_time="1231881322486" last="true" origin="installer" specification_version="1.0">
         <file crc="2425646588" name="config/Modules/com-jaspersoft-ireport.xml"/>
         <file crc="2666141633" name="libs/xalan.jar"/>
-        <file crc="1398988407" name="modules/com-jaspersoft-ireport.jar"/>
+        <file crc="2871573607" name="modules/com-jaspersoft-ireport.jar"/>
         <file crc="2050849624" name="modules/ext/ant-1.5.1.jar"/>
         <file crc="1663336707" name="modules/ext/antlr-2.7.5.jar"/>
         <file crc="1656749251" name="modules/ext/asm-attrs.jar"/>
@@ -26,7 +26,8 @@
         <file crc="681046774" name="modules/ext/cincom-jr-xmla.jar"/>
         <file crc="350195758" name="modules/ext/commons-beanutils-1.7.jar"/>
         <file crc="2172135688" name="modules/ext/commons-collections-2.1.jar"/>
-        <file crc="3014320569" name="modules/ext/commons-dbcp-1.2.1.jar"/>
+        <file crc="3014320569" name="modules/ext/commons-dbcp-1.2.1.jar_no"/>
+        <file crc="1386295753" name="modules/ext/commons-dbcp-1.2.2.jar"/>
         <file crc="2794300200" name="modules/ext/commons-digester-1.7.jar"/>
         <file crc="1712146089" name="modules/ext/commons-javaflow-20060411.jar"/>
         <file crc="3163580034" name="modules/ext/commons-logging-1.1.jar"/>
@@ -43,20 +44,20 @@
         <file crc="3833901688" name="modules/ext/hsqldb-1.7.1.jar"/>
         <file crc="3460807796" name="modules/ext/iText-2.1.0.jar"/>
         <file crc="1545701264" name="modules/ext/jakarta-bcel-20050813.jar"/>
-        <file crc="3636831497" name="modules/ext/jasperreports-3.1.2.jar"/>
+        <file crc="3527763093" name="modules/ext/jasperreports-3.1.3.jar"/>
         <file crc="2868363631" name="modules/ext/jasperreports-chart-themes-3.1.2.jar"/>
         <file crc="4248097675" name="modules/ext/javacup.jar"/>
         <file crc="409387958" name="modules/ext/jaxen-1.1.1.jar"/>
-        <file crc="2166140824" name="modules/ext/jcommon-1.0.13.jar"/>
+        <file crc="1871618793" name="modules/ext/jcommon-1.0.15.jar"/>
         <file crc="2659592228" name="modules/ext/jdt-compiler-3.1.1.jar"/>
-        <file crc="1210304711" name="modules/ext/jfreechart-1.0.10.jar"/>
+        <file crc="987423026" name="modules/ext/jfreechart-1.0.12.jar"/>
         <file crc="3870944862" name="modules/ext/jpa.jar"/>
         <file crc="190545487" name="modules/ext/jta.jar"/>
         <file crc="3654587812" name="modules/ext/jxl-2.6.jar"/>
         <file crc="2880301230" name="modules/ext/log4j-1.2.9.jar"/>
         <file crc="353568572" name="modules/ext/mondrian-2.3.2.8944.jar"/>
         <file crc="288180244" name="modules/ext/png-encoder-1.5.jar"/>
-        <file crc="3065545554" name="modules/ext/poi-3.0.1-FINAL-20070705.jar"/>
+        <file crc="1793723535" name="modules/ext/poi-3.2-FINAL-20081019.jar"/>
         <file crc="124986839" name="modules/ext/rex-20080421.jar"/>
         <file crc="2328658420" name="modules/ext/rhino-1.7R1.jar"/>
         <file crc="2898765198" name="modules/ext/saaj-api-1.3.jar"/>

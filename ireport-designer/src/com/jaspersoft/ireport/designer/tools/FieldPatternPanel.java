@@ -43,7 +43,7 @@ public class FieldPatternPanel extends javax.swing.JPanel {
         "MMM",
         "d/M/yyyy",
         "dd-MMM-yyyy",
-        I18n.getString("FieldPatternPanel.Format.Date"),
+        "yyyy.MM.dd G 'at' HH:mm:ss z",
         "EEE, MMM d, ''yy",
         "yyyy.MMMMM.dd GGG hh:mm aaa",
         "EEE, d MMM yyyy HH:mm:ss Z",
@@ -56,10 +56,10 @@ public class FieldPatternPanel extends javax.swing.JPanel {
         "HH.mm.ss",
         "h.mm.ss a",
         "mm.ss,S",
-        I18n.getString("FieldPatternPanel.Format.Date2"),
+        "hh 'o''clock' a, zzzz",
         "K:mm a, z",
         "yyyy.MMMMM.dd GGG hh:mm aaa",
-        I18n.getString("FieldPatternPanel.Format.Date"),
+        "yyyy.MM.dd G 'at' HH:mm:ss z",
         "EEE, d MMM yyyy HH:mm:ss Z",
         "yyMMddHHmmssZ"  
     };

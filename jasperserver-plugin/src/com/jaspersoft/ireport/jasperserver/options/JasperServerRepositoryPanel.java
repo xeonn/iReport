@@ -6,6 +6,7 @@
 package com.jaspersoft.ireport.jasperserver.options;
 
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
+import javax.swing.SpinnerNumberModel;
 
 final class JasperServerRepositoryPanel extends javax.swing.JPanel {
 
@@ -15,6 +16,7 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
         this.controller = controller;
         initComponents();
         // TODO listen to changes in form fields and call controller.changed()
+        jSpinner1.setModel(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE/1000, 5));
     }
 
     /** This method is called from within the constructor to
@@ -26,6 +28,8 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jCheckBoxJS30Compatibility = new javax.swing.JCheckBox();
+        jLabel1 = new javax.swing.JLabel();
+        jSpinner1 = new javax.swing.JSpinner();
 
         org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxJS30Compatibility, org.openide.util.NbBundle.getMessage(JasperServerRepositoryPanel.class, "JasperServerRepositoryPanel.jCheckBoxJS30Compatibility.text")); // NOI18N
         jCheckBoxJS30Compatibility.addActionListener(new java.awt.event.ActionListener() {
@@ -34,13 +38,20 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(JasperServerRepositoryPanel.class, "JasperServerRepositoryPanel.jLabel1.text")); // NOI18N
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jCheckBoxJS30Compatibility, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createSequentialGroup()
+                        .add(jLabel1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jSpinner1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 82, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jCheckBoxJS30Compatibility, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -48,7 +59,11 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jCheckBoxJS30Compatibility)
-                .addContainerGap(93, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jSpinner1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel1))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -60,10 +75,13 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
 
     void load() {
         jCheckBoxJS30Compatibility.setSelected(JasperServerManager.getPreferences().getBoolean("use_jrxml_DTD", false));
+        int timeout = JasperServerManager.getPreferences().getInt("client_timeout", 0);
+        jSpinner1.setValue(new Integer(timeout));
     }
 
     void store() {
         JasperServerManager.getPreferences().putBoolean("use_jrxml_DTD", jCheckBoxJS30Compatibility.isSelected());
+        JasperServerManager.getPreferences().putInt("client_timeout", ((SpinnerNumberModel)jSpinner1.getModel()).getNumber().intValue() );
     }
 
     boolean valid() {
@@ -73,5 +91,7 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox jCheckBoxJS30Compatibility;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JSpinner jSpinner1;
     // End of variables declaration//GEN-END:variables
 }

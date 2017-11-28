@@ -34,7 +34,10 @@ package com.jaspersoft.ireport.designer.tools;
 
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
+import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import net.sf.jasperreports.engine.design.JRDesignHyperlinkParameter;
 
 /**
@@ -55,6 +58,29 @@ public class JRLinkParameterDialog extends javax.swing.JDialog {
     {
         super(parent, modal);
         initAll();
+        java.util.List classes = new ArrayList();
+        classes.add(new Tag("java.lang.Boolean"));
+        classes.add(new Tag("java.lang.Byte"));
+        classes.add(new Tag("java.util.Date"));
+        classes.add(new Tag("java.sql.Timestamp"));
+        classes.add(new Tag("java.sql.Time"));
+        classes.add(new Tag("java.lang.Double"));
+        classes.add(new Tag("java.lang.Float"));
+        classes.add(new Tag("java.lang.Integer"));
+        classes.add(new Tag("java.lang.Long"));
+        classes.add(new Tag("java.lang.Short"));
+        classes.add(new Tag("java.math.BigDecimal"));
+        classes.add(new Tag("java.lang.Number"));
+        classes.add(new Tag("java.lang.String"));
+        classes.add(new Tag("java.util.Collection"));
+        classes.add(new Tag("java.util.List"));
+        classes.add(new Tag("java.lang.Object"));
+        classes.add(new Tag("java.io.InputStream"));
+        classes.add(new Tag("net.sf.jasperreports.engine.JREmptyDataSource"));
+        
+        jComboBox1.setModel(new DefaultComboBoxModel( classes.toArray() ) );
+        Misc.setComboboxSelectedTagValue(jComboBox1, "java.lang.String");
+
     }
     
     public void initAll()
@@ -97,10 +123,12 @@ public class JRLinkParameterDialog extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextFieldName = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jRTextExpressionAreaDefaultExpression = new com.jaspersoft.ireport.designer.editor.ExpressionEditorArea();
+        jComboBox1 = new javax.swing.JComboBox();
 
-        setTitle(I18n.getString("JRLinkParameterDialog.Label.Title")); // NOI18N
+        setTitle("Add/modify parameter");
         setModal(true);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -112,7 +140,7 @@ public class JRLinkParameterDialog extends javax.swing.JDialog {
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         jButtonOK.setMnemonic('o');
-        jButtonOK.setText(I18n.getString("Global.Button.Ok")); // NOI18N
+        jButtonOK.setText("OK");
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOKActionPerformed(evt);
@@ -121,7 +149,7 @@ public class JRLinkParameterDialog extends javax.swing.JDialog {
         jPanel1.add(jButtonOK);
 
         jButtonCancel.setMnemonic('c');
-        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
+        jButtonCancel.setText("Cancel");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -133,7 +161,7 @@ public class JRLinkParameterDialog extends javax.swing.JDialog {
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText(I18n.getString("JRLinkParameterDialog.Label.LinkParamName")); // NOI18N
+        jLabel1.setText("Link parameter name");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 0, 3);
@@ -146,10 +174,18 @@ public class JRLinkParameterDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 3, 3, 3);
         jPanel2.add(jTextFieldName, gridBagConstraints);
 
-        jLabel3.setText(I18n.getString("JRLinkParameterDialog.Label.ValExp")); // NOI18N
+        jLabel4.setText("Value expression");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel2.add(jLabel4, gridBagConstraints);
+
+        jLabel3.setText("Value expression");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jLabel3, gridBagConstraints);
@@ -158,7 +194,7 @@ public class JRLinkParameterDialog extends javax.swing.JDialog {
         jRTextExpressionAreaDefaultExpression.setPreferredSize(new java.awt.Dimension(300, 80));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -166,9 +202,17 @@ public class JRLinkParameterDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 3, 3, 3);
         jPanel2.add(jRTextExpressionAreaDefaultExpression, gridBagConstraints);
 
+        jComboBox1.setEditable(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
+        jPanel2.add(jComboBox1, gridBagConstraints);
+
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
-        setBounds(0, 0, 320, 220);
+        setBounds(0, 0, 327, 258);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
@@ -178,7 +222,27 @@ public class JRLinkParameterDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
     private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKActionPerformed
-        
+
+        Object itemType = jComboBox1.getSelectedItem();
+        String expClassName = "java.lang.String";
+        if (itemType != null && itemType instanceof Tag)
+        {
+            expClassName = ((Tag)itemType).getValue()+"";
+        }
+        else if (itemType != null)
+        {
+            expClassName = expClassName+"";
+        }
+
+        if (expClassName.length() <= 0)
+        {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    I18n.getString("JRLinkParameterDialog.Message.Warning"),
+                    I18n.getString("JRLinkParameterDialog.Message.Error"),
+                    javax.swing.JOptionPane.WARNING_MESSAGE );
+            return;
+        }
+
         if (this.jTextFieldName.getText().trim().length() <= 0)
         {
             javax.swing.JOptionPane.showMessageDialog(this,
@@ -190,7 +254,7 @@ public class JRLinkParameterDialog extends javax.swing.JDialog {
         
         tmpParameter = new JRDesignHyperlinkParameter();
         tmpParameter.setName(this.jTextFieldName.getText());
-        tmpParameter.setValueExpression( Misc.createExpression("java.lang.String", this.jRTextExpressionAreaDefaultExpression.getText()));
+        tmpParameter.setValueExpression( Misc.createExpression(expClassName, this.jRTextExpressionAreaDefaultExpression.getText()));
         
         setVisible(false);
         this.setDialogResult( javax.swing.JOptionPane.OK_OPTION);
@@ -219,7 +283,13 @@ public class JRLinkParameterDialog extends javax.swing.JDialog {
      */
     public void setParameter(JRDesignHyperlinkParameter tmpParameter) {
         this.jTextFieldName.setText( new String(tmpParameter.getName()));
-        this.jRTextExpressionAreaDefaultExpression.setText( Misc.getExpressionText(  tmpParameter.getValueExpression()));                       
+        if (tmpParameter.getValueExpression() != null &&
+            tmpParameter.getValueExpression().getValueClassName() != null)
+        {
+            this.jComboBox1.setSelectedItem(tmpParameter.getValueExpression().getValueClassName());
+        }
+
+        this.jRTextExpressionAreaDefaultExpression.setText( Misc.getExpressionText(  tmpParameter.getValueExpression()));
     }
     
     /** Getter for property dialogResult.
@@ -241,8 +311,10 @@ public class JRLinkParameterDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonOK;
+    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private com.jaspersoft.ireport.designer.editor.ExpressionEditorArea jRTextExpressionAreaDefaultExpression;

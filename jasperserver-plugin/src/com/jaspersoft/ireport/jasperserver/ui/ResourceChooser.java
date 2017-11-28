@@ -539,7 +539,7 @@ public class ResourceChooser extends javax.swing.JPanel {
                 ResourceDescriptor nrd = new ResourceDescriptor();
                 uri = ((ResourceDescriptor)jComboBoxLookIn.getSelectedItem()).getUriString() + "/" + uri;
                 nrd.setUriString(uri);
-                nrd.setWsType(ResourceDescriptor.TYPE_FOLDER);
+                    nrd.setWsType(ResourceDescriptor.TYPE_FOLDER);
                 try {
                     nrd = getServer().getWSClient().get(nrd, null);
                     if (nrd.getWsType() != null) // Filled by the WS!!!!
@@ -555,7 +555,7 @@ public class ResourceChooser extends javax.swing.JPanel {
                         }
                     }
                 } catch (Exception ex){
-                    //ex.printStackTrace();
+                    ex.printStackTrace();
                 }
                 
             }

@@ -73,8 +73,8 @@ import org.netbeans.api.visual.widget.Widget;
 public class JRDesignElementWidget extends Widget implements PropertyChangeListener {
 
     private SelectionWidget selectionWidget = null;
-    private javax.swing.ImageIcon crosstabImage = new ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/crosstab-32.png"));
-    private javax.swing.ImageIcon subreportImage = new ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/subreport-32.png"));
+    private javax.swing.ImageIcon crosstabImage = null;
+    private javax.swing.ImageIcon subreportImage = null;
     
     public JRDesignElement getElement() {
         return element;
@@ -95,6 +95,12 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
         this.element = element;
         setBorder(new SimpleLineBorder(this));
         updateBounds();
+
+        try {
+            if (crosstabImage == null) crosstabImage = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/crosstab-32.png"));
+            if (subreportImage == null) subreportImage = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/subreport-32.png"));
+        } catch (Exception ex) {  }
+
         selectionWidget = new SelectionWidget(scene, this);
         notifyStateChanged(null, ObjectState.createNormal());
         selectionWidget.addDependency(new Dependency() {

@@ -34,6 +34,25 @@ public class ComboBoxPropertyEditor extends PropertyEditorSupport
         this.tagValues = tagValues;
         this.editable = editable;
     }
+
+    @Override
+    public void setValue(Object value) {
+
+        Tag t = Tag.findTagByValue(value, tagValues);
+        super.setValue( t != null ? t : value);
+    }
+
+    @Override
+    public Object getValue() {
+
+        Object value = super.getValue();
+        if (value instanceof Tag)
+        {
+            return ((Tag)value).getValue();
+        }
+
+        return value;
+    }
     
     @java.lang.Override
     public String getAsText() {

@@ -1474,6 +1474,18 @@ public class ModelUtils {
         newVariable.setSystemDefined( variable.isSystemDefined() );
         return newVariable;
     }
+
+    /**
+     *  Utility function to duplicate a group.
+     *  No elements are considered, just the group for subdataset
+     */
+    public static JRDesignGroup cloneGroup(JRDesignGroup group)
+    {
+        JRDesignGroup newGroup = new JRDesignGroup();
+        newGroup.setName( group.getName() );
+        newGroup.setExpression( cloneExpression( group.getExpression()) );
+        return newGroup;
+    }
     
     /**
      * Looks for propertyName in the sets of properties.

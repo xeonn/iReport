@@ -40,14 +40,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.*;
-import javax.swing.JOptionPane;
-import org.openide.util.Lookup;
 
 /**
  * This special class loader is used when running a report.
@@ -64,7 +59,7 @@ public class ReportClassLoader extends java.lang.ClassLoader {
     /** scanned class path */
     private ArrayList fPathChachedItems;
     private HashMap cachedClasses;
-    
+
     /** default excluded paths */
 
     /**
@@ -107,46 +102,6 @@ public class ReportClassLoader extends java.lang.ClassLoader {
         try {
             rescanAdditionalClasspath();
         } catch (Exception ex) {}
-     
-        /*
-        if (it.businesslogic.ireport.gui.MainFrame.getMainInstance() == null) return;
-        // Looking for jars or zip in lib directory not in classpath...
-        String irHome = it.businesslogic.ireport.gui.MainFrame.getMainInstance().IREPORT_HOME_DIR;
-	if (irHome == null) irHome = System.getProperty("ireport.home",".");
-	File lib_dir = new File(irHome,"lib");     
-        String classpath = it.businesslogic.ireport.util.Misc.nvl(System.getProperty("java.class.path"),"");
-        if (!lib_dir.exists())
-        {
-            System.out.println("Cannot find lib in iReport home  directory ("+it.businesslogic.ireport.gui.MainFrame.getMainInstance().IREPORT_HOME_DIR+")");
-            return;
-        }
-
-        //System.out.println("Rescan lib...");
-        File[] new_libs = lib_dir.listFiles();
-
-        for (int i=0; i< new_libs.length; ++i)
-        {
-            if (!new_libs[i].getName().toLowerCase().endsWith("jar") &&
-                !new_libs[i].getName().toLowerCase().endsWith("zip")) continue;
-            
-            if (classpath.indexOf( new_libs[i].getName()) < 0)
-            {
-                try {
-                    if (!fPathChachedItems.contains(new_libs[i].getCanonicalPath()))
-                    {
-                        //if ( new File(new_libs[i].getAbsolutePath()).exists())
-                        //{
-                            //System.out.println("Added lib " + new_libs[i].getCanonicalPath() + " to ireport class path\n");
-                            fPathChachedItems.add(new_libs[i].getCanonicalPath());
-                        //}
-                    }
-                } catch (Exception ex)
-                {
-                    System.out.println("Invalid path: " + new_libs[i]);
-                }
-            }
-        }
-        */
     }
     
     public java.util.List getCachedItems()
@@ -211,7 +166,6 @@ public class ReportClassLoader extends java.lang.ClassLoader {
         StringTokenizer st = new StringTokenizer(classPath, separator);
         while (st.hasMoreTokens()) {
             String pp = st.nextToken();
-            //System.out.println("add " + pp);
             fPathItems.add(pp);
         }
     }
@@ -262,7 +216,7 @@ public class ReportClassLoader extends java.lang.ClassLoader {
                 File f = new File(path, name);
                 if (f.exists())
                 {
-                     try {
+                    try {
                         return new FileInputStream( f );
                     } catch (Exception ex)
                     {}
@@ -311,7 +265,7 @@ public class ReportClassLoader extends java.lang.ClassLoader {
     public synchronized Class findClass(String name) throws ClassNotFoundException {
 
         Class c = null;
-        
+
         if (cachedClasses.containsKey( name ))
         {
             c = (Class)cachedClasses.get(name);
@@ -331,8 +285,7 @@ public class ReportClassLoader extends java.lang.ClassLoader {
         throws ClassNotFoundException {
         
         // 1. Look for cached class...
-        //System.out.println("Looking for: " + className);
-        // if we can't find the cached class, looking first in no relodable paths...    
+        //if we can't find the cached class, looking first in no relodable paths...
         
         byte[] data = null;
         
@@ -366,7 +319,7 @@ public class ReportClassLoader extends java.lang.ClassLoader {
         {
             return (Class)cachedClasses.get(className);
         }
-        
+
         // Else try to load from reloadable paths...
         for (int i = 0; i < fPathItems.size(); i++) {
 

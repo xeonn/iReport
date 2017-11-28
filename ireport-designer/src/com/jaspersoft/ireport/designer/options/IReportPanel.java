@@ -9,6 +9,7 @@ import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ReportClassLoader;
 import com.jaspersoft.ireport.designer.fonts.CheckBoxListEntry;
+import com.jaspersoft.ireport.designer.options.export.ExportOptionsPanel;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.tools.LocaleSelectorDialog;
 import com.jaspersoft.ireport.designer.tools.TimeZoneDialog;
@@ -38,15 +39,17 @@ import javax.swing.ListModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.charts.ChartThemeBundle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRProperties;
 import net.sf.jasperreports.extensions.ExtensionsEnvironment;
-import org.openide.util.Exceptions;
 
 final class IReportPanel extends javax.swing.JPanel {
 
     private final IReportOptionsPanelController controller;
+
+    private ExportOptionsPanel exportOptionsPanel = null;
 
     private Locale currentReportLocale = null;
     private String currentReportTimeZoneId = null;
@@ -54,7 +57,10 @@ final class IReportPanel extends javax.swing.JPanel {
     IReportPanel(IReportOptionsPanelController ctlr) {
         this.controller = ctlr;
         initComponents();
-    
+
+        exportOptionsPanel = new ExportOptionsPanel(controller);
+        addTab(I18n.getString("ExportOptionsPanel.title"), exportOptionsPanel);
+
         // TODO listen to changes in form fields and call controller.changed()
         Unit[] units = Unit.getStandardUnits();
         for (int i=0; i<units.length; ++i)
@@ -62,7 +68,11 @@ final class IReportPanel extends javax.swing.JPanel {
             jComboBoxUnits.addItem(new Tag(units[i].getKeyName(), units[i].getUnitName()));
         }
         
-        jListClassPath.setModel(new DefaultListModel());
+        //jListClassPath.setModel(new DefaultListModel());
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(300);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(70);
+
+
         jListFontspath.setModel(new DefaultListModel());
         jListTemplates.setModel(new DefaultListModel());
         
@@ -127,6 +137,9 @@ final class IReportPanel extends javax.swing.JPanel {
          tags.add(new Tag("javascript", "JavaScript"));
 
          jComboBoxLanguage.setModel(new DefaultComboBoxModel(tags.toArray()));
+
+
+         
     }
 
     public void addTab(String title, JComponent component)
@@ -167,8 +180,8 @@ final class IReportPanel extends javax.swing.JPanel {
         jLabelTimeZone2 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabelClasspath = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jListClassPath = new javax.swing.JList();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         jButtonAddClasspathItem = new javax.swing.JButton();
         jButtonAddClasspathItem1 = new javax.swing.JButton();
@@ -259,7 +272,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabel1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jComboBoxUnits, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 72, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(219, Short.MAX_VALUE))
+                .addContainerGap(278, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -345,67 +358,58 @@ final class IReportPanel extends javax.swing.JPanel {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(jCheckBoxVirtualizer, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2Layout.createSequentialGroup()
+            .add(jPanel2Layout.createSequentialGroup()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel2Layout.createSequentialGroup()
                         .add(27, 27, 27)
                         .add(jLabelMaxNumber)
                         .add(18, 18, 18)
                         .add(jSpinnerMaxRecordNumber, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 83, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2Layout.createSequentialGroup()
+                    .add(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .add(jCheckBoxLimitRecordNumber, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jTextFieldReportLocale, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
-                            .add(jLabelReportLocale, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jButtonReportLocale))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2Layout.createSequentialGroup()
+                        .add(jCheckBoxLimitRecordNumber, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jTextFieldTimeZone, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
-                            .add(jLabelTimeZone, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))
+                            .add(jLabelTimeZone)
+                            .add(jLabelReportLocale))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jButtonTimeZone))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2Layout.createSequentialGroup()
+                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldReportLocale, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, jTextFieldTimeZone, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jButtonTimeZone)
+                            .add(jButtonReportLocale)))
+                    .add(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .add(jCheckBoxIgnorePagination, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)))
+                        .add(jCheckBoxIgnorePagination)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jCheckBoxVirtualizer)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel2Layout.createSequentialGroup()
-                        .add(jCheckBoxLimitRecordNumber)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(jLabelMaxNumber)
-                            .add(jSpinnerMaxRecordNumber, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(31, 31, 31)
-                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(jTextFieldReportLocale, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(jButtonReportLocale)))
-                    .add(jPanel2Layout.createSequentialGroup()
-                        .add(63, 63, 63)
-                        .add(jLabelReportLocale)))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel2Layout.createSequentialGroup()
-                        .add(13, 13, 13)
-                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(jTextFieldTimeZone, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(jButtonTimeZone)))
-                    .add(jLabelTimeZone))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jCheckBoxIgnorePagination)
+                .add(jCheckBoxLimitRecordNumber)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jCheckBoxVirtualizer)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabelMaxNumber)
+                    .add(jSpinnerMaxRecordNumber, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(11, 11, 11)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabelReportLocale)
+                    .add(jButtonReportLocale)
+                    .add(jTextFieldReportLocale, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabelTimeZone)
+                    .add(jTextFieldTimeZone, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jButtonTimeZone))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jCheckBoxIgnorePagination)
+                    .add(jCheckBoxVirtualizer))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -441,15 +445,13 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jPanel24Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jComboBoxLanguage, 0, 196, Short.MAX_VALUE)
                     .add(jComboBoxTheme, 0, 196, Short.MAX_VALUE))
-                .add(38, 38, 38))
+                .add(185, 185, 185))
         );
         jPanel24Layout.setVerticalGroup(
             jPanel24Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel24Layout.createSequentialGroup()
                 .add(jPanel24Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel24Layout.createSequentialGroup()
-                        .add(jLabelTimeZone1)
-                        .add(20, 20, 20))
+                    .add(jLabelTimeZone1)
                     .add(jPanel24Layout.createSequentialGroup()
                         .add(jComboBoxLanguage, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -463,12 +465,12 @@ final class IReportPanel extends javax.swing.JPanel {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
+            .add(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel24, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel24, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -488,7 +490,30 @@ final class IReportPanel extends javax.swing.JPanel {
         jLabelClasspath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         org.openide.awt.Mnemonics.setLocalizedText(jLabelClasspath, "Classpath");
 
-        jScrollPane1.setViewportView(jListClassPath);
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Path", "Relodable"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(jTable1);
 
         jPanel5.setMinimumSize(new java.awt.Dimension(120, 10));
         jPanel5.setPreferredSize(new java.awt.Dimension(120, 10));
@@ -582,12 +607,14 @@ final class IReportPanel extends javax.swing.JPanel {
             .add(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabelClasspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+                        .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 122, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 122, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .add(jPanel4Layout.createSequentialGroup()
+                        .add(jLabelClasspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                        .add(387, 387, 387))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -596,8 +623,8 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelClasspath)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE))
+                    .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -660,10 +687,10 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel7Layout.createSequentialGroup()
-                        .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+                        .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jLabelFontspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE))
+                    .add(jLabelFontspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -673,8 +700,8 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelFontspath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jPanel8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
-                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE))
+                    .add(jPanel8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -1021,9 +1048,9 @@ final class IReportPanel extends javax.swing.JPanel {
             .add(jPanel18Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabelClasspath1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
+                    .add(jLabelClasspath1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel18Layout.createSequentialGroup()
-                        .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+                        .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel19, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 122, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -1035,8 +1062,8 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelClasspath1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel19, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
-                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE))
+                    .add(jPanel19, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -1209,11 +1236,11 @@ final class IReportPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
+            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
+            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
         );
 
         jTabbedPane1.getAccessibleContext().setAccessibleName("General");
@@ -1331,10 +1358,16 @@ final class IReportPanel extends javax.swing.JPanel {
         jfc.setDialogType( javax.swing.JFileChooser.OPEN_DIALOG);
         if  (jfc.showOpenDialog( this) == javax.swing.JOptionPane.OK_OPTION) {
             java.io.File[] files = jfc.getSelectedFiles();
-            
+
+            DefaultTableModel tbm = (DefaultTableModel)jTable1.getModel();
             for (int i=0; i<files.length; ++i) {
-                ((DefaultListModel)jListClassPath.getModel()).addElement( files[i] );
+                //((DefaultListModel)jListClassPath.getModel()).addElement( files[i] );
+                tbm.addRow(new Object[]{files[i], new Boolean(false)});
             }
+
+
+
+
             IReportManager.getInstance().setCurrentDirectory( jfc.getSelectedFile(), true);
             controller.changed();
             classpathChanged();
@@ -1355,10 +1388,14 @@ final class IReportPanel extends javax.swing.JPanel {
         jfc.setDialogType( javax.swing.JFileChooser.OPEN_DIALOG);
         if  (jfc.showOpenDialog( this) == javax.swing.JOptionPane.OK_OPTION) {
             java.io.File[] files = jfc.getSelectedFiles();
-            
+
+            DefaultTableModel tbm = (DefaultTableModel)jTable1.getModel();
             for (int i=0; i<files.length; ++i) {
-                ((DefaultListModel)jListClassPath.getModel()).addElement( files[i] );
+                tbm.addRow(new Object[]{files[i], new Boolean(false)});
             }
+//            for (int i=0; i<files.length; ++i) {
+//                ((DefaultListModel)jListClassPath.getModel()).addElement( files[i] );
+//            }
             IReportManager.getInstance().setCurrentDirectory( jfc.getSelectedFile(), true);
             controller.changed();
             classpathChanged();
@@ -1366,43 +1403,86 @@ final class IReportPanel extends javax.swing.JPanel {
 }//GEN-LAST:event_jButtonAddClasspathItem1jButtonAddActionPerformed1
 
     private void jButtonRemoveClasspathItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveClasspathItemActionPerformed
-        if (jListClassPath.getSelectedValues() != null) {
-            Object[] values = jListClassPath.getSelectedValues();
-            for (int i=0; i<values.length; ++i) {
-                ((DefaultListModel)jListClassPath.getModel()).removeElement(values[i]);
+        
+        
+        if (jTable1.getSelectedRowCount() > 0) {
+            int[] rows = jTable1.getSelectedRows();
+            Arrays.sort(rows);
+
+            DefaultTableModel tbm = (DefaultTableModel)jTable1.getModel();
+            for (int i=rows.length-1; i>=0; --i)
+            {
+                    tbm.removeRow(rows[i]);
             }
+            //Object[] values = jListClassPath.getSelectedValues();
+            //for (int i=0; i<values.length; ++i) {
+            //    ((DefaultListModel)jListClassPath.getModel()).removeElement(values[i]);
+            //}
             controller.changed();
             classpathChanged();
         }
 }//GEN-LAST:event_jButtonRemoveClasspathItemActionPerformed
 
     private void jButtonMoveUpClasspathItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMoveUpClasspathItemActionPerformed
-        if (jListClassPath.getSelectedValues() != null) {
-            int[] indices = jListClassPath.getSelectedIndices();
-            for (int i=0; i<indices.length; ++i) {
-                if (indices[i] == 0) continue;
-                Object val = ((DefaultListModel)jListClassPath.getModel()).remove( indices[i] );
-                ((DefaultListModel)jListClassPath.getModel()).insertElementAt(val, indices[i]-1);
-                indices[i]--;
+
+        if (jTable1.getSelectedRowCount() > 0)
+        {
+            int[] rows = jTable1.getSelectedRows();
+            DefaultTableModel tbm = (DefaultTableModel)jTable1.getModel();
+            jTable1.clearSelection();
+            for (int i=0; i<rows.length; ++i) {
+                if (rows[i] == 0) continue;
+                Object[] theRow = new Object[]{tbm.getValueAt(rows[i], 0),tbm.getValueAt(rows[i], 1)  };
+                tbm.removeRow(rows[i]);
+                tbm.insertRow(rows[i]-1, theRow);
+                rows[i]--;
+                jTable1.addRowSelectionInterval(rows[i],rows[i]);
             }
-            jListClassPath.setSelectedIndices(indices);
             controller.changed();
         }
+//        if (jListClassPath.getSelectedValues() != null) {
+//            int[] indices = jListClassPath.getSelectedIndices();
+//            for (int i=0; i<indices.length; ++i) {
+//                if (indices[i] == 0) continue;
+//                Object val = ((DefaultListModel)jListClassPath.getModel()).remove( indices[i] );
+//                ((DefaultListModel)jListClassPath.getModel()).insertElementAt(val, indices[i]-1);
+//                indices[i]--;
+//            }
+//            jListClassPath.setSelectedIndices(indices);
+//            controller.changed();
+//        }
 }//GEN-LAST:event_jButtonMoveUpClasspathItemActionPerformed
 
     private void jButtonMoveDownClasspathItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMoveDownClasspathItemActionPerformed
-        if (jListClassPath.getSelectedValues() != null) {
-            int[] indices = jListClassPath.getSelectedIndices();
-            for (int i=indices.length-1; i>=0; --i) {
-                if (indices[i] >= ((DefaultListModel)jListClassPath.getModel()).size() -1 ) continue;
-                
-                Object val = ((DefaultListModel)jListClassPath.getModel()).remove( indices[i] );
-                ((DefaultListModel)jListClassPath.getModel()).insertElementAt(val, indices[i]+1);
-                indices[i]++;
+      
+        if (jTable1.getSelectedRowCount() > 0)
+        {
+            int[] rows = jTable1.getSelectedRows();
+            DefaultTableModel tbm = (DefaultTableModel)jTable1.getModel();
+            jTable1.clearSelection();
+            for (int i=rows.length-1; i>=0; --i) {
+                if (rows[i] == 0) continue;
+                Object[] theRow = new Object[]{tbm.getValueAt(rows[i], 0),tbm.getValueAt(rows[i], 1)  };
+                tbm.removeRow(rows[i]);
+                tbm.insertRow(rows[i]+1, theRow);
+                rows[i]++;
+                jTable1.addRowSelectionInterval(rows[i],rows[i]);
             }
-            jListClassPath.setSelectedIndices(indices);
             controller.changed();
         }
+            
+//      if (jListClassPath.getSelectedValues() != null) {            
+            //            int[] indices = jListClassPath.getSelectedIndices();
+//            for (int i=indices.length-1; i>=0; --i) {
+//                if (indices[i] >= ((DefaultListModel)jListClassPath.getModel()).size() -1 ) continue;
+//
+//                Object val = ((DefaultListModel)jListClassPath.getModel()).remove( indices[i] );
+//                ((DefaultListModel)jListClassPath.getModel()).insertElementAt(val, indices[i]+1);
+//                indices[i]++;
+//            }
+//            jListClassPath.setSelectedIndices(indices);
+//            controller.changed();
+//        }
 }//GEN-LAST:event_jButtonMoveDownClasspathItemActionPerformed
 
     private void jButtonSelectAllFontsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSelectAllFontsActionPerformed
@@ -1686,17 +1766,34 @@ private void jComboBoxThemeActionPerformed(java.awt.event.ActionEvent evt) {//GE
             setCurrentReportTimeZoneId(null);
         }   
         
-        ((DefaultListModel)jListClassPath.getModel()).clear();
+        //((DefaultListModel)jListClassPath.getModel()).clear();
+        
+        DefaultTableModel dtm = (DefaultTableModel)jTable1.getModel();
+        dtm.setRowCount(0);
         List<String> cp = IReportManager.getInstance().getClasspath();
+        List<String> fullCp = new ArrayList<String>();
+        fullCp.addAll(cp);
         for (String path : cp)
         {
             if (path != null && path.length() > 0)
             {
-                ((DefaultListModel)jListClassPath.getModel()).addElement( path );
+                //((DefaultListModel)jListClassPath.getModel()).addElement( path );
+                dtm.addRow(new Object[]{path, new Boolean(false)});
+            }
+        }
+
+        cp = IReportManager.getInstance().getRelodableClasspath();
+        fullCp.addAll(cp);
+        for (String path : cp)
+        {
+            if (path != null && path.length() > 0)
+            {
+                //((DefaultListModel)jListClassPath.getModel()).addElement( path );
+                dtm.addRow(new Object[]{path, new Boolean(true)});
             }
         }
         
-        setFontspath(IReportManager.getInstance().getFontpath(), cp);
+        setFontspath(IReportManager.getInstance().getFontpath(), fullCp);
 
 
         ((DefaultListModel)jListTemplates.getModel()).clear();
@@ -1751,7 +1848,7 @@ private void jComboBoxThemeActionPerformed(java.awt.event.ActionEvent evt) {//GE
 
         Misc.setComboboxSelectedTagValue(jComboBoxTheme, pref.get("DefaultTheme", "") );
 
-
+        exportOptionsPanel.load();
 
     }
 
@@ -1776,6 +1873,7 @@ private void jComboBoxThemeActionPerformed(java.awt.event.ActionEvent evt) {//GE
         else pref.remove("reportTimeZone");
         
         IReportManager.getInstance().setClasspath( getClasspath());
+        IReportManager.getInstance().setRelodableClasspath( getClasspath(true));
         IReportManager.getInstance().setFontpath( getFontspath());
 
         String templatesPath = "";
@@ -1824,21 +1922,34 @@ private void jComboBoxThemeActionPerformed(java.awt.event.ActionEvent evt) {//GE
         if (obj instanceof Tag) obj = ((Tag)obj).getValue();
         if (obj == null) obj = "";
         pref.put("DefaultTheme", (obj+"").trim());
+
+        exportOptionsPanel.store();
     }
     
-    private List<String> getClasspath()
+    private List<String> getClasspath(boolean relodable)
     {
         List<String> cp = new ArrayList<String>();
-        for (int i=0; i<((DefaultListModel)jListClassPath.getModel()).size(); ++i )
+        DefaultTableModel tbm = (DefaultTableModel)jTable1.getModel();
+        for (int i=0; i<jTable1.getRowCount(); ++i)
         {
-            cp.add( "" + ((DefaultListModel)jListClassPath.getModel()).elementAt( i ) );
+            Boolean b = (Boolean)jTable1.getValueAt(i, 1);
+            if (b.booleanValue() == relodable)
+            {
+                cp.add( "" + jTable1.getValueAt(i, 0) );
+                //System.out.println(relodable + " " + jTable1.getValueAt(i, 0));
+            }
         }
         return cp;
     }
 
+    private List<String> getClasspath()
+    {
+        return getClasspath(false);
+    }
+
     boolean valid() {
         // TODO check whether form is consistent and complete
-        return true;
+        return exportOptionsPanel.valid();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1892,7 +2003,6 @@ private void jComboBoxThemeActionPerformed(java.awt.event.ActionEvent evt) {//GE
     private javax.swing.JLabel jLabelTimeZone1;
     private javax.swing.JLabel jLabelTimeZone2;
     private javax.swing.JLabel jLabelXLSViewer;
-    private javax.swing.JList jListClassPath;
     private com.jaspersoft.ireport.designer.fonts.CheckBoxList jListFontspath;
     private javax.swing.JList jListTemplates;
     private javax.swing.JPanel jPanel1;
@@ -1920,14 +2030,15 @@ private void jComboBoxThemeActionPerformed(java.awt.event.ActionEvent evt) {//GE
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JPanel jPanelVirtualizer;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSpinner jSpinnerMaxRecordNumber;
     private javax.swing.JSpinner jSpinnerVirtualizerBlockSize;
     private javax.swing.JSpinner jSpinnerVirtualizerGrownCount;
     private javax.swing.JSpinner jSpinnerVirtualizerSize;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextFieldCSVViewer;
     private javax.swing.JTextField jTextFieldHTMLViewer;
     private javax.swing.JTextField jTextFieldODFViewer;
@@ -2032,6 +2143,6 @@ private void jComboBoxThemeActionPerformed(java.awt.event.ActionEvent evt) {//GE
      */
     private void classpathChanged()
     {
-        setFontspath(getFontspath(), getClasspath());
+        setFontspath(getFontspath(), getClasspath(true));
     }
 }

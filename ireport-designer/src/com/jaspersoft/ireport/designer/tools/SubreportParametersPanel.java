@@ -53,7 +53,8 @@ public class SubreportParametersPanel extends javax.swing.JPanel {
     public void setParameters(Map oldParameters) {
         
         this.parameters.clear();
-        DefaultTableModel model = (DefaultTableModel)jTable.getModel();
+        DefaultTableModel model = (DefaultTableModel)this.jTable.getModel();
+        model.setRowCount(0);
         // Create a copy of the map content...
         Iterator iterator = oldParameters.keySet().iterator();
         while (iterator.hasNext())
@@ -252,7 +253,7 @@ public class SubreportParametersPanel extends javax.swing.JPanel {
         {
             int row = jTable.getSelectedRow();
             row = ((JXTable)jTable).convertRowIndexToModel(row);
-            parameters.remove( model.getValueAt(0, row) );
+            parameters.remove( model.getValueAt(row, 0) );
             model.removeRow(row);
         }
         
@@ -265,9 +266,10 @@ public class SubreportParametersPanel extends javax.swing.JPanel {
         
         int row = jTable.getSelectedRow();
         if (row < 0) return;
-        row = ((JXTable)jTable).convertRowIndexToModel(row);
         
-        JRDesignSubreportParameter parameter = (JRDesignSubreportParameter)parameters.get(model.getValueAt(0, row));
+        row = ((JXTable)jTable).convertRowIndexToModel(row);
+
+        JRDesignSubreportParameter parameter = (JRDesignSubreportParameter)parameters.get(model.getValueAt(row,0));
         
         String oldName = parameter.getName();
         

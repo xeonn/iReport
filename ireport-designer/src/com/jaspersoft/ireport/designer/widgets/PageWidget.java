@@ -40,19 +40,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.Paint;
 import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.TexturePaint;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import org.netbeans.api.visual.border.BorderFactory;
 import org.netbeans.api.visual.widget.Widget;
-import org.openide.util.Utilities;
 
 
 /**

@@ -596,7 +596,7 @@ public class JrxmlVisualView extends TopComponent
                 tc.setName(nd.getName() );
                 tc.setDisplayName(nd.getDisplayName());
                 tc.setHtmlDisplayName(nd.getHtmlDisplayName());
-                
+                tc.setToolTipText( nd.getShortDescription() );
             }
         };
         

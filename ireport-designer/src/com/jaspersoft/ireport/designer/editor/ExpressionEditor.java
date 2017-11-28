@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.editor;
 
+import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Component;
 import java.awt.Dialog;
@@ -291,18 +292,28 @@ public class ExpressionEditor extends javax.swing.JPanel {
 
         jSplitPane1.setRightComponent(jPanel1);
 
-        jButtonImport.setText(I18n.getString("Global.Button.Import")); // NOI18N
+        jButtonImport.setText(org.openide.util.NbBundle.getMessage(ExpressionEditor.class, "ExpressionEditor.jButtonImport.text")); // NOI18N
+        jButtonImport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonImportActionPerformed(evt);
+            }
+        });
 
-        jButtonExport.setText(I18n.getString("Global.Button.Export")); // NOI18N
+        jButtonExport.setText(org.openide.util.NbBundle.getMessage(ExpressionEditor.class, "ExpressionEditor.jButtonExport.text")); // NOI18N
+        jButtonExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExportActionPerformed(evt);
+            }
+        });
 
-        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
+        jButtonCancel.setText(org.openide.util.NbBundle.getMessage(ExpressionEditor.class, "ExpressionEditor.jButtonCancel.text")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
             }
         });
 
-        jButtonApply.setText(I18n.getString("Global.Button.Apply")); // NOI18N
+        jButtonApply.setText(org.openide.util.NbBundle.getMessage(ExpressionEditor.class, "ExpressionEditor.jButtonApply.text")); // NOI18N
         jButtonApply.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonApplyActionPerformed(evt);
@@ -567,6 +578,18 @@ public class ExpressionEditor extends javax.swing.JPanel {
         }
         
     }//GEN-LAST:event_jButtonApplyActionPerformed
+
+    private void jButtonImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImportActionPerformed
+        String expression = Misc.loadExpression(this);
+
+        if (expression != null) {
+            jEditorPane1.setText(expression);
+        }
+    }//GEN-LAST:event_jButtonImportActionPerformed
+
+    private void jButtonExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExportActionPerformed
+        Misc.saveExpression( jEditorPane1.getText(), this );
+    }//GEN-LAST:event_jButtonExportActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

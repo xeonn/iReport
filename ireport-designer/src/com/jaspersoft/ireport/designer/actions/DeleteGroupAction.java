@@ -2,9 +2,9 @@ package com.jaspersoft.ireport.designer.actions;
 
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.outline.nodes.BandNode;
+import com.jaspersoft.ireport.designer.outline.nodes.GroupNode;
 import com.jaspersoft.ireport.designer.undo.DeleteGroupUndoableEdit;
-import net.sf.jasperreports.engine.JROrigin;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
@@ -51,25 +51,26 @@ public final class DeleteGroupAction extends NodeAction {
 
     protected void performAction(org.openide.nodes.Node[] activatedNodes) {
         
-        BandNode bandNode = (BandNode)activatedNodes[0];
+        GroupNode groupNode = (GroupNode)activatedNodes[0];
         // Remove the group...
-        String groupName = bandNode.getBand().getOrigin().getGroupName();
+        JRDesignGroup grp = groupNode.getGroup();
+
+        JRDesignDataset dataset = groupNode.getDataset();
+        int index = dataset.getGroupsList().indexOf(grp);
+        dataset.removeGroup(grp);
+
+        // We should add an undo here...
+        IReportManager.getInstance().notifyReportChange();
         
-        
-        JRDesignGroup grp = (JRDesignGroup)bandNode.getJasperDesign().getGroupsMap().get(groupName);
-        int index = bandNode.getJasperDesign().getGroupsList().indexOf(grp);
-        bandNode.getJasperDesign().removeGroup(grp);
-        
-        DeleteGroupUndoableEdit edit = new DeleteGroupUndoableEdit(grp, bandNode.getJasperDesign().getMainDesignDataset(), index);
+        DeleteGroupUndoableEdit edit = new DeleteGroupUndoableEdit(grp, dataset, index);
         IReportManager.getInstance().addUndoableEdit(edit);
         
     }
 
     protected boolean enable(org.openide.nodes.Node[] activatedNodes) {
         if (activatedNodes == null || activatedNodes.length != 1) return false;
-        if ( activatedNodes[0] instanceof BandNode &&
-            ( ((BandNode)activatedNodes[0]).getBand().getOrigin().getBandType() == JROrigin.GROUP_FOOTER ||
-              ((BandNode)activatedNodes[0]).getBand().getOrigin().getBandType() == JROrigin.GROUP_HEADER))
+        if ( activatedNodes[0] instanceof GroupNode &&
+            ( ((GroupNode)activatedNodes[0]).getGroup() != null))
         {
             return true;
         }

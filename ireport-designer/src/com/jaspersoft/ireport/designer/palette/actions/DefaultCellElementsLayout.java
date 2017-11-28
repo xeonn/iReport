@@ -11,6 +11,7 @@ import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.swing.SwingUtilities;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
@@ -144,7 +145,7 @@ public class DefaultCellElementsLayout {
                                 String text = "test";
                                 
                                 // Convert the element in a print element...
-                                Map attributes = JRFontUtil.getAttributes(dte);
+                                Map attributes = JRFontUtil.getAttributes(new HashMap(), dte, Locale.getDefault());
                                 
                                 JRStyledText styledText = 
                                     styledTextParser.getStyledText(

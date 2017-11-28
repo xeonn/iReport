@@ -17,11 +17,11 @@ import com.jaspersoft.ireport.designer.sheet.properties.HorizontalAlignmentPrope
 import com.jaspersoft.ireport.designer.sheet.properties.ScaleImageProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.FillProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.ImageExpressionProperty;
-import com.jaspersoft.ireport.designer.sheet.properties.EvaluationTimeProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.RadiusProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.DirectionProperty;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.sheet.JRPenProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.ImageEvaluationTimeProperty;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -69,7 +69,7 @@ public class GraphicElementPropertiesFactory {
             imagePropertySet.put(new ImageUsingCacheProperty( (JRDesignImage)element ));
             imagePropertySet.put(new LazyProperty( (JRDesignImage)element ));
             imagePropertySet.put(new OnErrorTypeProperty( (JRDesignImage)element ));
-            imagePropertySet.put(new EvaluationTimeProperty((JRDesignImage)element));//, dataset));
+            imagePropertySet.put(new ImageEvaluationTimeProperty((JRDesignImage)element, dataset));//, dataset));
             imagePropertySet.put(new EvaluationGroupProperty((JRDesignImage)element, dataset));
             list.add(imagePropertySet);
         }

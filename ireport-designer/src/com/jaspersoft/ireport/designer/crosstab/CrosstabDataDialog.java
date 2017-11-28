@@ -1212,7 +1212,8 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jComboBoxResetTypeActionPerformed
 
     private void jCheckBoxPreSortedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxPreSortedActionPerformed
-        // TODO add your handling code here:
+        if (isInit() || currentSelectedCrosstabElement == null) return;
+        ((JRDesignCrosstabDataset)currentSelectedCrosstabElement.getDataset()).setDataPreSorted( jCheckBoxPreSorted.isSelected() );
 }//GEN-LAST:event_jCheckBoxPreSortedActionPerformed
     
     

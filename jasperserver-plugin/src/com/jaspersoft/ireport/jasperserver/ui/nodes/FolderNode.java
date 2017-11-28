@@ -16,6 +16,8 @@ import com.jaspersoft.ireport.jasperserver.ui.actions.PropertiesAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.RefreshAction;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import org.openide.nodes.Node;
@@ -123,15 +125,29 @@ public class FolderNode extends IRIndexedNode implements ResourceNode {
 
     @Override
     public Action[] getActions(boolean arg0) {
-        return new Action[]{
-            SystemAction.get( AddResourceAction.class), null,
-            SystemAction.get( DeleteAction.class), null,
-            SystemAction.get( NewServerAction.class),
-            SystemAction.get( ModifyServerAction.class),
-            SystemAction.get( DeleteServerAction.class), null,
-            SystemAction.get( RefreshAction.class), 
-            SystemAction.get( PropertiesAction.class)
-        };
+
+
+        List<Action> list = new ArrayList();
+        list.add(SystemAction.get( AddResourceAction.class));
+        list.add(null);
+
+        if (isRoot())
+        {
+
+            list.add(SystemAction.get( NewServerAction.class));
+            list.add(SystemAction.get( ModifyServerAction.class));
+            list.add(SystemAction.get( DeleteServerAction.class));
+            list.add(SystemAction.get( AddResourceAction.class));
+        }
+        else
+        {
+            list.add(SystemAction.get( DeleteAction.class));
+        }
+        list.add(null);
+        list.add(SystemAction.get( RefreshAction.class));
+        list.add(SystemAction.get( PropertiesAction.class));
+
+        return list.toArray(new Action[list.size()]);
     }
 
     

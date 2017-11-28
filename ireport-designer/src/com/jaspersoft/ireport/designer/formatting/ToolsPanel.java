@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.formatting;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -25,6 +26,8 @@ public class ToolsPanel extends javax.swing.JPanel {
         applyI18n();
         jToolBar1.setLayout(new ToolsLayoutManager());
         jScrollPane1.getVerticalScrollBar().setBlockIncrement(23);
+        
+        setTextLabels(IReportManager.getPreferences().getBoolean("formatting_tools_show_labels",true));
     }
 
     public void setTextLabels(boolean labelsAreEnabled) {
@@ -46,6 +49,10 @@ public class ToolsPanel extends javax.swing.JPanel {
     {
         JButton button = jToolBar1.add(action);
         button.setComponentPopupMenu(jPopupMenu1);
+
+        button.setHorizontalTextPosition(SwingConstants.RIGHT);
+        button.setHorizontalAlignment(SwingConstants.LEFT);
+        button.setText((String) (IReportManager.getPreferences().getBoolean("formatting_tools_show_labels",true) ? button.getAction().getValue(Action.NAME) : null));
     }
 
     private void applyI18n() {
@@ -117,7 +124,7 @@ private void jScrollPane1ComponentResized(java.awt.event.ComponentEvent evt) {//
 private void jCheckBoxMenuItemShowLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemShowLabelsActionPerformed
 
     setTextLabels(jCheckBoxMenuItemShowLabels.isSelected());
-    
+    IReportManager.getPreferences().putBoolean("formatting_tools_show_labels",jCheckBoxMenuItemShowLabels.isSelected());
 }//GEN-LAST:event_jCheckBoxMenuItemShowLabelsActionPerformed
     
     

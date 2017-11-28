@@ -16,20 +16,28 @@ import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
 import com.jaspersoft.ireport.designer.palette.PaletteItemAction;
 import com.jaspersoft.ireport.designer.undo.AddElementUndoableEdit;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.dnd.DropTargetDropEvent;
+import java.util.List;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRBreak;
 import net.sf.jasperreports.engine.JRChart;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JRSubreport;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementGroup;
+import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Scene;
+import org.netbeans.api.visual.widget.Widget;
 import org.openide.util.Mutex;
 
 /**
@@ -37,6 +45,31 @@ import org.openide.util.Mutex;
  */
 public abstract class CreateReportElementAction extends PaletteItemAction 
 {
+
+    private static JRDesignFrame findTopMostFrameAt(ReportObjectScene theScene, Point p) {
+
+         LayerWidget layer = theScene.getElementsLayer();
+         List<Widget> widgets = layer.getChildren();
+
+         // Use revers order to find the top most...
+         for (int i= widgets.size()-1; i>=0; --i)
+         {
+             Widget w = widgets.get(i);
+             Point p2 = w.convertSceneToLocal(p);
+             if (w.isHitAt(p2))
+             {
+                 if (w instanceof JRDesignElementWidget)
+                 {
+                     JRDesignElement de =((JRDesignElementWidget)w).getElement();
+                     if (de instanceof JRDesignFrame)
+                     {
+                         return (JRDesignFrame)de;
+                     }
+                 }
+             }
+         }
+         return null;
+    }
 
     public void drop(DropTargetDropEvent dtde) {
         
@@ -60,13 +93,26 @@ public abstract class CreateReportElementAction extends PaletteItemAction
             //p.y -= 10;
             // find the band...
             JRDesignBand b = ModelUtils.getBandAt(jasperDesign, p);
-            
+            int yLocation = ModelUtils.getBandLocation(b, jasperDesign);
+            Point pLocationInBand = new Point(p.x - jasperDesign.getLeftMargin(),
+                                              p.y - yLocation);
             if (b != null)
             {
-                element.setX( p.x - jasperDesign.getLeftMargin());
-                element.setY( p.y - ModelUtils.getBandLocation(b, jasperDesign));
-                b.addElement(element);
-                
+                JRDesignFrame frame = findTopMostFrameAt((ReportObjectScene)theScene, p);
+
+                if (frame != null)
+                {
+                    frame.addElement(element);
+                    Point parentLocation = ModelUtils.getParentLocation(jasperDesign, element);
+                    element.setX( p.x - parentLocation.x);
+                    element.setY( p.y - parentLocation.y);
+                }
+                else
+                {
+                    element.setX(pLocationInBand.x);
+                    element.setY(pLocationInBand.y);
+                    b.addElement(element);
+                }
                 AddElementUndoableEdit edit = new AddElementUndoableEdit(element,b);
                 IReportManager.getInstance().addUndoableEdit(edit);
             }

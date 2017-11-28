@@ -12,6 +12,7 @@ package com.jaspersoft.ireport.designer.utils;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.tools.JNumberComboBox;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Frame;
@@ -537,6 +538,78 @@ public class Misc {
         }
         jTree.setSelectionPath(treePath);
   }
+
+  /**
+     * Don't use it. It does not work well in general,
+     * it just does the job for the porpuses it has been
+     * created for.
+     * The function parse \n \r \t \\ characters
+     * replacing the sequences with real newline, tabs etc...
+     * @param str
+     * @return
+     */
+    public static String removeSlashesString(String str) {
+
+        if (str == null) return str;
+
+        String newStr = "";
+        for (int i=0; i<str.length(); ++i)
+        {
+            char c = str.charAt(i);
+            if (c == '\\' && str.length() > i+1)
+            {
+                i++;
+                char c2 = str.charAt(i);
+                switch (c2)
+                {
+                    case 'n': newStr +="\n"; break;
+                    case 'r': newStr +="\r"; break;
+                    case 't': newStr +="\t"; break;
+                    case '\\': newStr +="\\"; break;
+                    default:
+                    {
+                        newStr += c;
+                        newStr += c2;
+                    }
+                }
+            }
+            else
+            {
+                newStr += c;
+            }
+        }
+
+        return newStr;
+    }
+
+    /**
+     * Don't use it. It does not work well in general,
+     * it just does the job for the porpuses it has been
+     * created for.
+     * The function replaces with \n \r \t \\ sequences
+     * newlines, tabs etc...
+     * @param str
+     * @return
+     */
+    public static String addSlashesString(String str) {
+
+        if (str == null) return str;
+
+        String newStr = "";
+        for (int i=0; i<str.length(); ++i)
+        {
+            char c = str.charAt(i);
+            switch (c)
+            {
+                case '\n': newStr +="\\n"; break;
+                case '\r': newStr +="\\r"; break;
+                case '\t': newStr +="\\t"; break;
+                case '\\': newStr +="\\\\"; break;
+                default: newStr += c;
+            }
+        }
+        return newStr;
+    }
    
     public static void updateComboBox(javax.swing.JComboBox comboBox, List newItems) {
             updateComboBox(comboBox,newItems, false);
@@ -587,7 +660,7 @@ public class Misc {
                 {
                     if ( (val == null && itemValue==null) ||
                          ((Tag)val).getValue() == itemValue ||
-                         ((Tag)val).getValue().equals(itemValue))
+                         (((Tag)val).getValue() != null && ((Tag)val).getValue().equals(itemValue)))
                     {
                         comboBox.setSelectedIndex( i );
                         return;
@@ -781,6 +854,96 @@ public class Misc {
             }
         }
         return true;
+    }
+
+    /**
+     * Load the query asking for a file.
+     * The optional component is used as parent for the file selection dialog
+     * Default is the MainFrame
+     */
+   public static String loadExpression(Component c)
+    {
+            JFileChooser jfc = new JFileChooser();
+            jfc.setMultiSelectionEnabled(false);
+            jfc.setFileFilter( new javax.swing.filechooser.FileFilter() {
+		    public boolean accept(java.io.File file) {
+			    String filename = file.getName().toLowerCase();
+			    return (filename.endsWith(".txt") ||file.isDirectory()) ;
+		    }
+		    public String getDescription() {
+			    return "Text file (*.txt)";
+		    }
+	    });
+
+	    if (jfc.showOpenDialog(c) == JFileChooser.APPROVE_OPTION) {
+
+                try {
+
+                    FileReader fr = new FileReader(jfc.getSelectedFile());
+                    StringBuffer sb = new StringBuffer();
+                    char[] cbuf = new char[1024];
+                    int i = fr.read(cbuf);
+                    while (i > 0)
+                    {
+                        sb.append( cbuf, 0, i);
+                        i = fr.read(cbuf);
+                    }
+                    fr.close();
+
+                    return sb.toString();
+                } catch (Exception ex)
+                {
+                    JOptionPane.showMessageDialog(c,I18n.getString("Misc.loadingExpression.error.text", new Object[]{ ex.getMessage() }),I18n.getString("Misc.loadingExpression.error.title","Error"),JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                }
+	    }
+
+            return null;
+    }
+
+   /**
+     * Save the query asking for a file.
+     * The optional component is used as parent for the file selection dialog
+     * Default is the MainFrame
+     */
+    public static boolean saveExpression(String expression, Component c)
+    {
+            JFileChooser jfc = new JFileChooser();
+            jfc.setFileFilter( new javax.swing.filechooser.FileFilter() {
+		    public boolean accept(java.io.File file) {
+			    String filename = file.getName().toLowerCase();
+			    return (filename.endsWith(".txt") ||file.isDirectory()) ;
+		    }
+		    public String getDescription() {
+			    return "Text file (*.txt)";
+		    }
+	    });
+
+	    if (jfc.showSaveDialog(c) == JFileChooser.APPROVE_OPTION) {
+
+                try {
+
+                    String fileName = jfc.getSelectedFile().getName();
+                    if (fileName.indexOf(".") < 0)
+                    {
+                        fileName += ".txt";
+                    }
+
+                    File f = new File( jfc.getSelectedFile().getParent(), fileName);
+
+                    FileWriter fw = new FileWriter(f);
+                    fw.write( expression );
+                    fw.close();
+
+                    return true;
+                } catch (Exception ex)
+                {
+                    JOptionPane.showMessageDialog(c,I18n.getString("Misc.savingExpression.error.text", new Object[]{ ex.getMessage() }),I18n.getString("Misc.savingExpression.error.title","Error"),JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                }
+	    }
+
+            return false;
     }
    
    

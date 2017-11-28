@@ -37,6 +37,7 @@ import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.designer.connection.gui.MondrianConnectionEditor;
+import java.sql.Connection;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -133,10 +134,21 @@ public class MondrianConnection extends IReportConnection {
         if (mondrianConnection == null)
         {
             JDBCConnection con = getJDBCConnection();
-            
+
+            // Force opening connection...
+
             try {
-            mondrianConnection  = 
-			DriverManager.getConnection(
+
+               Connection conn = null;
+            try {
+                    conn = con.getConnection();
+                    if (conn == null) throw new Exception("No DB connection");
+            } finally {
+                // Clean up
+                if( conn!=null ) try{ conn.close(); } catch(Exception e) { /* anyone really care? */ }
+            }
+
+            mondrianConnection  = DriverManager.getConnection(
 					"Provider=mondrian;" + 
 					"JdbcDrivers=" + escapeProperty( con.getJDBCDriver() )  + ";" +
 					"Jdbc=" + escapeProperty( con.getUrl() ) + ";" +

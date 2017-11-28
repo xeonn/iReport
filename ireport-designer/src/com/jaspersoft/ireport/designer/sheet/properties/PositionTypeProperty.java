@@ -52,7 +52,7 @@ public final class PositionTypeProperty extends ByteProperty
     {
         List tags = new java.util.ArrayList();
         tags.add(new Tag(new Byte(JRDesignElement.POSITION_TYPE_FIX_RELATIVE_TO_TOP), I18n.getString("Global.Property.FixTop")));
-        tags.add(new Tag(new Byte(JRDesignElement.POSITION_TYPE_FLOAT), "Float"));
+        tags.add(new Tag(new Byte(JRDesignElement.POSITION_TYPE_FLOAT), I18n.getString("Global.Property.PositionFloat")));
         tags.add(new Tag(new Byte(JRDesignElement.POSITION_TYPE_FIX_RELATIVE_TO_BOTTOM), I18n.getString("Global.Property.FixBottom")));
         return tags;
     }

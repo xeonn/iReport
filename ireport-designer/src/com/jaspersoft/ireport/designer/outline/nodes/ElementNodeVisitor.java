@@ -9,6 +9,8 @@
 
 package com.jaspersoft.ireport.designer.outline.nodes;
 
+import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.charts.multiaxis.MultiAxisChartElementNode;
 import java.beans.PropertyChangeListener;
 import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
@@ -105,7 +107,14 @@ public class ElementNodeVisitor implements JRVisitor {
      */
     public void visitChart(JRChart chart)
     {
-        node = new ElementNode(jasperDesign, (JRDesignChart)chart,doLkp);
+        if (chart.getChartType() == JRChart.CHART_TYPE_MULTI_AXIS)
+        {
+            node = new MultiAxisChartElementNode(jasperDesign, (JRDesignChart)chart, doLkp);
+        }
+        else
+        {
+            node = new ElementNode(jasperDesign, (JRDesignChart)chart,doLkp);
+        }
         node.setIconBaseWithExtension(ICON_CHART);
 
         ((JRBaseChartPlot)((JRDesignChart)chart).getPlot()).getEventSupport()
@@ -206,8 +215,14 @@ public class ElementNodeVisitor implements JRVisitor {
     }
 
     public void visitComponentElement(JRComponentElement componentElement) {
-        node = new ElementNode(jasperDesign, (JRDesignComponentElement)componentElement,doLkp);
-        node.setIconBaseWithExtension(ICON_RECTANGLE);
+
+        node = IReportManager.getComponentNode(jasperDesign, (JRDesignComponentElement)componentElement, doLkp );
+
+        if (node == null)
+        {
+            node = new ElementNode(jasperDesign, (JRDesignComponentElement)componentElement,doLkp);
+            node.setIconBaseWithExtension(ICON_RECTANGLE);
+        }
     }
 
     public void visitGenericElement(JRGenericElement genericElement) {

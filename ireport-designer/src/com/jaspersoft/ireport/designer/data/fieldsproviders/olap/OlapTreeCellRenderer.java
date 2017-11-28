@@ -51,9 +51,9 @@ public class OlapTreeCellRenderer extends DefaultTreeCellRenderer {
     public OlapTreeCellRenderer() {
         super();
 
-        if (measureIcon == null) measureIcon = new javax.swing.ImageIcon(getClass().getResource("/it/businesslogic/ireport/icons/olap/measure.png"));
-        if (dimensionIcon == null) dimensionIcon = new javax.swing.ImageIcon(getClass().getResource("/it/businesslogic/ireport/icons/olap/axis.png"));
-        if (hierarchyIcon == null) hierarchyIcon = new javax.swing.ImageIcon(getClass().getResource("/it/businesslogic/ireport/icons/olap/hierarchy.png"));
+        if (measureIcon == null) measureIcon = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/olap/measure.png"));
+        if (dimensionIcon == null) dimensionIcon = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/olap/axis.png"));
+        if (hierarchyIcon == null) hierarchyIcon = new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/olap/hierarchy.png"));
         
     }
 

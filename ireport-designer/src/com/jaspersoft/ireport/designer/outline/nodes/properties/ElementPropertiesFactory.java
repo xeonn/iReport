@@ -28,9 +28,11 @@ import com.jaspersoft.ireport.designer.sheet.properties.ForecolorProperty;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.outline.nodes.properties.charts.ChartPropertiesFactory;
 import com.jaspersoft.ireport.designer.sheet.PropertyExpressionsProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.BreakTypeProperty;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.engine.JRBox;
+import net.sf.jasperreports.engine.design.JRDesignBreak;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -75,7 +77,17 @@ public class ElementPropertiesFactory {
        
         return propertySet;
     }
-    
+
+
+    public static Sheet.Set getBreakPropertySet(JRDesignBreak breakElement)
+    {
+        Sheet.Set propertySet = Sheet.createPropertiesSet();
+        propertySet.setName("BREAK_PROPERTIES");
+        propertySet.setDisplayName("Break properties");
+        propertySet.put(new BreakTypeProperty(breakElement));
+
+        return propertySet;
+    }
     /**
      * Get the common properties...
      */
@@ -130,6 +142,11 @@ public class ElementPropertiesFactory {
         if (element instanceof  JRDesignSubreport)
         {
             sets.addAll( SubreportPropertiesFactory.getPropertySets(element, jd) );
+        }
+        if (element instanceof JRDesignBreak)
+        {
+            sets.add( getBreakPropertySet((JRDesignBreak)element) );
+
         }
         
         if (element instanceof  JRDesignChart)

@@ -627,17 +627,20 @@ public class WSClient {
 
     public ManagementService getManagementService() throws Exception {
         
-        
         if (managementService == null)
         {
             ManagementServiceServiceLocator rsl = new ManagementServiceServiceLocator(getEngineConfiguration());
             managementService = rsl.getrepository(new java.net.URL( getWebservicesUri() ) );
             ((org.apache.axis.client.Stub)managementService).setUsername( getUsername() );
             ((org.apache.axis.client.Stub)managementService).setPassword( getPassword() );
-            ((org.apache.axis.client.Stub)managementService).setMaintainSession( true ); 
-            
+            ((org.apache.axis.client.Stub)managementService).setMaintainSession( true );
         }
-        
+
+        int timeout = JasperServerManager.getPreferences().getInt("client_timeout", 0) * 1000;
+        if (timeout != ((org.apache.axis.client.Stub)managementService).getTimeout())
+        {
+            ((org.apache.axis.client.Stub)managementService).setTimeout(timeout);
+        }
         return managementService;
     }
 	
