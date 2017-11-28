@@ -35,6 +35,7 @@ package com.jaspersoft.ireport.designer.connection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.connection.gui.JREmptyDataSourceConnectionEditor;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 
 /**
@@ -47,7 +48,7 @@ public class JREmptyDatasourceConnection extends NullConnection {
     
     /** Creates a new instance of JDBCConnection */
     public JREmptyDatasourceConnection() {
-        this.setName("Empty datasource connection");
+        this.setName(I18n.getString("JREmptyDatasourceConnection.Property.Title"));
     }
     
     /**  This method return an instanced connection to the database.

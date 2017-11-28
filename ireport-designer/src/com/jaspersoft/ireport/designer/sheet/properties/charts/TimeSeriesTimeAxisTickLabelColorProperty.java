@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.charts.design.JRDesignTimeSeriesPlot;
     
@@ -22,7 +23,7 @@ public final class TimeSeriesTimeAxisTickLabelColorProperty extends ColorPropert
 
     private final JRDesignTimeSeriesPlot element;
 
-    @SuppressWarnings("unchecked")
+    
     public TimeSeriesTimeAxisTickLabelColorProperty(JRDesignTimeSeriesPlot element)
     {
         super(element);
@@ -38,13 +39,13 @@ public final class TimeSeriesTimeAxisTickLabelColorProperty extends ColorPropert
     @Override
     public String getDisplayName()
     {
-        return "Time Axis Tick Label Color";
+        return I18n.getString("Time_Axis_Tick_Label_Color");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The color of the Time Axis Tick Label.";
+        return I18n.getString("The_color_of_the_Time_Axis_Tick_Label.");
     }
 
     @Override

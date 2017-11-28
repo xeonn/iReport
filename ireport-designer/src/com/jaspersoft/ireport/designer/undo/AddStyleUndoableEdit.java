@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.undo;
 
+import com.jaspersoft.ireport.locale.I18n;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
@@ -55,7 +56,7 @@ public class AddStyleUndoableEdit extends AggregatedUndoableEdit {
     
     @Override
     public String getPresentationName() {
-        return "Add Style " + getStyle().getName();
+        return I18n.getString("AddStyleUndoableEdit.Name.AddStyle") + getStyle().getName();
     }
 
     public JasperDesign getJasperDesign() {

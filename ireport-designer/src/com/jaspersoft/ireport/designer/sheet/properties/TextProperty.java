@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.properties.StringProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.base.JRBaseStaticText;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 
@@ -38,13 +39,13 @@ public final class TextProperty extends StringProperty
     @Override
     public String getDisplayName()
     {
-        return "Text";
+        return I18n.getString("Global.Property.Text");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The text to show in this label.";
+        return I18n.getString("Global.Property.Textdetail");
     }
 
     @Override

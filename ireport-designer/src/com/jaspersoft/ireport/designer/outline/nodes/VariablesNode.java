@@ -12,6 +12,7 @@ package com.jaspersoft.ireport.designer.outline.nodes;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.outline.NewTypesUtils;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.beans.PropertyChangeEvent;
@@ -120,7 +121,7 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
         dataset.getEventSupport().addPropertyChangeListener(this);
         
         
-        setDisplayName("Variables");
+        setDisplayName(I18n.getString("VariableNode.Property.Variables"));
         setIconBaseWithExtension("com/jaspersoft/ireport/designer/resources/variables-16.png");
     }
 

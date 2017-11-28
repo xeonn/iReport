@@ -13,6 +13,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import net.sf.jasperreports.engine.JRExpression;
@@ -44,13 +45,13 @@ public final class ParametersMapExpressionProperty extends ExpressionProperty
     @Override
     public String getDisplayName()
     {
-        return "Parameters Map Expression";
+        return I18n.getString("Global.Property.ParametersMapExpression");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Optional expression to set a Map of parameters for this subreport.";
+        return I18n.getString("Global.Property.ParamMapExpdetail");
     }
 
     @Override

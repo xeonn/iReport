@@ -13,6 +13,7 @@ import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 
 import com.jaspersoft.ireport.designer.outline.NewTypesUtils;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.beans.PropertyChangeEvent;
@@ -121,7 +122,7 @@ public class ParametersNode extends IRIndexedNode implements PropertyChangeListe
         dataset.getEventSupport().addPropertyChangeListener(this);
         
         
-        setDisplayName("Parameters");
+        setDisplayName(I18n.getString("ParameterNode.Property.Parameters"));
         setIconBaseWithExtension("com/jaspersoft/ireport/designer/resources/parameters-16.png");
     }
 

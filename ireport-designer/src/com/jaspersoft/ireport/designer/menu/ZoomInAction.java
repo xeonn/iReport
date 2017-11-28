@@ -2,12 +2,6 @@ package com.jaspersoft.ireport.designer.menu;
 
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ReportDesignerPanel;
-import com.jaspersoft.ireport.designer.data.ReportQueryDialog;
-import com.jaspersoft.ireport.designer.utils.Misc;
-import java.awt.Component;
-import java.awt.Dialog;
-import java.awt.Frame;
-import java.awt.Window;
 import java.util.Iterator;
 import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;

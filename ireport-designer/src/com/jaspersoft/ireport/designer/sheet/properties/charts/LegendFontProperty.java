@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.AbstractFontProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -22,7 +23,6 @@ public final class LegendFontProperty extends AbstractFontProperty
 {
     private final JRDesignChart element;
         
-    @SuppressWarnings("unchecked")
     public LegendFontProperty(JRDesignChart element, JasperDesign jasperDesign)
     {
         super(element, jasperDesign);
@@ -38,13 +38,13 @@ public final class LegendFontProperty extends AbstractFontProperty
     @Override
     public String getDisplayName()
     {
-        return "Legend font";
+        return I18n.getString("Global.Property.LegendFont");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Legend font.";
+        return I18n.getString("Global.Property.LegendFont");
     }
 
     @Override

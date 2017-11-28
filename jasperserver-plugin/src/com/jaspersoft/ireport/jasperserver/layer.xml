@@ -27,6 +27,11 @@
             </folder>
             </folder>
     </folder>
+    <folder name="OptionsDialog">
+        <folder name="iReport">
+            <file name="com-jaspersoft-ireport-jasperserver-options-JasperServerRepositoryAdvancedOption.instance"/>
+        </folder>
+    </folder>
     <folder name="Windows2">
         <folder name="Components">
             <file name="JRViewerTopComponent.settings" url="JRViewerTopComponentSettings.xml"/>

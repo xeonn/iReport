@@ -1,3 +1,4 @@
+
 /*
  * GraphicElementPropertiesFactory.java
  * 
@@ -10,6 +11,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.AbstractFontProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignHighLowPlot;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -22,7 +24,7 @@ public final class HighLowValueAxisLabelFontProperty extends AbstractFontPropert
 {
     private final JRDesignHighLowPlot plot;
         
-    @SuppressWarnings("unchecked")
+    
     public HighLowValueAxisLabelFontProperty(JRDesignHighLowPlot plot, JasperDesign jasperDesign)
     {
         super(plot, jasperDesign);
@@ -38,13 +40,13 @@ public final class HighLowValueAxisLabelFontProperty extends AbstractFontPropert
     @Override
     public String getDisplayName()
     {
-        return "Value Axis Label Font";
+        return I18n.getString("Value_Axis_Label_Font");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Value Axis Label Font.";
+        return I18n.getString("Value_Axis_Label_Font.");
     }
 
     @Override

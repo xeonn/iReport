@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
@@ -41,13 +42,13 @@ public final class InitialValueExpressionProperty extends ExpressionProperty
     @Override
     public String getDisplayName()
     {
-        return "Initial Value Expression";
+        return I18n.getString("InitialValueExpressionProperty.Property.InitialValueExpression");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Initial Value Expression.";
+        return I18n.getString("InitialValueExpressionProperty.Property.InitialValueExpression");
     }
 
     @Override

@@ -49,7 +49,7 @@ public class JRDesignImageWidget extends JRDesignElementWidget implements Runnab
     
     
     @Override
-    protected void paintWidget() {
+    protected void paintWidgetImplementation() {
 
         if (offScreenImage == null || needReload)
         {

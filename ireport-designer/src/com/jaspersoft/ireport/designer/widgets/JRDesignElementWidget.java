@@ -31,6 +31,8 @@
 package com.jaspersoft.ireport.designer.widgets;
 
 import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
+import com.jaspersoft.ireport.designer.ElementDecorator;
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.borders.SimpleLineBorder;
 import java.awt.AlphaComposite;
@@ -41,12 +43,11 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Date;
+import java.util.List;
 import javax.swing.ImageIcon;
-import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRElementGroup;
@@ -259,8 +260,14 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
     }
     
     @Override
-    protected void paintWidget() {
-        
+    protected final void paintWidget() {
+
+        paintWidgetImplementation();
+        paintWidgetExtra();
+    }
+    
+    protected void paintWidgetImplementation() {
+
         super.paintWidget();
         Graphics2D gr = getScene().getGraphics();
         
@@ -417,5 +424,14 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
         boolean b = this.changing;
         this.changing = changing;
         return b;
+    }
+
+    final private void paintWidgetExtra() {
+
+        List<ElementDecorator> decorators = IReportManager.getInstance().getElementDecorators(element);
+        for (ElementDecorator decorator : decorators)
+        {
+            decorator.paintWidget(this);
+        }
     }
 }

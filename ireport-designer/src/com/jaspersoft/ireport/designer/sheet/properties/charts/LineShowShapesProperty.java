@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignLinePlot;
     
     
@@ -20,7 +21,7 @@ public final class LineShowShapesProperty extends BooleanProperty {
 
     private final JRDesignLinePlot plot;
 
-    @SuppressWarnings("unchecked")
+    
     public LineShowShapesProperty(JRDesignLinePlot plot)
     {
         super(plot);
@@ -35,13 +36,13 @@ public final class LineShowShapesProperty extends BooleanProperty {
     @Override
     public String getDisplayName()
     {
-        return "Show Shapes";
+        return I18n.getString("Show_Shapes");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Show Shapes.";
+        return I18n.getString("Show_Shapes.");
     }
 
     @Override

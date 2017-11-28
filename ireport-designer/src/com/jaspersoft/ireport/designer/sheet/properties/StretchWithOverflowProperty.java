@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.base.JRBaseTextField;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 
@@ -35,13 +36,13 @@ public final class StretchWithOverflowProperty extends BooleanProperty
     @Override
     public String getDisplayName()
     {
-        return "Stretch With Overflow";
+        return I18n.getString("Global.Property.StretchWithOverflow");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Stretch the field vertically it the text does not fit in the element.";
+        return I18n.getString("Global.Property.SWOdetail");
     }
 
     @Override

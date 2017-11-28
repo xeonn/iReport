@@ -9,6 +9,8 @@
 
 package com.jaspersoft.ireport.designer;
 
+import com.jaspersoft.ireport.locale.I18n;
+
 /**
  *
  * @author gtoffoli
@@ -64,7 +66,7 @@ public class IRFont {
     @Override
     public String toString()
     {
-        if (font == null || file == null) return "Not initialized font";
+        if (font == null || file == null) return I18n.getString("IRFont.Message.NotInitializedFont");
         return font.getFontName()+" ("+file+")";
     }    
 }

@@ -27,7 +27,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
  *
  * @author gtoffoli
  */
-public class ListItemWrapper  {
+public class ListItemWrapper implements Comparable {
     
     private ListItem item;
     /**
@@ -70,5 +70,14 @@ public class ListItemWrapper  {
     {
         if (item != null) return ""+item.getLabel();
         return super.toString();
+    }
+
+    public int compareTo(Object o) {
+        if (o instanceof ListItemWrapper)
+        {
+            ListItem newItem = ((ListItemWrapper)o).getItem();
+            return item.getLabel().compareTo(newItem.getLabel());
+        }
+        return -1;
     }
 }

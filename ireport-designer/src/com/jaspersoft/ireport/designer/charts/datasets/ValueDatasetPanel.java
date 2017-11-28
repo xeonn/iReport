@@ -86,7 +86,7 @@ public class ValueDatasetPanel extends javax.swing.JPanel  implements ChartDatas
         
     public void jRTextExpressionValueTextChanged()
     {
-        valueDataset.setValueExpression( Misc.createExpression("java.lung.Number", jRTextExpressionValue.getText() ) );// NOI18N
+        valueDataset.setValueExpression( Misc.createExpression("java.lang.Number", jRTextExpressionValue.getText() ) );// NOI18N
     }
     
     

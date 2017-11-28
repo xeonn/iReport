@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -37,13 +38,13 @@ public final class LanguageProperty extends StringListProperty
     @Override
     public String getDisplayName()
     {
-        return "Language";
+        return I18n.getString("LanguageProperty.Property.Language");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The language used in all the expressions.";
+        return I18n.getString("LanguageProperty.Property.Tooltip");
     }
 
     @Override
@@ -52,6 +53,7 @@ public final class LanguageProperty extends StringListProperty
         List tags = new java.util.ArrayList();
         tags.add(new Tag(JasperDesign.LANGUAGE_JAVA, "Java"));//FIXMETD confusion between lower case and upper case values
         tags.add(new Tag(JasperDesign.LANGUAGE_GROOVY, "Groovy"));
+        tags.add(new Tag("javascript", "JavaScript"));
         return tags;
     }
 

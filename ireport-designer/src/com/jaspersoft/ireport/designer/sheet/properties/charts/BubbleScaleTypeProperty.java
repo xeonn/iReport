@@ -19,6 +19,7 @@ import com.jaspersoft.ireport.designer.sheet.SeriesColorsProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
@@ -73,7 +74,7 @@ public final class BubbleScaleTypeProperty extends PropertySupport
         public BubbleScaleTypeProperty(JRDesignBubblePlot element)
         {
             // TODO: Replace WhenNoDataType with the right constant
-            super(JRDesignBubblePlot.PROPERTY_SCALE_TYPE,Integer.class, "Scale Type", "Scale Type", true, true);
+            super(JRDesignBubblePlot.PROPERTY_SCALE_TYPE,Integer.class, I18n.getString("Global.Property.ScaleType"), I18n.getString("Global.Property.ScaleType"), true, true);
             this.element = element;
             setValue("suppressCustomEditor", Boolean.TRUE);
         }
@@ -85,9 +86,9 @@ public final class BubbleScaleTypeProperty extends PropertySupport
             if (editor == null)
             {
                 java.util.ArrayList l = new java.util.ArrayList();
-                l.add(new Tag(new Integer(org.jfree.chart.renderer.xy.XYBubbleRenderer.SCALE_ON_BOTH_AXES), "Both Axes"));
-                l.add(new Tag(new Integer(org.jfree.chart.renderer.xy.XYBubbleRenderer.SCALE_ON_DOMAIN_AXIS), "Domain Axis"));
-                l.add(new Tag(new Integer(org.jfree.chart.renderer.xy.XYBubbleRenderer.SCALE_ON_RANGE_AXIS), "Range Axis"));
+                l.add(new Tag(new Integer(org.jfree.chart.renderer.xy.XYBubbleRenderer.SCALE_ON_BOTH_AXES), I18n.getString("Global.Property.BothAxes")));
+                l.add(new Tag(new Integer(org.jfree.chart.renderer.xy.XYBubbleRenderer.SCALE_ON_DOMAIN_AXIS), I18n.getString("Global.Property.DomainAxis")));
+                l.add(new Tag(new Integer(org.jfree.chart.renderer.xy.XYBubbleRenderer.SCALE_ON_RANGE_AXIS), I18n.getString("Global.Property.RangeAxis")));
                 editor = new ComboBoxPropertyEditor(false, l);
             }
             return editor;

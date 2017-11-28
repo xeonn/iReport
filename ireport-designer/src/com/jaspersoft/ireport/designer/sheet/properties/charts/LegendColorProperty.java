@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.design.JRDesignChart;
@@ -23,7 +24,7 @@ public final class LegendColorProperty extends ColorProperty {
 
     private final JRDesignChart element;
 
-    @SuppressWarnings("unchecked")
+    
     public LegendColorProperty(JRDesignChart element)
     {
         super(element);
@@ -39,13 +40,13 @@ public final class LegendColorProperty extends ColorProperty {
     @Override
     public String getDisplayName()
     {
-        return "Legend Color";
+        return I18n.getString("Global.Property.LegendColor");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The color of the legend.";
+        return I18n.getString("Global.Property.LegendColordetail");
     }
 
     @Override

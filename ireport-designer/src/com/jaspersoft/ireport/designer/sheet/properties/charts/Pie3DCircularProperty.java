@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignPie3DPlot;
     
     
@@ -20,7 +21,7 @@ public final class Pie3DCircularProperty extends BooleanProperty {
 
     private final JRDesignPie3DPlot plot;
 
-    @SuppressWarnings("unchecked")
+    
     public Pie3DCircularProperty(JRDesignPie3DPlot plot)
     {
         super(plot);
@@ -35,13 +36,13 @@ public final class Pie3DCircularProperty extends BooleanProperty {
     @Override
     public String getDisplayName()
     {
-        return "Circular";
+        return I18n.getString("Circular");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Circular.";
+        return I18n.getString("Circular.");
     }
 
     @Override

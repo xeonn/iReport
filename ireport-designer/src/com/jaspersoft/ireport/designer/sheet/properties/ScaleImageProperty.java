@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignImage;
@@ -38,22 +39,22 @@ public final class ScaleImageProperty extends ByteProperty
     @Override
     public String getDisplayName()
     {
-        return "Scale Image";
+        return I18n.getString("Global.Property.ScaleImage");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "How to scale the image.";
+        return I18n.getString("Global.Property.ScaleImagedetail");
     }
 
     @Override
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_CLIP), "Clip"));
-        tags.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_FILL_FRAME), "Fill Frame"));
-        tags.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_RETAIN_SHAPE), "Retain Shape"));
+        tags.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_CLIP), I18n.getString("Global.Property.Clip")));
+        tags.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_FILL_FRAME), I18n.getString("Global.Property.FillFrame")));
+        tags.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_RETAIN_SHAPE), I18n.getString("Global.Property.RetainShape")));
         return tags;
     }
 

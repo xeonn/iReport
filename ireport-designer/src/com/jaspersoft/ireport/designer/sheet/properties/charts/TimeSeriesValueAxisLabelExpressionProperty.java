@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignTimeSeriesPlot;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -37,13 +38,13 @@ public final class TimeSeriesValueAxisLabelExpressionProperty extends Expression
     @Override
     public String getDisplayName()
     {
-        return "Value Axis Label Expression";
+        return I18n.getString("Value_Axis_Label_Expression");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Value Axis Label Expression.";
+        return I18n.getString("Value_Axis_Label_Expression.");
     }
 
     @Override

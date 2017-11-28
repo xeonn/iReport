@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 
@@ -35,13 +36,13 @@ public final class BlankWhenNullProperty extends BooleanProperty
     @Override
     public String getDisplayName()
     {
-        return "Blank When Null";
+        return I18n.getString("Global.Property.BlankWhenNull");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Print a blank string instead of null.";
+        return I18n.getString("Global.Property.BWNdetail");
     }
 
     @Override

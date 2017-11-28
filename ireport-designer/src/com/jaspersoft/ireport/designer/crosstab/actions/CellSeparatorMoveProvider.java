@@ -38,6 +38,7 @@ import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
 import com.jaspersoft.ireport.designer.crosstab.undo.CellResizeUndoableEdit;
 import com.jaspersoft.ireport.designer.crosstab.widgets.CellSeparatorWidget;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.List;
@@ -107,7 +108,7 @@ public class CellSeparatorMoveProvider implements MoveProvider {
                // The change must be done on the cell of the row group...
                int h = ((JRDesignCrosstabColumnGroup)groups[separator.getIndex()]).getHeight();
                JRDesignCrosstabColumnGroup cell = (JRDesignCrosstabColumnGroup)groups[separator.getIndex()];
-               undos.add( new CellResizeUndoableEdit(cell,"Height",Integer.TYPE, h, h+delta ) );
+               undos.add( new CellResizeUndoableEdit(cell,I18n.getString("Global.Property.Height"),Integer.TYPE, h, h+delta ) );
                cell.setHeight( h + delta );
             }
             else
@@ -138,7 +139,7 @@ public class CellSeparatorMoveProvider implements MoveProvider {
                         }
                         if (h >= 0)
                         {
-                            undos.add( new CellResizeUndoableEdit(cell,"Height",Integer.class, h, h+delta ) );
+                            undos.add( new CellResizeUndoableEdit(cell,I18n.getString("Global.Property.Height"),Integer.class, h, h+delta ) );
                             cell.setHeight( h + delta );
                         }
                     }
@@ -155,7 +156,7 @@ public class CellSeparatorMoveProvider implements MoveProvider {
                // The change must be done on the cell of the row group...
                 JRDesignCrosstabRowGroup group = (JRDesignCrosstabRowGroup)groups[separator.getIndex()];
                 int width = group.getWidth();
-                undos.add( new CellResizeUndoableEdit(group,"Width",Integer.TYPE, width, width+delta ) );
+                undos.add( new CellResizeUndoableEdit(group,I18n.getString("Global.Property.Width"),Integer.TYPE, width, width+delta ) );
                 group.setWidth( width + delta );
             }
             else
@@ -188,7 +189,7 @@ public class CellSeparatorMoveProvider implements MoveProvider {
                         }
                         if (width >= 0)
                         {
-                            undos.add( new CellResizeUndoableEdit(cell,"Width",Integer.class, width, width+delta ) );
+                            undos.add( new CellResizeUndoableEdit(cell,I18n.getString("Global.Property.Width"),Integer.class, width, width+delta ) );
                             cell.setWidth( width + delta );
                         }
                     }

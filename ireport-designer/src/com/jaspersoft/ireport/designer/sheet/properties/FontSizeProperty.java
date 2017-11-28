@@ -9,6 +9,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -29,8 +30,8 @@ public class FontSizeProperty extends PropertySupport.ReadWrite {
     public FontSizeProperty(JRDesignTextElement element)
     {
         super(JRBaseStyle.PROPERTY_FONT_SIZE, Integer.class,
-              "Size",
-              "Size");
+              I18n.getString("Global.Property.Size"),
+              I18n.getString("Global.Property.Size"));
         this.element = element;
 
         setValue("canEditAsText",true);

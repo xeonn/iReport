@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -36,13 +37,13 @@ public final class BandPrintWhenExpressionProperty extends ExpressionProperty
     @Override
     public String getDisplayName()
     {
-        return "Print When Expression";
+        return I18n.getString("BandProperty.Property.PrintWhenExpression");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Print this element only when this expression is blank or returns true.";
+        return I18n.getString("BandProperty.Property.PrintWhenExpressiondetail");
     }
 
     @Override

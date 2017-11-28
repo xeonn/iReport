@@ -11,6 +11,7 @@ package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
@@ -25,7 +26,7 @@ public final class MeterShapeProperty extends ByteProperty
 {
     private final JRDesignMeterPlot element;
 
-    @SuppressWarnings("unchecked")
+    
     public MeterShapeProperty(JRDesignMeterPlot element)
     {
         super(element);
@@ -41,22 +42,22 @@ public final class MeterShapeProperty extends ByteProperty
     @Override
     public String getDisplayName()
     {
-        return "Shape";
+        return I18n.getString("Shape");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Shape.";
+        return I18n.getString("Shape.");
     }
 
     @Override
     public List getTagList() 
     {
         List tags = new ArrayList();
-        tags.add(new Tag(new Byte(JRDesignMeterPlot.SHAPE_PIE), "Pie"));
-        tags.add(new Tag(new Byte(JRDesignMeterPlot.SHAPE_CIRCLE), "Circle"));
-        tags.add(new Tag(new Byte(JRDesignMeterPlot.SHAPE_CHORD), "Chord"));
+        tags.add(new Tag(new Byte(JRDesignMeterPlot.SHAPE_PIE), I18n.getString("Pie")));
+        tags.add(new Tag(new Byte(JRDesignMeterPlot.SHAPE_CIRCLE), I18n.getString("Circle")));
+        tags.add(new Tag(new Byte(JRDesignMeterPlot.SHAPE_CHORD), I18n.getString("Chord")));
         return tags;
     }
 

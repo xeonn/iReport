@@ -19,6 +19,7 @@ import com.jaspersoft.ireport.designer.sheet.SeriesColorsProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
@@ -69,12 +70,12 @@ public final class MeterValueColorProperty extends PropertySupport.ReadWrite {
     // FIXME: it should extend ColorProperty
     JRDesignMeterPlot element = null;
 
-    @SuppressWarnings("unchecked")
+    
     public MeterValueColorProperty(JRDesignMeterPlot element)
     {
         super( JRDesignValueDisplay.PROPERTY_COLOR, java.awt.Color.class,
-              "Value Color",
-              "The color of the ticks.");
+              I18n.getString("Value_Color"),
+              I18n.getString("The_color_of_the_ticks."));
         this.element = element;
     }
 
@@ -99,7 +100,7 @@ public final class MeterValueColorProperty extends PropertySupport.ReadWrite {
             ObjectPropertyUndoableEdit urob =
                     new ObjectPropertyUndoableEdit(
                         element,
-                        "ValueDisplay", 
+                        I18n.getString("ValueDisplay"), 
                         JRValueDisplay.class,
                         oldValue,newValue);
             // Find the undoRedo manager...

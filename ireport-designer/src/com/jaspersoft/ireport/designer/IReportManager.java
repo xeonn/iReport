@@ -16,6 +16,7 @@ import com.jaspersoft.ireport.designer.fonts.TTFFontsLoaderMonitor;
 import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
 import com.jaspersoft.ireport.designer.undo.AggregatedUndoableEdit;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyChangeSupport;
 import java.beans.PropertyVetoException;
 import java.io.File;
@@ -24,6 +25,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -31,12 +33,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriter;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoableEdit;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignChartDataset;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.JRProperties;
@@ -44,6 +45,10 @@ import org.apache.xerces.parsers.DOMParser;
 import org.netbeans.api.db.explorer.JDBCDriver;
 import org.netbeans.api.db.explorer.JDBCDriverManager;
 import org.openide.awt.StatusDisplayer;
+import org.openide.filesystems.FileObject;
+import org.openide.filesystems.Repository;
+import org.openide.loaders.DataFolder;
+import org.openide.loaders.DataObject;
 import org.openide.modules.InstalledFileLocator;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -77,6 +82,41 @@ public class IReportManager {
     
     private static ReportClassLoader reportClassLoader = null;
     private static IReportManager mainInstance = null;
+
+    /**
+     * Look into the virtual file system for element decorators...
+     *
+     * @param element
+     * @return
+     */
+    public static List<ElementDecorator> getElementDecorators(JRDesignElement element) {
+        
+        List<ElementDecorator> decorators = new ArrayList<ElementDecorator>();
+        
+        FileObject decoratorsFileObject = Repository.getDefault().getDefaultFileSystem().getRoot().getFileObject("ireport/decorators/elements");
+        if (decoratorsFileObject == null) return decorators;
+        DataFolder decoratorsDataFolder = DataFolder.findFolder(decoratorsFileObject);
+        if (decoratorsDataFolder == null) return decorators;
+
+        Enumeration<DataObject> enObj = decoratorsDataFolder.children();
+        while (enObj.hasMoreElements())
+        {
+            DataObject dataObject = enObj.nextElement();
+            String name = dataObject.getName();
+            name = name.replace('-', '.');
+            try {
+                ElementDecorator decorator = (ElementDecorator) Class.forName(name).newInstance();
+                if (decorator.appliesTo(element))
+                {
+                    decorators.add(decorator);
+                }
+            } catch (Throwable ex)
+            {
+                System.out.println("Unable to find element decorator class: " + name);
+            }
+        }
+        return decorators;
+    }
     
     private java.util.ArrayList<IReportConnection> connections = null;
     private java.util.ArrayList<QueryExecuterDef> queryExecuters = null;
@@ -127,7 +167,7 @@ public class IReportManager {
                     "net.sf.jasperreports.engine.query.JRXmlaQueryExecuterFactory");
         } catch (Exception ex)
         { 
-            System.out.println("Error initializing JRXmlaQueryExecuterFactory " +ex.getMessage());
+            System.out.println(I18n.getString("IReportManager.Error.WarningJRXmla") +ex.getMessage());
             System.out.flush();
         }
         
@@ -136,7 +176,7 @@ public class IReportManager {
                     "net.sf.jasperreports.engine.util.xml.JaxenXPathExecuterFactory");
         } catch (Exception ex)
         { 
-            System.out.println("Error initializing JaxenXPathExecuterFactory " +ex.getMessage());
+            System.out.println(I18n.getString("IReportManager.Error.ErrorJaxenXP") +ex.getMessage());
             System.out.flush();
         }
         
@@ -177,6 +217,8 @@ public class IReportManager {
         }
         System.out.flush();
          */
+
+        createPaletteItem();
     }
     
     public static IReportManager getInstance()
@@ -210,7 +252,7 @@ public class IReportManager {
             if (connections.size() == 0)
             {
                 JREmptyDatasourceConnection c = new JREmptyDatasourceConnection();
-                c.setName("Empty datasource");
+                c.setName(I18n.getString("IReportManager.Type.EmptyDatasource"));
                 connections.add(c);
                 saveiReportConfiguration();
             }
@@ -460,7 +502,12 @@ public class IReportManager {
                     path = path.substring(1);
                 }
                 if (path.length() == 0) continue;
-                File f = locator.locate(path, null, false);
+                File f = new File(path);
+                if (!f.exists())
+                {
+                    f = locator.locate(path, null, false);
+                }
+
                 if (f != null && f.exists())
                 {
                     try {
@@ -954,5 +1001,12 @@ public class IReportManager {
         while (it.hasNext()) {
             it.next().jrxmlVisualViewActivated(view);
         }
+    }
+
+
+    public void createPaletteItem()
+    {
+
+        //PaletteItem item = CreatePageNumberTextfieldAction.createPaletteItem();
     }
 }

@@ -13,6 +13,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRExpression;
@@ -44,13 +45,13 @@ public final class DataSourceExpressionProperty extends ExpressionProperty
     @Override
     public String getDisplayName()
     {
-        return "Data Source Expression";
+        return I18n.getString("Global.Property.DataSourceExpression");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The expression must return a JRDataSource object to fill the subreport.";
+        return I18n.getString("Global.Property.DSEdetail");
     }
 
     @Override

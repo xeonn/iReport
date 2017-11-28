@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 /**
@@ -35,13 +36,13 @@ public final class LeftProperty extends IntegerProperty
     @Override
     public String getDisplayName()
     {
-        return "Left";
+        return I18n.getString("Global.Property.Left");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Left position of this element.";
+        return I18n.getString("Global.Property.Leftdetail");
     }
 
     @Override
@@ -73,7 +74,7 @@ public final class LeftProperty extends IntegerProperty
     {
         if (radius < 0)
         {
-            throw annotateException("This property cannot be a negative number.");
+            throw annotateException(I18n.getString("Global.Property.Leftexception"));
         }
     }
 

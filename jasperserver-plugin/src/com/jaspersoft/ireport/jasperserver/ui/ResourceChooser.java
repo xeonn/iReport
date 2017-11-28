@@ -512,7 +512,7 @@ public class ResourceChooser extends javax.swing.JPanel {
             {
                 ResourceDescriptor nrd = new ResourceDescriptor();
                 nrd.setUriString(uri);
-                nrd.setWsType(ResourceDescriptor.TYPE_FOLDER);
+                nrd.setWsType("-"); //ResourceDescriptor.TYPE_FOLDER);
                 try {
                     nrd = getServer().getWSClient().get(nrd, null);
                     
@@ -530,7 +530,7 @@ public class ResourceChooser extends javax.swing.JPanel {
                     }
                     
                 } catch (Exception ex){
-                    //ex.printStackTrace();
+                    ex.printStackTrace();
                 }
                 
             }

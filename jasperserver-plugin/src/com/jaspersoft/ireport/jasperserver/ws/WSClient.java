@@ -493,7 +493,7 @@ public class WSClient {
     	else 
     	{
                 // patch jrxml files....
-                if (JasperServerManager.getMainInstance().getProperties().getProperty("use_jrxml_DTD", "true").equals("true"))
+                if (JasperServerManager.getPreferences().getBoolean("use_jrxml_DTD", false))
                 {
                     if (inputFile.getName().toLowerCase().endsWith(".jrxml"))
                     {

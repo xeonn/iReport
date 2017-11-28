@@ -31,8 +31,11 @@
 package com.jaspersoft.ireport.designer;
 
 import com.jaspersoft.ireport.JrxmlDataObject;
+import com.jaspersoft.ireport.designer.utils.Misc;
 import java.io.IOException;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.text.BadLocationException;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
 import org.netbeans.core.spi.multiview.MultiViewDescription;
@@ -47,6 +50,7 @@ import org.openide.loaders.SaveAsCapable;
 import org.openide.nodes.Node.Cookie;
 import org.openide.text.CloneableEditorSupport;
 import org.openide.text.DataEditorSupport;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.Task;
 import org.openide.util.lookup.AbstractLookup;
@@ -150,14 +154,25 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
             {
                 //set the document content...
                 JasperDesign jd = getCurrentModel();
+                String content = null;
                 try {
-                    String content = JRXmlWriter.writeReport(jd, "UTF-8"); // IReportManager.getInstance().getProperty("jrxmlEncoding", System.getProperty("file.encoding") ));
-                    getDocument().remove(0, getDocument().getLength());
-                    getDocument().insertString(0, content, null);
-                    ((JrxmlVisualView)descriptions[0]).setNeedModelRefresh(false);
+                    content = JRXmlWriter.writeReport(jd, "UTF-8"); // IReportManager.getInstance().getProperty("jrxmlEncoding", System.getProperty("file.encoding") ));
                 } catch (Exception ex)
                 {
+                    JOptionPane.showMessageDialog(Misc.getMainWindow(), "Error saving the JRXML: " + ex.getMessage() + "\nSee the log file for more details.", "Error saving", JOptionPane.ERROR_MESSAGE);
                     ex.printStackTrace();
+                    return;
+                }
+
+                if (content != null)
+                {
+                    try {
+                        getDocument().remove(0, getDocument().getLength());
+                        getDocument().insertString(0, content, null);
+                        ((JrxmlVisualView) descriptions[0]).setNeedModelRefresh(false);
+                    } catch (BadLocationException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
                 }
             }
             

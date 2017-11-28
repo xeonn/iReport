@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.base.JRBaseImage;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 
@@ -36,13 +37,13 @@ public final class ImageUsingCacheProperty extends BooleanProperty
     @Override
     public String getDisplayName()
     {
-        return "Using Cache";
+        return I18n.getString("Global.Property.UsingCache");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Set if an the image should be cached filling the report.";
+        return I18n.getString("Global.Property.UsingCachedetail");
     }
 
     @Override

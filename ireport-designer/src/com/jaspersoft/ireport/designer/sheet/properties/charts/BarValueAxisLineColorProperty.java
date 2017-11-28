@@ -7,9 +7,11 @@
  * and open the template in the editor.
  */
 
-package com.jaspersoft.ireport.designer.sheet.properties.charts;
+package com.jaspersoft.ireport.designer.sheet.properties.charts; 
+
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.charts.design.JRDesignBarPlot;
     
@@ -38,13 +40,13 @@ public final class BarValueAxisLineColorProperty extends ColorProperty {
     @Override
     public String getDisplayName()
     {
-        return "Value Axis Line Color";
+        return I18n.getString("Global.Property.ValueAxisLineColor");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The color of the Value Axis Line.";
+        return I18n.getString("Global.Property.ValueAxisLineColordetail");
     }
 
     @Override

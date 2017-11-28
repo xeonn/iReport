@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
     
@@ -35,13 +36,13 @@ public final class PrintInFirstWholeBandProperty extends BooleanProperty
     @Override
     public String getDisplayName()
     {
-        return "Print In First Whole Band";
+        return I18n.getString("Global.Property.PrintFirstWholeBand");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Print In First Whole Band.";
+        return I18n.getString("Global.Property.PrintFirstWholeBand.");
     }
 
     @Override

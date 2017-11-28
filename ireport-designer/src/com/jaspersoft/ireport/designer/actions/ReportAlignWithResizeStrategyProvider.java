@@ -15,6 +15,7 @@ import com.jaspersoft.ireport.designer.undo.AggregatedUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import com.jaspersoft.ireport.designer.widgets.SelectionWidget;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -333,8 +334,8 @@ public class ReportAlignWithResizeStrategyProvider extends AlignWithSupport impl
                 JRDesignElementWidget dew = ((SelectionWidget)w).getRealWidget();
                 undoEdits.add(new ObjectPropertyUndoableEdit(dew.getElement(), "X", Integer.TYPE, new Integer(dew.getElement().getX()), new Integer(dew.getElement().getX())));
                 undoEdits.add(new ObjectPropertyUndoableEdit(dew.getElement(), "Y", Integer.TYPE, new Integer(dew.getElement().getY()), new Integer(dew.getElement().getY())));
-                undoEdits.add(new ObjectPropertyUndoableEdit(dew.getElement(), "Width", Integer.TYPE, new Integer(dew.getElement().getWidth()), new Integer(dew.getElement().getWidth())));
-                undoEdits.add(new ObjectPropertyUndoableEdit(dew.getElement(), "Height", Integer.TYPE, new Integer(dew.getElement().getHeight()), new Integer(dew.getElement().getHeight())));
+                undoEdits.add(new ObjectPropertyUndoableEdit(dew.getElement(), I18n.getString("Global.Property.Width"), Integer.TYPE, new Integer(dew.getElement().getWidth()), new Integer(dew.getElement().getWidth())));
+                undoEdits.add(new ObjectPropertyUndoableEdit(dew.getElement(), I18n.getString("Global.Property.Height"), Integer.TYPE, new Integer(dew.getElement().getHeight()), new Integer(dew.getElement().getHeight())));
            }
         }
         show ();
@@ -389,8 +390,8 @@ public class ReportAlignWithResizeStrategyProvider extends AlignWithSupport impl
                     
                     findEdit(dew.getElement(),"X").setNewValue(dew.getElement().getX());
                     findEdit(dew.getElement(),"Y").setNewValue(dew.getElement().getY());
-                    findEdit(dew.getElement(),"Width").setNewValue(dew.getElement().getWidth());
-                    findEdit(dew.getElement(),"Height").setNewValue(dew.getElement().getHeight());
+                    findEdit(dew.getElement(),I18n.getString("Global.Property.Width")).setNewValue(dew.getElement().getWidth());
+                    findEdit(dew.getElement(),I18n.getString("Global.Property.Height")).setNewValue(dew.getElement().getHeight());
                 
                 } finally {
                     dew.setChanging(b);

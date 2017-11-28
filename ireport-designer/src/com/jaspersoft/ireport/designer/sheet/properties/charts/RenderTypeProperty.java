@@ -11,6 +11,7 @@ package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.properties.StringListProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.design.JRDesignChart;
@@ -22,7 +23,7 @@ public final class RenderTypeProperty extends StringListProperty
 {
     private final JRDesignChart chart;
 
-    @SuppressWarnings("unchecked")
+    
     public RenderTypeProperty(JRDesignChart chart)
     {
         super(chart);
@@ -38,13 +39,13 @@ public final class RenderTypeProperty extends StringListProperty
     @Override
     public String getDisplayName()
     {
-        return "Render Type";
+        return I18n.getString("Render_Type");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The render type of the chart.";
+        return I18n.getString("The_render_type_of_the_chart.");
     }
 
     @Override

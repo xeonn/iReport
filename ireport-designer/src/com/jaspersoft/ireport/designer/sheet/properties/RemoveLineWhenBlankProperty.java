@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
     
@@ -35,13 +36,13 @@ public final class RemoveLineWhenBlankProperty extends BooleanProperty
     @Override
     public String getDisplayName()
     {
-        return "Remove Line When Blank";
+        return I18n.getString("Global.Property.RemoveLineWhenBlank");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Remove Line When Blank.";
+        return I18n.getString("Global.Property.RemoveLineWhenBlank.");
     }
 
     @Override

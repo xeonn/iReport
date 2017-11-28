@@ -86,9 +86,9 @@ public class Unit {
             unitsMap.put("pixels", units[0]);
             units[1] = new Unit("inches",Unit.INCHES, "inches");
             unitsMap.put("inches", units[1]);
-            units[2] = new Unit("cm",    Unit.CENTIMETERS);
+            units[2] = new Unit("cm",    Unit.CENTIMETERS, "cm");
             unitsMap.put("cm", units[2]);
-            units[3] = new Unit("mm",    Unit.MILLIMETERS);
+            units[3] = new Unit("mm",    Unit.MILLIMETERS, "mm");
             unitsMap.put("mm", units[3]);
         }
         return units;

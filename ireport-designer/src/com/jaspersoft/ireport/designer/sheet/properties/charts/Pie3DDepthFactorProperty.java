@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.DoubleProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignPie3DPlot;
     
     
@@ -20,7 +21,7 @@ public final class Pie3DDepthFactorProperty extends DoubleProperty {
 
     private final JRDesignPie3DPlot plot;
 
-    @SuppressWarnings("unchecked")
+    
     public Pie3DDepthFactorProperty(JRDesignPie3DPlot plot)
     {
         super(plot);
@@ -36,13 +37,13 @@ public final class Pie3DDepthFactorProperty extends DoubleProperty {
     @Override
     public String getDisplayName()
     {
-        return "Depth Factor";
+        return I18n.getString("Depth_Factor");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Depth Factor.";
+        return I18n.getString("Depth_Factor.");
     }
 
     @Override
@@ -74,7 +75,7 @@ public final class Pie3DDepthFactorProperty extends DoubleProperty {
     {
         if (depth < 0)
         {
-            throw annotateException("The depth factor must be a positive value.");
+            throw annotateException(I18n.getString("The_depth_factor_must_be_a_positive_value."));
         }
     }
 

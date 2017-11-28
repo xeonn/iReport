@@ -31,6 +31,7 @@
 package com.jaspersoft.ireport.designer;
 
 import com.jaspersoft.ireport.JrxmlDataObject;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.EventQueue;
 import java.awt.Image;
 import java.beans.BeanInfo;
@@ -58,7 +59,7 @@ public class JrxmlTextView implements MultiViewDescription {
     }
     
     public String getDisplayName() {
-        return "XML";
+        return I18n.getString("view.xml");
     }
     
     public Image getIcon() {
@@ -71,7 +72,7 @@ public class JrxmlTextView implements MultiViewDescription {
     }
     
     public String preferredID() {
-        return "XML";
+        return "XML"; // NOI18N
     }
     
     public MultiViewElement createElement() {

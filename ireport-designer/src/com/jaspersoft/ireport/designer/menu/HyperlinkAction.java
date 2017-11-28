@@ -14,6 +14,7 @@ import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.tools.HyperlinkPanel;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.util.HelpCtx;
@@ -44,7 +45,7 @@ public final class HyperlinkAction extends NodeAction {
     
     
     public String getName() {
-        return "Hyperlink";
+        return I18n.getString("HyperlinkAction.Property.Hyperlink");
     }
 
     @Override

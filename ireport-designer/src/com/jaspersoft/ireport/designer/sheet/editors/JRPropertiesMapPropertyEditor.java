@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.editors;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.beans.FeatureDescriptor;
 import java.beans.PropertyEditorSupport;
 import org.openide.explorer.propertysheet.ExPropertyEditor;
@@ -44,16 +45,16 @@ public class JRPropertiesMapPropertyEditor extends PropertyEditorSupport impleme
     public String getAsText() {
         Object val = getValue();
         if (val == null) {
-            return "No properties set";
+            return I18n.getString("JRPMPE.Property.Nopropertiesset");
         }
         if (val instanceof List)
         {
             int len = ((List)val).size();
             switch (len)
             {
-                case 0: return "No properties set";
-                case 1: return "One property set";
-                default: return len + " properties set";
+                case 0: return I18n.getString("JRPMPE.Property.Nopropertiesset");
+                case 1: return I18n.getString("JRPMPE.Property.Onepropertiesset");
+                default: return len + I18n.getString("JRPMPE.Property.propertiesset");
             }   
         }
         else if (val instanceof JRPropertiesMap)
@@ -61,9 +62,9 @@ public class JRPropertiesMapPropertyEditor extends PropertyEditorSupport impleme
             int len = ((JRPropertiesMap)val).getPropertyNames().length;
             switch (len)
             {
-                case 0: return "No properties set";
-                case 1: return "One property set";
-                default: return len + " properties set";
+                case 0: return I18n.getString("JRPMPE.Property.Nopropertiesset");
+                case 1: return I18n.getString("JRPMPE.Property.Onepropertiesset");
+                default: return len + I18n.getString("JRPMPE.Property.propertiesset");
             }   
         }
         return "";

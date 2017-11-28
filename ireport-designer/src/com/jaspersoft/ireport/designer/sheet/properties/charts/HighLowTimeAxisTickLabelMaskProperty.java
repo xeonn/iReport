@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.StringProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignHighLowPlot;
     
     
@@ -20,7 +21,7 @@ public final class HighLowTimeAxisTickLabelMaskProperty extends StringProperty
 {
     private final JRDesignHighLowPlot plot;
 
-    @SuppressWarnings("unchecked")
+    
     public HighLowTimeAxisTickLabelMaskProperty(JRDesignHighLowPlot plot)
     {
         super(plot);
@@ -36,13 +37,13 @@ public final class HighLowTimeAxisTickLabelMaskProperty extends StringProperty
     @Override
     public String getDisplayName()
     {
-        return "Time Axis Tick Label Mask";
+        return I18n.getString("Time_Axis_Tick_Label_Mask");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Time Axis Tick Label Mask.";
+        return I18n.getString("Time_Axis_Tick_Label_Mask.");
     }
 
     @Override

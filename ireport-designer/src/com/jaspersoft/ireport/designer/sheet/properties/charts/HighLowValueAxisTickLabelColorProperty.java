@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.charts.design.JRDesignHighLowPlot;
     
@@ -22,7 +23,7 @@ public final class HighLowValueAxisTickLabelColorProperty extends ColorProperty 
 
     private final JRDesignHighLowPlot element;
 
-    @SuppressWarnings("unchecked")
+   
     public HighLowValueAxisTickLabelColorProperty(JRDesignHighLowPlot element)
     {
         super(element);
@@ -38,13 +39,13 @@ public final class HighLowValueAxisTickLabelColorProperty extends ColorProperty 
     @Override
     public String getDisplayName()
     {
-        return "Value Axis Tick Label Color";
+        return I18n.getString("Value_Axis_Tick_Label_Color");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The color of the Value Axis Tick Label.";
+        return I18n.getString("The_color_of_the_Value_Axis_Tick_Label.");
     }
 
     @Override

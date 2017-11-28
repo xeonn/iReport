@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.JRGraphicElement;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
@@ -39,20 +40,20 @@ public final class FillProperty extends ByteProperty
     @Override
     public String getDisplayName()
     {
-        return "Fill";
+        return I18n.getString("FillProperty.Property.Fill");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The fill mode.";
+        return I18n.getString("FillProperty.Property.TheFillMode");
     }
 
     @Override
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRGraphicElement.FILL_SOLID), "Solid"));
+        tags.add(new Tag(new Byte(JRGraphicElement.FILL_SOLID), I18n.getString("Global.Property.Solid")));
         return tags;
     }
 

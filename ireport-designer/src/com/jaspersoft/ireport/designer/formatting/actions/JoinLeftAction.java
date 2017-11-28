@@ -5,10 +5,7 @@
 
 package com.jaspersoft.ireport.designer.formatting.actions;
 
-import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.ModelUtils;
-import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
-import com.jaspersoft.ireport.designer.undo.PropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Rectangle;
 import java.util.List;
 import javax.swing.Action;
@@ -60,7 +57,7 @@ public class JoinLeftAction extends AbstractFormattingToolAction {
 
     @Override
     public String getName() {
-        return "Join Left";
+        return I18n.getString("formatting.tools.joinLeft");
     }
 
     @Override

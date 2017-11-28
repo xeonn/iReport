@@ -18,6 +18,7 @@ import com.jaspersoft.ireport.designer.sheet.JRPropertiesMapProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.datatransfer.Transferable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -252,8 +253,8 @@ public class ParameterNode extends IRAbstractNode implements PropertyChangeListe
         public NameProperty(JRDesignParameter parameter, JRDesignDataset dataset)
         {
             super(JRDesignParameter.PROPERTY_NAME, String.class,
-                  "Name",
-                  "Name of the parameter");
+                  I18n.getString("ParameterNode.Property.Name"),
+                  I18n.getString("ParameterNode.Property.Namedetail"));
             this.parameter = parameter;
             this.dataset = dataset;
             this.setValue("oneline", Boolean.TRUE);
@@ -275,7 +276,7 @@ public class ParameterNode extends IRAbstractNode implements PropertyChangeListe
 
             if (val == null || val.equals(""))
             {
-                IllegalArgumentException iae = annotateException("Parameter name not valid."); 
+                IllegalArgumentException iae = annotateException(I18n.getString("ParameterNode.Property.NameInvalid")); 
                 throw iae; 
             }
 
@@ -287,7 +288,7 @@ public class ParameterNode extends IRAbstractNode implements PropertyChangeListe
             {
                 if (p != getParameter() && p.getName().equals(s))
                 {
-                    IllegalArgumentException iae = annotateException("Parameter name already in use."); 
+                    IllegalArgumentException iae = annotateException(I18n.getString("ParameterNode.Property.NameInUse")); 
                     throw iae; 
                 }
             }
@@ -343,8 +344,8 @@ public class ParameterNode extends IRAbstractNode implements PropertyChangeListe
         public ValueClassNameProperty(JRDesignParameter parameter)
         {
             super(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME, String.class,
-                  "Parameter Class",
-                  "Parameter Class");
+                  I18n.getString("ParameterNode.Property.ParameterClass"),
+                  I18n.getString("ParameterNode.Property.ParameterClass"));
             this.parameter = parameter;
         }
 
@@ -465,8 +466,8 @@ public class ParameterNode extends IRAbstractNode implements PropertyChangeListe
         public ForPromptingProperty(JRDesignParameter parameter)
         {
             super(JRDesignParameter.PROPERTY_FOR_PROMPTING, Boolean.class,
-                  "Use as a prompt",
-                  "Use as a prompt");
+                  I18n.getString("ParameterNode.Property.UsePrompt"),
+                  I18n.getString("ParameterNode.Property.UsePrompt"));
             this.parameter = parameter;
         }
 
@@ -539,8 +540,8 @@ public class ParameterNode extends IRAbstractNode implements PropertyChangeListe
         public DescriptionProperty(JRDesignParameter parameter)
         {
             super(JRDesignParameter.PROPERTY_DESCRIPTION, String.class,
-                  "Description",
-                  "Description");
+                  I18n.getString("ParameterNode.Property.Description"),
+                  I18n.getString("ParameterNode.Property.Description"));
             this.parameter = parameter;
         }
 

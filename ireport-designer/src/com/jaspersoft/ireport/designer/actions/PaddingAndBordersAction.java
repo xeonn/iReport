@@ -14,6 +14,7 @@ import com.jaspersoft.ireport.designer.charts.*;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.sheet.editors.box.BoxPanel;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ import org.openide.util.actions.NodeAction;
 public final class PaddingAndBordersAction extends NodeAction {
 
     public String getName() {
-        return "Padding and borders";
+        return I18n.getString("PaddingAndBordersAction.Property.PaddingAndBorders");
     }
 
     @Override

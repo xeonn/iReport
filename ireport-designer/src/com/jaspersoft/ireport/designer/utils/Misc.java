@@ -20,12 +20,14 @@ import java.awt.Window;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
@@ -45,6 +47,7 @@ import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
+import org.openide.filesystems.Repository;
 import org.openide.loaders.DataFolder;
 import org.openide.loaders.DataObject;
 import org.openide.util.Lookup;
@@ -58,6 +61,33 @@ import org.w3c.dom.NodeList;
  * @author gtoffoli
  */
 public class Misc {
+
+    public static FileObject createFolders(String path) throws IOException {
+
+        FileObject root = Repository.getDefault().getDefaultFileSystem().getRoot();
+
+        StringTokenizer st = new StringTokenizer(path, "/");
+
+        System.out.println("Creating dir: " + path);
+        FileObject nextDir = root;
+        while (st.hasMoreTokens())
+        {
+            String nextDirName = st.nextToken();
+            if (nextDirName.length() == 0) continue;
+
+            System.out.println("Creating subir: " + nextDirName);
+            if (nextDir != null)
+            {
+                FileObject newDir = nextDir.getFileObject(nextDirName);
+                if (newDir == null)
+                {
+                    newDir = nextDir.createFolder(nextDirName);
+                }
+                nextDir = newDir;
+            }
+        }
+        return nextDir;
+    }
 
     public static String getDataFolderPath(DataFolder targetFolder) {
        if (targetFolder == null) return null;
@@ -560,9 +590,15 @@ public class Misc {
                          ((Tag)val).getValue().equals(itemValue))
                     {
                         comboBox.setSelectedIndex( i );
-                        break;
+                        return;
                     }
                 }
+            }
+
+            // Item not found...if the combobox is editable..let's set the value...
+            if (comboBox.isEditable() && itemValue != null && itemValue instanceof String)
+            {
+                comboBox.setSelectedItem(itemValue);
             }
         }
     

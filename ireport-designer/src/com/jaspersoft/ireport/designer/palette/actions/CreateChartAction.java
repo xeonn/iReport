@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.palette.actions;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.charts.ChartSelectionJDialog;
 import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
 import com.jaspersoft.ireport.designer.utils.Misc;
@@ -54,6 +55,14 @@ public class CreateChartAction extends CreateReportElementAction
             element = dialog.getChart();
             element.setWidth(200);
             element.setHeight(100);
+            String s = IReportManager.getPreferences().get("DefaultTheme","");
+            if (s.length() > 0)
+            {
+                if (getJasperDesign().getPropertiesMap().getProperty("net.sf.jasperreports.chart.theme") == null)
+                {
+                    getJasperDesign().getPropertiesMap().setProperty("net.sf.jasperreports.chart.theme", s);
+                }
+            }
         }
 
         return element;

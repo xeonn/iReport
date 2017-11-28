@@ -9,6 +9,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -30,8 +31,8 @@ public class PdfEncodingProperty  extends PropertySupport.ReadWrite{
     public PdfEncodingProperty(JRDesignTextElement element)
     {
         super(JRBaseStyle.PROPERTY_PDF_ENCODING, String.class,
-              "Pdf Encoding",
-              "Pdf Encoding");
+              I18n.getString("Global.Property.PdfEncoding"),
+              I18n.getString("Global.Property.PdfEncoding"));
         this.element = element;
 
         setValue("canEditAsText",true);

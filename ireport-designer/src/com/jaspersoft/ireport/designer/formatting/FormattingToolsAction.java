@@ -4,9 +4,9 @@
  */
 package com.jaspersoft.ireport.designer.formatting;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
-import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
 /**
@@ -15,7 +15,7 @@ import org.openide.windows.TopComponent;
 public class FormattingToolsAction extends AbstractAction {
 
     public FormattingToolsAction() {
-        super(NbBundle.getMessage(FormattingToolsAction.class, "CTL_FormattingToolsAction"));
+        super(I18n.getString("CTL_FormattingToolsAction"));
 //        putValue(SMALL_ICON, new ImageIcon(Utilities.loadImage(FormattingToolsTopComponent.ICON_PATH, true)));
     }
 

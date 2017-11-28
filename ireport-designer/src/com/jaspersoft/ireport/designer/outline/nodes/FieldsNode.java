@@ -13,6 +13,7 @@ import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 
 import com.jaspersoft.ireport.designer.outline.NewTypesUtils;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.beans.PropertyChangeEvent;
@@ -70,7 +71,7 @@ public class FieldsNode extends IRIndexedNode implements PropertyChangeListener 
         dataset.getEventSupport().addPropertyChangeListener(this);
         
         
-        setDisplayName("Fields");
+        setDisplayName(I18n.getString("FieldsNode.Property.Fields"));
         setIconBaseWithExtension("com/jaspersoft/ireport/designer/resources/fields-16.png");
     
     

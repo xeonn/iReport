@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -38,22 +39,22 @@ public final class StretchTypeProperty extends ByteProperty
     @Override
     public String getDisplayName()
     {
-        return "Stretch Type";
+        return I18n.getString("Global.Property.StretchType");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "How to stretch the element.";
+        return I18n.getString("Global.Property.StretchTypedetail");
     }
 
     @Override
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRDesignElement.STRETCH_TYPE_NO_STRETCH), "No stretch"));
-        tags.add(new Tag(new Byte(JRDesignElement.STRETCH_TYPE_RELATIVE_TO_BAND_HEIGHT), "Relative to Band Height"));
-        tags.add(new Tag(new Byte(JRDesignElement.STRETCH_TYPE_RELATIVE_TO_TALLEST_OBJECT), "Relative to Tallest Object"));
+        tags.add(new Tag(new Byte(JRDesignElement.STRETCH_TYPE_NO_STRETCH), I18n.getString("Global.Property.Nostretch")));
+        tags.add(new Tag(new Byte(JRDesignElement.STRETCH_TYPE_RELATIVE_TO_BAND_HEIGHT), I18n.getString("Global.Property.RelativeBandHeight")));
+        tags.add(new Tag(new Byte(JRDesignElement.STRETCH_TYPE_RELATIVE_TO_TALLEST_OBJECT), I18n.getString("Global.Property.RBHdetail")));
         return tags;
     }
 

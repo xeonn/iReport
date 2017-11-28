@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -37,13 +38,13 @@ public final class BackcolorProperty extends ColorProperty
     @Override
     public String getDisplayName()
     {
-        return "Backcolor";
+        return I18n.getString("Global.Property.Backcolor");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The background color.";
+        return I18n.getString("Global.Property.Backcolordetail");
     }
 
     @Override

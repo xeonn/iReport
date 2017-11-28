@@ -116,6 +116,49 @@ public class JRPropertyDialog extends javax.swing.JDialog {
         dlm.addElement(new PropertyHint("net.sf.jasperreports.chart.theme",
             I18n.getString("JRPropertyDialog.List.Prop11") +
             I18n.getString("JRPropertyDialog.List.DefaultNull")));
+
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.pdf.tag.h1",
+            I18n.getString("JRPropertyDialog.List.Prop14") +
+            I18n.getString("JRPropertyDialog.List.DefaultNull")));
+
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.pdf.tag.h2",
+            I18n.getString("JRPropertyDialog.List.Prop15") +
+            I18n.getString("JRPropertyDialog.List.DefaultNull")));
+
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.pdf.tag.h3",
+            I18n.getString("JRPropertyDialog.List.Prop16") +
+            I18n.getString("JRPropertyDialog.List.DefaultNull")));
+
+        
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.pdf.tag.table",
+            I18n.getString("JRPropertyDialog.List.Prop17") +
+            I18n.getString("JRPropertyDialog.List.DefaultNull")));
+
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.pdf.tag.tr",
+            I18n.getString("JRPropertyDialog.List.Prop22") +
+            I18n.getString("JRPropertyDialog.List.DefaultNull")));
+        
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.pdf.tag.th",
+            I18n.getString("JRPropertyDialog.List.Prop18") +
+            I18n.getString("JRPropertyDialog.List.DefaultNull")));
+        
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.pdf.tag.td",
+            I18n.getString("JRPropertyDialog.List.Prop19") +
+            I18n.getString("JRPropertyDialog.List.DefaultNull")));
+        
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.pdf.tag.colspan",
+            I18n.getString("JRPropertyDialog.List.Prop20") +
+            I18n.getString("JRPropertyDialog.List.DefaultNull")));
+        
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.pdf.tag.rowspan",
+            I18n.getString("JRPropertyDialog.List.Prop21") +
+            I18n.getString("JRPropertyDialog.List.DefaultNull")));
+
+
+
+
+
+
         
     }
     
@@ -232,6 +275,16 @@ public class JRPropertyDialog extends javax.swing.JDialog {
         dlm.addElement(new PropertyHint("net.sf.jasperreports.export.csv.record.delimiter",
         I18n.getString("JRPropertyDialog.List.Prop10") +
         I18n.getString("JRPropertyDialog.List.Default1")));
+
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.pdf.tagged",
+        I18n.getString("JRPropertyDialog.List.Prop12") +
+        I18n.getString("JRPropertyDialog.List.DefaultFalse")));
+
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.pdf.tag.language",
+        I18n.getString("JRPropertyDialog.List.Prop13") +
+        I18n.getString("JRPropertyDialog.List.DefaultNull")));
+
+
         
     }
     
@@ -425,7 +478,7 @@ public class JRPropertyDialog extends javax.swing.JDialog {
         
         if (jCheckBox1.isSelected())
         {
-            tmpField.setValue( Misc.createExpression("java.lang.Object", this.expressionArea.getText() ));
+            tmpField.setValue( Misc.createExpression("java.lang.String", this.expressionArea.getText() ));
         }
         else
         {

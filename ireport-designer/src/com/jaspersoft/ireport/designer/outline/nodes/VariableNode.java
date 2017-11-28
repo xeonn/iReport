@@ -18,6 +18,7 @@ import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.datatransfer.Transferable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -248,8 +249,8 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
         public NameProperty(JRDesignVariable variable, JRDesignDataset dataset)
         {
             super(JRDesignVariable.PROPERTY_NAME, String.class,
-                  "Name",
-                  "Name of the variable");
+                  I18n.getString("VariableNode.Property.Name"),
+                  I18n.getString("VariableNode.Property.Namedetail"));
             this.variable = variable;
             this.dataset = dataset;
             this.setValue("oneline", Boolean.TRUE);
@@ -271,7 +272,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
 
             if (val == null || val.equals(""))
             {
-                IllegalArgumentException iae = annotateException("Variable name not valid."); 
+                IllegalArgumentException iae = annotateException(I18n.getString("VariableNode.Property.VariableInvalid")); 
                 throw iae; 
             }
 
@@ -283,7 +284,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
             {
                 if (p != getVariable() && p.getName().equals(s))
                 {
-                    IllegalArgumentException iae = annotateException("Variable name already in use."); 
+                    IllegalArgumentException iae = annotateException(I18n.getString("VariableNode.Property.VariableInUse")); 
                     throw iae; 
                 }
             }
@@ -339,8 +340,8 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
         public ValueClassNameProperty(JRDesignVariable variable)
         {
             super(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME, String.class,
-                  "Variable Class",
-                  "Variable Class");
+                  I18n.getString("VariableNode.Property.VariableClass"),
+                  I18n.getString("VariableNode.Property.VariableClass"));
             this.variable = variable;
         }
 
@@ -470,7 +471,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
             public CalculationProperty(JRDesignVariable variable)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super( JRDesignVariable.PROPERTY_CALCULATION,Byte.class, "Calculation", "Set the calculation performed by this variable", true, true);
+                super( JRDesignVariable.PROPERTY_CALCULATION,Byte.class, I18n.getString("VariableNode.Property.Calculation"), I18n.getString("VariableNode.Property.Calculationdetail"), true, true);
                 //this.dataset = dataset;
                 this.variable = variable;
                 setValue("suppressCustomEditor", Boolean.TRUE);
@@ -511,17 +512,17 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
                 {
                     java.util.ArrayList l = new java.util.ArrayList();
                     
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_NOTHING), "Nothing"));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_COUNT), "Count"));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_DISTINCT_COUNT), "Distinct Count"));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_SUM), "Sum"));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_AVERAGE), "Average"));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_LOWEST), "Lowest"));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_HIGHEST), "Highest"));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_STANDARD_DEVIATION), "Standard Deviation"));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_VARIANCE), "Variance"));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_SYSTEM), "System"));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_FIRST), "First"));
+                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_NOTHING), I18n.getString("VariableNode.Property.Nothing")));
+                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_COUNT), I18n.getString("VariableNode.Property.Count")));
+                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_DISTINCT_COUNT), I18n.getString("VariableNode.Property.DistinctCount")));
+                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_SUM), I18n.getString("VariableNode.Property.Sum")));
+                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_AVERAGE), I18n.getString("VariableNode.Property.Average")));
+                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_LOWEST), I18n.getString("VariableNode.Property.Lowest")));
+                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_HIGHEST), I18n.getString("VariableNode.Property.Highest")));
+                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_STANDARD_DEVIATION), I18n.getString("VariableNode.Property.StandardDeviation")));
+                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_VARIANCE), I18n.getString("VariableNode.Property.Variance")));
+                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_SYSTEM), I18n.getString("VariableNode.Property.System")));
+                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_FIRST), I18n.getString("VariableNode.Property.First")));
                     
                     editor = new ComboBoxPropertyEditor(false, l);
                 }
@@ -564,7 +565,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
             public ResetTypeProperty(JRDesignVariable variable, JRDesignDataset dataset)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super( JRDesignVariable.PROPERTY_RESET_TYPE,Byte.class, "Reset type", "When the variable should be reset to his initial value", true, true);
+                super( JRDesignVariable.PROPERTY_RESET_TYPE,Byte.class, I18n.getString("VariableNode.Property.Resettype"), I18n.getString("VariableNode.Property.Resettypedetail"), true, true);
                 this.variable = variable;
                 this.dataset = dataset;
                 setValue("suppressCustomEditor", Boolean.TRUE);
@@ -593,11 +594,11 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
                 {
                     java.util.ArrayList l = new java.util.ArrayList();
                     
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_REPORT), "Report"));
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_COLUMN), "Column"));
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_GROUP), "Group"));
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_NONE), "None"));
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_PAGE), "Page"));
+                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_REPORT), I18n.getString("VariableNode.Property.Report")));
+                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_COLUMN), I18n.getString("VariableNode.Property.Column")));
+                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_GROUP), I18n.getString("VariableNode.Property.Group")));
+                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_NONE), I18n.getString("VariableNode.Property.None")));
+                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_PAGE), I18n.getString("VariableNode.Property.Page")));
                     
                     editor = new ComboBoxPropertyEditor(false, l);
                 }
@@ -635,7 +636,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
                     {
                         if (dataset.getGroupsList().size() == 0)
                         {
-                            IllegalArgumentException iae = annotateException("No groups are defined to be used with this variable"); 
+                            IllegalArgumentException iae = annotateException(I18n.getString("VariableNode.Property.Message")); 
                             throw iae; 
                         }
                     
@@ -682,7 +683,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
             public ResetGroupProperty(JRDesignVariable variable, JRDesignDataset dataset)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super( JRDesignVariable.PROPERTY_RESET_GROUP,JRGroup.class, "Reset group", "Reset the variable when the specified group changes", true, true);
+                super( JRDesignVariable.PROPERTY_RESET_GROUP,JRGroup.class, I18n.getString("VariableNode.Property.Resetgroup"), I18n.getString("VariableNode.Property.Resetgroupdetail"), true, true);
                 this.variable = variable;
                 this.dataset = dataset;
                 setValue("suppressCustomEditor", Boolean.TRUE);
@@ -750,7 +751,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
             public IncrementTypeProperty(JRDesignVariable variable, JRDesignDataset dataset)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super( JRDesignVariable.PROPERTY_INCREMENT_TYPE,Byte.class, "Increment type", "When the variable expression should be evaluated to get a new value", true, true);
+                super( JRDesignVariable.PROPERTY_INCREMENT_TYPE,Byte.class, I18n.getString("VariableNode.Property.Incrementtype"), I18n.getString("VariableNode.Property.Incrementtypedetail"), true, true);
                 this.variable = variable;
                 this.dataset = dataset;
                 setValue("suppressCustomEditor", Boolean.TRUE);
@@ -779,11 +780,11 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
                 {
                     java.util.ArrayList l = new java.util.ArrayList();
                     
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_REPORT), "Report"));
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_COLUMN), "Column"));
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_GROUP), "Group"));
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_NONE), "None"));
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_PAGE), "Page"));
+                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_REPORT), I18n.getString("VariableNode.Property.Report")));
+                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_COLUMN), I18n.getString("VariableNode.Property.Column")));
+                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_GROUP), I18n.getString("VariableNode.Property.Group")));
+                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_NONE), I18n.getString("VariableNode.Property.None")));
+                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_PAGE), I18n.getString("VariableNode.Property.Page")));
                     
                     editor = new ComboBoxPropertyEditor(false, l);
                 }
@@ -821,7 +822,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
                     {
                         if (dataset.getGroupsList().size() == 0)
                         {
-                            IllegalArgumentException iae = annotateException("No groups are defined to be used with this variable"); 
+                            IllegalArgumentException iae = annotateException(I18n.getString("VariableNode.Property.Message")); 
                             throw iae; 
                         }
                     
@@ -868,7 +869,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
             public IncrementGroupProperty(JRDesignVariable variable, JRDesignDataset dataset)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super( JRDesignVariable.PROPERTY_INCREMENT_GROUP,JRGroup.class, "Increment group", "Evaluate the variable expression when the specified group changes", true, true);
+                super( JRDesignVariable.PROPERTY_INCREMENT_GROUP,JRGroup.class, I18n.getString("VariableNode.Property.Incrementgroup"), I18n.getString("VariableNode.Property.Incrementgroupdetail"), true, true);
                 this.variable = variable;
                 this.dataset = dataset;
                 setValue("suppressCustomEditor", Boolean.TRUE);
@@ -934,8 +935,8 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
         public IncrementerFactoryClassNameProperty(JRDesignVariable variable)
         {
             super(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME, String.class,
-                  "Incrementer Factory Class",
-                  "Name of the optional Incrementer Factory Class to use with this variable");
+                  I18n.getString("VariableNode.Property.IncrementerFactoryClass"),
+                  I18n.getString("VariableNode.Property.IncrementerFactoryClassdetail"));
             this.variable = variable;
             this.setValue("oneline", Boolean.TRUE);
         }

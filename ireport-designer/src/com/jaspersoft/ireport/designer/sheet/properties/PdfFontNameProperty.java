@@ -10,6 +10,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -31,8 +32,8 @@ public class PdfFontNameProperty extends PropertySupport.ReadWrite {
     public PdfFontNameProperty(JRDesignTextElement element)
     {
         super(JRBaseStyle.PROPERTY_PDF_FONT_NAME, String.class,
-              "Pdf Font name",
-              "Pdf Font name");
+              I18n.getString("Global.Property.PdfFontname"),
+              I18n.getString("Global.Property.PdfFontname"));
         this.element = element;
 
         setValue("canEditAsText",true);

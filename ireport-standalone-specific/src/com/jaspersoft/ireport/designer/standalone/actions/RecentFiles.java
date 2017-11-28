@@ -51,7 +51,7 @@ public final class RecentFiles {
                 public void run() {
                     
                     synchronized (HISTORY_LOCK) {
-                        String s = IReportManager.getPreferences().get("RecentFiles",null);
+                        String s = IReportManager.getPreferences().get("RecentFiles",null); // NOI18N
                         if (s != null)
                         {
                             String[] files = s.split("\n");
@@ -79,9 +79,9 @@ public final class RecentFiles {
         int i=0;
         for (String hItem : history) {
             if (i > MAX_HISTORY_ITEMS) break;
-            historyString += hItem + "\n";
+            historyString += hItem + "\n"; // NOI18N
         }
-        IReportManager.getPreferences().put("RecentFiles", historyString);
+        IReportManager.getPreferences().put("RecentFiles", historyString); // NOI18N
         
     }
 

@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.StringProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignScatterPlot;
     
     
@@ -20,7 +21,7 @@ public final class ScatterXAxisTickLabelMaskProperty extends StringProperty
 {
     private final JRDesignScatterPlot plot;
 
-    @SuppressWarnings("unchecked")
+    
     public ScatterXAxisTickLabelMaskProperty(JRDesignScatterPlot plot)
     {
         super(plot);
@@ -36,13 +37,13 @@ public final class ScatterXAxisTickLabelMaskProperty extends StringProperty
     @Override
     public String getDisplayName()
     {
-        return "X Axis Tick Label Mask";
+        return I18n.getString("X_Axis_Tick_Label_Mask");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "X Axis Tick Label Mask.";
+        return I18n.getString("X_Axis_Tick_Label_Mask.");
     }
 
     @Override

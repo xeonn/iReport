@@ -14,14 +14,13 @@ import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.palette.actions.CreateTextFieldAction;
 import com.jaspersoft.ireport.designer.undo.AddStyleUndoableEdit;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.locale.I18n;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
-import net.sf.jasperreports.crosstabs.JRCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
-import net.sf.jasperreports.crosstabs.base.JRBaseCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
@@ -150,7 +149,7 @@ class NewObjectType extends NewType {
             {
                 try {
                     JRDesignParameter p = new JRDesignParameter();
-                    String baseName = "parameter";
+                    String baseName = "parameter"; // NOI18N
                     String new_name = baseName;
 
                     List list = dataset.getParametersList();
@@ -179,7 +178,7 @@ class NewObjectType extends NewType {
             {
                 try {
                     JRDesignField f = new JRDesignField();
-                    String baseName = "field";
+                    String baseName = "field"; // NOI18N
                     String new_name = baseName;
 
                     List list = dataset.getFieldsList();
@@ -207,7 +206,7 @@ class NewObjectType extends NewType {
             {
                 try {
                     JRDesignVariable v = new JRDesignVariable();
-                    String baseName = "variable";
+                    String baseName = "variable"; // NOI18N
                     String new_name = baseName;
 
                     List list = dataset.getVariablesList();
@@ -235,7 +234,7 @@ class NewObjectType extends NewType {
             {
                 try {
                     JRDesignStyle v = new JRDesignStyle();
-                    String baseName = "style";
+                    String baseName = "style"; // NOI18N
                     String new_name = baseName;
 
                     List list = jd.getStylesList();
@@ -284,7 +283,7 @@ class NewObjectType extends NewType {
                 if (crosstab == null) return;
                 try {
                     JRDesignCrosstabParameter p = new JRDesignCrosstabParameter();
-                    String baseName = "parameter";
+                    String baseName = "parameter"; // NOI18N
                     String new_name = baseName;
 
                     List list = crosstab.getParametersList();
@@ -314,7 +313,7 @@ class NewObjectType extends NewType {
                 if (crosstab == null) return;
                 try {
                     JRDesignCrosstabMeasure p = new JRDesignCrosstabMeasure();
-                    String baseName = "measure";
+                    String baseName = "measure"; // NOI18N
                     String new_name = baseName;
 
                     for (int j = 1; ; j++) {
@@ -328,9 +327,9 @@ class NewObjectType extends NewType {
                     
                     p.setName(new_name);
                     
-                    JRDesignExpression exp = Misc.createExpression("java.lang.Integer", "\"\"");
+                    JRDesignExpression exp = Misc.createExpression("java.lang.Integer", "\"\""); // NOI18N
                     p.setValueExpression(exp);
-                    p.setValueClassName("java.lang.Integer");
+                    p.setValueClassName("java.lang.Integer"); // NOI18N
                     obj = p;
                     crosstab.addMeasure(p);
                     
@@ -370,7 +369,7 @@ class NewObjectType extends NewType {
                     int baseHeight = (baseCell.getHeight() != null) ? baseCell.getHeight() : ( (baseCell.getContents() != null) ? baseCell.getContents().getHeight() : 30);
                     
                     headerCell.addElement( 
-                            createField(jd, Misc.createExpression( "java.lang.String", "$V{" + new_name + "}"), 100, baseHeight, "Crosstab Data Text"));
+                            createField(jd, Misc.createExpression( "java.lang.String", "$V{" + new_name + "}"), 100, baseHeight, "Crosstab Data Text")); // NOI18N
                 
                     group.setTotalHeader(new JRDesignCellContents());
                     
@@ -423,7 +422,7 @@ class NewObjectType extends NewType {
                     group.setName(new_name);
                     group.setHeight(30);
                     
-                    JRDesignExpression exp = Misc.createExpression("java.lang.String", "");
+                    JRDesignExpression exp = Misc.createExpression("java.lang.String", ""); // NOI18N
                     JRDesignCrosstabBucket bucket = new JRDesignCrosstabBucket();
                     bucket.setExpression(exp);
                     group.setBucket(bucket);
@@ -434,7 +433,7 @@ class NewObjectType extends NewType {
                     int baseWidth = (baseCell.getWidth() != null) ? baseCell.getWidth() : ( (baseCell.getContents() != null) ? baseCell.getContents().getWidth() : 50);
                     
                     headerCell.addElement( 
-                            createField(jd, Misc.createExpression( "java.lang.String", "$V{" + new_name + "}"), baseWidth, 30, "Crosstab Data Text"));
+                            createField(jd, Misc.createExpression( "java.lang.String", "$V{" + new_name + "}"), baseWidth, 30, "Crosstab Data Text")); // NOI18N
                 
                     group.setTotalHeader(new JRDesignCellContents());
                     
@@ -483,15 +482,15 @@ class NewObjectType extends NewType {
     public String getName() {
         switch (type)
         {
-            case NewTypesUtils.PARAMETER: return "Parameter";
-            case NewTypesUtils.FIELD: return "Field";
-            case NewTypesUtils.VARIABLE: return "Variable";
-            case NewTypesUtils.STYLE: return "Style";
-            case NewTypesUtils.CONDITIONAL_STYLE: return "Conditional Style";
-            case NewTypesUtils.CROSSTAB_PARAMETER: return "Crosstab Parameter";
-            case NewTypesUtils.CROSSTAB_MEASURE: return "Measure";
-            case NewTypesUtils.CROSSTAB_ROW_GROUP: return "Row Group";
-            case NewTypesUtils.CROSSTAB_COLUMN_GROUP: return "Column Group";
+            case NewTypesUtils.PARAMETER: return I18n.getString("NewType.Parameter");
+            case NewTypesUtils.FIELD: return I18n.getString("NewType.Field");
+            case NewTypesUtils.VARIABLE: return I18n.getString("NewType.Variable");
+            case NewTypesUtils.STYLE: return I18n.getString("NewType.Style");
+            case NewTypesUtils.CONDITIONAL_STYLE: return I18n.getString("NewType.ConditionalStyle");
+            case NewTypesUtils.CROSSTAB_PARAMETER: return I18n.getString("NewType.CrosstabParameter");
+            case NewTypesUtils.CROSSTAB_MEASURE: return I18n.getString("NewType.Measure");
+            case NewTypesUtils.CROSSTAB_ROW_GROUP: return I18n.getString("NewType.RowGroup");
+            case NewTypesUtils.CROSSTAB_COLUMN_GROUP: return I18n.getString("NewType.ColumnGroup");
         }
         return super.getName();
     }

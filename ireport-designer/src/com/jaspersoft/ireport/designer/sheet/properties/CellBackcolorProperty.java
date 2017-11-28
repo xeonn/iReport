@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
@@ -38,13 +39,13 @@ public final class CellBackcolorProperty extends ColorProperty
     @Override
     public String getDisplayName()
     {
-        return "Backcolor";
+        return I18n.getString("Global.Property.Backcolor");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The background color.";
+        return I18n.getString("Global.Property.backgrounddetail");
     }
 
     @Override

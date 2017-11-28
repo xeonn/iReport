@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextElement;
@@ -37,23 +38,23 @@ public final class RotationProperty extends ByteProperty
     @Override
     public String getDisplayName()
     {
-        return "Rotation";
+        return I18n.getString("Global.Property.Rotation");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "How to rotate the text.";
+        return I18n.getString("Global.Property.Rotationdetail");
     }
 
     @Override
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRDesignTextElement.ROTATION_NONE), "None"));
-        tags.add(new Tag(new Byte(JRDesignTextElement.ROTATION_LEFT), "Left"));
-        tags.add(new Tag(new Byte(JRDesignTextElement.ROTATION_RIGHT), "Right"));
-        tags.add(new Tag(new Byte(JRDesignTextElement.ROTATION_UPSIDE_DOWN), "Upside Down"));
+        tags.add(new Tag(new Byte(JRDesignTextElement.ROTATION_NONE), I18n.getString("Global.Property.None")));
+        tags.add(new Tag(new Byte(JRDesignTextElement.ROTATION_LEFT), I18n.getString("Global.Property.Left")));
+        tags.add(new Tag(new Byte(JRDesignTextElement.ROTATION_RIGHT), I18n.getString("Global.Property.Right")));
+        tags.add(new Tag(new Byte(JRDesignTextElement.ROTATION_UPSIDE_DOWN), I18n.getString("Global.Property.UpsideDown")));
         return tags;
     }
 

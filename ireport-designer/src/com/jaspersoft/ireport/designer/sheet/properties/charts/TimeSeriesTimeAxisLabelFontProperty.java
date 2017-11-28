@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.AbstractFontProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignTimeSeriesPlot;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -22,7 +23,7 @@ public final class TimeSeriesTimeAxisLabelFontProperty extends AbstractFontPrope
 {
     private final JRDesignTimeSeriesPlot plot;
         
-    @SuppressWarnings("unchecked")
+    
     public TimeSeriesTimeAxisLabelFontProperty(JRDesignTimeSeriesPlot plot, JasperDesign jasperDesign)
     {
         super(plot, jasperDesign);
@@ -38,13 +39,13 @@ public final class TimeSeriesTimeAxisLabelFontProperty extends AbstractFontPrope
     @Override
     public String getDisplayName()
     {
-        return "Time Axis Label Font";
+        return I18n.getString("Time_Axis_Label_Font");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Time Axis Label Font.";
+        return I18n.getString("Time_Axis_Label_Font.");
     }
 
     @Override

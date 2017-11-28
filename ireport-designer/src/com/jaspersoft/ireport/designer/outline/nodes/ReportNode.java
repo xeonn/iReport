@@ -22,6 +22,7 @@ import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import com.jaspersoft.ireport.designer.wizards.ReportGroupWizardAction;
+import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
@@ -111,13 +112,13 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         Sheet sheet = super.createSheet();
         Sheet.Set reportPropertiesSet = Sheet.createPropertiesSet();
         reportPropertiesSet.setName("REPORT_PROPERTIES");
-        reportPropertiesSet.setDisplayName("Report properties");
+        reportPropertiesSet.setDisplayName(I18n.getString("ReportNode.Display.Report_properties"));//NOI18N
         reportPropertiesSet.put(new NameProperty( jd ));
         sheet.put(reportPropertiesSet);
         
         Sheet.Set pageSizeSet = Sheet.createPropertiesSet();
         pageSizeSet.setName("PAGE_SIZE");
-        pageSizeSet.setDisplayName("Page size");
+        pageSizeSet.setDisplayName(I18n.getString("ReportNode.Display.Pagesize"));//NOI18N
         pageSizeSet.put(new PageWidthProperty( jd ));
         pageSizeSet.put(new PageHeightProperty( jd ));
         pageSizeSet.put(new OrientationProperty( jd ));
@@ -125,7 +126,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         
         Sheet.Set marginsSet = Sheet.createPropertiesSet();
         marginsSet.setName("PAGE_MARGINS");
-        marginsSet.setDisplayName("Margins");
+        marginsSet.setDisplayName(I18n.getString("ReportNode.Display.Margins"));
         marginsSet.put(new LeftMarginProperty( jd ));
         marginsSet.put(new RightMarginProperty( jd ));
         marginsSet.put(new TopMarginProperty( jd ));
@@ -134,7 +135,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         
         Sheet.Set columnsSet = Sheet.createPropertiesSet();
         columnsSet.setName("PAGE_COLUMNS");
-        columnsSet.setDisplayName("Columns");
+        columnsSet.setDisplayName(I18n.getString("ReportNode.Display.Columns"));
         columnsSet.put(new ColumnCountProperty( jd ));
         columnsSet.put(new ColumnWidthProperty( jd ));
         columnsSet.put(new ColumnSpacingProperty( jd ));
@@ -142,7 +143,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         
         Sheet.Set moreSet = Sheet.createPropertiesSet();
         moreSet.setName("PAGE_MORE");
-        moreSet.setDisplayName("More...");
+        moreSet.setDisplayName(I18n.getString("ReportNode.Display.More"));
         DatasetNode.fillDatasetPropertySet(moreSet, jd.getMainDesignDataset(), jd );
         moreSet.put(new JRPropertiesMapProperty( jd ));
         moreSet.put(new TitleNewPageProperty( jd ));
@@ -191,7 +192,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public NameProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_NAME,String.class, "Report name", "The name of this report", true, true);
+                super(JasperDesign.PROPERTY_NAME,String.class, I18n.getString("ReportNode.Property.ReportName"), I18n.getString("ReportNode.Property.DefaultName"), true, true);
                 this.jasperDesign = jd;
                 this.setValue("oneline", Boolean.TRUE);
             }
@@ -230,7 +231,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public PageWidthProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_PAGE_WIDTH,Integer.class, "Page width", "This is the page width", true, true);
+                super(JasperDesign.PROPERTY_PAGE_WIDTH,Integer.class, I18n.getString("ReportNode.Property.Pagewidth"), I18n.getString("ReportNode.Property.Pagewidthdetails"), true, true);
                 this.jasperDesign = jd;
             }
             
@@ -270,7 +271,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public PageHeightProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_PAGE_HEIGHT,Integer.class, "Page height", "This is the page height", true, true);
+                super(JasperDesign.PROPERTY_PAGE_HEIGHT,Integer.class, I18n.getString("ReportNode.Property.Pageheight"), I18n.getString("ReportNode.Property.PageHeightdetails"), true, true);
                 this.jasperDesign = jd;
             }
             
@@ -308,7 +309,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public LeftMarginProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_LEFT_MARGIN,Integer.class, "Left margin", "This is the left margin", true, true);
+                super(JasperDesign.PROPERTY_LEFT_MARGIN,Integer.class, I18n.getString("ReportNode.Property.Leftmargin"), I18n.getString("ReportNode.Property.Leftmargindetails"), true, true);
                 this.jasperDesign = jd;
             }
             
@@ -347,7 +348,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public RightMarginProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_RIGHT_MARGIN,Integer.class, "Right margin", "This is the right margin", true, true);
+                super(JasperDesign.PROPERTY_RIGHT_MARGIN,Integer.class, I18n.getString("ReportNode.Property.Rightmargin"), I18n.getString("ReportNode.Property.Rightmargindetails"), true, true);
                 this.jasperDesign = jd;
             }
             
@@ -387,7 +388,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public TopMarginProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_TOP_MARGIN,Integer.class, "Top margin", "This is the top margin", true, true);
+                super(JasperDesign.PROPERTY_TOP_MARGIN,Integer.class,  I18n.getString("ReportNode.Property.Topmargin"),  I18n.getString("ReportNode.Property.Topmargindetail"), true, true);
                 this.jasperDesign = jd;
             }
             
@@ -426,7 +427,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public BottomMarginProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_BOTTOM_MARGIN,Integer.class, "Bottom margin", "This is the bottom margin", true, true);
+                super(JasperDesign.PROPERTY_BOTTOM_MARGIN,Integer.class, I18n.getString("ReportNode.Property.Bottomargin"), I18n.getString("ReportNode.Property.Bottomargindetails"), true, true);
                 this.jasperDesign = jd;
             }
             
@@ -464,7 +465,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public ColumnCountProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_COLUMN_COUNT,Integer.class, "Columns", "Number of columns", true, true);
+                super(JasperDesign.PROPERTY_COLUMN_COUNT,Integer.class, I18n.getString("ReportNode.Property.Columns"), I18n.getString("ReportNode.Property.Columnsdetails"), true, true);
                 this.jasperDesign = jd;
             }
             
@@ -481,7 +482,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
                     
                     if (newValue <= 0)
                     {
-                        IllegalArgumentException iae = annotateException("You need at least one column!");
+                        IllegalArgumentException iae = annotateException(I18n.getString("ReportNode.Warning.Columns"));
                         throw iae; 
                     }
                     
@@ -524,7 +525,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public ColumnWidthProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_COLUMN_WIDTH,Integer.class, "Column Width", "Width of each column", true, true);
+                super(JasperDesign.PROPERTY_COLUMN_WIDTH,Integer.class, I18n.getString("ReportNode.Property.ColumnWidth"),I18n.getString("ReportNode.Property.ColumnWidthdetails"), true, true);
                 this.jasperDesign = jd;
             }
             
@@ -548,7 +549,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
                     
                     if (newValue > available)
                     {
-                        IllegalArgumentException iae = annotateException("You don't have enought space (max column width: " + available + " pixels)");
+                        IllegalArgumentException iae = annotateException(I18n.getString("ReportNode.Exception.ColumnWidth",available));
                         throw iae; 
                     }
                     
@@ -607,7 +608,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public ColumnSpacingProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_COLUMN_SPACING,Integer.class, "Column Spacing", "The space between two columns", true, true);
+                super(JasperDesign.PROPERTY_COLUMN_SPACING,Integer.class, I18n.getString("ReportNode.Property.ColumnSpacing"), I18n.getString("ReportNode.Property.ColumnSpacingdetails"), true, true);
                 this.jasperDesign = jd;
             }
 
@@ -636,7 +637,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
                     
                     if (newValue > available)
                     {
-                        IllegalArgumentException iae = annotateException("You don't have enought space (max available column space: " + available + " pixels)");
+                        IllegalArgumentException iae = annotateException(I18n.getString("ReportNode.Exception.ColumnSpace",available));
                         throw iae; 
                     }
                     
@@ -696,7 +697,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public OrientationProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_ORIENTATION,Byte.class, "Orientation", "This is the page orientation", true, true);
+                super(JasperDesign.PROPERTY_ORIENTATION,Byte.class, I18n.getString("ReportNode.Property.Orientation"),  I18n.getString("ReportNode.Property.Orientationdetails"), true, true);
                 this.jasperDesign = jd;
                 setValue("suppressCustomEditor", Boolean.TRUE);
             }
@@ -708,8 +709,8 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
                 if (editor == null)
                 {
                     java.util.ArrayList l = new java.util.ArrayList();
-                    l.add(new Tag(new Byte(JasperDesign.ORIENTATION_PORTRAIT), "Portrait"));
-                    l.add(new Tag(new Byte(JasperDesign.ORIENTATION_LANDSCAPE), "Landscape"));
+                    l.add(new Tag(new Byte(JasperDesign.ORIENTATION_PORTRAIT), I18n.getString("ReportNode.Orientation.Portrait")));
+                    l.add(new Tag(new Byte(JasperDesign.ORIENTATION_LANDSCAPE), I18n.getString("ReportNode.Orientation.Landscape")));
                     editor = new ComboBoxPropertyEditor(false, l);
                 }
                 return editor;
@@ -803,7 +804,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public TitleNewPageProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_TITLE_NEW_PAGE,Boolean.class, "Title on a new page", "Print the title band on a separate page", true, true);
+                super(JasperDesign.PROPERTY_TITLE_NEW_PAGE,Boolean.class, I18n.getString("ReportNode.Property.Title"), "ReportNode.Property.Titledetail", true, true);
                 this.jasperDesign = jd;
             }
             
@@ -841,7 +842,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public SummaryNewPageProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_SUMMARY_NEW_PAGE,Boolean.class, "Summary on a new page", "Print the summary band on a separate page", true, true);
+                super(JasperDesign.PROPERTY_SUMMARY_NEW_PAGE,Boolean.class, I18n.getString("ReportNode.Property.Summary"), I18n.getString("ReportNode.Property.Summarydetails"), true, true);
                 this.jasperDesign = jd;
             }
             
@@ -879,7 +880,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public FloatColumnFooterProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_FLOAT_COLUMN_FOOTER,Boolean.class, "Float column footer", "Let the column footer to float", true, true);
+                super(JasperDesign.PROPERTY_FLOAT_COLUMN_FOOTER,Boolean.class,I18n.getString("ReportNode.Property.FloatColumnFooter"), I18n.getString("ReportNode.Property.FloatColumnFooterdetail"), true, true);
                 this.jasperDesign = jd;
             }
             
@@ -917,7 +918,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public IgnorePaginationProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_IGNORE_PAGINATION,Boolean.class, "Ignore pagination", "Print the whole document as a single page", true, true);
+                super(JasperDesign.PROPERTY_IGNORE_PAGINATION,Boolean.class, I18n.getString("ReportNode.property.Pagination"),  I18n.getString("ReportNode.property.Paginationdetail"), true, true);
                 this.jasperDesign = jd;
             }
             
@@ -957,7 +958,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public PrintOrderProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_PRINT_ORDER,Byte.class, "Print order", "The way to print the records", true, true);
+                super(JasperDesign.PROPERTY_PRINT_ORDER,Byte.class, I18n.getString("ReportNode.Property.Print"),I18n.getString("ReportNode.Property.Printdetail"), true, true);
                 this.jasperDesign = jd;
                 setValue("suppressCustomEditor", Boolean.TRUE);
             }
@@ -969,8 +970,8 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
                 if (editor == null)
                 {
                     java.util.ArrayList l = new java.util.ArrayList();
-                    l.add(new Tag(new Byte(JasperDesign.PRINT_ORDER_VERTICAL), "Vertical"));
-                    l.add(new Tag(new Byte(JasperDesign.PRINT_ORDER_HORIZONTAL), "Horizontal"));
+                    l.add(new Tag(new Byte(JasperDesign.PRINT_ORDER_VERTICAL), I18n.getString("ReportNode.Property.Vertical")));
+                    l.add(new Tag(new Byte(JasperDesign.PRINT_ORDER_HORIZONTAL), I18n.getString("ReportNode.Property.Horizontal")));
                     editor = new ComboBoxPropertyEditor(false, l);
                 }
                 return editor;
@@ -1009,7 +1010,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public FormatFactoryClassProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS,String.class, "Format Factory Class", "Name of an optional class to format numbers, dates, etc...", true, true);
+                super(JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS,String.class, I18n.getString("ReportNode.Property.FactoryClass"), I18n.getString("ReportNode.Property.FactoryClassdetail"), true, true);
                 this.jasperDesign = jd;
                 this.setValue("oneline", Boolean.TRUE);
             }

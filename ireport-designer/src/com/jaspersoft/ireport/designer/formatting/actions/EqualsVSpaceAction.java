@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.formatting.actions;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Rectangle;
 import java.util.List;
 import javax.swing.Action;
@@ -85,7 +86,7 @@ public class EqualsVSpaceAction extends AbstractFormattingToolAction {
 
     @Override
     public String getName() {
-        return "Equal Vert. Space";
+        return I18n.getString("formatting.tools.equalVSpace");
     }
 
     @Override

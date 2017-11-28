@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
     
@@ -22,7 +23,7 @@ public final class MeterMeterBackgroundColorProperty extends ColorProperty {
 
     private final JRDesignMeterPlot element;
 
-    @SuppressWarnings("unchecked")
+    
     public MeterMeterBackgroundColorProperty(JRDesignMeterPlot element)
     {
         super(element);
@@ -38,13 +39,13 @@ public final class MeterMeterBackgroundColorProperty extends ColorProperty {
     @Override
     public String getDisplayName()
     {
-        return "Meter Background Color";
+        return I18n.getString("Meter_Background_Color");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The background color of the meter.";
+        return I18n.getString("The_background_color_of_the_meter.");
     }
 
     @Override

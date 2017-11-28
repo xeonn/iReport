@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.engine.base.JRBaseChartPlot;
     
@@ -21,7 +22,7 @@ public final class PlotBackgroundProperty extends ColorProperty {
 
     private final JRBaseChartPlot plot;
 
-    @SuppressWarnings("unchecked")
+    
     public PlotBackgroundProperty(JRBaseChartPlot plot)
     {
         super(plot);
@@ -37,13 +38,13 @@ public final class PlotBackgroundProperty extends ColorProperty {
     @Override
     public String getDisplayName()
     {
-        return "Background";
+        return I18n.getString("Background");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Background of the chart.";
+        return I18n.getString("Background_of_the_chart.");
     }
 
     @Override

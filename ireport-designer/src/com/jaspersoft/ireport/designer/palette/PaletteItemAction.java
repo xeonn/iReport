@@ -51,6 +51,4 @@ public abstract class PaletteItemAction {
     
     public abstract void drop(java.awt.dnd.DropTargetDropEvent dtde);
     
-    
-    
 }

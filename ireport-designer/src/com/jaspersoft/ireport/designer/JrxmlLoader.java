@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer;
 
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.EventQueue;
 import java.io.InputStream;
 import java.net.URL;
@@ -52,7 +53,7 @@ public class JrxmlLoader implements ErrorHandler {
        if (file == null)
        {
            // Unable to load the jrxml file
-           throw new JRException("File not found.");
+           throw new JRException(I18n.getString("JrxmlLoader.Error.FileNF"));
        }
        
        try {
@@ -72,7 +73,7 @@ public class JrxmlLoader implements ErrorHandler {
        
        if (EventQueue.isDispatchThread())
        {
-           throw new IllegalStateException("You are trying to load a jrxml file from an event thread. Don't do that.");
+           throw new IllegalStateException(I18n.getString("JrxmlLoader.Error.Warning"));
        }
        
        try {

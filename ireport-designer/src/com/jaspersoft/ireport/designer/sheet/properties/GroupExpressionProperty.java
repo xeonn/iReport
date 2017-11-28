@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
@@ -36,13 +37,13 @@ public final class GroupExpressionProperty extends ExpressionProperty
     @Override
     public String getDisplayName()
     {
-        return "Group Expression";
+        return I18n.getString("GroupExpressionProperty.Property.GroupExpression");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Expression to group records, it can be simply the value of a field or a more complex expression.";
+        return I18n.getString("GroupExpressionProperty.Property.GroupExpressiondetail");
     }
 
     @Override

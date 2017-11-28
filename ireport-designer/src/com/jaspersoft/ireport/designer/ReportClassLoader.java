@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -179,7 +180,7 @@ public class ReportClassLoader extends java.lang.ClassLoader {
                 }
             } catch (Exception ex)
             {
-                System.out.println("Invalid path: " + f);
+                System.out.println(I18n.getString("ReportClassLoader.Warning.Path") + f);
             }
                    
             

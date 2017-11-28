@@ -22,6 +22,7 @@ public class ToolsPanel extends javax.swing.JPanel {
     /** Creates new form ToolsPanel */
     public ToolsPanel() {
         initComponents();
+        applyI18n();
         jToolBar1.setLayout(new ToolsLayoutManager());
         jScrollPane1.getVerticalScrollBar().setBlockIncrement(23);
     }
@@ -46,6 +47,10 @@ public class ToolsPanel extends javax.swing.JPanel {
         JButton button = jToolBar1.add(action);
         button.setComponentPopupMenu(jPopupMenu1);
     }
+
+    private void applyI18n() {
+        jCheckBoxMenuItemShowLabels.setText(I18n.getString("ToolsPanel.jCheckBoxMenuItemShowLabels.text")); // NOI18N
+    }
   
     /** This method is called from within the constructor to
      * initialize the form.
@@ -61,7 +66,7 @@ public class ToolsPanel extends javax.swing.JPanel {
         jToolBar1 = new javax.swing.JToolBar();
 
         jCheckBoxMenuItemShowLabels.setSelected(true);
-        jCheckBoxMenuItemShowLabels.setText(I18n.getString("ToolsPanel.jCheckBoxMenuItemShowLabels.text")); // NOI18N
+        jCheckBoxMenuItemShowLabels.setText("Show Labels");
         jCheckBoxMenuItemShowLabels.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxMenuItemShowLabelsActionPerformed(evt);

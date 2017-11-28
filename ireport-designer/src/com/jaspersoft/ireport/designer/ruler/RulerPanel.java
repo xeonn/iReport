@@ -110,15 +110,15 @@ public class RulerPanel extends javax.swing.JPanel implements MouseListener, Mou
         this.addMouseMotionListener(this);
         this.scene = scene;
         
-        String newUnitName = IReportManager.getPreferences().get(I18n.getString("RulerPanel.Value.Unit"), I18n.getString("RulerPanel.Measure.inches"));
+        String newUnitName = IReportManager.getPreferences().get("Unit", "inches");
         unitPixels = Unit.getUnit(newUnitName).getConversionValue();
                     
         IReportManager.getPreferences().addPreferenceChangeListener(new PreferenceChangeListener() {
 
             public void preferenceChange(PreferenceChangeEvent evt) {
-                if (evt.getKey() != null && evt.getKey().equals(I18n.getString("RulerPanel.Value.Unit")))
+                if (evt.getKey() != null && evt.getKey().equals("Unit"))
                 {
-                    String newUnitName = IReportManager.getPreferences().get(I18n.getString("RulerPanel.Value.Unit"), I18n.getString("RulerPanel.Measure.inches"));
+                    String newUnitName = IReportManager.getPreferences().get("Unit", "inches");
                     setUnitPixels( Unit.getUnit(newUnitName).getConversionValue() );
                     repaint();
                 }

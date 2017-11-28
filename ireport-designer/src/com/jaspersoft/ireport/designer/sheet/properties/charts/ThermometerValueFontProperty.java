@@ -12,6 +12,7 @@ package com.jaspersoft.ireport.designer.sheet.properties.charts;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.JRFontProperty;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.charts.JRValueDisplay;
 import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
@@ -29,11 +30,11 @@ public final class ThermometerValueFontProperty extends JRFontProperty
         private final JasperDesign jd;
         private final JRDesignThermometerPlot element;
         
-        @SuppressWarnings("unchecked")
+        
         public ThermometerValueFontProperty(JRDesignThermometerPlot element, JasperDesign jd)
         {
             // TODO: Replace WhenNoDataType with the right constant
-            super( JRDesignValueDisplay.PROPERTY_FONT, "Value Font", "Value Font", jd);
+            super( JRDesignValueDisplay.PROPERTY_FONT, I18n.getString("Value_Font"), I18n.getString("Value_Font"), jd);
             this.element = element;
             this.jd = jd;
         }
@@ -55,7 +56,7 @@ public final class ThermometerValueFontProperty extends JRFontProperty
                 ObjectPropertyUndoableEdit urob =
                         new ObjectPropertyUndoableEdit(
                             element,
-                            "ValueDisplay", 
+                            I18n.getString("ValueDisplay"), 
                             JRValueDisplay.class,
                             oldValue,newValue);
                 // Find the undoRedo manager...

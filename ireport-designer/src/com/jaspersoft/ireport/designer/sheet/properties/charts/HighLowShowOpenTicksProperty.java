@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignHighLowPlot;
     
     
@@ -35,13 +36,13 @@ public final class HighLowShowOpenTicksProperty extends BooleanProperty {
     @Override
     public String getDisplayName()
     {
-        return "Show OpenTicks";
+        return I18n.getString("Global.Property.ShowOpenTicks");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Show OpenTicks.";
+        return I18n.getString("Global.Property.ShowOpenTicksdetail");
     }
 
     @Override

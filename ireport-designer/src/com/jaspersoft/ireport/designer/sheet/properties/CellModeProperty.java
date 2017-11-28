@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
@@ -36,13 +37,13 @@ public final class CellModeProperty extends BooleanProperty
     @Override
     public String getDisplayName()
     {
-        return "Opaque";
+        return I18n.getString("Global.Property.Opaque");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Set if the cell is opaque or transparent.";
+        return I18n.getString("Global.Property.Opaquedetail");
     }
 
     @Override

@@ -6,6 +6,7 @@
 package com.jaspersoft.ireport.designer.formatting.actions;
 
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Rectangle;
 import java.util.List;
 import javax.swing.Action;
@@ -62,7 +63,7 @@ public class OrganizeAsTableAction extends AbstractFormattingToolAction {
 
     @Override
     public String getName() {
-        return "Organize As Table";
+        return I18n.getString("formatting.tools.organizeAsTable");
     }
 
 }

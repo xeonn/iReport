@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.charts.design.JRDesignScatterPlot;
@@ -23,7 +24,7 @@ public final class ScatterYAxisTickLabelColorProperty extends ColorProperty {
 
     private final JRDesignScatterPlot element;
 
-    @SuppressWarnings("unchecked")
+    
     public ScatterYAxisTickLabelColorProperty(JRDesignScatterPlot element)
     {
         super(element);
@@ -39,13 +40,13 @@ public final class ScatterYAxisTickLabelColorProperty extends ColorProperty {
     @Override
     public String getDisplayName()
     {
-        return "Y Axis Tick Label Color";
+        return I18n.getString("Y_Axis_Tick_Label_Color");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The color of the Y Axis Tick Label.";
+        return I18n.getString("The_color_of_the_Y_Axis_Tick_Label.");
     }
 
     @Override

@@ -11,6 +11,7 @@ package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextElement;
@@ -37,22 +38,22 @@ public final class LineSpacingProperty extends ByteProperty
     @Override
     public String getDisplayName()
     {
-        return "Line Spacing";
+        return I18n.getString("Global.Property.LineSpacing");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The space to put between lines of text.";
+        return I18n.getString("Global.Property.LineSpacingdetail");
     }
 
     @Override
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRDesignTextElement.LINE_SPACING_SINGLE), "Single"));
-        tags.add(new Tag(new Byte(JRDesignTextElement.LINE_SPACING_1_1_2), "1.5"));
-        tags.add(new Tag(new Byte(JRDesignTextElement.LINE_SPACING_DOUBLE), "Double"));
+        tags.add(new Tag(new Byte(JRDesignTextElement.LINE_SPACING_SINGLE), I18n.getString("Global.Property.Single")));
+        tags.add(new Tag(new Byte(JRDesignTextElement.LINE_SPACING_1_1_2), I18n.getString("Global.Property.1.5")));
+        tags.add(new Tag(new Byte(JRDesignTextElement.LINE_SPACING_DOUBLE), I18n.getString("Global.Property.Double")));
         return tags;
     }
 

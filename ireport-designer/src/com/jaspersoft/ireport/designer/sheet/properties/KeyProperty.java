@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
     
@@ -35,13 +36,13 @@ public final class KeyProperty extends StringProperty
     @Override
     public String getDisplayName()
     {
-        return "Key";
+        return I18n.getString("Global.Property.Key");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Optional identifier for this element.";
+        return I18n.getString("Global.Property.Keydetail");
     }
 
     @Override

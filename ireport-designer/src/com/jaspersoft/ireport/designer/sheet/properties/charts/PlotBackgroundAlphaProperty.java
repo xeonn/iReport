@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.FloatProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.base.JRBaseChartPlot;
     
     
@@ -20,7 +21,7 @@ public final class PlotBackgroundAlphaProperty extends FloatProperty {
 
     private final JRBaseChartPlot plot;
 
-    @SuppressWarnings("unchecked")
+    
     public PlotBackgroundAlphaProperty(JRBaseChartPlot plot)
     {
         super(plot);
@@ -36,13 +37,13 @@ public final class PlotBackgroundAlphaProperty extends FloatProperty {
     @Override
     public String getDisplayName()
     {
-        return "Background Alpha (%)";
+        return I18n.getString("Background_Alpha_(%)");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Background Alpha.";
+        return I18n.getString("Background_Alpha.");
     }
 
     @Override
@@ -74,7 +75,7 @@ public final class PlotBackgroundAlphaProperty extends FloatProperty {
     {
         if (backgroundAlpha < 0f || backgroundAlpha > 1f)
         {
-            throw annotateException("The value must be between 0 and 1.");
+            throw annotateException(I18n.getString("The_value_must_be_between_0_and_1."));
         }
     }
 

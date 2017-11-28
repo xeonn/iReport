@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.outline.nodes;
 
+import com.jaspersoft.ireport.designer.ElementDecorator;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.outline.nodes.properties.ElementPropertiesFactory;
@@ -17,12 +18,14 @@ import com.jaspersoft.ireport.designer.actions.OpenSubreportAction;
 import com.jaspersoft.ireport.designer.actions.PaddingAndBordersAction;
 import com.jaspersoft.ireport.designer.charts.ChartDataAction;
 import com.jaspersoft.ireport.designer.menu.HyperlinkAction;
+import com.jaspersoft.ireport.designer.pdf508.Pdf508TagDecorator;
 import com.jaspersoft.ireport.designer.undo.DeleteElementUndoableEdit;
 import java.awt.datatransfer.Transferable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.Action;
 import net.sf.jasperreports.charts.design.JRDesignDataRange;
@@ -31,12 +34,9 @@ import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
 import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRDatasetParameter;
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRExpressionCollector;
 import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
-import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -274,7 +274,17 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
         
         
         list.add( SystemAction.get( DeleteAction.class ) );
+
+        // Looks for decorators supporting this element type...
+        List<ElementDecorator> decorators = IReportManager.getElementDecorators( getElement() );
+
+        for (ElementDecorator decorator : decorators)
+        {
+            list.addAll(Arrays.asList(decorator.getActions(this)));
+        }
+        //Pdf508TagDecorator pdf508TagDecorator = new Pdf508TagDecorator();
         
+
         return list.toArray(new Action[list.size()]);
     }
     

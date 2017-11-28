@@ -37,7 +37,7 @@ public class JRDesignChartWidget extends JRDesignElementWidget {
     
     
     @Override
-    protected void paintWidget() {
+    protected void paintWidgetImplementation() {
         
         Image image = getChartImage();
         

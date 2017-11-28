@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.charts.design.JRDesignAreaPlot;
@@ -39,13 +40,13 @@ public final class AreaCategoryAxisTickLabelColorProperty extends ColorProperty 
     @Override
     public String getDisplayName()
     {
-        return "Category Axis Tick Label Color";
+        return I18n.getString("Global.Property.CategoryAxisTickLabelColor");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The color of the Category Axis Tick Label.";
+        return I18n.getString("Global.Property.CATLdetail");
     }
 
     @Override

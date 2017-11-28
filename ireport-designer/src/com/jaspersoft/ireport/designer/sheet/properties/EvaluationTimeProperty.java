@@ -10,7 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
-import java.lang.reflect.InvocationTargetException;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignImage;
@@ -39,26 +39,26 @@ public final class EvaluationTimeProperty extends ByteProperty
     @Override
     public String getDisplayName()
     {
-        return "Evaluation Time";
+        return I18n.getString("Global.Property.EvaluationTime");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "When the image expression should be evaluated.";
+        return I18n.getString("Global.Property.ETdetail");
     }
 
     @Override
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_NOW), "Now"));
-        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_REPORT), "Report"));
-        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_PAGE), "Page"));
-        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_COLUMN), "Column"));
-        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_GROUP), "Group"));
-        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_BAND), "Band"));
-        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_AUTO), "Auto"));
+        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_NOW), I18n.getString("Global.Property.Now")));
+        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_REPORT), I18n.getString("Global.Property.Report")));
+        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_PAGE), I18n.getString("Global.Property.Page")));
+        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_COLUMN), I18n.getString("Global.Property.Column")));
+        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_GROUP), I18n.getString("Global.Property.Group")));
+        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_BAND), I18n.getString("Global.Property.Band")));
+        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_AUTO), I18n.getString("Global.Property.Auto")));
         return tags;
     }
 

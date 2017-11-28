@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.AbstractFontProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -22,7 +23,7 @@ public final class TitleFontProperty extends AbstractFontProperty
 {
     private final JRDesignChart element;
         
-    @SuppressWarnings("unchecked")
+    
     public TitleFontProperty(JRDesignChart element, JasperDesign jasperDesign)
     {
         super(element, jasperDesign);
@@ -38,13 +39,13 @@ public final class TitleFontProperty extends AbstractFontProperty
     @Override
     public String getDisplayName()
     {
-        return "Title Font";
+        return I18n.getString("Title_Font");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Title font.";
+        return I18n.getString("Title_font.");
     }
 
     @Override

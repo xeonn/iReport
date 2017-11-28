@@ -1,11 +1,11 @@
 package com.jaspersoft.ireport.designer.palette;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.io.IOException;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObjectExistsException;
 import org.openide.loaders.MultiDataObject;
 import org.openide.loaders.UniFileLoader;
-import org.openide.util.NbBundle;
 
 public class PaletteItemDataLoader extends UniFileLoader {
 
@@ -18,7 +18,7 @@ public class PaletteItemDataLoader extends UniFileLoader {
 
     @Override
     protected String defaultDisplayName() {
-        return NbBundle.getMessage(PaletteItemDataLoader.class, "LBL_PaletteItem_loader_name");
+        return I18n.getString("LBL_PaletteItem_loader_name");
     }
 
     @Override

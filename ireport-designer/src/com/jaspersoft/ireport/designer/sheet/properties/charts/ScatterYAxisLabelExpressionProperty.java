@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignScatterPlot;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -37,13 +38,13 @@ public final class ScatterYAxisLabelExpressionProperty extends ExpressionPropert
     @Override
     public String getDisplayName()
     {
-        return "Y Axis Label Expression";
+        return I18n.getString("Y_Axis_Label_Expression");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Y Axis Label Expression.";
+        return I18n.getString("Y_Axis_Label_Expression.");
     }
 
     @Override

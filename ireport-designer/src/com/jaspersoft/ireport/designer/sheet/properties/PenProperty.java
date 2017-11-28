@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
@@ -39,25 +40,25 @@ public final class PenProperty extends ByteProperty
     @Override
     public String getDisplayName()
     {
-        return "Pen";
+        return I18n.getString("PenProperty.Property.Pen");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Pen.";
+        return I18n.getString("PenProperty.Property.DescriptionPen");
     }
 
     @Override
     public List getTagList() 
     {
         List tags = new ArrayList();
-        tags.add(new Tag(new Byte(JRDesignGraphicElement.PEN_THIN), "Thin"));
-        tags.add(new Tag(new Byte(JRDesignGraphicElement.PEN_1_POINT), "1 point"));
-        tags.add(new Tag(new Byte(JRDesignGraphicElement.PEN_2_POINT), "2 point"));
-        tags.add(new Tag(new Byte(JRDesignGraphicElement.PEN_4_POINT), "4 point"));
-        tags.add(new Tag(new Byte(JRDesignGraphicElement.PEN_DOTTED), "Dotted"));
-        tags.add(new Tag(new Byte(JRDesignGraphicElement.PEN_NONE), "None"));
+        tags.add(new Tag(new Byte(JRDesignGraphicElement.PEN_THIN), I18n.getString("Global.Property.Thin")));
+        tags.add(new Tag(new Byte(JRDesignGraphicElement.PEN_1_POINT), I18n.getString("Global.Property.1_point")));
+        tags.add(new Tag(new Byte(JRDesignGraphicElement.PEN_2_POINT), I18n.getString("Global.Property.2_point")));
+        tags.add(new Tag(new Byte(JRDesignGraphicElement.PEN_4_POINT), I18n.getString("Global.Property.4_point")));
+        tags.add(new Tag(new Byte(JRDesignGraphicElement.PEN_DOTTED), I18n.getString("Global.Property.Dotted")));
+        tags.add(new Tag(new Byte(JRDesignGraphicElement.PEN_NONE), I18n.getString("Global.Property.None")));
         return tags;
     }
 

@@ -35,6 +35,7 @@
             <file name="com-jaspersoft-ireport-designer-menu-SelectDatasourceAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-ShowGridAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-SnapToGridAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-pdf508-ShowPdf508TagsAction.instance"/>
         </folder>
         <folder name="Data">
             <file name="com-jaspersoft-ireport-designer-menu-DatasourcesAction.instance"/>
@@ -220,7 +221,7 @@
             </folder>
         </folder>
         <folder name="View">
-            <folder name="Report Designer Grid">
+            <folder name="Report Designer">
                 <!-- <attr name="com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow/Separator2.instance" boolvalue="true"/>
                 <attr name="com-jaspersoft-ireport-designer-menu-OpenQueryDialogAction.shadow/com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow" boolvalue="true"/>
                 -->
@@ -234,6 +235,10 @@
                 <file name="com-jaspersoft-ireport-designer-menu-SnapToGridAction.shadow" url="com-jaspersoft-ireport-designer-menu-SnapToGridAction.shadow">
                     <attr name="originalFile" stringvalue="Actions/Designer/com-jaspersoft-ireport-designer-menu-SnapToGridAction.instance"/>
                 </file>
+                <file name="ShowPdf508TagsAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Designer/com-jaspersoft-ireport-designer-pdf508-ShowPdf508TagsAction.instance"/>
+                </file>
+
             </folder>
             <attr name="com-jaspersoft-ireport-designer-menu-OpenQueryDialogAction.shadow/com-jaspersoft-ireport-designer-menu-DatasourcesAction.shadow" boolvalue="true"/>
         </folder>
@@ -371,6 +376,7 @@
     <folder name="ireport">
         <folder name="palette">
             <folder name="ReportElements">
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="com.jaspersoft.ireport.locale.Bundle"/>
                 <file name="line.irpitem" url="designer/palette/items/line.irpitem"/>
                 <file name="ellipse.irpitem" url="designer/palette/items/ellipse.irpitem"/>
                 <file name="rectangle.irpitem" url="designer/palette/items/rectangle.irpitem"/>
@@ -394,6 +400,11 @@
                <file name="Classic" url="designer/templates/classicT.jrxml"/>
                <file name="Classic.preview" url="designer/templates/classicT.gif"/>
            </folder>
+       </folder>
+       <folder name="decorators">
+            <folder name="elements">
+               <file name="com-jaspersoft-ireport-designer-pdf508-Pdf508TagDecorator"/>
+            </folder>
        </folder>
      </folder>
 

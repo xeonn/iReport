@@ -9,6 +9,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -27,12 +28,12 @@ public class TextFieldExpressionClassNameProperty  extends PropertySupport.ReadW
     private final JRDesignTextField element;
     PropertyEditor editor = null;
 
-    @SuppressWarnings("unchecked")
+    
     public TextFieldExpressionClassNameProperty(JRDesignTextField element)
     {
         super(JRDesignExpression.PROPERTY_VALUE_CLASS_NAME, String.class,
-              "Expression Class",
-              "Expression Class");
+              I18n.getString("Expression_Class"),
+              I18n.getString("Expression_Class"));
         this.element = element;
 
         setValue("canEditAsText", true);
@@ -70,7 +71,7 @@ public class TextFieldExpressionClassNameProperty  extends PropertySupport.ReadW
         ObjectPropertyUndoableEdit urob =
                     new ObjectPropertyUndoableEdit(
                         element,
-                        "Expression", 
+                        I18n.getString("Global.Property.Expression"), 
                         JRExpression.class,
                         oldExp,newExp);
             // Find the undoRedo manager...

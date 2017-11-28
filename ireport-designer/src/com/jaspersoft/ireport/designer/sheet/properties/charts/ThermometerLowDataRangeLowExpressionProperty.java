@@ -12,6 +12,7 @@ package com.jaspersoft.ireport.designer.sheet.properties.charts;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.charts.JRDataRange;
 import net.sf.jasperreports.charts.design.JRDesignDataRange;
@@ -36,19 +37,19 @@ public final class ThermometerLowDataRangeLowExpressionProperty extends Expressi
     @Override
     public String getName()
     {
-        return "LOW_RANGE_" + JRDesignDataRange.PROPERTY_LOW_EXPRESSION;
+        return I18n.getString("LOW_RANGE_") + JRDesignDataRange.PROPERTY_LOW_EXPRESSION;
     }
 
     @Override
     public String getDisplayName()
     {
-        return "Low Range Low Expression";
+        return I18n.getString("Low_Range_Low_Expression");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Low Range Low Expression.";
+        return I18n.getString("Low_Range_Low_Expression.");
     }
 
     @Override
@@ -84,13 +85,13 @@ public final class ThermometerLowDataRangeLowExpressionProperty extends Expressi
         }
         
         //System.out.println("Setting as value: " + val);
-        if (val == null || val.equals(""))
+        if (val == null || val.equals(I18n.getString("")))
         {
             newValue.setLowExpression(null);
         }
         else
         {
-            String s = (val != null) ? val+"" : "";
+            String s = (val != null) ? val+I18n.getString("") : I18n.getString("");
             
             JRDesignExpression newExp = new JRDesignExpression();
             newExp.setText(s);

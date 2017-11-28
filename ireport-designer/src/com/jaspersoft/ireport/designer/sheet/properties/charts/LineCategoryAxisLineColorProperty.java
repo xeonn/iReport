@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.charts.design.JRDesignLinePlot;
     
@@ -22,7 +23,7 @@ public final class LineCategoryAxisLineColorProperty extends ColorProperty {
 
     private final JRDesignLinePlot element;
 
-    @SuppressWarnings("unchecked")
+    
     public LineCategoryAxisLineColorProperty(JRDesignLinePlot element)
     {
         super(element);
@@ -38,13 +39,13 @@ public final class LineCategoryAxisLineColorProperty extends ColorProperty {
     @Override
     public String getDisplayName()
     {
-        return "Category Axis Line Color";
+        return I18n.getString("Category_Axis_Line_Color");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The color of the Category Axis Line.";
+        return I18n.getString("The_color_of_the_Category_Axis_Line.");
     }
 
     @Override

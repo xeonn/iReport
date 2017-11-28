@@ -35,6 +35,7 @@ import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.widgets.*;
 import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Point;
 import java.util.List;
 import net.sf.jasperreports.engine.JRBand;
@@ -99,7 +100,7 @@ public class BandMoveProvider implements MoveProvider {
         ((JRDesignBand)b).setHeight( newValue );
                 
         ObjectPropertyUndoableEdit edit = new ObjectPropertyUndoableEdit(
-                b, "Height", Integer.TYPE, originalHight,  newValue);
+                b, I18n.getString("Global.Property.Height"), Integer.TYPE, originalHight,  newValue);
         IReportManager.getInstance().addUndoableEdit(edit);
         
         ((PageWidget)scene.getPageLayer().getChildren().get(0)).updateBounds();

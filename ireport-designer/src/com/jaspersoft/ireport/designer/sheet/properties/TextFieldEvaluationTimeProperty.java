@@ -9,6 +9,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.engine.JRExpression;
@@ -33,7 +34,7 @@ public class TextFieldEvaluationTimeProperty extends PropertySupport {
     public TextFieldEvaluationTimeProperty(JRDesignTextField element, JRDesignDataset dataset)
     {
         // TODO: Replace WhenNoDataType with the right constant
-        super( JRDesignTextField.PROPERTY_EVALUATION_TIME,Byte.class, "Evaluation Time", "When the image expression should be evaluated.", true, true);
+        super( JRDesignTextField.PROPERTY_EVALUATION_TIME,Byte.class, I18n.getString("Global.Property.EvaluationTime"), I18n.getString("Global.Property.EvaluationTimedetail"), true, true);
         this.element = element;
         this.dataset = dataset;
         setValue("suppressCustomEditor", Boolean.TRUE);
@@ -62,13 +63,13 @@ public class TextFieldEvaluationTimeProperty extends PropertySupport {
         {
             java.util.ArrayList l = new java.util.ArrayList();
 
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_NOW), "Now"));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_REPORT), "Report"));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_PAGE), "Page"));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_COLUMN), "Column"));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_GROUP), "Group"));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_BAND), "Band"));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_AUTO), "Auto"));
+            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_NOW), I18n.getString("Global.Property.Now")));
+            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_REPORT), I18n.getString("Global.Property.Report")));
+            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_PAGE), I18n.getString("Global.Property.Page")));
+            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_COLUMN), I18n.getString("Global.Property.Column")));
+            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_GROUP), I18n.getString("Global.Property.Group")));
+            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_BAND), I18n.getString("Global.Property.Band")));
+            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_AUTO), I18n.getString("Global.Property.Auto")));
 
             editor = new ComboBoxPropertyEditor(false, l);
         }
@@ -104,7 +105,7 @@ public class TextFieldEvaluationTimeProperty extends PropertySupport {
             {
                 if (dataset.getGroupsList().size() == 0)
                 {
-                    IllegalArgumentException iae = annotateException("No groups are defined to be used with this element"); 
+                    IllegalArgumentException iae = annotateException(I18n.getString("Global.Property.NogroupsTextFielddetail")); 
                     throw iae; 
                 }
 

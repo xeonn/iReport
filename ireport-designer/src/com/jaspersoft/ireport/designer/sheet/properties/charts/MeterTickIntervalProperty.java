@@ -1,3 +1,4 @@
+
 /*
  * GraphicElementPropertiesFactory.java
  * 
@@ -10,6 +11,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.DoubleProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
     
     
@@ -20,7 +22,7 @@ public final class MeterTickIntervalProperty extends DoubleProperty {
 
     private final JRDesignMeterPlot plot;
 
-    @SuppressWarnings("unchecked")
+    
     public MeterTickIntervalProperty(JRDesignMeterPlot plot)
     {
         super(plot);
@@ -36,13 +38,13 @@ public final class MeterTickIntervalProperty extends DoubleProperty {
     @Override
     public String getDisplayName()
     {
-        return "Tick Interval";
+        return I18n.getString("Tick_Interval");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Tick Interval.";
+        return I18n.getString("Tick_Interval.");
     }
 
     @Override

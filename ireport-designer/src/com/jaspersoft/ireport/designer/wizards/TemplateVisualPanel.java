@@ -313,7 +313,8 @@ public final class TemplateVisualPanel extends JPanel {
 
     public String getReportType()
     {
-        return jRadioButton1.isSelected() ? I18n.getString("TemplateVisualPanel.RadioButton.columnar") : I18n.getString("TemplateVisualPanel.RadioButton.tabular");
+        return jRadioButton1.isSelected() ? "columnar" : "tabular";//NOI18N
+
     }
     
     public FileObject getReportTemplate()

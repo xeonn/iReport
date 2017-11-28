@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
     
@@ -35,13 +36,13 @@ public final class WidthProperty extends IntegerProperty
     @Override
     public String getDisplayName()
     {
-        return "Width";
+        return I18n.getString("Global.Property.Width");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Element width.";
+        return I18n.getString("Global.Property.Widthdetail");
     }
 
     @Override
@@ -73,7 +74,7 @@ public final class WidthProperty extends IntegerProperty
     {
         if (width < 0)
         {
-            throw annotateException("The width cannot be a negative number.");
+            throw annotateException(I18n.getString("Global.Property.Widthexception"));
         }
     }
 }

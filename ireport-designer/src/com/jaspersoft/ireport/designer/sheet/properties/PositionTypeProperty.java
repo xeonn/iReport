@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
@@ -37,22 +38,22 @@ public final class PositionTypeProperty extends ByteProperty
     @Override
     public String getDisplayName()
     {
-        return "Position Type";
+        return I18n.getString("Global.Property.PositionType");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "How to anchor the element.";
+        return I18n.getString("Global.Property.PositionTypedetail");
     }
 
     @Override
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRDesignElement.POSITION_TYPE_FIX_RELATIVE_TO_TOP), "Fix Relative to Top"));
+        tags.add(new Tag(new Byte(JRDesignElement.POSITION_TYPE_FIX_RELATIVE_TO_TOP), I18n.getString("Global.Property.FixTop")));
         tags.add(new Tag(new Byte(JRDesignElement.POSITION_TYPE_FLOAT), "Float"));
-        tags.add(new Tag(new Byte(JRDesignElement.POSITION_TYPE_FIX_RELATIVE_TO_BOTTOM), "Fix Relative to Bottom"));
+        tags.add(new Tag(new Byte(JRDesignElement.POSITION_TYPE_FIX_RELATIVE_TO_BOTTOM), I18n.getString("Global.Property.FixBottom")));
         return tags;
     }
 

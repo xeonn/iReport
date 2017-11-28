@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
@@ -40,13 +41,13 @@ public final class VariableExpressionProperty extends ExpressionProperty
     @Override
     public String getDisplayName()
     {
-        return "Variable Expression";
+        return I18n.getString("VariableExpressionProperty.Property.VariableExpression");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Variable Expression.";
+        return I18n.getString("VariableExpressionProperty.Property.VariableExpression");
     }
 
     @Override
@@ -66,7 +67,18 @@ public final class VariableExpressionProperty extends ExpressionProperty
     {
         // This avoid incompatibilities with the
         // variable...
-        expression.setValueClassName(variable.getValueClassName());
+        if (expression != null)
+        {
+            if (variable.getCalculation() == JRDesignVariable.CALCULATION_COUNT ||
+                variable.getCalculation() == JRDesignVariable.CALCULATION_DISTINCT_COUNT)
+            {
+                expression.setValueClassName("java.lang.Object");
+            }
+            else
+            {
+                expression.setValueClassName(variable.getValueClassName());
+            }
+        }
         variable.setExpression(expression);
     }
 

@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
     
     
@@ -20,7 +21,7 @@ public final class ThermometerShowValueLinesProperty extends BooleanProperty {
 
     private final JRDesignThermometerPlot plot;
 
-    @SuppressWarnings("unchecked")
+    
     public ThermometerShowValueLinesProperty(JRDesignThermometerPlot plot)
     {
         super(plot);
@@ -35,13 +36,13 @@ public final class ThermometerShowValueLinesProperty extends BooleanProperty {
     @Override
     public String getDisplayName()
     {
-        return "Show Value Lines";
+        return I18n.getString("Show_Value_Lines");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Show Value Lines.";
+        return I18n.getString("Show_Value_Lines.");
     }
 
     @Override

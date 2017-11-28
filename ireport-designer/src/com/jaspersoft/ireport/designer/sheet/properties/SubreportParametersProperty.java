@@ -11,6 +11,7 @@ package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.editors.SubreportParametersPropertyEditor;
+import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
@@ -28,7 +29,7 @@ public final class SubreportParametersProperty  extends PropertySupport {
     @SuppressWarnings("unchecked")
     public SubreportParametersProperty(JRDesignSubreport element, JRDesignDataset dataset)
     {
-       super( JRDesignSubreport.PROPERTY_PARAMETERS, Map.class, "Parameters","Subreport parameters", true,true);
+       super( JRDesignSubreport.PROPERTY_PARAMETERS, Map.class, I18n.getString("Global.Property.Parameters"),I18n.getString("Global.Property.Subreportparameters"), true,true);
 
        setValue("canEditAsText", Boolean.FALSE);
        setValue("expressionContext", new ExpressionContext(dataset));

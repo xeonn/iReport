@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.StringProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignCandlestickPlot;
     
     
@@ -36,13 +37,13 @@ public final class CandlestickTimeAxisTickLabelMaskProperty extends StringProper
     @Override
     public String getDisplayName()
     {
-        return "Time Axis Tick Label Mask";
+        return I18n.getString("Global.Property.TimeAxisTickLabelMask");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Time Axis Tick Label Mask.";
+        return I18n.getString("Global.Property.TimeAxisTickLabelMaskdetail");
     }
 
     @Override

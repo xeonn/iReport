@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.charts.design.JRDesignBubblePlot;
     
@@ -38,13 +39,13 @@ public final class BubbleXAxisTickLabelColorProperty extends ColorProperty {
     @Override
     public String getDisplayName()
     {
-        return "X Axis Tick Label Color";
+        return I18n.getString("Global.Property.X_AxisTickLabelColor");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The color of the X Axis Tick Label.";
+        return I18n.getString("Global.Property.X_AxisTickLabelColordetail");
     }
 
     @Override

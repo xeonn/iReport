@@ -50,11 +50,12 @@ public final class DeleteServerAction extends NodeAction {
                 JasperServerManager.getMainInstance().saveConfiguration();
                 Node root = activatedNodes[0].getParentNode();
                 while (root.getParentNode() != null) root = root.getParentNode();
+                JasperServerManager.getMainInstance().getJServers().remove(server);
                 if (root.getChildren() instanceof ServerChildren)
                 {
                     ((ServerChildren)root.getChildren()).recalculateKeys();
                 }
-                JasperServerManager.getMainInstance().getJServers().remove(server);
+                
             }
         }
         

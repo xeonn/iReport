@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
     
@@ -34,13 +35,13 @@ public final class PrintWhenDetailOverflowsProperty extends BooleanProperty
     @Override
     public String getDisplayName()
     {
-        return "Print When Detail Overflows";
+        return I18n.getString("Global.Property.PrintWhenDetailOverflows");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Print When Detail Overflows.";
+        return I18n.getString("Global.Property.PrintWhenDetailOverflows.");
     }
 
     @Override

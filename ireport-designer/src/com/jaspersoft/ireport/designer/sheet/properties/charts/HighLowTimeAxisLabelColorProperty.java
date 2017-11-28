@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.charts.design.JRDesignHighLowPlot;
     
@@ -22,7 +23,7 @@ public final class HighLowTimeAxisLabelColorProperty extends ColorProperty {
 
     private final JRDesignHighLowPlot element;
 
-    @SuppressWarnings("unchecked")
+    
     public HighLowTimeAxisLabelColorProperty(JRDesignHighLowPlot element)
     {
         super(element);
@@ -38,13 +39,13 @@ public final class HighLowTimeAxisLabelColorProperty extends ColorProperty {
     @Override
     public String getDisplayName()
     {
-        return "Time Axis Label Color";
+        return I18n.getString("Time_Axis_Label_Color");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The color of the Time Axis Label.";
+        return I18n.getString("The_color_of_the_Time_Axis_Label.");
     }
 
     @Override

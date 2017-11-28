@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignRectangle;
 
@@ -36,13 +37,13 @@ public final class RadiusProperty extends IntegerProperty
     @Override
     public String getDisplayName()
     {
-        return "Radius";
+        return I18n.getString("RadiusPropertyRadius.Property.Radius");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The radius used to paint the corners.";
+        return I18n.getString("Global.Property.Radiusdetail");
     }
 
     @Override
@@ -74,7 +75,7 @@ public final class RadiusProperty extends IntegerProperty
     {
         if (radius < 0)
         {
-            throw annotateException("The radius cannot be a negative number.");
+            throw annotateException(I18n.getString("Global.Property.Radiusexception"));
         }
     }
 

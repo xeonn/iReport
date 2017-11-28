@@ -7,11 +7,11 @@ package com.jaspersoft.ireport.designer.options;
 
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.ReportClassLoader;
 import com.jaspersoft.ireport.designer.fonts.CheckBoxListEntry;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.tools.LocaleSelectorDialog;
 import com.jaspersoft.ireport.designer.tools.TimeZoneDialog;
-import com.jaspersoft.ireport.designer.tools.TimeZoneWrapper;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.designer.utils.Unit;
 import java.awt.Dialog;
@@ -21,17 +21,28 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.prefs.Preferences;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.TitledBorder;
+import net.sf.jasperreports.charts.ChartThemeBundle;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRProperties;
+import net.sf.jasperreports.extensions.ExtensionsEnvironment;
+import org.openide.util.Exceptions;
 
 final class IReportPanel extends javax.swing.JPanel {
 
@@ -63,7 +74,10 @@ final class IReportPanel extends javax.swing.JPanel {
                controller.changed();
             }
          });
-         
+
+         jSpinnerVirtualizerSize.setModel(new javax.swing.SpinnerNumberModel(100,1,100000000,10));
+         jSpinnerVirtualizerBlockSize.setModel(new javax.swing.SpinnerNumberModel(100,1,100000000,10));
+         jSpinnerVirtualizerGrownCount.setModel(new javax.swing.SpinnerNumberModel(1,1,100000000,10));
          
          
          javax.swing.event.DocumentListener textfieldListener =  new javax.swing.event.DocumentListener()
@@ -89,6 +103,35 @@ final class IReportPanel extends javax.swing.JPanel {
          jTextFieldODFViewer.getDocument().addDocumentListener(textfieldListener);
          jTextFieldRTFViewer.getDocument().addDocumentListener(textfieldListener);
          jTextFieldHTMLViewer.getDocument().addDocumentListener(textfieldListener);
+         jTextFieldVirtualizerDir.getDocument().addDocumentListener(textfieldListener);
+
+         jComboBoxVirtualizer.addItem( new Tag("JRFileVirtualizer", I18n.getString("virtualizer.file") ));
+         jComboBoxVirtualizer.addItem( new Tag("JRSwapFileVirtualizer",I18n.getString("virtualizer.swap")));
+         jComboBoxVirtualizer.addItem( new Tag("JRGzipVirtualizer",I18n.getString("virtualizer.gzip")));
+
+         ((TitledBorder)jPanelVirtualizer.getBorder()).setTitle(I18n.getString("optionsPanel.virtualizer.virtualizer"));
+         jLabel2.setText(I18n.getString("optionsPanel.virtualizer.label1","Use this virtualizer"));
+         jButtonVirtualizerDirBrowse.setText(  I18n.getString("optionsPanel.virtualizer.Browse","Browse"));
+         jLabelReportVirtualizerDirectory.setText(  I18n.getString("optionsPanel.virtualizer.ReportVirtualizerDir","Directory where the paged out data is to be stored"));
+         jLabelReportVirtualizerSize.setText(  I18n.getString("optionsPanel.virtualizer.ReportVirtualizerSize","Maximum size (in JRVirtualizable objects) of the paged in cache"));
+
+         ((TitledBorder)jPanel23.getBorder()).setTitle(I18n.getString("optionsPanel.virtualizer.SwapFile"));
+         jLabelReportVirtualizerSize1.setText(I18n.getString("optionsPanel.virtualizer.blockSize"));
+         jLabelReportVirtualizerMinGrowCount.setText(I18n.getString("optionsPanel.virtualizer.growCount"));
+
+
+         List tags = new java.util.ArrayList();
+         tags.add(new Tag("", "<Template Default>"));//FIXMETD confusion between lower case and upper case values
+         tags.add(new Tag(JasperDesign.LANGUAGE_JAVA, "Java"));//FIXMETD confusion between lower case and upper case values
+         tags.add(new Tag(JasperDesign.LANGUAGE_GROOVY, "Groovy"));
+         tags.add(new Tag("javascript", "JavaScript"));
+
+         jComboBoxLanguage.setModel(new DefaultComboBoxModel(tags.toArray()));
+    }
+
+    public void addTab(String title, JComponent component)
+    {
+        jTabbedPane1.add(title, component);
     }
 
     /** This method is called from within the constructor to
@@ -116,6 +159,12 @@ final class IReportPanel extends javax.swing.JPanel {
         jTextFieldTimeZone = new javax.swing.JTextField();
         jButtonTimeZone = new javax.swing.JButton();
         jCheckBoxIgnorePagination = new javax.swing.JCheckBox();
+        jCheckBoxVirtualizer = new javax.swing.JCheckBox();
+        jPanel24 = new javax.swing.JPanel();
+        jLabelTimeZone1 = new javax.swing.JLabel();
+        jComboBoxLanguage = new javax.swing.JComboBox();
+        jComboBoxTheme = new javax.swing.JComboBox();
+        jLabelTimeZone2 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabelClasspath = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -175,6 +224,21 @@ final class IReportPanel extends javax.swing.JPanel {
         jButtonMoveUpTemplate = new javax.swing.JButton();
         jButtonMoveDownTemplate = new javax.swing.JButton();
         jPanel20 = new javax.swing.JPanel();
+        jPanel21 = new javax.swing.JPanel();
+        jPanelVirtualizer = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jComboBoxVirtualizer = new javax.swing.JComboBox();
+        jPanel22 = new javax.swing.JPanel();
+        jLabelReportVirtualizerDirectory = new javax.swing.JLabel();
+        jTextFieldVirtualizerDir = new javax.swing.JTextField();
+        jButtonVirtualizerDirBrowse = new javax.swing.JButton();
+        jLabelReportVirtualizerSize = new javax.swing.JLabel();
+        jSpinnerVirtualizerSize = new javax.swing.JSpinner();
+        jPanel23 = new javax.swing.JPanel();
+        jLabelReportVirtualizerSize1 = new javax.swing.JLabel();
+        jSpinnerVirtualizerBlockSize = new javax.swing.JSpinner();
+        jLabelReportVirtualizerMinGrowCount = new javax.swing.JLabel();
+        jSpinnerVirtualizerGrownCount = new javax.swing.JSpinner();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Units"));
 
@@ -195,7 +259,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabel1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jComboBoxUnits, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 72, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(282, Short.MAX_VALUE))
+                .addContainerGap(219, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -265,37 +329,52 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxVirtualizer, "Use virtualizer");
+        jCheckBoxVirtualizer.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jCheckBoxVirtualizerStateChanged(evt);
+            }
+        });
+        jCheckBoxVirtualizer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxVirtualizerActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel2Layout.createSequentialGroup()
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel2Layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jCheckBoxVirtualizer, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2Layout.createSequentialGroup()
                         .add(27, 27, 27)
                         .add(jLabelMaxNumber)
                         .add(18, 18, 18)
                         .add(jSpinnerMaxRecordNumber, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 83, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jPanel2Layout.createSequentialGroup()
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .add(jCheckBoxLimitRecordNumber, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE))
-                    .add(jPanel2Layout.createSequentialGroup()
+                        .add(jCheckBoxLimitRecordNumber, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jTextFieldReportLocale, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-                            .add(jLabelReportLocale, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))
+                            .add(jTextFieldReportLocale, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                            .add(jLabelReportLocale, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonReportLocale))
-                    .add(jPanel2Layout.createSequentialGroup()
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jTextFieldTimeZone, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-                            .add(jLabelTimeZone, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))
+                            .add(jTextFieldTimeZone, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                            .add(jLabelTimeZone, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonTimeZone))
-                    .add(jPanel2Layout.createSequentialGroup()
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .add(jCheckBoxIgnorePagination, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)))
+                        .add(jCheckBoxIgnorePagination, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -324,32 +403,84 @@ final class IReportPanel extends javax.swing.JPanel {
                             .add(jButtonTimeZone)))
                     .add(jLabelTimeZone))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jCheckBoxIgnorePagination))
+                .add(jCheckBoxIgnorePagination)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxVirtualizer)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel24.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report defaults"));
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelTimeZone1, "Language");
+
+        jComboBoxLanguage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxLanguageActionPerformed(evt);
+            }
+        });
+
+        jComboBoxTheme.setEditable(true);
+        jComboBoxTheme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxThemeActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelTimeZone2, "Chart theme");
+
+        org.jdesktop.layout.GroupLayout jPanel24Layout = new org.jdesktop.layout.GroupLayout(jPanel24);
+        jPanel24.setLayout(jPanel24Layout);
+        jPanel24Layout.setHorizontalGroup(
+            jPanel24Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel24Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel24Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabelTimeZone1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 113, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabelTimeZone2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel24Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jComboBoxLanguage, 0, 196, Short.MAX_VALUE)
+                    .add(jComboBoxTheme, 0, 196, Short.MAX_VALUE))
+                .add(38, 38, 38))
+        );
+        jPanel24Layout.setVerticalGroup(
+            jPanel24Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel24Layout.createSequentialGroup()
+                .add(jPanel24Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel24Layout.createSequentialGroup()
+                        .add(jLabelTimeZone1)
+                        .add(20, 20, 20))
+                    .add(jPanel24Layout.createSequentialGroup()
+                        .add(jComboBoxLanguage, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel24Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(jComboBoxTheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(jLabelTimeZone2))))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 456, Short.MAX_VALUE)
-            .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jPanel3Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addContainerGap()))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel24, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 303, Short.MAX_VALUE)
-            .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jPanel3Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                    .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(27, Short.MAX_VALUE)))
+            .add(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("General", jPanel3);
@@ -451,9 +582,9 @@ final class IReportPanel extends javax.swing.JPanel {
             .add(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabelClasspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
+                    .add(jLabelClasspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 122, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -465,8 +596,8 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelClasspath)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE))
+                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -529,10 +660,10 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel7Layout.createSequentialGroup()
-                        .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                        .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jLabelFontspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE))
+                    .add(jLabelFontspath, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -542,8 +673,8 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelFontspath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jPanel8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
-                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE))
+                    .add(jPanel8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -890,9 +1021,9 @@ final class IReportPanel extends javax.swing.JPanel {
             .add(jPanel18Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabelClasspath1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
+                    .add(jLabelClasspath1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel18Layout.createSequentialGroup()
-                        .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                        .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel19, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 122, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -904,22 +1035,185 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelClasspath1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel19, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
-                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE))
+                    .add(jPanel19, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab("Wizard templates", jPanel18);
 
+        jPanel21.setLayout(new java.awt.GridBagLayout());
+
+        jPanelVirtualizer.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Virtualizer"));
+        jPanelVirtualizer.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, "Use this virtualizer");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 3, 0, 3);
+        jPanelVirtualizer.add(jLabel2, gridBagConstraints);
+
+        jComboBoxVirtualizer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxVirtualizerActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 3, 8, 3);
+        jPanelVirtualizer.add(jComboBoxVirtualizer, gridBagConstraints);
+
+        jPanel22.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelReportVirtualizerDirectory, "Directory where the paged out data is to be stored");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        jPanel22.add(jLabelReportVirtualizerDirectory, gridBagConstraints);
+
+        jTextFieldVirtualizerDir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldVirtualizerDirActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1000.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 3, 0, 3);
+        jPanel22.add(jTextFieldVirtualizerDir, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonVirtualizerDirBrowse, "Browse");
+        jButtonVirtualizerDirBrowse.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        jButtonVirtualizerDirBrowse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVirtualizerDirBrowseActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 3, 0, 3);
+        jPanel22.add(jButtonVirtualizerDirBrowse, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelReportVirtualizerSize, "Maximum size (in JRVirtualizable objects) of the paged in cache");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(2, 4, 0, 4);
+        jPanel22.add(jLabelReportVirtualizerSize, gridBagConstraints);
+
+        jSpinnerVirtualizerSize.setMinimumSize(new java.awt.Dimension(127, 20));
+        jSpinnerVirtualizerSize.setPreferredSize(new java.awt.Dimension(127, 20));
+        jSpinnerVirtualizerSize.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinnerVirtualizerSizeStateChanged(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
+        jPanel22.add(jSpinnerVirtualizerSize, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanelVirtualizer.add(jPanel22, gridBagConstraints);
+
+        jPanel23.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Swap file"));
+        jPanel23.setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelReportVirtualizerSize1, "Block size");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        jPanel23.add(jLabelReportVirtualizerSize1, gridBagConstraints);
+
+        jSpinnerVirtualizerBlockSize.setMinimumSize(new java.awt.Dimension(127, 20));
+        jSpinnerVirtualizerBlockSize.setPreferredSize(new java.awt.Dimension(127, 20));
+        jSpinnerVirtualizerBlockSize.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinnerVirtualizerBlockSizejSpinnerVirtualizerSizeStateChanged2(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
+        jPanel23.add(jSpinnerVirtualizerBlockSize, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelReportVirtualizerMinGrowCount, "Min. grow count");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
+        jPanel23.add(jLabelReportVirtualizerMinGrowCount, gridBagConstraints);
+
+        jSpinnerVirtualizerGrownCount.setMinimumSize(new java.awt.Dimension(127, 20));
+        jSpinnerVirtualizerGrownCount.setPreferredSize(new java.awt.Dimension(127, 20));
+        jSpinnerVirtualizerGrownCount.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinnerVirtualizerGrownCountjSpinnerVirtualizerSize1jSpinnerVirtualizerSizeStateChanged2(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
+        jPanel23.add(jSpinnerVirtualizerGrownCount, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanelVirtualizer.add(jPanel23, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
+        jPanel21.add(jPanelVirtualizer, gridBagConstraints);
+
+        jTabbedPane1.addTab("Virtualizer", jPanel21);
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
+            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 331, Short.MAX_VALUE)
+            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
         );
 
         jTabbedPane1.getAccessibleContext().setAccessibleName("General");
@@ -948,7 +1242,7 @@ final class IReportPanel extends javax.swing.JPanel {
 }//GEN-LAST:event_jCheckBoxIgnorePaginationStateChanged
 
     private void jCheckBoxIgnorePaginationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxIgnorePaginationActionPerformed
-        // TODO add your handling code here:
+        controller.changed();
 }//GEN-LAST:event_jCheckBoxIgnorePaginationActionPerformed
 
     private void jButtonReportLocaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonReportLocaleActionPerformed
@@ -1312,20 +1606,66 @@ private void jButtonMoveDownTemplateActionPerformed(java.awt.event.ActionEvent e
             controller.changed();
         }
 }//GEN-LAST:event_jButtonMoveDownTemplateActionPerformed
+
+private void jComboBoxVirtualizerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxVirtualizerActionPerformed
+    controller.changed();
+}//GEN-LAST:event_jComboBoxVirtualizerActionPerformed
+
+private void jTextFieldVirtualizerDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldVirtualizerDirActionPerformed
+    controller.changed();
+}//GEN-LAST:event_jTextFieldVirtualizerDirActionPerformed
+
+private void jButtonVirtualizerDirBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVirtualizerDirBrowseActionPerformed
+    JFileChooser jfc = new JFileChooser();
+    jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        jTextFieldVirtualizerDir.setText( jfc.getSelectedFile().getPath());
+    }
+    controller.changed();
+}//GEN-LAST:event_jButtonVirtualizerDirBrowseActionPerformed
+
+private void jSpinnerVirtualizerSizeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerVirtualizerSizeStateChanged
+    controller.changed();
+}//GEN-LAST:event_jSpinnerVirtualizerSizeStateChanged
+
+private void jSpinnerVirtualizerBlockSizejSpinnerVirtualizerSizeStateChanged2(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerVirtualizerBlockSizejSpinnerVirtualizerSizeStateChanged2
+    controller.changed();
+}//GEN-LAST:event_jSpinnerVirtualizerBlockSizejSpinnerVirtualizerSizeStateChanged2
+
+private void jSpinnerVirtualizerGrownCountjSpinnerVirtualizerSize1jSpinnerVirtualizerSizeStateChanged2(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerVirtualizerGrownCountjSpinnerVirtualizerSize1jSpinnerVirtualizerSizeStateChanged2
+    controller.changed();
+}//GEN-LAST:event_jSpinnerVirtualizerGrownCountjSpinnerVirtualizerSize1jSpinnerVirtualizerSizeStateChanged2
+
+private void jCheckBoxVirtualizerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxVirtualizerStateChanged
+    // TODO add your handling code here:
+}//GEN-LAST:event_jCheckBoxVirtualizerStateChanged
+
+private void jCheckBoxVirtualizerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxVirtualizerActionPerformed
+    controller.changed();
+}//GEN-LAST:event_jCheckBoxVirtualizerActionPerformed
+
+private void jComboBoxLanguageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLanguageActionPerformed
+    controller.changed();
+}//GEN-LAST:event_jComboBoxLanguageActionPerformed
+
+private void jComboBoxThemeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxThemeActionPerformed
+    controller.changed();
+}//GEN-LAST:event_jComboBoxThemeActionPerformed
     
             
     void load() {
     
         Preferences pref = IReportManager.getPreferences();
         
-        String unit = pref.get("Unit",I18n.getString("IReportPanel.Measure.inches")); // NOI18N
+        String unit = pref.get("Unit","inches"); // NOI18N
         Misc.setComboboxSelectedTagValue(jComboBoxUnits, unit);
         
         jCheckBoxLimitRecordNumber.setSelected( pref.getBoolean("limitRecordNumber", false)  );  // NOI18N
         ((SpinnerNumberModel)jSpinnerMaxRecordNumber.getModel()).setValue(  pref.getInt("maxRecordNumber", 1)  );  // NOI18N
      
         jCheckBoxIgnorePagination.setSelected( pref.getBoolean("isIgnorePagination", false)  );  // NOI18N
-    
+        jCheckBoxVirtualizer.setSelected( pref.getBoolean("isUseReportVirtualizer", false)  );  // NOI18N
+
         String locName = pref.get("reportLocale", null);  // NOI18N
         if (locName != null)
         {
@@ -1378,6 +1718,41 @@ private void jButtonMoveDownTemplateActionPerformed(java.awt.event.ActionEvent e
         jTextFieldODFViewer.setText(pref.get("ExternalODFViewer", ""));
         jTextFieldTXTViewer.setText(pref.get("ExternalTXTViewer", ""));
         jTextFieldHTMLViewer.setText(pref.get("ExternalHTMLViewer", ""));
+
+        this.jTextFieldVirtualizerDir.setText(  pref.get("ReportVirtualizerDirectory", Misc.nvl(JRProperties.getProperty(JRProperties.COMPILER_TEMP_DIR),"")));
+        this.jSpinnerVirtualizerSize.setValue(pref.getInt("ReportVirtualizerSize",100));
+        Misc.setComboboxSelectedTagValue(jComboBoxVirtualizer, pref.get("ReportVirtualizer", "JRFileVirtualizer") );
+        this.jSpinnerVirtualizerBlockSize.setValue(pref.getInt("ReportVirtualizerBlockSize",100));
+        this.jSpinnerVirtualizerGrownCount.setValue(pref.getInt("ReportVirtualizerMinGrownCount",100));
+
+        Misc.setComboboxSelectedTagValue(jComboBoxLanguage, pref.get("DefaultLanguage", "eye.candy.sixties") );
+        
+        ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(new ReportClassLoader(oldCL));
+        
+        Set<String> themeNamesSet = new HashSet<String>();
+        List themeBundles = ExtensionsEnvironment.getExtensionsRegistry().getExtensions(ChartThemeBundle.class);
+        for (Iterator it = themeBundles.iterator(); it.hasNext();)
+        {
+           ChartThemeBundle bundle = (ChartThemeBundle) it.next();
+           String[] themeNames = bundle.getChartThemeNames();
+           themeNamesSet.addAll(Arrays.asList(themeNames));
+        }
+
+        String[] allThemeNames  = themeNamesSet.toArray(new String[themeNamesSet.size()]);
+        Arrays.sort(allThemeNames);
+
+        Thread.currentThread().setContextClassLoader(oldCL);
+
+        jComboBoxTheme.setModel(new DefaultComboBoxModel(allThemeNames));
+        ((DefaultComboBoxModel)jComboBoxTheme.getModel()).insertElementAt(
+                new Tag("", "<JasperReports Default>"), 0);
+
+
+        Misc.setComboboxSelectedTagValue(jComboBoxTheme, pref.get("DefaultTheme", "") );
+
+
+
     }
 
     void store() {
@@ -1392,7 +1767,8 @@ private void jButtonMoveDownTemplateActionPerformed(java.awt.event.ActionEvent e
         pref.putBoolean("limitRecordNumber"  , jCheckBoxLimitRecordNumber.isSelected() );
         pref.putInt( "maxRecordNumber", ((SpinnerNumberModel)jSpinnerMaxRecordNumber.getModel()).getNumber().intValue() );
         pref.putBoolean("isIgnorePagination"  , jCheckBoxIgnorePagination.isSelected() );
-    
+        pref.putBoolean("isUseReportVirtualizer"  , jCheckBoxVirtualizer.isSelected() );
+
         if (getCurrentReportLocale() != null) pref.put("reportLocale", getCurrentReportLocale().toString());
         else pref.remove("reportLocale");
         
@@ -1431,7 +1807,23 @@ private void jButtonMoveDownTemplateActionPerformed(java.awt.event.ActionEvent e
 
         if (jTextFieldHTMLViewer.getText().length() > 0) pref.put("ExternalHTMLViewer", jTextFieldHTMLViewer.getText());
         else pref.remove("ExternalHTMLViewer");
-        
+
+
+        if (jTextFieldVirtualizerDir.getText().length() > 0) pref.put("ReportVirtualizerDirectory", this.jTextFieldVirtualizerDir.getText());
+        pref.putInt("ReportVirtualizerSize",((SpinnerNumberModel)this.jSpinnerVirtualizerSize.getModel()).getNumber().intValue());
+        pref.putInt("ReportVirtualizerBlockSize",((SpinnerNumberModel)this.jSpinnerVirtualizerBlockSize.getModel()).getNumber().intValue());
+        pref.putInt("ReportVirtualizerMinGrownCount",((SpinnerNumberModel)this.jSpinnerVirtualizerGrownCount.getModel()).getNumber().intValue());
+        pref.put("ReportVirtualizer",  ""+((Tag)jComboBoxVirtualizer.getSelectedItem()).getValue() );
+
+        Object obj = jComboBoxLanguage.getSelectedItem();
+        if (obj instanceof Tag) obj = ((Tag)obj).getValue();
+        if (obj == null) obj = "";
+        pref.put("DefaultLanguage", (obj+"").trim());
+
+        obj = jComboBoxTheme.getSelectedItem();
+        if (obj instanceof Tag) obj = ((Tag)obj).getValue();
+        if (obj == null) obj = "";
+        pref.put("DefaultTheme", (obj+"").trim());
     }
     
     private List<String> getClasspath()
@@ -1470,11 +1862,17 @@ private void jButtonMoveDownTemplateActionPerformed(java.awt.event.ActionEvent e
     private javax.swing.JButton jButtonSelectAllFonts;
     private javax.swing.JButton jButtonTXTViewer;
     private javax.swing.JButton jButtonTimeZone;
+    private javax.swing.JButton jButtonVirtualizerDirBrowse;
     private javax.swing.JButton jButtonXLSViewer;
     private javax.swing.JCheckBox jCheckBoxIgnorePagination;
     private javax.swing.JCheckBox jCheckBoxLimitRecordNumber;
+    private javax.swing.JCheckBox jCheckBoxVirtualizer;
+    private javax.swing.JComboBox jComboBoxLanguage;
+    private javax.swing.JComboBox jComboBoxTheme;
     private javax.swing.JComboBox jComboBoxUnits;
+    private javax.swing.JComboBox jComboBoxVirtualizer;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelCSVViewer;
     private javax.swing.JLabel jLabelClasspath;
     private javax.swing.JLabel jLabelClasspath1;
@@ -1485,8 +1883,14 @@ private void jButtonMoveDownTemplateActionPerformed(java.awt.event.ActionEvent e
     private javax.swing.JLabel jLabelPDFViewer;
     private javax.swing.JLabel jLabelRTFViewer;
     private javax.swing.JLabel jLabelReportLocale;
+    private javax.swing.JLabel jLabelReportVirtualizerDirectory;
+    private javax.swing.JLabel jLabelReportVirtualizerMinGrowCount;
+    private javax.swing.JLabel jLabelReportVirtualizerSize;
+    private javax.swing.JLabel jLabelReportVirtualizerSize1;
     private javax.swing.JLabel jLabelTXTViewer;
     private javax.swing.JLabel jLabelTimeZone;
+    private javax.swing.JLabel jLabelTimeZone1;
+    private javax.swing.JLabel jLabelTimeZone2;
     private javax.swing.JLabel jLabelXLSViewer;
     private javax.swing.JList jListClassPath;
     private com.jaspersoft.ireport.designer.fonts.CheckBoxList jListFontspath;
@@ -1504,6 +1908,10 @@ private void jButtonMoveDownTemplateActionPerformed(java.awt.event.ActionEvent e
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
+    private javax.swing.JPanel jPanel21;
+    private javax.swing.JPanel jPanel22;
+    private javax.swing.JPanel jPanel23;
+    private javax.swing.JPanel jPanel24;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -1511,10 +1919,14 @@ private void jButtonMoveDownTemplateActionPerformed(java.awt.event.ActionEvent e
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JPanel jPanelVirtualizer;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSpinner jSpinnerMaxRecordNumber;
+    private javax.swing.JSpinner jSpinnerVirtualizerBlockSize;
+    private javax.swing.JSpinner jSpinnerVirtualizerGrownCount;
+    private javax.swing.JSpinner jSpinnerVirtualizerSize;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextFieldCSVViewer;
     private javax.swing.JTextField jTextFieldHTMLViewer;
@@ -1524,6 +1936,7 @@ private void jButtonMoveDownTemplateActionPerformed(java.awt.event.ActionEvent e
     private javax.swing.JTextField jTextFieldReportLocale;
     private javax.swing.JTextField jTextFieldTXTViewer;
     private javax.swing.JTextField jTextFieldTimeZone;
+    private javax.swing.JTextField jTextFieldVirtualizerDir;
     private javax.swing.JTextField jTextFieldXLSViewer;
     // End of variables declaration//GEN-END:variables
 

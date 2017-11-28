@@ -42,6 +42,7 @@ import com.jaspersoft.ireport.designer.outline.nodes.CellNode;
 import com.jaspersoft.ireport.designer.tools.JrxmlEditorToolbar;
 import com.jaspersoft.ireport.designer.undo.UndoRedoManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.beans.BeanInfo;
@@ -110,7 +111,7 @@ public class JrxmlVisualView extends TopComponent
      * The explorer manager selection (and content) is always synchronized with the outline view.
      */
     private transient ExplorerManager explorerManager;
-    public static final String PREFERRED_ID = "ireport_visual_view";
+    public static final String PREFERRED_ID = "ireport_visual_view"; // NOI18N
     
     private JrxmlEditorSupport support;
     private ReportDesignerPanel reportDesignerPanel = null;
@@ -181,7 +182,7 @@ public class JrxmlVisualView extends TopComponent
     
     @Override
     public String getDisplayName() {
-        return "Designer";
+        return I18n.getString("view.designer");  // NOI18N
     }
     
     @Override
@@ -219,14 +220,14 @@ public class JrxmlVisualView extends TopComponent
                 map.put(DefaultEditorKit.copyAction, ExplorerUtils.actionCopy(explorerManager));
                 map.put(DefaultEditorKit.cutAction, ExplorerUtils.actionCut(explorerManager));
                 map.put(DefaultEditorKit.pasteAction, ExplorerUtils.actionPaste(explorerManager));
-                map.put("delete", ExplorerUtils.actionDelete(explorerManager, true));
+                map.put("delete", ExplorerUtils.actionDelete(explorerManager, true)); // NOI18N
 
                 abstractLookup = new AbstractLookup(ic);
                 //if (pc != null)
 
                 if (pc == null)
                 {
-                    pc = getPaletteFromMimeType("text/x-jrxml+xml");
+                    pc = getPaletteFromMimeType("text/x-jrxml+xml");  // NOI18N
                 }
 
                 lookup = new ProxyLookup(new Lookup[]{
@@ -480,8 +481,10 @@ public class JrxmlVisualView extends TopComponent
             //
             support.setCurrentModel( null );
             
-            
+
+            Thread.currentThread().setContextClassLoader(new ReportClassLoader(IReportManager.getReportClassLoader()));
             JrxmlLoader jrxmlLoader = new JrxmlLoader();
+
             jasperDesign = jrxmlLoader.reloadJasperDesign(support.getInputStream());
             
             if (jasperDesign == null)
@@ -535,7 +538,7 @@ public class JrxmlVisualView extends TopComponent
 
                         reportDesignerPanel.setJasperDesign(null);
                         AbstractNode mNode = new AbstractNode(Children.LEAF);
-                        mNode.setDisplayName("Invalid report");
+                        mNode.setDisplayName(I18n.getString("view.designer.invalidreport"));
                         
                         getUndoRedoManager().discardAllEdits();
                         explorerManager.setRootContext(mNode);
@@ -560,12 +563,14 @@ public class JrxmlVisualView extends TopComponent
                 //Exceptions.printStackTrace(ex1);
             }
             
-            Misc.showErrorMessage("Error loading the report template:\n" + ex.getMessage(), "Error loading the report template", ex);
+            Misc.showErrorMessage( I18n.getString("view.designer.errorloading", ex.getMessage()), // NOI18N
+                                   I18n.getString("view.designer.errorloading.title"), ex); // NOI18N
 
         
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
-            Misc.showErrorMessage("Error loading the report template:\n"+ex.getMessage(), "Error loading the report template", ex);
+            Misc.showErrorMessage( I18n.getString("view.designer.errorloading", ex.getMessage()), // NOI18N
+                                   I18n.getString("view.designer.errorloading.title"), ex); // NOI18N
         }
         finally{
             
@@ -612,7 +617,7 @@ public class JrxmlVisualView extends TopComponent
   
     class JasperDesignerTypeLookupHint implements NavigatorLookupHint {
             public String getContentType () {
-                return "my-jasper-designer-mimetype";
+                return "my-jasper-designer-mimetype";  // NOI18N
             }
         }
 

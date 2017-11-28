@@ -6,7 +6,9 @@
 package com.jaspersoft.ireport.designer.standalone.menu;
 
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.standalone.IReportStandaloneManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.locale.I18n;
 import java.io.File;
 import javax.swing.JFileChooser;
 import org.openide.ErrorManager;
@@ -17,7 +19,6 @@ import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.util.HelpCtx;
-import org.openide.util.NbBundle;
 import org.openide.util.UserCancelException;
 import org.openide.util.actions.CallableSystemAction;
 import org.openide.windows.WindowManager;
@@ -29,11 +30,11 @@ import org.openide.windows.WindowManager;
 public class OpenFileAction extends CallableSystemAction {
 
 	public OpenFileAction() {
-		putValue("noIconInMenu", Boolean.TRUE);
+		putValue("noIconInMenu", Boolean.TRUE); // NOI18N
 	}
 	
 	public String getName() {
-		return NbBundle.getMessage(OpenFileAction.class, "CTL_OpenFileAction");
+		return I18n.getString( IReportStandaloneManager.class, "CTL_OpenFileAction");
 	}
 
 	public HelpCtx getHelpCtx() {
@@ -61,7 +62,7 @@ public class OpenFileAction extends CallableSystemAction {
                         public boolean accept(File f) {
                             
                             if (f.isDirectory()) return true;
-                            if (f.exists() && f.getName().toLowerCase().endsWith(".jrxml"))
+                            if (f.exists() && f.getName().toLowerCase().endsWith(".jrxml")) // NOI18N
                             {
                                 return true;
                             }
@@ -140,7 +141,7 @@ public class OpenFileAction extends CallableSystemAction {
                 try {
 			// the process succeeded 
 			DataObject dob = DataObject.find (fob);
-                        if (f.getName().toLowerCase().endsWith(".properties"))
+                        if (f.getName().toLowerCase().endsWith(".properties")) // NOI18N
                         {
                             EditCookie oc = (EditCookie) dob.getCookie (EditCookie.class);
                             if (oc != null)

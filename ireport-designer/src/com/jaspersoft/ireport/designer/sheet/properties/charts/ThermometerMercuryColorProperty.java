@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
     
@@ -22,7 +23,7 @@ public final class ThermometerMercuryColorProperty extends ColorProperty {
 
     private final JRDesignThermometerPlot element;
 
-    @SuppressWarnings("unchecked")
+    
     public ThermometerMercuryColorProperty(JRDesignThermometerPlot element)
     {
         super(element);
@@ -38,13 +39,13 @@ public final class ThermometerMercuryColorProperty extends ColorProperty {
     @Override
     public String getDisplayName()
     {
-        return "Mercury Color";
+        return I18n.getString("Mercury_Color");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The color of the mercury inside the thermometer.";
+        return I18n.getString("The_color_of_the_mercury_inside_the_thermometer.");
     }
 
     @Override

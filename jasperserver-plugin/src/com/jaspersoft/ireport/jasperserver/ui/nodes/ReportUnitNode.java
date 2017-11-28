@@ -149,18 +149,15 @@ public class ReportUnitNode extends IRIndexedNode implements ResourceNode {
         return getParentReportUnit(node.getParentNode());
     }
 
- /*
+ 
      @Override
     public Transferable drag() throws IOException {
         ExTransferable tras = ExTransferable.create(clipboardCut());
         
-        if (getFile().getDescriptor().getWsType().equals(ResourceDescriptor.TYPE_IMAGE))
-        {
-            tras.put(new ReportObjectPaletteTransferable( 
+        tras.put(new ReportObjectPaletteTransferable( 
                     "com.jaspersoft.ireport.jasperserver.ui.actions.CreateDrillDownAction",
                     getReportUnit()));
-        }
         return tras;
     }
-   */ 
+    
 }

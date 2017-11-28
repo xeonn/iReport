@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
@@ -36,13 +37,13 @@ public final class FilterExpressionProperty extends ExpressionProperty
     @Override
     public String getDisplayName()
     {
-        return "Filter Expression";
+        return I18n.getString("Global.Property.FilterExpression");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Expression used to filter the records. It must return a Boolean object.";
+        return I18n.getString("Global.Property.FilterExpressiondetail");
     }
 
     @Override

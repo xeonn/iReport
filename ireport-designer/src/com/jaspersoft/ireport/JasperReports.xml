@@ -23,7 +23,7 @@ and open the template in the editor.
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jxl-2.6.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/png-encoder-1.5.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/poi-3.0.1-FINAL-20070705.jar!/</resource>
-        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-3.1.0.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-3.1.2.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/libs/xalan.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/xercesImpl.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/xml-apis.jar!/</resource>
@@ -41,6 +41,9 @@ and open the template in the editor.
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/batik-util.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/batik-xml.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/iText-2.1.0.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/rhino-1.7R1.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/xml-apis-ext.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-chart-themes-3.1.2.jar!/</resource>
 
     </volume>
     <volume>

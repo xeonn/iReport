@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.JRAlignment;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
@@ -38,23 +39,23 @@ public final class VerticalAlignmentProperty extends ByteProperty
     @Override
     public String getDisplayName()
     {
-        return "Vertical Alignment";
+        return I18n.getString("Global.Property.VerticalAlignment");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "How to align the element.";
+        return I18n.getString("Global.Property.VerticalAlignmentdetail");
     }
 
     @Override
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_TOP), "Top"));
-        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_MIDDLE), "Middle"));
-        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_BOTTOM), "Bottom"));
-        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_JUSTIFIED), "Justified"));
+        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_TOP), I18n.getString("Global.Property.Top")));
+        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_MIDDLE), I18n.getString("Global.Property.Middle")));
+        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_BOTTOM), I18n.getString("Global.Property.Bottom")));
+        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_JUSTIFIED), I18n.getString("Global.Property.Justified")));
         return tags;
     }
 

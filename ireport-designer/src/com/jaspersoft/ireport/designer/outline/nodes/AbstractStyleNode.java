@@ -18,6 +18,7 @@ import com.jaspersoft.ireport.designer.sheet.properties.StylePatternProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 import java.awt.datatransfer.Transferable;
@@ -266,8 +267,8 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
         public ModeProperty(JRBaseStyle style)
         {
             super(JRBaseStyle.PROPERTY_MODE, Boolean.class,
-                  "Opaque",
-                  "Set if the style is opaque or transparent.");
+                  I18n.getString("AbstractStyleNode.Property.Opaque"),
+                  I18n.getString("AbstractStyleNode.Property.Set"));
             this.style = style;
         }
 
@@ -322,8 +323,8 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
         public ForecolorProperty(JRBaseStyle style)
         {
             super(JRBaseStyle.PROPERTY_FORECOLOR, java.awt.Color.class,
-                  "Forecolor",
-                  "The foreground color.");
+                  I18n.getString("AbstractStyleNode.Property.Forecolor"),
+                  I18n.getString("AbstractStyleNode.Property.Forecolordetail"));
             this.style = style;
         }
 
@@ -382,8 +383,8 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
         public BackcolorProperty(JRBaseStyle style)
         {
             super(JRBaseStyle.PROPERTY_BACKCOLOR, java.awt.Color.class,
-                  "Backcolor",
-                  "The background color.");
+                  I18n.getString("AbstractStyleNode.Property.Backcolor"),
+                  I18n.getString("AbstractStyleNode.Property.Backcolordetail"));
             this.style = style;
         }
 
@@ -448,7 +449,7 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
             public FillProperty(JRBaseStyle style)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super(JRBaseStyle.PROPERTY_FILL,Byte.class, "Fill", "Fill.", true, true);
+                super(JRBaseStyle.PROPERTY_FILL,Byte.class, I18n.getString("AbstractStyleNode.Property.Fill"),I18n.getString("AbstractStyleNode.Property.Fill"), true, true);
                 this.style = style;
                 setValue("suppressCustomEditor", Boolean.TRUE);
             }
@@ -460,7 +461,7 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
                 if (editor == null)
                 {
                     java.util.ArrayList l = new java.util.ArrayList();
-                    l.add(new Tag(new Byte(JRDesignGraphicElement.FILL_SOLID), "Solid"));
+                    l.add(new Tag(new Byte(JRDesignGraphicElement.FILL_SOLID), I18n.getString("AbstractStyleNode.Property.Solid")));
                     editor = new ComboBoxPropertyEditor(false, l);
                 }
                 return editor;
@@ -520,7 +521,7 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
             @SuppressWarnings("unchecked")
             public RadiusProperty(JRBaseStyle style)
             {
-                super(JRBaseStyle.PROPERTY_RADIUS,Integer.class, "Radius", "The radius used to paint the corners.", true, true);
+                super(JRBaseStyle.PROPERTY_RADIUS,Integer.class, I18n.getString("RadiusPropertyRadius.Property.Radius"),  I18n.getString("RadiusPropertyRadius.Property.Radiusdetail"), true, true);
                 this.style = style;
             }
 
@@ -537,7 +538,7 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
 
                     if (newValue < 0)
                     {
-                        IllegalArgumentException iae = annotateException("This property requires a positive number.");
+                        IllegalArgumentException iae = annotateException(I18n.getString("RadiusPropertyRadius.Property.Message"));
                         throw iae; 
                     }
 
@@ -593,7 +594,7 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
             public ScaleImageProperty(JRBaseStyle style)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super(JRBaseStyle.PROPERTY_SCALE_IMAGE,Byte.class, "Scale", "How to scale the image.", true, true);
+                super(JRBaseStyle.PROPERTY_SCALE_IMAGE,Byte.class, I18n.getString("AbstractStyleNode.Property.Scale"), I18n.getString("AbstractStyleNode.Property.Scaledetail"), true, true);
                 this.style = style;
                 setValue("suppressCustomEditor", Boolean.TRUE);
             }
@@ -606,9 +607,9 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
                 {
                     java.util.ArrayList l = new java.util.ArrayList();
                     l.add(new Tag(null, "<Default>"));
-                    l.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_CLIP), "Clip"));
-                    l.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_FILL_FRAME), "Fill Frame"));
-                    l.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_RETAIN_SHAPE), "Retain Shape"));
+                    l.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_CLIP), I18n.getString("AbstractStyleNode.Property.Clip")));
+                    l.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_FILL_FRAME), I18n.getString("AbstractStyleNode.Property.Fill_Frame")));
+                    l.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_RETAIN_SHAPE), I18n.getString("AbstractStyleNode.Property.Retain_Shape")));
                     editor = new ComboBoxPropertyEditor(false, l);
                 }
                 return editor;
@@ -664,7 +665,7 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
             public HorizontalAlignmentProperty(JRBaseStyle style)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT,Byte.class, "Horizontal Alignment", "How to align the image.", true, true);
+                super(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT,Byte.class, I18n.getString("AbstractStyleNode.Property.Horizontal_Alignment"), I18n.getString("AbstractStyleNode.Property.HorizDetail"), true, true);
                 this.style = style;
                 setValue("suppressCustomEditor", Boolean.TRUE);
             }
@@ -677,10 +678,10 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
                 {
                     java.util.ArrayList l = new java.util.ArrayList();
                     l.add(new Tag(null, "<Default>"));
-                    l.add(new Tag(new Byte(JRDesignImage.HORIZONTAL_ALIGN_LEFT), "Left"));
-                    l.add(new Tag(new Byte(JRDesignImage.HORIZONTAL_ALIGN_CENTER), "Center"));
-                    l.add(new Tag(new Byte(JRDesignImage.HORIZONTAL_ALIGN_RIGHT), "Right"));
-                    l.add(new Tag(new Byte(JRDesignImage.HORIZONTAL_ALIGN_JUSTIFIED), "Justified"));
+                    l.add(new Tag(new Byte(JRDesignImage.HORIZONTAL_ALIGN_LEFT), I18n.getString("AbstractStyleNode.Property.Left")));
+                    l.add(new Tag(new Byte(JRDesignImage.HORIZONTAL_ALIGN_CENTER), I18n.getString("AbstractStyleNode.Property.Center")));
+                    l.add(new Tag(new Byte(JRDesignImage.HORIZONTAL_ALIGN_RIGHT), I18n.getString("AbstractStyleNode.Property.Right")));
+                    l.add(new Tag(new Byte(JRDesignImage.HORIZONTAL_ALIGN_JUSTIFIED), I18n.getString("AbstractStyleNode.Property.Justified")));
                     editor = new ComboBoxPropertyEditor(false, l);
                 }
                 return editor;
@@ -736,7 +737,7 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
             public VerticalAlignmentProperty(JRBaseStyle style)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT,Byte.class, "Vertical Alignment", "How to align the image.", true, true);
+                super(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT,Byte.class, I18n.getString("AbstractStyleNode.Property.Vertical_Alignment"), I18n.getString("AbstractStyleNode.Property.VerticalDetail"), true, true);
                 this.style = style;
                 setValue("suppressCustomEditor", Boolean.TRUE);
             }
@@ -749,10 +750,10 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
                 {
                     java.util.ArrayList l = new java.util.ArrayList();
                     l.add(new Tag(null, "<Default>"));
-                    l.add(new Tag(new Byte(JRDesignImage.VERTICAL_ALIGN_TOP), "Left"));
-                    l.add(new Tag(new Byte(JRDesignImage.VERTICAL_ALIGN_MIDDLE), "Center"));
-                    l.add(new Tag(new Byte(JRDesignImage.VERTICAL_ALIGN_BOTTOM), "Right"));
-                    l.add(new Tag(new Byte(JRDesignImage.VERTICAL_ALIGN_JUSTIFIED), "Justified"));
+                    l.add(new Tag(new Byte(JRDesignImage.VERTICAL_ALIGN_TOP), I18n.getString("AbstractStyleNode.Property.Left")));
+                    l.add(new Tag(new Byte(JRDesignImage.VERTICAL_ALIGN_MIDDLE), I18n.getString("AbstractStyleNode.Property.Center")));
+                    l.add(new Tag(new Byte(JRDesignImage.VERTICAL_ALIGN_BOTTOM), I18n.getString("AbstractStyleNode.Property.Right")));
+                    l.add(new Tag(new Byte(JRDesignImage.VERTICAL_ALIGN_JUSTIFIED), I18n.getString("AbstractStyleNode.Property.Justified")));
                     editor = new ComboBoxPropertyEditor(false, l);
                 }
                 return editor;
@@ -809,7 +810,7 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
             public RotationProperty(JRBaseStyle style)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super(JRBaseStyle.PROPERTY_ROTATION,Byte.class, "Rotation", "How to rotate the text.", true, true);
+                super(JRBaseStyle.PROPERTY_ROTATION,Byte.class, I18n.getString("AbstractStyleNode.Property.Rotation"), I18n.getString("AbstractStyleNode.Property.RotationDetail"), true, true);
                 this.style = style;
                 setValue("suppressCustomEditor", Boolean.TRUE);
             }
@@ -822,10 +823,10 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
                 {
                     java.util.ArrayList l = new java.util.ArrayList();
                     l.add(new Tag(null, "<Default>"));
-                    l.add(new Tag(new Byte(JRDesignTextElement.ROTATION_NONE), "None"));
-                    l.add(new Tag(new Byte(JRDesignTextElement.ROTATION_LEFT), "Left"));
-                    l.add(new Tag(new Byte(JRDesignTextElement.ROTATION_RIGHT), "Right"));
-                    l.add(new Tag(new Byte(JRDesignTextElement.ROTATION_UPSIDE_DOWN), "Upside Down"));
+                    l.add(new Tag(new Byte(JRDesignTextElement.ROTATION_NONE), I18n.getString("AbstractStyleNode.Property.None")));
+                    l.add(new Tag(new Byte(JRDesignTextElement.ROTATION_LEFT), I18n.getString("AbstractStyleNode.Property.Left")));
+                    l.add(new Tag(new Byte(JRDesignTextElement.ROTATION_RIGHT), I18n.getString("AbstractStyleNode.Property.Right")));
+                    l.add(new Tag(new Byte(JRDesignTextElement.ROTATION_UPSIDE_DOWN), I18n.getString("AbstractStyleNode.Property.Upside_Down")));
                     editor = new ComboBoxPropertyEditor(false, l);
                 }
                 return editor;
@@ -889,7 +890,7 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
             public LineSpacingProperty(JRBaseStyle style)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super(JRBaseStyle.PROPERTY_LINE_SPACING,Byte.class, "Line Spacing", "The space to put between lines of text.", true, true);
+                super(JRBaseStyle.PROPERTY_LINE_SPACING,Byte.class, I18n.getString("AbstractStyleNode.Property.Line_Spacing"), I18n.getString("AbstractStyleNode.Property.LSDetail"), true, true);
                 this.style = style;
                 setValue("suppressCustomEditor", Boolean.TRUE);
             }
@@ -902,9 +903,9 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
                 {
                     java.util.ArrayList l = new java.util.ArrayList();
                     l.add(new Tag(null, "<Default>"));
-                    l.add(new Tag(new Byte(JRDesignTextElement.LINE_SPACING_SINGLE), "Single"));
-                    l.add(new Tag(new Byte(JRDesignTextElement.LINE_SPACING_1_1_2), "1.5"));
-                    l.add(new Tag(new Byte(JRDesignTextElement.LINE_SPACING_DOUBLE), "Double"));
+                    l.add(new Tag(new Byte(JRDesignTextElement.LINE_SPACING_SINGLE), I18n.getString("AbstractStyleNode.Property.Single")));
+                    l.add(new Tag(new Byte(JRDesignTextElement.LINE_SPACING_1_1_2), I18n.getString("AbstractStyleNode.Property.1-5")));
+                    l.add(new Tag(new Byte(JRDesignTextElement.LINE_SPACING_DOUBLE), I18n.getString("AbstractStyleNode.Property.Double")));
                     editor = new ComboBoxPropertyEditor(false, l);
                 }
                 return editor;
@@ -964,8 +965,8 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
         public StyledTextProperty(JRBaseStyle style)
         {
             super(JRBaseStyle.PROPERTY_IS_STYLED_TEXT, Boolean.class,
-                  "Is Styled Text",
-                  "Set if the value should be parsed as styled text.");
+                  I18n.getString("AbstractStyleNode.Property.Is_Styled_Text"),
+                  I18n.getString("AbstractStyleNode.Property.StyleTextDetail"));
             this.style = style;
         }
 
@@ -1022,7 +1023,7 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
         public BoldProperty(JRBaseStyle style)
         {
             super(JRBaseStyle.PROPERTY_BOLD, Boolean.class,
-                  "Bold",
+                  I18n.getString("AbstractStyleNode.Property.Bold"),
                   "");
             this.style = style;
         }
@@ -1080,7 +1081,7 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
         public ItalicProperty(JRBaseStyle style)
         {
             super(JRBaseStyle.PROPERTY_ITALIC, Boolean.class,
-                  "Italic",
+                  I18n.getString("AbstractStyleNode.Property.Italic"),
                   "");
             this.style = style;
         }
@@ -1138,7 +1139,7 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
         public StrikeThroughProperty(JRBaseStyle style)
         {
             super(JRBaseStyle.PROPERTY_STRIKE_THROUGH, Boolean.class,
-                  "Strike Through",
+                  I18n.getString("AbstractStyleNode.Property.Strike_Through"),
                   "");
             this.style = style;
         }
@@ -1196,7 +1197,7 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
         public UnderlineProperty(JRBaseStyle style)
         {
             super(JRBaseStyle.PROPERTY_UNDERLINE, Boolean.class,
-                  "Underline",
+                  I18n.getString("AbstractStyleNode.Property.Underline"),
                   "");
             this.style = style;
         }
@@ -1254,7 +1255,7 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
         public PdfEmbeddedProperty(JRBaseStyle style)
         {
             super(JRBaseStyle.PROPERTY_PDF_EMBEDDED, Boolean.class,
-                  "Pdf Embedded",
+                  I18n.getString("AbstractStyleNode.Property.Pdf_Embedded"),
                   "");
             this.style = style;
         }
@@ -1314,8 +1315,8 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
         public FontNameProperty(JRBaseStyle style)
         {
             super(JRBaseStyle.PROPERTY_FONT_NAME, String.class,
-                  "Font name",
-                  "Font name");
+                  I18n.getString("AbstractStyleNode.Property.Font_name"),
+                  I18n.getString("Font_name"));
             this.style = style;
         
             setValue("canEditAsText",true);
@@ -1401,8 +1402,8 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
         public FontSizeProperty(JRBaseStyle style)
         {
             super(JRBaseStyle.PROPERTY_FONT_SIZE, Integer.class,
-                  "Size",
-                  "Size");
+                  I18n.getString("AbstractStyleNode.Property.Size"),
+                  I18n.getString("AbstractStyleNode.Property.Size"));
             this.style = style;
         
             setValue("canEditAsText",true);
@@ -1498,8 +1499,8 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
         public PdfFontNameProperty(JRBaseStyle style)
         {
             super(JRBaseStyle.PROPERTY_PDF_FONT_NAME, String.class,
-                  "Pdf Font name",
-                  "Pdf Font name");
+                  I18n.getString("AbstractStyleNode.Property.Pdf_Font_name"),
+                  I18n.getString("AbstractStyleNode.Property.Pdf_Font_name"));
             this.style = style;
         
             setValue("canEditAsText",true);
@@ -1603,8 +1604,8 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
         public PdfEncodingProperty(JRBaseStyle style)
         {
             super(JRBaseStyle.PROPERTY_PDF_ENCODING, String.class,
-                  "Pdf Encoding",
-                  "Pdf Encoding");
+                  I18n.getString("AbstractStyleNode.Property.Pdf_Encoding"),
+                  I18n.getString("AbstractStyleNode.Property.Pdf_Encoding"));
             this.style = style;
         
             setValue("canEditAsText",true);
@@ -1703,8 +1704,8 @@ public class AbstractStyleNode extends IRAbstractNode implements PropertyChangeL
         public BlankWhenNullProperty(JRBaseStyle style)
         {
             super(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL, Boolean.class,
-                  "Blank When Null",
-                  "Print a blank string instead of null.");
+                  I18n.getString("AbstractStyleNode.Property.Blank_When_Null"),
+                  I18n.getString("AbstractStyleNode.Property.Blankdetail"));
             this.style = style;
         }
 

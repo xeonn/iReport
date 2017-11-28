@@ -9,6 +9,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
@@ -37,7 +38,7 @@ public class TextFieldEvaluationGroupProperty  extends PropertySupport implement
     public TextFieldEvaluationGroupProperty(JRDesignTextField element, JRDesignDataset dataset)
     {
         // TODO: Replace WhenNoDataType with the right constant
-        super( JRDesignTextField.PROPERTY_EVALUATION_GROUP,JRGroup.class, "Evaluation group", "Evaluate the image expression when the specified group changes", true, true);
+        super( JRDesignTextField.PROPERTY_EVALUATION_GROUP,JRGroup.class, I18n.getString("Global.Property.Evaluationgroup"), I18n.getString("Global.Property.EvalGroupdeatail"), true, true);
         this.element = element;
         this.dataset = dataset;
         setValue("suppressCustomEditor", Boolean.TRUE);

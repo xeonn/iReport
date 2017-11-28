@@ -38,7 +38,7 @@ public final class NewJrxmlVisualPanel6 extends JPanel {
 
         setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, "<html><font size=+1>Congratulations!</font><br><br>You have succesfully created a new report.<br> Click finish to generate it.");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, I18n.getString("Wizards.Title.Congrats"));
         jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel2.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();

@@ -11,6 +11,7 @@ package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.properties.StringListProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -48,13 +49,13 @@ public abstract class AbstractStyleProperty extends StringListProperty implement
     @Override
     public String getDisplayName()
     {
-        return "Style";
+        return I18n.getString("Global.Property.Style");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The optional style to use for this object. Can be the name of a locally defined style or the name of a style defined in an external style template file.";
+        return I18n.getString("Global.Property.Styledetail");
     }
 
     @Override

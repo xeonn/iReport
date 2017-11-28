@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.palette;
 
 import java.awt.datatransfer.DataFlavor;
+import java.util.Properties;
 import javax.swing.Action;
 import org.netbeans.spi.palette.PaletteActions;
 import org.netbeans.spi.palette.PaletteController;
@@ -59,5 +60,4 @@ public class PaletteUtils {
             return null;
         }
     }
-    
 }

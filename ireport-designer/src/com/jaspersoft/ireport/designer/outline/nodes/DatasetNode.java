@@ -19,6 +19,7 @@ import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.DeleteDatasetUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
@@ -248,7 +249,7 @@ public class DatasetNode extends IRAbstractNode implements PropertyChangeListene
             public WhenResourceMissingTypeProperty(JRDesignDataset dataset)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super("WhenResourceMissingType",Byte.class, "When Resource Missing Type", "Set what to type or to do when a resource is not found in the resource bundle", true, true);
+                super("WhenResourceMissingType",Byte.class, I18n.getString("DatasetNode.Property.ResourceMissig"), I18n.getString("DatasetNode.Property.ResourceMissigdetail"), true, true);
                 this.dataset = dataset;
                 setValue("suppressCustomEditor", Boolean.TRUE);
             }
@@ -260,10 +261,10 @@ public class DatasetNode extends IRAbstractNode implements PropertyChangeListene
                 if (editor == null)
                 {
                     java.util.ArrayList l = new java.util.ArrayList();
-                    l.add(new Tag(new Byte(JRDesignDataset.WHEN_RESOURCE_MISSING_TYPE_EMPTY), "Type Empty"));
-                    l.add(new Tag(new Byte(JRDesignDataset.WHEN_RESOURCE_MISSING_TYPE_ERROR), "Rise an Error"));
-                    l.add(new Tag(new Byte(JRDesignDataset.WHEN_RESOURCE_MISSING_TYPE_KEY), "Type the Key"));
-                    l.add(new Tag(new Byte(JRDesignDataset.WHEN_RESOURCE_MISSING_TYPE_NULL), "Type Null"));
+                    l.add(new Tag(new Byte(JRDesignDataset.WHEN_RESOURCE_MISSING_TYPE_EMPTY), I18n.getString("DatasetNode.Property.Empty")));
+                    l.add(new Tag(new Byte(JRDesignDataset.WHEN_RESOURCE_MISSING_TYPE_ERROR), I18n.getString("DatasetNode.Property.Error")));
+                    l.add(new Tag(new Byte(JRDesignDataset.WHEN_RESOURCE_MISSING_TYPE_KEY), I18n.getString("DatasetNode.Property.Key")));
+                    l.add(new Tag(new Byte(JRDesignDataset.WHEN_RESOURCE_MISSING_TYPE_NULL), I18n.getString("DatasetNode.Property.Null")));
                     editor = new ComboBoxPropertyEditor(false, l);
                 }
                 return editor;
@@ -304,7 +305,7 @@ public class DatasetNode extends IRAbstractNode implements PropertyChangeListene
             public QueryLanguageProperty(JRDesignDataset dataset)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super("queryLanguage",String.class, "Query Language", "The language for the dataset query", true, true);
+                super("queryLanguage",String.class, I18n.getString("DatasetNode.Property.Query"), I18n.getString("DatasetNode.Property.Query"), true, true);
                 //FIXMETD properties might have the same name in different classes. reconsider this
                 //super(JRDesignQuery.PROPERTY_LANGUAGE,String.class, "Query Language", "The language for the dataset query", true, true);
                 this.dataset = dataset;
@@ -396,7 +397,7 @@ public class DatasetNode extends IRAbstractNode implements PropertyChangeListene
             @SuppressWarnings("unchecked")
             public QueryTextProperty(JRDesignDataset dataset)
             {
-                super(JRDesignQuery.PROPERTY_TEXT,String.class, "Query Text", "The query used by this dataset",true, true);
+                super(JRDesignQuery.PROPERTY_TEXT,String.class, I18n.getString("DatasetNode.Property.QueryText"), I18n.getString("DatasetNode.Property.QueryTextdetail"),true, true);
                 this.dataset = dataset;
                 //this.setValue("oneline", Boolean.TRUE);
             }

@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.IntegerProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
     
     
@@ -20,7 +21,7 @@ public final class MeterMeterAngleProperty extends IntegerProperty {
 
     private final JRDesignMeterPlot plot;
 
-    @SuppressWarnings("unchecked")
+    
     public MeterMeterAngleProperty(JRDesignMeterPlot plot)
     {
         super(plot);
@@ -36,13 +37,13 @@ public final class MeterMeterAngleProperty extends IntegerProperty {
     @Override
     public String getDisplayName()
     {
-        return "Meter Angle";
+        return I18n.getString("Meter_Angle");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Meter Angle.";
+        return I18n.getString("Meter_Angle.");
     }
 
     @Override
@@ -74,7 +75,7 @@ public final class MeterMeterAngleProperty extends IntegerProperty {
     {
         if (angle < 0 || angle > 360)
         {
-            throw annotateException("The angle should be in the range 0-360.");
+            throw annotateException(I18n.getString("The_angle_should_be_in_the_range_0-360."));
         }
     }
     

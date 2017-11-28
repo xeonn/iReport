@@ -13,6 +13,7 @@ import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.sheet.editors.JRPropertiesMapPropertyEditor;
 import com.jaspersoft.ireport.designer.sheet.editors.box.JRLineBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.sheet.properties.AbstractProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.engine.JRBoxContainer;
@@ -36,8 +37,8 @@ public class JRLineBoxProperty  extends AbstractProperty {
     {
        super(JRLineBox.class, container.getLineBox());
        setName("linebox");
-       setDisplayName("Padding and borders");
-       setShortDescription("Padding and borders");
+       setDisplayName(I18n.getString("JRLineBoxProperty.Paddingandborders"));
+       setShortDescription(I18n.getString("JRLineBoxProperty.Paddingandborders"));
        setValue("canEditAsText", Boolean.FALSE);
        this.container = container;
     }

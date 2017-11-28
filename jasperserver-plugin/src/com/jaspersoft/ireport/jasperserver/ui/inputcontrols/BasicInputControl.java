@@ -26,6 +26,7 @@ package com.jaspersoft.ireport.jasperserver.ui.inputcontrols;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl.BasicInputControlUI;
+import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl.DateTimeInputControlUI;
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl.InputControlUI;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.text.ParseException;
@@ -94,7 +95,14 @@ public class BasicInputControl {
     public void setInputControl(ResourceDescriptor inputControl, ResourceDescriptor dataType) {
         this.inputControl = inputControl;
         this.dataType = dataType;
-    
+
+        if (dataType != null && (
+                    dataType.getDataType() == dataType.DT_TYPE_DATE ||
+                    dataType.getDataType() == ResourceDescriptor.DT_TYPE_DATE_TIME))
+        {
+            setInputControlUI(new DateTimeInputControlUI());
+        }
+
         String label = inputControl.getLabel() + ((inputControl.isMandatory()) ? "*" : "");
         getInputControlUI().setLabel(label);
         getInputControlUI().setReadOnly( inputControl.isReadOnly() );
@@ -103,6 +111,7 @@ public class BasicInputControl {
         java.util.List revisedHistory = new java.util.ArrayList();
         if (dataType != null && dataType.getDataType() == dataType.DT_TYPE_DATE)
         {
+            /*
             SimpleDateFormat format = new SimpleDateFormat(IReportManager.getInstance().getProperty("dateformat", "d/M/y"));
             for (int i=0; i<history.size(); ++i)
             {
@@ -114,9 +123,11 @@ public class BasicInputControl {
                 else
                     revisedHistory.add(  obj);
             }
+            */
         }
-        else if (dataType != null && dataType.getDataType() == dataType.DT_TYPE_DATE)
+        else if (dataType != null && dataType.getDataType() == dataType.DT_TYPE_DATE_TIME)
         {
+            /*
             SimpleDateFormat format = new SimpleDateFormat(IReportManager.getInstance().getProperty("timeformat", "d/M/y H:m:s"));
             for (int i=0; i<history.size(); ++i)
             {
@@ -128,6 +139,7 @@ public class BasicInputControl {
                 else
                     revisedHistory.add(  obj);
             }
+            */
         }
         else
         {
@@ -225,6 +237,8 @@ public class BasicInputControl {
 			}
 			case ResourceDescriptor.DT_TYPE_DATE_TIME :
                         {
+                            if (!(val instanceof java.util.Date))
+                            {
                                 SimpleDateFormat format = new SimpleDateFormat(IReportManager.getInstance().getProperty("timeformat", "d/M/y H:m:s"));
                                 try
                                 { 
@@ -236,12 +250,15 @@ public class BasicInputControl {
                                         throw new InputValidationException(
                                                 JasperServerManager.getFormattedString("basicInputControl.invalidDatetime","Invalid value set for {0} is not a valid datetime in the form {1}",new Object[]{getInputControl().getLabel(),IReportManager.getInstance().getProperty("timeformat", "d/M/y H:m:s")}));
                                 }
-                                break;
+                            }
+                            break;
                         }
                             
                             
 			case ResourceDescriptor.DT_TYPE_DATE :
 			{
+                            if (!(val instanceof java.util.Date))
+                            {
 				SimpleDateFormat format = new SimpleDateFormat( IReportManager.getInstance().getProperty("dateformat", "d/M/y") );
 
 				try
@@ -255,7 +272,9 @@ public class BasicInputControl {
                                                 JasperServerManager.getFormattedString("basicInputControl.invalidDate","Invalid value set for {0} is not a valid date in the form {1}",new Object[]{getInputControl().getLabel(),IReportManager.getInstance().getProperty("dateformat", "d/M/y")}));
                                                 
 				}
-                                break;
+
+                            }
+                            break;
 			}
 		}
             }

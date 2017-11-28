@@ -72,6 +72,12 @@ public class JasperServerManager {
      */
     private java.util.HashMap<String, RepositoryReportUnit> jrxmlReportUnitMap= new java.util.HashMap<String, RepositoryReportUnit>();
 
+    /**
+     * This map is used to register JSDataProviders
+     *
+     */
+    private java.util.HashMap<String, JSDataProvider> dataProvidersMap= new java.util.HashMap<String, JSDataProvider>();
+
     private static java.util.ResourceBundle oLanguage = null;
     private static Locale pluginLocale = null;
     
@@ -243,7 +249,11 @@ public class JasperServerManager {
         }
 
         return true;
+    }
 
+    public static Preferences getPreferences()
+    {
+        return NbPreferences.forModule(JasperServerManager.class);
     }
 
     /**
@@ -421,6 +431,20 @@ public class JasperServerManager {
      */
     public void setJrxmlReportUnitMap(java.util.HashMap<String, RepositoryReportUnit> jrxmlReportUnitMap) {
         this.jrxmlReportUnitMap = jrxmlReportUnitMap;
+    }
+
+    /**
+     * @return the dataProvidersMap
+     */
+    public java.util.HashMap<String, JSDataProvider> getDataProvidersMap() {
+        return dataProvidersMap;
+    }
+
+    /**
+     * @param dataProvidersMap the dataProvidersMap to set
+     */
+    public void setDataProvidersMap(java.util.HashMap<String, JSDataProvider> dataProvidersMap) {
+        this.dataProvidersMap = dataProvidersMap;
     }
     
 }

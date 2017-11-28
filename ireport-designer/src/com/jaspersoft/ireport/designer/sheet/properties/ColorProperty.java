@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import java.awt.Color;
+import java.lang.reflect.InvocationTargetException;
 
     
 /**
@@ -44,6 +45,11 @@ public abstract class ColorProperty extends AbstractProperty
     @Override
     public void validate(Object value)
     {
+    }
+
+    @Override
+    public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
+        setPropertyValue(getDefaultColor());
     }
 
     @Override

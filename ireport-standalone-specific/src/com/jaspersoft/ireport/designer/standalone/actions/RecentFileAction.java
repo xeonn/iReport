@@ -4,6 +4,8 @@
  */
 package com.jaspersoft.ireport.designer.standalone.actions;
 
+import com.jaspersoft.ireport.designer.standalone.IReportStandaloneManager;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.beans.BeanInfo;
@@ -14,7 +16,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ImageIcon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -27,7 +28,6 @@ import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.util.Exceptions;
-import org.openide.util.NbBundle;
 import org.openide.util.actions.Presenter;
 
 /**
@@ -38,7 +38,7 @@ import org.openide.util.actions.Presenter;
 public class RecentFileAction extends AbstractAction implements Presenter.Menu, PopupMenuListener {
 
     /** property of menu items where we store fileobject to open */
-    private static final String FO_PROP = "RecentFileAction.Recent_FO";
+    private static final String FO_PROP = "RecentFileAction.Recent_FO"; // NOI18N
 
     /** number of maximum shown items in submenu */ 
     private static final int MAX_COUNT = 15;
@@ -46,7 +46,7 @@ public class RecentFileAction extends AbstractAction implements Presenter.Menu, 
     private JMenu menu;
     
     public RecentFileAction() {
-        super(NbBundle.getMessage(RecentFileAction.class, "LBL_RecentFileAction_Name")); // NOI18N
+        super(I18n.getString( IReportStandaloneManager.class,"LBL_RecentFileAction_Name")); // NOI18N
         RecentFiles.init();
     }
     
@@ -55,8 +55,7 @@ public class RecentFileAction extends AbstractAction implements Presenter.Menu, 
     public JMenuItem getMenuPresenter() {
         if (menu == null) {
             menu = new UpdatingMenu(this);
-            menu.setMnemonic(NbBundle.getMessage(RecentFileAction.class,
-                                                 "MNE_RecentFileAction_Name").charAt(0));
+            menu.setMnemonic(I18n.getString(IReportStandaloneManager.class,"MNE_RecentFileAction_Name").charAt(0)); // NOI18N
             menu.getPopupMenu().addPopupMenuListener(this);
         }
         return menu;

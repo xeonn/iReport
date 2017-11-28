@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.JRLine;
 import net.sf.jasperreports.engine.base.JRBaseLine;
@@ -39,21 +40,21 @@ public final class DirectionProperty extends ByteProperty
     @Override
     public String getDisplayName()
     {
-        return "Direction";
+        return I18n.getString("Global.Property.Direction");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The line direction.";
+        return I18n.getString("Global.Property.Directiondetail");
     }
 
     @Override
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRDesignLine.DIRECTION_TOP_DOWN), "Top Down (\\)"));
-        tags.add(new Tag(new Byte(JRDesignLine.DIRECTION_BOTTOM_UP), "Bottom Up (/)"));
+        tags.add(new Tag(new Byte(JRDesignLine.DIRECTION_TOP_DOWN), I18n.getString("Global.Property.TopDown")));
+        tags.add(new Tag(new Byte(JRDesignLine.DIRECTION_BOTTOM_UP), I18n.getString("Global.Property.BottomUp")));
         return tags;
     }
 

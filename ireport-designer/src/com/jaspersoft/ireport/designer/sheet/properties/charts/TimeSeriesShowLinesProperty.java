@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignTimeSeriesPlot;
     
     
@@ -20,7 +21,7 @@ public final class TimeSeriesShowLinesProperty extends BooleanProperty {
 
     private final JRDesignTimeSeriesPlot plot;
 
-    @SuppressWarnings("unchecked")
+    
     public TimeSeriesShowLinesProperty(JRDesignTimeSeriesPlot plot)
     {
         super(plot);
@@ -35,13 +36,13 @@ public final class TimeSeriesShowLinesProperty extends BooleanProperty {
     @Override
     public String getDisplayName()
     {
-        return "Show Lines";
+        return I18n.getString("Show_Lines");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Show Lines.";
+        return I18n.getString("Show_Lines.");
     }
 
     @Override

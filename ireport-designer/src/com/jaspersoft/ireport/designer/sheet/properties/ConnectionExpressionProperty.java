@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.sql.Connection;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -37,13 +38,13 @@ public final class ConnectionExpressionProperty extends ExpressionProperty
     @Override
     public String getDisplayName()
     {
-        return "Connection Expression";
+        return I18n.getString("Global.Property.ConnectionExpression");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The expression must return a java.sql.Connection object to fill the subreport.";
+        return I18n.getString("Global.Property.ConnectionExpressiondetail");
     }
 
     @Override

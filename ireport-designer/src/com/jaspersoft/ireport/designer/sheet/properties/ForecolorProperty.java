@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -39,13 +40,13 @@ public final class ForecolorProperty extends ColorProperty
     @Override
     public String getDisplayName()
     {
-        return "Forecolor";
+        return I18n.getString("Global.Property.Forecolor");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The foreground color.";
+        return I18n.getString("Global.Property.Forecolordetail");
     }
 
     @Override

@@ -34,6 +34,7 @@ import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.palette.actions.CreateTextFieldAction;
 import com.jaspersoft.ireport.designer.sheet.GenericProperty;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.lang.reflect.Method;
@@ -533,33 +534,33 @@ public class ModelUtils {
     
     public static String nameOf(JRCrosstabOrigin origin) {
         
-        String title ="unknow";
+        String title =I18n.getString("ModelUtils.Title.unknow");
         if (origin != null)
         {
             
             switch (origin.getType())
             {
                 case JRCrosstabOrigin.TYPE_HEADER_CELL:
-                    title = "Crosstab header";
+                    title = I18n.getString("ModelUtils.Title.Header");
                     break;
                 case JRCrosstabOrigin.TYPE_DATA_CELL:
-                    title = (origin.getRowGroupName() == null ? "Detail" : origin.getRowGroupName()) + " / " +
-                            (origin.getColumnGroupName() == null ? "Detail" : origin.getColumnGroupName());
+                    title = (origin.getRowGroupName() == null ? I18n.getString("ModelUtils.Title.Detail") : origin.getRowGroupName()) + " / " +
+                            (origin.getColumnGroupName() == null ? I18n.getString("ModelUtils.Title.Detail") : origin.getColumnGroupName());
                     break;
                 case JRCrosstabOrigin.TYPE_COLUMN_GROUP_HEADER:
-                    title = origin.getColumnGroupName() + " header";
+                    title = origin.getColumnGroupName() + I18n.getString("ModelUtils.Column.header");
                     break;
                 case JRCrosstabOrigin.TYPE_COLUMN_GROUP_TOTAL_HEADER:
-                    title = origin.getColumnGroupName() + " total header";
+                    title = origin.getColumnGroupName() + I18n.getString("ModelUtils.Title.Totalheader");
                     break;
                 case JRCrosstabOrigin.TYPE_ROW_GROUP_HEADER:
-                    title = origin.getRowGroupName() + " header";
+                    title = origin.getRowGroupName() + I18n.getString("ModelUtils.Title.HeaderH");
                     break;
                 case JRCrosstabOrigin.TYPE_ROW_GROUP_TOTAL_HEADER:
-                    title = origin.getRowGroupName() + " total header";
+                    title = origin.getRowGroupName() + I18n.getString("ModelUtils.Title.Totalheader");
                     break;
                 case JRCrosstabOrigin.TYPE_WHEN_NO_DATA_CELL:
-                    title = "When no data";
+                    title = I18n.getString("ModelUtils.Title.WhenNoData");
                     break;
             }
         }
@@ -798,24 +799,24 @@ public class ModelUtils {
         {
             switch (origin.getBandType())
             {
-                case JROrigin.BACKGROUND: return "background";
-                case JROrigin.TITLE: return "title";
-                case JROrigin.PAGE_HEADER: return "pageHeader";
-                case JROrigin.COLUMN_HEADER: return "columnHeader";
-                case JROrigin.DETAIL: return "detail";
-                case JROrigin.COLUMN_FOOTER: return "columnFooter";
-                case JROrigin.PAGE_FOOTER: return "pageFooter";
-                case JROrigin.LAST_PAGE_FOOTER: return "lastPageFooter";
-                case JROrigin.SUMMARY: return "summary";
-                case JROrigin.NO_DATA: return "noData";
+                case JROrigin.BACKGROUND: return I18n.getString("band.name.background");
+                case JROrigin.TITLE: return I18n.getString("band.name.title");
+                case JROrigin.PAGE_HEADER: return I18n.getString("band.name.pageHeader");
+                case JROrigin.COLUMN_HEADER: return I18n.getString("band.name.columnHeader");
+                case JROrigin.DETAIL: return I18n.getString("band.name.detail");
+                case JROrigin.COLUMN_FOOTER: return I18n.getString("band.name.columnFooter");
+                case JROrigin.PAGE_FOOTER: return I18n.getString("band.name.pageFooter");
+                case JROrigin.LAST_PAGE_FOOTER: return I18n.getString("band.name.lastPageFooter");
+                case JROrigin.SUMMARY: return I18n.getString("band.name.summary");
+                case JROrigin.NO_DATA: return I18n.getString("band.name.noData");
                 case JROrigin.GROUP_HEADER:
-                    return origin.getGroupName() + "GroupHeader";
+                    return  I18n.getString("band.name.GroupHeader", origin.getGroupName());
                 case JROrigin.GROUP_FOOTER:
-                    return origin.getGroupName() + "GroupFooter";
+                    return  I18n.getString("band.name.GroupFooter", origin.getGroupName());
             }
         }
         
-        return "unknow";
+        return I18n.getString("ModelUtils.Title.unknow");
         
     }
     
@@ -1594,12 +1595,15 @@ public class ModelUtils {
             setHyperlinkAttribute(to, "HyperlinkTarget", Byte.TYPE, from.getHyperlinkTarget() );
             setHyperlinkAttribute(to, "HyperlinkTooltipExpression", JRExpression.class, (from.getHyperlinkTooltipExpression() == null) ? null : from.getHyperlinkTooltipExpression().clone() );
             setHyperlinkAttribute(to, "LinkType", String.class, (from.getLinkType() == null) ? null : from.getLinkType() );
-       
+
+            // remove all the old params...
             JRHyperlinkParameter[] params = from.getHyperlinkParameters();
             List parameters = getHyperlinkParametersList(to);
+            parameters.clear();
+
             for (int i=0; i<params.length; ++i)
             {
-                parameters.add( params[0].clone() );
+                parameters.add( params[i].clone() );
             }
             
         } catch (Throwable t)

@@ -7,6 +7,7 @@ package com.jaspersoft.ireport.designer.wizards;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.data.WizardFieldsProvider;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Component;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -57,7 +58,7 @@ public class NewJrxmlWizardPanel2 implements WizardDescriptor.AsynchronousValida
         if (con instanceof WizardFieldsProvider &&
             component.getQuery().trim().length() == 0)
         {
-            getWizard().putProperty("WizardPanel_errorMessage", "Invalid query");
+            getWizard().putProperty("WizardPanel_errorMessage", I18n.getString("Wizards.Property.Invalidquery"));
             return false;
         }
         

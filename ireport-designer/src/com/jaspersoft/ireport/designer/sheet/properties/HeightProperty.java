@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
     
@@ -35,13 +36,13 @@ public final class HeightProperty extends IntegerProperty
     @Override
     public String getDisplayName()
     {
-        return "Height";
+        return I18n.getString("Global.Property.Height");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Element height.";
+        return I18n.getString("Global.Property.Hightdetail");
     }
 
     @Override
@@ -73,7 +74,7 @@ public final class HeightProperty extends IntegerProperty
     {
         if (height < 0)
         {
-            throw annotateException("The height cannot be a negative number.");
+            throw annotateException(I18n.getString("Global.Property.Heightexception"));
         }
     }
 

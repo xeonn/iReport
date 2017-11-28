@@ -14,6 +14,7 @@ import com.jaspersoft.ireport.designer.compiler.CompilationStatusEvent;
 import com.jaspersoft.ireport.designer.compiler.CompilationStatusListener;
 import com.jaspersoft.ireport.designer.menu.RunReportAction;
 import com.jaspersoft.ireport.designer.tools.JrxmlPreviewToolbar;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -58,7 +59,7 @@ public class JrxmlPreviewView extends TopComponent
     
     @Override
     public String getDisplayName() {
-        return "Preview";
+        return I18n.getString("view.preview");
     }
     
     @Override
@@ -69,7 +70,7 @@ public class JrxmlPreviewView extends TopComponent
     
     
     public String preferredID() {
-        return "Preview";
+        return "Preview"; // NOI18N
     }
     
     public void componentDeactivated() {

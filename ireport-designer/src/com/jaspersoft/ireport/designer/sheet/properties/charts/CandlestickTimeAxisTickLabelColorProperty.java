@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.charts.design.JRDesignCandlestickPlot;
     
@@ -38,13 +39,13 @@ public final class CandlestickTimeAxisTickLabelColorProperty extends ColorProper
     @Override
     public String getDisplayName()
     {
-        return "Time Axis Tick Label Color";
+        return I18n.getString("Global.Property.TimeAxisTickLabelColor");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The color of the Time Axis Tick Label.";
+        return I18n.getString("Global.Property.TimeAxisTickLabelColordetail");
     }
 
     @Override

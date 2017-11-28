@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -36,23 +37,23 @@ public final class WhenNoDataTypeProperty extends ByteProperty
     @Override
     public String getDisplayName()
     {
-        return "When No Data Type";
+        return I18n.getString("WhenNoDataTypeProperty.Property");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "What to display when there are no records in the data source.";
+        return I18n.getString("WhenNoDataTypeProperty.Property.Message");
     }
 
     @Override
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JasperDesign.WHEN_NO_DATA_TYPE_ALL_SECTIONS_NO_DETAIL), "All Sections, No Detail"));
-        tags.add(new Tag(new Byte(JasperDesign.WHEN_NO_DATA_TYPE_BLANK_PAGE), "Blank Page"));
-        tags.add(new Tag(new Byte(JasperDesign.WHEN_NO_DATA_TYPE_NO_DATA_SECTION), "No Data Section"));
-        tags.add(new Tag(new Byte(JasperDesign.WHEN_NO_DATA_TYPE_NO_PAGES), "No Pages"));
+        tags.add(new Tag(new Byte(JasperDesign.WHEN_NO_DATA_TYPE_ALL_SECTIONS_NO_DETAIL), I18n.getString("WhenNoDataTypeProperty.Property.All")));
+        tags.add(new Tag(new Byte(JasperDesign.WHEN_NO_DATA_TYPE_BLANK_PAGE), I18n.getString("WhenNoDataTypeProperty.Property.Blank")));
+        tags.add(new Tag(new Byte(JasperDesign.WHEN_NO_DATA_TYPE_NO_DATA_SECTION), I18n.getString("WhenNoDataTypeProperty.Property.Section")));
+        tags.add(new Tag(new Byte(JasperDesign.WHEN_NO_DATA_TYPE_NO_PAGES), I18n.getString("WhenNoDataTypeProperty.Property.Pages")));
         return tags;
     }
 

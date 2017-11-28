@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextElement;
 
@@ -32,7 +33,7 @@ public class PdfEmbeddedProperty extends BooleanProperty{
     @Override
     public String getDisplayName()
     {
-        return "Pdf Embedded";
+        return I18n.getString("Global.Property.PdfEmbedded");
     }
 
     @Override

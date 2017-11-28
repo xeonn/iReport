@@ -11,6 +11,7 @@ package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
@@ -23,7 +24,7 @@ public final class ThermometerValueLocationProperty extends ByteProperty
 {
     private final JRDesignThermometerPlot plot;
 
-    @SuppressWarnings("unchecked")
+    
     public ThermometerValueLocationProperty(JRDesignThermometerPlot plot)
     {
         super(plot);
@@ -39,23 +40,23 @@ public final class ThermometerValueLocationProperty extends ByteProperty
     @Override
     public String getDisplayName()
     {
-        return "Value Location";
+        return I18n.getString("Global.Property.ValueLocation");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Value Location.";
+        return I18n.getString("Global.Property.ValueLocation");
     }
 
     @Override
     public List getTagList() 
     {
         List tags = new ArrayList();
-        tags.add(new Tag(new Byte(JRDesignThermometerPlot.LOCATION_BULB), "Bulb"));
-        tags.add(new Tag(new Byte(JRDesignThermometerPlot.LOCATION_LEFT), "Left"));
-        tags.add(new Tag(new Byte(JRDesignThermometerPlot.LOCATION_RIGHT), "Right"));
-        tags.add(new Tag(new Byte(JRDesignThermometerPlot.LOCATION_NONE), "None"));
+        tags.add(new Tag(new Byte(JRDesignThermometerPlot.LOCATION_BULB), I18n.getString("Global.Property.Bulb")));
+        tags.add(new Tag(new Byte(JRDesignThermometerPlot.LOCATION_LEFT), I18n.getString("Global.Property.Left")));
+        tags.add(new Tag(new Byte(JRDesignThermometerPlot.LOCATION_RIGHT), I18n.getString("Global.Property.Right")));
+        tags.add(new Tag(new Byte(JRDesignThermometerPlot.LOCATION_NONE), I18n.getString("Global.Property.None")));
         return tags;
     }
 

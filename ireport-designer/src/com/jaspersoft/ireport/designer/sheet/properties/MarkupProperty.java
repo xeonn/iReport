@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.JRCommonText;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
@@ -38,13 +39,13 @@ public final class MarkupProperty extends StringListProperty
     @Override
     public String getDisplayName()
     {
-        return "Markup";
+        return I18n.getString("Global.Property.Markup");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The markup language used inside the text element.";
+        return I18n.getString("Global.Property.Markupdetail");
     }
 
     @Override

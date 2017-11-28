@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.design.JRDesignChart;
@@ -23,7 +24,7 @@ public final class SubtitleColorProperty extends ColorProperty {
 
     private final JRDesignChart element;
 
-    @SuppressWarnings("unchecked")
+    
     public SubtitleColorProperty(JRDesignChart element)
     {
         super(element);
@@ -39,13 +40,13 @@ public final class SubtitleColorProperty extends ColorProperty {
     @Override
     public String getDisplayName()
     {
-        return "Subtitle Color";
+        return I18n.getString("Subtitle_Color");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The color of the subtitle.";
+        return I18n.getString("The_color_of_the_subtitle.");
     }
 
     @Override

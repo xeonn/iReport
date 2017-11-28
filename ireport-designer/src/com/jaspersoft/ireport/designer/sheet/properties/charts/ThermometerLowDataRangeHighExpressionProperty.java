@@ -12,6 +12,7 @@ package com.jaspersoft.ireport.designer.sheet.properties.charts;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.charts.JRDataRange;
 import net.sf.jasperreports.charts.design.JRDesignDataRange;
@@ -36,19 +37,19 @@ public final class ThermometerLowDataRangeHighExpressionProperty extends Express
     @Override
     public String getName()
     {
-        return "LOW_RANGE_" + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION;//FIXMETD what is this concatenation?
+        return I18n.getString("LOW_RANGE_") + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION;//FIXMETD what is this concatenation?
     }
 
     @Override
     public String getDisplayName()
     {
-        return "Low Data Range High Expression";
+        return I18n.getString("Low_Data_Range_High_Expression");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Low Data Range High Expression.";
+        return I18n.getString("Low_Data_Range_High_Expression.");
     }
 
     @Override
@@ -84,13 +85,13 @@ public final class ThermometerLowDataRangeHighExpressionProperty extends Express
         }
         
         //System.out.println("Setting as value: " + val);
-        if (val == null || val.equals(""))
+        if (val == null || val.equals(I18n.getString("")))
         {
             newValue.setHighExpression(null);
         }
         else
         {
-            String s = (val != null) ? val+"" : "";
+            String s = (val != null) ? val+I18n.getString("") : I18n.getString("");
             
             JRDesignExpression newExp = new JRDesignExpression();
             newExp.setText(s);

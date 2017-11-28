@@ -11,6 +11,7 @@ package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.charts.JRValueDisplay;
@@ -27,12 +28,12 @@ public final class ThermometerValueColorProperty extends PropertySupport.ReadWri
     // FIXME: it should extend ColorProperty
     JRDesignThermometerPlot element = null;
 
-    @SuppressWarnings("unchecked")
+    
     public ThermometerValueColorProperty(JRDesignThermometerPlot element)
     {
         super( JRDesignValueDisplay.PROPERTY_COLOR, java.awt.Color.class,
-              "Value Color",
-              "The color of the ticks.");
+              I18n.getString("Value_Color"),
+              I18n.getString("The_color_of_the_ticks."));
         this.element = element;
     }
 
@@ -57,7 +58,7 @@ public final class ThermometerValueColorProperty extends PropertySupport.ReadWri
             ObjectPropertyUndoableEdit urob =
                     new ObjectPropertyUndoableEdit(
                         element,
-                        "ValueDisplay", 
+                        I18n.getString("ValueDisplay"), 
                         JRValueDisplay.class,
                         oldValue,newValue);
             // Find the undoRedo manager...

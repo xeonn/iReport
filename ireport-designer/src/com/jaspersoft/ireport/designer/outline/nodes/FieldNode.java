@@ -15,6 +15,7 @@ import com.jaspersoft.ireport.designer.sheet.JRPropertiesMapProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.datatransfer.Transferable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -155,7 +156,7 @@ public class FieldNode extends IRAbstractNode implements PropertyChangeListener 
         
         if (s.equals(""))
         {
-            throw new IllegalArgumentException("Field name not valid.");
+            throw new IllegalArgumentException(I18n.getString("FieldNode.Property.FieldInvalid"));
         }
         
         List<JRDesignField> currentFields = null;
@@ -165,7 +166,7 @@ public class FieldNode extends IRAbstractNode implements PropertyChangeListener 
         {
             if (p != getField() && p.getName().equals(s))
             {
-                throw new IllegalArgumentException("Field name already in use.");
+                throw new IllegalArgumentException(I18n.getString("FieldNode.Property.FieldInUse"));
             }
         }
         
@@ -227,8 +228,8 @@ public class FieldNode extends IRAbstractNode implements PropertyChangeListener 
         public NameProperty(JRDesignField field, JRDesignDataset dataset)
         {
             super(JRDesignField.PROPERTY_NAME, String.class,
-                  "Name",
-                  "Name of the field");
+                  I18n.getString("FieldNode.Property.Name"),
+                  I18n.getString("FieldNode.Property.Namedetail"));
             this.field = field;
             this.dataset = dataset;
             this.setValue("oneline", Boolean.TRUE);
@@ -250,7 +251,7 @@ public class FieldNode extends IRAbstractNode implements PropertyChangeListener 
 
             if (val == null || val.equals(""))
             {
-                IllegalArgumentException iae = annotateException("Field name not valid."); 
+                IllegalArgumentException iae = annotateException(I18n.getString("FieldNode.Property.FieldInvalid")); 
                 throw iae; 
             }
 
@@ -262,7 +263,7 @@ public class FieldNode extends IRAbstractNode implements PropertyChangeListener 
             {
                 if (p != getField() && p.getName().equals(s))
                 {
-                    IllegalArgumentException iae = annotateException("Field name already in use."); 
+                    IllegalArgumentException iae = annotateException(I18n.getString("FieldNode.Property.FieldInUse")); 
                     throw iae; 
                 }
             }
@@ -318,8 +319,8 @@ public class FieldNode extends IRAbstractNode implements PropertyChangeListener 
         public ValueClassNameProperty(JRDesignField field)
         {
             super(JRDesignField.PROPERTY_VALUE_CLASS_NAME, String.class,
-                  "Field Class",
-                  "Field Class");
+                  I18n.getString("FieldNode.Property.FieldClass"),
+                  I18n.getString("FieldNode.Property.FieldClass"));
             this.field = field;
         }
 
@@ -425,8 +426,8 @@ public class FieldNode extends IRAbstractNode implements PropertyChangeListener 
         public DescriptionProperty(JRDesignField field)
         {
             super(JRDesignField.PROPERTY_DESCRIPTION, String.class,
-                  "Description",
-                  "Description");
+                  I18n.getString("FieldNode.Property.Description"),
+                  I18n.getString("FieldNode.Property.Description"));
             this.field = field;
         }
 

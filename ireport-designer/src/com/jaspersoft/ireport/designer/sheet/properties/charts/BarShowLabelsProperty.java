@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignBarPlot;
     
     
@@ -35,13 +36,13 @@ public final class BarShowLabelsProperty extends BooleanProperty {
     @Override
     public String getDisplayName()
     {
-        return "Show Labels";
+        return I18n.getString("Global.Property.ShowLabels");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Show Labels.";
+        return I18n.getString("Global.Property.ShowLabelsdetail");
     }
 
     @Override

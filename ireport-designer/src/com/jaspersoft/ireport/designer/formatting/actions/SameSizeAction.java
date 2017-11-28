@@ -6,6 +6,7 @@
 package com.jaspersoft.ireport.designer.formatting.actions;
 
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import javax.swing.Action;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -50,7 +51,7 @@ public class SameSizeAction extends AbstractFormattingToolAction {
 
     @Override
     public String getName() {
-        return "Same Size";
+        return I18n.getString("formatting.tools.sameSize");
     }
 
     @Override

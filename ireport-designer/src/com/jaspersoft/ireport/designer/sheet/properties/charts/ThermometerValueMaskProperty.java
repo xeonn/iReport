@@ -11,6 +11,7 @@ package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.charts.JRValueDisplay;
 import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
@@ -25,17 +26,17 @@ public final class ThermometerValueMaskProperty extends PropertySupport
 {
         private final JRDesignThermometerPlot element;
     
-        @SuppressWarnings("unchecked")
+        
         public ThermometerValueMaskProperty(JRDesignThermometerPlot element)
         {
-            super(JRDesignValueDisplay.PROPERTY_MASK,String.class, "Mask", "Mask", true, true);
+            super(JRDesignValueDisplay.PROPERTY_MASK,String.class, I18n.getString("Mask"), I18n.getString("Mask"), true, true);
             this.element = element;
-            this.setValue("oneline", Boolean.TRUE);
+            this.setValue(I18n.getString("oneline"), Boolean.TRUE);
         }
         
         @Override
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
-        return (element.getValueDisplay() == null || element.getValueDisplay().getMask() == null) ? "" : element.getValueDisplay().getMask();
+        return (element.getValueDisplay() == null || element.getValueDisplay().getMask() == null) ? I18n.getString("") : element.getValueDisplay().getMask();
     }
 
     @Override
@@ -54,7 +55,7 @@ public final class ThermometerValueMaskProperty extends PropertySupport
             ObjectPropertyUndoableEdit urob =
                     new ObjectPropertyUndoableEdit(
                         element,
-                        "ValueDisplay", 
+                        I18n.getString("ValueDisplay"), 
                         JRValueDisplay.class,
                         oldValue,newValue);
             // Find the undoRedo manager...

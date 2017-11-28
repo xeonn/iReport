@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.AbstractFontProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignHighLowPlot;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -22,7 +23,7 @@ public final class HighLowTimeAxisTickLabelFontProperty extends AbstractFontProp
 {
     private final JRDesignHighLowPlot plot;
         
-    @SuppressWarnings("unchecked")
+    
     public HighLowTimeAxisTickLabelFontProperty(JRDesignHighLowPlot plot, JasperDesign jasperDesign)
     {
         super(plot, jasperDesign);
@@ -38,13 +39,13 @@ public final class HighLowTimeAxisTickLabelFontProperty extends AbstractFontProp
     @Override
     public String getDisplayName()
     {
-        return "Time Axis Tick Label Font";
+        return I18n.getString("Time_Axis_Tick_Label_Font");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Time Axis Tick Label Font.";
+        return I18n.getString("Time_Axis_Tick_Label_Font.");
     }
 
     @Override

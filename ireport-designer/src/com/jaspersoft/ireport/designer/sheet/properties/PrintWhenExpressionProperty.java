@@ -12,6 +12,7 @@ package com.jaspersoft.ireport.designer.sheet.properties;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -46,13 +47,13 @@ public final class PrintWhenExpressionProperty extends ExpressionProperty
     @Override
     public String getDisplayName()
     {
-        return "Print When Expressio";
+        return I18n.getString("Global.Property.PrintWhenExpressio");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Print this element only when this expression is blank or returns true.";
+        return I18n.getString("Global.Property.PrintWhenExpressiondetail");
     }
 
     @Override

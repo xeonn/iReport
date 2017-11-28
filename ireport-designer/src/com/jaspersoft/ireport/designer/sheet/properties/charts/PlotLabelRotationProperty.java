@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.DoubleProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.base.JRBaseChartPlot;
     
     
@@ -20,7 +21,7 @@ public final class PlotLabelRotationProperty extends DoubleProperty {
 
     private final JRBaseChartPlot plot;
 
-    @SuppressWarnings("unchecked")
+    
     public PlotLabelRotationProperty(JRBaseChartPlot plot)
     {
         super(plot);
@@ -36,13 +37,13 @@ public final class PlotLabelRotationProperty extends DoubleProperty {
     @Override
     public String getDisplayName()
     {
-        return "Label rotation";
+        return I18n.getString("Label_rotation");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Label rotation.";
+        return I18n.getString("Label_rotation.");
     }
 
     @Override

@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
     
@@ -22,7 +23,7 @@ public final class MeterNeedleColorProperty extends ColorProperty {
 
     private final JRDesignMeterPlot element;
 
-    @SuppressWarnings("unchecked")
+    
     public MeterNeedleColorProperty(JRDesignMeterPlot element)
     {
         super(element);
@@ -38,13 +39,13 @@ public final class MeterNeedleColorProperty extends ColorProperty {
     @Override
     public String getDisplayName()
     {
-        return "Needle Color";
+        return I18n.getString("Needle_Color");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The color of the needle.";
+        return I18n.getString("The_color_of_the_needle.");
     }
 
     @Override

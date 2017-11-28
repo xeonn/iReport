@@ -11,6 +11,7 @@ package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -45,13 +46,13 @@ public final class ImageExpressionProperty extends ExpressionProperty
     @Override
     public String getDisplayName()
     {
-        return "Image Expression";
+        return I18n.getString("Global.Property.ImageExpression");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The image expression.";
+        return I18n.getString("Global.Property.ImageExpressiondetail");
     }
 
     @Override

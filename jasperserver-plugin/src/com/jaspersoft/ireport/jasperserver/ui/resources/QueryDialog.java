@@ -289,6 +289,12 @@ public class QueryDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 2, 4);
         jPanel3.add(jLabel3, gridBagConstraints);
 
+        jComboBoxQueryLanguage.setEditable(true);
+        jComboBoxQueryLanguage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxQueryLanguageActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -599,6 +605,10 @@ public class QueryDialog extends javax.swing.JDialog {
             return;
         }
     }//GEN-LAST:event_jButtonSaveActionPerformed
+
+    private void jComboBoxQueryLanguageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxQueryLanguageActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxQueryLanguageActionPerformed
     
 
     public int getDialogResult() {
@@ -684,8 +694,12 @@ public class QueryDialog extends javax.swing.JDialog {
         boolean found = false;
         for (int ix=0; ix<jComboBoxQueryLanguage.getItemCount(); ++ix)
         {
-           Tag t = (Tag)jComboBoxQueryLanguage.getItemAt(ix);
-           if (t.getValue().equals(ql))
+           Object value = jComboBoxQueryLanguage.getItemAt(ix);
+           if (jComboBoxQueryLanguage.getItemAt(ix) instanceof Tag)
+           {
+               value = ((Tag)jComboBoxQueryLanguage.getItemAt(ix)).getValue();
+           }
+           if (value.equals(ql))
            {
                found = true;
                jComboBoxQueryLanguage.setSelectedIndex(ix);

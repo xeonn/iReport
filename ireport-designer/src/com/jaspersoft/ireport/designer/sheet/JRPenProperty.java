@@ -11,6 +11,7 @@ package com.jaspersoft.ireport.designer.sheet;
 
 import com.jaspersoft.ireport.designer.sheet.editors.JRPenPropertyEditor;
 import com.jaspersoft.ireport.designer.sheet.properties.AbstractProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyEditor;
 import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.JRPenContainer;
@@ -31,8 +32,8 @@ public class JRPenProperty extends AbstractProperty {
     {
        super(JRPen.class, pen);
        setName("pen");
-       setDisplayName("Pen");        
-       setShortDescription("The pen to draw lines");
+       setDisplayName(I18n.getString("PenProperty.Property.Pen"));        
+       setShortDescription(I18n.getString("JRPenProperty.Property.detail"));
        setValue( "canEditAsText", Boolean.FALSE );
        this.pen = pen;
        this.container = container;

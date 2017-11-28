@@ -19,30 +19,41 @@ import javax.swing.DefaultComboBoxModel;
 public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportConnectionEditor {
     
     private IReportConnection iReportConnection = null;
+
+    public static JDBCDriverDefinition[] definitions = new JDBCDriverDefinition[]{
+		new JDBCDriverDefinition("MySQL","org.gjt.mm.mysql.Driver","jdbc:mysql://{0}/{1}"),
+		new JDBCDriverDefinition("MySQL","com.mysql.jdbc.Driver","jdbc:mysql://{0}/{1}"),
+		new JDBCDriverDefinition("PostgreSQL","org.postgresql.Driver","jdbc:postgresql://{0}:5432/{1}"),
+		new JDBCDriverDefinition("HSQLDB (file)","org.hsqldb.jdbcDriver","jdbc:hsqldb:[PATH_TO_DB_FILES]/{1}"),
+		new JDBCDriverDefinition("HSQLDB (server)","org.hsqldb.jdbcDriver","jdbc:hsqldb:hsql://{0}"),
+                new JDBCDriverDefinition("MS SQLServer","com.internetcds.jdbc.tds.Driver","jdbc:freetds:sqlserver://{0}/{1}"),
+		new JDBCDriverDefinition("MS SQLServer (2000)","com.microsoft.jdbc.sqlserver.SQLServerDriver","jdbc:microsoft:sqlserver://{0}:1433;DatabaseName={1}"),
+		new JDBCDriverDefinition("MS SQLServer (2005)","com.microsoft.sqlserver.jdbc.SQLServerDriver","jdbc:sqlserver://{0}:1433;databaseName={1}"),
+		new JDBCDriverDefinition("MS SQLServer","net.sourceforge.jtds.jdbc.Driver","jdbc:jtds:sqlserver://{0}/{1}"),
+                new JDBCDriverDefinition("MS SQLServer","com.merant.datadirect.jdbc.sqlserver.SQLServerDriver","jdbc:sqlserver://{0}:1433/{1}"),
+                new JDBCDriverDefinition("JDBC-ODBC Bridge","sun.jdbc.odbc.JdbcOdbcDriver","jdbc:odbc:{1}","DSNAME"),
+		new JDBCDriverDefinition("JDBC-ODBC Bridge","com.ms.jdbc.odbc.JdbcOdbcDriver","jdbc:odbc:{1}","DSNAME"),
+		new JDBCDriverDefinition("Oracle","oracle.jdbc.driver.OracleDriver","jdbc:oracle:thin:@{0}:1521:{1}"),
+		new JDBCDriverDefinition("IBM DB2","COM.ibm.db2.jdbc.app.DB2Driver","jdbc:db2:{0}/{1}"),
+		new JDBCDriverDefinition("Informix","com.informix.jdbc.IfxDriver","jdbc:informix-sqli://{0}:informixserver={1}"),
+		new JDBCDriverDefinition("Sybase","com.sybase.jdbc2.jdbc.SybDriver","jdbc:sybase:Tds:{0}:2638/{1}"),
+		new JDBCDriverDefinition("inetdae7","com.inet.tds.TdsDriver","jdbc:inetdae7:{0}:1433/{1}"),
+		new JDBCDriverDefinition("Cloudscape","COM.cloudscape.JDBCDriver","jdbc:cloudscape:/{1}")};
+
     /** Creates new form JDBCConnectionEditor */
     public JDBCConnectionEditor() {
         initComponents();
         //applyI18n();
+
         
-        jComboBoxJDBCDriver.setModel( new DefaultComboBoxModel(new Object[]{
-            "com.mysql.jdbc.Driver",
-            "org.gjt.mm.mysql.Driver", // NOI18N
-            "com.internetcds.jdbc.tds.Driver", // NOI18N
-            "net.sourceforge.jtds.jdbc.Driver", // NOI18N
-            "com.microsoft.jdbc.sqlserver.SQLServerDriver", // NOI18N
-            "sun.jdbc.odbc.JdbcOdbcDriver", // NOI18N
-            "com.ms.jdbc.odbc.JdbcOdbcDriver", // NOI18N
-            "oracle.jdbc.driver.OracleDriver", // NOI18N
-            "COM.ibm.db2.jdbc.app.DB2Driver", // NOI18N
-            "com.informix.jdbc.IfxDriver", // NOI18N
-            "com.sybase.jdbc2.jdbc.SybDriver", // NOI18N
-            "com.merant.datadirect.jdbc.sqlserver.SQLServerDriver", // NOI18N
-            "com.inet.tds.TdsDriver", // NOI18N
-            "org.postgresql.Driver", // NOI18N
-            "org.hsqldb.jdbcDriver", // NOI18N
-            "COM.cloudscape.JDBCDriver"})); // NOI18N
+        //Arrays.sort(definitions);
+
+        jComboBoxJDBCDriver.setRenderer(new JDBCDriverListRenderer());
+        jComboBoxJDBCDriver.setModel(new DefaultComboBoxModel(definitions));
             
          jComboBoxJDBCDriver.setSelectedIndex(0);
+
+         jLabel1.setText(I18n.getString("XMLADataSourceConnectionEditor.Label.Warning"));
     }
     
     /** This method is called from within the constructor to
@@ -235,152 +246,17 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
     private void jButtonWizardActionPerformed(java.awt.event.ActionEvent evt) {                                              
           
         if (jComboBoxJDBCDriver.getSelectedIndex() < 0) return;
-        String driver = ""+jComboBoxJDBCDriver.getSelectedItem();
-        driver = driver.trim();
-        if (driver.equals("")) return;
-        
-        String server = jTextFieldServerAddress.getText().trim();
-        if( server.length()==0 ) {
-            server = "localhost";
-        }
-        
-        String databaseName = jTextFieldDBName.getText().trim();
-        
-        if (driver.equalsIgnoreCase("org.gjt.mm.mysql.Driver") ||
-            driver.equalsIgnoreCase("com.mysql.jdbc.Driver")) {
-            String url = "jdbc:mysql://" + server + "/";
-            if ( databaseName.length()>0 )
-                url += databaseName;
-            else
-                url += "MYDATABASE";
-            jTextFieldJDBCUrl.setText(url);
-        }
-        else if (driver.equalsIgnoreCase("com.internetcds.jdbc.tds.Driver")) {
-            String url = "jdbc:freetds:sqlserver://localhost/";
-            if (databaseName.length()>0)
-                url += databaseName;
-            else
-                url += "MYDATABASE";
-            jTextFieldJDBCUrl.setText(url);
-        }
-        else if (driver.equalsIgnoreCase("com.microsoft.jdbc.sqlserver.SQLServerDriver")) {
-            String url = "jdbc:microsoft:sqlserver://" + server + ":1433;DatabaseName=";
-            if (databaseName.length()>0)
-                url += databaseName;
-            else
-                url += "MYDATABASE";
-            jTextFieldJDBCUrl.setText(url);
-        }
-        else if (driver.equalsIgnoreCase("sun.jdbc.odbc.JdbcOdbcDriver")) {
-            String url = "jdbc:odbc:";
-            if (databaseName.length()>0)
-                url += jTextFieldDBName.getText();
-            else
-                url += "DSNAME";
-            jTextFieldJDBCUrl.setText(url);
-        }
-        else if (driver.equalsIgnoreCase("com.ms.jdbc.odbc.JdbcOdbcDriver")) {
-            String url = "jdbc:odbc:";
-            if (databaseName.length()>0)
-                url += databaseName;
-            else
-                url += "DSNAME";
-            jTextFieldJDBCUrl.setText(url);
-        }
-        else if (driver.equalsIgnoreCase("oracle.jdbc.driver.OracleDriver")) {
-            String url = "jdbc:oracle:thin:@" + server + ":1521:";
-            if (databaseName.length()>0)
-                url += databaseName;
-            else
-                url += "MYDATABASE";
-            jTextFieldJDBCUrl.setText(url);
-        }
-        else if (driver.equalsIgnoreCase("COM.ibm.db2.jdbc.app.DB2Driver")) {
-            String url = "jdbc:db2:";
-            if (databaseName.length()>0)
-                url += databaseName;
-            else
-                url += "MYDATABASE";
-            jTextFieldJDBCUrl.setText(url);
-        }
-        else if (driver.equalsIgnoreCase("com.informix.jdbc.IfxDriver")) {
-            String url = "jdbc:informix-sqli://" + server + ":port/";
-            if (databaseName.length()>0)
-                url += databaseName;
-            else
-                url += "MYDATABASE";
-            
-            url += ":informixserver=SERVERNAME";
-            jTextFieldJDBCUrl.setText(url);
-        }
-        else if (driver.equalsIgnoreCase("com.sybase.jdbc2.jdbc.SybDriver")) {
-            String url = "jdbc:sybase:Tds:" + server + ":2638/";
-            if (databaseName.length()>0)
-                url += databaseName;
-            else
-                url += "MYDATABASE";
-            jTextFieldJDBCUrl.setText(url);
-        }
-        else if (driver.equalsIgnoreCase("com.mysql.jdbc.Driver")) {
-            String url = "jdbc:mysql://"+server+"/";
-            if (databaseName.length()>0)
-                url += databaseName;
-            else
-                url += "MYDATABASE";
-            jTextFieldJDBCUrl.setText(url);
-        }
-        else if (driver.equalsIgnoreCase("com.merant.datadirect.jdbc.sqlserver.SQLServerDriver")) {
-            String url = "jdbc:sqlserver://" + server + ":1433/";
-            if (databaseName.length()>0)
-                url += databaseName;
-            else
-                url += "MYDATABASE";
-            jTextFieldJDBCUrl.setText(url);
-        }
-        else if (driver.equalsIgnoreCase("com.inet.tds.TdsDriver")) {
-            String url = "jdbc:inetdae7:"+server+":1433/";
-            if (databaseName.length()>0)
-                url += jTextFieldDBName.getText();
-            else
-                url += "MYDATABASE";
-            jTextFieldJDBCUrl.setText(url);
-        }
-        else if (driver.equalsIgnoreCase("org.postgresql.Driver")) {
-            String url = "jdbc:postgresql://" + server + ":5432/";
-            if (databaseName.length()>0)
-                url += databaseName;
-            else
-                url += "MYDATABASE";
-            jTextFieldJDBCUrl.setText(url);
-        }
-        else if (driver.equalsIgnoreCase("org.hsqldb.jdbcDriver")) {
-            String url = "jdbc:hsqldb:[PATH_TO_DB_FILES]/";
-            if (databaseName.length()>0)
-                url += databaseName;
-            else
-                url += "MYDATABASE";
-            jTextFieldJDBCUrl.setText(url);
-        }
-        else if (driver.equalsIgnoreCase("COM.cloudscape.JDBCDriver ")) {
-            String url = "jdbc:cloudscape:/cloudscape/";
-            if (databaseName.length()>0)
-                url += databaseName;
-            else
-                url += "MYDATABASE";
-            jTextFieldJDBCUrl.setText(url);
-        } 
-        else if (driver.equalsIgnoreCase("net.sourceforge.jtds.jdbc.Driver"))
-        {
-            String url = "jdbc:jtds:sqlserver://" +
-            server + "/";
-            if (databaseName.length()>0)
-                url += databaseName;
-            else
-                url += "MYDATABASE";
-            url += ";instance=";
-            jTextFieldJDBCUrl.setText(url);
-        }
 
+        if (jComboBoxJDBCDriver.getSelectedItem() instanceof JDBCDriverDefinition)
+        {
+            String server = jTextFieldServerAddress.getText().trim();
+            if( server.length()==0 ) {
+                server = "localhost";
+            }
+            String databaseName = jTextFieldDBName.getText().trim();
+            jTextFieldJDBCUrl.setText( ((JDBCDriverDefinition)jComboBoxJDBCDriver.getSelectedItem()).getUrl(server, databaseName) );
+        }
+        
     }
     
     public void setIReportConnection(IReportConnection c) {
@@ -389,7 +265,22 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
         if (iReportConnection instanceof JDBCConnection)
         {
             JDBCConnection con = (JDBCConnection)iReportConnection;
-            this.jComboBoxJDBCDriver.setSelectedItem(con.getJDBCDriver());
+            // Find if the is a good definition..
+
+            boolean found = false;
+            for (int i=0; i<definitions.length; ++i)
+            {
+                if (definitions[i].getDriverName().equals(con.getJDBCDriver()))
+                {
+                    this.jComboBoxJDBCDriver.setSelectedItem(definitions[i]);
+                    found = true;
+                }
+            }
+            if (!found)
+            {
+                this.jComboBoxJDBCDriver.setSelectedItem(con.getJDBCDriver());
+            }
+            
             this.jTextFieldJDBCUrl.setText( con.getUrl());
             this.jTextFieldServerAddress.setText( con.getServerAddress() );
             this.jTextFieldDBName.setText( con.getDatabase() );
@@ -415,8 +306,17 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
         else
             ((JDBCConnection)irConn).setPassword("");
         ((JDBCConnection)irConn).setSavePassword( jCheckBoxSavePassword.isSelected() );
-        ((JDBCConnection)irConn).setJDBCDriver( (this.jComboBoxJDBCDriver.getSelectedItem()+"").trim() );
-        if ((this.jComboBoxJDBCDriver.getSelectedItem()+"").trim().length() == 0) {
+        
+        Object obj = jComboBoxJDBCDriver.getSelectedItem();
+        String driver = obj+"";
+        if (obj instanceof JDBCDriverDefinition)
+        {
+            driver = ((JDBCDriverDefinition)obj).getDriverName();
+        }
+        
+        ((JDBCConnection)irConn).setJDBCDriver( driver.trim() );
+        if (driver.trim().length() == 0 ||
+            driver.indexOf(" ") >= 0) {
             javax.swing.JOptionPane.showMessageDialog(this,
                     I18n.getString("JDBCConnectionEditor.Message.JDBCDriver"), //"messages.connectionDialog.jdbc.invalidDriver"
                     I18n.getString("JDBCConnectionEditor.Message.InvalidDriver"), //"messages.connectionDialog.jdbc.invalidDriverCaption"

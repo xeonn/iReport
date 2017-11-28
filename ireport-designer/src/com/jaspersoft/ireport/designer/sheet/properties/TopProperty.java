@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
     
@@ -35,13 +36,13 @@ public final class TopProperty extends IntegerProperty
     @Override
     public String getDisplayName()
     {
-        return "Top";
+        return I18n.getString("Global.Property.Top");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Top position of this element in the band/frame/cell.";
+        return I18n.getString("Global.Property.Topdetail");
     }
 
     @Override
@@ -73,7 +74,7 @@ public final class TopProperty extends IntegerProperty
     {
         if (y < 0)
         {
-            throw annotateException("The property cannot be a negative number.");
+            throw annotateException(I18n.getString("Global.Property.Topexception"));
         }
     }
 

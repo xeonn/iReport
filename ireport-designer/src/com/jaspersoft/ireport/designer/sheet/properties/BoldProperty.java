@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextElement;
 
@@ -32,7 +33,7 @@ public class BoldProperty extends BooleanProperty{
     @Override
     public String getDisplayName()
     {
-        return "Bold";
+        return I18n.getString("Global.Property.Bold");
     }
 
     @Override

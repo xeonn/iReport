@@ -64,7 +64,7 @@ public class MultiColumnListInputControl extends BasicInputControl{
             InputControlQueryDataRow item = (InputControlQueryDataRow)items.get(i);
             wrappedItems.add( item);
         }
-        
+
         getInputControlUI().setHistory( wrappedItems );
     
         List history = getHistory(inputControl.getUriString());

@@ -1,3 +1,4 @@
+
 /*
  * BubbleYAxisLineColorProperty.java
  * 
@@ -10,6 +11,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.charts.design.JRDesignBubblePlot;
     
@@ -38,13 +40,13 @@ public final class BubbleYAxisLineColorProperty extends ColorProperty {
     @Override
     public String getDisplayName()
     {
-        return "Y Axis Line Color";
+        return I18n.getString("Global.Property.Y_AxisLineColor");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The color of the Y Axis Bubble.";
+        return I18n.getString("Global.Property.Y_AxisLineColordetail");
     }
 
     @Override

@@ -33,10 +33,15 @@ import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.InputValidationExcep
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.MultiColumnListInputControl;
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.MultiSelectInputControl;
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.SingleSelectInputControl;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.InputControlQueryDataRow;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.util.List;
 import javax.swing.JOptionPane;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import javax.swing.JPanel;
 
 /**
@@ -67,6 +72,8 @@ public class ReportUnitRunDialog extends javax.swing.JDialog {
         jButtonSave.setText( JasperServerManager.getString("reportUnitRunDialog.buttonRunReport","Run report"));
         jLabel1.setText( JasperServerManager.getString("reportUnitRunDialog.title","Report parameters"));
     }
+
+
     
     /** This method is called from within the constructor to
      * initialize the form.
@@ -399,7 +406,7 @@ public class ReportUnitRunDialog extends javax.swing.JDialog {
                 ResourceDescriptor rd2 = (ResourceDescriptor)rd.getChildren().get(0);
                 List items = null;
 
-                bic.setInputControl(rd, rd.getQueryData());
+                bic.setInputControl(rd,rd.getQueryData());
                 if (defaultValue != null) bic.setDefaultValue(defaultValue);
                 inputControls.add(bic);
             }

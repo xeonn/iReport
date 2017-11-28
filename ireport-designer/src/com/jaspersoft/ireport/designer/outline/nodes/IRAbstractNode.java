@@ -5,9 +5,11 @@
 
 package com.jaspersoft.ireport.designer.outline.nodes;
 
+import com.jaspersoft.ireport.designer.pdf508.Pdf508TagDecorator;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.util.Lookup;
+import org.openide.util.actions.SystemAction;
 
 
 /**
@@ -40,5 +42,5 @@ public class IRAbstractNode extends AbstractNode  {
     public void setSpecialDataObjectLookup(Lookup specialDataObjectLookup) {
         this.specialDataObjectLookup = specialDataObjectLookup;
     }
-    
+
 }

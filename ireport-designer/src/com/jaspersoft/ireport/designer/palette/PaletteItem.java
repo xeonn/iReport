@@ -11,9 +11,9 @@ package com.jaspersoft.ireport.designer.palette;
 
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Image;
 import java.util.Properties;
-import org.openide.util.NbBundle;
 import org.openide.util.Utilities;
 
 /**
@@ -48,7 +48,7 @@ public class PaletteItem {
         if ( props.getProperty( PROP_NAME ) != null)
         {
             try {
-                return NbBundle.getMessage(PaletteItem.class, props.getProperty( PROP_NAME ));
+                return I18n.getString(props.getProperty( PROP_NAME ));
             } catch (Exception ex)
             {
                 return props.getProperty( PROP_NAME );
@@ -62,7 +62,7 @@ public class PaletteItem {
         {
             
             try {
-                return NbBundle.getMessage(PaletteItem.class, props.getProperty( PROP_COMMENT ));
+                return I18n.getString(props.getProperty( PROP_COMMENT ));
             } catch (Exception ex)
             {
                 return props.getProperty( PROP_COMMENT );

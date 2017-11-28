@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.base.JRBaseSubreport;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 
@@ -35,13 +36,13 @@ public final class SubreportUsingCacheProperty extends BooleanProperty
     @Override
     public String getDisplayName()
     {
-        return "Using Cache";
+        return I18n.getString("Global.Property.UsingCache");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Set if the subreport must be cached when loaded.";
+        return I18n.getString("Global.Property.UsingCachedetail");
     }
 
     @Override

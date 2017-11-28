@@ -1,3 +1,4 @@
+
 /*
  * GraphicElementPropertiesFactory.java
  * 
@@ -10,6 +11,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignHighLowPlot;
     
     
@@ -35,13 +37,13 @@ public final class HighLowShowCloseTicksProperty extends BooleanProperty {
     @Override
     public String getDisplayName()
     {
-        return "Show Close Ticks";
+        return I18n.getString("Global.Property.ShowCloseTicks");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Show Close Ticks.";
+        return I18n.getString("Global.Property.ShowCloseTicksdetail");
     }
 
     @Override

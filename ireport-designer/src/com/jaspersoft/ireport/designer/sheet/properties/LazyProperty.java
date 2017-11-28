@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.base.JRBaseImage;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 
@@ -35,13 +36,13 @@ public final class LazyProperty extends BooleanProperty
     @Override
     public String getDisplayName()
     {
-        return "Is Lazy";
+        return I18n.getString("Global.Property.IsLazy");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "If set to true, this property avoid the load of the image at fill time.";
+        return I18n.getString("Global.Property.IsLazydetail");
     }
 
     @Override

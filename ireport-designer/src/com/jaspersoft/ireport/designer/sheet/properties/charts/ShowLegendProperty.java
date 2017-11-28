@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.design.JRDesignChart;
     
@@ -21,7 +22,7 @@ public final class ShowLegendProperty extends BooleanProperty {
 
     private final JRDesignChart element;
 
-    @SuppressWarnings("unchecked")
+    
     public ShowLegendProperty(JRDesignChart element)
     {
         super(element);
@@ -36,13 +37,13 @@ public final class ShowLegendProperty extends BooleanProperty {
     @Override
     public String getDisplayName()
     {
-        return "Show Legend";
+        return I18n.getString("Global.Property.ShowLegend");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Show Legend.";
+        return I18n.getString("Global.Property.ShowLegend");
     }
 
     @Override

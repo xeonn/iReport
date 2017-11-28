@@ -65,6 +65,7 @@ import javax.swing.event.*;
 import javax.swing.tree.*;
 import java.awt.datatransfer.*;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -599,12 +600,51 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         
         
         javax.swing.table.DefaultTableModel dtm =  (javax.swing.table.DefaultTableModel)jTableFields.getModel();
+        // Collect all the previous fields trying to preserve possible settings...
+        HashMap<String,JRPropertiesMap> fieldProperties = new HashMap<String,JRPropertiesMap>();
+
+        // GEt from the document...
+        JasperDesign report = IReportManager.getInstance().getActiveReport();
+        JRField[] oldFields = report.getFields();
+        for (int i=0; i<oldFields.length; ++i)
+        {
+            JRField field = oldFields[i];
+            if (field.getPropertiesMap().hasProperties())
+            {
+                fieldProperties.put(field.getName(), field.getPropertiesMap().cloneProperties());
+            }
+        }
+
+        // Get from the current  table...
+        for (int i=0; i<dtm.getRowCount(); ++i)
+        {
+            JRField field = (JRField)dtm.getValueAt(i, 0);
+            if (field.getPropertiesMap().hasProperties())
+            {
+                fieldProperties.put(field.getName(), field.getPropertiesMap().cloneProperties());
+            }
+        }
+
+        
+
         dtm.getDataVector().clear();
         for(int i=0; i<cols.size(); i++) {
             Object obj = cols.get(i);
             if (obj instanceof JRDesignField)
             {
                 JRDesignField field = (JRDesignField)obj;
+                if (fieldProperties.containsKey(field.getName()))
+                {
+                    JRPropertiesMap map = fieldProperties.get(field.getName());
+                    String[] names = map.getPropertyNames();
+                    for (int k=0; k<names.length; ++k)
+                    {
+                        if (!field.getPropertiesMap().containsProperty(names[k]))
+                        {
+                            field.getPropertiesMap().setProperty(names[k], map.getProperty(names[k]));
+                        }
+                    }
+                }
                 Vector row = new Vector();
                 row.add(field);
                 row.add(field.getValueClassName());

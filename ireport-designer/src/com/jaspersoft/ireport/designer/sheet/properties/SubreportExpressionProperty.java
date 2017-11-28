@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
@@ -36,13 +37,13 @@ public final class SubreportExpressionProperty extends ExpressionProperty
     @Override
     public String getDisplayName()
     {
-        return "Subreport Expression";
+        return I18n.getString("Global.Property.SubreportExpression");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The subreport expression.";
+        return I18n.getString("Global.Property.SubreportExpressiondetail");
     }
 
     @Override

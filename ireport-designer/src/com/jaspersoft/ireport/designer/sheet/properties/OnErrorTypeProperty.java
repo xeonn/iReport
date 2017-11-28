@@ -11,6 +11,7 @@ package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.base.JRBaseImage;
 import net.sf.jasperreports.engine.design.JRDesignImage;
@@ -39,22 +40,22 @@ public final class OnErrorTypeProperty extends ByteProperty
     @Override
     public String getDisplayName()
     {
-        return "On Error Type";
+        return I18n.getString("Global.Property.OnErrorType");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "What to print or to do if an error occurs loading the image.";
+        return I18n.getString("Global.Property.OnErrorTypedetail");
     }
 
     @Override
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRDesignImage.ON_ERROR_TYPE_ERROR), "Error"));
-        tags.add(new Tag(new Byte(JRDesignImage.ON_ERROR_TYPE_BLANK), "Blank"));
-        tags.add(new Tag(new Byte(JRDesignImage.ON_ERROR_TYPE_ICON), "Icon"));
+        tags.add(new Tag(new Byte(JRDesignImage.ON_ERROR_TYPE_ERROR), I18n.getString("Global.Property.Error")));
+        tags.add(new Tag(new Byte(JRDesignImage.ON_ERROR_TYPE_BLANK), I18n.getString("Global.Property.Blank")));
+        tags.add(new Tag(new Byte(JRDesignImage.ON_ERROR_TYPE_ICON), I18n.getString("Global.Property.Icon")));
         return tags;
     }
 

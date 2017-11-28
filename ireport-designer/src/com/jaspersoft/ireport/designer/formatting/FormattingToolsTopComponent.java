@@ -47,7 +47,6 @@ import javax.swing.ActionMap;
 import org.openide.awt.UndoRedo;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
-import org.openide.util.NbBundle;
 import org.openide.util.Utilities;
 import org.openide.util.actions.SystemAction;
 import org.openide.windows.TopComponent;
@@ -64,12 +63,12 @@ final class FormattingToolsTopComponent extends TopComponent implements Explorer
     /** path to the icon used by the component and its open action */
 //    static final String ICON_PATH = "SET/PATH/TO/ICON/HERE";
     
-    private static final String PREFERRED_ID = "FormattingToolsTopComponent";
+    private static final String PREFERRED_ID = "FormattingToolsTopComponent"; // NOI18N
 
     private FormattingToolsTopComponent() {
         initComponents();
-        setName(NbBundle.getMessage(FormattingToolsTopComponent.class, "CTL_FormattingToolsTopComponent"));
-        setToolTipText(NbBundle.getMessage(FormattingToolsTopComponent.class, "HINT_FormattingToolsTopComponent"));
+        setName(I18n.getString("CTL_FormattingToolsTopComponent")); // NOI18N
+        setToolTipText(I18n.getString("HINT_FormattingToolsTopComponent")); // NOI18N
 //        setIcon(Utilities.loadImage(ICON_PATH, true));
         
         toolsPanel = new ToolsPanel();
@@ -157,15 +156,16 @@ final class FormattingToolsTopComponent extends TopComponent implements Explorer
         TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
         if (win == null) {
             Logger.getLogger(FormattingToolsTopComponent.class.getName()).warning(
-                    I18n.getString("FormattingToolsTopComponent.Message.ErrorA") + PREFERRED_ID + I18n.getString("FormattingToolsTopComponent.Message.ErrorB"));
+                    I18n.getString("FormattingToolsTopComponent.Message.Error", PREFERRED_ID));
+
             return getDefault();
         }
         if (win instanceof FormattingToolsTopComponent) {
             return (FormattingToolsTopComponent) win;
         }
         Logger.getLogger(FormattingToolsTopComponent.class.getName()).warning(
-                I18n.getString("FormattingToolsTopComponent.Message.WarningA") + PREFERRED_ID +
-                I18n.getString("FormattingToolsTopComponent.Message.WarningB"));
+                  I18n.getString("FormattingToolsTopComponent.Message.Warning", PREFERRED_ID));
+
         return getDefault();
     }
 

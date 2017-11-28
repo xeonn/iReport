@@ -3,6 +3,7 @@ package com.jaspersoft.ireport.jasperserver.ui.actions;
 import com.jaspersoft.ireport.designer.logpane.IRConsoleTopComponent;
 import com.jaspersoft.ireport.designer.logpane.LogTextArea;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.jasperserver.JSDataProvider;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.ReportRunner;
@@ -161,7 +162,9 @@ public final class RunReportUnitAction extends NodeAction {
                         {
                             String dsUriQuery = null;
                             inputcontrols.remove(ic);
-                            
+
+                            String language = "sql";
+                            String query = null;
                             System.out.println("Looking for the right ds...");
                             // Ask to add values to the control....
                             java.util.List args = new java.util.ArrayList();
@@ -173,6 +176,9 @@ public final class RunReportUnitAction extends NodeAction {
                                 System.out.println("Found child..." + sub_ic.getName() + " (" + sub_ic.getWsType() +")");
                                 if (sub_ic.getWsType().equals(ResourceDescriptor.TYPE_QUERY) )
                                 {
+                                    language = sub_ic.getResourceProperty(ResourceDescriptor.PROP_QUERY_LANGUAGE).getValue();
+                                    query = sub_ic.getResourceProperty(ResourceDescriptor.PROP_QUERY).getValue();
+
                                     System.out.println("Found the query child...");
                                     // Look in the query detail
                                     for (int k2=0; k2<sub_ic.getChildren().size(); ++k2)
@@ -190,9 +196,24 @@ public final class RunReportUnitAction extends NodeAction {
                             }
                             if (dsUriQuery == null) dsUriQuery = dsUri;
                             ic.setResourceProperty(ic.PROP_QUERY_DATA, null);
-                            args.add(new Argument( Argument.IC_GET_QUERY_DATA, dsUriQuery));
-                            ic = server.getWSClient().get(ic, null, args);
-                            
+
+//                            if (JasperServerManager.getMainInstance().getDataProvidersMap().containsKey(language))
+//                            {
+//                                JSDataProvider dataProvider = JasperServerManager.getMainInstance().getDataProvidersMap().get(language);
+//                                try {
+//                                    List data = dataProvider.getData(server, dsUri, query, new HashMap());
+//                                    ic.setQueryData(data);
+//                                } catch (Exception ex)
+//                                {
+//                                    ex.printStackTrace();
+//                                }
+//
+//                            }
+//                            else
+//                            {
+                                args.add(new Argument( Argument.IC_GET_QUERY_DATA, dsUriQuery));
+                                ic = server.getWSClient().get(ic, null, args);
+//                            }
                             inputcontrols.add(i, ic);
                         }
                 }

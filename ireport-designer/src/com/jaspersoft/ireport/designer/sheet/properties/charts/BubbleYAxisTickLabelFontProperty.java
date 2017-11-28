@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.AbstractFontProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignBubblePlot;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -38,13 +39,13 @@ public final class BubbleYAxisTickLabelFontProperty extends AbstractFontProperty
     @Override
     public String getDisplayName()
     {
-        return "Y Axis Tick Label Font";
+        return I18n.getString("Global.Property.Y_AxisTickLabelFont");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Y Axis Tick Label Font.";
+        return I18n.getString("Global.Property.Y_AxisTickLabelFontdetail");
     }
 
     @Override

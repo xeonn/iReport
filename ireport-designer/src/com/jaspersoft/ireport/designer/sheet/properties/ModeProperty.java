@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.properties;
 
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -36,13 +37,13 @@ public final class ModeProperty extends BooleanProperty
     @Override
     public String getDisplayName()
     {
-        return "Opaque";
+        return I18n.getString("Global.Property.Opaque");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Set if an element is opaque or transparent.";
+        return I18n.getString("Global.Property.Opaquedetail");
     }
 
     @Override

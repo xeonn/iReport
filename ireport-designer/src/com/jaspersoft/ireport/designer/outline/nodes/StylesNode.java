@@ -15,6 +15,7 @@ import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 
 import com.jaspersoft.ireport.designer.outline.NewTypesUtils;
 import com.jaspersoft.ireport.designer.undo.AddStyleUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.beans.PropertyChangeEvent;
@@ -104,7 +105,7 @@ public class StylesNode extends IRIndexedNode implements PropertyChangeListener 
         jd.getEventSupport().addPropertyChangeListener(this);
         
         
-        setDisplayName("Styles");
+        setDisplayName(I18n.getString("StylesNode.Display.Name"));
         setIconBaseWithExtension("com/jaspersoft/ireport/designer/resources/styles-16.png");
     }
 

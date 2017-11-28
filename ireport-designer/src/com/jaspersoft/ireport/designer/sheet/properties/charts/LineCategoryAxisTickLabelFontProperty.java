@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.AbstractFontProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignLinePlot;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -22,7 +23,7 @@ public final class LineCategoryAxisTickLabelFontProperty extends AbstractFontPro
 {
     private final JRDesignLinePlot plot;
         
-    @SuppressWarnings("unchecked")
+    
     public LineCategoryAxisTickLabelFontProperty(JRDesignLinePlot plot, JasperDesign jasperDesign)
     {
         super(plot, jasperDesign);
@@ -38,13 +39,13 @@ public final class LineCategoryAxisTickLabelFontProperty extends AbstractFontPro
     @Override
     public String getDisplayName()
     {
-        return "Category Axis Tick Label Font";
+        return I18n.getString("Category_Axis_Tick_Label_Font");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Category Axis Tick Label Font.";
+        return I18n.getString("Category_Axis_Tick_Label_Font.");
     }
 
     @Override

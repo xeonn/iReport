@@ -19,6 +19,7 @@ import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.properties.BandPrintWhenExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.beans.PropertyChangeEvent;
@@ -162,7 +163,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
         
         Sheet.Set bandPropertiesSet = Sheet.createPropertiesSet();
         bandPropertiesSet.setName("BAND_PROPERTIES");
-        bandPropertiesSet.setDisplayName("Band properties");
+        bandPropertiesSet.setDisplayName(I18n.getString("BandNode.Property.Bandproperties"));
         bandPropertiesSet.put(new HeightProperty(band, jd));
         bandPropertiesSet.put(new BandPrintWhenExpressionProperty(band, jd.getMainDesignDataset()));
         bandPropertiesSet.put(new SplitAllowedProperty(band));
@@ -173,7 +174,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
         {
             Sheet.Set groupPropertiesSet = Sheet.createPropertiesSet();
             groupPropertiesSet.setName("GROUP_PROPERTIES");
-            groupPropertiesSet.setDisplayName("Group properties");
+            groupPropertiesSet.setDisplayName(I18n.getString("BandNode.Property.Groupproperties"));
             groupPropertiesSet = fillGroupPropertySet(groupPropertiesSet, jd.getMainDesignDataset(), group);
         
             sheet.put(groupPropertiesSet);
@@ -257,7 +258,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
     public static final class RefreshNodes extends NodeAction {
 
             public String getName() {
-                return "Refresh nodes";
+                return I18n.getString("BandNode.Property.Refreshnodes");
             }
 
             public HelpCtx getHelpCtx() {
@@ -341,7 +342,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
             @SuppressWarnings("unchecked")
             public HeightProperty(JRDesignBand band, JasperDesign jd)
             {
-                super(JRDesignBand.PROPERTY_HEIGHT,Integer.class, "Band height", "This is the band height", true, true);
+                super(JRDesignBand.PROPERTY_HEIGHT,Integer.class, I18n.getString("BandNode.Property.Bandheight"), I18n.getString("BandNode.Property.Bandheightdetail"), true, true);
                 this.jasperDesign = jd;
                 this.band = band;
             }
@@ -361,7 +362,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
                     int maxBandHeight = ModelUtils.getMaxBandHeight(band, jasperDesign);
                     if (newValue < 0 || newValue > maxBandHeight)
                     {
-                        IllegalArgumentException iae = annotateException("The specified band height is not valid.\nThe height must be between 0 and " + maxBandHeight + " pixels."); 
+                        IllegalArgumentException iae = annotateException(I18n.getString("BandNode.Property.bandheightmessagge",maxBandHeight )); 
                         throw iae; 
                     }
                     
@@ -369,7 +370,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
                     ObjectPropertyUndoableEdit urob =
                             new ObjectPropertyUndoableEdit(
                                 band,
-                                "Height", 
+                                I18n.getString("Global.Property.Height"), 
                                 Integer.TYPE,
                                 oldValue,newValue);
                     // Find the undoRedo manager...
@@ -399,7 +400,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
             @SuppressWarnings("unchecked")
             public SplitAllowedProperty(JRDesignBand band)
             {
-                super(JRBaseBand.PROPERTY_SPLIT_ALLOWED,Boolean.class, "Split allowed", "Define if the band can be splitted or not", true, true);
+                super(JRBaseBand.PROPERTY_SPLIT_ALLOWED,Boolean.class, I18n.getString("BandNode.Property.Splitallowed"), I18n.getString("BandNode.Property.Splitalloweddetail"), true, true);
                 this.band = band;
             }
             
@@ -460,8 +461,8 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
         public GroupNameProperty(JRDesignGroup group, JRDesignDataset dataset)
         {
             super(JRDesignGroup.PROPERTY_NAME, String.class,
-                  "Name",
-                  "Name of the group");
+                  I18n.getString("BandNode.Property.Name"),
+                  I18n.getString("BandNode.Property.Namedetail"));
             this.group = group;
             this.dataset = dataset;
             this.setValue("oneline", Boolean.TRUE);
@@ -476,7 +477,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
 
             if (val == null || val.equals(""))
             {
-                IllegalArgumentException iae = annotateException("Group name not valid."); 
+                IllegalArgumentException iae = annotateException(I18n.getString("BandNode.Property.NameMessage")); 
                 throw iae; 
             }
 
@@ -488,7 +489,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
             {
                 if (g != group && g.getName().equals(s))
                 {
-                    IllegalArgumentException iae = annotateException("Group name already in use."); 
+                    IllegalArgumentException iae = annotateException(I18n.getString("BandNode.Property.Nameexist")); 
                     throw iae; 
                 }
             }
@@ -530,7 +531,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
             @SuppressWarnings("unchecked")
             public StartNewPageProperty(JRDesignGroup group)
             {
-                super(JRDesignGroup.PROPERTY_START_NEW_PAGE,Boolean.class, "Start on a new page", "If checked, it forces the group to start on a new page", true, true);
+                super(JRDesignGroup.PROPERTY_START_NEW_PAGE,Boolean.class, I18n.getString("BandNode.Property.NewPage"), I18n.getString("BandNode.Property.NewPagedetail"), true, true);
                 this.group = group;
             }
             
@@ -587,7 +588,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
             @SuppressWarnings("unchecked")
             public StartNewColumnProperty(JRDesignGroup group)
             {
-                super(JRDesignGroup.PROPERTY_START_NEW_COLUMN,Boolean.class, "Start on a new column", "If checked, it forces the group to start on a new column", true, true);
+                super(JRDesignGroup.PROPERTY_START_NEW_COLUMN,Boolean.class, I18n.getString("BandNode.Property.NewCol"), I18n.getString("BandNode.Property.NewColdetail"), true, true);
                 this.group = group;
             }
             
@@ -644,7 +645,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
             @SuppressWarnings("unchecked")
             public ResetPageNumberProperty(JRDesignGroup group)
             {
-                super(JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER,Boolean.class, "Reset page number", "Reset the page number when the group changes.", true, true);
+                super(JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER,Boolean.class, I18n.getString("BandNode.Property.ResetPageNumber"), I18n.getString("BandNode.Property.ResetPageNumberdetail"), true, true);
                 this.group = group;
             }
             
@@ -701,7 +702,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
             @SuppressWarnings("unchecked")
             public ReprintHeaderProperty(JRDesignGroup group)
             {
-                super(JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE,Boolean.class, "Reprint header", "Reprint the group header on each page.", true, true);
+                super(JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE,Boolean.class, I18n.getString("BandNode.Property.ReprintHeader"), I18n.getString("BandNode.Property.ReprintHeaderdetail"), true, true);
                 this.group = group;
             }
             
@@ -759,7 +760,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
             @SuppressWarnings("unchecked")
             public MinHeightToStartNewPageProperty(JRDesignGroup group)
             {
-                super(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE,Integer.class, "Min Height To Start New Page", "If greater than zero, this value is considerd as minimum height required to keep the group on the current page", true, true);
+                super(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE,Integer.class, I18n.getString("BandNode.Property.MinHeight"), I18n.getString("BandNode.Property.MinHeightdetail"), true, true);
                 this.group = group;
             }
             
@@ -798,7 +799,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
                     // Check if the height is too big....
                     if (newValue < 0)
                     {
-                        IllegalArgumentException iae = annotateException("The value must be a positive number"); 
+                        IllegalArgumentException iae = annotateException(I18n.getString("BandNode.Property.Nodemessage")); 
                         throw iae; 
                     }
                     

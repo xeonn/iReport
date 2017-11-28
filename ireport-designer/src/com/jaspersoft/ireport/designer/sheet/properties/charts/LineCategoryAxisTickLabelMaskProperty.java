@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.StringProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.charts.design.JRDesignLinePlot;
     
     
@@ -20,7 +21,7 @@ public final class LineCategoryAxisTickLabelMaskProperty extends StringProperty
 {
     private final JRDesignLinePlot plot;
 
-    @SuppressWarnings("unchecked")
+    
     public LineCategoryAxisTickLabelMaskProperty(JRDesignLinePlot plot)
     {
         super(plot);
@@ -36,13 +37,13 @@ public final class LineCategoryAxisTickLabelMaskProperty extends StringProperty
     @Override
     public String getDisplayName()
     {
-        return "Category Axis Tick Label Mask";
+        return I18n.getString("Category_Axis_Tick_Label_Mask");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Category Axis Tick Label Mask.";
+        return I18n.getString("Category_Axis_Tick_Label_Mask.");
     }
 
     @Override

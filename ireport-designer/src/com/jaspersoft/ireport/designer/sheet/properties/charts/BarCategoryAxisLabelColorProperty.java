@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.properties.ColorProperty;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import net.sf.jasperreports.charts.design.JRDesignBarPlot;
     
@@ -38,13 +39,13 @@ public final class BarCategoryAxisLabelColorProperty extends ColorProperty {
     @Override
     public String getDisplayName()
     {
-        return "Category Axis Label Color";
+        return I18n.getString("Global.Property.CategoryAxisLabelColor");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "The color of the Category Axis Label.";
+        return I18n.getString("Global.Property.CategoryAxisLabelColordetail");
     }
 
     @Override

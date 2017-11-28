@@ -15,6 +15,7 @@ import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.DeleteStyleUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
@@ -130,7 +131,7 @@ public class StyleNode extends AbstractStyleNode  {
         
         if (s.equals(""))
         {
-            throw new IllegalArgumentException("Style name not valid.");
+            throw new IllegalArgumentException(I18n.getString("StyleNode.Exception.NameNotValid"));
         }
         
         List<JRDesignStyle> currentStyles = null;
@@ -139,7 +140,7 @@ public class StyleNode extends AbstractStyleNode  {
         {
             if (p != getStyle() && p.getName().equals(s))
             {
-                throw new IllegalArgumentException("Style name already in use.");
+                throw new IllegalArgumentException(I18n.getString("StyleNode.Exception.NameInUse"));
             }
         }
         
@@ -175,8 +176,8 @@ public class StyleNode extends AbstractStyleNode  {
         public NameProperty(JRDesignStyle style, JasperDesign jd)
         {
             super(JRDesignStyle.PROPERTY_NAME, String.class,
-                  "Name",
-                  "Name of the style");
+                  I18n.getString("StyleNode.Property.Name"),
+                  I18n.getString("StyleNode.Property.NameStyle"));
             this.style = style;
             this.jd = jd;
             this.setValue("oneline", Boolean.TRUE);
@@ -198,7 +199,7 @@ public class StyleNode extends AbstractStyleNode  {
 
             if (val == null || val.equals(""))
             {
-                IllegalArgumentException iae = annotateException("Style name not valid."); 
+                IllegalArgumentException iae = annotateException(I18n.getString("StyleNode.Exception.NameNotValid")); 
                 throw iae; 
             }
 
@@ -210,7 +211,7 @@ public class StyleNode extends AbstractStyleNode  {
             {
                 if (st != getStyle() && st.getName().equals(s))
                 {
-                    IllegalArgumentException iae = annotateException("Style name already in use."); 
+                    IllegalArgumentException iae = annotateException(I18n.getString("StyleNode.Exception.NameInUse")); 
                     throw iae; 
                 }
             }
@@ -256,7 +257,7 @@ public class StyleNode extends AbstractStyleNode  {
         {
             super(JRDesignStyle.PROPERTY_DEFAULT, Boolean.class,
                   "Default Style",
-                  "Default Style");
+                  I18n.getString("StyleNode.Property.DefaultStyle"));
             this.jd = jd;
             this.style = style;
         }
@@ -349,7 +350,7 @@ public class StyleNode extends AbstractStyleNode  {
         public ParentStyleProperty(JRDesignStyle style, JasperDesign jd)
         {
             // TODO: Replace WhenNoDataType with the right constant
-            super( JRDesignStyle.PROPERTY_PARENT_STYLE, String.class, "Style", "The optional style to use as parent. Can be the name of a locally defined style or the name of a style defined in an external style template file.", true, true);
+            super( JRDesignStyle.PROPERTY_PARENT_STYLE, String.class, I18n.getString("StyleNode.Property.Style"), I18n.getString("StyleNode.Property.Message"), true, true);
             this.jd = jd;
             this.style = style;
 

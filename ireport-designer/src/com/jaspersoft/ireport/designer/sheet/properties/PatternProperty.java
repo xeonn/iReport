@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.editors.FieldPatternPropertyEditor;
+import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyEditor;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 
@@ -45,13 +46,13 @@ public abstract class PatternProperty extends StringProperty
     @Override
     public String getDisplayName()
     {
-        return "Pattern";
+        return I18n.getString("PatternProperty.Property.Pattern");
     }
 
     @Override
     public String getShortDescription()
     {
-        return "Pattern used to format numbers and dates.";
+        return I18n.getString("PatternProperty.Property.Patterndetail");
     }
 
     @Override
