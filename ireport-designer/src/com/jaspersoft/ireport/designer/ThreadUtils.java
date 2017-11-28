@@ -27,6 +27,5 @@ public class ThreadUtils {
         {
             SwingUtilities.invokeLater(r);
         }
-        
     }
 }

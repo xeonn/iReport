@@ -32,10 +32,13 @@ package com.jaspersoft.ireport.designer;
 
 import com.jaspersoft.ireport.JrxmlDataNode;
 import com.jaspersoft.ireport.JrxmlDataObject;
+import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.outline.nodes.ReportNode;
 import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
-import com.jaspersoft.ireport.designer.palette.PaletteUtils;
+import com.jaspersoft.ireport.designer.outline.nodes.CellNode;
+import com.jaspersoft.ireport.designer.outline.nodes.CrosstabNode;
+import com.jaspersoft.ireport.designer.outline.nodes.NullCellNode;
 import com.jaspersoft.ireport.designer.tools.JrxmlEditorToolbar;
 import com.jaspersoft.ireport.designer.undo.UndoRedoManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
@@ -48,7 +51,6 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -59,12 +61,14 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultEditorKit;
+import net.sf.jasperreports.crosstabs.JRCellContents;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import org.netbeans.api.editor.mimelookup.MimeLookup;
+import org.netbeans.api.editor.mimelookup.MimePath;
 import org.netbeans.api.visual.model.ObjectSceneEvent;
-import org.netbeans.api.visual.model.ObjectSceneEventType;
 import org.netbeans.api.visual.model.ObjectSceneListener;
 import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.core.api.multiview.MultiViewHandler;
@@ -111,6 +115,7 @@ public class JrxmlVisualView extends TopComponent
     
     private JrxmlEditorSupport support;
     private ReportDesignerPanel reportDesignerPanel = null;
+    private boolean elementInitialized = false;
     
     /**
      * This is the model. It could be null if the underline jrxml is not valid of a parsing
@@ -146,68 +151,24 @@ public class JrxmlVisualView extends TopComponent
     private boolean needModelRefresh = true;
     MultiViewElementCallback callback = null;
     
-    final InstanceContent ic;
-    final AbstractLookup abstractLookup;
+    InstanceContent ic;
+    AbstractLookup abstractLookup;
     final JasperDesignerTypeLookupHint hint = new JasperDesignerTypeLookupHint();
     private ProxyLookup lookup = null;
     
     public static int num = 0;
     
+    private static PaletteController pc;
+
+    public static PaletteController getPaletteFromMimeType( String mimeType ) {
+        MimePath path = MimePath.get( mimeType );
+        Lookup lkp = MimeLookup.getLookup( path );
+        return (PaletteController) lkp.lookup(org.netbeans.spi.palette.PaletteController.class);
+    }
+    
     public JrxmlVisualView(JrxmlEditorSupport ed) {
         super();
-        
         support = ed;
-        ic = new InstanceContent();
-        explorerManager = new ExplorerManager();
-        
-        ActionMap map = getActionMap();
-        //setActionMap(map);
-        map.put(DefaultEditorKit.copyAction, ExplorerUtils.actionCopy(explorerManager));
-        map.put(DefaultEditorKit.cutAction, ExplorerUtils.actionCut(explorerManager));
-        map.put(DefaultEditorKit.pasteAction, ExplorerUtils.actionPaste(explorerManager));
-        map.put("delete", ExplorerUtils.actionDelete(explorerManager, true));
-        
-        
-        abstractLookup = new AbstractLookup(ic);
-        //if (pc != null)
-        
-        lookup = new ProxyLookup(new Lookup[]{
-            abstractLookup,
-            Lookups.fixed(hint), //support.getDataObject().getNodeDelegate()
-            ExplorerUtils.createLookup(explorerManager, map),
-            support.getDataObject().getLookup()
-            });
-        
-        ThreadUtils.invokeInAWTThread( new Runnable()
-        {
-            public void run()
-            {
-                PaletteController pc = PaletteUtils.createPalette();
-                if (pc != null)  ic.add(pc);
-            }
-        });
-        
-        associateLookup(lookup);
-        //setActivatedNodes( new Node[]{support.getDataObject().getNodeDelegate()});
-        
-            explorerManager.addPropertyChangeListener(new PropertyChangeListener() {
-                public void propertyChange(PropertyChangeEvent evt) {
-                    if (ExplorerManager.PROP_SELECTED_NODES.equals(evt.getPropertyName()))
-                    {
-                            
-                        if (OutlineTopComponent.getDefault() != null)
-                        {
-                            
-                            
-                            try {
-                                OutlineTopComponent.getDefault().getExplorerManager().setSelectedNodes( explorerManager.getSelectedNodes() );
-                            } catch (Exception ex) {}
-                        }
-                    }
-                }
-            });
-            
-        // Add a scene to the panel...
     }
     
     @Override
@@ -237,27 +198,72 @@ public class JrxmlVisualView extends TopComponent
     }
     
     public MultiViewElement createElement() {
-        try {
-            assert java.awt.EventQueue.isDispatchThread();
             
-            removeAll();
-            support.openDocument().addDocumentListener(this);
-            reportDesignerPanel = new com.jaspersoft.ireport.designer.ReportDesignerPanel();
-            
-            setLayout(new java.awt.BorderLayout());
-            add(reportDesignerPanel, BorderLayout.CENTER);
-            
-            ActionMap map = getActionMap();
-            //setActionMap(map);
-            map.put(DefaultEditorKit.copyAction, ExplorerUtils.actionCopy(explorerManager));
-            map.put(DefaultEditorKit.cutAction, ExplorerUtils.actionCut(explorerManager));
-            map.put(DefaultEditorKit.pasteAction, ExplorerUtils.actionPaste(explorerManager));
-            map.put("delete", ExplorerUtils.actionDelete(explorerManager, true));
-            
-            reportDesignerPanel.getScene().addObjectSceneListener(this, ObjectSceneEventType.OBJECT_SELECTION_CHANGED);
-                    
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+        if (!elementInitialized)
+        {
+            try {
+                assert java.awt.EventQueue.isDispatchThread();
+
+                
+                    elementInitialized = true;
+
+                    ic = new InstanceContent();
+                explorerManager = new ExplorerManager();
+
+                ActionMap map = getActionMap();
+                //setActionMap(map);
+                map.put(DefaultEditorKit.copyAction, ExplorerUtils.actionCopy(explorerManager));
+                map.put(DefaultEditorKit.cutAction, ExplorerUtils.actionCut(explorerManager));
+                map.put(DefaultEditorKit.pasteAction, ExplorerUtils.actionPaste(explorerManager));
+                map.put("delete", ExplorerUtils.actionDelete(explorerManager, true));
+
+                abstractLookup = new AbstractLookup(ic);
+                //if (pc != null)
+
+                if (pc == null)
+                {
+                    pc = getPaletteFromMimeType("text/x-jrxml+xml");
+                }
+
+                lookup = new ProxyLookup(new Lookup[]{
+                    abstractLookup,
+                    //Lookups.fixed(hint), //support.getDataObject().getNodeDelegate()
+                    ExplorerUtils.createLookup(explorerManager, map),
+                    support.getDataObject().getLookup(),
+                    Lookups.fixed(pc)
+                    });
+
+                associateLookup(lookup);
+                //setActivatedNodes( new Node[]{support.getDataObject().getNodeDelegate()});
+
+
+                explorerManager.addPropertyChangeListener(new PropertyChangeListener() {
+                    public void propertyChange(PropertyChangeEvent evt) {
+                        if (ExplorerManager.PROP_SELECTED_NODES.equals(evt.getPropertyName()))
+                        {
+
+                            if (OutlineTopComponent.getDefault() != null)
+                            {
+                                try {
+                                    OutlineTopComponent.getDefault().getExplorerManager().setSelectedNodes( explorerManager.getSelectedNodes() );
+                                } catch (Exception ex) {}
+                            }
+                        }
+                    }
+                });
+
+                removeAll();
+                support.openDocument().addDocumentListener(this);
+                reportDesignerPanel = new com.jaspersoft.ireport.designer.ReportDesignerPanel();
+
+                setLayout(new java.awt.BorderLayout());
+                add(reportDesignerPanel, BorderLayout.CENTER);
+
+                reportDesignerPanel.addObjectSelectionListener(this);
+
+            } catch (IOException ex) {
+                Exceptions.printStackTrace(ex);
+            }
         }
         return this;
     }
@@ -304,22 +310,29 @@ public class JrxmlVisualView extends TopComponent
     public void setSelectedNodes(Node[] selectedNodes) {
         
         if (isSettingSelection()) return;
+        
         try {
             setSettingSelection(true);
             explorerManager.setSelectedNodes(selectedNodes);
+            
             // Find the objects related to these nodes...
             HashSet selectedObjects = new HashSet();
+
             for (int i=0; i<selectedNodes.length; ++i)
-            {
+            {               
                 if (selectedNodes[i] instanceof ElementNode)
                 {
                     selectedObjects.add( ((ElementNode)selectedNodes[i]).getElement() );
                 }
+                else if (selectedNodes[i] instanceof CellNode)
+                {
+                    selectedObjects.add( ((CellNode)selectedNodes[i]).getCellContents() );
+                }
             }
             
-            getReportDesignerPanel().getScene().setSelectedObjects(selectedObjects);
-            getReportDesignerPanel().getScene().validate();
-            
+            // We have to find the scene with this object...
+            getReportDesignerPanel().setSelectedObjects(selectedObjects);
+                        
         } catch (PropertyVetoException ex) {
             Exceptions.printStackTrace(ex);
         } finally {
@@ -398,10 +411,10 @@ public class JrxmlVisualView extends TopComponent
         ic.add(this.getReportDesignerPanel());
         updateGroupVisibility();
         if (getReportDesignerPanel() != null &&
-            getReportDesignerPanel().getScene() != null &&
-            getReportDesignerPanel().getScene().getView() != null)
+            getReportDesignerPanel().getActiveScene() != null &&
+            getReportDesignerPanel().getActiveScene().getView() != null)
         {
-            getReportDesignerPanel().getScene().getView().requestFocusInWindow();
+            getReportDesignerPanel().getActiveScene().getView().requestFocusInWindow();
         }
         
         
@@ -615,8 +628,17 @@ public class JrxmlVisualView extends TopComponent
                 Node[] selectedNodes = explorerManager.getSelectedNodes();
                 for (int i=0; i<selectedNodes.length; ++i)
                 {
-                    if (selectedNodes[i].getLookup().lookup(JRDesignElement.class) != null)
+                    if (selectedNodes[i] instanceof ElementNode) // .getLookup().lookup(JRDesignElement.class) != null)
                     {
+                        // In case of a cell, the lookup contains the crosstab, so we have to skip
+                        // this particular case...
+                        if (selectedNodes[i].getLookup().lookup(JRCellContents.class) != null ||
+                            event.getObjectScene() instanceof CrosstabObjectScene)
+                        {
+                            continue;
+                        }
+                        
+                        
                         explorerManager.setSelectedNodes( new Node[]{getExplorerManager().getRootContext()} );
                         break;
                     }

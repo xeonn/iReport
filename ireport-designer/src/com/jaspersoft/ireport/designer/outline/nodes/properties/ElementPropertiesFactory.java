@@ -9,7 +9,22 @@
 
 package com.jaspersoft.ireport.designer.outline.nodes.properties;
 
-import com.jaspersoft.ireport.designer.outline.properties.BackcolorProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.StyleProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.KeyProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.ModeProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.RemoveLineWhenBlankProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.PrintWhenDetailOverflowsProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.PrintRepeatedValuesProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.PrintInFirstWholeBandProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.StretchTypeProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.PositionTypeProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.WidthProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.TopProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.LeftProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.HeightProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.PrintWhenExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.BackcolorProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.ForecolorProperty;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.outline.nodes.properties.charts.ChartPropertiesFactory;
 import java.util.ArrayList;
@@ -25,7 +40,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.nodes.Sheet;
 
 /**
- *
  * @author gtoffoli
  */
 public class ElementPropertiesFactory {
@@ -42,19 +56,19 @@ public class ElementPropertiesFactory {
         propertySet.put(new TopProperty( element ));
         propertySet.put(new WidthProperty( element ));
         propertySet.put(new HeightProperty( element ));
-        propertySet.put(new ForecolorProperty( element));
-        propertySet.put(new BackcolorProperty( element));
-        propertySet.put(new ModeProperty( element));
-        propertySet.put(new StyleProperty( element, jd));
-        propertySet.put(new KeyProperty( element, jd));
-        propertySet.put(new PositionTypeProperty( element));
-        propertySet.put(new StretchTypeProperty( element));
-        propertySet.put(new PrintRepeatedValuesProperty( element));
-        propertySet.put(new RemoveLineWhenBlankProperty( element));
-        propertySet.put(new PrintInFirstWholeBandProperty( element));
-        propertySet.put(new PrintWhenDetailOverflowsProperty( element));
-        propertySet.put(new PrintWhenGroupChangesProperty( element, dataset));
-        propertySet.put(new PrintWhenExpressionProperty( element, dataset));
+        propertySet.put(new ForecolorProperty(element));
+        propertySet.put(new BackcolorProperty(element));
+        propertySet.put(new ModeProperty(element));
+        propertySet.put(new StyleProperty(element, jd));
+        propertySet.put(new KeyProperty(element));
+        propertySet.put(new PositionTypeProperty(element));
+        propertySet.put(new StretchTypeProperty(element));
+        propertySet.put(new PrintRepeatedValuesProperty(element));
+        propertySet.put(new RemoveLineWhenBlankProperty(element));
+        propertySet.put(new PrintInFirstWholeBandProperty(element));
+        propertySet.put(new PrintWhenDetailOverflowsProperty(element));
+        propertySet.put(new PrintWhenGroupChangesProperty(element, dataset));
+        propertySet.put(new PrintWhenExpressionProperty(element, dataset));
         
        
         return propertySet;

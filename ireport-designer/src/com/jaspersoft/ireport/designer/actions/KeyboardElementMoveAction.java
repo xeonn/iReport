@@ -30,14 +30,13 @@
 
 package com.jaspersoft.ireport.designer.actions;
 
-import com.jaspersoft.ireport.designer.ReportObjectScene;
+import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.action.WidgetAction.State;
 import org.netbeans.api.visual.action.WidgetAction.WidgetKeyEvent;
@@ -78,7 +77,7 @@ public class KeyboardElementMoveAction extends WidgetAction.Adapter {
             }
             
             List<JRDesignElementWidget> widgets = new ArrayList<JRDesignElementWidget>();
-            ReportObjectScene scene = (ReportObjectScene)widget.getScene();
+            AbstractReportObjectScene scene = (AbstractReportObjectScene)widget.getScene();
 
             Iterator iterSelectedObject = scene.getSelectedObjects().iterator();
             while (iterSelectedObject.hasNext())

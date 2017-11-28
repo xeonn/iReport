@@ -12,6 +12,7 @@ package com.jaspersoft.ireport.designer.dnd;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.ReportObjectScene;
+import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
 import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
 import com.jaspersoft.ireport.designer.palette.PaletteItem;
 import com.jaspersoft.ireport.designer.palette.PaletteUtils;
@@ -24,6 +25,7 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.io.IOException;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import org.netbeans.api.visual.widget.Scene;
 
 /**
@@ -31,9 +33,6 @@ import org.netbeans.api.visual.widget.Scene;
  * @author gtoffoli
  */
 class DesignerDropTargetListener implements DropTargetListener {
-
-    public DesignerDropTargetListener(ReportObjectScene scene) {
-    }
 
     public void dragEnter(DropTargetDragEvent dtde) {
         if (!acceptDataFlavor( dtde.getCurrentDataFlavors()) )
@@ -125,8 +124,17 @@ class DesignerDropTargetListener implements DropTargetListener {
     
     private boolean isInDocument(Point location)
     {
-        Scene scene = OutlineTopComponent.getDefault().getCurrentJrxmlVisualView().getReportDesignerPanel().getScene();
+        Scene scene = OutlineTopComponent.getDefault().getCurrentJrxmlVisualView().getReportDesignerPanel().getActiveScene();
         Point p = scene.convertViewToScene(location);
-        return ModelUtils.getBandAt(IReportManager.getInstance().getActiveReport(), p) != null;
+        if (scene instanceof ReportObjectScene)
+        {
+             return ModelUtils.getBandAt(IReportManager.getInstance().getActiveReport(), p) != null;
+        }
+        else if (scene instanceof CrosstabObjectScene)
+        {
+            JRDesignCrosstab crosstab = ((CrosstabObjectScene)scene).getDesignCrosstab();
+            return ModelUtils.getCellAt(crosstab,  p) != null;
+        }
+       return false;
     }
 }

@@ -9,11 +9,12 @@
 
 package com.jaspersoft.ireport.designer.outline.nodes;
 
+import com.jaspersoft.ireport.designer.sheet.properties.FilterExpressionProperty;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.menu.EditQueryAction;
-import com.jaspersoft.ireport.designer.sheet.ExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.DeleteDatasetUndoableEdit;
@@ -283,58 +284,6 @@ public class DatasetNode extends IRAbstractNode implements PropertyChangeListene
             }
     }
 
-    /**
-     *  Class to manage the JRDesignDataset.PROPERTY_RESOURCE_BUNDLE property
-     */
-    private static final class FilterExpressionProperty extends ExpressionProperty
-    {
-            private final JRDesignDataset dataset;
-        
-            @SuppressWarnings("unchecked")
-            public FilterExpressionProperty(JRDesignDataset dataset)
-            {
-                super(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, "Filter expression", "Expression used to filter the records. It must return a Boolean object.");
-                this.dataset = dataset;
-                this.setValue("expressionContext", new ExpressionContext(dataset));
-            }
-            
-        @Override
-            public Object getValue() throws IllegalAccessException, InvocationTargetException {
-                if (dataset.getFilterExpression() == null) return "";
-                return dataset.getFilterExpression().getText();
-            }
-
-        @Override
-            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                
-                JRDesignExpression oldExpression = (JRDesignExpression)dataset.getFilterExpression();
-                JRDesignExpression newExpression = null;
-                
-                if (val == null || val.equals(""))
-                {
-                    dataset.setFilterExpression(newExpression);
-                }
-                else
-                {
-                    String s = val+"";
-                    newExpression = new JRDesignExpression();
-                    newExpression.setText(s);
-                    dataset.setFilterExpression(newExpression);
-                }
-                
-                ObjectPropertyUndoableEdit urob =
-                            new ObjectPropertyUndoableEdit(
-                                dataset,
-                                "FilterExpression", 
-                                JRExpression.class,
-                                oldExpression,newExpression);
-                    // Find the undoRedo manager...
-                    IReportManager.getInstance().addUndoableEdit(urob);
-                
-            }
-    }
-    
-    
     /**
      *  Class to manage the WhenResourceMissingType property
      */

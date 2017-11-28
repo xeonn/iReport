@@ -31,34 +31,54 @@
 package com.jaspersoft.ireport.designer;
 
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
+import com.jaspersoft.ireport.designer.palette.actions.CreateTextFieldAction;
+import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import net.sf.jasperreports.crosstabs.JRCellContents;
+import net.sf.jasperreports.crosstabs.JRCrosstabCell;
+import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
+import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabParameter;
+import net.sf.jasperreports.crosstabs.fill.calculation.BucketDefinition;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementDataset;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRExpressionChunk;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
+import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.JROrigin;
+import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import org.netbeans.api.visual.action.WidgetAction.Adapter;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 
@@ -67,6 +87,25 @@ import org.openide.nodes.Node;
  * @author gtoffoli
  */
 public class ModelUtils {
+
+    public static JRDesignCrosstabParameter cloneCrosstabParameter(JRDesignCrosstabParameter param) {
+        JRDesignCrosstabParameter newParam = new JRDesignCrosstabParameter();
+        newParam.setName( param.getName() );
+        newParam.setForPrompting( param.isForPrompting() );
+        newParam.setSystemDefined( param.isSystemDefined() );
+        //newParam.setValueClass( param.getValueClass() );
+        newParam.setValueClassName( param.getValueClassName() );
+        newParam.setDescription( param.getDescription());
+        if (param.getDefaultValueExpression() != null)
+        {
+            newParam.setDefaultValueExpression( cloneExpression( (JRDesignExpression)param.getDefaultValueExpression()) );
+        }
+        
+        // Duplicate properties...
+        replacePropertiesMap(param.getPropertiesMap(), newParam.getPropertiesMap());
+        
+        return newParam;
+    }
 
     public static JRDesignStyle cloneStyle(JRDesignStyle style) {
         JRDesignStyle newStyle = new JRDesignStyle();
@@ -109,6 +148,478 @@ public class ModelUtils {
         return list;
     }
 
+    public static int getHeaderCellWidth(JRDesignCrosstab crosstab)
+    {
+        if (crosstab == null) return 0;
+        //if (crosstab.getHeaderCell() != null) return crosstab.getHeaderCell().getWidth();
+        JRCrosstabRowGroup[] row_groups = crosstab.getRowGroups();
+        int tot = 0;
+        for (int i=0; i<row_groups.length; ++i)
+        {
+            tot += row_groups[i].getWidth();
+        }
+        
+        return tot;
+    }
+    
+    public static int getHeaderCellHeight(JRDesignCrosstab crosstab)
+    {
+        if (crosstab == null) return 0;
+        //if (crosstab.getHeaderCell() != null) return crosstab.getHeaderCell().getHeight();
+        JRCrosstabColumnGroup[] col_groups = crosstab.getColumnGroups();
+        int tot = 0;
+        for (int i=0; i<col_groups.length; ++i)
+        {
+            tot += col_groups[i].getHeight();
+        }
+        
+        return tot;
+    }
+    
+    public static int findRowHeight(JRCrosstabCell[][] cells, int rowIndex) {
+        for (int i=0; i<cells[rowIndex].length; ++i)
+        {
+            if (cells[rowIndex][i] != null && cells[rowIndex][i].getContents() != null)
+            {
+                return cells[rowIndex][i].getContents().getHeight();
+            }
+        }
+        return 0;
+    }
+    
+    public static int findColumnWidth(JRCrosstabCell[][] cells, int colIndex) {
+        for (int i=0; i<cells.length; ++i)
+        {
+            if (cells[i][colIndex] != null && cells[i][colIndex].getContents() != null)
+            {
+                return cells[i][colIndex].getContents().getWidth();
+            }
+        }
+        return 0;
+    }
+    
+    public static JRDesignCellContents getCellAt(JRDesignCrosstab crosstab, Point point)
+    {
+        return getCellAt(crosstab,point, false);
+        
+    }
+    public static JRDesignCellContents getCellAt(JRDesignCrosstab crosstab, Point point, boolean createIt) {
+        
+            
+            int header_width = getHeaderCellWidth(crosstab);
+            int header_height = getHeaderCellHeight(crosstab);
+
+            JRCrosstabRowGroup[] row_groups = crosstab.getRowGroups();
+            JRCrosstabColumnGroup[] col_groups = crosstab.getColumnGroups();
+            
+            JRCrosstabCell[][] cells = normalizeCell(crosstab.getCells(),row_groups,col_groups);
+        
+            int x = header_width;
+            int y = header_height;
+            
+            Rectangle r1 = new Rectangle(0,0,header_width,header_height);
+            if (r1.contains(point)) return (JRDesignCellContents)crosstab.getHeaderCell();
+
+            for (int i=cells.length-1; i>=0; --i)
+            {
+                x = header_width;
+                for (int k=cells[i].length-1; k>=0; --k)
+                {
+                    JRCrosstabCell cell = cells[i][k];
+                    if (cell == null) continue;
+                    Rectangle rect = new Rectangle(x,y,cell.getContents().getWidth(),cell.getContents().getHeight());
+
+                    if (rect.contains(point)) 
+                    {
+                        if (cell.getContents() == null && createIt)
+                        {
+                            ((JRDesignCrosstabCell)cell).setContents(new JRDesignCellContents());
+                        }
+                        return (JRDesignCellContents)cell.getContents();
+                    }
+                    
+                    x += ModelUtils.findColumnWidth(cells, k);
+                }
+                
+                y += findRowHeight(cells, i);
+            }
+
+            int data_width = x - header_width;
+            int data_height = y - header_height;
+
+            x = 0;
+            y = header_height;
+
+
+            // paint row cells...
+            for (int i=0; i<row_groups.length; ++i)
+            {
+                switch (row_groups[i].getTotalPosition())
+                {
+                    case BucketDefinition.TOTAL_POSITION_START:
+                        Rectangle rect1 = new Rectangle(x,y,row_groups[i].getTotalHeader().getWidth(),row_groups[i].getTotalHeader().getHeight());
+                        if (rect1.contains(point)) 
+                        {
+                            if ((JRDesignCellContents)row_groups[i].getTotalHeader() == null && createIt)
+                            {
+                                 ((JRDesignCrosstabGroup)row_groups[i]).setTotalHeader(new JRDesignCellContents());   
+                            }
+                            return (JRDesignCellContents)row_groups[i].getTotalHeader();
+                        }
+                        data_height -= row_groups[i].getTotalHeader().getHeight();
+                        y += row_groups[i].getTotalHeader().getHeight();
+                        break;
+                    case BucketDefinition.TOTAL_POSITION_END:
+                        int y_loc = y + data_height - row_groups[i].getTotalHeader().getHeight();
+                        Rectangle rect2 = new Rectangle(x,y_loc,row_groups[i].getTotalHeader().getWidth(),row_groups[i].getTotalHeader().getHeight());
+                        if (rect2.contains(point)) 
+                        {
+                            if ((JRDesignCellContents)row_groups[i].getTotalHeader() == null && createIt)
+                            {
+                                 ((JRDesignCrosstabGroup)row_groups[i]).setTotalHeader(new JRDesignCellContents());   
+                            }
+                            return (JRDesignCellContents)row_groups[i].getTotalHeader();
+                        }
+
+                        data_height -= row_groups[i].getTotalHeader().getHeight();
+                        break;
+                }
+                
+                Rectangle rect3 = new Rectangle(x,y,row_groups[i].getHeader().getWidth(),row_groups[i].getHeader().getHeight());
+                if (rect3.contains(point)) 
+                {
+                        if ((JRDesignCellContents)row_groups[i].getHeader() == null && createIt)
+                        {
+                             ((JRDesignCrosstabGroup)row_groups[i]).setHeader(new JRDesignCellContents());   
+                        }
+                        return (JRDesignCellContents)row_groups[i].getHeader();
+                }
+                
+                x += row_groups[i].getHeader().getWidth();
+            }
+
+
+            x = header_width;
+            y = 0;
+
+            // paint col cells...
+            for (int i=0; i<col_groups.length; ++i)
+            {
+                switch (col_groups[i].getTotalPosition())
+                {
+                    case BucketDefinition.TOTAL_POSITION_START:
+                        Rectangle rect1 = new Rectangle(x,y,col_groups[i].getTotalHeader().getWidth(),col_groups[i].getTotalHeader().getHeight());
+                        if (rect1.contains(point))
+                        {
+                            if ((JRDesignCellContents)col_groups[i].getTotalHeader() == null && createIt)
+                            {
+                              ((JRDesignCrosstabGroup)col_groups[i]).setTotalHeader(new JRDesignCellContents());   
+                            }
+                            return (JRDesignCellContents)col_groups[i].getTotalHeader();
+                        }
+                        data_width -= col_groups[i].getTotalHeader().getWidth();
+                        x += col_groups[i].getTotalHeader().getWidth();
+                        break;
+                    case BucketDefinition.TOTAL_POSITION_END:
+                        int x_loc = x + data_width - col_groups[i].getTotalHeader().getWidth();
+                        Rectangle rect2 = new Rectangle(x_loc,y,col_groups[i].getTotalHeader().getWidth(),col_groups[i].getTotalHeader().getHeight());
+                        if (rect2.contains(point))
+                        {
+                            if ((JRDesignCellContents)col_groups[i].getTotalHeader() == null && createIt)
+                            {
+                              ((JRDesignCrosstabGroup)col_groups[i]).setTotalHeader(new JRDesignCellContents());   
+                            }
+                            return (JRDesignCellContents)col_groups[i].getTotalHeader();
+                        }
+                            
+                        data_width -= col_groups[i].getTotalHeader().getWidth();
+                        break;
+                    case BucketDefinition.TOTAL_POSITION_NONE:
+                        break;
+                }
+
+                Rectangle rect3 = new Rectangle(x,y,col_groups[i].getHeader().getWidth(),col_groups[i].getHeader().getHeight());
+                if (rect3.contains(point))
+                {
+                    if ((JRDesignCellContents)col_groups[i].getHeader() == null && createIt)
+                    {
+                      ((JRDesignCrosstabGroup)col_groups[i]).setHeader(new JRDesignCellContents());   
+                    }
+                    return (JRDesignCellContents)col_groups[i].getHeader();
+                }    
+
+                y += col_groups[i].getHeader().getHeight();
+            }
+        
+            return null;
+    }
+    
+    /**
+     * It could be a very expensive operation, don't use it if you have to explore the whole crosstab
+     * 
+     * @param crosstab
+     * @param content
+     * @return
+     */
+    public static Point getCellLocation(JRDesignCrosstab crosstab, JRDesignCellContents content) {
+ 
+            if (content == null || content == crosstab.getHeaderCell()) return new Point(0,0);
+
+            int header_width = getHeaderCellWidth(crosstab);
+            int header_height = getHeaderCellHeight(crosstab);
+
+            JRCrosstabRowGroup[] row_groups = crosstab.getRowGroups();
+            JRCrosstabColumnGroup[] col_groups = crosstab.getColumnGroups();
+            
+            
+            
+            JRCrosstabCell[][] jr_cells = crosstab.getCells();
+            JRCrosstabCell baseCell = jr_cells[jr_cells.length-1][jr_cells[0].length-1];
+            
+            
+            JRCrosstabCell[][] cells = normalizeCell(jr_cells,row_groups,col_groups);
+        
+            int x = header_width;
+            int y = header_height;
+            
+            for (int i=cells.length-1; i>=0; --i)
+            {
+                x = header_width;
+                int height = 0;
+                for (int k=cells[i].length-1; k>=0; --k)
+                {
+                    JRCrosstabCell cell = cells[i][k];
+                    if (cell == null)
+                    {
+                        //x += baseCell.getWidth();
+                    }
+                    else
+                    {
+                        if (cell.getContents() == content) return new Point(x,y);
+                        x += cell.getContents().getWidth();
+                        height = cell.getContents().getHeight();
+                    }
+                }
+                y += height;
+            }
+            
+            int data_width = x - header_width;
+            int data_height = y - header_height;
+
+
+            // paint row cells...
+            if (content.getOrigin().getType() == JRCrosstabOrigin.TYPE_ROW_GROUP_HEADER ||
+                content.getOrigin().getType() == JRCrosstabOrigin.TYPE_ROW_GROUP_TOTAL_HEADER)
+            {
+                x = 0;
+                y = header_height;
+            
+                for (int i=0; i<row_groups.length; ++i)
+                {
+                    switch (row_groups[i].getTotalPosition())
+                    {
+                        case BucketDefinition.TOTAL_POSITION_START:
+                            if (row_groups[i].getTotalHeader() == content) return new Point(x,y);
+                            data_height -= row_groups[i].getTotalHeader().getHeight();
+                            y += row_groups[i].getTotalHeader().getHeight();
+                            break;
+                        case BucketDefinition.TOTAL_POSITION_END:
+                            int y_loc = y + data_height - row_groups[i].getTotalHeader().getHeight();
+                            if (row_groups[i].getTotalHeader() == content) return new Point(x,y_loc);
+                            data_height -= row_groups[i].getTotalHeader().getHeight();
+                            break;
+                    }
+
+                    if (row_groups[i].getHeader() == content) return new Point(x,y);
+                    x += row_groups[i].getHeader().getWidth();
+                }
+            }
+
+            x = header_width;
+            y = 0;
+
+            if (content.getOrigin().getType() == JRCrosstabOrigin.TYPE_COLUMN_GROUP_HEADER ||
+                content.getOrigin().getType() == JRCrosstabOrigin.TYPE_COLUMN_GROUP_TOTAL_HEADER)
+            {
+                // paint col cells...
+                for (int i=0; i<col_groups.length; ++i)
+                {
+                    switch (col_groups[i].getTotalPosition())
+                    {
+                        case BucketDefinition.TOTAL_POSITION_START:
+                            if (col_groups[i].getTotalHeader() == content) return new Point(x,y);
+                            data_width -= col_groups[i].getTotalHeader().getWidth();
+                            x += col_groups[i].getTotalHeader().getWidth();
+                            break;
+                        case BucketDefinition.TOTAL_POSITION_END:
+                            int x_loc = x + data_width - col_groups[i].getTotalHeader().getWidth();
+                            if (col_groups[i].getTotalHeader() == content) return new Point(x_loc,y);
+                            data_width -= col_groups[i].getTotalHeader().getWidth();
+                            break;
+                        case BucketDefinition.TOTAL_POSITION_NONE:
+                            break;
+                    }
+
+                    if (col_groups[i].getHeader() == content) return new Point(x,y);
+                    y += col_groups[i].getHeader().getHeight();
+                }
+            }
+        
+            return new Point(0,0);
+    }
+
+    /**
+     * Look in the crosstab if the provided new name is already a name of a group or a measure...
+     * 
+     * @param crosstab
+     * @param new_name
+     * @return
+     */
+    public static boolean isValidNewCrosstabObjectName(JRDesignCrosstab crosstab, String new_name) {
+        
+        if (crosstab.getRowGroupIndicesMap().containsKey(new_name)) return false;
+        if (crosstab.getColumnGroupIndicesMap().containsKey(new_name)) return false;
+        if (crosstab.getMeasureIndicesMap().containsKey(new_name)) return false;
+        
+        return true;
+    }
+    
+    public static String nameOf(JRCrosstabOrigin origin) {
+        
+        String title ="unknow";
+        if (origin != null)
+        {
+            
+            switch (origin.getType())
+            {
+                case JRCrosstabOrigin.TYPE_HEADER_CELL:
+                    title = "Crosstab header";
+                    break;
+                case JRCrosstabOrigin.TYPE_DATA_CELL:
+                    title = (origin.getRowGroupName() == null ? "Detail" : origin.getRowGroupName()) + " / " +
+                            (origin.getColumnGroupName() == null ? "Detail" : origin.getColumnGroupName());
+                    break;
+                case JRCrosstabOrigin.TYPE_COLUMN_GROUP_HEADER:
+                    title = origin.getColumnGroupName() + " header";
+                    break;
+                case JRCrosstabOrigin.TYPE_COLUMN_GROUP_TOTAL_HEADER:
+                    title = origin.getColumnGroupName() + " total header";
+                    break;
+                case JRCrosstabOrigin.TYPE_ROW_GROUP_HEADER:
+                    title = origin.getRowGroupName() + " header";
+                    break;
+                case JRCrosstabOrigin.TYPE_ROW_GROUP_TOTAL_HEADER:
+                    title = origin.getRowGroupName() + " total header";
+                    break;
+                case JRCrosstabOrigin.TYPE_WHEN_NO_DATA_CELL:
+                    title = "When no data";
+                    break;
+            }
+        }
+        
+        return title;
+        
+    }
+    
+    /**
+     * Look the contents origin to guess the cell name
+     * 
+     * @param contents
+     * @return
+     */
+    public static String nameOf(JRDesignCellContents contents)
+    {
+        JRCrosstabOrigin origin = contents.getOrigin();
+        
+        return nameOf(origin);
+        
+        /*
+        
+        // Draw this cell...
+        if (contents == crosstab.getHeaderCell()) return "Crosstab header";
+        
+        // Paint the data cells...
+        JRCrosstabCell[][] cells = crosstab.getCells();
+        for (int i=cells.length-1; i>=0; --i)
+        {
+            for (int k=cells[i].length-1; k>=0; --k)
+            {
+                JRCrosstabCell cell = cells[i][k];
+                String title = (cell.getRowTotalGroup() == null ? "Detail" : cell.getRowTotalGroup()) + " / " +
+                               (cell.getColumnTotalGroup() == null ? "Detail" : cell.getColumnTotalGroup());
+                if (contents == cell.getContents()) return title;
+            }
+        }
+        
+        JRCrosstabRowGroup[] row_groups = crosstab.getRowGroups();
+        
+        // paint row cells...
+        for (int i=0; i<row_groups.length; ++i)
+        {
+            if (row_groups[i].getHeader() == contents) return row_groups[i].getName() + " header";
+            if (row_groups[i].getTotalHeader() == contents) return row_groups[i].getName() + " total header";
+        }
+        
+        JRCrosstabColumnGroup[] col_groups = crosstab.getColumnGroups();
+        
+        for (int i=0; i<col_groups.length; ++i)
+        {
+            if (col_groups[i].getHeader() == contents) return col_groups[i].getName() + " header";
+            if (col_groups[i].getTotalHeader() == contents) return col_groups[i].getName() + " total header";
+        }
+        
+        return "?";
+        */
+    }
+    
+    public static List<JRDesignCellContents> getAllCells(JRDesignCrosstab designCrosstab) {
+        
+        List<JRDesignCellContents> list = new ArrayList<JRDesignCellContents>();
+        
+        list.add( (JRDesignCellContents)designCrosstab.getHeaderCell() );
+        
+        // Row cells
+        List cells = designCrosstab.getCellsList();
+        for (int i=0; i<cells.size(); ++i)
+        {
+            JRCrosstabCell cell = (JRCrosstabCell)cells.get(i);
+            if (cell != null && (JRDesignCellContents)cell.getContents() != null)
+            {
+                list.add( (JRDesignCellContents)cell.getContents() );
+            }
+        }
+        
+        JRCrosstabRowGroup[] row_groups = designCrosstab.getRowGroups();
+        for (int i=0; i<row_groups.length; ++i)
+        {
+            switch (row_groups[i].getTotalPosition())
+            {
+                case BucketDefinition.TOTAL_POSITION_START:
+                case BucketDefinition.TOTAL_POSITION_END:
+                    list.add( (JRDesignCellContents)row_groups[i].getTotalHeader());
+                    break;
+                default: break;
+            }
+            list.add( (JRDesignCellContents)row_groups[i].getHeader());
+        }
+        
+        JRCrosstabColumnGroup[] col_groups = designCrosstab.getColumnGroups();
+        for (int i=0; i<col_groups.length; ++i)
+        {
+            switch (col_groups[i].getTotalPosition())
+            {
+                case BucketDefinition.TOTAL_POSITION_START:
+                case BucketDefinition.TOTAL_POSITION_END:
+                    list.add( (JRDesignCellContents)col_groups[i].getTotalHeader());
+                    break;
+                default: break;
+            }
+            list.add( (JRDesignCellContents)col_groups[i].getHeader());
+        }
+        
+        return list;
+    }
+
     /**
      * Returns the dataset of an element. If the element is contained in a crosstab referencing a specific
      * dataset, it is found.
@@ -139,6 +650,30 @@ public class ModelUtils {
         return dataset;
     }
 
+    
+    /**
+     * Returns the dataset tied to a dataset run of a crosstab, or the main jd dataset
+     * if the crosstab dataset and/or the dataset run are null.
+     * 
+     * @param element
+     * @param jd
+     * @return crosstab's JRDesignDataset
+     */
+    public static JRDesignDataset getCrosstabDataset(JRDesignCrosstab element, JasperDesign jd)
+    {
+                JRElementDataset elementDataset = element.getDataset();
+                if (elementDataset != null && elementDataset.getDatasetRun() != null)
+                {
+                    // Get the dataset name...
+                    String datasetName = elementDataset.getDatasetRun().getDatasetName();
+                    
+                    return (JRDesignDataset)jd.getDatasetMap().get(datasetName);
+                }    
+                
+                return (JRDesignDataset)jd.getMainDataset();
+    }
+    
+    
     /**
      * Return a JRDesignGroup from a band if this band is the header or the foorter of a group.
      */
@@ -440,6 +975,243 @@ public class ModelUtils {
         
         return newParam;
     }
+
+    /**
+     * This method creates a new cell matrix ordering the cells based on total position....
+     * The matrix is displayed like that:
+     *  <pre>
+     *       2         1         0
+     *   +--------+---------+---------+
+     * 3 |  3/2   |   3/1   |  3/0    |
+     *   +--------+---------+---------+
+     * 2 |  2/2   |   2/1   |  2/0    |
+     *   +--------+---------+---------+
+     * 1 |  1/2   |   1/1   |  1/0    |
+     *   +--------+---------+---------+
+     * 0 |  0/2   |   0/1   |  0/0    |
+     *   +--------+---------+---------+
+     * </pre>
+     * @param cells
+     * @param row_groups
+     * @param col_groups
+     * @return
+     */
+    public static JRCrosstabCell[][] normalizeCell(JRCrosstabCell[][] cells, JRCrosstabRowGroup[] row_groups, JRCrosstabColumnGroup[] col_groups) {
+        
+        JRCrosstabCell[][] newCells = new JRCrosstabCell[row_groups.length+1][col_groups.length+1];
+        
+//        System.out.println("cell     Rows " + cells.length + " x columns " + cells[0].length);
+//        System.out.flush();
+//        System.out.println("newCells Rows " + newCells.length + " x columns " + newCells[0].length);
+//        System.out.flush();
+        
+        int minRow = 0;
+        int maxRow = row_groups.length;
+        int minCol = 0;
+        int maxCol = col_groups.length;
+        
+        int[] rowsConversion = new int[row_groups.length+1];
+        int[] colsConversion = new int[col_groups.length+1];
+        
+        for (int i=0; i<row_groups.length; ++i)
+        {
+            if (row_groups[i].getTotalPosition() == BucketDefinition.TOTAL_POSITION_START)
+            {
+                rowsConversion[i] = maxRow;
+                maxRow--;
+            }
+            else
+            {
+                rowsConversion[i] = minRow;
+                minRow++;
+            }
+        }
+        rowsConversion[row_groups.length] = minRow;
+        
+        
+        for (int i=0; i<col_groups.length; ++i)
+        {
+            if (col_groups[i].getTotalPosition() == BucketDefinition.TOTAL_POSITION_START)
+            {
+                colsConversion[i] = maxCol;
+                maxCol--;
+            }
+            else
+            {
+                colsConversion[i] = minCol;
+                minCol++;
+            }
+        }
+        colsConversion[col_groups.length] = minCol;
+        
+        for (int i=0; i<rowsConversion.length; ++i)
+        {
+            for (int j=0; j<colsConversion.length; ++j)
+            {
+                int x = rowsConversion[i];
+                int y = colsConversion[j];
+                try {
+                    JRCrosstabCell cell = cells[i][j];
+                    newCells[x][y] = cell;
+                } catch (Exception ex)
+                {
+                }
+            }
+        }
+        
+        
+//        // Print all:
+//        for (int i=cells.length-1; i>=0; --i)
+//        {
+//            System.out.print(" >> ");
+//            for (int j=cells[i].length-1; j>=0; --j)
+//            { 
+//                
+//                 JRCrosstabCell cell = cells[i][j];
+//                 if (cell == null)   System.out.print("NULL\t|");
+//                 else System.out.print(ModelUtils.nameOf((JRDesignCellContents)cell.getContents()) + "\t|");
+//            }
+//            System.out.println("");
+//        }
+//        System.out.println("---------------");
+//        for (int i=newCells.length-1; i>=0; --i)
+//        {
+//            for (int j=newCells[i].length-1; j>=0; --j)
+//            { 
+//                 JRCrosstabCell cell = newCells[i][j];
+//                 if (cell == null)   System.out.print("NULL\t|");
+//                 else System.out.print(ModelUtils.nameOf((JRDesignCellContents)cell.getContents()) + "\t|");
+//            }
+//            System.out.println("");
+//        }
+//        System.out.println("----------------------------------");
+//        System.out.flush();
+        return newCells;
+        
+    }
+
+    
+    public static void fixElementsExpressions(JasperDesign jd, String oldName, String newName, byte chunckType, String newClassName) {
+        List<JRBand> bands = ModelUtils.getBands(jd);
+        for (JRBand b : bands)
+        {
+            if (b != null && b instanceof JRDesignBand)
+            {
+                fixElementsExpressions((JRDesignBand)b,oldName,newName,chunckType,newClassName);
+            }
+        }
+    }
+    
+    public static void fixElementsExpressions(JRDesignCrosstab crosstab, String oldName, String newName, byte chunckType, String newClassName) {
+        
+        List<JRDesignCellContents> cells = ModelUtils.getAllCells(crosstab);
+        for (JRDesignCellContents cell : cells)
+        {
+            if (cell != null && cell instanceof JRDesignCellContents)
+            {
+                fixElementsExpressions(cell,oldName,newName,chunckType,newClassName);
+            }
+        }
+    }
+    
+    public static void fixElementsExpressions(JRDesignElementGroup group, String oldName, String newName, byte chunckType, String newClassName) {
+        
+        List list = group.getChildren();
+        for (int i=0; i<list.size(); ++i)
+        {
+            Object obj = list.get(i);
+            if (obj == null) continue;
+            if (obj instanceof JRDesignElementGroup)
+            {
+                fixElementsExpressions((JRDesignElementGroup)obj,oldName,newName,chunckType,newClassName);
+            }
+            else if (obj instanceof JRDesignTextField)
+            {
+                fixElementExpressionText((JRDesignTextField)obj,oldName,newName,chunckType,newClassName);
+            }
+            else if (obj instanceof JRDesignImage)
+            {
+                fixElementExpressionImage((JRDesignImage)obj,oldName,newName,chunckType,newClassName);
+            }
+            
+            
+        }
+        
+    }
+    
+    public static void fixElementExpressionText(JRDesignTextField textfield, String oldName, String newName, byte chunckType, String newClassName) {
+        
+        JRDesignExpression exp = (JRDesignExpression)textfield.getExpression();
+        replaceChunkText( exp, oldName, newName, chunckType, newClassName);
+        if (exp != null && exp.getValueClassName() != null && newClassName != null)
+        {
+            CreateTextFieldAction.setMatchingClassExpression(exp, newClassName, true);
+            textfield.getEventSupport().firePropertyChange( JRDesignTextField.PROPERTY_EXPRESSION, null, exp);
+        }
+        
+    }
+    
+    public static void fixElementExpressionImage(JRDesignImage imageelement, String oldName, String newName, byte chunckType, String newClassName) {
+        
+        JRDesignExpression exp = (JRDesignExpression)imageelement.getExpression();
+        replaceChunkText( exp, oldName, newName, chunckType, newClassName);
+        if (exp != null)
+        {
+            imageelement.getEventSupport().firePropertyChange( JRDesignTextField.PROPERTY_EXPRESSION, null, exp);
+        }
+        
+    }
+    
+    /**
+     * Replace a particular name with another name.
+     * If newClassName is null, it is ignored, otherwise the expression will take the new class value.
+     * if oldName is null or newName is null, nothing is done
+     * if oldName and newName are equals,  nothing is done
+     * if exp is null, nothing is done
+     * 
+     * @param exp
+     * @param oldName
+     * @param newName
+     * @param chunckType
+     * @param newClassName (can be null)
+     */
+    public static void replaceChunkText(JRDesignExpression exp, String oldName, String newName, byte chunckType, String newClassName) {
+        if (exp == null) return;
+        if (oldName == null || newName == null) return;
+        if (oldName.equals(newName)) return;
+        
+        // replace the correct chunk. TODO: better implementation?
+        String oldString = "";
+        String pre = "";
+        String post = "";
+        
+        switch (chunckType)
+        {
+            case JRExpressionChunk.TYPE_FIELD:
+                pre = "$F{";  post = "}"; break;
+            case JRExpressionChunk.TYPE_VARIABLE:
+                pre = "$V{";  post = "}"; break;
+            case JRExpressionChunk.TYPE_PARAMETER:
+                pre = "$P{";  post = "}";  break;
+            case JRExpressionChunk.TYPE_RESOURCE:
+                pre = "$R{";  post = "}";  break;
+            default:
+               break;
+        }
+        
+        oldName = pre + oldName + post;
+        newName = pre + newName + post;
+        
+        if (!exp.getText().contains(oldName)) return;
+    
+        exp.setText( Misc.string_replace(newName, oldName, exp.getText()));
+        if (exp.getValueClassName() != null &&
+            newClassName != null &&
+            !exp.getValueClassName().equals(newClassName))
+        {
+            exp.setValueClassName( newClassName );
+        }
+    }
     
     /**
      * replace the properties in dest with the ones found in source.
@@ -504,12 +1276,11 @@ public class ModelUtils {
                 base.y = ModelUtils.getBandLocation(band, jd);
                 break;
             }
-            else if (grp instanceof JRCellContents)    // Element placed in a cell
+            else if (grp instanceof JRDesignCellContents)    // Element placed in a cell
             {
                 // TODO: calculate cell position....
-                JRCellContents cell = (JRCellContents)grp;
-                base.x = 0;
-                base.y = 0;
+                JRDesignCellContents cell = (JRDesignCellContents)grp;
+                base = getCellLocation(cell.getOrigin().getCrosstab(),cell);
                 break;
             }
             else if (grp instanceof JRDesignFrame)
@@ -620,8 +1391,8 @@ public class ModelUtils {
     }
     
     /**
-     * Check is an element is orphan or not.
-     * An element is orphan when his parent is null, or if is null one of his ancestor parents
+     * Check if an element is orphan or not.
+     * An element is orphan when his parent is null, or if it is null one of his ancestors
      */
     public static JRElementGroup getTopElementGroup(JRDesignElement element) {
         
@@ -668,6 +1439,18 @@ public class ModelUtils {
         
         return ds;
     }
+    
+    public static JRDesignDataset getDatasetFromCrosstabDataset(JRDesignCrosstabDataset dataset, JasperDesign jd)
+    {
+        JRDesignDataset ds = (JRDesignDataset)jd.getMainDataset();
+        if (dataset.getDatasetRun() != null &&
+            dataset.getDatasetRun().getDatasetName() != null)
+        {
+            ds = (JRDesignDataset)jd.getDatasetMap().get( dataset.getDatasetRun().getDatasetName() );
+        }     
+        
+        return ds;
+    }
 
     public static void copyHyperlink(JRHyperlink from, JRHyperlink to)
     {
@@ -692,6 +1475,27 @@ public class ModelUtils {
         {
             t.printStackTrace();
         }
+    }
+
+    /**
+     * This methos looks if this node is in some way a Nephew or a Child or the same Crosstab node.
+     * It does it first looking in the node lookup, then going trough the parent chain
+     * 
+     * @param node
+     * @param designCrosstab
+     * @return
+     */
+    static boolean isNephewOf(Node node, JRDesignCrosstab designCrosstab)
+    {
+        if (node == null || designCrosstab == null) return false;
+        if (node.getLookup().lookup(JRDesignCrosstab.class) == designCrosstab) return true;
+        
+        if (node.getParentNode() != null)
+        {
+            return isNephewOf(node.getParentNode(),designCrosstab);
+        }
+        
+        return false;
     }
     
     /**
@@ -727,4 +1531,55 @@ public class ModelUtils {
         }
         catch (Throwable t) { t.printStackTrace(); }
     }
+    
+    
+    public static void applyBoxProperties(JRLineBox to, JRLineBox from)
+    {
+        // Paddings...
+        to.setPadding(from.getOwnPadding());
+        to.setLeftPadding( from.getOwnLeftPadding() );
+        to.setRightPadding( from.getOwnRightPadding() );
+        to.setBottomPadding( from.getOwnBottomPadding() );
+        to.setTopPadding( from.getOwnTopPadding() );
+        
+        // Pens...
+        applyPenProperties( to.getPen(), from.getPen());
+        applyPenProperties( to.getTopPen(), from.getTopPen());
+        applyPenProperties( to.getLeftPen(), from.getLeftPen());
+        applyPenProperties( to.getBottomPen(), from.getBottomPen());
+        applyPenProperties( to.getRightPen(), from.getRightPen());
+        
+    }
+    
+    public static void applyPenProperties(JRPen to, JRPen from)
+    {
+        // Paddings...
+        to.setLineColor( from.getOwnLineColor() );
+        to.setLineWidth( from.getOwnLineWidth() );
+        to.setLineStyle( from.getOwnLineStyle() );
+     }
+
+     public static void applyDiff(JRLineBox main, JRLineBox box) {
+        
+         if (main.getOwnPadding() != box.getOwnPadding()) main.setPadding(null);
+         if (main.getOwnLeftPadding() != box.getOwnLeftPadding()) main.setLeftPadding(null);
+         if (main.getOwnRightPadding() != box.getOwnRightPadding()) main.setRightPadding(null);
+         if (main.getOwnBottomPadding() != box.getOwnBottomPadding()) main.setBottomPadding(null);
+         if (main.getOwnTopPadding() != box.getOwnTopPadding()) main.setTopPadding(null);
+         
+         applyDiff( main.getPen(), box.getPen());
+         applyDiff( main.getTopPen(), box.getTopPen());
+         applyDiff( main.getLeftPen(), box.getLeftPen());
+         applyDiff( main.getBottomPen(), box.getBottomPen());
+         applyDiff( main.getRightPen(), box.getRightPen());
+         
+     }
+     
+     public static void applyDiff(JRPen main, JRPen from)
+     {
+        // Paddings...
+        if (main.getOwnLineColor() != null && !main.getOwnLineColor().equals(from.getOwnLineColor())) main.setLineColor(null);
+        if (main.getOwnLineWidth() != null && !main.getOwnLineWidth().equals(from.getOwnLineWidth())) main.setLineWidth(null);
+        if (main.getOwnLineStyle() != null && !main.getOwnLineStyle().equals(from.getOwnLineStyle())) main.setLineStyle(null);
+     }
 }

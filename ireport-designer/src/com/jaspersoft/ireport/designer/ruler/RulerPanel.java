@@ -6,9 +6,10 @@
 
 package com.jaspersoft.ireport.designer.ruler;
 
+import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
-import com.jaspersoft.ireport.designer.ReportDesignerPanel;
+import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.utils.Unit;
 import java.awt.Color;
 import java.awt.Component;
@@ -64,7 +65,6 @@ public class RulerPanel extends javax.swing.JPanel implements MouseListener, Mou
     
     private java.awt.image.BufferedImage savedImage = null;
     private java.util.List guideLines = new java.util.ArrayList();
-    private int lastTempGuidePosition = -1;
     
     private GuideLine editingGuideLine = null;
 
@@ -87,28 +87,31 @@ public class RulerPanel extends javax.swing.JPanel implements MouseListener, Mou
     
     static int[] normal_intervals = new int[]{1,2,5,10,25,50,100,200,500,1000,2500,5000,10000};
     
-    private ReportDesignerPanel reportPanel = null;
+    private AbstractReportObjectScene scene = null;
     
     private JScrollPane sceneScrollPane = null;
 
-    public ReportDesignerPanel getReportPanel() {
-        return reportPanel;
+    public AbstractReportObjectScene getScene() {
+        return scene;
     }
 
     /**
      *  Set the report panel to which the ruler refers to.
      */
-    public void setReportPanel(ReportDesignerPanel reportPanel) {
-        this.reportPanel = reportPanel;
+    public void setScene(AbstractReportObjectScene scene) {
+        this.scene = scene;
     }
     
     /** Creates new form RulerPanel */
-    public RulerPanel(ReportDesignerPanel reportPanel) {
+    public RulerPanel(AbstractReportObjectScene scene) {
         initComponents();
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
-        this.reportPanel = reportPanel;
+        this.scene = scene;
         
+        String newUnitName = IReportManager.getPreferences().get("Unit", "inches");
+        unitPixels = Unit.getUnit(newUnitName).getConversionValue();
+                    
         IReportManager.getPreferences().addPreferenceChangeListener(new PreferenceChangeListener() {
 
             public void preferenceChange(PreferenceChangeEvent evt) {
@@ -126,9 +129,9 @@ public class RulerPanel extends javax.swing.JPanel implements MouseListener, Mou
     @Override
     public void addNotify() {
         super.addNotify();
-        if (reportPanel == null) return;
-        reportPanel.getScene().addSceneListener(this);
-        JComponent viewComponent = reportPanel.getScene().getView();
+        if (getScene() == null) return;
+        getScene().addSceneListener(this);
+        JComponent viewComponent = getScene().getView();
         //if (viewComponent == null)
         //    viewComponent = scene.createView ();
         viewComponent.addComponentListener (this);
@@ -137,10 +140,10 @@ public class RulerPanel extends javax.swing.JPanel implements MouseListener, Mou
 
     @Override
     public void removeNotify() {
-        if (reportPanel != null)
+        if (getScene() != null)
         {
-            reportPanel.getScene().getView().removeComponentListener (this);
-            reportPanel.getScene().removeSceneListener (this);
+            getScene().getView().removeComponentListener (this);
+            getScene().removeSceneListener (this);
         }
         super.removeNotify();
     }
@@ -217,17 +220,18 @@ public class RulerPanel extends javax.swing.JPanel implements MouseListener, Mou
         
         JasperDesign jd = null;
         JScrollPane scrollPane = null;
-        if (getReportPanel() != null && getReportPanel().getScene().getJasperDesign() != null)
+        if (getScene() != null && getScene().getJasperDesign() != null)
         {
-            jd = getReportPanel().getScene().getJasperDesign();
-            scrollPane = findScrollPane(getReportPanel().getScene().getView());
+            if (getScene() instanceof ReportObjectScene)
+            {
+                jd = getScene().getJasperDesign();
+            }
+            scrollPane = findScrollPane(getScene().getView());
         }
         
         if (jd != null)
         {
             g.setPaint(new Color(128,128,128,128));
-            
-            
             
             if (isVertical())
             {
@@ -378,7 +382,7 @@ public class RulerPanel extends javax.swing.JPanel implements MouseListener, Mou
         {
             g.drawLine(0,getHeight()-1, this.getWidth(), getHeight()-1);
         }
-        
+
         // Paint guidelines...
         for (int i=0; i<getGuideLines().size(); ++i)
         {
@@ -783,15 +787,15 @@ public class RulerPanel extends javax.swing.JPanel implements MouseListener, Mou
     
     public void sceneRepaint() {
         boolean needRefresh = false;
-        if (getReportPanel().getScene().getZoomFactor() != zoomFactor)
+        if (getScene().getZoomFactor() != zoomFactor)
         {
             needRefresh = true;
         }
         
-        JasperDesign jd = getReportPanel().getScene().getJasperDesign();
+        JasperDesign jd = getScene().getJasperDesign();
         if (jd != null && !needRefresh)
         {
-            sceneScrollPane = findScrollPane(getReportPanel().getScene().getView());
+            sceneScrollPane = findScrollPane(getScene().getView());
             double newZeroPos = 0;
             if (isVertical())
             {
@@ -841,7 +845,7 @@ public class RulerPanel extends javax.swing.JPanel implements MouseListener, Mou
         }
     }
     
-    static int kkk = 0;
+    //static int kkk = 0;
     public void refreshRuler()
     {
         
@@ -850,13 +854,13 @@ public class RulerPanel extends javax.swing.JPanel implements MouseListener, Mou
             public void run() {
                 
                 
-                if (getReportPanel() != null && getReportPanel().getScene() != null)
+                if (getScene() != null)
                 {
-                    zoomFactor = getReportPanel().getScene().getZoomFactor();
-                    JasperDesign jd = getReportPanel().getScene().getJasperDesign();
+                    zoomFactor = getScene().getZoomFactor();
+                    JasperDesign jd = getScene().getJasperDesign();
                     if (jd != null)
                     {
-                        sceneScrollPane = findScrollPane(getReportPanel().getScene().getView());
+                        sceneScrollPane = findScrollPane(getScene().getView());
                         
                         if (isVertical())
                         {

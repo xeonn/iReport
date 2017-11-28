@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.dnd;
 
+import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.ReportObjectScene;
 import java.awt.dnd.DropTarget;
 
@@ -18,8 +19,8 @@ import java.awt.dnd.DropTarget;
  */
 public class DesignerDropTarget extends DropTarget {
 
-    public DesignerDropTarget(ReportObjectScene scene)
+    public DesignerDropTarget(AbstractReportObjectScene scene)
     {
-        super(scene.getJComponent(), new DesignerDropTargetListener(scene) );
+        super(scene.getJComponent(), new DesignerDropTargetListener() );
     }
 }

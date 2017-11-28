@@ -248,8 +248,6 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         
         if (isSettingSQLExpression) return;
         
-        //System.out.println("processQueryChanged");
-        //Thread.currentThread().dumpStack();
         
         if (dataset == null) {
             setColumnsError( "Please open a report." );

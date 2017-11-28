@@ -28,7 +28,6 @@ import org.openide.util.Mutex;
 public class StylesChildren extends Index.KeysChildren implements PropertyChangeListener {
 
     JasperDesign jd = null;
-    private JRDesignDataset dataset = null;
     private Lookup doLkp = null;
     
     public StylesChildren(JasperDesign jd, Lookup doLkp) {
@@ -39,9 +38,7 @@ public class StylesChildren extends Index.KeysChildren implements PropertyChange
         super(new ArrayList());
         this.jd = jd;
         this.doLkp=doLkp;
-        if (dataset == null) dataset = jd.getMainDesignDataset();
-        this.dataset = dataset;
-        this.dataset.getEventSupport().addPropertyChangeListener(this);
+        this.jd.getEventSupport().addPropertyChangeListener(this);
     }
 
     /*
@@ -89,7 +86,7 @@ public class StylesChildren extends Index.KeysChildren implements PropertyChange
 
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName() == null) return;
-        if (evt.getPropertyName().equals( JRDesignDataset.PROPERTY_PARAMETERS))
+        if (evt.getPropertyName().equals( JasperDesign.PROPERTY_STYLES ))
         {
             recalculateKeys();
         }

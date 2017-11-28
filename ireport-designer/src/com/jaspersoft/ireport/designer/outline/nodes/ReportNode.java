@@ -9,11 +9,12 @@
 
 package com.jaspersoft.ireport.designer.outline.nodes;
 
+import com.jaspersoft.ireport.designer.sheet.properties.LanguageProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.WhenNoDataTypeProperty;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.actions.AddDatasetAction;
 import com.jaspersoft.ireport.designer.menu.EditQueryAction;
-import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
 import com.jaspersoft.ireport.designer.sheet.JRPropertiesMapProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
@@ -29,10 +30,7 @@ import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.ErrorManager;
 import org.openide.cookies.SaveCookie;
-import org.openide.loaders.DataObject;
-import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Node;
-import org.openide.nodes.Node.Cookie;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
 import org.openide.util.HelpCtx;
@@ -129,6 +127,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         marginsSet.put(new RightMarginProperty( jd ));
         marginsSet.put(new TopMarginProperty( jd ));
         marginsSet.put(new BottomMarginProperty( jd ));
+        sheet.put(marginsSet);
         
         Sheet.Set columnsSet = Sheet.createPropertiesSet();
         columnsSet.setName("PAGE_COLUMNS");
@@ -974,63 +973,6 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
     }
     
     /**
-     *  Class to manage the WhenNoDataType property
-     */
-    private static final class WhenNoDataTypeProperty extends PropertySupport
-    {
-            private final JasperDesign jasperDesign;
-            private ComboBoxPropertyEditor editor;
-            
-            @SuppressWarnings("unchecked")
-            public WhenNoDataTypeProperty(JasperDesign jd)
-            {
-                // TODO: Replace WhenNoDataType with the right constant
-                super("WhenNoDataType",Byte.class, "When no data", "The way to print the records", true, true);
-                this.jasperDesign = jd;
-                setValue("suppressCustomEditor", Boolean.TRUE);
-            }
-
-            @Override
-            @SuppressWarnings("unchecked")
-            public PropertyEditor getPropertyEditor() {
-
-                if (editor == null)
-                {
-                    java.util.ArrayList l = new java.util.ArrayList();
-                    l.add(new Tag(new Byte(JasperDesign.WHEN_NO_DATA_TYPE_ALL_SECTIONS_NO_DETAIL), "Type All Sections, No Detail"));
-                    l.add(new Tag(new Byte(JasperDesign.WHEN_NO_DATA_TYPE_BLANK_PAGE), "Type a Blank Page"));
-                    l.add(new Tag(new Byte(JasperDesign.WHEN_NO_DATA_TYPE_NO_DATA_SECTION), "Type \"No Data\" section"));
-                    l.add(new Tag(new Byte(JasperDesign.WHEN_NO_DATA_TYPE_NO_PAGES), "Type No Pages"));
-                    editor = new ComboBoxPropertyEditor(false, l);
-                }
-                return editor;
-            }
-            
-            public Object getValue() throws IllegalAccessException, InvocationTargetException {
-                return new Byte(jasperDesign.getWhenNoDataType());
-            }
-
-            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                if (val instanceof Byte)
-                {
-                    Byte oldValue = jasperDesign.getWhenNoDataType();
-                    Byte newValue = (Byte)val;
-                    jasperDesign.setWhenNoDataType(newValue);
-                
-                    ObjectPropertyUndoableEdit urob =
-                            new ObjectPropertyUndoableEdit(
-                                jasperDesign,
-                                "WhenNoDataType", 
-                                Byte.TYPE,
-                                oldValue,newValue);
-                    // Find the undoRedo manager...
-                    IReportManager.getInstance().addUndoableEdit(urob);
-                }
-            }
-    }
-    
-    
-    /**
      *  Class to manage the JasperDesign.PROPERTY_PAGE_WIDTH property
      */
     private static final class FormatFactoryClassProperty extends PropertySupport
@@ -1069,63 +1011,6 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             }
     }
     
-    /**
-     *  Class to manage the WhenNoDataType property
-     */
-    private static final class LanguageProperty extends PropertySupport
-    {
-            private final JasperDesign jasperDesign;
-            private ComboBoxPropertyEditor editor;
-            
-            @SuppressWarnings("unchecked")
-            public LanguageProperty(JasperDesign jd)
-            {
-                // TODO: Replace WhenNoDataType with the right constant
-                super(JasperDesign.PROPERTY_LANGUAGE,String.class, "Language", "The language used in all the expressions", true, true);
-                this.jasperDesign = jd;
-                this.setValue("oneline", Boolean.TRUE);
-                this.setValue("canEditAsText", Boolean.TRUE);
-                this.setValue("suppressCustomEditor", Boolean.FALSE);
-            }
-
-            @Override
-            @SuppressWarnings("unchecked")
-            public PropertyEditor getPropertyEditor() {
-
-                if (editor == null)
-                {
-                    java.util.ArrayList l = new java.util.ArrayList();
-                    l.add(new Tag(JasperDesign.LANGUAGE_JAVA, "Java"));
-                    l.add(new Tag(JasperDesign.LANGUAGE_GROOVY, "Groovy"));
-                    editor = new ComboBoxPropertyEditor(true, l);
-                }
-                
-                return editor;
-            }
-            
-            public Object getValue() throws IllegalAccessException, InvocationTargetException {
-                return new String(jasperDesign.getLanguage());
-            }
-
-            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                if (val instanceof String)
-                {
-                    String oldValue = jasperDesign.getLanguage();
-                    String newValue = (String)val;
-                    jasperDesign.setLanguage(newValue);
-                
-                    ObjectPropertyUndoableEdit urob =
-                            new ObjectPropertyUndoableEdit(
-                                jasperDesign,
-                                "Language", 
-                                String.class,
-                                oldValue,newValue);
-                    // Find the undoRedo manager...
-                    IReportManager.getInstance().addUndoableEdit(urob);
-                }
-            }
-    }
-
     public void propertyChange(PropertyChangeEvent evt) {
         
         com.jaspersoft.ireport.designer.IReportManager.getInstance().notifyReportChange();
@@ -1217,9 +1102,6 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         {
            o = super.getCookie(type); 
         }
-        
-        System.out.println("Report node Cookie: " + type.getSimpleName() + " " + o);
-            System.out.flush();
         
         return o instanceof Node.Cookie ? (T)o : null;
     }

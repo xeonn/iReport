@@ -75,7 +75,7 @@ public class SubreportCustomChooserWizardPanel extends CustomChooserWizardPanel 
            try {
                 if (((TemplateWizard) settings).getTargetFolder() != null)
                 {
-                    getSuperComponent().setTargetDirectory( ((TemplateWizard) settings).getTargetFolder().getPrimaryFile().getPath() );
+                    getSuperComponent().setTargetDirectory( Misc.getDataFolderPath(((TemplateWizard) settings).getTargetFolder()) );
                     if (((TemplateWizard) settings).getTargetName() != null)
                     {
                         getSuperComponent().setReportName(  ((TemplateWizard) settings).getTargetName() );
@@ -85,7 +85,7 @@ public class SubreportCustomChooserWizardPanel extends CustomChooserWizardPanel 
                         // Look for the first available reportX.jrxml
                         for (int i=1; i<100; ++i)
                         {
-                            File f = new File(((TemplateWizard) settings).getTargetFolder().getPrimaryFile().getPath(), "subreport" + i +".jrxml");
+                            File f = new File( Misc.getDataFolderPath(((TemplateWizard) settings).getTargetFolder()), "subreport" + i +".jrxml");
                             if (f.exists()) continue;
 
                             getSuperComponent().setReportName("subreport" + i);

@@ -105,6 +105,10 @@ public class SubreportSelectionWizardPanel implements WizardDescriptor.Finishabl
     // WizardDescriptor.getProperty & putProperty to store information entered
     // by the user.
     public void readSettings(Object settings) {
+        if (getWizard().getProperty("subreport_type") == null)
+        {
+            updateWizardPanels();
+        }
     }
 
     public void storeSettings(Object settings) {
@@ -117,7 +121,7 @@ public class SubreportSelectionWizardPanel implements WizardDescriptor.Finishabl
     }
 
     public boolean isFinishPanel() {
-        return true;
+        return component != null && component.canFinish();
     }
 
     public

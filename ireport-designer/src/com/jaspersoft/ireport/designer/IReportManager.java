@@ -51,6 +51,9 @@ public class IReportManager {
     
     public static final String PROPERTY_CONNECTIONS = "PROPERTY_CONNECTIONS";
     public static final String PROPERTY_DEFAULT_CONNECTION = "PROPERTY_DEFAULT_CONNECTION";
+    public static final String PROPERTY_SHOW_CELL_NAMES = "PROPERTY_SHOW_CELL_NAMES";
+    public static final String PROPERTY_SHOW_BAND_NAMES = "PROPERTY_SHOW_BAND_NAMES";
+    
     
     public static final String CURRENT_DIRECTORY = "CURRENT_DIRECTORY";
     public static final String IREPORT_CLASSPATH = "IREPORT_CLASSPATH";
@@ -438,9 +441,6 @@ public class IReportManager {
         return null;
     }
     
-    
-    
-    
     private void addDefaultConnectionImplementations()
     {
         addConnectionImplementation("com.jaspersoft.ireport.designer.connection.JDBCConnection");
@@ -723,7 +723,11 @@ public class IReportManager {
      **/
     public boolean notifyReportChange()
     {
-        return getActiveVisualView().getEditorSupport().notifyModified();
+        if (getActiveVisualView() != null)
+        {
+            return getActiveVisualView().getEditorSupport().notifyModified();
+        }
+        return false;
     }
     
     
@@ -772,6 +776,7 @@ public class IReportManager {
     
     public void addUndoableEdit(UndoableEdit edit, boolean aggregate)
     {
+        notifyReportChange();
         if (aggregate)
         {
             if (lastUndoableEdit != null &&

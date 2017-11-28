@@ -9,6 +9,12 @@
 
 package com.jaspersoft.ireport.designer.outline.nodes.properties;
 
+import com.jaspersoft.ireport.designer.sheet.properties.SubreportUsingCacheProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.SubreportParametersProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.SubreportExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.ParametersMapExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.DataSourceExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.ConnectionExpressionProperty;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import java.util.ArrayList;
 import java.util.List;

@@ -168,7 +168,7 @@ public class JRHibernateConnection extends IReportConnection {
                                     //I18n.getString("messages.connectionDialog.connectionTestSuccessful",
                                     "Connection test successful!","",JOptionPane.INFORMATION_MESSAGE);
 
-                        } catch (Exception ex)
+                        } catch (Throwable ex)
                         {
                             ex.printStackTrace();
                             JOptionPane.showMessageDialog(Misc.getMainWindow(),ex.getMessage(),

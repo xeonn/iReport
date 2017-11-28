@@ -9,8 +9,8 @@
 
 package com.jaspersoft.ireport.designer.widgets;
 
+import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.JrxmlVisualView;
-import com.jaspersoft.ireport.designer.ReportObjectScene;
 import java.awt.Component;
 import java.io.File;
 import net.sf.jasperreports.engine.design.JRDesignImage;
@@ -25,7 +25,7 @@ import org.openide.filesystems.FileUtil;
  */
 public class JRDesignImageWidget extends JRDesignElementWidget {
 
-    public JRDesignImageWidget(ReportObjectScene scene, JRDesignImage element) {
+    public JRDesignImageWidget(AbstractReportObjectScene scene, JRDesignImage element) {
         super(scene, element);
     }
     
@@ -33,9 +33,9 @@ public class JRDesignImageWidget extends JRDesignElementWidget {
     @Override
     protected void paintWidget() {
         
-        Component component = ((ReportObjectScene)getScene()).getView();
+        Component component = ((AbstractReportObjectScene)getScene()).getView();
         JrxmlVisualView visualView = null;
-        while (component.getParent() != null)
+        while (component.getParent() != null) //FIXME: the component could be not installed...
         {
             if (component.getParent() instanceof JrxmlVisualView)
             {

@@ -99,7 +99,7 @@ public class PaletteItem {
                 PaletteItemAction pia = (PaletteItemAction)Class.forName( props.getProperty( ACTION ), true, Thread.currentThread().getContextClassLoader()).newInstance();
                 pia.setJasperDesign( IReportManager.getInstance().getActiveReport());
                 pia.setPaletteItem(this);
-                pia.setScene( OutlineTopComponent.getDefault().getCurrentJrxmlVisualView().getReportDesignerPanel().getScene());
+                pia.setScene( OutlineTopComponent.getDefault().getCurrentJrxmlVisualView().getReportDesignerPanel().getActiveScene());
             
                 pia.drop(dtde);
                 

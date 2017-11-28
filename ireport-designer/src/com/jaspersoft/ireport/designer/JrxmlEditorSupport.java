@@ -150,7 +150,7 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
                 //set the document content...
                 JasperDesign jd = getCurrentModel();
                 try {
-                    String content = JRXmlWriter.writeReport(jd, "UTF8"); // IReportManager.getInstance().getProperty("jrxmlEncoding", System.getProperty("file.encoding") ));
+                    String content = JRXmlWriter.writeReport(jd, "UTF-8"); // IReportManager.getInstance().getProperty("jrxmlEncoding", System.getProperty("file.encoding") ));
                     getDocument().remove(0, getDocument().getLength());
                     getDocument().insertString(0, content, null);
                     ((JrxmlVisualView)descriptions[0]).setNeedModelRefresh(false);

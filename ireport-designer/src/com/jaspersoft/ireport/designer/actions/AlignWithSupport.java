@@ -191,8 +191,8 @@ public class AlignWithSupport {
 
     public void hide () {
         if (interractionLayer != null) {
-            interractionLayer.removeChild (lineWidget1);
-            interractionLayer.removeChild (lineWidget2);
+            if (lineWidget1 != null) interractionLayer.removeChild (lineWidget1);
+            if (lineWidget2 != null) interractionLayer.removeChild (lineWidget2);
         }
     }
     

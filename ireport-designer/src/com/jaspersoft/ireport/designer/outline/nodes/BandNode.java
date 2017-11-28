@@ -9,13 +9,15 @@
 
 package com.jaspersoft.ireport.designer.outline.nodes;
 
+import com.jaspersoft.ireport.designer.sheet.properties.GroupExpressionProperty;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.actions.DeleteBandAction;
 import com.jaspersoft.ireport.designer.actions.DeleteGroupAction;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
-import com.jaspersoft.ireport.designer.sheet.ExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.BandPrintWhenExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
@@ -162,7 +164,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
         bandPropertiesSet.setName("BAND_PROPERTIES");
         bandPropertiesSet.setDisplayName("Band properties");
         bandPropertiesSet.put(new HeightProperty(band, jd));
-        bandPropertiesSet.put(new PrintWhenExpressionProperty(band, jd.getMainDesignDataset()));
+        bandPropertiesSet.put(new BandPrintWhenExpressionProperty(band, jd.getMainDesignDataset()));
         bandPropertiesSet.put(new SplitAllowedProperty(band));
         
         sheet.put(bandPropertiesSet);
@@ -446,85 +448,6 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
     
     
     
-    
-    /**
-     *  Class to manage the JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION property
-     */
-    public static final class PrintWhenExpressionProperty extends ExpressionProperty {
-
-        private final JRDesignBand band;
-        private final JRDesignDataset dataset;
-
-        public PrintWhenExpressionProperty(JRDesignBand band, JRDesignDataset dataset)
-        {
-            super(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION,
-                  "Print when",
-                  "Print when expression. It must retuen a Boolean value.");
-            this.band = band;
-            this.dataset = dataset;
-            this.setValue("expressionContext", new ExpressionContext(dataset));
-        }
-
-        @Override
-        public Object getValue() throws IllegalAccessException, InvocationTargetException {
-            if (band.getPrintWhenExpression() == null) return "";
-            return band.getPrintWhenExpression().getText();
-        }
-
-        @Override
-        public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-
-            setPropertyValue(val);
-
-            //System.out.println("Done: " + val);
-        }
-        
-        private void setPropertyValue(Object val)
-        {
-            JRDesignExpression oldExp =  (JRDesignExpression) band.getPrintWhenExpression();
-            JRDesignExpression newExp = null;
-            //System.out.println("Setting as value: " + val);
-            if (val == null || val.equals(""))
-            {
-                band.setPrintWhenExpression(null);
-            }
-            else
-            {
-                String s = val+"";
-
-                newExp = new JRDesignExpression();
-                newExp.setText(s);
-                band.setPrintWhenExpression(newExp);
-            }
-            
-            ObjectPropertyUndoableEdit urob =
-                        new ObjectPropertyUndoableEdit(
-                            band,
-                            "PrintWhenExpression", 
-                            JRExpression.class,
-                            oldExp,newExp);
-                // Find the undoRedo manager...
-                IReportManager.getInstance().addUndoableEdit(urob);
-        }
-
-        @Override
-        public boolean isDefaultValue() {
-            return band.getPrintWhenExpression() == null;
-        }
-
-        @Override
-        public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
-            super.restoreDefaultValue();
-            setPropertyValue(null);
-        }
-
-        @Override
-        public boolean supportsDefaultValue() {
-            return true;
-        }
-    }
-    
-    
     /**
      *  Class to manage the JRDesignParameter.PROPERTY_NAME property
      */
@@ -587,85 +510,6 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener {
                                     msg,
                                     msg, null, null); 
             return iae;
-        }
-    }
-    
-    
-    
-    /**
-     *  Class to manage the JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION property
-     */
-    public static final class GroupExpressionProperty extends ExpressionProperty {
-
-        private final JRDesignGroup group;
-        private final JRDesignDataset dataset;
-
-        public GroupExpressionProperty(JRDesignGroup group, JRDesignDataset dataset)
-        {
-            super(JRDesignGroup.PROPERTY_EXPRESSION,
-                  "Group Expression",
-                  "Expression to group records, it can be simply the value of a field or a more complex expression.");
-            this.group = group;
-            this.dataset = dataset;
-            this.setValue("expressionContext", new ExpressionContext(dataset));
-        }
-
-        @Override
-        public Object getValue() throws IllegalAccessException, InvocationTargetException {
-            if (group.getExpression() == null) return "";
-            return group.getExpression().getText();
-        }
-
-        @Override
-        public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-
-            setPropertyValue(val);
-
-            //System.out.println("Done: " + val);
-        }
-        
-        private void setPropertyValue(Object val)
-        {
-            JRDesignExpression oldExp =  (JRDesignExpression) group.getExpression();
-            JRDesignExpression newExp = null;
-            //System.out.println("Setting as value: " + val);
-            if (val == null || val.equals(""))
-            {
-                group.setExpression(null);
-            }
-            else
-            {
-                String s = val+"";
-
-                newExp = new JRDesignExpression();
-                newExp.setText(s);
-                group.setExpression(newExp);
-            }
-            
-            ObjectPropertyUndoableEdit urob =
-                        new ObjectPropertyUndoableEdit(
-                            group,
-                            "Expression", 
-                            JRExpression.class,
-                            oldExp,newExp);
-                // Find the undoRedo manager...
-                IReportManager.getInstance().addUndoableEdit(urob);
-        }
-
-        @Override
-        public boolean isDefaultValue() {
-            return group.getExpression() == null;
-        }
-
-        @Override
-        public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
-            super.restoreDefaultValue();
-            setPropertyValue(null);
-        }
-
-        @Override
-        public boolean supportsDefaultValue() {
-            return true;
         }
     }
     

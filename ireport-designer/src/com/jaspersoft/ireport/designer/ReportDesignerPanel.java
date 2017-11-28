@@ -6,32 +6,74 @@
 
 package com.jaspersoft.ireport.designer;
 
+import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
+import com.jaspersoft.ireport.designer.crosstab.CrosstabPanel;
 import com.jaspersoft.ireport.designer.dnd.DesignerDropTarget;
 import com.jaspersoft.ireport.designer.ruler.RulerPanel;
 import java.awt.BorderLayout;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import javax.swing.JComponent;
+import javax.swing.JToggleButton;
+import javax.swing.SwingUtilities;
+import net.sf.jasperreports.crosstabs.JRCellContents;
+import net.sf.jasperreports.crosstabs.JRCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import org.netbeans.api.visual.animator.SceneAnimator;
+import org.netbeans.api.visual.model.ObjectSceneEvent;
+import org.netbeans.api.visual.model.ObjectSceneEventType;
+import org.netbeans.api.visual.model.ObjectSceneListener;
+import org.netbeans.api.visual.model.ObjectState;
 
         
 /**
  *
  * @author  gtoffoli
  */
-public class ReportDesignerPanel extends javax.swing.JPanel {
+public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSceneListener {
  
-    private List<JasperDesignObserver> observers = new ArrayList<JasperDesignObserver>();
+    private boolean adjustingSelection = false;
+    
+    
+    private Set<ObjectSceneListener> listeners = new HashSet<ObjectSceneListener>(1); // or can use ChangeSupport in NB 6.0
+    public final void addObjectSelectionListener(ObjectSceneListener l) {
+        synchronized (listeners) {
+            listeners.add(l);
+        }
+    }
+    public final void removeObjectSelectionListener(ObjectSceneListener l) {
+        synchronized (listeners) {
+        listeners.remove(l);
+        }
+    }
+    
+    protected final void fireSelectionChangeEvent(ObjectSceneEvent arg0, Set<Object> arg1, Set<Object> arg2) {
+        Iterator<ObjectSceneListener> it;
+        synchronized (listeners) {
+        it = new HashSet<ObjectSceneListener>(listeners).iterator();
+        }
+        
+        while (it.hasNext()) {
+            it.next().selectionChanged(arg0,arg1,arg2);
+        }
+    }
+    
+    
+    java.util.List<CrosstabPanel> crosstabs = new ArrayList<CrosstabPanel>();
     JasperDesign jasperDesign = null;
     
+    private int activeCrosstabIndex = -1;
+    
+    
     private RulerPanel hRuler = null;
-
+    private RulerPanel vRuler = null;
+    
     public RulerPanel getHRuler() {
         return hRuler;
     }
@@ -39,22 +81,23 @@ public class ReportDesignerPanel extends javax.swing.JPanel {
     public RulerPanel getVRuler() {
         return vRuler;
     }
-    private RulerPanel vRuler = null;
+    
     
     public boolean isGridVisible() {
-        return getScene().isGridVisible();
+        return getActiveScene().isGridVisible();
     }
 
     public void setGridVisible(boolean b) {
-        getScene().setGridVisible(b);
+        
+        getActiveScene().setGridVisible(b);
     }
     
     public boolean isSnapToGrid() {
-        return getScene().isSnapToGrid();
+        return getActiveScene().isSnapToGrid();
     }
 
     public void setSnapToGrid(boolean b) {
-        getScene().setSnapToGrid(b);
+        getActiveScene().setSnapToGrid(b);
     }
 
     /**
@@ -77,45 +120,105 @@ public class ReportDesignerPanel extends javax.swing.JPanel {
     public void setJasperDesign(JasperDesign jasperDesign) {
         this.jasperDesign = jasperDesign;
         
-        
         getScene().setJasperDesign(jasperDesign);
-        if (jasperDesign == null) return;
-                
-        // notify all the observers...
-        for (JasperDesignObserver jdo  : observers)
+
+        // Remove all the listeners...
+        for (CrosstabPanel p : crosstabs)
         {
-            jdo.jasperDesignAvailable(this.jasperDesign);
+            p.getScene().removeObjectSceneListener(this, ObjectSceneEventType.OBJECT_SELECTION_CHANGED);
         }
-        observers.clear();
-    
+        
+        crosstabs.clear();
+        activeCrosstabIndex = -1;
+        if (jasperDesign != null)
+        {
+            // Look for crosstabs in the report...
+            List<JRBand> bands = ModelUtils.getBands(jasperDesign);
+            for (JRBand b : bands)
+            {
+                List l = ((JRDesignBand)b).getChildren();
+                for (int i=0; i<l.size(); ++i)
+                {
+                    if (l.get(i) instanceof JRDesignCrosstab)
+                    {
+                        JRDesignCrosstab ct = (JRDesignCrosstab)l.get(i);
+                        addCrosstabPanel(ct, jasperDesign);
+                    }
+                }
+            }
+        }
+        
+        SwingUtilities.invokeLater(new Runnable()
+            {
+                public void run()
+                {
+                    updateCrosstabPanels();
+                }
+            });
+            
     }
+    
+    
+    public CrosstabPanel getCrosstabPanel(JRDesignCrosstab crosstab)
+    {
+        for (CrosstabPanel p : crosstabs)
+        {
+            if (p.getScene().getDesignCrosstab() == crosstab) return p;
+        }
+        return null;
+    }
+    
+    public boolean addCrosstabPanel(JRDesignCrosstab crosstab, JasperDesign design)
+    {
+        // check if there is already this crosstab...
+        if (getCrosstabPanel(crosstab) != null) return false;
+        
+       CrosstabPanel panel = new CrosstabPanel(crosstab, design);
+       crosstabs.add(panel);
+       panel.getScene().addObjectSceneListener(this, ObjectSceneEventType.OBJECT_SELECTION_CHANGED);
+       
+       return true;
+    }
+    
+
     private ReportObjectScene scene = null;
     private JComponent myView = null;
     
     /** Creates new form ReportDesignerPanel */
     public ReportDesignerPanel() {
         initComponents();
+        
         scene = new ReportObjectScene();
         myView = scene.getJComponent();
         
         jScrollPaneMainReport.setViewportView(myView);
         
-        hRuler = new RulerPanel(this);
+        hRuler = new RulerPanel(scene);
         myView.addMouseMotionListener(hRuler);
         hRuler.addGuideLineChangedListener(scene);
         jPanel1.add(hRuler, BorderLayout.CENTER);
     
-        vRuler = new RulerPanel(this);
+        vRuler = new RulerPanel(scene);
         vRuler.setVertical(true);
         myView.addMouseMotionListener(vRuler);
         vRuler.addGuideLineChangedListener(scene);
         jPanel2.add(vRuler, BorderLayout.CENTER);
         myView.setDropTarget(new DesignerDropTarget(scene));
+        
+        scene.addObjectSceneListener(this, ObjectSceneEventType.OBJECT_SELECTION_CHANGED);
+        scene.addObjectSceneListener(this, ObjectSceneEventType.OBJECT_REMOVED);
+        scene.addObjectSceneListener(this, ObjectSceneEventType.OBJECT_ADDED);
+        
+        
     }
 
     static private double[] zoomSteps = new double[]{0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0};
     public void zoomIn() {
-        double zoom = this.getScene().getZoomFactor();
+        
+        AbstractReportObjectScene sc = getActiveScene();
+        
+        SceneAnimator sa = new SceneAnimator(sc);
+        double zoom = sc.getZoomFactor();
         
         for (int i=0; i<zoomSteps.length; ++i)
         {
@@ -126,13 +229,16 @@ public class ReportDesignerPanel extends javax.swing.JPanel {
             }
         }
         
-        this.getScene().setZoomFactor( zoom );
-        this.getScene().validate();
+        sa.animateZoomFactor(zoom);
+        //sc.validate();
     }
     
     public void zoomOut() {
         
-        double zoom = this.getScene().getZoomFactor();
+        AbstractReportObjectScene sc = getActiveScene();
+        
+        SceneAnimator sa = new SceneAnimator(sc);
+        double zoom = sc.getZoomFactor();
         
         for (int i=zoomSteps.length-1; i>=0; --i)
         {
@@ -143,10 +249,92 @@ public class ReportDesignerPanel extends javax.swing.JPanel {
             }
         }
         
-        this.getScene().setZoomFactor( zoom );
-        this.getScene().validate();
+        sa.animateZoomFactor(zoom);
+        //sc.validate();
+    }
+
+    /**
+     * For each available scene, this method creates a subset of selected objects
+     * and sets the corresponding selections.
+     * 
+     * @param selectedObjects
+     */
+    public void setSelectedObjects(Set selectedObjects) {
+ 
+        boolean oldValue = setAdjustingSelection(true);
+        
+        try {    
+            int count0 = setSelectedObjects(selectedObjects, getScene());
+            int selectedIndex = -1;
+            int cIndex = 0;
+            
+            // If the selected object is just a crosstab, do nothing...
+            if (selectedObjects.size() == 1 &&
+                selectedObjects.iterator().next() instanceof JRCrosstab)
+            {
+                // do nothing
+                selectedIndex = getActiveCrosstabIndex();
+            }
+            else
+            {
+                for (CrosstabPanel p : crosstabs)
+                {
+                    CrosstabObjectScene sc = p.getScene();
+                    int count = setSelectedObjects(selectedObjects, sc );
+                    if (count0 < count) selectedIndex = cIndex;
+                    cIndex++;
+                }
+            }
+            
+            if (selectedObjects.size() == 0)
+            {
+                // do nothing
+            }
+            else if (crosstabs.size() > 0)
+            {
+                setActiveCrosstabIndex(selectedIndex);
+            }
+            
+            getActiveScene().validate();
+        } finally {
+            setAdjustingSelection(oldValue);
+        }
+        
+    } 
+    
+    public int setSelectedObjects(Set selectedObjects, AbstractReportObjectScene sc) {
+        
+        boolean oldValue = setAdjustingSelection(true);
+        List list = new ArrayList();
+        int otherObjects = 0;
+        try { 
+            
+            for (Iterator iter = selectedObjects.iterator(); iter.hasNext(); )
+            {
+                Object obj = iter.next();
+                if (sc.getObjects().contains( obj ))
+                {
+                    list.add(obj);
+                }
+                else if (obj instanceof JRCellContents &&
+                         sc instanceof CrosstabObjectScene)
+                {
+                    if (ModelUtils.getAllCells( ((CrosstabObjectScene)sc).getDesignCrosstab()).contains(obj))
+                    {
+                        otherObjects++;
+                    }
+                }
+            }
+
+            sc.setSelectedObjects( new HashSet(list) ); 
+        } finally {
+            setAdjustingSelection(oldValue);
+        }
+        
+        return list.size() + otherObjects;
     }
     
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -155,12 +343,16 @@ public class ReportDesignerPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPaneMainReport = new javax.swing.JScrollPane();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jPanelMainReport = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        jScrollPaneMainReport = new javax.swing.JScrollPane();
+        jToolBar1 = new javax.swing.JToolBar();
+        jToggleButtonMain = new javax.swing.JToggleButton();
+        jPanelContainer = new javax.swing.JPanel();
 
-        jScrollPaneMainReport.setBorder(null);
-
+        jPanel1.setBackground(new java.awt.Color(255, 204, 204));
         jPanel1.setMinimumSize(new java.awt.Dimension(100, 20));
         jPanel1.setPreferredSize(new java.awt.Dimension(100, 20));
         jPanel1.setLayout(new java.awt.BorderLayout());
@@ -170,59 +362,67 @@ public class ReportDesignerPanel extends javax.swing.JPanel {
         jPanel2.setPreferredSize(new java.awt.Dimension(20, 0));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+        jScrollPaneMainReport.setBorder(null);
+
+        org.jdesktop.layout.GroupLayout jPanelMainReportLayout = new org.jdesktop.layout.GroupLayout(jPanelMainReport);
+        jPanelMainReport.setLayout(jPanelMainReportLayout);
+        jPanelMainReportLayout.setHorizontalGroup(
+            jPanelMainReportLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanelMainReportLayout.createSequentialGroup()
+                .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 20, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(0, 0, 0)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
-                    .add(jScrollPaneMainReport, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE))
-                .add(0, 0, 0))
+                .add(jPanelMainReportLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
+                    .add(jScrollPaneMainReport, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
+        jPanelMainReportLayout.setVerticalGroup(
+            jPanelMainReportLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanelMainReportLayout.createSequentialGroup()
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(0, 0, 0)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                    .add(jScrollPaneMainReport, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE))
-                .add(0, 0, 0))
+                .add(jPanelMainReportLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
+                    .add(jScrollPaneMainReport, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)))
         );
+
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+
+        buttonGroup1.add(jToggleButtonMain);
+        jToggleButtonMain.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/report-16.png"))); // NOI18N
+        jToggleButtonMain.setText(org.openide.util.NbBundle.getMessage(ReportDesignerPanel.class, "ReportDesignerPanel.jToggleButtonMain.text")); // NOI18N
+        jToggleButtonMain.setFocusable(false);
+        jToggleButtonMain.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jToggleButtonMain.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToggleButtonMain.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButtonMainActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jToggleButtonMain);
+
+        setLayout(new java.awt.BorderLayout());
+
+        jPanelContainer.setLayout(new java.awt.BorderLayout());
+        add(jPanelContainer, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jToggleButtonMainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonMainActionPerformed
+        setActiveCrosstabIndex(-1);
+    }//GEN-LAST:event_jToggleButtonMainActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanelContainer;
+    private javax.swing.JPanel jPanelMainReport;
     private javax.swing.JScrollPane jScrollPaneMainReport;
+    private javax.swing.JToggleButton jToggleButtonMain;
+    private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
     
-    /**
-     *  See getJasperDesign() for more details.
-     * 
-     */
-    public void addJasperDesignObserver(JasperDesignObserver jdo)
-    {
-        observers.add(jdo);
-    }
-
-    /**
-     *  See getJasperDesign() for more details.
-     * 
-     */
-    public void removeJasperDesignObserver(JasperDesignObserver jdo)
-    {
-        observers.remove(jdo);
-    }
-    
-    public interface JasperDesignObserver {
-        public void jasperDesignAvailable(JasperDesign jd);
-    }
-
     public ReportObjectScene getScene() {
         return scene;
     }
@@ -230,6 +430,208 @@ public class ReportDesignerPanel extends javax.swing.JPanel {
     public void setScene(ReportObjectScene scene) {
         this.scene = scene;
     }
+
+    private void updateCrosstabPanels() {
+        
+        if (crosstabs.size() > 0)
+        {
+            jToolBar1.removeAll();
+            jToolBar1.add(jToggleButtonMain);
+            
+            for (int i=0; i<crosstabs.size(); ++i)
+            {
+                JToggleButton jToggleButton = new JToggleButton();
+                buttonGroup1.add(jToggleButton);
+                jToggleButton.setText("Corsstab " + (i+1)); // NOI18N
+                jToggleButton.setFocusable(false);
+                jToggleButton.setActionCommand(""+i);
+                jToggleButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+                jToggleButton.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+                jToggleButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+                jToggleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/crosstab-16.png"))); // NOI18N
+                jToggleButton.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+
+                        int cindex = Integer.parseInt(evt.getActionCommand());
+                        setActiveCrosstabIndex(cindex);
+                    }
+                });
+                jToolBar1.add(jToggleButton);
+            }
+            
+            add(jToolBar1, BorderLayout.SOUTH);
+            // force un update
+            setActiveCrosstabIndex(this.activeCrosstabIndex);
+        }
+        else
+        {
+            remove(jToolBar1);
+            setActiveCrosstabIndex(-1);
+        }
+        
+        
+        updateUI();
+    }
+
+    public int getActiveCrosstabIndex() {
+        return activeCrosstabIndex;
+    }
+
+    public void setActiveCrosstabIndex(int cIndex) {
+        
+        if (cIndex >= crosstabs.size()) throw new IndexOutOfBoundsException();
+        this.activeCrosstabIndex = cIndex;
+        jPanelContainer.removeAll();
+        if (cIndex == -1)
+        {
+            jPanelContainer.add(jPanelMainReport, BorderLayout.CENTER);
+            jToggleButtonMain.setSelected(true);
+        }
+        else
+        {
+            jPanelContainer.add(crosstabs.get(cIndex), BorderLayout.CENTER);
+            ((JToggleButton)jToolBar1.getComponent(cIndex+1)).setSelected(true);
+        }
+        
+        jPanelContainer.updateUI();
+    }
     
     
+    /**
+     * Returns the currently visible scene.
+     * 
+     * @return
+     */
+    public AbstractReportObjectScene getActiveScene()
+    {
+        if (getActiveCrosstabIndex() == -1) return getScene();
+        else return crosstabs.get(getActiveCrosstabIndex()).getScene();
+    }
+
+    public void objectAdded(ObjectSceneEvent evt, Object elem) {
+        
+        
+        
+//        if (arg0.getObjectScene() instanceof AbstractReportObjectScene &&
+//            ((AbstractReportObjectScene)arg0.getObjectScene()).isUpdatingView())  
+//        {
+//                return;
+//        }
+        
+        if (elem instanceof JRDesignCrosstab)
+        {
+            if (getCrosstabPanel((JRDesignCrosstab)elem) == null)
+            {
+                addCrosstabPanel((JRDesignCrosstab)elem, getJasperDesign());
+                activeCrosstabIndex = crosstabs.size()-1;
+                SwingUtilities.invokeLater(new Runnable() {
+
+                    public void run() {
+                        updateCrosstabPanels();
+                    }
+                });
+            }
+            //setActiveCrosstabIndex(crosstabs.size()-1);
+        }
+        
+    }
+
+    public void objectRemoved(ObjectSceneEvent arg0, Object arg1) {
+        
+        
+        
+//        if (arg0.getObjectScene() instanceof AbstractReportObjectScene &&
+//            ((AbstractReportObjectScene)arg0.getObjectScene()).isUpdatingView())  
+//        {
+//                return;
+//        }
+        
+        if (arg1 instanceof JRDesignCrosstab)
+        {
+            // Find the right crosstab panel...
+            for (int i=0; i<crosstabs.size(); ++i)
+            {
+                CrosstabPanel panel = crosstabs.get(i);
+                if (panel.getScene().getDesignCrosstab() == arg1)
+                {
+                    panel.getScene().removeObjectSceneListener(this, ObjectSceneEventType.OBJECT_SELECTION_CHANGED);
+                    panel.getScene().removeObjectSceneListener(this, ObjectSceneEventType.OBJECT_REMOVED);
+                    panel.getScene().removeObjectSceneListener(this, ObjectSceneEventType.OBJECT_ADDED);
+                    
+                    if (activeCrosstabIndex >= i)
+                    {
+                        activeCrosstabIndex--;
+                    }
+                    crosstabs.remove(panel);
+                    
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                        public void run() {
+                            updateCrosstabPanels();
+                        }
+                    });
+                    
+                    return;
+                }
+            }
+        }
+    }
+
+    public void objectStateChanged(ObjectSceneEvent arg0, Object arg1, ObjectState arg2, ObjectState arg3) {
+    }
+
+    public void selectionChanged(ObjectSceneEvent se, Set<Object> arg1, Set<Object> arg2) {
+    
+        if (isAdjustingSelection()) return; // Ignore this event...
+        fireSelectionChangeEvent(se,arg1,arg2);
+    }
+
+    public void highlightingChanged(ObjectSceneEvent arg0, Set<Object> arg1, Set<Object> arg2) {
+    }
+
+    public void hoverChanged(ObjectSceneEvent arg0, Object arg1, Object arg2) {
+    }
+
+    public void focusChanged(ObjectSceneEvent arg0, Object arg1, Object arg2) {
+    }
+    
+    
+    /**
+     * This methods returns the AbstractReportObjectScene that contains that object
+     * If noone of the scene shown by this panel have the requested object, the
+     * method returns null.
+     * 
+     * @param obj
+     * @return
+     */
+    public AbstractReportObjectScene getSceneOf(Object obj)
+    {
+        if (getScene().getObjects().contains(obj)) return getScene();
+        for (CrosstabPanel p : crosstabs)
+        {
+            CrosstabObjectScene sc = p.getScene();
+            if (sc.getObjects().contains(obj) ) return sc;
+        }
+        
+        return null; // No scene found...
+    }
+
+    public boolean isAdjustingSelection() {
+        return adjustingSelection;
+    }
+
+    /**
+     * Set the flag AdjustingSelection to the new value.
+     * Return the old value. The old value should be always restored
+     * by who call the setAdjustingSelection() method in a finally construct
+     * 
+     * @param adjustingSelection
+     * @return
+     */
+    public boolean setAdjustingSelection(boolean adjustingSelection) {
+        boolean oldValue = this.adjustingSelection;
+        this.adjustingSelection = adjustingSelection;
+        return oldValue;
+    }
 }
+

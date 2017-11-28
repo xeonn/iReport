@@ -12,7 +12,7 @@ package com.jaspersoft.ireport.designer.outline.nodes.properties.charts;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
-import com.jaspersoft.ireport.designer.sheet.ExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.JRFontProperty;
 import com.jaspersoft.ireport.designer.sheet.MeterIntervalsProperty;
 import com.jaspersoft.ireport.designer.sheet.SeriesColorsProperty;

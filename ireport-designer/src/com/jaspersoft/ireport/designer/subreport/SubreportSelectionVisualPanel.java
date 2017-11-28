@@ -77,6 +77,10 @@ public final class SubreportSelectionVisualPanel extends JPanel {
             //throw new IllegalArgumentException("Invalid report specified.");
         }
     }
+
+    public boolean canFinish() {
+        return jRadioButton3.isSelected();
+    }
     
     /** This method is called from within the constructor to
      * initialize the form.
@@ -240,8 +244,8 @@ public final class SubreportSelectionVisualPanel extends JPanel {
     }//GEN-LAST:event_jRadioButton2StateChanged
 
     private void jRadioButton3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButton3StateChanged
-        getPanel().fireChangeEvent();
         getPanel().updateWizardPanels();
+        getPanel().fireChangeEvent();
     }//GEN-LAST:event_jRadioButton3StateChanged
 
     private void jTextFieldReportNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldReportNameActionPerformed

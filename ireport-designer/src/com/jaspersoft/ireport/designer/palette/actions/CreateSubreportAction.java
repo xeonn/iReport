@@ -10,11 +10,13 @@
 package com.jaspersoft.ireport.designer.palette.actions;
 
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
 import com.jaspersoft.ireport.designer.subreport.SubreportTemplateWizard;
-import com.jaspersoft.ireport.designer.subreport.SubreportWizardIterator;
+import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Dialog;
 import java.io.File;
 import java.text.MessageFormat;
+import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.DialogDisplayer;
@@ -22,7 +24,7 @@ import org.openide.WizardDescriptor;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataFolder;
-import org.openide.loaders.TemplateWizard;
+import org.openide.util.Mutex;
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
@@ -32,6 +34,18 @@ public class CreateSubreportAction extends CreateReportElementAction
 
     public JRDesignElement createReportElement(JasperDesign jd)
     {
+        if (getScene() instanceof CrosstabObjectScene)
+        {
+            Runnable r = new Runnable() {
+                public void run() {
+                    JOptionPane.showMessageDialog(Misc.getMainFrame(), "You can not use a subreport inside a crosstab","Error", JOptionPane.WARNING_MESSAGE);
+                }
+            };
+            
+            Mutex.EVENT.readAccess(r); 
+            return null;
+        }
+        
         JRDesignElement element = null;
 
         SubreportTemplateWizard wizardDescriptor = new SubreportTemplateWizard();
@@ -46,7 +60,7 @@ public class CreateSubreportAction extends CreateReportElementAction
             
             for (int i=1; i<100; ++i)
             {
-                File f = new File(df.getPrimaryFile().getPath(), fname + "_subreport" + i + ".jrxml");
+                File f = new File( Misc.getDataFolderPath(df), fname + "_subreport" + i + ".jrxml");
                 if (f.exists()) continue;
 
                 wizardDescriptor.setTargetName( fname + "_subreport" + i);

@@ -30,6 +30,7 @@
 
 package com.jaspersoft.ireport.designer.widgets;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.borders.ReportBorder;
@@ -176,13 +177,17 @@ public class PageWidget extends Widget {
          
             g.setStroke(oldStroke);
             
-            List<JRBand> bands = ModelUtils.getBands(jd);
-            
-            for (JRBand b : bands)
+            if (IReportManager.getPreferences().getBoolean( IReportManager.PROPERTY_SHOW_BAND_NAMES, true))
             {
-                designHeight += b.getHeight();
-                paintBand(g, jd, ModelUtils.nameOf(b, jd) , b, designHeight);
+                List<JRBand> bands = ModelUtils.getBands(jd);
+
+                for (JRBand b : bands)
+                {
+                    designHeight += b.getHeight();
+                    paintBand(g, jd, ModelUtils.nameOf(b, jd) , b, designHeight);
+                }
             }
+            
         }
         g.setStroke(oldStroke);
     }

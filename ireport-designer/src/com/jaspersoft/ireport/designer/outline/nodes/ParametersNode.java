@@ -284,7 +284,7 @@ public class ParametersNode extends IRIndexedNode implements PropertyChangeListe
     @Override
     public NewType[] getNewTypes()
     {
-        return NewTypesUtils.getNewType( NewTypesUtils.PARAMETER, this);
+        return NewTypesUtils.getNewType(this, NewTypesUtils.PARAMETER);
     }
 
     public void propertyChange(PropertyChangeEvent evt) {

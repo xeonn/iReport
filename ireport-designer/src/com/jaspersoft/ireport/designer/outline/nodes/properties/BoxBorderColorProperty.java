@@ -38,7 +38,7 @@ public final class BoxBorderColorProperty extends PropertySupport.ReadWrite {
     }
 
     @Override
-    public Object getValue() throws IllegalAccessException, InvocationTargetException {
+    public Object getValue() {
 //FIXME
 //            if (this.getName().equals( JRBaseStyle.PROPERTY_BORDER_COLOR)) return box.getBorderColor();
 //            if (this.getName().equals( JRBaseStyle.PROPERTY_TOP_BORDER_COLOR)) return box.getTopBorderColor();

@@ -5,18 +5,27 @@
 package com.jaspersoft.ireport.designer.wizards;
 
 import com.jaspersoft.ireport.designer.templates.DefaultReportGenerator;
+import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Component;
+import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeListener;
 import org.openide.WizardDescriptor;
 import org.openide.cookies.OpenCookie;
 import org.openide.filesystems.FileObject;
+import org.openide.loaders.DataFolder;
 import org.openide.loaders.DataObject;
+import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.loaders.TemplateWizard;
+import org.openide.util.Exceptions;
 
 public final class NewJrxmlWizardIterator implements WizardDescriptor.InstantiatingIterator {
 
@@ -43,7 +52,26 @@ public final class NewJrxmlWizardIterator implements WizardDescriptor.Instantiat
                 }
                 else
                 {
-                    targetChooserPanel = ((TemplateWizard)wizard).targetChooser();
+                
+                    targetChooserPanel = ((TemplateWizard) wizard).targetChooser();
+                    try {
+                        // Suggest a good name...
+                        DataFolder folder = ((TemplateWizard) wizard).getTargetFolder();
+                        String dir = Misc.getDataFolderPath(folder);
+
+                        String fname = "report1.jrxml";
+                        for (int i = 1; i < 1000; ++i) {
+                            fname = "report" + i + ".jrxml";
+                            File f = new File(dir, fname);
+                            if (f.exists()) {
+                                continue;
+                            }
+                            break;
+                        }
+                        ((TemplateWizard) wizard).setTargetName(fname);
+                    } catch (IOException ex) {
+                        //Exceptions.printStackTrace(ex);
+                    }
                 }
                 
                 panels = new WizardDescriptor.Panel[]{
@@ -81,35 +109,107 @@ public final class NewJrxmlWizardIterator implements WizardDescriptor.Instantiat
         return panels;
     }
 
+    private DataObject createdDataObject = null;
+    
+    public void setCreatedDataObject(DataObject obj)
+    {
+        createdDataObject = obj;
+    }
+    
+    public DataObject getCreatedDataObject()
+    {
+        return createdDataObject;
+    }
+    
+    
     public Set instantiate() throws IOException {
         
-        // TODO: make this configurable
+        setCreatedDataObject(null);
+        final Thread t = Thread.currentThread();
+                
+        Runnable r = new Runnable() {
+
+            public void run() {
+
+                try { 
+                    
+                    Thread.sleep(15000);
+                    if (getCreatedDataObject() == null)
+                    {
+                       StackTraceElement[] ees = t.getStackTrace();
+                       for (int i=0; i<ees.length; ++i)
+                       {
+                           Misc.msg(""+ees[i]);
+                       }
+                    }
+                    
+                } catch (Exception ex) {}
+                
+            }
+        };
+        
+        Thread t2 = new Thread(r);
+        t2.start();
+
+        
+        Logger.global.log(Level.INFO, "Instancing the report generator");
         DefaultReportGenerator reportGenerator = new DefaultReportGenerator();
-                
+        Logger.global.log(Level.INFO, "Report generator instanced");
+
         FileObject createdFile = reportGenerator.generateReport(wizard);
-                
-        if (createdFile == null)
+
+        Logger.global.log(Level.INFO, "Report generated");
+
+        if (createdFile == null) {
+            throw new IOException("Unable to create the report.");
+        }
+
+        try {
+            setCreatedDataObject(DataObject.find(createdFile));
+        } catch (DataObjectNotFoundException ex) {
+            //Exceptions.printStackTrace(ex);
+        }
+            //DataFolder favoritesDataFolder = DataFolder.findFolder(favoritesFileObject);
+            //createdDataObject.createShadow(favoritesDataFolder);
+        
+        if (getCreatedDataObject() != null) {
+            return Collections.singleton(getCreatedDataObject());
+        }
+        else 
         {
             throw new IOException("Unable to create the report.");
         }
-        // Add file to favorites..
-        DataObject createdDataObject =  DataObject.find(createdFile);
-        
-        // Add the file to the favorites?
-        //FileObject favoritesFileObject = Repository.getDefault().getDefaultFileSystem().getRoot().getFileObject("Favorites");
-        //DataFolder favoritesDataFolder = DataFolder.findFolder(favoritesFileObject);
-        //createdDataObject.createShadow(favoritesDataFolder);
-        
-        OpenCookie cookie = createdDataObject.getCookie( OpenCookie.class);
-        cookie.open();
-        return Collections.singleton( createdFile );
     }
 
     public void initialize(WizardDescriptor wizard) {
         this.wizard = wizard;
+        setCreatedDataObject(null);
     }
 
     public void uninitialize(WizardDescriptor wizard) {
+        
+        if (getCreatedDataObject() != null)
+        {
+            Runnable r = new Runnable() {
+
+                public void run() {
+                    Logger.global.log(Level.INFO, "Opening report");
+                    if (getCreatedDataObject() != null)
+                    {
+                        OpenCookie cookie = getCreatedDataObject().getCookie(OpenCookie.class);
+                        if (cookie != null)
+                        {
+                            cookie.open();
+                        }
+                    }
+                    Logger.global.log(Level.INFO, "Report opened...");
+                }
+            };
+            
+            SwingUtilities.invokeLater(r);
+        }
+        
+        
         panels = null;
     }
 

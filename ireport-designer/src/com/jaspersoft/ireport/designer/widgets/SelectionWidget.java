@@ -30,7 +30,7 @@
 
 package com.jaspersoft.ireport.designer.widgets;
 
-import com.jaspersoft.ireport.designer.ReportObjectScene;
+import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.borders.ElementSelectedBorder;
 import java.awt.Cursor;
 import java.awt.Insets;
@@ -58,7 +58,7 @@ public class SelectionWidget extends Widget {
     /**
      *  Widget w is the widget to proxy.
      */
-    public SelectionWidget(ReportObjectScene scene, JRDesignElementWidget w) {
+    public SelectionWidget(AbstractReportObjectScene scene, JRDesignElementWidget w) {
         super(scene);
         this.realWidget = w;
         setBorder(SELECTED_BORDER);

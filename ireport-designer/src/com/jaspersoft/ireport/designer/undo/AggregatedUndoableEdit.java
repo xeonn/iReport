@@ -33,6 +33,7 @@ public class AggregatedUndoableEdit extends AbstractUndoableEdit {
     
     public AggregatedUndoableEdit(String name)
     {
+        super();
         this.presentationName = name;
     }
     

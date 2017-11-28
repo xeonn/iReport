@@ -12,6 +12,7 @@ package com.jaspersoft.ireport.designer.outline.nodes;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.outline.nodes.properties.ElementPropertiesFactory;
 import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.actions.PaddingAndBordersAction;
 import com.jaspersoft.ireport.designer.charts.ChartDataAction;
 import com.jaspersoft.ireport.designer.menu.HyperlinkAction;
 import com.jaspersoft.ireport.designer.undo.DeleteElementUndoableEdit;
@@ -26,14 +27,21 @@ import net.sf.jasperreports.charts.design.JRDesignDataRange;
 import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
 import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
 import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
+import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRHyperlink;
+import net.sf.jasperreports.engine.JRLineBox;
+import net.sf.jasperreports.engine.JRPen;
+import net.sf.jasperreports.engine.base.JRBaseLineBox;
+import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
+import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
+import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.actions.CopyAction;
 import org.openide.actions.CutAction;
@@ -59,6 +67,7 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
 
     JasperDesign jd = null;
     JRDesignElement element = null;
+    private ElementNameVisitor elemenNameVisitor = null;
 
     public JRDesignElement getElement() {
         return element;
@@ -75,10 +84,30 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
     public ElementNode(JasperDesign jd, JRDesignElement element, Children children, Index index, Lookup doLkp)
     {
         super (children, index, new ProxyLookup( doLkp, Lookups.fixed(jd,element)));
+        elemenNameVisitor = new ElementNameVisitor(jd);
         this.jd = jd;
         this.element = element;
-    
+        
         element.getEventSupport().addPropertyChangeListener(this);
+        
+        if (element instanceof JRDesignGraphicElement)
+        {
+            JRDesignGraphicElement gele = (JRDesignGraphicElement)element;
+            ((JRBasePen)gele.getLinePen()).getEventSupport().addPropertyChangeListener(this);
+        }
+        
+        if (element instanceof JRBoxContainer)
+        {
+            JRBoxContainer boxcontainer = (JRBoxContainer)element;
+            JRBaseLineBox baseBox = (JRBaseLineBox)boxcontainer.getLineBox();
+            baseBox.getEventSupport().addPropertyChangeListener(this);
+            ((JRBasePen)baseBox.getPen()).getEventSupport().addPropertyChangeListener(this);
+            ((JRBasePen)baseBox.getTopPen()).getEventSupport().addPropertyChangeListener(this);
+            ((JRBasePen)baseBox.getBottomPen()).getEventSupport().addPropertyChangeListener(this);
+            ((JRBasePen)baseBox.getLeftPen()).getEventSupport().addPropertyChangeListener(this);
+            ((JRBasePen)baseBox.getRightPen()).getEventSupport().addPropertyChangeListener(this);
+        }
+        
     }
     
     public ElementNode(JasperDesign jd, JRDesignElement element, Lookup doLkp)
@@ -106,10 +135,22 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
         return sheet;
     }
     
-    @Override
-    public void setDisplayName(String name) {
-        super.setDisplayName(name 
-            + ((element.getKey() != null &&  element.getKey().length() > 0) ? " (" +  element.getKey() + ")" : ""));
+//    @Override
+//    public void setDisplayName(String name) {
+//        super.setDisplayName(name 
+//            + ((element.getKey() != null &&  element.getKey().length() > 0) ? " (" +  element.getKey() + ")" : ""));
+//    }
+    
+    public String getDisplayName()
+    {
+        if (elemenNameVisitor != null && getElement() != null)
+        {
+            return elemenNameVisitor.getName(getElement());
+        }
+        else
+        {
+            return super.getDisplayName();
+        }
     }
     
     /**
@@ -196,6 +237,13 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
             list.add( null );
         }
         
+        if (getElement() instanceof JRBoxContainer)
+        {
+            
+            list.add( SystemAction.get( PaddingAndBordersAction.class ));
+            
+        }
+        
         if (getElement() instanceof JRHyperlink)
         {
             list.add( HyperlinkAction.getInstance() );
@@ -221,9 +269,11 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
         
         com.jaspersoft.ireport.designer.IReportManager.getInstance().notifyReportChange();
         if (evt.getPropertyName() == null) return;
-        if (evt.getPropertyName().equals( JRDesignElement.PROPERTY_KEY))
+        if (evt.getPropertyName().equals( JRDesignElement.PROPERTY_KEY) ||
+            evt.getPropertyName().equals(JRDesignImage.PROPERTY_EXPRESSION) ||
+            evt.getPropertyName().equals(JRDesignTextField.PROPERTY_EXPRESSION))
         {
-            setDisplayName(new ElementNameVisitor(jd).getName(element));
+            fireNameChange(null, getName());
         }
         
         if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_PARENT_STYLE))
@@ -295,7 +345,31 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
                 this.firePropertyChange( JRDesignValueDisplay.PROPERTY_MASK, evt.getOldValue(), evt.getNewValue() );
                 this.firePropertyChange( JRDesignValueDisplay.PROPERTY_COLOR, evt.getOldValue(), evt.getNewValue() );
         }
-        
+        else if (evt.getPropertyName().equals(JRBasePen.PROPERTY_LINE_COLOR) ||
+                 evt.getPropertyName().equals(JRBasePen.PROPERTY_LINE_STYLE) ||
+                 evt.getPropertyName().equals(JRBasePen.PROPERTY_LINE_WIDTH))
+        {
+            
+            if (ModelUtils.containsProperty(this.getPropertySets(),"pen"))
+            {
+                this.firePropertyChange("pen", evt.getOldValue(), evt.getNewValue() );
+            }
+            
+            if (ModelUtils.containsProperty(this.getPropertySets(),"linebox"))
+            {
+                this.firePropertyChange("linebox", evt.getOldValue(), evt.getNewValue() );
+            }
+        }
+        else if (evt.getPropertyName().equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING) ||
+                 evt.getPropertyName().equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING) ||
+                 evt.getPropertyName().equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING) ||
+                 evt.getPropertyName().equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING))
+        {
+            if (ModelUtils.containsProperty(this.getPropertySets(),"linebox"))
+            {
+                this.firePropertyChange("linebox", evt.getOldValue(), evt.getNewValue() );
+            }
+        }
         
         if (ModelUtils.containsProperty(  this.getPropertySets(), evt.getPropertyName()))
         {

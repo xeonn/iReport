@@ -340,7 +340,7 @@ public final class SubreportWizardIterator implements WizardDescriptor.Instantia
                 param.setName("SUBREPORT_DIR");
                 param.setForPrompting(false);
                 // TODO: set as directory the target directory for compiled files....
-                String s = ((TemplateWizard)wizard).getTargetFolder().getPrimaryFile().getPath() + File.separator;
+                String s = Misc.getDataFolderPath( ((TemplateWizard)wizard).getTargetFolder() ) + File.separator;
                 s = Misc.string_replace("\\\\","\\",s);
                 s = "\"" + s + "\"";
                 param.setDefaultValueExpression( Misc.createExpression("java.lang.String", s));

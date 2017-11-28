@@ -35,6 +35,11 @@ public class ExpObject {
         this.setClassType(classType);
     }
 
+    public ExpObject()
+    {
+    }
+    
+    
     public ExpObject(Object obj) {
         if (obj instanceof JRField)
         {

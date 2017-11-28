@@ -69,14 +69,5 @@
         <file name="Refactoring_hidden"/>
         <file name="Source_hidden"/>
     </folder>
-    <folder name="Templates">
-        <folder name="Reports">
-            <file name="emptyReport">
-                <attr name="SystemFileSystem.localizingBundle" stringvalue="com.jaspersoft.ireport.designer.standalone.Bundle"/>
-                <attr name="instantiatingIterator" newvalue="com.jaspersoft.ireport.designer.standalone.EmptyReportWizardIterator"/>
-                <attr name="template" boolvalue="true"/>
-                <attr name="templateWizardURL" urlvalue="nbresloc:/com/jaspersoft/ireport/designer/standalone/emptyReport.html"/>
-            </file>
-        </folder>
-    </folder>
+    <folder name="Templates"/>
 </filesystem>

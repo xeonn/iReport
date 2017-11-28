@@ -43,6 +43,7 @@ public class ExpObjectCellRenderer extends JTextPane implements ListCellRenderer
         Style variableStyle = null;
         Style fieldStyle = null;
         Style whiteStyle = null;
+        Style normalStyle = null;
 
         public ExpObjectCellRenderer(JList list) {
             super();
@@ -58,7 +59,7 @@ public class ExpObjectCellRenderer extends JTextPane implements ListCellRenderer
        
             this.setText("");
             StyledDocument doc = (StyledDocument)this.getDocument();
-            
+                        
             if (object instanceof JRVariable ||
                 object instanceof JRField ||
                 object instanceof JRParameter)
@@ -66,20 +67,26 @@ public class ExpObjectCellRenderer extends JTextPane implements ListCellRenderer
                 object = new ExpObject(object);
             }
             
+            
+            setBackground(isSelected || cellHasFocus ? selectionBackground : background);
+            StyleConstants.setBackground(typeStyle, isSelected || cellHasFocus ? selectionBackground : background);
+            StyleConstants.setBackground(classTypeStyle, isSelected || cellHasFocus ? selectionBackground : background);
+            StyleConstants.setBackground(parameterStyle, isSelected || cellHasFocus ? selectionBackground : background);
+            StyleConstants.setBackground(variableStyle, isSelected || cellHasFocus ? selectionBackground : background);
+            StyleConstants.setBackground(fieldStyle, isSelected || cellHasFocus ? selectionBackground : background);
+            StyleConstants.setBackground(whiteStyle, isSelected || cellHasFocus ? selectionBackground : background);
+            
             if (object instanceof ExpObject)
             {
                 ExpObject eo = (ExpObject)object;
                  
                  try {
                      
-                     doc.insertString(doc.getLength(), eo.getName() + "   ", (isSelected) ? whiteStyle : null);
+                     doc.insertString(doc.getLength(), eo.getName() + "   ", (isSelected || cellHasFocus) ? whiteStyle : null);
                      
                      if (isShowObjectType())
                      {
                          Style s = parameterStyle;
-                         if (isSelected) s = whiteStyle;
-                     
-                     
                          String type = "Parameter";
 
                          if (eo.getType() == eo.TYPE_FIELD) 
@@ -92,6 +99,8 @@ public class ExpObjectCellRenderer extends JTextPane implements ListCellRenderer
                              s = variableStyle;
                              type = "Variable";
                          }
+                         if (isSelected || cellHasFocus) s = whiteStyle;
+                         
                          doc.insertString(doc.getLength(), type + " ", s);
                      }
                      
@@ -99,6 +108,7 @@ public class ExpObjectCellRenderer extends JTextPane implements ListCellRenderer
                      if (tp.lastIndexOf(".") > 0) tp = tp.substring(tp.lastIndexOf(".")+1);
                      
                      doc.insertString(doc.getLength(), tp, classTypeStyle);
+                     doc.setLogicalStyle(0, normalStyle);
                 } catch (Exception ex){}
             }
             else
@@ -110,7 +120,9 @@ public class ExpObjectCellRenderer extends JTextPane implements ListCellRenderer
                      }
                  } catch (Exception ex){}
             }
-            setBackground(isSelected ? selectionBackground : background);
+            setOpaque(true);
+            
+            this.revalidate();
             return this;
     }
         
@@ -121,6 +133,14 @@ public class ExpObjectCellRenderer extends JTextPane implements ListCellRenderer
             
             StyledDocument doc = new DefaultStyledDocument();
             this.setDocument( doc );
+            
+            normalStyle = doc.addStyle("normalStyle", null);
+            
+            java.awt.Font font = UIManager.getFont("List.font");
+            StyleConstants.setFontFamily(normalStyle, font.getFamily() );
+            StyleConstants.setFontSize(normalStyle, font.getSize() );
+            StyleConstants.setForeground(normalStyle, UIManager.getColor("List.foreground") );
+            
             
             typeStyle = doc.addStyle("typeStyle", null);
             StyleConstants.setItalic(typeStyle, true);
@@ -145,11 +165,12 @@ public class ExpObjectCellRenderer extends JTextPane implements ListCellRenderer
         public ExpObjectCellRenderer() {
             super();
             initColors();
+            
         }
         
         public Component getListCellRendererComponent(JList list, Object object,
                 int index, boolean isSelected, boolean cellHasFocus) {
-            
+                
             return getRendererComponent(object, isSelected, cellHasFocus);
         }
 

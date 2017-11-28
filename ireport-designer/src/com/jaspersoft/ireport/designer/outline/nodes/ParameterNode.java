@@ -9,10 +9,11 @@
 
 package com.jaspersoft.ireport.designer.outline.nodes;
 
+import com.jaspersoft.ireport.designer.sheet.properties.DefaultValueExpressionProperty;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.dnd.ReportObjectPaletteTransferable;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
-import com.jaspersoft.ireport.designer.sheet.ExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.JRPropertiesMapProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
@@ -139,13 +140,18 @@ public class ParameterNode extends IRAbstractNode implements PropertyChangeListe
     @Override
     public void destroy() throws IOException {
        
+       if (getParentNode() == null) return;
+       
        if (!getParameter().isSystemDefined())
        {
-           
           JRDesignDataset dataset = getParentNode().getLookup().lookup(JRDesignDataset.class);
-          dataset.removeParameter(getParameter());
+          if (dataset != null)
+          {
+            dataset.removeParameter(getParameter());
+          }
           super.destroy();
        } // otherwise the component was likely already removed with a parent component
+       
     }
         
     @Override
@@ -432,111 +438,6 @@ public class ParameterNode extends IRAbstractNode implements PropertyChangeListe
             if ("oneline".equals(attributeName)) return true;
             if ("suppressCustomEditor".equals(attributeName)) return false;
             return super.getValue(attributeName);
-        }
-    }
-    
-    
-    /**
-     *  Class to manage the JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION property
-     */
-    public static final class DefaultValueExpressionProperty extends ExpressionProperty {
-
-        JRDesignParameter parameter = null;
-        JRDesignDataset dataset = null;
-
-        public DefaultValueExpressionProperty(JRDesignParameter parameter, JRDesignDataset dataset)
-        {
-            super(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION,
-                  "Default value expression",
-                  "Default value expression");
-            this.parameter = parameter;
-            this.dataset = dataset;
-            this.setValue("expressionContext", new ExpressionContext(dataset));
-        }
-
-        @Override
-        public boolean canWrite()
-        {
-            return !getParameter().isSystemDefined();
-        }
-
-        @Override
-        public Object getValue() throws IllegalAccessException, InvocationTargetException {
-            if (parameter.getDefaultValueExpression() == null) return "";
-            return parameter.getDefaultValueExpression().getText();
-        }
-
-        @Override
-        public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-
-            JRDesignExpression oldExp =  (JRDesignExpression) parameter.getDefaultValueExpression();
-            JRDesignExpression newExp = null;
-            //System.out.println("Setting as value: " + val);
-            if (val == null || val.equals(""))
-            {
-                parameter.setDefaultValueExpression(null);
-            }
-            else
-            {
-                String s = val+"";
-
-                newExp = new JRDesignExpression();
-                newExp.setText(s);
-                parameter.setDefaultValueExpression(newExp);
-            }
-            
-            ObjectPropertyUndoableEdit urob =
-                        new ObjectPropertyUndoableEdit(
-                            getParameter(),
-                            "DefaultValueExpression", 
-                            JRExpression.class,
-                            oldExp,newExp);
-                // Find the undoRedo manager...
-                IReportManager.getInstance().addUndoableEdit(urob);
-
-            //System.out.println("Done: " + val);
-        }
-
-        public JRDesignDataset getDataset() {
-            return dataset;
-        }
-
-        public void setDataset(JRDesignDataset dataset) {
-            this.dataset = dataset;
-        }
-
-        public JRDesignParameter getParameter() {
-            return parameter;
-        }
-
-        public void setParameter(JRDesignParameter parameter) {
-            this.parameter = parameter;
-        }
-
-        public IllegalArgumentException annotateException(String msg)
-        {
-            IllegalArgumentException iae = new IllegalArgumentException(msg); 
-            ErrorManager.getDefault().annotate(iae, 
-                                    ErrorManager.EXCEPTION,
-                                    msg,
-                                    msg, null, null); 
-            return iae;
-        }
-
-         @Override
-        public boolean isDefaultValue() {
-            return getParameter().getDefaultValueExpression() == null;
-        }
-
-        @Override
-        public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
-            super.restoreDefaultValue();
-            setValue(null);
-        }
-
-        @Override
-        public boolean supportsDefaultValue() {
-            return true;
         }
     }
     

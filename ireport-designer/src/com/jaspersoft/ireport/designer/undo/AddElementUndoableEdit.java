@@ -66,7 +66,6 @@ public class AddElementUndoableEdit extends AggregatedUndoableEdit {
             element.setElementGroup(cg);
             cg.getChildren().add(index, element);
             cg.getEventSupport().fireCollectionElementAddedEvent(JRDesignElementGroup.PROPERTY_CHILDREN, element, cg.getChildren().size() - 1);
-            
         }
         
     }

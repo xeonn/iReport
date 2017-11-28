@@ -33,7 +33,7 @@ public final class NewReportAction extends CallableSystemAction {
             wizardDescriptor.setTargetFolder(df);
 
             try {
-            FileObject templateFileObject = Repository.getDefault().getDefaultFileSystem().getRoot().getFileObject("Templates/Reports/JrxmlTemplate.jrxml");
+            FileObject templateFileObject = Repository.getDefault().getDefaultFileSystem().getRoot().getFileObject("Templates/Report/Report.jrxml");
             wizardDescriptor.setTemplate(DataObject.find(templateFileObject));
             } catch (DataObjectNotFoundException ex) {
             }

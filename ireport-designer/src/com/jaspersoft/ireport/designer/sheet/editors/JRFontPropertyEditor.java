@@ -26,6 +26,7 @@ import org.openide.explorer.propertysheet.ExPropertyEditor;
 import org.openide.explorer.propertysheet.PropertyEnv;
 import java.beans.FeatureDescriptor;
 import net.sf.jasperreports.engine.design.JRDesignFont;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.nodes.Node;
 
 
@@ -37,8 +38,15 @@ public class JRFontPropertyEditor extends PropertyEditorSupport implements ExPro
 {
     private static boolean useRaw = Boolean.getBoolean("netbeans.stringEditor.useRawCharacters");
     // bugfix# 9219 added editable field and isEditable() "getter" to be used in StringCustomEditor
-    private boolean editable=true;   
+    private boolean editable = true;   
     /** gets information if the text in editor should be editable or not */
+
+    private final JasperDesign jasperDesign;
+    
+    public JRFontPropertyEditor(JasperDesign jasperDesign)
+    {
+        this.jasperDesign = jasperDesign;
+    }
     
     public boolean isEditable(){
         return false;
@@ -68,7 +76,16 @@ public class JRFontPropertyEditor extends PropertyEditorSupport implements ExPro
 
     public java.awt.Component getCustomEditor () {
         Object val = getValue();
-        return new JRFontPropertyCustomEditor((JRDesignFont)val, isEditable(), false, null, this, env); // NOI18N
+        return 
+            new JRFontPropertyCustomEditor(
+                jasperDesign,
+                (JRDesignFont)val, 
+                isEditable(), 
+                false, 
+                null, 
+                this, 
+                env
+                ); // NOI18N
     }
 
     //private String instructions=null;

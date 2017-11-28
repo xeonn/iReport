@@ -30,28 +30,35 @@
 
 package com.jaspersoft.ireport.designer.widgets;
 
+import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.ModelUtils;
-import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.borders.SimpleLineBorder;
+import java.awt.AlphaComposite;
+import java.awt.Composite;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Date;
+import javax.swing.ImageIcon;
+import net.sf.jasperreports.crosstabs.JRCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.base.JRBaseLine;
-import net.sf.jasperreports.engine.base.JRBaseRectangle;
+import net.sf.jasperreports.engine.base.JRBaseLineBox;
+import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.base.JRBaseStaticText;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
-import net.sf.jasperreports.engine.design.JRDesignImage;
-import net.sf.jasperreports.engine.design.JRDesignLine;
-import net.sf.jasperreports.engine.design.JRDesignRectangle;
-import net.sf.jasperreports.engine.design.JRDesignStaticText;
+import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
@@ -65,6 +72,8 @@ import org.netbeans.api.visual.widget.Widget;
 public class JRDesignElementWidget extends Widget implements PropertyChangeListener {
 
     private SelectionWidget selectionWidget = null;
+    private javax.swing.ImageIcon crosstabImage = new ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/crosstab-32.png"));
+    private javax.swing.ImageIcon subreportImage = new ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/subreport-32.png"));
     
     public JRDesignElement getElement() {
         return element;
@@ -80,10 +89,10 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
     }
     JRDesignElement element = null;
     
-    public JRDesignElementWidget(ReportObjectScene scene, JRDesignElement element) {
+    public JRDesignElementWidget(AbstractReportObjectScene scene, JRDesignElement element) {
         super(scene);
         this.element = element;
-        setBorder(new SimpleLineBorder());
+        setBorder(new SimpleLineBorder(this));
         updateBounds();
         selectionWidget = new SelectionWidget(scene, this);
         notifyStateChanged(null, ObjectState.createNormal());
@@ -97,6 +106,23 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
         });
         
         element.getEventSupport().addPropertyChangeListener(this);
+        if (element instanceof JRDesignGraphicElement)
+        {
+            JRDesignGraphicElement gele = (JRDesignGraphicElement)element;
+            ((JRBasePen)gele.getLinePen()).getEventSupport().addPropertyChangeListener(this);
+        }
+        
+        if (element instanceof JRBoxContainer)
+        {
+            JRBoxContainer boxcontainer = (JRBoxContainer)element;
+            JRBaseLineBox baseBox = (JRBaseLineBox)boxcontainer.getLineBox();
+            baseBox.getEventSupport().addPropertyChangeListener(this);
+            ((JRBasePen)baseBox.getPen()).getEventSupport().addPropertyChangeListener(this);
+            ((JRBasePen)baseBox.getTopPen()).getEventSupport().addPropertyChangeListener(this);
+            ((JRBasePen)baseBox.getBottomPen()).getEventSupport().addPropertyChangeListener(this);
+            ((JRBasePen)baseBox.getLeftPen()).getEventSupport().addPropertyChangeListener(this);
+            ((JRBasePen)baseBox.getRightPen()).getEventSupport().addPropertyChangeListener(this);
+        }
     }
     
     
@@ -116,7 +142,7 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
     
     public void updateBounds()
     {
-        JasperDesign jd = ((ReportObjectScene)this.getScene()).getJasperDesign();
+        JasperDesign jd = ((AbstractReportObjectScene)this.getScene()).getJasperDesign();
         
         //Point p = 
         //JRBand band = ModelUtils.bandOfElement(element, jd);
@@ -204,7 +230,7 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
      */
     public Point convertLocalToModelLocation(Point p, boolean out)
     {
-        JasperDesign jd = ((ReportObjectScene)getScene()).getJasperDesign();
+        JasperDesign jd = ((AbstractReportObjectScene)getScene()).getJasperDesign();
         Point base = ModelUtils.getParentLocation(jd, getElement());
         
         if (out)
@@ -225,7 +251,7 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
      */
     public Point convertModelToLocalLocation(Point p)
     {
-        JasperDesign jd = ((ReportObjectScene)getScene()).getJasperDesign();
+        JasperDesign jd = ((AbstractReportObjectScene)getScene()).getJasperDesign();
         Point base = ModelUtils.getParentLocation(jd, getElement());
         
         // I need to discover the first logical parent of this element
@@ -253,15 +279,45 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
         new_af.concatenate(translate);
         gr.setTransform(new_af);
         
-        JasperDesign jd = ((ReportObjectScene)this.getScene()).getJasperDesign();
+        JasperDesign jd = ((AbstractReportObjectScene)this.getScene()).getJasperDesign();
         JRDesignElement e = this.getElement();
-        DrawVisitor dv = ((ReportObjectScene)this.getScene()).getDrawVisitor();
+        DrawVisitor dv = ((AbstractReportObjectScene)this.getScene()).getDrawVisitor();
         if (dv == null) return;
-        dv.setGraphics2D(gr);
-        e.visit( dv );
         
+        if (e instanceof JRDesignCrosstab)
+        {
+            Composite oldComposite = gr.getComposite();
+            gr.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f)); 
+            try {
+                e.visit( dv );
+            } catch (Exception ex){}
+            gr.setComposite(oldComposite);
+            Shape oldClip = gr.getClip();
+            Shape rect = new Rectangle2D.Float(0,0,element.getWidth(), element.getHeight());
+            
+            gr.clip(rect);
+            gr.drawImage(crosstabImage.getImage(), 4, 4, null);
+            gr.setClip(oldClip);
+        }
+        else if (e instanceof JRDesignSubreport)
+        {
+            Composite oldComposite = gr.getComposite();
+            gr.fillRect(0, 0, element.getWidth(), element.getHeight());
+            gr.setComposite(oldComposite);
+            Shape oldClip = gr.getClip();
+            Shape rect = new Rectangle2D.Float(0,0,element.getWidth(), element.getHeight());
+            gr.clip(rect);
+            gr.drawImage(subreportImage.getImage(), 4, 4, null);
+            gr.setClip(oldClip);
+        }
+        else
+        {
+            dv.setGraphics2D(gr);
+            try {
+                e.visit( dv );
+            } catch (Exception ex){}
+        }
         gr.setTransform(af);
-        
         //Java2DUtils.resetClip(gr);
         
         //System.out.println("Painted : " + (t - new Date().getTime()) + "   " + getElement());
@@ -314,7 +370,16 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
             propertyName.equals( JRBaseStyle.PROPERTY_ROTATION) ||
             propertyName.equals( JRBaseStyle.PROPERTY_LINE_SPACING) ||
             propertyName.equals( JRBaseStaticText.PROPERTY_TEXT) ||
-            propertyName.equals( JRDesignTextField.PROPERTY_EXPRESSION)
+            propertyName.equals( JRDesignTextField.PROPERTY_EXPRESSION) ||
+            propertyName.equals("pen") ||           // Special property fired by the property sheet
+            propertyName.equals("linebox") ||       // Special property fired by the property sheet
+            propertyName.equals(JRBasePen.PROPERTY_LINE_COLOR) ||
+            propertyName.equals(JRBasePen.PROPERTY_LINE_STYLE) ||
+            propertyName.equals(JRBasePen.PROPERTY_LINE_WIDTH) ||
+            propertyName.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING) ||
+            propertyName.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING) ||
+            propertyName.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING) ||
+            propertyName.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING)
             )
         {        
             updateBounds();
@@ -327,7 +392,7 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
         {
             if (getElement() instanceof JRElementGroup)
             {
-                ((ReportObjectScene)getScene()).refreshElementGroup( (JRElementGroup)getElement() );
+                ((AbstractReportObjectScene)getScene()).refreshElementGroup( (JRElementGroup)getElement() );
             }
         }
     }

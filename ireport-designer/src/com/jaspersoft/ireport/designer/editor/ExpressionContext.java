@@ -20,8 +20,10 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
  * a particular expression.
  * @author gtoffoli
  */
-public class ExpressionContext {
-
+public class ExpressionContext 
+{
+    public static final String ATTRIBUTE_EXPRESSION_CONTEXT = "EXPRESSION_CONTEXT";
+    
     private static ExpressionContext globalContext = null;
     public static ExpressionContext getGlobalContext()
     {
@@ -53,8 +55,26 @@ public class ExpressionContext {
 
     public ExpressionContext() {}
     
+    /**
+     * The most commond kind of Expressioncontext used for elements in
+     * a document (not in a crosstab), for fields and variables, for
+     * crosstab groups (bucket expressions) and measures.
+     * 
+     * @param dataset
+     */
     public ExpressionContext(JRDesignDataset dataset)
     {
         datasets.add(dataset);
+    }
+    
+    /**
+     * This kind of expression context should be set for element expressions
+     * (like textfields and images) appearing in a crosstab
+     * 
+     * @param crosstab
+     */
+    public ExpressionContext(JRDesignCrosstab crosstab)
+    {
+        crosstabs.add(crosstab);
     }
 }

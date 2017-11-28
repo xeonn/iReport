@@ -9,8 +9,6 @@
 
 package com.jaspersoft.ireport.designer.widgets;
 
-import com.jaspersoft.ireport.designer.ModelUtils;
-import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.utils.Java2DUtils;
 import com.jaspersoft.ireport.designer.ruler.GuideLine;
 import java.awt.BasicStroke;

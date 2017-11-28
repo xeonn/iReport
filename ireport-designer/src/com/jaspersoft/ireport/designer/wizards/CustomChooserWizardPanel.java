@@ -4,6 +4,7 @@
  */
 package com.jaspersoft.ireport.designer.wizards;
 
+import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
@@ -97,12 +98,12 @@ public class CustomChooserWizardPanel implements WizardDescriptor.Panel {
             try {
                 if (((TemplateWizard) settings).getTargetFolder() != null)
                 {
-                    component.setTargetDirectory( ((TemplateWizard) settings).getTargetFolder().getPrimaryFile().getPath() );
+                    component.setTargetDirectory( Misc.getDataFolderPath( ((TemplateWizard) settings).getTargetFolder()) );
                 
                     // Look for the first available reportX.jrxml
                     for (int i=1; i<100; ++i)
                     {
-                        File f = new File(((TemplateWizard) settings).getTargetFolder().getPrimaryFile().getPath(), "report" + i + ".jrxml");
+                        File f = new File( Misc.getDataFolderPath(  ((TemplateWizard) settings).getTargetFolder()), "report" + i + ".jrxml");
                         if (f.exists()) continue;
                         
                         component.setReportName("report" + i);

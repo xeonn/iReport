@@ -11,6 +11,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -47,18 +50,31 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
 
     public FileObject generateReport(WizardDescriptor wizard) {
         
+        Misc.msg("Inside generateReport");
+        
         try {
             // 1. Load the selected template...
+            Misc.msg("Generating design ...");
+            
             JasperDesign jasperDesign = generateDesign(wizard);
+            
+            Misc.msg("Generating design OK ...");
             File f = getFile(wizard);
-             
-            JRXmlWriter.writeReport(jasperDesign, new FileOutputStream(f),"UTF8");
+            Misc.msg("get the file ...");
+            Misc.msg("The file store the generated report is " + f);
+            
+            if (!f.exists()) {
+               f.createNewFile();
+            }
+            
+            JasperCompileManager.writeReportToXmlFile( jasperDesign, f.getPath() );
             
             return FileUtil.toFileObject(f);
         
         } catch (Exception ex) {
-            ex.printStackTrace();
-            Misc.showErrorMessage("An error has occurred generating the report:\n" + ex.getMessage(), "Error", ex);
+           Misc.msg("Exception generating the file ...",ex);
+            //ex.printStackTrace();
+            //Misc.showErrorMessage("An error has occurred generating the report:\n" + ex.getMessage(), "Error", ex);
             return null;
         }
     }
@@ -68,6 +84,9 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
             // If we used our cool custom file chooser panel, we should find the
             // property filename set.
             File f = null;
+            String fname = null;
+            String directory = null;
+            
             if (wizard.getProperty("filename") != null)
             {
                f = new File( ""+wizard.getProperty("filename"));
@@ -75,18 +94,32 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
                if (wizard instanceof TemplateWizard)
                {
                    // Let's set the file folder...
-                   ((TemplateWizard)wizard).setTargetFolder(DataFolder.findFolder( FileUtil.toFileObject( f.getParentFile() )) );
+                   DataFolder df = ((TemplateWizard)wizard).getTargetFolder();
+                   if (df == null || df.getPrimaryFile() == null ||
+                       !Misc.getDataFolderPath(df).equals( f.getParent()))
+                   {
+                       // Band idea...
+                       //((TemplateWizard)wizard).setTargetFolder( DataFolder.findFolder( FileUtil.toFileObject( f.getParentFile() )) );
+                       directory = f.getParent();
+                   }
+                        
                    // Let's set the target folder...
-                   ((TemplateWizard)wizard).setTargetName(f.getName());
-                }
+                   if (((TemplateWizard)wizard).getTargetName() == null ||
+                       !((TemplateWizard)wizard).getTargetName().equals(f.getName()))
+                   {
+                       // Bad idea... 
+                       //((TemplateWizard)wizard).setTargetName(f.getName());
+                       fname = f.getName();
+                   }
+               }
             }
             
             if (wizard instanceof TemplateWizard)
             {
                 if (((TemplateWizard)wizard).getTargetFolder() != null)
                 {
-                    String fname = ((TemplateWizard)wizard).getTargetName();
-                    String directory = ((TemplateWizard) wizard).getTargetFolder().getPrimaryFile().getPath();
+                    if (fname == null) fname = ((TemplateWizard)wizard).getTargetName();
+                    if (directory == null) directory = Misc.getDataFolderPath( ((TemplateWizard) wizard).getTargetFolder() );
                     // We do some strong assumptions here:
                     // 1. the directory exists
                     // 2. we are not replacing another file if it was specified
@@ -111,7 +144,12 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
                         f = new File( directory,fname);
                     }
 
-                    ((TemplateWizard)wizard).setTargetName(fname);
+                    if (((TemplateWizard)wizard).getTargetName() == null ||
+                       !((TemplateWizard)wizard).getTargetName().equals(fname ))
+                    {
+                        // Bad Idea...
+                        //((TemplateWizard)wizard).setTargetName(fname);
+                    }
                 }
             }
             
@@ -125,7 +163,8 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
     
     protected JasperDesign generateDesign(WizardDescriptor wizard) throws Exception
     {
-        FileObject reportTemplate = (FileObject) wizard.getProperty("reportTemplate");
+            FileObject reportTemplate = (FileObject) wizard.getProperty("reportTemplate");
+            
             String reportType = (String) wizard.getProperty("reportType");
             List<JRDesignField> selectedFields = (List<JRDesignField>) wizard.getProperty("selectedFields");
             List<JRDesignField> groupFields = (List<JRDesignField>) wizard.getProperty("groupFields");

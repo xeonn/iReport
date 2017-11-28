@@ -113,7 +113,7 @@ public class ElementNodeVisitor implements JRVisitor {
      */
     public void visitCrosstab(JRCrosstab crosstab)
     {
-        node = new ElementNode(jasperDesign, (JRDesignCrosstab)crosstab,doLkp);
+        node = new CrosstabNode(jasperDesign, (JRDesignCrosstab)crosstab,doLkp);
         node.setIconBaseWithExtension(ICON_CROSSTAB);
     }
 

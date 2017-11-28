@@ -261,7 +261,7 @@ public class FieldsNode extends IRIndexedNode implements PropertyChangeListener 
     @Override
     public NewType[] getNewTypes()
     {
-        return NewTypesUtils.getNewType( NewTypesUtils.FIELD, this);
+        return NewTypesUtils.getNewType(this, NewTypesUtils.FIELD);
     }
 
     public void propertyChange(PropertyChangeEvent evt) {

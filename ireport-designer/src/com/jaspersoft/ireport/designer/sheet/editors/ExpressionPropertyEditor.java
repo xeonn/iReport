@@ -116,9 +116,6 @@ public class ExpressionPropertyEditor extends PropertyEditorSupport implements E
             customEd = !Boolean.TRUE.equals (prop.getValue ("suppressCustomEditor")); //NOI18N
         }
         this.env = env;
-        
-        
-
     }
 }
 

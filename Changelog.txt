@@ -1,3 +1,13 @@
+2008-04-07 Version 0.9.1 released
+_______________________________________________________________________________
+- Support for crosstab
+- Support for borders and pens
+- Support for conditional styles
+- Several bug fixes
+- Upgraded to JasperReports 2.0.5
+- Fully compatible with NB 6.1
+
+
 2008-02-17 Version 0.9.0 released
 _______________________________________________________________________________
 

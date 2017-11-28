@@ -76,8 +76,8 @@ public class StylesNode extends IRIndexedNode implements PropertyChangeListener 
 
                 Node[] nodes = getChildren().getNodes();
                 for (int i = 0; i < nodes.length; ++i) {
-                    JRDesignStyle s = ((StyleNode) nodes[i]).getStyle();
-                    newList.add(s);
+                   JRDesignStyle s = ((StyleNode) nodes[i]).getDesignStyle();
+                   newList.add(s);
                 }
 
                 list.clear();
@@ -85,7 +85,7 @@ public class StylesNode extends IRIndexedNode implements PropertyChangeListener 
                 
                 getJasperDesign().getEventSupport().firePropertyChange(
                         new PropertyChangeEvent(getJasperDesign(), JasperDesign.PROPERTY_STYLES, null, null ) );
-
+                com.jaspersoft.ireport.designer.IReportManager.getInstance().notifyReportChange();
             }
 
             public void nodeDestroyed(NodeEvent ev) {
@@ -256,16 +256,9 @@ public class StylesNode extends IRIndexedNode implements PropertyChangeListener 
     @Override
     public NewType[] getNewTypes()
     {
-        return NewTypesUtils.getNewType( NewTypesUtils.STYLE, this);
+        return NewTypesUtils.getNewType(this, NewTypesUtils.STYLE);
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
-        
-        com.jaspersoft.ireport.designer.IReportManager.getInstance().notifyReportChange();
-        if (evt.getPropertyName().equals( JasperDesign.PROPERTY_STYLES))
-        {
-            // Refrersh parameters list...
-            ((StylesChildren)this.getChildren()).recalculateKeys();
-        }
     }
 }

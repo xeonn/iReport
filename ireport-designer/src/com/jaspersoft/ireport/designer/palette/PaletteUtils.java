@@ -10,7 +10,6 @@
 package com.jaspersoft.ireport.designer.palette;
 
 import java.awt.datatransfer.DataFlavor;
-import java.io.IOException;
 import javax.swing.Action;
 import org.netbeans.spi.palette.PaletteActions;
 import org.netbeans.spi.palette.PaletteController;
@@ -25,9 +24,13 @@ public class PaletteUtils {
 
     public static final DataFlavor PALETTE_ITEM_DATA_FLAVOR = new DataFlavor( PaletteItem.class, "IR_PaletteItem");
     
+    public static PaletteController controller = null;
     public static PaletteController createPalette() {
         try {
-            return PaletteFactory.createPalette("ireport/palette", // NOI18N
+            if (controller == null)
+            { 
+                controller = PaletteFactory.createPalette("ireport/palette", // NOI18N
+            
                                                 new PaletteActions() {
                 public Action[] getCustomCategoryActions(Lookup lookup) {
                     return new Action[0];
@@ -45,6 +48,8 @@ public class PaletteUtils {
                     return null; //TODO
                 }
             });
+          }
+          return controller;
 
         }
         catch (Throwable ex) {

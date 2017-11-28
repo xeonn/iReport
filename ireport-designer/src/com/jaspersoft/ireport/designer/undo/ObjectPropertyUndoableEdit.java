@@ -25,8 +25,17 @@ public class ObjectPropertyUndoableEdit extends AggregatedUndoableEdit {
     private Object newValue;
     private Class  propertyClass;
     
+    /**
+     * 
+     * @param object It is the object on which call the set method
+     * @param property The name of the method (without the initial "set", i.e. Name for setName, or Xyz for setXyz)
+     * @param propertyClass The argument of the method. If the argument is primitive, specify the right type (i.e. Integer.TYPE)
+     * @param oldValue The oldValue (used by the undo operation)
+     * @param newValueThe oldValue (must be the current value of the attribute, it will be used for a redo operation)
+     */
     public ObjectPropertyUndoableEdit(Object object, String property, Class propertyClass, Object oldValue, Object newValue)
     {
+        super();
         this.object = object;
         this.property = property;
         this.oldValue = oldValue;

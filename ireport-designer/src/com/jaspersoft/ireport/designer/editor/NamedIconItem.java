@@ -25,6 +25,7 @@ public class NamedIconItem {
     public static final String ICON_FOLDER_WIZARDS = "com/jaspersoft/ireport/designer/resources/fields-16.png";
     public static final String ICON_FOLDER_RECENT_EXPRESSIONS = "com/jaspersoft/ireport/designer/resources/fields-16.png";
     public static final String ICON_FOLDER_FORMULAS = "com/jaspersoft/ireport/designer/resources/fields-16.png";
+    public static final String ICON_CROSSTAB = "com/jaspersoft/ireport/designer/resources/crosstab-16.png";
     
     private Object item = null;
     private String displayName = null;

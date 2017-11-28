@@ -18,23 +18,16 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.explorer.propertysheet.PropertyEnv;
 
 /**
- *
  * @author gtoffoli
  */
-public class JRFontPropertyCustomEditor extends JRFontPanel implements PropertyChangeListener {
-
-    public JRFontPropertyCustomEditor()
-    {
-        super();
-    }
-    
+public class JRFontPropertyCustomEditor extends JRFontPanel implements PropertyChangeListener 
+{
     boolean oneline=false;
     String instructions = null;
 
     private PropertyEnv env;
 
     private PropertyEditor editor;
-
 
     //enh 29294, provide one line editor on request
     /** Create a StringCustomEditor.
@@ -43,11 +36,18 @@ public class JRFontPropertyCustomEditor extends JRFontPanel implements PropertyC
      * @param oneline whether the text component should be a single-line or multi-line component (NOT USED)
      * @param instructions any instructions that should be displayed (NOT USED)
      */
-    JRFontPropertyCustomEditor (JRDesignFont value, boolean editable, boolean oneline, String instructions, PropertyEditor editor, PropertyEnv env) {
-        
+    public JRFontPropertyCustomEditor(
+        JasperDesign jasperDesign,
+        JRDesignFont value, 
+        boolean editable, 
+        boolean oneline, 
+        String instructions, 
+        PropertyEditor editor, 
+        PropertyEnv env
+        ) 
+    {
         super();
         
-        JasperDesign jasperDesign = (JasperDesign)env.getFeatureDescriptor().getValue("JasperDesign");
         if (jasperDesign != null)
         {
             fillReportFonts(jasperDesign);

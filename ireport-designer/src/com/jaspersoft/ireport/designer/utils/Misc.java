@@ -25,6 +25,8 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -40,7 +42,9 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
+import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
+import org.openide.loaders.DataFolder;
 import org.openide.loaders.DataObject;
 import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
@@ -53,6 +57,14 @@ import org.w3c.dom.NodeList;
  * @author gtoffoli
  */
 public class Misc {
+
+    public static String getDataFolderPath(DataFolder targetFolder) {
+       if (targetFolder == null) return null;
+       FileObject file = targetFolder.getPrimaryFile();
+       File f = FileUtil.toFile (file);
+       String path = f.getPath();
+       return path;
+    }
     
     /**
      * If c != null, the ancestor window is return, otherwise this method looks for the main window.
@@ -123,6 +135,18 @@ public class Misc {
                 }
                 return null;
         }
+
+    public static void msg(String string) {
+        Logger.global.log(Level.INFO, string );
+        java.util.logging.Handler[] handlres = Logger.global.getHandlers();
+        for (int i=0; i<handlres.length; ++i) handlres[i].flush();
+    }
+    
+    public static void msg(String string, Throwable t) {
+        Logger.global.log(Level.SEVERE, string, t);
+        java.util.logging.Handler[] handlres = Logger.global.getHandlers();
+        for (int i=0; i<handlres.length; ++i) handlres[i].flush();
+    }
 
     
     static public String readPCDATA(Node textNode) {

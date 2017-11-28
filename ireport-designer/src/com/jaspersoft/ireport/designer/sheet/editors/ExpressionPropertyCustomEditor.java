@@ -62,7 +62,7 @@ public class ExpressionPropertyCustomEditor extends ExpressionEditor implements 
         this.env.setState(PropertyEnv.STATE_NEEDS_VALIDATION);
         this.env.addPropertyChangeListener(this);
         
-        ExpressionContext ec = (ExpressionContext)this.env.getFeatureDescriptor().getValue("expressionContext");
+        ExpressionContext ec = (ExpressionContext)this.env.getFeatureDescriptor().getValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT);
         if (ec != null) setExpressionContext(ec);
         setExpression(value);
     }

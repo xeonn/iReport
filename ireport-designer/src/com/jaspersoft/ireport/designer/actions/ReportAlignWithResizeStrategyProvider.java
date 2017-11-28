@@ -9,8 +9,8 @@
 
 package com.jaspersoft.ireport.designer.actions;
 
+import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.undo.AggregatedUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
@@ -79,7 +79,7 @@ public class ReportAlignWithResizeStrategyProvider extends AlignWithSupport impl
 
         // If we have a multiselection, the minimum size is given by the smallset object of
         // the selection...
-        List<Widget> selectedElements = ((ReportObjectScene)widget.getScene()).getSelectionLayer().getChildren();
+        List<Widget> selectedElements = ((AbstractReportObjectScene)widget.getScene()).getSelectionLayer().getChildren();
         
         int minElementWidth = widget.getPreferredBounds().width;
         int minElementHeight = widget.getPreferredBounds().height;
@@ -307,7 +307,7 @@ public class ReportAlignWithResizeStrategyProvider extends AlignWithSupport impl
                 
                 if (dew.getElement() instanceof JRDesignFrame)
                 {
-                    updateChildren((JRDesignFrame)dew.getElement(), (ReportObjectScene)dew.getScene(), changedWidgets);
+                    updateChildren((JRDesignFrame)dew.getElement(), (AbstractReportObjectScene)dew.getScene(), changedWidgets);
                 }
                 changedWidgets.add(dew);
            }
@@ -323,7 +323,7 @@ public class ReportAlignWithResizeStrategyProvider extends AlignWithSupport impl
         
         undoEdits = new java.util.ArrayList<ObjectPropertyUndoableEdit>();
         
-        List<Widget> selectedElements = ((ReportObjectScene)widget.getScene()).getSelectionLayer().getChildren();
+        List<Widget> selectedElements = ((AbstractReportObjectScene)widget.getScene()).getSelectionLayer().getChildren();
         
         // for each element, let's save x and y...
         for (Widget w : selectedElements)
@@ -356,7 +356,7 @@ public class ReportAlignWithResizeStrategyProvider extends AlignWithSupport impl
     public void resizingFinished (Widget widget) {
         hide ();
         
-        List<Widget> selectedElements = ((ReportObjectScene)widget.getScene()).getSelectionLayer().getChildren();
+        List<Widget> selectedElements = ((AbstractReportObjectScene)widget.getScene()).getSelectionLayer().getChildren();
         ArrayList<Widget> changedWidgets = new ArrayList<Widget>();
         
         for (Widget w : selectedElements)
@@ -399,7 +399,7 @@ public class ReportAlignWithResizeStrategyProvider extends AlignWithSupport impl
                 
                 if (dew.getElement() instanceof JRDesignFrame)
                 {
-                    updateChildren((JRDesignFrame)dew.getElement(), (ReportObjectScene)dew.getScene(), changedWidgets);
+                    updateChildren((JRDesignFrame)dew.getElement(), (AbstractReportObjectScene)dew.getScene(), changedWidgets);
                 }
                 
                 changedWidgets.add(dew);
@@ -439,7 +439,7 @@ public class ReportAlignWithResizeStrategyProvider extends AlignWithSupport impl
         }
     }
     
-    private void updateChildren(JRDesignFrame parent, ReportObjectScene scene, ArrayList<Widget> changedWidgets)
+    private void updateChildren(JRDesignFrame parent, AbstractReportObjectScene scene, ArrayList<Widget> changedWidgets)
     {
           JRElement[] elements = parent.getElements();
           for (int i=0; i < elements.length; ++i)

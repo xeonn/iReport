@@ -9,8 +9,11 @@
 
 package com.jaspersoft.ireport.designer.actions;
 
+import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.ReportObjectScene;
+import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
+import com.jaspersoft.ireport.designer.crosstab.widgets.CrosstabWidget;
 import com.jaspersoft.ireport.designer.widgets.GuideLineWidget;
 import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import com.jaspersoft.ireport.designer.widgets.SelectionWidget;
@@ -18,14 +21,15 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import net.sf.jasperreports.crosstabs.JRCrosstabCell;
+import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
+import net.sf.jasperreports.crosstabs.fill.calculation.BucketDefinition;
 import net.sf.jasperreports.engine.JRBand;
-import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import org.apache.bcel.generic.GETSTATIC;
 import org.netbeans.api.visual.action.AlignWithWidgetCollector;
-import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
 
 /**
@@ -52,9 +56,9 @@ public class ReportAlignWithWidgetCollector implements AlignWithWidgetCollector 
         this.verticalGuideLines = verticalGuideLines;
     }
     private List<Integer> horizontalGuideLines = new ArrayList<Integer>();
-    private ReportObjectScene scene = null;
+    private AbstractReportObjectScene scene = null;
     
-    public ReportAlignWithWidgetCollector(ReportObjectScene scene)
+    public ReportAlignWithWidgetCollector(AbstractReportObjectScene scene)
     {
         this.scene = scene;
     }
@@ -72,7 +76,7 @@ public class ReportAlignWithWidgetCollector implements AlignWithWidgetCollector 
             obj = ((SelectionWidget)widget).getRealWidget().getElement();
         }
         
-        if ( ((ReportObjectScene)widget.getScene()).getSelectedObjects().contains(obj) )
+        if ( ((AbstractReportObjectScene)widget.getScene()).getSelectedObjects().contains(obj) )
         {
             return true;
         }
@@ -141,19 +145,113 @@ public class ReportAlignWithWidgetCollector implements AlignWithWidgetCollector 
         }
         */
         
-        JasperDesign jd = scene.getJasperDesign();
-        // Add margins and bands position...
-        int bandLocation = jd.getTopMargin(); // Scene location...
-        regions.add( new Rectangle(jd.getLeftMargin(), bandLocation, jd.getPageWidth() - jd.getRightMargin() - jd.getLeftMargin(), 0 ) );
-        for (JRBand band : ModelUtils.getBands(jd))
+        if (scene instanceof ReportObjectScene)
         {
-            if (band.getHeight() > 0)
+            JasperDesign jd = scene.getJasperDesign();
+            // Add margins and bands position...
+            int bandLocation = jd.getTopMargin(); // Scene location...
+            regions.add( new Rectangle(jd.getLeftMargin(), bandLocation, jd.getPageWidth() - jd.getRightMargin() - jd.getLeftMargin(), 0 ) );
+            for (JRBand band : ModelUtils.getBands(jd))
             {
-                bandLocation += band.getHeight();
-                regions.add( new Rectangle(jd.getLeftMargin(), bandLocation, jd.getPageWidth() - jd.getRightMargin() - jd.getLeftMargin(), 0 ) );
+                if (band.getHeight() > 0)
+                {
+                    bandLocation += band.getHeight();
+                    regions.add( new Rectangle(jd.getLeftMargin(), bandLocation, jd.getPageWidth() - jd.getRightMargin() - jd.getLeftMargin(), 0 ) );
+                }
             }
         }
+        else if (scene instanceof CrosstabObjectScene)
+        {
+            
+            List<Widget> separators = ((CrosstabObjectScene)scene).getCellSeparatorsLayer().getChildren();
+            CrosstabWidget cw = ((CrosstabObjectScene)scene).getCrosstabWidget();
+            //Rectangle r1 = new Rectangle(0,0, cw.getCrosstabDesignWidth(), cw.getCrosstabDesignHeight());
+            //regions.add(r1);
+            
+            // Paint the data cells...
+            //JRCrosstabCell[][] cells = cw.getCrosstab().getCells();
+            int header_width = ModelUtils.getHeaderCellWidth(cw.getCrosstab());
+            int header_height = ModelUtils.getHeaderCellHeight(cw.getCrosstab());
+
+            JRCrosstabRowGroup[] row_groups = cw.getCrosstab().getRowGroups();
+            JRCrosstabColumnGroup[] col_groups = cw.getCrosstab().getColumnGroups();
+            
+            JRCrosstabCell[][] cells = ModelUtils.normalizeCell(cw.getCrosstab().getCells(),row_groups,col_groups);
         
+            int x = header_width;
+            int y = header_height;
+
+            for (int i=cells.length-1; i>=0; --i)
+            {
+                x = header_width;
+                for (int k=cells[i].length-1; k>=0; --k)
+                {
+                    JRCrosstabCell cell = cells[i][k];
+                    if (cell == null) continue;
+                    regions.add(new Rectangle(x,y,cell.getContents().getWidth(),cell.getContents().getHeight()));
+                    x += cell.getContents().getWidth();
+                }
+                if (cells[i][0] != null && cells[i][0].getContents() != null)
+                {
+                    y += cells[i][0].getContents().getHeight();
+                }
+            }
+
+            int data_width = x - header_width;
+            int data_height = y - header_height;
+
+            x = 0;
+            y = header_height;
+
+
+            // paint row cells...
+            for (int i=0; i<row_groups.length; ++i)
+            {
+                switch (row_groups[i].getTotalPosition())
+                {
+                    case BucketDefinition.TOTAL_POSITION_START:
+                        regions.add(new Rectangle(x,y,row_groups[i].getTotalHeader().getWidth(),row_groups[i].getTotalHeader().getHeight()));
+                        data_height -= row_groups[i].getTotalHeader().getHeight();
+                        y += row_groups[i].getTotalHeader().getHeight();
+                        break;
+                    case BucketDefinition.TOTAL_POSITION_END:
+                        int y_loc = y + data_height - row_groups[i].getTotalHeader().getHeight();
+                        regions.add(new Rectangle(x,y_loc,row_groups[i].getTotalHeader().getWidth(),row_groups[i].getTotalHeader().getHeight()));
+                        data_height -= row_groups[i].getTotalHeader().getHeight();
+                        break;
+                }
+                
+                regions.add(new Rectangle(x,y,row_groups[i].getHeader().getWidth(),row_groups[i].getHeader().getHeight()));
+                x += row_groups[i].getHeader().getWidth();
+            }
+
+
+            x = header_width;
+            y = 0;
+
+            // paint col cells...
+            for (int i=0; i<col_groups.length; ++i)
+            {
+                switch (col_groups[i].getTotalPosition())
+                {
+                    case BucketDefinition.TOTAL_POSITION_START:
+                        regions.add(new Rectangle(x,y,col_groups[i].getTotalHeader().getWidth(),col_groups[i].getTotalHeader().getHeight()));
+                        data_width -= col_groups[i].getTotalHeader().getWidth();
+                        x += col_groups[i].getTotalHeader().getWidth();
+                        break;
+                    case BucketDefinition.TOTAL_POSITION_END:
+                        int x_loc = x + data_width - col_groups[i].getTotalHeader().getWidth();
+                        regions.add(new Rectangle(x_loc,y,col_groups[i].getTotalHeader().getWidth(),col_groups[i].getTotalHeader().getHeight()));
+                        data_width -= col_groups[i].getTotalHeader().getWidth();
+                        break;
+                    case BucketDefinition.TOTAL_POSITION_NONE:
+                        break;
+                }
+
+                regions.add(new Rectangle(x,y,col_groups[i].getHeader().getWidth(),col_groups[i].getHeader().getHeight()));
+                y += col_groups[i].getHeader().getHeight();
+            }
+        }
        
         
         return regions;

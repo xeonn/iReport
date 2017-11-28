@@ -23,6 +23,7 @@ import org.openide.nodes.PropertySupport;
 public class JRFontProperty extends PropertySupport {
 
     PropertyEditor editor = null;
+    JasperDesign jasperDesign = null;
     
     @SuppressWarnings("unchecked")
     public JRFontProperty(String name,
@@ -33,10 +34,7 @@ public class JRFontProperty extends PropertySupport {
        super( name, JRFont.class, displayName,shortDescription, true,true);
        
        setValue( "canEditAsText", Boolean.FALSE );
-       if (jd != null)
-       {
-            setValue( "JasperDesign", jd );
-       }
+       this.jasperDesign = jd;
     }
 
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
@@ -51,7 +49,7 @@ public class JRFontProperty extends PropertySupport {
         
         if (editor == null)
         {
-            editor = new JRFontPropertyEditor();
+            editor = new JRFontPropertyEditor(jasperDesign);
         }
         return editor;
     }

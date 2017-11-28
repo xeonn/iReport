@@ -9,10 +9,19 @@
 
 package com.jaspersoft.ireport.designer.outline.nodes.properties;
 
-import com.jaspersoft.ireport.designer.outline.properties.EvaluationTimeProperty;
-import com.jaspersoft.ireport.designer.outline.properties.RadiusProperty;
-import com.jaspersoft.ireport.designer.outline.properties.DirectionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.OnErrorTypeProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.LazyProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.ImageUsingCacheProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.VerticalAlignmentProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.HorizontalAlignmentProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.ScaleImageProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.FillProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.ImageExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.EvaluationTimeProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.RadiusProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.DirectionProperty;
 import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.sheet.JRPenProperty;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -42,7 +51,9 @@ public class GraphicElementPropertiesFactory {
         propertySet.setName("GRAPHIC_ELEMENT_PROPERTIES");
         propertySet.setDisplayName("Graphic properties");
         //propertySet.put(new PenProperty( element ));
+        propertySet.put(new JRPenProperty(element.getLinePen(), element));
         propertySet.put(new FillProperty( element ));
+        
         list.add(propertySet);
         
         if (element instanceof JRDesignImage)

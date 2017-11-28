@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE library PUBLIC "-//NetBeans//DTD Library Declaration 1.0//EN" "http://www.netbeans.org/dtds/library-declaration-1_0.dtd">
+<library version="1.0">
+    <name>JasperReports</name>
+    <type>j2se</type>
+    <localizing-bundle>com.jaspersoft.ireport.Bundle</localizing-bundle>
+    <volume>
+        <type>classpath</type>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/commons-beanutils-1.7.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/commons-collections-2.1.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/commons-digester-1.7.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/commons-logging-1.0.2.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/commons-logging-api-1.0.2.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/groovy-all-1.0.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/itext-1.3.1.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jakarta-bcel-20050813.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jaxen-1.1.1.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jcommon-1.0.0.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jfreechart-1.0.0.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jpa.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jxl-2.6.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/png-encoder-1.5.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/poi-3.0.1-FINAL-20070705.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-2.0.5.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/libs/xalan.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/xercesImpl.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/xml-apis.jar!/</resource>
+    </volume>
+    <volume>
+        <type>src</type>
+        
+    </volume>
+    <volume>
+        <type>javadoc</type>
+        
+    </volume>
+</library>

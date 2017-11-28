@@ -81,9 +81,6 @@ public class IRIndexedNode extends IRAbstractNode {
             return clazz.cast(ch);
         }
 
-        
-        System.out.println("Cookie requested: " + clazz);
-        System.out.flush();
         return super.getCookie(clazz);
     }
     

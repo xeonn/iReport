@@ -14,6 +14,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
@@ -21,6 +22,10 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.text.EditorKit;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabParameter;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import org.openide.text.CloneableEditorSupport;
 
@@ -142,7 +147,10 @@ public class ExpressionEditor extends javax.swing.JPanel {
             for (JRDesignCrosstab crosstab : getExpressionContext().getCrosstabs())
             {
                 i++;
-                dlm1.addElement(new NamedIconItem(crosstab, "Crosstab (" + i + ") " + crosstab.getKey()) );
+                String key = crosstab.getKey();
+                if (key == null) key = "";
+                
+                dlm1.addElement(new NamedIconItem(crosstab, "Crosstab (" + i + ") " + key, NamedIconItem.ICON_CROSSTAB) );
             }
         }
         
@@ -151,6 +159,11 @@ public class ExpressionEditor extends javax.swing.JPanel {
         dlm1.addElement( new NamedIconItem(WIZARDS, "Expression Wizards", NamedIconItem.ICON_FOLDER_WIZARDS ) );
         
         jList1.updateUI();
+        if (dlm1.size() > 0)
+        {
+            jList1.setSelectedIndex(0);
+        }
+        
         
     }
     
@@ -374,7 +387,59 @@ public class ExpressionEditor extends javax.swing.JPanel {
                     dlm2.addElement(new ExpObject(variables.next()));
                 }
             }
-            // TODO -> Wizards and crosstabs
+            else if (item.getItem() instanceof JRDesignCrosstab)
+            {
+                JRDesignCrosstab crosstab = (JRDesignCrosstab)item.getItem();
+                List rowGroups = crosstab.getRowGroupsList();
+                List columnGroups = crosstab.getColumnGroupsList();
+                
+                Iterator measures = crosstab.getMesuresList().iterator();
+                while (measures.hasNext())
+                {
+                    JRDesignCrosstabMeasure measure = (JRDesignCrosstabMeasure)measures.next();
+                    dlm2.addElement(new ExpObject(measure.getVariable()));
+                    
+                    for (int i=0; i<rowGroups.size(); ++i)
+                    {
+                        JRDesignCrosstabRowGroup rowGroup = (JRDesignCrosstabRowGroup)rowGroups.get(i);
+                        dlm2.addElement(new CrosstabTotalVariable(measure, rowGroup, null));
+                        
+                        
+                        for (int j=0; j<columnGroups.size(); ++j)
+                        {
+                            JRDesignCrosstabColumnGroup columnGroup = (JRDesignCrosstabColumnGroup)columnGroups.get(j);
+                            if (j==0)
+                            {
+                                dlm2.addElement(new CrosstabTotalVariable(measure, null, columnGroup));
+                            }
+                            
+                            dlm2.addElement(new CrosstabTotalVariable(measure, rowGroup, columnGroup));
+                        }
+                    }
+                }
+                
+                for (int i=0; i<rowGroups.size(); ++i)
+                {
+                    JRDesignCrosstabRowGroup rowGroup = (JRDesignCrosstabRowGroup)rowGroups.get(i);
+                    dlm2.addElement(new ExpObject(rowGroup.getVariable()));
+                }
+                
+                for (int i=0; i<columnGroups.size(); ++i)
+                {
+                    JRDesignCrosstabColumnGroup columnGroup = (JRDesignCrosstabColumnGroup)columnGroups.get(i);
+                    dlm2.addElement(new ExpObject(columnGroup.getVariable()));
+                }
+                
+                List crosstabParameters = crosstab.getParametersList();
+                for (int i=0; i<crosstabParameters.size(); ++i)
+                {
+                    JRDesignCrosstabParameter parameter = (JRDesignCrosstabParameter)crosstabParameters.get(i);
+                    dlm2.addElement(new ExpObject(parameter));
+                }
+                
+            }
+            // TODO -> Wizards
+            
             
             if (dlm2.size() > 0)
             {
@@ -535,7 +600,7 @@ public class ExpressionEditor extends javax.swing.JPanel {
         
         if (pWin instanceof Dialog) dialog = new JDialog((Dialog)pWin);
         else if (pWin instanceof Frame) dialog = new JDialog((Frame)pWin);
-        else dialog = new JDialog((Dialog)null);
+        else dialog = new JDialog();
         
         dialog.setModal(true);
         dialog.getContentPane().add(this);

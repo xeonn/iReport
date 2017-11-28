@@ -284,7 +284,7 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
     @Override
     public NewType[] getNewTypes()
     {
-        return NewTypesUtils.getNewType( NewTypesUtils.VARIABLE, this);
+        return NewTypesUtils.getNewType(this, NewTypesUtils.VARIABLE);
     }
 
     public void propertyChange(PropertyChangeEvent evt) {

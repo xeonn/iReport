@@ -9,8 +9,8 @@
 
 package com.jaspersoft.ireport.designer.actions;
 
+import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import com.jaspersoft.ireport.designer.widgets.SelectionWidget;
 import java.awt.Point;
@@ -42,7 +42,7 @@ public class ReportElementPopupMenuProvider implements PopupMenuProvider {
             return null;
         }
         
-        if ( !((ReportObjectScene)widget.getScene()).getSelectedObjects().contains(element) )
+        if ( !((AbstractReportObjectScene)widget.getScene()).getSelectedObjects().contains(element) )
         {
             return null;
         }
