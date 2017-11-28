@@ -1,3 +1,21 @@
+2010-10-31 Version 3.7.6 released (Happy Halloween!)
+_______________________________________________________________________________
+- Fixed import settings on Mac and Linux
+- Updated to JasperReports 3.7.6
+- Fixed Bug 18273 iReport's built-in SQL editor cannot display Japanese characters
+- Fixed Bug 20106 copy & paste does not work
+- Fixed Bug 11216 [Case #6129] Cannot get 2 datasources to work with master-subreport in iReport
+- Fixed Bug 19739 [Case #14127] Subreports cannot be referenced in german environment
+- Fixed Bug 14362 typo on SQL Leonardo message
+- Fixed Bug 17125 Win 7: Query designer background is balck
+- Fixed Bug 4329: Datasource fields not listed in the wizard 
+- No such parameter SORT_FIELDS problem fixed (JasperReports 3.7.6)
+- Added support for Domain Axis Min/Max value exportssions for bar and other charts
+- Added support for Ignore Width property in the List component
+- Updated to SQLeonardo 2009.03.rc1
+- Updated to Groovy 1.7.5
+
+
 2010-09-22 Version 3.7.5 released
 _______________________________________________________________________________
 - Updated to JasperReports 3.7.5

@@ -212,17 +212,23 @@ import com.jaspersoft.ireport.designer.sheet.properties.charts.RenderTypePropert
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.AreaCategoryAxisTickLabelRotationProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.AreaCategoryAxisVerticalTickLabelsProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.AreaDomainAxisMaxValueExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.AreaDomainAxisMinValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.AreaRangeAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.AreaRangeAxisMinValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.AreaValueAxisVerticalTickLabelsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DCategoryAxisTickLabelRotationProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DCategoryAxisVerticalTickLabelsProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DDomainAxisMaxValueExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DDomainAxisMinValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DItemLabelProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DRangeAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DRangeAxisMinValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DValueAxisVerticalTickLabelsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.BarCategoryAxisTickLabelRotationProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.BarCategoryAxisVerticalTickLabelsProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.BarDomainAxisMaxValueExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.BarDomainAxisMinValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.BarItemLabelProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.BarRangeAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.BarRangeAxisMinValueExpressionProperty;
@@ -247,6 +253,8 @@ import com.jaspersoft.ireport.designer.sheet.properties.charts.HighLowTimeAxisVe
 import com.jaspersoft.ireport.designer.sheet.properties.charts.HighLowValueAxisVerticalTickLabelsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.LineCategoryAxisTickLabelRotationProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.LineCategoryAxisVerticalTickLabelsProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.LineDomainAxisMaxValueExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.LineDomainAxisMinValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.LineRangeAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.LineRangeAxisMinValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.LineValueAxisVerticalTickLabelsProperty;
@@ -399,6 +407,8 @@ public class ChartPropertiesFactory {
             propertySet.put(new BarValueAxisLineColorProperty((JRDesignBarPlot)plot));
             propertySet.put(new BarRangeAxisMinValueExpressionProperty((JRDesignBarPlot)plot, dataset));
             propertySet.put(new BarRangeAxisMaxValueExpressionProperty((JRDesignBarPlot)plot, dataset));
+            propertySet.put(new BarDomainAxisMinValueExpressionProperty((JRDesignBarPlot)plot, dataset));
+            propertySet.put(new BarDomainAxisMaxValueExpressionProperty((JRDesignBarPlot)plot, dataset));
 
         }
         else if (plot instanceof JRDesignBar3DPlot)
@@ -427,6 +437,8 @@ public class ChartPropertiesFactory {
             propertySet.put(new Bar3DValueAxisLineColorProperty((JRDesignBar3DPlot)plot));
             propertySet.put(new Bar3DRangeAxisMinValueExpressionProperty((JRDesignBar3DPlot)plot, dataset));
             propertySet.put(new Bar3DRangeAxisMaxValueExpressionProperty((JRDesignBar3DPlot)plot, dataset));
+            propertySet.put(new Bar3DDomainAxisMinValueExpressionProperty((JRDesignBar3DPlot)plot, dataset));
+            propertySet.put(new Bar3DDomainAxisMaxValueExpressionProperty((JRDesignBar3DPlot)plot, dataset));
 
         }
         else if (plot instanceof JRDesignLinePlot)//FIXME line plots are use by XYLine charts as well, so X and Y axis props should be present
@@ -453,6 +465,8 @@ public class ChartPropertiesFactory {
             propertySet.put(new LineValueAxisLineColorProperty((JRDesignLinePlot)plot));
             propertySet.put(new LineRangeAxisMinValueExpressionProperty((JRDesignLinePlot)plot, dataset));
             propertySet.put(new LineRangeAxisMaxValueExpressionProperty((JRDesignLinePlot)plot, dataset));
+            propertySet.put(new LineDomainAxisMinValueExpressionProperty((JRDesignLinePlot)plot, dataset));
+            propertySet.put(new LineDomainAxisMaxValueExpressionProperty((JRDesignLinePlot)plot, dataset));
         }
         else if (plot instanceof JRDesignAreaPlot)
         {
@@ -476,6 +490,8 @@ public class ChartPropertiesFactory {
             propertySet.put(new AreaValueAxisLineColorProperty((JRDesignAreaPlot)plot));
             propertySet.put(new AreaRangeAxisMinValueExpressionProperty((JRDesignAreaPlot)plot, dataset));
             propertySet.put(new AreaRangeAxisMaxValueExpressionProperty((JRDesignAreaPlot)plot, dataset));
+            propertySet.put(new AreaDomainAxisMinValueExpressionProperty((JRDesignAreaPlot)plot, dataset));
+            propertySet.put(new AreaDomainAxisMaxValueExpressionProperty((JRDesignAreaPlot)plot, dataset));
         }
         else if (plot instanceof JRDesignScatterPlot)
         {
@@ -502,6 +518,8 @@ public class ChartPropertiesFactory {
             propertySet.put(new ScatterDomainAxisMaxValueExpressionProperty((JRDesignScatterPlot)plot, dataset));
             propertySet.put(new ScatterRangeAxisMinValueExpressionProperty((JRDesignScatterPlot)plot, dataset));
             propertySet.put(new ScatterRangeAxisMaxValueExpressionProperty((JRDesignScatterPlot)plot, dataset));
+            propertySet.put(new ScatterDomainAxisMinValueExpressionProperty((JRDesignScatterPlot)plot, dataset));
+            propertySet.put(new ScatterDomainAxisMaxValueExpressionProperty((JRDesignScatterPlot)plot, dataset));
         }
         else if (plot instanceof JRDesignBubblePlot)
         {
@@ -527,6 +545,8 @@ public class ChartPropertiesFactory {
             propertySet.put(new BubbleDomainAxisMaxValueExpressionProperty((JRDesignBubblePlot)plot, dataset));
             propertySet.put(new BubbleRangeAxisMinValueExpressionProperty((JRDesignBubblePlot)plot, dataset));
             propertySet.put(new BubbleRangeAxisMaxValueExpressionProperty((JRDesignBubblePlot)plot, dataset));
+            propertySet.put(new BubbleDomainAxisMinValueExpressionProperty((JRDesignBubblePlot)plot, dataset));
+            propertySet.put(new BubbleDomainAxisMaxValueExpressionProperty((JRDesignBubblePlot)plot, dataset));
         }
         else if (plot instanceof JRDesignTimeSeriesPlot)
         {
@@ -554,6 +574,8 @@ public class ChartPropertiesFactory {
             propertySet.put(new TimeSeriesDomainAxisMaxValueExpressionProperty((JRDesignTimeSeriesPlot)plot, dataset));
             propertySet.put(new TimeSeriesRangeAxisMinValueExpressionProperty((JRDesignTimeSeriesPlot)plot, dataset));
             propertySet.put(new TimeSeriesRangeAxisMaxValueExpressionProperty((JRDesignTimeSeriesPlot)plot, dataset));
+            propertySet.put(new TimeSeriesDomainAxisMinValueExpressionProperty((JRDesignTimeSeriesPlot)plot, dataset));
+            propertySet.put(new TimeSeriesDomainAxisMaxValueExpressionProperty((JRDesignTimeSeriesPlot)plot, dataset));
         }
         else if (plot instanceof JRDesignHighLowPlot)
         {
@@ -580,6 +602,8 @@ public class ChartPropertiesFactory {
             propertySet.put(new HighLowDomainAxisMaxValueExpressionProperty((JRDesignHighLowPlot)plot, dataset));
             propertySet.put(new HighLowRangeAxisMinValueExpressionProperty((JRDesignHighLowPlot)plot, dataset));
             propertySet.put(new HighLowRangeAxisMaxValueExpressionProperty((JRDesignHighLowPlot)plot, dataset));
+            propertySet.put(new HighLowDomainAxisMinValueExpressionProperty((JRDesignHighLowPlot)plot, dataset));
+            propertySet.put(new HighLowDomainAxisMaxValueExpressionProperty((JRDesignHighLowPlot)plot, dataset));
         }
         else if (plot instanceof JRDesignCandlestickPlot)
         {
@@ -605,6 +629,8 @@ public class ChartPropertiesFactory {
             propertySet.put(new CandlestickDomainAxisMaxValueExpressionProperty((JRDesignCandlestickPlot)plot, dataset));
             propertySet.put(new CandlestickRangeAxisMinValueExpressionProperty((JRDesignCandlestickPlot)plot, dataset));
             propertySet.put(new CandlestickRangeAxisMaxValueExpressionProperty((JRDesignCandlestickPlot)plot, dataset));
+            propertySet.put(new CandlestickDomainAxisMinValueExpressionProperty((JRDesignCandlestickPlot)plot, dataset));
+            propertySet.put(new CandlestickDomainAxisMaxValueExpressionProperty((JRDesignCandlestickPlot)plot, dataset));
         }
         else if (plot instanceof JRDesignMeterPlot)
         {

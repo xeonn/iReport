@@ -114,6 +114,7 @@ public class ElementPropertiesFactory {
     {
         JRDesignDataset dataset = ModelUtils.getElementDataset(genericElement, jd);
         Sheet.Set propertySet = Sheet.createPropertiesSet();
+
         propertySet.setName("GENERIC_ELEMENT_PROPERTIES");
         propertySet.setDisplayName("Generic Element properties");
         propertySet.put(new GenericElementTypeNameProperty(genericElement));

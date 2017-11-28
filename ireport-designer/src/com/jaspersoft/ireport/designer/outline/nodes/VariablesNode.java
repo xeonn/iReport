@@ -151,18 +151,21 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
     }
 
     @Override
-    public PasteType getDropType(Transferable t, final int action, int index) {
+    public PasteType getDropType(Transferable t, final int action, final int index) {
 
         final Node dropNode = NodeTransfer.node(t, DnDConstants.ACTION_COPY_OR_MOVE + NodeTransfer.CLIPBOARD_CUT);
-        final int dropAction = DnDUtilities.getTransferAction(t);
+        final int dropAction = action; //DnDUtilities.getTransferAction(t);
         
         final int insertAt = index;
+
         if (null != dropNode) {
 
             final JRDesignVariable variable = dropNode.getLookup().lookup(JRDesignVariable.class);
+
             if (null != variable) {
 
-                if (isSort() && getDataset().getVariablesList().contains(variable)) return null;
+                //System.out.println("Drop action is: " + dropAction);
+                if (isSort() && getDataset().getVariablesList().contains(variable) && dropAction != DnDConstants.ACTION_COPY) return null;
 
                 return new PasteType() {
 
@@ -176,7 +179,7 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
                         List list = getDataset().getVariablesList();
                         int currentIndex = -1; //Current position in the list
                         int lastSystemDefinedVariableIndex = -1; //First valid position
-                        
+
                         for (int i = 0; i < list.size(); ++i) {
                             JRDesignVariable p = (JRDesignVariable) list.get(i);
                             if (p == variable) {
@@ -189,8 +192,19 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
                         // At this point lastSystemDefinedVariableIndex contains the first valid index
                         // to add a variable and currentIndex contains the index of the variable in the list
                         // if present
-                        
-                        if( (dropAction & NodeTransfer.MOVE) != 0 ) // Moving variable...
+/*
+                        boolean duplicate = false;
+                        if (insertAt != -1 && currentIndex>=0)
+                        {
+                            // the variable has been dropped over its parent node.
+                            // check the move type...
+                            if (dropAction == NodeTransfer.COPY)
+                            {
+                                duplicate = true;
+                            }
+                        }
+ */
+                        if(dropAction == DnDConstants.ACTION_MOVE) // Moving variable...
                         {
                             int newIndex = -1;
                             if (currentIndex != -1) { // Case 1: Moving in the list...

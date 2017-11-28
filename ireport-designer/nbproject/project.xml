@@ -737,8 +737,8 @@
                 <binary-origin>release/modules/ext/jakarta-bcel-20050813.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/groovy-all-1.5.5.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/groovy-all-1.5.5.jar</binary-origin>
+                <runtime-relative-path>ext/groovy-all-1.7.5.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/groovy-all-1.7.5.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jcommon-1.0.15.jar</runtime-relative-path>
@@ -757,12 +757,12 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-3.7.5.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-3.7.5.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-3.7.6.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-3.7.6.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-fonts-3.7.5.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-fonts-3.7.5.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-fonts-3.7.6.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-fonts-3.7.6.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jaxen-1.1.1.jar</runtime-relative-path>
@@ -889,8 +889,8 @@
                 <binary-origin>release/modules/ext/rhino-1.7R1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-chart-themes-3.7.4.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-chart-themes-3.7.4.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-chart-themes-3.7.6.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-chart-themes-3.7.6.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/castor-1.2.jar</runtime-relative-path>
@@ -1009,8 +1009,8 @@
             <!-- end REX -->
             <!-- sqleonardo-2007.03.jar -->
             <class-path-extension>
-                <runtime-relative-path>ext/sqleonardo-2007.03.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/sqleonardo-2007.03.jar</binary-origin>
+                <runtime-relative-path>ext/sqleonardo-2009.03.rc1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/sqleonardo-2009.03.rc1.jar</binary-origin>
             </class-path-extension>
             <!-- end sqleonardo-2007.03.jar -->
             <!-- swingx-2007_10_07.jar -->

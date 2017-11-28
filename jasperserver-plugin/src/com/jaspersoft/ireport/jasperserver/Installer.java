@@ -48,5 +48,12 @@ public class Installer extends ModuleInstall {
             e.printStackTrace();
         }
 
+
+        ClassLoader cl = IReportManager.getReportClassLoader();
+        while (cl != null)
+        {
+            System.out.println(cl.getClass().getName());
+            cl = cl.getParent();
+        }
     }
 }

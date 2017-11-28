@@ -24,14 +24,9 @@
 package com.jaspersoft.ireport.designer.data.fieldsproviders;
 
 import com.jaspersoft.ireport.locale.I18n;
-import java.io.IOException;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import nickyb.sqleonardo.environment.Application;
-import nickyb.sqleonardo.querybuilder.QueryActions;
 import nickyb.sqleonardo.querybuilder.QueryModel;
 import nickyb.sqleonardo.querybuilder.syntax.SQLParser;
-
 
 
 /**
@@ -63,11 +58,6 @@ public class QueryBuilderDialog extends javax.swing.JDialog {
     public void applyI18n()
     {
         
-        jTabbedPane1.setTitleAt(0, //I18n.getString("application.builder",
-                I18n.getString("QueryBuilderDialog.Pane.Builder"));
-        jTabbedPane1.setTitleAt(1, //I18n.getString("application.syntax",
-                I18n.getString("QueryBuilderDialog.Title.SQL"));
-        
         jButtonOk.setText( I18n.getString("Global.Button.Ok") );
         jButtonCancel.setText( I18n.getString("Global.Button.Cancel"));
         
@@ -96,40 +86,16 @@ public class QueryBuilderDialog extends javax.swing.JDialog {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        queryBuilder1 = new nickyb.sqleonardo.querybuilder.QueryBuilder();
-        jEditorPaneSQL = new javax.swing.JEditorPane();
         jPanel1 = new javax.swing.JPanel();
         jButtonOk = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
+        queryBuilder1 = new nickyb.sqleonardo.querybuilder.QueryBuilder();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.GridBagLayout());
-
-        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
-        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jTabbedPane1StateChanged(evt);
-            }
-        });
-
-        queryBuilder1.setPreferredSize(new java.awt.Dimension(600, 483));
-        jTabbedPane1.addTab(I18n.getString("QueryBuilderDialog.Pane.Design"), queryBuilder1); // NOI18N
-
-        jEditorPaneSQL.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jEditorPaneSQL.setMinimumSize(new java.awt.Dimension(50, 200));
-        jEditorPaneSQL.setPreferredSize(new java.awt.Dimension(661, 340));
-        jTabbedPane1.addTab(I18n.getString("QueryBuilderDialog.Pane.SQL"), jEditorPaneSQL); // NOI18N
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        getContentPane().add(jTabbedPane1, gridBagConstraints);
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButtonOk.setText(I18n.getString("Global.Button.Ok")); // NOI18N
+        jButtonOk.setText("Ok");
         jButtonOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOkActionPerformed(evt);
@@ -141,7 +107,7 @@ public class QueryBuilderDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 0);
         jPanel1.add(jButtonOk, gridBagConstraints);
 
-        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
+        jButtonCancel.setText("Cancel");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -151,64 +117,25 @@ public class QueryBuilderDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanel1.add(jButtonCancel, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        getContentPane().add(jPanel1, gridBagConstraints);
+        queryBuilder1.setPreferredSize(new java.awt.Dimension(600, 483));
+
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 713, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+            .add(queryBuilder1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 713, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
+                .add(queryBuilder1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
-
-            if (isInit()) return; 
-            if(jTabbedPane1.getSelectedIndex() == 0)
-		{
-			String msql = queryBuilder1.getModel().toString(true);
-			String tsql = jEditorPaneSQL.getText();
-			
-			if(!tsql.equals(msql))
-			{
-				if(JOptionPane.showConfirmDialog( this, //I18n.getString("application.syntaxChanged",
-                                        I18n.getString("QueryBuilderDialog.Message.Confirm")) == JOptionPane.OK_OPTION)
-				{
-					// this thread resolve: IllegalComponentStateException
-					new Thread(new Runnable()
-					{
-						public void run()
-						{
-							while(!queryBuilder1.isVisible());
-							try
-							{
-								QueryModel qm = SQLParser.toQueryModel(jEditorPaneSQL.getText());
-								queryBuilder1.setModel(qm);
-							}
-							catch (IOException e)
-							{
-								JOptionPane.showMessageDialog(QueryBuilderDialog.this,// I18n.getString("errorParsingSQL",
-                                                                        I18n.getString("QueryBuilderDialog.Message.Warning"));
-                                                                jTabbedPane1.setSelectedIndex(0);
-                                                        }
-						}
-					}).start();
-				}
-			}
-		}
-		else
-                {
-                    try {
-		
-                        jEditorPaneSQL.setText(queryBuilder1.getModel().toString(true));
-                    
-                    } catch (Exception ex)
-                    {
-                        
-                    }
-                }
-        
-    }//GEN-LAST:event_jTabbedPane1StateChanged
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
 
@@ -219,14 +146,7 @@ public class QueryBuilderDialog extends javax.swing.JDialog {
 
     private void jButtonOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOkActionPerformed
 
-        if (jTabbedPane1.getSelectedIndex() == 0)
-        {
-            query = this.queryBuilder1.getModel().toString(true);
-        }
-        else
-        {
-            query = this.jEditorPaneSQL.getText();
-        }
+        query = this.queryBuilder1.getQueryModel().toString(true);
         
         this.setDialogResult(javax.swing.JOptionPane.OK_OPTION);
         this.setVisible(false);
@@ -247,7 +167,7 @@ public class QueryBuilderDialog extends javax.swing.JDialog {
             {
                 if (isVisible())
                 {
-                    queryBuilder1.setModel( qm );
+                    queryBuilder1.setQueryModel( qm );
                 }
             }
         });
@@ -256,9 +176,7 @@ public class QueryBuilderDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonOk;
-    private javax.swing.JEditorPane jEditorPaneSQL;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private nickyb.sqleonardo.querybuilder.QueryBuilder queryBuilder1;
     // End of variables declaration//GEN-END:variables
     

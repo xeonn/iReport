@@ -147,7 +147,7 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
             }
         });
 
-        jCheckBoxAutoDetectCellType.setText("Auto Detect Cell Type");
+        jCheckBoxAutoDetectCellType.setText("Detect Cell Type");
         jCheckBoxAutoDetectCellType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxAutoDetectCellTypeActionPerformed(evt);

@@ -27,6 +27,7 @@ import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementPasteType;
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.datatransfer.Transferable;
@@ -136,7 +137,8 @@ public class ListElementNode extends ElementNode {
         set.put(new ListContentsHeightProperty(contents));
         set.put(new ListContentsWidthProperty(contents));
         set.put(new PrintOrderProperty((StandardListComponent)((JRDesignComponentElement)this.getElement()).getComponent()));
-
+        set.put(new IgnoreWidthProperty((StandardListComponent)((JRDesignComponentElement)this.getElement()).getComponent()));
+        
         sheet.put( set);
         
         return sheet;
@@ -228,3 +230,59 @@ class PrintOrderProperty extends ByteProperty
         }
 
 }
+
+
+class IgnoreWidthProperty extends BooleanProperty
+{
+
+        private final StandardListComponent element;
+
+        @SuppressWarnings("unchecked")
+        public IgnoreWidthProperty(StandardListComponent element)
+        {
+            super(element);
+            this.element = element;
+        }
+        @Override
+        public String getName()
+        {
+            return StandardListComponent.PROPERTY_IGNORE_WIDTH;
+        }
+
+        @Override
+        public String getDisplayName()
+        {
+            return "Ignore Width Property";
+        }
+
+        @Override
+        public String getShortDescription()
+        {
+            return "This attribute determines whether the list will break at the width set for the list element, or whether the list is to expand over this width (and over the page width as well).";
+        }
+
+        @Override
+        public Boolean getBoolean()
+        {
+            return element.getIgnoreWidth();
+        }
+
+        @Override
+        public Boolean getOwnBoolean()
+        {
+            return element.getIgnoreWidth();
+        }
+
+        @Override
+        public Boolean getDefaultBoolean()
+        {
+            return null;
+        }
+
+        @Override
+        public void setBoolean(Boolean b)
+        {
+            element.setIgnoreWidth(b);
+        }
+
+    }

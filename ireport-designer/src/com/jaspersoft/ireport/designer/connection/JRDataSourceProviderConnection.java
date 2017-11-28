@@ -26,11 +26,18 @@ package com.jaspersoft.ireport.designer.connection;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.connection.gui.JRDataSourceProviderConnectionEditor;
+import com.jaspersoft.ireport.designer.data.WizardFieldsProvider;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import net.sf.jasperreports.engine.*;
 import javax.swing.*;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.util.Mutex;
 
 
@@ -38,7 +45,7 @@ import org.openide.util.Mutex;
  *
  * @author  Administrator
  */
-public class JRDataSourceProviderConnection extends IReportConnection {
+public class JRDataSourceProviderConnection extends IReportConnection implements WizardFieldsProvider {
     
     
     private net.sf.jasperreports.engine.JRDataSourceProvider dsp;
@@ -217,5 +224,49 @@ public class JRDataSourceProviderConnection extends IReportConnection {
                     "Exception",JOptionPane.ERROR_MESSAGE);
                     return;									
             }
+    }
+
+    public String getQueryLanguage() {
+        return null;
+    }
+
+    public List<JRDesignField> readFields(String query) throws Exception {
+        List<JRDesignField> fields = new ArrayList<JRDesignField>();
+
+        try {
+
+            InputStream is = getClass().getResourceAsStream("/com/jaspersoft/ireport/designer/data/data.jrxml");
+            JasperDesign dataJd = net.sf.jasperreports.engine.xml.JRXmlLoader.load(is);
+
+            // Remove fields...
+            dataJd.getFieldsList().clear(); // This would not be legal...
+            dataJd.getFieldsMap().clear();
+
+            JasperReport jr = JasperCompileManager.compileReport(dataJd);
+
+            net.sf.jasperreports.engine.JRField[] jrfields = getDataSourceProvider().getFields( jr );
+
+            for (int i=0; i< jrfields.length; ++i)
+            {
+                JRDesignField field = new JRDesignField();
+                field.setName( jrfields[i].getName());
+                field.setDescription( jrfields[i].getDescription());
+                field.setValueClassName( jrfields[i].getValueClassName());
+                field.setValueClass( jrfields[i].getValueClass());
+                ModelUtils.replacePropertiesMap( jrfields[i].getPropertiesMap(), field.getPropertiesMap());
+                fields.add(field);
+            }
+        } catch (Exception ex)
+        {}
+
+        return fields;
+    }
+
+    public boolean supportsDesign() {
+        return false;
+    }
+
+    public String designQuery(String query) {
+        return query;
     }
 }

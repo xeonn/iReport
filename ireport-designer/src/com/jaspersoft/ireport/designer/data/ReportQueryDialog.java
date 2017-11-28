@@ -60,10 +60,16 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import javax.swing.event.*;
 import java.awt.datatransfer.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.text.MessageFormat;
 import javax.persistence.EntityManager;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoManager;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
@@ -82,6 +88,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.query.JRHibernateQueryExecuterFactory;
 import net.sf.jasperreports.engine.query.JRJpaQueryExecuterFactory;
 import net.sf.jasperreports.olap.JRMondrianQueryExecuterFactory;
+import nickyb.sqleonardo.querybuilder.QueryStyledDocument;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jdesktop.swingx.JXBusyLabel;
@@ -100,6 +107,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
     private boolean winMaximized = false;
     private boolean adjustingFrameSize = false;
     private Rectangle normalBounds = null;
+    private UndoManager manager = new UndoManager();
     
     private FieldsProvider fieldsProvider = null;
         
@@ -155,7 +163,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         jTableFields.getColumn(0).setCellRenderer(new JRFieldTableCellRenderer());
         
         stoppedChanging.setRepeats(false);
-        
+        jEditorPane1.setDocument(new QueryStyledDocument());
         jEditorPane1.getDocument().addDocumentListener( new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
                 if(isSettingSQLExpression)return;
@@ -174,6 +182,30 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
             }
         } );
         
+        
+        jEditorPane1.getDocument().addUndoableEditListener(new UndoableEditListener() {
+
+            public void undoableEditHappened(UndoableEditEvent e) {
+                if(e.getEdit().getPresentationName() != null &&
+                        e.getEdit().getPresentationName().equals("style change"))
+                {
+                    // ignore it
+                    return;
+                }
+                manager.undoableEditHappened(e);
+            }
+        });
+
+        Action undoAction = new UndoAction(manager);
+        Action redoAction = new RedoAction(manager);
+
+        // Assign the actions to keys
+        jEditorPane1.registerKeyboardAction(undoAction, KeyStroke.getKeyStroke(
+            KeyEvent.VK_Z, InputEvent.CTRL_MASK), JComponent.WHEN_FOCUSED);
+        jEditorPane1.registerKeyboardAction(redoAction, KeyStroke.getKeyStroke(
+            KeyEvent.VK_Y, InputEvent.CTRL_MASK), JComponent.WHEN_FOCUSED);
+
+
         setColumnsError( I18n.getString("ReportQueryDialog.Message.Error") );
         
         /*
@@ -914,7 +946,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         jSplitPane2 = new javax.swing.JSplitPane();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jEditorPane1 = new javax.swing.JEditorPane();
+        jEditorPane1 = new javax.swing.JTextPane();
         jLabelStatusSQL = new org.jdesktop.swingx.JXBusyLabel();
         automaticlyReadFieldsCheckBox = new javax.swing.JCheckBox();
         readFieldsButton = new javax.swing.JButton();
@@ -1057,7 +1089,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         jScrollPane1.setPreferredSize(new java.awt.Dimension(661, 340));
 
         jEditorPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jEditorPane1.setFont(new java.awt.Font("Courier New", 0, 12));
+        jEditorPane1.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         jEditorPane1.setMinimumSize(new java.awt.Dimension(50, 200));
         jEditorPane1.setPreferredSize(new java.awt.Dimension(661, 340));
         jScrollPane1.setViewportView(jEditorPane1);
@@ -2825,3 +2857,37 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
 }
 
 
+
+// The Undo action
+  class UndoAction extends AbstractAction {
+    public UndoAction(UndoManager manager) {
+      this.manager = manager;
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+      try {
+        manager.undo();
+      } catch (CannotUndoException e) {
+        Toolkit.getDefaultToolkit().beep();
+      }
+    }
+
+    private UndoManager manager;
+  }
+
+  // The Redo action
+  class RedoAction extends AbstractAction {
+    public RedoAction(UndoManager manager) {
+      this.manager = manager;
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+      try {
+        manager.redo();
+      } catch (CannotRedoException e) {
+        Toolkit.getDefaultToolkit().beep();
+      }
+    }
+
+    private UndoManager manager;
+  }

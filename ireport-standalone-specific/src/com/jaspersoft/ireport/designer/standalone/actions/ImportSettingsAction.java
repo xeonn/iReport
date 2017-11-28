@@ -44,7 +44,9 @@ public final class ImportSettingsAction extends CallableSystemAction {
                 String selectedVersion = (String)wizardDescriptor.getProperty("version");
                 if (selectedVersion != null)
                 {
-                    dir = new File(System.getProperty("netbeans.user"), selectedVersion);
+
+                    dir = new File(System.getProperty("netbeans.user"));
+                    dir = new File( dir.getParent(), selectedVersion);
                 }
             }
             else
