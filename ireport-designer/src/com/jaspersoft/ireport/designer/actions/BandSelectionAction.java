@@ -11,7 +11,6 @@ import com.jaspersoft.ireport.designer.ReportObjectScene;
 import java.awt.event.MouseEvent;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.widget.Widget;
 
@@ -23,7 +22,12 @@ public class BandSelectionAction extends WidgetAction.Adapter {
 
     public WidgetAction.State mousePressed(Widget widget,   WidgetAction.WidgetMouseEvent event)
     {
-        
+        if ((event.getModifiersEx () & MouseEvent.CTRL_DOWN_MASK) != 0 &&
+             ((ReportObjectScene)widget.getScene()).getSelectedObjects().size() > 0)
+        {
+            return WidgetAction.State.CONSUMED;
+        }
+
         if (event.getButton() == MouseEvent.BUTTON1 && widget instanceof ReportObjectScene)
         {
             // find the correct band...

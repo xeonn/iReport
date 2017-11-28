@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.widget.Widget;
 import org.openide.nodes.Node;
+import org.openide.nodes.NodeOp;
 import org.openide.util.Lookup;
 import org.openide.util.Utilities;
 import org.openide.util.lookup.Lookups;
@@ -50,13 +51,18 @@ public class ReportElementPopupMenuProvider implements PopupMenuProvider {
         
         Node node = null;
         
-        try {
-            node = IReportManager.getInstance().findNodeOf(element, IReportManager.getInstance().getActiveVisualView().getExplorerManager().getRootContext());
-        } catch (Exception ex) { }
         
-        if (node != null)
+            // We can assume that the node is selected in this explorer window...
+            Node[] selectedNodes = IReportManager.getInstance().getActiveVisualView().getExplorerManager().getSelectedNodes();
+            if (selectedNodes != null && selectedNodes.length > 0)
+            {
+                node = selectedNodes[0];
+            }
+            //node = IReportManager.getInstance().findNodeOf(element, IReportManager.getInstance().getActiveVisualView().getExplorerManager().getRootContext());
+        
+        if (selectedNodes != null && selectedNodes.length > 0)
         {
-            Action[] actions = node.getActions(true);
+            Action[] actions = NodeOp.findActions(selectedNodes);
             if (actions != null && actions.length > 0)
             {
                 ActionMap actionsMap = new ActionMap();
@@ -66,13 +72,6 @@ public class ReportElementPopupMenuProvider implements PopupMenuProvider {
                         actionsMap.put( actions[i].getValue( Action.ACTION_COMMAND_KEY), actions[i]);
                 }
                 
-                if (node instanceof ElementNode)
-                {
-                    // Add format tools action...
-                    
-                }
-
-
                 List<Lookup> allLookups = new ArrayList<Lookup>();
                 allLookups.add(node.getLookup());
                 allLookups.add(Utilities.actionsGlobalContext());

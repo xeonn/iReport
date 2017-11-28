@@ -34,7 +34,9 @@ import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.ElementDecorator;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.borders.SimpleLineBorder;
+import com.jaspersoft.ireport.designer.utils.WrapperClassLoader;
 import java.awt.AlphaComposite;
 import java.awt.Composite;
 import java.awt.Graphics2D;
@@ -47,7 +49,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Date;
 import java.util.List;
-import javax.swing.ImageIcon;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRElementGroup;
@@ -57,6 +58,7 @@ import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.base.JRBaseStaticText;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
@@ -77,6 +79,8 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
     private javax.swing.ImageIcon crosstabImage = null;
     private javax.swing.ImageIcon subreportImage = null;
     private javax.swing.ImageIcon multiaxisImage = null;
+
+    private boolean needCLRefresh = true;
 
     
     public JRDesignElement getElement() {
@@ -241,8 +245,8 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
      */
     public Point convertLocalToModelLocation(Point p, boolean out)
     {
-        JasperDesign jd = ((AbstractReportObjectScene)getScene()).getJasperDesign();
-        Point base = ModelUtils.getParentLocation(jd, getElement());
+        
+        Point base = getParentElementModelLocation();
         
         if (out)
         {
@@ -250,6 +254,13 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
             base.y -= getBorder().getInsets().top;
         }
         return new Point(p.x - base.x, p.y - base.y);
+    }
+
+    public Point getParentElementModelLocation()
+    {
+        JasperDesign jd = ((AbstractReportObjectScene)getScene()).getJasperDesign();
+        Point base = ModelUtils.getParentLocation(jd, getElement(), this);
+        return base;
     }
     
     
@@ -263,10 +274,8 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
     public Point convertModelToLocalLocation(Point p)
     {
         JasperDesign jd = ((AbstractReportObjectScene)getScene()).getJasperDesign();
-        Point base = ModelUtils.getParentLocation(jd, getElement());
+        Point base = getParentElementModelLocation();
 
-        
-        
         // I need to discover the first logical parent of this element
         return new Point(base.x + p.x, base.y + p.y);
     }
@@ -282,11 +291,13 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
 
         super.paintWidget();
         Graphics2D gr = getScene().getGraphics();
-        
+
+
+
         //Java2DUtils.setClip(gr,getClientArea());
         // Move the gfx 10 pixel ahead...
         Rectangle r = getPreferredBounds();
-        
+
         long t = new Date().getTime();
         //if (getElement() instanceof JRDesignImage) return;
         
@@ -318,6 +329,18 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
             gr.drawImage(crosstabImage.getImage(), 4, 4, null);
             gr.setClip(oldClip);
         }
+//        if (e instanceof JRDesignFrame)
+//        {
+//            Composite oldComposite = gr.getComposite();
+//            gr.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+//            //try {
+//            //    e.visit( dv );
+//            //} catch (Exception ex){}
+//            gr.setComposite(oldComposite);
+//            Shape oldClip = gr.getClip();
+//            Shape rect = new Rectangle2D.Float(0,0,element.getWidth(), element.getHeight());
+//
+//        }
         else if (e instanceof JRDesignSubreport)
         {
             Composite oldComposite = gr.getComposite();
@@ -329,17 +352,48 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
             gr.drawImage(subreportImage.getImage(), 4, 4, null);
             gr.setClip(oldClip);
         }
-        else if (e instanceof JRDesignChart &&
-                 ((JRDesignChart)e).getChartType() == JRDesignChart.CHART_TYPE_MULTI_AXIS )
+        else if (e instanceof JRDesignChart)
         {
-            Composite oldComposite = gr.getComposite();
-            gr.fillRect(0, 0, element.getWidth(), element.getHeight());
-            gr.setComposite(oldComposite);
-            Shape oldClip = gr.getClip();
-            Shape rect = new Rectangle2D.Float(0,0,element.getWidth(), element.getHeight());
-            gr.clip(rect);
-            gr.drawImage(multiaxisImage.getImage(), 4, 4, null);
-            gr.setClip(oldClip);
+            
+            if (((JRDesignChart)e).getChartType() == JRDesignChart.CHART_TYPE_MULTI_AXIS )
+            {
+                Composite oldComposite = gr.getComposite();
+
+                gr.fillRect(0, 0, element.getWidth(), element.getHeight());
+                gr.setComposite(oldComposite);
+                Shape oldClip = gr.getClip();
+                Shape rect = new Rectangle2D.Float(0,0,element.getWidth(), element.getHeight());
+                gr.clip(rect);
+                gr.drawImage(multiaxisImage.getImage(), 4, 4, null);
+                gr.setClip(oldClip);
+            }
+            else
+            {
+                ClassLoader oldCL = null;
+
+                dv.setGraphics2D(gr);
+                if (isNeedCLRefresh())
+                {
+                    System.out.println("Refresh classloader...");
+                    System.out.flush();
+                    oldCL = Thread.currentThread().getContextClassLoader();
+                    Thread.currentThread().setContextClassLoader(WrapperClassLoader.wrapClassloader( IReportManager.getReportClassLoader()));
+                    setNeedCLRefresh(false);
+                }
+
+                try {
+                    e.visit( dv );
+                } catch (Exception ex){
+
+                    System.err.println("iReport - Element rendering exception " + getElement() + " " + ex.getMessage());
+                    //ex.printStackTrace();
+                }
+                
+                if (oldCL != null)
+                {
+                    Thread.currentThread().setContextClassLoader(oldCL);
+                }
+            }
         }
         else
         {
@@ -352,6 +406,15 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
                 //ex.printStackTrace();
             }
         }
+
+        // show the element and parent coordinates...
+        /*
+        Point p = getParentElementModelLocation();
+        gr.setColor(Color.darkGray);
+        gr.setFont(new Font("SansSerif",0,6));
+        gr.drawString( getElement().getX() + "," + getElement().getY() + " - " + p.x + "," + p.y, 2, 12);
+        */
+        //
         gr.setTransform(af);
         //Java2DUtils.resetClip(gr);
         
@@ -364,6 +427,12 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
         String propertyName = evt.getPropertyName();
 
         if (propertyName == null) return;
+        
+        if (propertyName.equals( JRDesignChart.PROPERTY_CHART_THEME))
+        {
+            setNeedCLRefresh(true);
+        }
+
         if (propertyName.equals( JRDesignElement.PROPERTY_HEIGHT) ||
             propertyName.equals( JRDesignElement.PROPERTY_WIDTH) ||
             propertyName.equals( JRDesignElement.PROPERTY_ELEMENT_GROUP) ||
@@ -427,9 +496,18 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
         
         if (propertyName.equals( JRDesignFrame.PROPERTY_CHILDREN))
         {
+            
             if (getElement() instanceof JRElementGroup)
             {
                 ((AbstractReportObjectScene)getScene()).refreshElementGroup( (JRElementGroup)getElement() );
+            }
+            else if (getScene() instanceof ReportObjectScene &&
+                     this.getElement() instanceof JRDesignComponentElement &&
+                     this.getChildrenElements() != null)
+            {
+                System.out.println("Componenst changed! Refreshing bands!");
+                System.out.flush();
+                ((ReportObjectScene)getScene()).refreshBands();
             }
         }
 
@@ -458,6 +536,46 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
         for (ElementDecorator decorator : decorators)
         {
             decorator.paintWidget(this);
+        }
+    }
+
+    /**
+     * @return the needCLRefresh
+     */
+    public boolean isNeedCLRefresh() {
+        return needCLRefresh;
+    }
+
+    /**
+     * @param needCLRefresh the needCLRefresh to set
+     */
+    public void setNeedCLRefresh(boolean needCLRefresh) {
+        this.needCLRefresh = needCLRefresh;
+    }
+
+    /**
+     * For containers widget. This should return the childrens from the design element.
+     * @return
+     */
+    public List getChildrenElements()
+    {
+        if (getElement() instanceof JRDesignFrame)
+        {
+            return ((JRDesignFrame)getElement()).getChildren();
+        }
+        return null;
+    }
+
+    /**
+     * If a widget can have sub elements, this is the way the elements are
+     * added.
+     * @param element
+     */
+    public void addElement(JRDesignElement element)
+    {
+        if (getElement() instanceof JRDesignFrame)
+        {
+            ((JRDesignFrame)getElement()).addElement(element);
         }
     }
 }

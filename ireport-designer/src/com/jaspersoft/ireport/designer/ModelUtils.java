@@ -33,7 +33,9 @@ package com.jaspersoft.ireport.designer;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.palette.actions.CreateTextFieldAction;
 import com.jaspersoft.ireport.designer.sheet.GenericProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.PatternProperty;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -68,6 +70,7 @@ import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignChartDataset;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
@@ -570,6 +573,21 @@ public class ModelUtils {
             return new Point(0,0);
     }
 
+    public static boolean isChildOf(JRDesignElement element, List childrenElements) {
+        
+        for (int i=0; i<childrenElements.size(); ++i)
+        {
+            if (childrenElements.get(i) instanceof JRDesignElement)
+            {
+                if (isChildOf(element, (JRDesignElement)childrenElements.get(i)))
+                    return true;
+            }
+        }
+        return false;
+
+
+    }
+
     /**
      * Look in the crosstab if the provided new name is already a name of a group or a measure...
      * 
@@ -822,6 +840,32 @@ public class ModelUtils {
                 if (isChildOf(element, ((JRDesignFrame)elements[i]).getElements() ))
                     return true;
             }
+        }
+        return false;
+    }
+
+    public static boolean isChildOf(JRDesignElement element,  JRDesignElement elementParent)
+    {
+        if (element == elementParent) return true;
+        if (elementParent instanceof JRDesignFrame)
+        {
+            if (isChildOf(element, ((JRDesignFrame)elementParent).getElements() ))
+                return true;
+        }
+        else if (elementParent instanceof JRDesignComponentElement)
+        {
+            // In this case we need to find if the component can have children.
+            // The easiest way to do it is looking for its widget...
+            try {
+                JRDesignElementWidget w = (JRDesignElementWidget)(IReportManager.getInstance().getActiveVisualView().getReportDesignerPanel().getActiveScene().findWidget(element));
+                if (w.getChildrenElements() != null)
+                {
+                    if (isChildOf(element, w.getChildrenElements()))
+                    {
+                        return true;
+                    }
+                }
+            } catch (Throwable t) {}
         }
         return false;
     }
@@ -1381,17 +1425,29 @@ public class ModelUtils {
         newExp.setText( exp.getText() );
         return newExp;
     }
-    
+
+//    /**
+//     * This utility looks for the phisical parent of an element and returns his position.
+//     * This position is refers to the plain document preview, where 0,0 are the coordinates
+//     * of the upperleft corner of the document.
+//     * If no parent is found, the method returns 0,0
+//     *
+//     * @deprecated Use getParentLocationVisual instead
+//     */
+//    public static Point getParentLocation(JasperDesign jd, JRDesignElement element )
+//    {
+//        return getParentLocationVisual(jd, element, null);
+//    }
     /**
      * This utility looks for the phisical parent of an element and returns his position.
      * This position is refers to the plain document preview, where 0,0 are the coordinates
      * of the upperleft corner of the document.
      * If no parent is found, the method returns 0,0
      */ 
-    public static Point getParentLocation(JasperDesign jd, JRDesignElement element )
+    public static Point getParentLocation(JasperDesign jd, JRDesignElement element, JRDesignElementWidget widget)
     {
-        Point base = new Point(0,0);
-        if (element == null) return base;
+        Point base = null;
+        if (element == null) return new Point(0,0);
         
         JRElementGroup grp = element.getElementGroup();
 
@@ -1401,22 +1457,23 @@ public class ModelUtils {
             if (grp instanceof JRDesignBand)    // Element placed in a band
             {
                 JRDesignBand band = (JRDesignBand)grp;
-                base.x = jd.getLeftMargin();
-                base.y = ModelUtils.getBandLocation(band, jd);
+                base = new Point( 
+                        jd.getLeftMargin(),  // X
+                        ModelUtils.getBandLocation(band, jd) // Y
+                );
                 break;
             }
             else if (grp instanceof JRDesignCellContents)    // Element placed in a cell
             {
                 // TODO: calculate cell position....
                 JRDesignCellContents cell = (JRDesignCellContents)grp;
-                
                 base = getCellLocation(cell.getOrigin().getCrosstab(),cell);
                 break;
             }
             else if (grp instanceof JRDesignFrame)
             {
                 JRDesignFrame frame = (JRDesignFrame)grp;
-                base = getParentLocation(jd, frame);
+                base = getParentLocation(jd, frame, widget);
                 base.x += frame.getX();
                 base.y += frame.getY();
                 // In this case we return immediatly
@@ -1426,6 +1483,28 @@ public class ModelUtils {
             {
                 grp = grp.getElementGroup();
             }
+        }
+
+        if (base == null)
+        {
+            base = new Point(0,0);
+            if (widget != null)
+            {
+
+                // this is a very strange case... check if this element belongs to
+                // a custom component...
+                if (widget.getScene() instanceof ReportObjectScene)
+                {
+                    JRDesignElementWidget owner = ((ReportObjectScene)widget.getScene()).findCustomComponentOwner(element);
+                    if (owner != null)
+                    {
+                        base = getParentLocation(jd, owner.getElement(), owner);
+                        base.x += owner.getElement().getX();
+                        base.y += owner.getElement().getY();
+                    }
+                }
+            }
+
         }
         
         return base;
@@ -1437,24 +1516,38 @@ public class ModelUtils {
      * This position is refers to the plain document preview, where 0,0 are the coordinates
      * of the upperleft corner of the document.
      * If no parent is found, the method returns 0,0
-     */ 
+     */
     public static Rectangle getParentBounds(JasperDesign jd, JRDesignElement element )
     {
-        Rectangle base = new Rectangle(0,0,0,0);
-        if (element == null) return base;
-        
+        return getParentBounds(jd, element, null);
+    }
+
+
+      /**
+     * This utility looks for the phisical parent of an element and returns his position.
+     * This position is refers to the plain document preview, where 0,0 are the coordinates
+     * of the upperleft corner of the document.
+     * If no parent is found, the method returns 0,0
+     */
+    public static Rectangle getParentBounds(JasperDesign jd, JRDesignElement element, JRDesignElementWidget widget)
+    {
+        Rectangle base = null;
+        if (element == null) return new Rectangle(0,0,0,0);
+
         JRElementGroup grp = element.getElementGroup();
-        
+
         // I need to discover the first logical parent of this element
         while (grp != null)    // Element placed in a frame
         {
             if (grp instanceof JRDesignBand)    // Element placed in a band
             {
                 JRDesignBand band = (JRDesignBand)grp;
-                base.x = jd.getLeftMargin();
-                base.y = ModelUtils.getBandLocation(band, jd);
-                base.width = jd.getPageWidth() - jd.getLeftMargin() - jd.getRightMargin();
-                base.height = band.getHeight();
+                base = new Rectangle(
+                        jd.getLeftMargin(),  // X
+                        ModelUtils.getBandLocation(band, jd), // Y
+                        jd.getPageWidth() - jd.getLeftMargin() - jd.getRightMargin(), //width
+                        band.getHeight()); //height
+
                 break;
             }
             else if (grp instanceof JRDesignCellContents)    // Element placed in a cell
@@ -1462,21 +1555,20 @@ public class ModelUtils {
                 // TODO: calculate cell position....
                 JRDesignCellContents cell = (JRDesignCellContents)grp;
                 Point p = getCellLocation(cell.getOrigin().getCrosstab(),cell);
-                base.x = p.x;
-                base.y = p.y;
-                base.width = cell.getWidth();
-                base.height = cell.getHeight();
+                base = new Rectangle(p.x, p.y, cell.getWidth(), cell.getHeight());
                 break;
             }
             else if (grp instanceof JRDesignFrame)
             {
                 JRDesignFrame frame = (JRDesignFrame)grp;
-                Point p = getParentLocation(jd, frame);
+
+                Point p = getParentLocation(jd, frame, widget);
+                base = new Rectangle();
                 base.x = p.x + frame.getX();
                 base.y = p.y + frame.getY();
                 base.width = frame.getWidth();
                 base.height = frame.getHeight();
-                // In this case we return immediatly
+
                 break;
             }
             else
@@ -1484,9 +1576,34 @@ public class ModelUtils {
                 grp = grp.getElementGroup();
             }
         }
-        
+
+        if (base == null)
+        {
+            base = new Rectangle(0,0,0,0);
+            if (widget != null)
+            {
+
+                // this is a very strange case... check if this element belongs to
+                // a custom component...
+                if (widget.getScene() instanceof ReportObjectScene)
+                {
+                    JRDesignElementWidget owner = ((ReportObjectScene)widget.getScene()).findCustomComponentOwner(element);
+                    if (owner != null)
+                    {
+                        Point p = getParentLocation(jd, owner.getElement(), owner);
+
+                        base.x += owner.getElement().getX();
+                        base.y += owner.getElement().getY();
+                        base.width += owner.getElement().getWidth();
+                        base.height += owner.getElement().getHeight();
+                    }
+                }
+            }
+
+        }
+
         return base;
-        
+
     }
     
     /**
@@ -1562,6 +1679,33 @@ public class ModelUtils {
         }
         
         return false;
+    }
+
+    /**
+     * Looks for propertyName in the sets of properties.
+     * @param Node.PropertySet[] sets The sets of properties (see Node.getPropertySets()
+     * @param String propertyName The name of the property to look for
+     * @return true if propertyName is in one of the sets.
+     *
+     */
+    public static Node.Property findProperty(Node.PropertySet[] sets, String propertyName)
+    {
+        for (int i=0; i<sets.length; ++i)
+        {
+            Node.Property[] pp = sets[i].getProperties();
+            for (int j=0; j<pp.length; ++j)
+            {
+                String name = pp[j].getName();
+                if (pp[j] instanceof PatternProperty)
+                {
+                    System.out.println("Property: " + pp[j].getName());
+                }
+
+                if (name != null && name.equals(propertyName)) return pp[j];
+            }
+        }
+
+        return null;
     }
 
     /**

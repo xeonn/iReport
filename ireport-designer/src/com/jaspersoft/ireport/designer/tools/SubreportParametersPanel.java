@@ -313,6 +313,7 @@ public class SubreportParametersPanel extends javax.swing.JPanel {
                 parameter.setName(jrParameter.getName() );
                 JRDesignExpression exp = new JRDesignExpression();
                 exp.setText("$P{" + jrParameter.getName() + "}");
+                exp.setValueClassName( jrParameter.getValueClassName() );
                 parameter.setExpression(exp);
                 parameters.put(parameter.getName(), parameter);
                 model.addRow(new Object[]{parameter.getName(), ((parameter.getExpression() != null && parameter.getExpression().getText() != null) ? 

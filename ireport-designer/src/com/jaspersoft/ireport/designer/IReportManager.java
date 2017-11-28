@@ -31,6 +31,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -121,6 +122,7 @@ public class IReportManager {
     public static HashMap<String, ElementNodeFactory> elementNodeFactories = new HashMap<String, ElementNodeFactory>();
     public static ElementNodeFactory getElementNodeFactory(String componentClassName)
     {
+
         if (elementNodeFactories.containsKey(componentClassName))
         {
             return elementNodeFactories.get(componentClassName);
@@ -138,8 +140,6 @@ public class IReportManager {
             FileObject fileObject = dataObject.getPrimaryFile();
             String name = dataObject.getName();
             boolean instance = false;
-            //System.out.println("Found: " + name + " ." + fileObject.getExt());
-            //System.out.flush();
             if (fileObject.getExt().equals("instance"))
             {
                 instance = true;
@@ -155,10 +155,12 @@ public class IReportManager {
                         Lookup lookup = Lookups.forPath("ireport/components/nodes"); // NOI18N
                         String elementFactoryClassName = (String)fileObject.getAttribute("instanceClass");
                         Collection<? extends ElementNodeFactory> elementNodeFactories = lookup.lookupAll(ElementNodeFactory.class);
+                        
                         Iterator<? extends ElementNodeFactory> it = elementNodeFactories.iterator();
                         while (it.hasNext ()) {
 
                             ElementNodeFactory tmp_enf = it.next();
+
                             if (tmp_enf.getClass().getName().equals(elementFactoryClassName))
                             {
                                 enf = tmp_enf;
@@ -174,6 +176,11 @@ public class IReportManager {
                     }
                     elementNodeFactories.put(componentClassName, enf);
                     return enf;
+                }
+                else
+                {
+                    System.out.println("Name not equals: " + name +  " != " + componentClassName);
+                            System.out.flush();
                 }
             } catch (Throwable ex)
             {
@@ -697,6 +704,7 @@ public class IReportManager {
                 }
             }
         }
+
         reportClassLoader.rescanAdditionalClasspath();
 
         // set the not cached classpath...
@@ -729,6 +737,15 @@ public class IReportManager {
         return urlCl;
     }
 
+    /*
+    public void registerAvailableJDBCDrivers()
+    {
+                // Reregister drivers...
+        java.sql.DriverManager.registerDriver(driver);
+        getReportClassLoader().
+    }
+    */
+
     /**
      *  Set the give object selected in the outline view.
      *  The lookup of the object is done looking first at the node that has this object in his lookup...
@@ -753,6 +770,73 @@ public class IReportManager {
                 OutlineTopComponent.getDefault().getExplorerManager().setSelectedNodes(new org.openide.nodes.Node[]{node});
             } catch (PropertyVetoException ex) {
                 Exceptions.printStackTrace(ex);
+            }
+        }
+        
+    }
+    
+         
+       
+
+/**
+     *  Set the give object selected in the outline view.
+     *  The lookup of the object is done looking first at the node that has this object in his lookup...
+     */
+    public void addSelectedObject(Object obj) {
+        
+        
+        org.openide.nodes.Node root = OutlineTopComponent.getDefault().getExplorerManager().getRootContext();
+        org.openide.nodes.Node node = null;
+        if (obj == null)
+        {
+            node = root;
+        }
+        else
+        {
+            node = findNodeOf(obj, root);
+        }
+        
+        if (node != null)
+        {
+            try {
+                List<org.openide.nodes.Node> selectedNodes = new ArrayList<org.openide.nodes.Node>();
+                selectedNodes.addAll( Arrays.asList(OutlineTopComponent.getDefault().getExplorerManager().getSelectedNodes()));
+                selectedNodes.add(node);
+                OutlineTopComponent.getDefault().getExplorerManager().setSelectedNodes(selectedNodes.toArray(new org.openide.nodes.Node[selectedNodes.size()]));
+            } catch (PropertyVetoException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+    }
+    
+    /**
+     *  Set the give object selected in the outline view.
+     *  The lookup of the object is done looking first at the node that has this object in his lookup...
+     */
+    public void removeSelectedObject(Object obj) {
+        
+        
+        org.openide.nodes.Node root = OutlineTopComponent.getDefault().getExplorerManager().getRootContext();
+        org.openide.nodes.Node node = null;
+        if (obj == null)
+        {
+            node = root;
+        }
+        else
+        {
+            node = findNodeOf(obj, root);
+        }
+        
+        if (node != null)
+        {
+            try {
+                List<org.openide.nodes.Node> selectedNodes = new ArrayList<org.openide.nodes.Node>();
+                selectedNodes.addAll( Arrays.asList(OutlineTopComponent.getDefault().getExplorerManager().getSelectedNodes()));
+                selectedNodes.remove(node);
+                OutlineTopComponent.getDefault().getExplorerManager().setSelectedNodes(selectedNodes.toArray(new org.openide.nodes.Node[selectedNodes.size()]));
+            } catch (PropertyVetoException ex) {
+                ex.printStackTrace();
             }
         }
         
@@ -832,7 +916,16 @@ public class IReportManager {
      *  Return the user defined set of additional paths for the classpath.
      */
     public String getCurrentDirectory() {
-        return getPreferences().get(CURRENT_DIRECTORY, System.getProperty("user.dir"));
+
+        String s = getPreferences().get(CURRENT_DIRECTORY, System.getProperty("user.dir"));
+
+        File f = new File(s);
+        if (f.exists())
+        {
+            return s;
+        }
+
+        return System.getProperty("user.dir");
     }
     
     /**

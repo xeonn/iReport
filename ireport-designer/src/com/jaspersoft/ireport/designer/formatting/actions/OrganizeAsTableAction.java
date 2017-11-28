@@ -10,6 +10,7 @@ import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Rectangle;
 import java.util.List;
 import javax.swing.Action;
+import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -71,6 +72,13 @@ public class OrganizeAsTableAction extends AbstractFormattingToolAction {
     @Override
     protected boolean asynchronous() {
         return false;
+    }
+
+    @Override
+    public JMenuItem getPopupPresenter() {
+        JMenuItem item = super.getPopupPresenter();
+        item.setIcon(getIcon());
+        return item;
     }
 
     

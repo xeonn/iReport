@@ -48,6 +48,7 @@ import com.jaspersoft.ireport.designer.widgets.JRDesignChartWidget;
 import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import com.jaspersoft.ireport.designer.widgets.JRDesignImageWidget;
 import com.jaspersoft.ireport.designer.widgets.PageWidget;
+import com.jaspersoft.ireport.designer.widgets.visitor.ConfigurableDrawVisitor;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.beans.PropertyChangeEvent;
@@ -90,6 +91,7 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
     private ReportAlignWithResizeStrategyProvider reportAlignWithResizeStrategyProvider = null;
     private KeyboardElementMoveAction keyboardElementMoveAction = null;
     private BandSelectionAction bandSelectionAction = null;
+    
 
     
     
@@ -158,7 +160,7 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
             }
             
             this.drawVisitor = 
-                    new DrawVisitor(new ReportConverter(jasperDesign, true, false), null);
+                    new ConfigurableDrawVisitor(new ReportConverter(jasperDesign, true, false), null);
             ThreadUtils.invokeInAWTThread(new Runnable() {
 
                 public void run() {
@@ -181,16 +183,15 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
         bandLayer.addChild(new BandWidget(this, b));
     }
     
-    public void addElementWidget(JRDesignElement de)
+    public JRDesignElementWidget addElementWidget(JRDesignElement de)
     {
-        if (de == null) return;
+        if (de == null) return null;
         JRDesignElementWidget widget = null;
 
         if (de instanceof JRDesignComponentElement)
         {
             widget = IReportManager.getComponentWidget(this, (JRDesignComponentElement)de);
         }
-
         else if (de instanceof JRDesignImage)
         {
             widget = new JRDesignImageWidget(this, (JRDesignImage)de);
@@ -207,10 +208,11 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
         //widget.getSelectionWidget().setLayout(new ResizeHandleLayout());
         //widget.getSelectionWidget().getActions().addAction(createSelectAction());
         
-        widget.getActions().addAction (createSelectAction());
+        widget.getActions().addAction (getReportSelectAction());
         
         widget.getSelectionWidget().getActions().addAction( keyboardElementMoveAction );
-        
+
+        widget.getSelectionWidget().getActions().addAction (getReportSelectAction());
         widget.getSelectionWidget().getActions().addAction(createObjectHoverAction());
         
         
@@ -240,6 +242,8 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
         selectionLayer.addChild(widget.getSelectionWidget());
         
         addObject(de, widget);
+
+        return widget;
     }
     
     public void rebuildDocument()
@@ -260,7 +264,6 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
             // Remove all the objects...
             while (getObjects().size() > 0)
             {
-
                 removeObject(getObjects().iterator().next());
             }
 
@@ -352,10 +355,24 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
                     JRElementGroup grp = ModelUtils.getTopElementGroup(dew.getElement());
                     if (!bands.contains(grp))
                     {
-                        // This band (top group) is not longer in the mode...
-                        this.removeObject(dew.getElement());
-                        toBeRemoved.add(widget);
-                        toBeRemovedSelection.add(dew.getSelectionWidget());
+                        // This element could still be in the model holded by a special
+                        // component... we should check first in all the custom components...
+                        boolean remove = true;
+
+                        JRDesignElementWidget owner = findCustomComponentOwner(dew.getElement());
+                        if (owner != null)
+                        {
+                            JRElementGroup grp2 = ModelUtils.getTopElementGroup(owner.getElement());
+                            if (bands.contains(grp2)) remove = false;
+                        }
+
+                        if (remove)
+                        {
+                            // This band (top group) is not longer in the mode...
+                            this.removeObject(dew.getElement());
+                            toBeRemoved.add(widget);
+                            toBeRemovedSelection.add(dew.getSelectionWidget());
+                        }
                     }
                 }
             }
@@ -371,16 +388,37 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
             setUpdatingView(oldUpdateingStatus);
         }
     }
-    
+
+    public JRDesignElementWidget findCustomComponentOwner(JRDesignElement element)
+    {
+        while (element.getElementGroup() != null &&
+               element.getElementGroup() instanceof JRDesignFrame)
+        {
+            element = (JRDesignFrame)element.getElementGroup();
+        }
+
+        List<Widget> widgets = elementsLayer.getChildren();
+        for (Widget widget : widgets)
+        {
+            if (widget instanceof JRDesignElementWidget)
+            {
+                    JRDesignElementWidget dew = (JRDesignElementWidget)widget;
+                    if (dew.getElement() instanceof JRDesignComponentElement &&
+                        dew.getChildrenElements().contains(element))
+                    {
+                        return dew;
+                    }
+            }
+        }
+        return null;
+    }
+
     @SuppressWarnings("unchecked")
     private void addElements(List children)
     {
         for (int i=0; i<children.size(); ++i)
             {
                 Object obj = children.get(i);
-
-
-
 
                 if (obj instanceof JRDesignElementGroup)
                 {
@@ -398,7 +436,7 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
                 if (obj instanceof JRDesignElement)
                 {
                     JRDesignElement de = (JRDesignElement)obj;
-                    JRDesignElementWidget w = (JRDesignElementWidget)findElementWidget(de);
+                    JRDesignElementWidget w = findElementWidget(de);
                     if (w != null)
                     {
                         w.updateBounds();
@@ -407,13 +445,15 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
                     }
                     else
                     {
-                        addElementWidget(de);
+                        w  = addElementWidget(de);
                     }
 
-                    if (de instanceof JRDesignFrame)
+                    // If the widget has childrens, add them here automatically....
+                    if (w != null && w.getChildrenElements() != null)
                     {
-                        addElements( ((JRDesignFrame)de).getChildren() );
+                        addElements(w.getChildrenElements());
                     }
+
                 }
             }
     }
@@ -474,27 +514,37 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
                         // if an element is already present in the band and will update it...
                         //ModelUtils.isElementChildOf(dw.getElement(),group) )
                         // Re Giulio: this would not take care of an order change...
-                    
-                        toRemove.add(dw);
-                        JRDesignElement element = dw.getElement();
-                        // check if the element is still valid...
-                        if (selectedObjects != null && selectedObjects.contains(element))
+                        boolean remove = true;
+                        // Check if the element belong to a custom component...
+                        JRDesignElementWidget owner = findCustomComponentOwner(dw.getElement());
+                        if (owner != null)
                         {
-                            // Check if the element is still there...
-                            boolean found = false;
-                            JRElement[] ele = group.getElements();
-                            for (int i=0; i<ele.length; ++i)
+                            remove = ModelUtils.isOrphan(owner.getElement());
+                        }
+
+                        if (remove)
+                        {
+                            toRemove.add(dw);
+                            JRDesignElement element = dw.getElement();
+                            // check if the element is still valid...
+                            if (selectedObjects != null && selectedObjects.contains(element))
                             {
-                                if (ele[i] == element)
+                                // Check if the element is still there...
+                                boolean found = false;
+                                JRElement[] ele = group.getElements();
+                                for (int i=0; i<ele.length; ++i)
                                 {
-                                    found = true;
-                                    break;
+                                    if (ele[i] == element)
+                                    {
+                                        found = true;
+                                        break;
+                                    }
                                 }
-                            }
-                            // The element is no longer in the model, remove it.
-                            if (!found)
-                            {
-                                selectedObjects.remove(element);
+                                // The element is no longer in the model, remove it.
+                                if (!found)
+                                {
+                                    selectedObjects.remove(element);
+                                }
                             }
                         }
                     }
@@ -507,6 +557,8 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
                 dw.removeFromParent();
                 if (getObjects().contains(dw.getElement()))
                 {
+                    System.out.println("Removing object2: " + dw.getElement());
+                    System.out.flush();
                     removeObject(dw.getElement());
                 }
             }

@@ -36,6 +36,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import net.sf.jasperreports.engine.JasperReport;
 
 /**
  *
@@ -67,7 +68,16 @@ public abstract class IReportConnection {
     *  If isJDBCConnection() return false => getConnection() return null
     */
   public java.sql.Connection getConnection(){ return null; }
-    
+
+  /**
+     *  This method return an instanced JRDataDource to the database.
+     *  It just call getJRDataSource(), but can be redefined in special
+     *  connections.
+     */
+   public net.sf.jasperreports.engine.JRDataSource getJRDataSource(JasperReport jasper) {
+         return getJRDataSource();
+   }
+
     /**
      *  This method return an instanced JRDataDource to the database.
      *  If isJDBCConnection() return true => getJRDataSource() return false

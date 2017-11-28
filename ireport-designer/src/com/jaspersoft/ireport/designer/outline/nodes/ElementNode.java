@@ -14,14 +14,28 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.outline.nodes.properties.ElementPropertiesFactory;
 import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.NotRealElementNode;
+import com.jaspersoft.ireport.designer.actions.BringElementForwardAction;
+import com.jaspersoft.ireport.designer.actions.BringElementToFrontAction;
+import com.jaspersoft.ireport.designer.actions.EditTextfieldExpressionAction;
+import com.jaspersoft.ireport.designer.actions.EditTextfieldPatternAction;
+import com.jaspersoft.ireport.designer.actions.GroupElementsAction;
 import com.jaspersoft.ireport.designer.actions.OpenSubreportAction;
 import com.jaspersoft.ireport.designer.actions.PaddingAndBordersAction;
+import com.jaspersoft.ireport.designer.actions.SendElementBackwardAction;
+import com.jaspersoft.ireport.designer.actions.SendElementToBackAction;
+import com.jaspersoft.ireport.designer.actions.UnGroupElementsAction;
 import com.jaspersoft.ireport.designer.charts.ChartDataAction;
 import com.jaspersoft.ireport.designer.charts.multiaxis.AddAxisChartAction;
+import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
+import com.jaspersoft.ireport.designer.formatting.actions.OrganizeAsTableAction;
 import com.jaspersoft.ireport.designer.menu.HyperlinkAction;
+import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.undo.DeleteElementUndoableEdit;
+import com.jaspersoft.ireport.designer.utils.SubMenuAction;
 import com.jaspersoft.ireport.designer.utils.WeakPreferenceChangeListener;
 import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -41,6 +55,7 @@ import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
@@ -60,10 +75,12 @@ import org.openide.actions.PasteAction;
 import org.openide.actions.ReorderAction;
 import org.openide.nodes.Children;
 import org.openide.nodes.Index;
+import org.openide.nodes.Node;
 import org.openide.nodes.NodeTransfer;
 import org.openide.nodes.Sheet;
 import org.openide.util.Lookup;
 import org.openide.util.actions.SystemAction;
+import org.openide.util.datatransfer.PasteType;
 import org.openide.util.lookup.Lookups;
 import org.openide.util.lookup.ProxyLookup;
 
@@ -109,7 +126,7 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
             JRDesignGraphicElement gele = (JRDesignGraphicElement)element;
             ((JRBasePen)gele.getLinePen()).getEventSupport().addPropertyChangeListener(this);
         }
-        
+
         if (element instanceof JRBoxContainer)
         {
             JRBoxContainer boxcontainer = (JRBoxContainer)element;
@@ -179,7 +196,7 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
      *  This is used internally to understand if the element can accept other elements...
      */
     public boolean canPaste() {
-        return false;
+        return true;
     }
     
     /**
@@ -251,6 +268,11 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
             list.add( null );
         }
 
+        if (element instanceof JRDesignTextField)
+        {
+            list.add( SystemAction.get(EditTextfieldExpressionAction.class ) );
+            list.add( SystemAction.get(EditTextfieldPatternAction.class ) );
+        }
 
         if (getElement() instanceof JRDesignChart &&
             ((JRDesignChart)getElement()).getChartType() != JRDesignChart.CHART_TYPE_MULTI_AXIS)
@@ -282,18 +304,34 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
         list.add( SystemAction.get( CopyAction.class ) );
         list.add( SystemAction.get( CutAction.class ) );
         if (canPaste()) list.add( SystemAction.get( PasteAction.class ) );
-        list.add( SystemAction.get( ReorderAction.class ) );
-        list.add( SystemAction.get(MoveUpAction.class) );
-        list.add( SystemAction.get(MoveDownAction.class) );
-        list.add( null  );
-        
-        
-        
         list.add( SystemAction.get( DeleteAction.class ) );
+        list.add( null  );
+        list.add( SystemAction.get( GroupElementsAction.class ) );
+        list.add( SystemAction.get( UnGroupElementsAction.class ) );
+        
+        //list.add( SystemAction.get( ReorderAction.class ) );
+        list.add( SystemAction.get(BringElementToFrontAction.class) );
+        list.add( SystemAction.get(BringElementForwardAction.class) );
+        list.add( SystemAction.get(SendElementBackwardAction.class) );
+        list.add( SystemAction.get(SendElementToBackAction.class) );
+        list.add( null  );
+        list.add(  SubMenuAction.getAction("Menu/Format/Align"));
+        list.add(  SubMenuAction.getAction("Menu/Format/Size"));
+        list.add(  SubMenuAction.getAction("Menu/Format/Position"));
+        list.add( null  );
+        list.add(  SubMenuAction.getAction("Menu/Format/Horizontal Spacing"));
+        list.add(  SubMenuAction.getAction("Menu/Format/Vertical Spacing"));
+        list.add( null  );
+        list.add( SystemAction.get(OrganizeAsTableAction.class) );
+        
 
         // Looks for decorators supporting this element type...
         List<ElementDecorator> decorators = IReportManager.getElementDecorators( getElement() );
 
+        if (decorators.size() > 0)
+        {
+            list.add( null  );
+        }
         for (ElementDecorator decorator : decorators)
         {
             list.addAll(Arrays.asList(decorator.getActions(this)));
@@ -313,6 +351,7 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
             evt.getPropertyName().equals(JRDesignTextField.PROPERTY_EXPRESSION))
         {
             fireNameChange(null, getName());
+            fireDisplayNameChange(null, getDisplayName());
         }
         
         if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_PARENT_STYLE))
@@ -409,6 +448,52 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
                 this.firePropertyChange("linebox", evt.getOldValue(), evt.getNewValue() );
             }
         }
+        else if (evt.getPropertyName().equals( JRDesignChartDataset.PROPERTY_DATASET_RUN))
+        {
+            // Update the dataset context used in the properties....
+           
+            
+            
+
+            if (element instanceof JRDesignChart)
+            {
+                PropertySet[] sets = this.getPropertySets();
+                JRDesignChart chart = (JRDesignChart)element;
+
+                JRDesignDataset newDataset = jd.getMainDesignDataset();
+
+                if (chart.getDataset() != null &&
+                    chart.getDataset().getDatasetRun() != null &&
+                    chart.getDataset().getDatasetRun().getDatasetName() != null)
+                {
+                    String dsname = chart.getDataset().getDatasetRun().getDatasetName();
+                    if (jd.getDatasetMap().containsKey(dsname))
+                    {
+                        newDataset = (JRDesignDataset)jd.getDatasetMap().get(dsname);
+                    }
+                }
+                
+
+
+                
+                for (int i=0; i<sets.length; ++i)
+                {
+                    if (sets[i].getName().equals("CHART_PLOT_PROPERTIES"))
+                    {
+                        Node.Property[] pp = sets[i].getProperties();
+                        for (int j=0; j<pp.length; ++j)
+                        {
+                            if (pp[j].getValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT) != null ||
+                                pp[j] instanceof ExpressionProperty)
+                            {
+
+                                pp[j].setValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT,new ExpressionContext(newDataset));
+                            }
+                        }
+                    }
+                }
+            }
+        }
         
         if (ModelUtils.containsProperty(  this.getPropertySets(), evt.getPropertyName()))
         {
@@ -468,6 +553,50 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
         return new ExpressionContext(ModelUtils.getElementDataset(element, jd));
         
         
+    }
+
+
+    @Override
+    public PasteType getDropType(Transferable t, final int action, int index) {
+
+        Node dropNode = NodeTransfer.node(t, DnDConstants.ACTION_COPY_OR_MOVE + NodeTransfer.CLIPBOARD_CUT);
+        int dropAction = DnDUtilities.getTransferAction(t);
+
+        if (null != dropNode && !(dropNode instanceof NotRealElementNode)) {
+            JRDesignElement element = dropNode.getLookup().lookup(JRDesignElement.class);
+
+
+
+            if (null != element) {
+
+                return new ElementPasteType( element.getElementGroup(),
+                                             getElement().getElementGroup(),
+                                             element,dropAction,this);
+            }
+
+            if (dropNode instanceof ElementGroupNode)
+            {
+                JRDesignElementGroup g = ((ElementGroupNode)dropNode).getElementGroup();
+                return new ElementPasteType( g.getElementGroup(),
+                                             getElement().getElementGroup(),
+                                             g,dropAction,this);
+            }
+            else
+            {
+
+            }
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected void createPasteTypes(Transferable t, List s) {
+        super.createPasteTypes(t, s);
+        PasteType paste = getDropType(t, DnDConstants.ACTION_MOVE, -1);
+        if (null != paste) {
+            s.add(paste);
+        }
     }
     
 }

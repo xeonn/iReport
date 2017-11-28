@@ -897,11 +897,11 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                    }
                    else if (connection.isJRDataSource())
                    {
+
                        JRDataSource ds = null;
+                       JasperReport jasper_report_obj =  (JasperReport)JRLoader.loadObject(fileName);
                        if (connection instanceof JRDataSourceProviderConnection)
                        {
-
-                            JasperReport jasper_report_obj =  (JasperReport)JRLoader.loadObject(fileName);
                             ds = ((JRDataSourceProviderConnection) connection).getJRDataSource(jasper_report_obj);
 
                             if (ds == null) return;
@@ -917,7 +917,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                        }
                        else
                        {
-                           ds = connection.getJRDataSource();
+                           ds = connection.getJRDataSource(jasper_report_obj);
                            print = JasperFillManager.fillReport(fileName,hm,ds);
                        }
                    }

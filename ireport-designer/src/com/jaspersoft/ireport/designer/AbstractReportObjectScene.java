@@ -8,6 +8,7 @@ package com.jaspersoft.ireport.designer;
 import com.jaspersoft.ireport.designer.actions.ReportElementPopupMenuProvider;
 import com.jaspersoft.ireport.designer.actions.ReportPopupMenuProvider;
 import com.jaspersoft.ireport.designer.actions.ReportTextElementInplaceEditorProvider;
+import com.jaspersoft.ireport.designer.actions.SelectAction;
 import com.jaspersoft.ireport.designer.ruler.GuideLine;
 import com.jaspersoft.ireport.designer.ruler.GuideLineChangedListener;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
@@ -24,7 +25,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
-import java.util.Set;
 import javax.swing.JComponent;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRExpression;
@@ -41,10 +41,6 @@ import org.netbeans.api.visual.action.AlignWithMoveDecorator;
 import org.netbeans.api.visual.action.TextFieldInplaceEditor;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.model.ObjectScene;
-import org.netbeans.api.visual.model.ObjectSceneEvent;
-import org.netbeans.api.visual.model.ObjectSceneEventType;
-import org.netbeans.api.visual.model.ObjectSceneListener;
-import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Scene;
@@ -61,11 +57,14 @@ public abstract class AbstractReportObjectScene extends ObjectScene implements G
     public static Color GRID_LINE_COLOR = new Color(230,230,230);
 
     private ObjectSceneSelectionManager selectionManager = null;
+    private WidgetAction reportSelectAction = null;
+    
 
     public AbstractReportObjectScene()
     {
         super();
         selectionManager = new ObjectSceneSelectionManager(this);
+        reportSelectAction = createReportSelectAction();
     }
 
     public void assureVisible(Object object) {
@@ -412,6 +411,20 @@ public abstract class AbstractReportObjectScene extends ObjectScene implements G
     public ObjectSceneSelectionManager getSelectionManager() {
         return selectionManager;
     }
+
+    /**
+     * @return the reportSelectAction
+     */
+    public WidgetAction getReportSelectAction() {
+        return reportSelectAction;
+    }
+
+    /**
+     * @param reportSelectAction the reportSelectAction to set
+     */
+    public void setReportSelectAction(WidgetAction reportSelectAction) {
+        this.reportSelectAction = reportSelectAction;
+    }
     
     protected final class GroupChangeListener implements PropertyChangeListener
     {
@@ -443,8 +456,10 @@ public abstract class AbstractReportObjectScene extends ObjectScene implements G
     }
 
     
-
-
+    public WidgetAction createReportSelectAction()
+    {
+        return new SelectAction(new ReportObjectSelectProvider(this));
+    }
 
 
 }

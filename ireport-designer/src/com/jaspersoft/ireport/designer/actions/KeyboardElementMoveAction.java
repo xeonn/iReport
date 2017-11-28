@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.action.WidgetAction.State;
@@ -128,30 +129,35 @@ public class KeyboardElementMoveAction extends WidgetAction.Adapter {
 
         for (JRDesignElementWidget dew : widgets)
         {
-            if (dew.getElement() instanceof JRDesignFrame)
+            if (dew.getChildrenElements() != null)
             {
-                updateChildren((JRDesignFrame)dew.getElement(), (AbstractReportObjectScene)dew.getScene(), changedWidgets);
+                updateChildren(dew, (AbstractReportObjectScene)dew.getScene(), changedWidgets);
             }
         }
     }
 
 
-    private void updateChildren(JRDesignFrame parent, AbstractReportObjectScene scene, ArrayList<Widget> changedWidgets)
+    private void updateChildren(JRDesignElementWidget dew, AbstractReportObjectScene scene, ArrayList<Widget> changedWidgets)
     {
-          JRElement[] elements = parent.getElements();
-          for (int i=0; i < elements.length; ++i)
+          List listOfElements = dew.getChildrenElements();
+          
+          for (int i=0; i < listOfElements.size(); ++i)
           {
-               JRDesignElementWidget w = (JRDesignElementWidget)scene.findWidget(elements[i]);
-               if (changedWidgets.contains(w)) continue;
-               w.updateBounds();
-               w.getSelectionWidget().updateBounds();
-
-               if (elements[i] instanceof JRDesignFrame)
+               if (listOfElements.get(i) instanceof JRDesignElement)
                {
-                   updateChildren((JRDesignFrame)elements[i], scene, changedWidgets);
-               }
+                   JRDesignElement element = (JRDesignElement)listOfElements.get(i);
+                   JRDesignElementWidget w = (JRDesignElementWidget)scene.findWidget(element);
+                   if (changedWidgets.contains(w)) continue;
+                   w.updateBounds();
+                   w.getSelectionWidget().updateBounds();
 
-               changedWidgets.add(w);
+                   if (w.getChildrenElements() != null)
+                   {
+                       updateChildren(w, scene, changedWidgets);
+                   }
+
+                   changedWidgets.add(w);
+               }
           }
     }
 }

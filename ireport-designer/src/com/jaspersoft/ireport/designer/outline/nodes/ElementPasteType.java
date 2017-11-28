@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.outline.nodes;
 
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.undo.AddElementGroupUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.AddElementUndoableEdit;
@@ -17,8 +18,12 @@ import com.jaspersoft.ireport.designer.undo.AggregatedUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.DeleteElementGroupUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.DeleteElementUndoableEdit;
 import java.awt.datatransfer.Transferable;
+import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import javax.swing.SwingUtilities;
 import net.sf.jasperreports.crosstabs.JRCellContents;
 import net.sf.jasperreports.crosstabs.JRCrosstabCell;
 import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
@@ -33,6 +38,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
 import org.openide.nodes.Node;
 import org.openide.nodes.NodeTransfer;
+import org.openide.util.Exceptions;
 import org.openide.util.datatransfer.PasteType;
 
 /**
@@ -67,8 +73,7 @@ public class ElementPasteType extends PasteType {
     
     @SuppressWarnings("unchecked")
     public Transferable paste() throws IOException {
-            
-            
+
         List list = newContainer.getChildren();
         int currentIndex = -1; //Current position in the list
 
@@ -199,12 +204,35 @@ public class ElementPasteType extends PasteType {
                 }
          */
                 if (newElement instanceof JRDesignElement) {
+
+                    JRDesignElement ele = (JRDesignElement)newElement;
+                    ele.setX( ele.getX()+10);
+                    ele.setY( ele.getY()+10);
                     addElement(newContainer, (JRDesignElement) newElement);
                 } else if (newElement instanceof JRDesignElementGroup) {
                     addElementGroup(newContainer, (JRDesignElementGroup) newElement);
                 }
 
-                
+                IReportManager.getInstance().addSelectedObject(newElement);
+                IReportManager.getInstance().removeSelectedObject(element);
+                /*
+                // Unselect original
+                final JrxmlVisualView view =  IReportManager.getInstance().getActiveVisualView();
+                if  (view != null)
+                {
+                    org.openide.nodes.Node root = view.getExplorerManager().getRootContext();
+                    org.openide.nodes.Node node = null; //IReportManager.getInstance().findNodeOf(newElement, root);
+                    org.openide.nodes.Node nodeOriginal = null; //IReportManager.getInstance().findNodeOf(element, root);
+                    if (node != null || nodeOriginal != null)
+                    {
+                        Node[] selectedNodes = view.getExplorerManager().getSelectedNodes();
+                        final List<Node> listNodes = new ArrayList<Node>(Arrays.asList(selectedNodes));
+                        if (nodeOriginal != null) list.remove(nodeOriginal);
+                        if (node != null) list.add(node);
+                  
+                    }
+                }
+                 */
            }
             
             

@@ -136,7 +136,7 @@ public class GanttSeriesDialog extends javax.swing.JDialog {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabelSeriesExpression.setText("Series expression");
+        jLabelSeriesExpression.setText("Series expression (required)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;

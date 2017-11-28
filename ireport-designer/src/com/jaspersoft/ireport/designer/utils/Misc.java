@@ -25,9 +25,12 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.text.MessageFormat;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,6 +55,7 @@ import org.openide.filesystems.Repository;
 import org.openide.loaders.DataFolder;
 import org.openide.loaders.DataObject;
 import org.openide.util.Lookup;
+import org.openide.util.actions.NodeAction;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import org.w3c.dom.Node;
@@ -811,7 +815,14 @@ public class Misc {
 		}
                 
         String dir = IReportManager.getPreferences().get( IReportManager.CURRENT_DIRECTORY, null);
-        if (dir != null) return new File(dir);
+        if (dir != null)
+        {
+            File f = new File(dir);
+            if (f.exists())
+            {
+                return f;
+            }
+        }
 		// Backup:
 		return new File(System.getProperty("user.home"));
 	}
@@ -1020,6 +1031,9 @@ public class Misc {
                 r.run();
         }
     }
+
+    
+
    
    
 }

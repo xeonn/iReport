@@ -13,17 +13,18 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.utils.ExpressionInterpreter;
+import com.jaspersoft.ireport.designer.utils.Misc;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.cookies.OpenCookie;
+import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
-import org.openide.loaders.DataObjectNotFoundException;
-import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
 
@@ -53,9 +54,10 @@ public final class OpenSubreportAction extends NodeAction {
         return false;
     }
 
-    protected void subreportNotFound()
+    protected void subreportNotFound(String msg)
     {
         // Display a message here...
+        JOptionPane.showMessageDialog(Misc.getMainFrame(), "Unable to open the subreport:\n"+msg);
     }
 
     protected void performAction(org.openide.nodes.Node[] activatedNodes) {
@@ -72,7 +74,7 @@ public final class OpenSubreportAction extends NodeAction {
         {
            // Return default image...
            // Unable to resolve the subreoport jrxml file...
-            subreportNotFound();
+            subreportNotFound("The subreport expression is empty.");
             return;
         }
 
@@ -93,6 +95,11 @@ public final class OpenSubreportAction extends NodeAction {
                 {
                     resourceName = resourceName.substring(0, resourceName.length() -  ".jasper".length());
                     resourceName += ".jrxml";
+                }
+
+                if (!resourceName.toLowerCase().endsWith(".jrxml"))
+                {
+                    throw new Exception("Unable to resolve the jrxml file for this subreport expression");
                 }
 
                 File f = new File(resourceName);
@@ -116,10 +123,19 @@ public final class OpenSubreportAction extends NodeAction {
                     }
                     URLClassLoader urlClassLoader = new URLClassLoader(urls, classLoader);
                     URL url = urlClassLoader.findResource(resourceName);
+                    if (url == null)
+                    {
+                        throw new Exception(resourceName + " not found.");
+                    }
+                        
                     f = new File(url.getPath());
                     if (f.exists())
                     {
                         openFile(f);
+                    }
+                    else
+                    {
+                        throw new Exception(f + " not found.");
                     }
                 }
                 else
@@ -128,7 +144,9 @@ public final class OpenSubreportAction extends NodeAction {
                 }
 
              }
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
+
+            subreportNotFound(ex.getMessage());
             ex.printStackTrace();
         }
 
@@ -150,25 +168,21 @@ public final class OpenSubreportAction extends NodeAction {
         return false;
     }
 
-    private void openFile(File f) {
+    private void openFile(File f) throws Exception {
 
         DataObject obj;
 
-        
-        try {
-            obj = DataObject.find(FileUtil.toFileObject(f));
+        f = FileUtil.normalizeFile(f);
+        FileObject fl = FileUtil.toFileObject(f);
+        if (fl == null) throw new Exception("Unable to open the file " + f);
+        obj = DataObject.find(fl);
 
-            OpenCookie ocookie = obj.getCookie(OpenCookie.class);
+        OpenCookie ocookie = obj.getCookie(OpenCookie.class);
 
-            if (ocookie != null)
-            {
-                ocookie.open();
-            }
-
-        } catch (DataObjectNotFoundException ex) {
-            Exceptions.printStackTrace(ex);
+        if (ocookie != null)
+        {
+            ocookie.open();
         }
-        
 
     }
 }

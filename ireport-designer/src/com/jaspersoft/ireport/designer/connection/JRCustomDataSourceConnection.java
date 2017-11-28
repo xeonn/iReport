@@ -132,8 +132,8 @@ public class JRCustomDataSourceConnection extends IReportConnection {
     public net.sf.jasperreports.engine.JRDataSource getJRDataSource()
     { 
         try {
-            Object obj = Class.forName( factoryClass, true, Thread.currentThread().getContextClassLoader() ).newInstance();
-            return (net.sf.jasperreports.engine.JRDataSource) obj.getClass().getMethod( methodToCall, new Class[0]).invoke(obj,new Object[0]);
+            Class clazz = Class.forName( factoryClass, true, Thread.currentThread().getContextClassLoader() );
+            return (net.sf.jasperreports.engine.JRDataSource) clazz.getMethod( methodToCall, new Class[0]).invoke(null,new Object[0]);
         } catch (Throwable ex)
         {
             showErrorMessage( I18n.getString("unexpected.datasource.error"  ,ex.getMessage(), Misc.getLogFile()),

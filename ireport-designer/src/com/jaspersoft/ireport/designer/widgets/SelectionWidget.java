@@ -32,6 +32,7 @@ package com.jaspersoft.ireport.designer.widgets;
 
 import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.borders.ElementSelectedBorder;
 import java.awt.Cursor;
 import java.awt.Insets;
@@ -40,9 +41,7 @@ import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRVerifier;
 import org.netbeans.api.visual.widget.Widget;
 
 /**
@@ -228,7 +227,24 @@ public class SelectionWidget extends Widget {
         Point p0 = null; //w.getLocation();
         if (p0 == null)
         {
-            p0 = ModelUtils.getParentLocation(((AbstractReportObjectScene)w.getScene()).getJasperDesign(), element);
+            p0 = ModelUtils.getParentLocation(((AbstractReportObjectScene)w.getScene()).getJasperDesign(), element, w);
+//            if (p0.x == 0 && p0.y == 0)
+//            {
+//                // this is a very strange case... check if this element belongs to
+//                // a custom component...
+//                if (getScene() instanceof ReportObjectScene)
+//                {
+//                    JRDesignElementWidget owner = ((ReportObjectScene)getScene()).findCustomComponentOwner(element);
+//                    if (owner != null)
+//                    {
+//                        p0 = ModelUtils.getParentLocation(((AbstractReportObjectScene)w.getScene()).getJasperDesign(), owner.getElement());
+//                        p0.x += owner.getElement().getX();
+//                        p0.y += owner.getElement().getY();
+//                    }
+//                }
+//            }
+
+
             p0.x += element.getX();
             p0.y += element.getY();
         }

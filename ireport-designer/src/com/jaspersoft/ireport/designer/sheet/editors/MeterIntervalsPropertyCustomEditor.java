@@ -11,7 +11,6 @@ package com.jaspersoft.ireport.designer.sheet.editors;
 
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.tools.MeterIntervalsPanel;
-import com.jaspersoft.ireport.designer.tools.SubreportParametersPanel;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;

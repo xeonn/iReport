@@ -71,14 +71,17 @@ public class ImageExpressionFileResolver implements FileResolver {
                         URL[] urls = new URL[]{};
                         if (reportFolder != null)
                         {
-                            urls = new URL[]{ (new File(reportFolder)).toURL()};
+                            urls = new URL[]{ (new File(reportFolder)).toURI().toURL()};
                         }
                         URLClassLoader urlClassLoader = new URLClassLoader(urls, classLoader);
                         URL url = urlClassLoader.findResource(resourceName);
-                        f = new File(url.getPath());
-                        if (f.exists())
+                        if (url != null)
                         {
-                            file = f;
+                            f = new File(url.getPath());
+                            if (f.exists())
+                            {
+                                file = f;
+                            }
                         }
                     }
                     else

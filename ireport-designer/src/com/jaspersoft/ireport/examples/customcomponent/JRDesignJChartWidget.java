@@ -18,7 +18,6 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
  *

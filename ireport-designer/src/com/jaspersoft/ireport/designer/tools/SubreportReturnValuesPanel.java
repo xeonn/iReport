@@ -80,6 +80,10 @@ public class SubreportReturnValuesPanel extends javax.swing.JPanel {
         });
         
         jTable.getColumnModel().getColumn(0).setCellRenderer( new SubreportReturnValueCellRenderer());
+        jLabelTitle.setText(I18n.getString("SubreportReturnValuesPanel.jLabelTitle.text"));
+        jButtonAdd.setText(I18n.getString("Global.Button.Add"));
+        jButtonModify.setText(I18n.getString("SubreportParametersPanel.jButtonModify.text"));
+        jButtonDelete.setText(I18n.getString("Global.Button.Delete"));
         
         
     }

@@ -44,7 +44,6 @@ import com.jaspersoft.ireport.designer.undo.UndoRedoManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Image;
 import java.beans.BeanInfo;
 import java.beans.PropertyChangeEvent;
@@ -52,14 +51,12 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import javax.swing.ActionMap;
-import javax.swing.FocusManager;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
@@ -71,7 +68,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
-import org.netbeans.api.queries.FileEncodingQuery;
 import org.netbeans.api.visual.model.ObjectSceneEvent;
 import org.netbeans.api.visual.model.ObjectSceneListener;
 import org.netbeans.api.visual.model.ObjectState;
@@ -94,7 +90,6 @@ import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
-import org.openide.util.Mutex;
 import org.openide.util.RequestProcessor;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
@@ -507,13 +502,11 @@ public class JrxmlVisualView extends TopComponent
         try {
             //
             support.setCurrentModel( null );
+            System.gc();
             
 
             Thread.currentThread().setContextClassLoader(new ReportClassLoader(IReportManager.getReportClassLoader()));
             JrxmlLoader jrxmlLoader = new JrxmlLoader();
-
-            System.out.println("Loading file with encoding: " + FileEncodingQuery.getEncoding(getEditorSupport().getDataObject().getPrimaryFile()));
-            System.out.flush();
 
             jasperDesign = jrxmlLoader.reloadJasperDesign(support.getInputStream());
             

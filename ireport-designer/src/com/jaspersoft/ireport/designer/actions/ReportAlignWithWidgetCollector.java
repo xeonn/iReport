@@ -96,10 +96,14 @@ public class ReportAlignWithWidgetCollector implements AlignWithWidgetCollector 
                 JRDesignElement frame = ((JRDesignElementWidget)parent).getElement();
                 JRDesignElement element = ((JRDesignElementWidget)widget).getElement();
 
-                if (frame instanceof JRDesignFrame)
+                //if (frame instanceof JRDesignFrame)
+                //{
+                //    // Look if a child element has this widget....
+                //    return ModelUtils.isChildOf(element, ((JRDesignFrame)frame).getElements());
+                //}
+                if ( ((JRDesignElementWidget)widget).getChildrenElements() != null)
                 {
-                    // Look if a child element has this widget....
-                    return ModelUtils.isChildOf(element, ((JRDesignFrame)frame).getElements());
+                    ModelUtils.isChildOf(element, ((JRDesignElementWidget)widget).getChildrenElements());
                 }
             }
         }

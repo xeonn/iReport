@@ -1,3 +1,29 @@
+2009-05-04 Version 3.5.1 released
+_______________________________________________________________________________
+- Fixed bug 14367 Fields, parameters and variables missing in hyperlink anchor expression editor
+- Fixed bug 3811 [Bugs iReport - NB] Problem Menu-Visualizza-Report Designer
+- Fixed bug 3767 [Bugs iReport - NB] ReportQueryDialog expects JRDesignField instead of interface JRField
+- Improved multi selection (shift+click).
+- Fixed bug 3708 [Bugs iReport - NB] Control Click Shifts Fields (giulio)
+- Fixed bug 3790 [Bugs iReport - NB] Using arrows to move StaticText element actually moving other iReport controls
+- Fixed bug 3659 java.lang.IllegalArgumentException: Called DataObject.find on null
+- Fixed bug 3852 Report Unit creation using JRXML from repo 
+- Updated to JasperReports 3.5.1
+- Added support for the new List component of JasperReports
+- Fixed bug 3792 JRDataSource needs an empty constructor when used in iReport 
+- Fixed bug 3746  Unable to load images from a relative path when the relative path is from a location specified in the classpath
+- Fixed bug 3760  Hibernate version bundled in iReport-3.5 is ancient, doesn't support AnnotationConfiguration
+- Fixed bug 3692 BigDecimal Parameter Not Accepting User Entry
+- Fixed bug 3715 Incorrect Dialog Label for Subreport Parameters
+- Fixed bug 3716 Restart Required for Subreport Parameters
+- Fixed bug 3720 Subdataset fields retrieve in Termomether chart
+- Added bring to front and send to back context menu items for elements
+- Added group elements and ungroup elements context menu items for elements
+- Added format tools as context menu for elements
+- Added edit pattern context menu item for textfield elements
+- Added edit textfield expression context menu item for textfield elements
+- Changed cut and paset operation to select the pasted elements and shift them of 10 pixels
+
 2009-03-25 Version 3.5.0 released
 _______________________________________________________________________________
 - Ability to export a chart theme as jasperreports extension (jar)

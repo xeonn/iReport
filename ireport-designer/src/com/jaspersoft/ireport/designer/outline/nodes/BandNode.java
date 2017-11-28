@@ -112,7 +112,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
             @SuppressWarnings("unchecked")
             public void childrenReordered(NodeReorderEvent ev) {
                 // Fire an event now...
-                
+
                 List elements = getBand().getChildren();
                 int[] permutations = ev.getPermutation();
                 

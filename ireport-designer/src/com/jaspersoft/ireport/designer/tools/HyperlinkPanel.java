@@ -181,6 +181,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
     
     public void setExpressionContext( ExpressionContext ec )
     {
+        jRTextExpressionAreaAnchorName.setExpressionContext(ec);
         jRTextExpressionAreaAnchor.setExpressionContext(ec);
         jRTextExpressionAreaReference.setExpressionContext(ec);
         jRTextExpressionAreaAnchor.setExpressionContext(ec);

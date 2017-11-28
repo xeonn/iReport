@@ -1137,7 +1137,8 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
             if (this.jComboBoxSubDataset.getSelectedIndex() > 0)
             {
                     // Check subdataset parameters....
-                    ExpressionContext ec = new ExpressionContext((JRDesignDataset)getJasperDesign().getDatasetMap().get(""+jComboBoxSubDataset.getSelectedItem()));
+                    JRDesignDataset dds = (JRDesignDataset)getJasperDesign().getDatasetMap().get(""+jComboBoxSubDataset.getSelectedItem());
+                    ExpressionContext ec = new ExpressionContext(dds);
                     setExpressionContext( ec );
 
                     if (currentSelectedChartElement.getDataset().getDatasetRun() == null ||
@@ -1171,6 +1172,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
                             jPanel7.updateUI();
                         }
                         datasetRun.setDatasetName("" + jComboBoxSubDataset.getSelectedItem());//NOI18N
+                        // we need to fix the groups...
                     }
             }
             else
@@ -1195,6 +1197,44 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
                 //jTabbedPaneSubDataset.updateUI();
                 jPanel7.updateUI();
             }
+
+            updateGroups();
+            List groups = getJasperDesign().getGroupsList();
+
+            if (currentSelectedChartElement != null &&
+                currentSelectedChartElement.getDataset() != null &&
+                currentSelectedChartElement.getDataset().getDatasetRun() != null &&
+                currentSelectedChartElement.getDataset().getDatasetRun().getDatasetName() != null)
+            {
+                String dsName = currentSelectedChartElement.getDataset().getDatasetRun().getDatasetName();
+                groups = ((JRDesignDataset)getJasperDesign().getDatasetMap().get(dsName)).getGroupsList();
+            }
+
+            if (groups.size() == 0)
+            {
+                byte val = ((Byte)((Tag)jComboBoxIncrementType.getSelectedItem()).getValue()).byteValue();
+                if (val == JRVariable.RESET_TYPE_GROUP)
+                {
+                    setInit(true);
+                    //((JRDesignChartDataset)currentSelectedChartElement.getDataset()).setIncrementType(JRVariable.RESET_TYPE_REPORT);
+                    //((JRDesignChartDataset)currentSelectedChartElement.getDataset()).setIncrementGroup(null);
+                    Misc.setComboboxSelectedTagValue(jComboBoxIncrementType, new Byte(JRVariable.RESET_TYPE_NONE));
+                    setInit(false);
+                }
+                val = ((Byte)((Tag)jComboBoxResetType.getSelectedItem()).getValue()).byteValue();
+                if (val == JRVariable.RESET_TYPE_GROUP)
+                {
+                    setInit(true);
+                    //((JRDesignChartDataset)currentSelectedChartElement.getDataset()).setResetType(JRVariable.RESET_TYPE_REPORT);
+                    //((JRDesignChartDataset)currentSelectedChartElement.getDataset()).setResetGroup(null);
+                    Misc.setComboboxSelectedTagValue(jComboBoxResetType, new Byte(JRVariable.RESET_TYPE_REPORT));
+                    setInit(false);
+                }
+            }
+            jComboBoxIncrementTypeActionPerformed(null);
+            jComboBoxResetTypeActionPerformed(null);
+            
+            currentSelectedChartElement.getEventSupport().firePropertyChange(JRDesignChartDataset.PROPERTY_DATASET_RUN, null, null);
         }
         notifyChange();
     }//GEN-LAST:event_jComboBoxSubDatasetActionPerformed
@@ -1320,7 +1360,19 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         
         if (val == JRVariable.RESET_TYPE_GROUP)
         {
-            if (getJasperDesign().getGroupsList().size() == 0)
+            // Currently selected dataset...
+            List groups = getJasperDesign().getGroupsList();
+
+            if (currentSelectedChartElement != null &&
+                currentSelectedChartElement.getDataset() != null &&
+                currentSelectedChartElement.getDataset().getDatasetRun() != null &&
+                currentSelectedChartElement.getDataset().getDatasetRun().getDatasetName() != null)
+            {
+                String dsName = currentSelectedChartElement.getDataset().getDatasetRun().getDatasetName();
+                groups = ((JRDesignDataset)getJasperDesign().getDatasetMap().get(dsName)).getGroupsList();
+            }
+
+            if (groups.size() == 0)
             {
                 setInit(true);
                 Misc.setComboboxSelectedTagValue(jComboBoxIncrementType, new Byte(currentSelectedChartElement.getDataset().getIncrementType()));
@@ -1374,7 +1426,18 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         
         if (val == JRVariable.RESET_TYPE_GROUP)
         {
-            if (getJasperDesign().getGroupsList().size() == 0)
+            List groups = getJasperDesign().getGroupsList();
+            
+            if (currentSelectedChartElement != null &&
+                currentSelectedChartElement.getDataset() != null &&
+                currentSelectedChartElement.getDataset().getDatasetRun() != null &&
+                currentSelectedChartElement.getDataset().getDatasetRun().getDatasetName() != null)
+            {
+                String dsName = currentSelectedChartElement.getDataset().getDatasetRun().getDatasetName();
+                groups = ((JRDesignDataset)getJasperDesign().getDatasetMap().get(dsName)).getGroupsList();
+            }
+
+            if (groups.size() == 0)
             {
                 setInit(true);
                 Misc.setComboboxSelectedTagValue(jComboBoxResetType, new Byte(currentSelectedChartElement.getDataset().getResetType()));
@@ -1472,9 +1535,21 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         else
         {
             List<String> groupNames = new ArrayList<String>();
-            for (int i=0; i<getJasperDesign().getGroupsList().size(); ++i)
+
+            List groups = getJasperDesign().getGroupsList();
+
+            if (currentSelectedChartElement != null &&
+                currentSelectedChartElement.getDataset() != null &&
+                currentSelectedChartElement.getDataset().getDatasetRun() != null &&
+                currentSelectedChartElement.getDataset().getDatasetRun().getDatasetName() != null)
             {
-                groupNames.add( ((JRGroup)getJasperDesign().getGroupsList().get(i)).getName());
+                String dsName = currentSelectedChartElement.getDataset().getDatasetRun().getDatasetName();
+                groups = ((JRDesignDataset)getJasperDesign().getDatasetMap().get(dsName)).getGroupsList();
+            }
+
+            for (int i=0; i<groups.size(); ++i)
+            {
+                groupNames.add( ((JRGroup)groups.get(i)).getName());
             }
             
             Misc.updateComboBox(jComboBoxResetGroup, groupNames);

@@ -4,7 +4,7 @@
  * Created on March 27, 2007, 1:18 PM
  */
 
-package com.jaspersoft.ireport.designer.gui;
+package com.jaspersoft.ireport.designer.connection.gui;
 
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportConnection;

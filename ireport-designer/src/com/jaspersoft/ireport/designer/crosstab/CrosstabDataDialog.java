@@ -1002,6 +1002,10 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
                         !("" + jComboBoxSubDataset.getSelectedItem()).equals(currentSelectedCrosstabElement.getDataset().getDatasetRun().getDatasetName()) )
                     {
 
+                        JRDesignDataset dds = (JRDesignDataset)getJasperDesign().getDatasetMap().get(""+jComboBoxSubDataset.getSelectedItem());
+                        ExpressionContext ec = new ExpressionContext(dds);
+                        setExpressionContext( ec );
+                    
                         JRDesignDatasetRun datasetRun = (JRDesignDatasetRun)currentSelectedCrosstabElement.getDataset().getDatasetRun();
                         if (datasetRun == null)
                         {
@@ -1055,6 +1059,43 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
                 //jTabbedPaneSubDataset.updateUI();
                 jPanel7.updateUI();
             }
+
+            updateGroups();
+            List groups = getJasperDesign().getGroupsList();
+
+            if (currentSelectedCrosstabElement != null &&
+                currentSelectedCrosstabElement.getDataset() != null &&
+                currentSelectedCrosstabElement.getDataset().getDatasetRun() != null &&
+                currentSelectedCrosstabElement.getDataset().getDatasetRun().getDatasetName() != null)
+            {
+                String dsName = currentSelectedCrosstabElement.getDataset().getDatasetRun().getDatasetName();
+                groups = ((JRDesignDataset)getJasperDesign().getDatasetMap().get(dsName)).getGroupsList();
+            }
+
+            if (groups.size() == 0)
+            {
+                byte val = ((Byte)((Tag)jComboBoxIncrementType.getSelectedItem()).getValue()).byteValue();
+                if (val == JRVariable.RESET_TYPE_GROUP)
+                {
+                    setInit(true);
+                    //((JRDesignChartDataset)currentSelectedChartElement.getDataset()).setIncrementType(JRVariable.RESET_TYPE_REPORT);
+                    //((JRDesignChartDataset)currentSelectedChartElement.getDataset()).setIncrementGroup(null);
+                    Misc.setComboboxSelectedTagValue(jComboBoxIncrementType, new Byte(JRVariable.RESET_TYPE_NONE));
+                    setInit(false);
+                }
+                val = ((Byte)((Tag)jComboBoxResetType.getSelectedItem()).getValue()).byteValue();
+                if (val == JRVariable.RESET_TYPE_GROUP)
+                {
+                    setInit(true);
+                    //((JRDesignChartDataset)currentSelectedChartElement.getDataset()).setResetType(JRVariable.RESET_TYPE_REPORT);
+                    //((JRDesignChartDataset)currentSelectedChartElement.getDataset()).setResetGroup(null);
+                    Misc.setComboboxSelectedTagValue(jComboBoxResetType, new Byte(JRVariable.RESET_TYPE_REPORT));
+                    setInit(false);
+                }
+            }
+            jComboBoxIncrementTypeActionPerformed(null);
+            jComboBoxResetTypeActionPerformed(null);
+
         }
         notifyChange();
     }//GEN-LAST:event_jComboBoxSubDatasetActionPerformed
@@ -1279,9 +1320,21 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         else
         {
             List<String> groupNames = new ArrayList<String>();
-            for (int i=0; i<getJasperDesign().getGroupsList().size(); ++i)
+
+            List groups = getJasperDesign().getGroupsList();
+
+            if (currentSelectedCrosstabElement != null &&
+                currentSelectedCrosstabElement.getDataset() != null &&
+                currentSelectedCrosstabElement.getDataset().getDatasetRun() != null &&
+                currentSelectedCrosstabElement.getDataset().getDatasetRun().getDatasetName() != null)
             {
-                groupNames.add( ((JRGroup)getJasperDesign().getGroupsList().get(i)).getName());
+                String dsName = currentSelectedCrosstabElement.getDataset().getDatasetRun().getDatasetName();
+                groups = ((JRDesignDataset)getJasperDesign().getDatasetMap().get(dsName)).getGroupsList();
+            }
+
+            for (int i=0; i<groups.size(); ++i)
+            {
+                groupNames.add( ((JRGroup)groups.get(i)).getName());
             }
             
             Misc.updateComboBox(jComboBoxResetGroup, groupNames);

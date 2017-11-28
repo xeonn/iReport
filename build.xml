@@ -216,10 +216,12 @@
         <copy file="build/updates/com-jaspersoft-ireport.nbm" tofile="dist/${distro.zipfilename}.nbm" />
         <copy file="build/updates/com-jaspersoft-ireport-jasperserver.nbm" tofile="dist/${distro.zipfilename.js}.nbm" />
         <copy file="build/updates/com-jaspersoft-ireport-heartbeat.nbm" tofile="dist/${distro.zipfilename.hb}.nbm" />
+        <copy file="build/updates/com-jaspersoft-ireport-components.nbm" tofile="dist/${distro.zipfilename.components}.nbm" />
         <zip destfile="dist/${distro.zipfilename}-plugin.zip">
             <zipfileset dir="dist" prefix="">
                 <include name="${distro.zipfilename}.nbm"/>
                 <include name="${distro.zipfilename.js}.nbm"/>
+                <include name="${distro.zipfilename.components}.nbm"/>
             </zipfileset>
         </zip>
 

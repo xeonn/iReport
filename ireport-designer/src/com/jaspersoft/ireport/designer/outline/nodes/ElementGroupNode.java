@@ -9,8 +9,10 @@
 
 package com.jaspersoft.ireport.designer.outline.nodes;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
+import com.jaspersoft.ireport.designer.undo.DeleteElementGroupUndoableEdit;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.beans.PropertyChangeEvent;
@@ -47,7 +49,7 @@ import org.openide.util.lookup.ProxyLookup;
  *
  * @author gtoffoli
  */
-class ElementGroupNode extends IRIndexedNode implements PropertyChangeListener {
+public class ElementGroupNode extends IRIndexedNode implements PropertyChangeListener {
 
     JasperDesign jd = null;
     JRDesignElementGroup elementGroup = null;
@@ -171,8 +173,11 @@ class ElementGroupNode extends IRIndexedNode implements PropertyChangeListener {
     public void destroy() throws IOException {
        
        JRDesignElementGroup container = (JRDesignElementGroup)getElementGroup().getElementGroup();
+       int index = container.getChildren().indexOf(getElementGroup());
        container.removeElementGroup( getElementGroup() );
        // TODO: add Unduable edit here
+       DeleteElementGroupUndoableEdit undo = new DeleteElementGroupUndoableEdit(getElementGroup(), container, index);
+       IReportManager.getInstance().addUndoableEdit(undo);
        super.destroy();
     }
     

@@ -35,6 +35,7 @@ package com.jaspersoft.ireport.designer.compiler.prompt;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ThreadUtils;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import javax.swing.SwingUtilities;
@@ -82,6 +83,7 @@ public class Prompter
                 {
 
                     Object value = pd.getValue();
+
 
                     if (param.getValueClassName().equals("java.lang.String"))
                     {
@@ -230,6 +232,16 @@ public class Prompter
                                             System.out.println(ex.getMessage());
                                         }
                                     }
+                            }
+                            else if (value instanceof String && value != null)
+                            {
+                                Constructor c;
+                                c = param.getValueClass().getConstructor(String.class);
+                                if (c != null)
+                                {
+                                        Object obj = c.newInstance((String)value);
+                                        hm.put(param.getName(), obj);
+                                }
                             }
 
                         } catch (Exception ex)

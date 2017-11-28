@@ -58,6 +58,7 @@ public final class ReportUnitVisualPanel2 extends JPanel {
             }
         };
         this.jTextFieldFile.getDocument().addDocumentListener(dl);
+        this.jTextFieldFileRepo.getDocument().addDocumentListener(dl);
 
         jButtonGetCurrentReport.setEnabled(false);
         JrxmlVisualView view = IReportManager.getInstance().getActiveVisualView();
@@ -87,13 +88,13 @@ public final class ReportUnitVisualPanel2 extends JPanel {
         
         if (jRadioButtonLocal1.isSelected() && jTextFieldFile.getText().trim().length() == 0)
         {
-            
+            File resourceFile = new File(jTextFieldFile.getText());
+            if (!resourceFile.exists()) {
+                throw new Exception(JasperServerManager.getFormattedString("newReportUnitWizard.message.fileNotFound","{0}\n\nFile not found!",new Object[]{jTextFieldFile.getText()}));
+            }
         }
         
-        File resourceFile = new File(jTextFieldFile.getText());
-        if (!resourceFile.exists()) {
-            throw new Exception(JasperServerManager.getFormattedString("newReportUnitWizard.message.fileNotFound","{0}\n\nFile not found!",new Object[]{jTextFieldFile.getText()}));
-        }
+        
     }
 
     /** This method is called from within the constructor to
@@ -246,6 +247,8 @@ public final class ReportUnitVisualPanel2 extends JPanel {
                     jTextFieldFileRepo.setText( rd.getUriString() );
                 }
             }
+
+            if (wizardPanel != null) wizardPanel.fireChangeEvent();
         }
     }//GEN-LAST:event_jButtonPickJrxmljButton1ActionPerformed12
 

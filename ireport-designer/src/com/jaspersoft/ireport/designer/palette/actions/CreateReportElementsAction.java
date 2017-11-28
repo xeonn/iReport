@@ -43,7 +43,13 @@ import org.openide.util.Mutex;
 public abstract class CreateReportElementsAction extends PaletteItemAction 
 {
 
-    private static JRDesignFrame findTopMostFrameAt(ReportObjectScene theScene, Point p) {
+    /**
+     * Find the top most element that support children...
+     * @param theScene
+     * @param p
+     * @return
+     */
+    private static JRDesignElementWidget findTopMostFrameAt(ReportObjectScene theScene, Point p) {
 
          LayerWidget layer = theScene.getElementsLayer();
          List<Widget> widgets = layer.getChildren();
@@ -58,9 +64,9 @@ public abstract class CreateReportElementsAction extends PaletteItemAction
                  if (w instanceof JRDesignElementWidget)
                  {
                      JRDesignElement de =((JRDesignElementWidget)w).getElement();
-                     if (de instanceof JRDesignFrame)
+                     if (((JRDesignElementWidget)w).getChildrenElements() != null)
                      {
-                         return (JRDesignFrame)de;
+                         return (JRDesignElementWidget)w;
                      }
                  }
              }
@@ -116,18 +122,29 @@ public abstract class CreateReportElementsAction extends PaletteItemAction
                                               p.y - yLocation);
             if (b != null)
             {
-                JRDesignFrame frame = findTopMostFrameAt((ReportObjectScene)theScene, p);
+                JRDesignElementWidget wContainer = findTopMostFrameAt((ReportObjectScene)theScene, p);
 
                 for (int k=0; k<elements.length; ++k)
                 {
                     JRDesignElement element = elements[k];
-                    if (frame != null)
+                    if (wContainer != null)
                     {
+                            JRDesignElement frame = wContainer.getElement();
+                            Point parentLocation = wContainer.convertModelToLocalLocation(new Point(frame.getX(), frame.getY()));
+                            /*
                             Point parentLocation = ModelUtils.getParentLocation(jasperDesign, element);
+                            if (parentLocation.x == 0 &&
+                                parentLocation.y == 0)
+                            {
+                                parentLocation = ModelUtils.getParentLocation(jasperDesign, wContainer.getElement());
+                                parentLocation.x = wContainer.getElement().getX();
+                                parentLocation.y = wContainer.getElement().getY();
+                            }
+                            */
                             element.setX( p.x - parentLocation.x);
                             element.setY( p.y - parentLocation.y);
                             adjustElement(elements,k,theScene, jasperDesign, frame, location);
-                            frame.addElement(element);
+                            wContainer.addElement(element);
                     }
                     else
                     {

@@ -520,7 +520,15 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
                         JRDesignQuery query = new JRDesignQuery();
                         query.setLanguage(src_query_language);
                         query.setText(src_query);
+
+                        ClassLoader origCL = Thread.currentThread().getContextClassLoader();
+                        Thread.currentThread().setContextClassLoader( IReportManager.getReportClassLoader());
+
                         ds.setQuery(query);
+
+                        Thread.currentThread().setContextClassLoader( origCL );
+
+                        
                         // Set query and langauge
                         
                         
@@ -628,9 +636,16 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         dtm.getDataVector().clear();
         for(int i=0; i<cols.size(); i++) {
             Object obj = cols.get(i);
-            if (obj instanceof JRDesignField)
+            if (obj instanceof JRField)
             {
-                JRDesignField field = (JRDesignField)obj;
+
+                JRField jrfield = (JRField)obj;
+                JRDesignField field = new JRDesignField();
+                field.setName(jrfield.getName());
+                field.setDescription(jrfield.getDescription());
+                field.setValueClassName(jrfield.getValueClassName());
+                ModelUtils.replacePropertiesMap(jrfield.getPropertiesMap(), field.getPropertiesMap());
+               
                 if (fieldProperties.containsKey(field.getName()))
                 {
                     JRPropertiesMap map = fieldProperties.get(field.getName());
@@ -1590,7 +1605,15 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
                 }
 
                 query.setText(jEditorPane1.getText());
+
+                ClassLoader origCL = Thread.currentThread().getContextClassLoader();
+                Thread.currentThread().setContextClassLoader( IReportManager.getReportClassLoader());
+
                 this.dataset.setQuery(query);
+
+                Thread.currentThread().setContextClassLoader( origCL );
+
+                
                 com.jaspersoft.ireport.designer.IReportManager.getInstance().notifyReportChange();
 
                 if ( jTableFields.getRowCount() > 0)

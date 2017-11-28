@@ -42,7 +42,9 @@ import javax.swing.SwingUtilities;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.cfg.Environment;
 import org.hibernate.classic.Session;
 /**
  *
@@ -51,6 +53,7 @@ import org.hibernate.classic.Session;
 public class JRHibernateConnection extends IReportConnection {
     
     private String name;
+    private boolean useAnnotations = true;
     
     /** Creates a new instance of JRHibernateConnection */   
     public JRHibernateConnection() {
@@ -82,12 +85,15 @@ public class JRHibernateConnection extends IReportConnection {
     public java.util.HashMap getProperties()
     {    
         java.util.HashMap map = new java.util.HashMap();
+        map.put("useAnnotations", ""+useAnnotations);
         return map;
     }
     
     @Override
     public void loadProperties(java.util.HashMap map)
     {
+        String b = (String)map.get("useAnnotations");
+        if (b!= null) useAnnotations = Boolean.valueOf(b);
     }
     
     
@@ -125,8 +131,17 @@ public class JRHibernateConnection extends IReportConnection {
     }
 
     public SessionFactory getSessionFactory() throws org.hibernate.HibernateException {
-        
-          return new Configuration ().configure().buildSessionFactory();
+
+          if (useAnnotations)
+          {
+            AnnotationConfiguration conf = new org.hibernate.cfg.AnnotationConfiguration().configure();
+            conf.setProperty(Environment.CONNECTION_PROVIDER, "com.jaspersoft.ireport.designer.connection.HibernateConnectionProvider");
+            return conf.buildSessionFactory();
+          }
+          else
+          {
+             return new Configuration().configure().buildSessionFactory();
+          }
     }
     
     public String getDescription(){ return "Hibernate connection"; } //"connectionType.hibernate"
@@ -148,12 +163,13 @@ public class JRHibernateConnection extends IReportConnection {
                         Thread.currentThread().setContextClassLoader( IReportManager.getInstance().getReportClassLoader() );
                         SessionFactory hb_sessionFactory = null;
                         try {
-                            hb_sessionFactory = new Configuration().configure().buildSessionFactory();
-
+                            hb_sessionFactory = getSessionFactory();
+                            
                             // Try to execute an hibernate query...
                             Session hb_session = hb_sessionFactory.openSession();
                             Transaction  transaction = hb_session.beginTransaction();
-                            Query q = hb_session.createQuery("select address as address from Address as address");
+
+                            Query q = hb_session.createQuery("from java.lang.String s");
                         
                             q.setFetchSize(100);
                             java.util.Iterator iterator = q.iterate();
@@ -183,6 +199,20 @@ public class JRHibernateConnection extends IReportConnection {
                 });
             } catch (Exception ex)
             {}
+    }
+
+    /**
+     * @return the useAnnotations
+     */
+    public boolean isUseAnnotations() {
+        return useAnnotations;
+    }
+
+    /**
+     * @param useAnnotations the useAnnotations to set
+     */
+    public void setUseAnnotations(boolean useAnnotations) {
+        this.useAnnotations = useAnnotations;
     }
 }
 

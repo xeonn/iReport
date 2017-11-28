@@ -38,8 +38,7 @@ public class ReportPopupMenuProvider implements PopupMenuProvider {
         try {
             nodes = OutlineTopComponent.getDefault().getExplorerManager().getSelectedNodes();
         } catch (Exception ex) { }
-        
-        
+       
         if (nodes != null && nodes.length > 0)
         {
             //return NodeOp.findContextMenu(nodes);

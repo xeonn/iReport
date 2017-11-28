@@ -46,6 +46,7 @@ import com.jaspersoft.ireport.designer.crosstab.widgets.CellSeparatorWidget;
 import com.jaspersoft.ireport.designer.crosstab.widgets.CrosstabWidget;
 import com.jaspersoft.ireport.designer.widgets.JRDesignElementWidget;
 import com.jaspersoft.ireport.designer.widgets.JRDesignImageWidget;
+import com.jaspersoft.ireport.designer.widgets.visitor.ConfigurableDrawVisitor;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.beans.PropertyChangeEvent;
@@ -146,7 +147,7 @@ public class CrosstabObjectScene extends AbstractReportObjectScene implements Pr
                 return;
             }
 
-            this.drawVisitor = new DrawVisitor(jasperDesign, null);
+            this.drawVisitor = new ConfigurableDrawVisitor(jasperDesign, null);
             jasperDesign.getEventSupport().addPropertyChangeListener(this);
             
             // Adding listeners for groups...
@@ -778,7 +779,7 @@ public class CrosstabObjectScene extends AbstractReportObjectScene implements Pr
         getActions().addAction( keyboardElementMoveAction );
         
         this.setMaximumBounds(new Rectangle(-10,-10,Integer.MAX_VALUE, Integer.MAX_VALUE) );
-        this.drawVisitor = new DrawVisitor(getJasperDesign(), null);
+        this.drawVisitor = new ConfigurableDrawVisitor(getJasperDesign(), null);
         
         SwingUtilities.invokeLater(new Runnable() {
 

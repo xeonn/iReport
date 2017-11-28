@@ -50,7 +50,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabelSeriesExpression">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Series expression"/>
+                <Property name="text" type="java.lang.String" value="Series expression (required)"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

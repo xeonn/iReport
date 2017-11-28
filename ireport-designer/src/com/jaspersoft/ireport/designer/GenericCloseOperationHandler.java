@@ -29,6 +29,7 @@ public class GenericCloseOperationHandler implements CloseOperationHandler{
         } catch (PropertyVetoException ex) {
             return false;
         }
+        System.gc();
         return true;
         
 

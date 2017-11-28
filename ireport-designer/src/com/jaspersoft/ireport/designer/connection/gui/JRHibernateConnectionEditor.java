@@ -37,35 +37,55 @@ public class JRHibernateConnectionEditor extends javax.swing.JPanel implements I
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanelHibernate = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jLabel8 = new javax.swing.JLabel();
 
         setLayout(new java.awt.BorderLayout());
 
         jPanelHibernate.setLayout(new java.awt.GridBagLayout());
-
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/connection/gui/hibernate.png"))); // NOI18N
-        jLabel8.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jLabel8.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanelHibernate.add(jLabel8, gridBagConstraints);
 
         jLabel1.setText("jLabel1");
         jLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         jPanelHibernate.add(jLabel1, gridBagConstraints);
+
+        jCheckBox1.setSelected(true);
+        jCheckBox1.setText("Use Hibernate Annotations");
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 0);
+        jPanelHibernate.add(jCheckBox1, gridBagConstraints);
+
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/connection/gui/hibernate.png"))); // NOI18N
+        jLabel8.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jLabel8.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanelHibernate.add(jLabel8, gridBagConstraints);
 
         add(jPanelHibernate, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanelHibernate;
@@ -74,15 +94,19 @@ public class JRHibernateConnectionEditor extends javax.swing.JPanel implements I
     
     public void setIReportConnection(IReportConnection c) {
         this.iReportConnection = c;
+        jCheckBox1.setSelected(((JRHibernateConnection)c).isUseAnnotations());
     }
 
     public IReportConnection getIReportConnection() {
         
         IReportConnection irConn = new JRHibernateConnection();
+        ((JRHibernateConnection)irConn).setUseAnnotations(jCheckBox1.isSelected());
         iReportConnection = irConn;
         return iReportConnection;
     }
-    
+
+
+
     /*
     public void applyI18n(){
           jLabel1.setText("<html>"+ I18n.getString("connectionDialog.textPane1","Press the test button.\n\niReport will look in the classpath for a valid hibernate configuration."));
