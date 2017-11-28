@@ -45,15 +45,10 @@ public class ProxyFileResolver implements FileResolver {
     {
         this();
         resolvers.addAll(resolverList);
-        
-        System.out.println("Resolver created...");
-        System.out.flush();
     }
     
     public File resolveFile(String arg0) {
         
-        System.out.println("Resolving " + arg0);
-        System.out.flush();
         for (FileResolver res : resolvers)
         {
             try {

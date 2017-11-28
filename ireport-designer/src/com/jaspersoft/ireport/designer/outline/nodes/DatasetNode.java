@@ -73,16 +73,16 @@ public class DatasetNode extends IRAbstractNode implements PropertyChangeListene
         datasetPropertySet.setName("DATASET_PROPERTIES");
         datasetPropertySet.setDisplayName("Dataset properties");
         
-        fillDatasetPropertySet(datasetPropertySet, dataset);
+        fillDatasetPropertySet(datasetPropertySet, dataset, jd);
         sheet.put(datasetPropertySet);
         return sheet;
     }
     
-    public static Sheet.Set fillDatasetPropertySet(Sheet.Set datasetPropertySet, JRDesignDataset dataset)
+    public static Sheet.Set fillDatasetPropertySet(Sheet.Set datasetPropertySet, JRDesignDataset dataset, JasperDesign jasperDesign)
     {
         if (!dataset.isMainDataset())
         {
-            datasetPropertySet.put(new NameProperty( dataset ));
+            datasetPropertySet.put(new NameProperty( dataset, jasperDesign ));
         }
         datasetPropertySet.put(new ScriptletProperty( dataset ));
         datasetPropertySet.put(new ResourceBundleProperty( dataset ));
@@ -117,12 +117,14 @@ public class DatasetNode extends IRAbstractNode implements PropertyChangeListene
     private static final class NameProperty extends PropertySupport
     {
             private final JRDesignDataset dataset;
+            private final JasperDesign jd;
         
             @SuppressWarnings("unchecked")
-            public NameProperty(JRDesignDataset dataset)
+            public NameProperty(JRDesignDataset dataset, JasperDesign jd)
             {
                 super(JRDesignDataset.PROPERTY_NAME,String.class, "Dataset name", "The name of this dataset", true, true);
                 this.dataset = dataset;
+                this.jd= jd;
                 this.setValue("oneline", Boolean.TRUE);
             }
             
@@ -137,6 +139,12 @@ public class DatasetNode extends IRAbstractNode implements PropertyChangeListene
                     String newValue = (String)val;
                     dataset.setName(newValue);
                 
+                    if (!dataset.isMainDataset())
+                    {
+                        jd.getDatasetMap().remove(oldValue);
+                        jd.getDatasetMap().put(newValue,dataset);
+                    }
+                    
                     ObjectPropertyUndoableEdit urob =
                             new ObjectPropertyUndoableEdit(
                                 dataset,

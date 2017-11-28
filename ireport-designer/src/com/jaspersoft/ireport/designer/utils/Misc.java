@@ -11,6 +11,7 @@ package com.jaspersoft.ireport.designer.utils;
 
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.designer.tools.JNumberComboBox;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Frame;
@@ -698,4 +699,53 @@ public class Misc {
 		return new File(System.getProperty("user.home"));
 	}
     
+        public static boolean setComboBoxText( boolean firstTime, String value, javax.swing.JComboBox comboField ) {
+        if (( ! firstTime ) && (!( Misc.nvl(comboField.getSelectedItem(),"").equalsIgnoreCase(value)))) {
+            comboField.setSelectedIndex(0);
+            return false;
+        } else {
+            try {
+                // find the item and select it.
+                // we want an ignore case selection of the item...
+                boolean found = false;
+                for (int i=0; i<comboField.getItemCount(); ++i)
+                {
+                    String s = (String)comboField.getItemAt(i);
+                    if (s != null && s.equalsIgnoreCase(value))
+                    {
+                        comboField.setSelectedIndex(i);
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if (!found)
+                {
+                    comboField.addItem(value);
+                    comboField.setSelectedItem(value);
+                }
+            } catch (Exception ex){
+                ex.printStackTrace();
+            }
+        }
+        return true;
+    }
+        
+   public static boolean setElementComboNumber( boolean firstTime, double value, JNumberComboBox numberField ) {
+        if (!firstTime && numberField.getValue() != value) {
+            numberField.setSetting(true);
+            numberField.setSelectedItem("");
+            numberField.setSetting(false);
+            return false;
+        } else {
+            try {
+                numberField.setValue( value );
+            } catch (Exception ex){
+                ex.printStackTrace();
+            }
+        }
+        return true;
+    }
+   
+   
 }

@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.1//EN" "http://www.netbeans.org/dtds/filesystem-1_1.dtd">
 <filesystem>
+    <attr name="Menu\Window\CloneDocumentAction.shadow\position" intvalue="1700"/>
+    <attr name="Menu\Window\CloseAllButThisAction.shadow\position" intvalue="1900"/>
+    <attr name="Menu\Window\CloseAllDocumentsAction.shadow\position" intvalue="1800"/>
+    <attr name="Menu\Window\CloseWindowAction.shadow\position" intvalue="1300"/>
+    <attr name="Menu\Window\DocumentsAction.shadow\position" intvalue="2000"/>
+    <attr name="Menu\Window\JRViewerAction.shadow\position" intvalue="100"/>
+    <attr name="Menu\Window\MaximizeWindowAction.shadow\position" intvalue="1400"/>
+    <attr name="Menu\Window\ProgressListAction.shadow\position" intvalue="1100"/>
+    <attr name="Menu\Window\RepositoryAction.shadow\position" intvalue="200"/>
+    <attr name="Menu\Window\Separator3.instance\position" intvalue="1200"/>
+    <attr name="Menu\Window\Separator4.instance\position" intvalue="1600"/>
+    <attr name="Menu\Window\Separator5.instance\position" intvalue="2100"/>
+    <attr name="Menu\Window\ShowPaletteAction.shadow\position" intvalue="500"/>
+    <attr name="Menu\Window\SwitchToRecentDocumentAction.shadow\position" intvalue="1000"/>
+    <attr name="Menu\Window\ViewFavoritesTabAction.shadow\position" intvalue="400"/>
+    <attr name="Menu\Window\org-netbeans-core-actions-GlobalPropertiesAction.shadow\position" intvalue="700"/>
+    <attr name="Menu\Window\org-netbeans-core-windows-actions-ResetWindowsAction.instance\position" intvalue="2200"/>
+    <attr name="Menu\Window\org-netbeans-core-windows-actions-UndockAction.shadow\position" intvalue="1500"/>
     <attr name="Services\MIMEResolver\Languagesresolver.xml\position" intvalue="500"/>
     <attr name="Services\MIMEResolver\org-netbeans-modules-editor-settings-storage-mime-resolver.xml\position" intvalue="600"/>
     <attr name="Services\MIMEResolver\plain-text-resolver.xml\position" intvalue="300"/>
@@ -26,6 +44,8 @@
             <file name="com-jaspersoft-ireport-designer-menu-FontpathAction.instance"/>
         </folder>
         <folder name="Window">
+            <file name="com-jaspersoft-ireport-designer-errorhandler-ErrorHandlerAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-formatting-FormattingToolsAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-outline-OutlineAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-logpane-IRConsoleAction.instance"/>
             <file name="org-netbeans-core-actions-ViewRuntimeTabAction.instance"> 
@@ -166,20 +186,34 @@
             <file name="org-netbeans-modules-editor-NbCodeFoldingAction.instance_hidden"/>
         </folder>
         <folder name="Window">
+            
             <folder name="Navigator">
-                <file name="OutlineAction.shadow" url="OutlineAction.shadow">
-                    <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-outline-OutlineAction.instance"/>
-                </file>
-            </folder>
-            <attr name="ViewFilesystemsTabAction.shadow/ViewRuntimeTabAction.shadow" boolvalue="true"/> 
-            <attr name="org-netbeans-core-output2-OutputWindowAction.instance/ViewRuntimeTabAction.shadow" boolvalue="true"/> 
+                <attr name="position" intvalue="900"/>
+                </folder> 
+             
             <folder name="Output">
-                <file name="IRConsoleAction.shadow" url="IRConsoleAction.shadow">
+                <attr name="position" intvalue="800"/>
+                </folder>
+            <folder name="Report designer">
+                <file name="ErrorHandlerAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-errorhandler-ErrorHandlerAction.instance"/>
+                </file>
+                <attr name="position" intvalue="950"/>
+                <file name="FormattingToolsAction.shadow" url="FormattingToolsAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-formatting-FormattingToolsAction.instance"/>
+                    <attr name="position" intvalue="200"/>
+                </file>
+                <file name="IRConsoleAction.shadow" url="IRConsoleAction_1.shadow">
                     <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-logpane-IRConsoleAction.instance"/>
+                </file>
+                <file name="OutlineAction.shadow" url="OutlineAction_1.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-outline-OutlineAction.instance"/>
+                    <attr name="position" intvalue="100"/>
                 </file>
             </folder>
             <file name="ViewRuntimeTabAction.shadow"> 
                 <attr name="originalFile" stringvalue="Actions/Window/org-netbeans-core-actions-ViewRuntimeTabAction.instance"/> 
+                <attr name="position" intvalue="300"/>
             </file> 
 
         </folder>
@@ -303,6 +337,8 @@
     
     <folder name="Windows2">
         <folder name="Components">
+            <file name="ErrorHandlerTopComponent.settings" url="ErrorHandlerTopComponentSettings.xml"/>
+            <file name="FormattingToolsTopComponent.settings" url="FormattingToolsTopComponentSettings.xml"/>
             <file name="IRConsoleTopComponent.settings" url="IRConsoleTopComponentSettings.xml"/>
             <file name="OutlineTopComponent.settings" url="OutlineTopComponentSettings.xml"/>
         </folder>
@@ -315,11 +351,15 @@
             </folder>
         </folder>
         <folder name="Modes">
+            <folder name="commonpalette">
+                <file name="FormattingToolsTopComponent.wstcref" url="FormattingToolsTopComponentWstcref.xml"/>
+            </folder>
             <folder name="navigator">
                 <file name="OutlineTopComponent.wstcref" url="OutlineTopComponentWstcref.xml"/>
                 <file name="navigatorTC.wstcref" url="navigatorTCWstcref.xml"/>
             </folder>
             <folder name="output">
+                <file name="ErrorHandlerTopComponent.wstcref" url="ErrorHandlerTopComponentWstcref.xml"/>
                 <file name="IRConsoleTopComponent.wstcref" url="IRConsoleTopComponentWstcref.xml"/>
             </folder>
         </folder>

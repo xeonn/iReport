@@ -30,7 +30,8 @@
 package com.jaspersoft.ireport.designer.compiler;
 
 import com.jaspersoft.ireport.designer.compiler.xml.SourceLocation;
-import com.jaspersoft.ireport.designer.logpane.ProblemItem;
+import com.jaspersoft.ireport.designer.errorhandler.ProblemItem;
+import net.sf.jasperreports.engine.JRExpression;
 import org.eclipse.jdt.core.compiler.IProblem;
 
 /**
@@ -63,7 +64,13 @@ public class ErrorsCollector implements JasperReportErrorHandler {
     }
 
     public void addMarker(IProblem problem, SourceLocation location) {
+        
         addMarker( problem.getMessage(), location);
+    }
+    
+    public void addMarker(JRExpression expression, IProblem problem, SourceLocation location) {
+        
+        getProblemItems().add( new ProblemItem(ProblemItem.ERROR, problem.getMessage(), expression, location.getXPath()) );
     }
 
     public java.util.List getProblemItems() {
@@ -72,6 +79,11 @@ public class ErrorsCollector implements JasperReportErrorHandler {
 
     public void setProblemItems(java.util.List problemItems) {
         this.problemItems = problemItems;
+    }
+
+    public void addMarker(IProblem problem, JRExpression expression, SourceLocation location) {
+
+        getProblemItems().add( new ProblemItem(ProblemItem.ERROR, problem.getMessage(), expression, (location==null) ? null : location.getXPath()) );
     }
     
 }

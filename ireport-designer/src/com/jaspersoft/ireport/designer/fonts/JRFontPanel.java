@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.fonts;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IRFont;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
@@ -54,16 +55,16 @@ public class JRFontPanel extends javax.swing.JPanel {
         
         jPanel6.setVisible(false);
         
-        ((JNumberComboBox)jNumberComboBoxSize).addEntry("3",3);
-        ((JNumberComboBox)jNumberComboBoxSize).addEntry("5",5);
-        ((JNumberComboBox)jNumberComboBoxSize).addEntry("8",8);
-        ((JNumberComboBox)jNumberComboBoxSize).addEntry("10",10);
-        ((JNumberComboBox)jNumberComboBoxSize).addEntry("12",12);
-        ((JNumberComboBox)jNumberComboBoxSize).addEntry("14",14);
-        ((JNumberComboBox)jNumberComboBoxSize).addEntry("18",18);
-        ((JNumberComboBox)jNumberComboBoxSize).addEntry("24",24);
-        ((JNumberComboBox)jNumberComboBoxSize).addEntry("36",36);
-        ((JNumberComboBox)jNumberComboBoxSize).addEntry("48",48);
+        ((JNumberComboBox)jNumberComboBoxSize).addEntry(I18n.getString("Global.ComboBox.3"),3);
+        ((JNumberComboBox)jNumberComboBoxSize).addEntry(I18n.getString("Global.ComboBox.5"),5);
+        ((JNumberComboBox)jNumberComboBoxSize).addEntry(I18n.getString("Global.ComboBox.8"),8);
+        ((JNumberComboBox)jNumberComboBoxSize).addEntry(I18n.getString("Global.ComboBox.10"),10);
+        ((JNumberComboBox)jNumberComboBoxSize).addEntry(I18n.getString("Global.ComboBox.12"),12);
+        ((JNumberComboBox)jNumberComboBoxSize).addEntry(I18n.getString("Global.ComboBox.14"),14);
+        ((JNumberComboBox)jNumberComboBoxSize).addEntry(I18n.getString("Global.ComboBox.18"),18);
+        ((JNumberComboBox)jNumberComboBoxSize).addEntry(I18n.getString("Global.ComboBox.24"),24);
+        ((JNumberComboBox)jNumberComboBoxSize).addEntry(I18n.getString("Global.ComboBox.36"),36);
+        ((JNumberComboBox)jNumberComboBoxSize).addEntry(I18n.getString("Global.ComboBox.48"),48);
         
         jNumberComboBoxSize.setSelectedIndex(3);
                 
@@ -146,7 +147,7 @@ public class JRFontPanel extends javax.swing.JPanel {
 
         jPanelFont.setLayout(new java.awt.GridBagLayout());
 
-        jLabel24.setText(org.openide.util.NbBundle.getMessage(JRFontPanel.class, "JRFontPanel.jLabel24.text")); // NOI18N
+        jLabel24.setText(I18n.getString("JRFontPanel.jLabel24.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -155,7 +156,7 @@ public class JRFontPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         jPanelFont.add(jLabel24, gridBagConstraints);
 
-        jLabel27.setText(org.openide.util.NbBundle.getMessage(JRFontPanel.class, "JRFontPanel.jLabel27.text")); // NOI18N
+        jLabel27.setText(I18n.getString("JRFontPanel.jLabel27.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -188,7 +189,7 @@ public class JRFontPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
         jPanelFont.add(jNumberComboBoxSize, gridBagConstraints);
 
-        jLabel25.setText(org.openide.util.NbBundle.getMessage(JRFontPanel.class, "JRFontPanel.jLabel25.text")); // NOI18N
+        jLabel25.setText(I18n.getString("JRFontPanel.jLabel25.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -213,7 +214,7 @@ public class JRFontPanel extends javax.swing.JPanel {
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jCheckBoxBold.setText(org.openide.util.NbBundle.getMessage(JRFontPanel.class, "JRFontPanel.jCheckBoxBold.text")); // NOI18N
+        jCheckBoxBold.setText(I18n.getString("JRFontPanel.jCheckBoxBold.text")); // NOI18N
         jCheckBoxBold.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxBoldActionPerformed(evt);
@@ -226,7 +227,7 @@ public class JRFontPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         jPanel2.add(jCheckBoxBold, gridBagConstraints);
 
-        jCheckBoxUnderline.setText(org.openide.util.NbBundle.getMessage(JRFontPanel.class, "JRFontPanel.jCheckBoxUnderline.text")); // NOI18N
+        jCheckBoxUnderline.setText(I18n.getString("JRFontPanel.jCheckBoxUnderline.text")); // NOI18N
         jCheckBoxUnderline.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxUnderlineActionPerformed(evt);
@@ -239,7 +240,7 @@ public class JRFontPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         jPanel2.add(jCheckBoxUnderline, gridBagConstraints);
 
-        jCheckBoxItalic.setText(org.openide.util.NbBundle.getMessage(JRFontPanel.class, "JRFontPanel.jCheckBoxItalic.text")); // NOI18N
+        jCheckBoxItalic.setText(I18n.getString("JRFontPanel.jCheckBoxItalic.text")); // NOI18N
         jCheckBoxItalic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxItalicActionPerformed(evt);
@@ -251,7 +252,7 @@ public class JRFontPanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         jPanel2.add(jCheckBoxItalic, gridBagConstraints);
 
-        jCheckBoxStrikeThrough.setText(org.openide.util.NbBundle.getMessage(JRFontPanel.class, "JRFontPanel.jCheckBoxStrikeThrough.text")); // NOI18N
+        jCheckBoxStrikeThrough.setText(I18n.getString("JRFontPanel.jCheckBoxStrikeThrough.text")); // NOI18N
         jCheckBoxStrikeThrough.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxStrikeThroughActionPerformed(evt);
@@ -281,7 +282,7 @@ public class JRFontPanel extends javax.swing.JPanel {
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jCheckBoxPDFEmbedded.setText(org.openide.util.NbBundle.getMessage(JRFontPanel.class, "JRFontPanel.jCheckBoxPDFEmbedded.text")); // NOI18N
+        jCheckBoxPDFEmbedded.setText(I18n.getString("JRFontPanel.jCheckBoxPDFEmbedded.text")); // NOI18N
         jCheckBoxPDFEmbedded.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxPDFEmbeddedActionPerformed(evt);
@@ -293,7 +294,7 @@ public class JRFontPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel4.add(jCheckBoxPDFEmbedded, gridBagConstraints);
 
-        jCheckBoxDefaultFont.setText(org.openide.util.NbBundle.getMessage(JRFontPanel.class, "JRFontPanel.jCheckBoxDefaultFont.text")); // NOI18N
+        jCheckBoxDefaultFont.setText(I18n.getString("JRFontPanel.jCheckBoxDefaultFont.text")); // NOI18N
         jCheckBoxDefaultFont.setEnabled(false);
         jCheckBoxDefaultFont.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -313,7 +314,7 @@ public class JRFontPanel extends javax.swing.JPanel {
 
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
-        jLabel32.setText(org.openide.util.NbBundle.getMessage(JRFontPanel.class, "JRFontPanel.jLabel32.text")); // NOI18N
+        jLabel32.setText(I18n.getString("JRFontPanel.jLabel32.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -345,7 +346,7 @@ public class JRFontPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         jPanelFont.add(jPanel3, gridBagConstraints);
 
-        jLabel23.setText(org.openide.util.NbBundle.getMessage(JRFontPanel.class, "JRFontPanel.jLabel23.text")); // NOI18N
+        jLabel23.setText(I18n.getString("JRFontPanel.jLabel23.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 14;
@@ -379,7 +380,7 @@ public class JRFontPanel extends javax.swing.JPanel {
         jPanel6.add(jPanel7, gridBagConstraints);
 
         jButtonOK.setMnemonic('o');
-        jButtonOK.setText(org.openide.util.NbBundle.getMessage(JRFontPanel.class, "JRFontPanel.jButtonOK.text")); // NOI18N
+        jButtonOK.setText(I18n.getString("JRFontPanel.jButtonOK.text")); // NOI18N
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOKActionPerformed(evt);
@@ -393,7 +394,7 @@ public class JRFontPanel extends javax.swing.JPanel {
         jPanel6.add(jButtonOK, gridBagConstraints);
 
         jButtonCancel.setMnemonic('c');
-        jButtonCancel.setText(org.openide.util.NbBundle.getMessage(JRFontPanel.class, "JRFontPanel.jButtonCancel.text")); // NOI18N
+        jButtonCancel.setText(I18n.getString("JRFontPanel.jButtonCancel.text")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -407,7 +408,7 @@ public class JRFontPanel extends javax.swing.JPanel {
         jPanel6.add(jButtonCancel, gridBagConstraints);
 
         jButtonResetAllToDefault.setMnemonic('d');
-        jButtonResetAllToDefault.setText(org.openide.util.NbBundle.getMessage(JRFontPanel.class, "JRFontPanel.jButtonResetAllToDefault.text")); // NOI18N
+        jButtonResetAllToDefault.setText(I18n.getString("JRFontPanel.jButtonResetAllToDefault.text")); // NOI18N
         jButtonResetAllToDefault.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonResetAllToDefaultjButtonOKActionPerformed1(evt);
@@ -534,8 +535,8 @@ public class JRFontPanel extends javax.swing.JPanel {
     private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKActionPerformed
         if (this.jTextFieldReportFont.getText().trim().length() <= 0 && isReportFontMode()) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "Please insert a valid report font name!",
-                    "Invalid report font name!",
+                    I18n.getString("JRFontPanel.Message.Warning"),
+                    I18n.getString("JRFontPanel.Message.Error"),
                     javax.swing.JOptionPane.WARNING_MESSAGE );
             return;
         }
@@ -914,8 +915,8 @@ public class JRFontPanel extends javax.swing.JPanel {
             }
         };
        
-        dialog.getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        dialog.getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        dialog.getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        dialog.getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
 
         java.awt.GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();

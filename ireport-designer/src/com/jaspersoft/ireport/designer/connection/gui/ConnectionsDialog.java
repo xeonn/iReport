@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.connection.gui;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportManager;
 import javax.swing.table.*;
@@ -99,8 +100,8 @@ public class ConnectionsDialog extends javax.swing.JDialog {
             }
         };
        
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
         this.setLocationRelativeTo(null);
 
@@ -145,7 +146,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         jButtonExport = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Connections / Datasources");
+        setTitle(I18n.getString("ConnectionsDialog.Title.ConnDatasource")); // NOI18N
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
@@ -197,7 +198,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         jPanelButtons.setPreferredSize(new java.awt.Dimension(100, 10));
         jPanelButtons.setLayout(new java.awt.GridBagLayout());
 
-        jButtonNewParameter.setText("New");
+        jButtonNewParameter.setText(I18n.getString("Global.Button.New")); // NOI18N
         jButtonNewParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonNewParameterActionPerformed(evt);
@@ -211,7 +212,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanelButtons.add(jButtonNewParameter, gridBagConstraints);
 
-        jButtonModifyParameter.setText("Modify");
+        jButtonModifyParameter.setText(I18n.getString("Global.Button.Modify")); // NOI18N
         jButtonModifyParameter.setEnabled(false);
         jButtonModifyParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -226,7 +227,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 3, 5, 3);
         jPanelButtons.add(jButtonModifyParameter, gridBagConstraints);
 
-        jButtonDeleteParameter.setText("Delete");
+        jButtonDeleteParameter.setText(I18n.getString("Global.Button.Delete")); // NOI18N
         jButtonDeleteParameter.setEnabled(false);
         jButtonDeleteParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -242,8 +243,8 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 3, 5, 3);
         jPanelButtons.add(jButtonDeleteParameter, gridBagConstraints);
 
-        jButtonDefault.setText("Set as default");
-        jButtonDefault.setActionCommand("Set as active");
+        jButtonDefault.setText(I18n.getString("Global.Button.Set_as_default")); // NOI18N
+        jButtonDefault.setActionCommand(I18n.getString("Global.Button.Set_as_active")); // NOI18N
         jButtonDefault.setEnabled(false);
         jButtonDefault.setMargin(new java.awt.Insets(2, 4, 2, 4));
         jButtonDefault.addActionListener(new java.awt.event.ActionListener() {
@@ -260,8 +261,8 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(8, 3, 5, 3);
         jPanelButtons.add(jButtonDefault, gridBagConstraints);
 
-        jButtonImport.setText("Import...");
-        jButtonImport.setActionCommand("Set as active");
+        jButtonImport.setText(I18n.getString("Global.Button.Import")); // NOI18N
+        jButtonImport.setActionCommand(I18n.getString("Global.Button.Set_as_active")); // NOI18N
         jButtonImport.setMargin(new java.awt.Insets(2, 4, 2, 4));
         jButtonImport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -277,8 +278,8 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(8, 3, 5, 3);
         jPanelButtons.add(jButtonImport, gridBagConstraints);
 
-        jButtonExport.setText("Export...");
-        jButtonExport.setActionCommand("Set as active");
+        jButtonExport.setText(I18n.getString("Global.Button.Export")); // NOI18N
+        jButtonExport.setActionCommand(I18n.getString("Global.Button.Set_as_active")); // NOI18N
         jButtonExport.setMargin(new java.awt.Insets(2, 4, 2, 4));
         jButtonExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -311,7 +312,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
             if (jTableParameters.getRowCount() == 0)
             {
                 JOptionPane.showMessageDialog(this,
-                        "No connections to export",
+                        I18n.getString("ConnectionsDialog.Message.NoExport"),
                         "",JOptionPane.INFORMATION_MESSAGE);
                 return;
             }    
@@ -323,7 +324,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
 			    return (filename.endsWith(".xml") || file.isDirectory()) ;
 		    }
 		    public String getDescription() {
-			    return "iReport connection/datasource definition (*.xml)";
+			    return I18n.getString("ConnectionsDialog.Description.Definition");
 		    }
 	    });
 
@@ -341,7 +342,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
                     if (f.exists())
                     {
                         if (JOptionPane.showConfirmDialog(this,
-                                Misc.formatString("{0} already exists.\nDo you want overwrite it?", new Object[]{""+f}),
+                                Misc.formatString(I18n.getString("ConnectionsDialog.Message.ConnExists"), new Object[]{""+f}),
                                 "",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE) != JOptionPane.OK_OPTION)
                         {
                             return;
@@ -368,13 +369,13 @@ public class ConnectionsDialog extends javax.swing.JDialog {
                     pw.close();
                     
                     JOptionPane.showMessageDialog(this,
-                            Misc.formatString("{0,number,integer} connection(s) succesfully exported.", new Object[]{new Integer(i)}), //"messages.connectionsDialog.connectionsExported" 
+                            Misc.formatString(I18n.getString("ConnectionsDialog.Message.Exported"), new Object[]{new Integer(i)}), //"messages.connectionsDialog.connectionsExported" 
                             "",JOptionPane.INFORMATION_MESSAGE);
                     
                 } catch (Exception ex)
                 {
                     JOptionPane.showMessageDialog(this,
-                            Misc.formatString("Error saving connections:\n{0}", new Object[]{ex.getMessage()}) //"messages.connectionsDialog.errorSavingConnections" 
+                            Misc.formatString(I18n.getString("ConnectionsDialog.Message.ErrorSave"), new Object[]{ex.getMessage()}) //"messages.connectionsDialog.errorSavingConnections" 
                             );
                     ex.printStackTrace();
                 }
@@ -395,7 +396,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
 			    return (filename.endsWith(".xml") || file.isDirectory()) ;
 		    }
 		    public String getDescription() {
-			    return "iReport connection/datasource definition (*.xml)";
+			    return I18n.getString("ConnectionsDialog.Description.Definition");
 		    }
 	    });
 
@@ -415,7 +416,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
                         IReportManager.getInstance().saveiReportConfiguration();
                         
                         JOptionPane.showMessageDialog(this,
-                                Misc.formatString("{0,number,integer} connection(s) succesfully imported.", new Object[]{new Integer(i)}), //"messages.connectionsDialog.connectionsImported" ,
+                                Misc.formatString(I18n.getString("ConnectionsDialog.Message.Imported"), new Object[]{new Integer(i)}), //"messages.connectionsDialog.connectionsImported" ,
                                 "",JOptionPane.INFORMATION_MESSAGE);
                     }
 	    }        
@@ -614,12 +615,19 @@ public class ConnectionsDialog extends javax.swing.JDialog {
      {
          Vector v = new Vector();
          try {
+             
+             ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
+             Thread.currentThread().setContextClassLoader(DOMParser.class.getClassLoader());
+             
              DOMParser parser = new DOMParser();
              java.io.FileInputStream fis = new java.io.FileInputStream(xmlfile);
              org.xml.sax.InputSource input_sss  = new org.xml.sax.InputSource(fis);
              //input_sss.setSystemId(filename);
              parser.parse( input_sss );
 
+             Thread.currentThread().setContextClassLoader(oldClassLoader);
+
+                          
              Document document = parser.getDocument();
              Node node = document.getDocumentElement();
 
@@ -662,16 +670,16 @@ public class ConnectionsDialog extends javax.swing.JDialog {
                         } catch (Exception ex) {
                                 
                             JOptionPane.showMessageDialog(this,
-                                Misc.formatString("Error loading  {0}", new Object[]{connectionName}), //"messages.connectionsDialog.errorLoadingConnection"
-                                "Error", JOptionPane.ERROR_MESSAGE);
+                                Misc.formatString(I18n.getString("ConnectionsDialog.Message.Error"), new Object[]{connectionName}), //"messages.connectionsDialog.errorLoadingConnection"
+                                I18n.getString("ConnectionsDialog.Message.Err"), JOptionPane.ERROR_MESSAGE);
                         }
                 }
              }
          } catch (Exception ex)
          {
              JOptionPane.showMessageDialog(this,
-                                Misc.formatString("Error loading connections.\n{0}", new Object[]{ex.getMessage()}), //"messages.connectionsDialog.errorLoadingConnections"
-                                "Error", JOptionPane.ERROR_MESSAGE);
+                                Misc.formatString(I18n.getString("ConnectionsDialog.Message.Err2"), new Object[]{ex.getMessage()}), //"messages.connectionsDialog.errorLoadingConnections"
+                                I18n.getString("ConnectionsDialog.Message.Err"), JOptionPane.ERROR_MESSAGE);
               ex.printStackTrace();
          }
 

@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.tools;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Dialog;
@@ -82,8 +83,8 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
             }
         };
        
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
 
         //to make the default button ...
@@ -109,7 +110,7 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
         jRTextExpressionAreaDefaultExpression = new com.jaspersoft.ireport.designer.editor.ExpressionEditorArea();
         jSeparator1 = new javax.swing.JSeparator();
 
-        setTitle("Add/modify parameter");
+        setTitle(I18n.getString("JRDatasetParameterDialog.Title.AddModParam")); // NOI18N
         setModal(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -120,7 +121,7 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         jButtonOK.setMnemonic('o');
-        jButtonOK.setText("OK");
+        jButtonOK.setText(I18n.getString("Global.Button.Ok")); // NOI18N
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOKActionPerformed(evt);
@@ -129,7 +130,7 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
         jPanel1.add(jButtonOK);
 
         jButtonCancel.setMnemonic('c');
-        jButtonCancel.setText("Cancel");
+        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -142,7 +143,7 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
         jPanel2.setPreferredSize(new java.awt.Dimension(350, 250));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("Dataset parameter name");
+        jLabel1.setText(I18n.getString("JRDatasetParameterDialog.Label.DatasetParamName")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 0, 3);
@@ -155,7 +156,7 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 3, 3, 3);
         jPanel2.add(jTextFieldName, gridBagConstraints);
 
-        jLabel3.setText("Value expression");
+        jLabel3.setText(I18n.getString("JRDatasetParameterDialog.Label.ValExpre")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -198,8 +199,8 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
         if (newName.length() <= 0)
         {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "Please insert a valid parameter name!",
-                    "Invalid parameter name!",
+                    I18n.getString("JRDatasetParameterDialog.Message.Warning"),
+                    I18n.getString("JRDatasetParameterDialog.Message.Error"),
                     javax.swing.JOptionPane.WARNING_MESSAGE );
             return;
         }
@@ -210,8 +211,8 @@ public class JRDatasetParameterDialog extends javax.swing.JDialog {
             currentParameters.containsKey(newName))
         {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "A parameter with this name is already defined!",
-                    "Invalid parameter name!",
+                    I18n.getString("JRDatasetParameterDialog.Message.Warning2"),
+                    I18n.getString("JRFontPanel.Message.Error2"),
                     javax.swing.JOptionPane.WARNING_MESSAGE );
             return;
         }

@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.crosstab.wizard;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.editor.ExpObjectCellRenderer;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.utils.Misc;
@@ -38,15 +39,15 @@ public class GroupPanel extends javax.swing.JPanel {
         
         if (type == GROUP)
         {
-            jLabelGroupMeasure.setText("Group");
-            jLabelGroupByFunction.setText("Group By");
+            jLabelGroupMeasure.setText(I18n.getString("GroupPanel.Label.Group"));
+            jLabelGroupByFunction.setText(I18n.getString("GroupPanel.Label.GroupBy"));
             jLabelGroupByFunction.setEnabled(false);
             jComboBoxGroupBy.setEnabled(false);
         }
         else
         {
-            jLabelGroupMeasure.setText("Measure");
-            jLabelGroupByFunction.setText("Function");
+            jLabelGroupMeasure.setText(I18n.getString("GroupPanel.Label.Measure"));
+            jLabelGroupByFunction.setText(I18n.getString("GroupPanel.Label.Function"));
             jLabelGroupByFunction.setEnabled(true);
             jComboBoxGroupBy.setEnabled(true);
         }
@@ -100,10 +101,10 @@ public class GroupPanel extends javax.swing.JPanel {
         jLabelGroupByFunction = new javax.swing.JLabel();
         jComboBoxGroupBy = new javax.swing.JComboBox();
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), org.openide.util.NbBundle.getMessage(GroupPanel.class, "GroupPanel.border.title"))); // NOI18N
+        setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), I18n.getString("GroupPanel.border.title"))); // NOI18N
 
         jLabelGroupMeasure.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabelGroupMeasure.setText(org.openide.util.NbBundle.getMessage(GroupPanel.class, "GroupPanel.jLabelGroupMeasure.text")); // NOI18N
+        jLabelGroupMeasure.setText(I18n.getString("GroupPanel.jLabelGroupMeasure.text")); // NOI18N
 
         jComboBoxGroup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -112,7 +113,7 @@ public class GroupPanel extends javax.swing.JPanel {
         });
 
         jLabelGroupByFunction.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabelGroupByFunction.setText(org.openide.util.NbBundle.getMessage(GroupPanel.class, "GroupPanel.jLabelGroupByFunction.text")); // NOI18N
+        jLabelGroupByFunction.setText(I18n.getString("GroupPanel.jLabelGroupByFunction.text")); // NOI18N
         jLabelGroupByFunction.setEnabled(false);
 
         jComboBoxGroupBy.setEnabled(false);
@@ -194,7 +195,7 @@ public class GroupPanel extends javax.swing.JPanel {
         String classtype = "java.lang.String";
         List groupByValues = new ArrayList();
         
-        groupByValues.add(new Tag("Unique","Unique"));
+        groupByValues.add(new Tag(I18n.getString("GroupPanel.Label.Unique"),I18n.getString("GroupPanel.Label.Unique")));
         
         Object obj = jComboBoxGroup.getSelectedItem();
         
@@ -216,10 +217,10 @@ public class GroupPanel extends javax.swing.JPanel {
             if ( java.util.Date.class.isAssignableFrom( clazz ))
             {
                 
-                groupByValues.add(new Tag("Year","Year"));
-                groupByValues.add(new Tag("Month","Month"));
-                groupByValues.add(new Tag("Week","Week"));
-                groupByValues.add(new Tag("Day","Day"));
+                groupByValues.add(new Tag(I18n.getString("Global.ComboBox.Year"),I18n.getString("Global.ComboBox.Year")));
+                groupByValues.add(new Tag(I18n.getString("Global.ComboBox.Month"),I18n.getString("Global.ComboBox.Month")));
+                groupByValues.add(new Tag(I18n.getString("Global.ComboBox.Week"),I18n.getString("Global.ComboBox.Week")));
+                groupByValues.add(new Tag(I18n.getString("Global.ComboBox.Day"),I18n.getString("Global.ComboBox.Day")));
             }
         } catch (Exception ex)
         {}
@@ -232,7 +233,7 @@ public class GroupPanel extends javax.swing.JPanel {
         String classtype = "java.lang.String";
         List functions = new ArrayList();
         
-        functions.add(new Tag(JRVariable.CALCULATION_COUNT,"Count"));
+        functions.add(new Tag(JRVariable.CALCULATION_COUNT,I18n.getString("GroupPanel.Label.Count")));
         
         Object obj = jComboBoxGroup.getSelectedItem();
         
@@ -254,27 +255,27 @@ public class GroupPanel extends javax.swing.JPanel {
             
             if (java.lang.Number.class.isAssignableFrom( clazz ))
             {
-                functions.add(new Tag(JRVariable.CALCULATION_SUM,"Sum"));
-                functions.add(new Tag(JRVariable.CALCULATION_COUNT,"Count"));
-                functions.add(new Tag(JRVariable.CALCULATION_DISTINCT_COUNT,"DistinctCount"));
-                functions.add(new Tag(JRVariable.CALCULATION_AVERAGE,"Average"));
-                functions.add(new Tag(JRVariable.CALCULATION_STANDARD_DEVIATION,"StandardDeviation"));
-                functions.add(new Tag(JRVariable.CALCULATION_VARIANCE,"Variance"));
+                functions.add(new Tag(JRVariable.CALCULATION_SUM,I18n.getString("GroupPanel.Function.Sum")));
+                functions.add(new Tag(JRVariable.CALCULATION_COUNT,I18n.getString("GroupPanel.Function.Count")));
+                functions.add(new Tag(JRVariable.CALCULATION_DISTINCT_COUNT,I18n.getString("GroupPanel.Function.DistinctCount")));
+                functions.add(new Tag(JRVariable.CALCULATION_AVERAGE,I18n.getString("GroupPanel.Function.Average")));
+                functions.add(new Tag(JRVariable.CALCULATION_STANDARD_DEVIATION,I18n.getString("GroupPanel.Function.StandardDeviation")));
+                functions.add(new Tag(JRVariable.CALCULATION_VARIANCE,I18n.getString("GroupPanel.Function.Variance")));
             }
             
             if ( java.util.Date.class.isAssignableFrom( clazz ) || 
                  java.lang.Number.class.isAssignableFrom( clazz ))
             {
-                functions.add(new Tag(JRVariable.CALCULATION_LOWEST,"Lowest"));
-                functions.add(new Tag(JRVariable.CALCULATION_HIGHEST,"Highest"));
+                functions.add(new Tag(JRVariable.CALCULATION_LOWEST,I18n.getString("GroupPanel.Function.Lowest")));
+                functions.add(new Tag(JRVariable.CALCULATION_HIGHEST,I18n.getString("GroupPanel.Function.Highest")));
             }
             
             
         } catch (Exception ex)
         {}
         
-        functions.add(new Tag(JRVariable.CALCULATION_FIRST,"First"));
-        functions.add(new Tag(JRVariable.CALCULATION_NOTHING,"Nothing"));
+        functions.add(new Tag(JRVariable.CALCULATION_FIRST,I18n.getString("GroupPanel.Function.First")));
+        functions.add(new Tag(JRVariable.CALCULATION_NOTHING,I18n.getString("GroupPanel.Function.Nothing")));
         
       return functions;
     }
@@ -318,21 +319,21 @@ public class GroupPanel extends javax.swing.JPanel {
         
         if (groupByType != null)
         {
-            if (groupByType.equals("Year"))
+            if (groupByType.equals(I18n.getString("Global.ComboBox.Year")))
             {
-                return "(new SimpleDateFormat(\"yyyy\")).format("+expression+")";
+                return I18n.getString("GroupPanel.Label.DateFormat")+expression+")";
             }
-            else if (groupByType.equals("Month"))
+            else if (groupByType.equals(I18n.getString("Global.ComboBox.Month")))
             {
-                return "(new SimpleDateFormat(\"yyyy-MM\")).format("+expression+")";
+                return I18n.getString("GroupPanel.Label.DateFormat2")+expression+")";
             }
-            else if (groupByType.equals("Week"))
+            else if (groupByType.equals(I18n.getString("Global.ComboBox.Week")))
             {
-                return "(new SimpleDateFormat(\"yyyy-ww\")).format("+expression+")";
+                return I18n.getString("GroupPanel.Label.DateFormat3")+expression+")";
             }
-            else if (groupByType.equals("Day"))
+            else if (groupByType.equals(I18n.getString("Global.ComboBox.Day")))
             {
-                return "(new SimpleDateFormat(\"yyyy-MM-dd\")).format("+expression+")";
+                return I18n.getString("GroupPanel.Label.DateFormat4")+expression+")";
             }
         }
         
@@ -342,7 +343,7 @@ public class GroupPanel extends javax.swing.JPanel {
     public String getExpressionClass(String groupByType)
     {
         Object obj = jComboBoxGroup.getSelectedItem();
-        if (groupByType !=null && !groupByType.equals("Unique") )
+        if (groupByType !=null && !groupByType.equals(I18n.getString("GroupPanel.Function.Unique")) )
         {
             return "java.lang.String";
         }

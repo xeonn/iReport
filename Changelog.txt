@@ -1,3 +1,27 @@
+
+2008-08-05 Version 3.1.0 released
+_______________________________________________________________________________
+
+- Fixed classpath extender
+- Fixed crosstab measure renaming
+- Fixed variable/param/field renaming
+- New error handler
+- Added the formatting tools window
+- Added hints component to the property dialog
+- Added elements properties and expression properties
+- Added hypelink top and parent targets
+- Fixed bug opening the hyperlink window
+
+2008-07-07 Version 0.9.2 released
+_______________________________________________________________________________
+
+- Support for JasperServer 3.0
+- Fixed Maven plugin compatibility (IDE)
+- Removed xalan (to avoid Mac users problems)
+- Updated to JasperServer 3.0
+- New toolbar in preview window
+
+
 2008-04-07 Version 0.9.1 released
 _______________________________________________________________________________
 - Support for crosstab

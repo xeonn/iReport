@@ -69,6 +69,10 @@ public class JRDesignImageWidget extends JRDesignElementWidget {
         {
             super.paintWidget();
         }
+        catch (Exception ex)
+        {
+            System.err.println("iReport - Error painting image: " + ex.getMessage());
+        }
         finally
         {
             JRResourcesUtil.resetThreadFileResolver();

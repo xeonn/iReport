@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.compiler.prompt;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import java.awt.BorderLayout;
 
@@ -74,7 +75,7 @@ public class PromptDialog
         initComponents();
         applyI18n();
         
-        jLabelYouCan.setText("You can provide a value for the parameter:");
+        jLabelYouCan.setText(I18n.getString("PromptDialog.Label.info"));
         //jLabelYouCan.setText(it.businesslogic.ireport.util.I18n.getString(
         //                             "gui.prompt.parameter", 
         //                             "You can provide a value for the parameter:"));
@@ -104,8 +105,8 @@ public class PromptDialog
             }
         };
        
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
 
         //to make the default button ...
@@ -122,11 +123,11 @@ public class PromptDialog
 
         Object val = IReportManager.getInstance().getLastParameterValue(param);
 
-        String format = "";
+        String format = ""; //NOI18N
         
-        if (param.getValueClassName().equals("java.util.Date"))
+        if (param.getValueClassName().equals("java.util.Date"))//NOI18N
         {
-            format="";
+            format="";//NOI18N
             jPanel4.removeAll();
             datePicker = new JXDatePicker();
             //datePicker.setLocale( I18n.getCurrentLocale() );
@@ -145,7 +146,7 @@ public class PromptDialog
         else if (param.getValueClassName().equals("java.sql.Time") || 
             param.getValueClassName().equals("java.sql.Timestamp"))
         {
-            format="";
+            format="";//NOI18N
             jPanel4.removeAll();
             datetimePicker = new JDateTimePicker();
             //datetimePicker.setLocale( I18n.getCurrentLocale() );
@@ -163,7 +164,7 @@ public class PromptDialog
         }
         else
         {
-            val = (val == null) ? "" : val;
+            val = (val == null) ? "" : val;// NOI18N
             this.jComboBox1.setSelectedItem(val);
             this.jComboBox1.getEditor().selectAll();
         }
@@ -178,7 +179,7 @@ public class PromptDialog
 
         
 
-        if (param.getValueClassName().equals("java.util.Date"))
+        if (param.getValueClassName().equals("java.util.Date"))//NOI18N
         {
             //format = " (" + 
             //         it.businesslogic.ireport.gui.MainFrame.getMainInstance().getProperties()
@@ -193,11 +194,11 @@ public class PromptDialog
             //                          .getProperty("timeformat", "d/M/y H:m:s") + 
             //         ")";
         }
-        else if (param.getValueClassName().equals("java.lang.Boolean"))
+        else if (param.getValueClassName().equals("java.lang.Boolean"))//NOI18N
         {
             format = " (true | false)";
         }
-        else if (param.getValueClassName().equals("java.lang.String"))
+        else if (param.getValueClassName().equals("java.lang.String"))//NOI18N
         {
             
         }
@@ -218,7 +219,7 @@ public class PromptDialog
         }
 
         jLabelClass.setText(
-                "The class type is: " + param.getValueClassName() + format);
+                I18n.getString("PromptDialog.Label.ClassType") + param.getValueClassName() + format);
 
         if (param.getDescription() != null &&
             param.getDescription().length()>0)
@@ -260,7 +261,7 @@ public class PromptDialog
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Parameter prompt");
+        setTitle(I18n.getString("PromptDialog.Title.Prompt")); // NOI18N
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -277,7 +278,7 @@ public class PromptDialog
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jLabelYouCan.setFont(new java.awt.Font("SansSerif", 0, 12));
-        jLabelYouCan.setText("You can provide a value for the parameter:");
+        jLabelYouCan.setText(I18n.getString("PromptDialog.Label.info")); // NOI18N
         jLabelYouCan.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -286,7 +287,7 @@ public class PromptDialog
         jPanel1.add(jLabelYouCan, gridBagConstraints);
 
         jLabelParamName.setFont(new java.awt.Font("SansSerif", 1, 16));
-        jLabelParamName.setText("Param name");
+        jLabelParamName.setText(I18n.getString("PromptDialog.Label.ParamName")); // NOI18N
         jLabelParamName.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -314,7 +315,7 @@ public class PromptDialog
         jPanel1.add(jPanel4, gridBagConstraints);
 
         jLabelClass.setFont(new java.awt.Font("SansSerif", 0, 12));
-        jLabelClass.setText("The class  type is:");
+        jLabelClass.setText(I18n.getString("PromptDialog.Label.ClassType")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -357,7 +358,7 @@ public class PromptDialog
         gridBagConstraints.weightx = 1.0;
         jPanel2.add(jPanel3, gridBagConstraints);
 
-        jButton1.setText("Ok");
+        jButton1.setText(I18n.getString("Global.Button.Ok")); // NOI18N
         jButton1.setPreferredSize(new java.awt.Dimension(100, 26));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -376,7 +377,7 @@ public class PromptDialog
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         jPanel2.add(jButton1, gridBagConstraints);
 
-        jButton2.setText("Use default");
+        jButton2.setText(I18n.getString("Global.Button.Default")); // NOI18N
         jButton2.setPreferredSize(new java.awt.Dimension(100, 26));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

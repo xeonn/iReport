@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.tools;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import java.awt.Dialog;
@@ -113,7 +114,7 @@ public class SubreportReturnValuesPanel extends javax.swing.JPanel {
 
         setLayout(new java.awt.GridBagLayout());
 
-        jLabelTitle.setText(org.openide.util.NbBundle.getMessage(SubreportReturnValuesPanel.class, "SubreportParametersPanel.jLabelTitle.text")); // NOI18N
+        jLabelTitle.setText(I18n.getString("SubreportParametersPanel.jLabelTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -156,7 +157,7 @@ public class SubreportReturnValuesPanel extends javax.swing.JPanel {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButtonAdd.setText(org.openide.util.NbBundle.getMessage(SubreportReturnValuesPanel.class, "SubreportParametersPanel.jButtonAdd.text")); // NOI18N
+        jButtonAdd.setText(I18n.getString("SubreportParametersPanel.jButtonAdd.text")); // NOI18N
         jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddActionPerformed(evt);
@@ -166,7 +167,7 @@ public class SubreportReturnValuesPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         jPanel1.add(jButtonAdd, gridBagConstraints);
 
-        jButtonModify.setText(org.openide.util.NbBundle.getMessage(SubreportReturnValuesPanel.class, "SubreportParametersPanel.jButtonModify.text")); // NOI18N
+        jButtonModify.setText(I18n.getString("SubreportParametersPanel.jButtonModify.text")); // NOI18N
         jButtonModify.setEnabled(false);
         jButtonModify.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -177,7 +178,7 @@ public class SubreportReturnValuesPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         jPanel1.add(jButtonModify, gridBagConstraints);
 
-        jButtonDelete.setText(org.openide.util.NbBundle.getMessage(SubreportReturnValuesPanel.class, "SubreportParametersPanel.jButtonDelete.text")); // NOI18N
+        jButtonDelete.setText(I18n.getString("SubreportParametersPanel.jButtonDelete.text")); // NOI18N
         jButtonDelete.setEnabled(false);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -213,8 +214,8 @@ public class SubreportReturnValuesPanel extends javax.swing.JPanel {
         if (count == 0)
         {
             javax.swing.JOptionPane.showMessageDialog(this, 
-                    "There are not local variables defined in this report to store a return value.\nPlease close this dialog and create a local variable first.",
-                    "No local variables!",
+                    I18n.getString("SubreportReturnValuesPanel.Message.Warning"),
+                    I18n.getString("SubreportReturnValuesPanel.Message.Error"),
                     javax.swing.JOptionPane.WARNING_MESSAGE);
             return;
         }

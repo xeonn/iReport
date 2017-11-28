@@ -1,12 +1,12 @@
 package com.jaspersoft.ireport.designer.actions;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.outline.nodes.BandNode;
 import com.jaspersoft.ireport.designer.undo.DeleteGroupUndoableEdit;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import org.openide.util.HelpCtx;
-import org.openide.util.NbBundle;
 import org.openide.util.actions.NodeAction;
 
 public final class DeleteGroupAction extends NodeAction {
@@ -30,7 +30,7 @@ public final class DeleteGroupAction extends NodeAction {
     
     
     public String getName() {
-        return NbBundle.getMessage(DeleteGroupAction.class, "CTL_DeleteGroupAction");
+        return I18n.getString("DeleteGroupAction.Name.CTL_DeleteGroupAction");
     }
 
     @Override

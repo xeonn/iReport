@@ -17,14 +17,8 @@ import com.jaspersoft.ireport.designer.palette.PaletteItemAction;
 import com.jaspersoft.ireport.designer.undo.AddElementUndoableEdit;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.dnd.DropTargetDropEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
@@ -35,11 +29,7 @@ import net.sf.jasperreports.engine.JRSubreport;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import org.netbeans.api.visual.animator.AnimatorEvent;
-import org.netbeans.api.visual.animator.AnimatorListener;
-import org.netbeans.api.visual.animator.SceneAnimator;
 import org.netbeans.api.visual.widget.Scene;
-import org.netbeans.api.visual.widget.Widget;
 import org.openide.util.Mutex;
 
 /**
@@ -54,27 +44,36 @@ public abstract class CreateReportElementAction extends PaletteItemAction
         
         if (element == null) return;
         // Find location...
-        if (getScene() instanceof ReportObjectScene)
+        dropElementAt(getScene(), getJasperDesign(), element, dtde.getLocation());
+    }
+    
+    public abstract JRDesignElement createReportElement(JasperDesign jd);
+
+    // The main idea is to optimize the space of each element...
+    
+    public static void dropElementAt(Scene theScene, JasperDesign jasperDesign, JRDesignElement element, Point location)
+    {
+        if (theScene instanceof ReportObjectScene)
         {
-            Point p = getScene().convertViewToScene( dtde.getLocation() );
+            Point p = theScene.convertViewToScene( location );
             p.x -= 10;
             p.y -= 10;
             // find the band...
-            JRDesignBand b = ModelUtils.getBandAt(getJasperDesign(), p);
+            JRDesignBand b = ModelUtils.getBandAt(jasperDesign, p);
             
             if (b != null)
             {
-                element.setX( p.x - getJasperDesign().getLeftMargin());
-                element.setY( p.y - ModelUtils.getBandLocation(b, getJasperDesign()));
+                element.setX( p.x - jasperDesign.getLeftMargin());
+                element.setY( p.y - ModelUtils.getBandLocation(b, jasperDesign));
                 b.addElement(element);
                 
                 AddElementUndoableEdit edit = new AddElementUndoableEdit(element,b);
                 IReportManager.getInstance().addUndoableEdit(edit);
             }
         }
-        else if (getScene() instanceof CrosstabObjectScene)
+        else if (theScene instanceof CrosstabObjectScene)
         {
-            Point p = getScene().convertViewToScene( dtde.getLocation() );
+            Point p = theScene.convertViewToScene( location );
             p.x -= 10;
             p.y -= 10;
             
@@ -95,7 +94,7 @@ public abstract class CreateReportElementAction extends PaletteItemAction
                 return;
              }
             
-             JRDesignCrosstab crosstab = ((CrosstabObjectScene)getScene()).getDesignCrosstab();
+             JRDesignCrosstab crosstab = ((CrosstabObjectScene)theScene).getDesignCrosstab();
              final JRDesignCellContents cell = ModelUtils.getCellAt(crosstab, p, true);
              if (cell != null)
              {
@@ -104,9 +103,9 @@ public abstract class CreateReportElementAction extends PaletteItemAction
                  element.setY( p.y - base.y );
                  
                  String styleName = "Crosstab Data Text";
-                 if (getJasperDesign().getStylesMap().containsKey(styleName))
+                 if (jasperDesign.getStylesMap().containsKey(styleName))
                  {
-                     element.setStyle((JRStyle)getJasperDesign().getStylesMap().get(styleName));
+                     element.setStyle((JRStyle)jasperDesign.getStylesMap().get(styleName));
                  }
                  cell.addElement(element);
                  
@@ -116,10 +115,5 @@ public abstract class CreateReportElementAction extends PaletteItemAction
              }
         }
     }
-    
-    public abstract JRDesignElement createReportElement(JasperDesign jd);
-
-    // The main idea is to optimize the space of each element...
-    
     
 }

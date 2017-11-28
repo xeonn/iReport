@@ -120,6 +120,7 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
                 //((JrxmlDataNode)obj.getNodeDelegate()).cookieSetChanged();
             }
             ((JrxmlPreviewView)descriptions[2]).setNeedRefresh(true);
+            ((JrxmlVisualView)descriptions[0]).fireModelChange();
         }
         return retValue;
     }

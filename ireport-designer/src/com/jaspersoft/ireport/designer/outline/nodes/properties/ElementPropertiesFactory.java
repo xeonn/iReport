@@ -27,6 +27,7 @@ import com.jaspersoft.ireport.designer.sheet.properties.BackcolorProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.ForecolorProperty;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.outline.nodes.properties.charts.ChartPropertiesFactory;
+import com.jaspersoft.ireport.designer.sheet.PropertyExpressionsProperty;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.engine.JRBox;
@@ -69,6 +70,7 @@ public class ElementPropertiesFactory {
         propertySet.put(new PrintWhenDetailOverflowsProperty(element));
         propertySet.put(new PrintWhenGroupChangesProperty(element, dataset));
         propertySet.put(new PrintWhenExpressionProperty(element, dataset));
+        propertySet.put(new PropertyExpressionsProperty(element, dataset) );
         
        
         return propertySet;

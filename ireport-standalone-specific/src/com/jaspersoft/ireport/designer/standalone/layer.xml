@@ -1,6 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.1//EN" "http://www.netbeans.org/dtds/filesystem-1_1.dtd">
 <filesystem>
+    <attr name="Menu\Window\CloneDocumentAction.shadow\position" intvalue="2000"/>
+    <attr name="Menu\Window\CloseAllButThisAction.shadow\position" intvalue="2200"/>
+    <attr name="Menu\Window\CloseAllDocumentsAction.shadow\position" intvalue="2100"/>
+    <attr name="Menu\Window\CloseWindowAction.shadow\position" intvalue="1600"/>
+    <attr name="Menu\Window\DocumentsAction.shadow\position" intvalue="2300"/>
+    <attr name="Menu\Window\MaximizeWindowAction.shadow\position" intvalue="1700"/>
+    <attr name="Menu\Window\ProgressListAction.shadow\position" intvalue="1400"/>
+    <attr name="Menu\Window\Report designer\ErrorHandlerAction.shadow\position" intvalue="10"/>
+    <attr name="Menu\Window\Separator3.instance\position" intvalue="1500"/>
+    <attr name="Menu\Window\Separator4.instance\position" intvalue="1900"/>
+    <attr name="Menu\Window\Separator5.instance\position" intvalue="2400"/>
+    <attr name="Menu\Window\ShowPaletteAction.shadow\position" intvalue="200"/>
+    <attr name="Menu\Window\SwitchToRecentDocumentAction.shadow\position" intvalue="1300"/>
+    <attr name="Menu\Window\ViewFavoritesTabAction.shadow\position" intvalue="1000"/>
+    <attr name="Menu\Window\ViewRuntimeTabAction.shadow\position" intvalue="1100"/>
+    <attr name="Menu\Window\org-netbeans-core-actions-GlobalPropertiesAction.shadow\position" intvalue="250"/>
+    <attr name="Menu\Window\org-netbeans-core-windows-actions-ResetWindowsAction.instance\position" intvalue="2500"/>
+    <attr name="Menu\Window\org-netbeans-core-windows-actions-UndockAction.shadow\position" intvalue="1800"/>
     <attr name="OptionsDialog\Actions\position" intvalue="100"/>
     <attr name="OptionsDialog\Advanced.instance\position" intvalue="900"/>
     <attr name="OptionsDialog\Advanced\position" intvalue="200"/>
@@ -17,7 +35,6 @@
             <file name="com-jaspersoft-ireport-designer-standalone-menu-NewReportAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-standalone-menu-ReportWizardAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-standalone-menu-OpenFileAction.instance"/>
-            <file name="org-netbeans-modules-openfile-RecentFileAction.instance"/>
         </folder>
     </folder>
     <folder name="Menu">
@@ -68,6 +85,42 @@
         <file name="GoTo_hidden"/>
         <file name="Refactoring_hidden"/>
         <file name="Source_hidden"/>
+        <folder name="Window">
+            <file name="FormattingToolsAction.shadow" url="FormattingToolsAction_1.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-formatting-FormattingToolsAction.instance"/>
+                <attr name="position" intvalue="100"/>
+            </file>
+            <file name="OutlineAction.shadow" url="OutlineAction_1.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-outline-OutlineAction.instance"/>
+                <attr name="position" intvalue="110"/>
+            </file>
+            <file name="ErrorHandlerAction.shadow" url="ErrorHandlerAction_1.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-errorhandler-ErrorHandlerAction.instance"/>
+                <attr name="position" intvalue="120"/>
+            </file>
+            
+            <file name="IRConsoleAction.shadow" url="IRConsoleAction_1.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-designer-logpane-IRConsoleAction.instance"/>
+                <attr name="position" intvalue="130"/>
+            </file>
+            <file name="JRViewerAction.shadow" url="JRViewerAction_1.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-jasperserver-ui-JRViewerAction.instance"/>
+                <attr name="position" intvalue="350"/>
+            </file>
+            <file name="Navigator_hidden"/>
+            
+            <folder name="Output">
+                <attr name="position" intvalue="950"/>
+                <file name="FindUsagesOpenAction.shadow_hidden"/>
+                <file name="RefactoringPreviewOpenAction.shadow_hidden"/>
+            </folder>
+            <file name="Report designer_hidden"/>
+            <file name="RepositoryAction.shadow" url="RepositoryAction_1.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/com-jaspersoft-ireport-jasperserver-ui-RepositoryAction.instance"/>
+                <attr name="position" intvalue="300"/>
+            </file>
+            
+        </folder>
     </folder>
     <folder name="Templates"/>
 </filesystem>

@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.wizards;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -60,7 +61,7 @@ public final class CustomChooserVisualPanel extends JPanel {
 
     @Override
     public String getName() {
-        return "Name and location";
+        return I18n.getString("CustomChooserVisualPanel.Name.NameLocation");
     }
 
     /** This method is called from within the constructor to
@@ -83,7 +84,7 @@ public final class CustomChooserVisualPanel extends JPanel {
         setLayout(new java.awt.GridBagLayout());
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, "Report name:");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, I18n.getString("CustomChooserVisualPanel.Label.ReportName")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 4, 4);
@@ -96,7 +97,7 @@ public final class CustomChooserVisualPanel extends JPanel {
         add(jTextFieldReportName, gridBagConstraints);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, "Location:");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, I18n.getString("CustomChooserVisualPanel.Label.Location")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -109,7 +110,7 @@ public final class CustomChooserVisualPanel extends JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 10);
         add(jTextFieldDirectory, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonDirectory, "Browse...");
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonDirectory, I18n.getString("Global.Button.Browse")); // NOI18N
         jButtonDirectory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDirectoryActionPerformed(evt);
@@ -121,7 +122,7 @@ public final class CustomChooserVisualPanel extends JPanel {
         add(jButtonDirectory, gridBagConstraints);
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, "File:");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, I18n.getString("CustomChooserVisualPanel.Label.File")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -215,18 +216,18 @@ public final class CustomChooserVisualPanel extends JPanel {
     {
         if (jTextFieldReportName.getText().trim().length() == 0)
         {
-            throw new IllegalArgumentException("Invalid report name");
+            throw new IllegalArgumentException(I18n.getString("CustomChooserVisualPanel.Message.Exception"));
         }
         
         if (jTextFieldDirectory.getText().trim().length() == 0)
         {
-            throw new IllegalArgumentException("Invalid directory");
+            throw new IllegalArgumentException(I18n.getString("CustomChooserVisualPanel.Message.Exception2"));
         }
         String dir = jTextFieldDirectory.getText();
         File dirFile = new File(dir);
         if (!dirFile.exists())
         {
-            throw new IllegalArgumentException("The specified directory does not exists");
+            throw new IllegalArgumentException(I18n.getString("CustomChooserVisualPanel.Message.Exception3"));
         }
         
         String fname = jTextFieldReportName.getText().trim();
@@ -234,7 +235,7 @@ public final class CustomChooserVisualPanel extends JPanel {
         File finalFile = new File(dir,fname);
         if (finalFile.exists())
         {
-            throw new IllegalArgumentException("The specified file already exists " + fname );
+            throw new IllegalArgumentException(I18n.getString("CustomChooserVisualPanel.Message.Exception4") + fname );
         }
     }
 }

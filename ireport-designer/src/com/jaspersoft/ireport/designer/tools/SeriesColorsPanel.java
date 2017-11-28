@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.tools;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -139,7 +140,7 @@ public class SeriesColorsPanel extends javax.swing.JPanel {
         jPanel2.setPreferredSize(new java.awt.Dimension(100, 283));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jButtonAddColor.setText(org.openide.util.NbBundle.getMessage(SeriesColorsPanel.class, "SeriesColorsPanel.jButtonAddColor.text")); // NOI18N
+        jButtonAddColor.setText(I18n.getString("SeriesColorsPanel.jButtonAddColor.text")); // NOI18N
         jButtonAddColor.setMargin(new java.awt.Insets(2, 8, 2, 8));
         jButtonAddColor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -153,7 +154,7 @@ public class SeriesColorsPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanel2.add(jButtonAddColor, gridBagConstraints);
 
-        jButtonModify.setText(org.openide.util.NbBundle.getMessage(SeriesColorsPanel.class, "SeriesColorsPanel.jButtonModify.text")); // NOI18N
+        jButtonModify.setText(I18n.getString("SeriesColorsPanel.jButtonModify.text")); // NOI18N
         jButtonModify.setEnabled(false);
         jButtonModify.setMargin(new java.awt.Insets(2, 8, 2, 8));
         jButtonModify.addActionListener(new java.awt.event.ActionListener() {
@@ -168,7 +169,7 @@ public class SeriesColorsPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanel2.add(jButtonModify, gridBagConstraints);
 
-        jButtonDelete.setText(org.openide.util.NbBundle.getMessage(SeriesColorsPanel.class, "SeriesColorsPanel.jButtonDelete.text")); // NOI18N
+        jButtonDelete.setText(I18n.getString("SeriesColorsPanel.jButtonDelete.text")); // NOI18N
         jButtonDelete.setEnabled(false);
         jButtonDelete.setMargin(new java.awt.Insets(2, 8, 2, 8));
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -183,7 +184,7 @@ public class SeriesColorsPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanel2.add(jButtonDelete, gridBagConstraints);
 
-        jButtonMoveUp.setText(org.openide.util.NbBundle.getMessage(SeriesColorsPanel.class, "SeriesColorsPanel.jButtonMoveUp.text")); // NOI18N
+        jButtonMoveUp.setText(I18n.getString("SeriesColorsPanel.jButtonMoveUp.text")); // NOI18N
         jButtonMoveUp.setEnabled(false);
         jButtonMoveUp.setMargin(new java.awt.Insets(2, 8, 2, 8));
         jButtonMoveUp.addActionListener(new java.awt.event.ActionListener() {
@@ -198,7 +199,7 @@ public class SeriesColorsPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanel2.add(jButtonMoveUp, gridBagConstraints);
 
-        jButtonMoveDown.setText(org.openide.util.NbBundle.getMessage(SeriesColorsPanel.class, "SeriesColorsPanel.jButtonMoveDown.text")); // NOI18N
+        jButtonMoveDown.setText(I18n.getString("SeriesColorsPanel.jButtonMoveDown.text")); // NOI18N
         jButtonMoveDown.setEnabled(false);
         jButtonMoveDown.setMargin(new java.awt.Insets(2, 8, 2, 8));
         jButtonMoveDown.addActionListener(new java.awt.event.ActionListener() {
@@ -214,7 +215,7 @@ public class SeriesColorsPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 14, 4);
         jPanel2.add(jButtonMoveDown, gridBagConstraints);
 
-        jButtonCopySeries.setText(org.openide.util.NbBundle.getMessage(SeriesColorsPanel.class, "SeriesColorsPanel.jButtonCopySeries.text")); // NOI18N
+        jButtonCopySeries.setText(I18n.getString("SeriesColorsPanel.jButtonCopySeries.text")); // NOI18N
         jButtonCopySeries.setMargin(new java.awt.Insets(2, 8, 2, 8));
         jButtonCopySeries.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -229,7 +230,7 @@ public class SeriesColorsPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanel2.add(jButtonCopySeries, gridBagConstraints);
 
-        jButtonPasteSeries.setText(org.openide.util.NbBundle.getMessage(SeriesColorsPanel.class, "SeriesColorsPanel.jButtonPasteSeries.text")); // NOI18N
+        jButtonPasteSeries.setText(I18n.getString("SeriesColorsPanel.jButtonPasteSeries.text")); // NOI18N
         jButtonPasteSeries.setEnabled(false);
         jButtonPasteSeries.setMargin(new java.awt.Insets(2, 8, 2, 8));
         jButtonPasteSeries.addActionListener(new java.awt.event.ActionListener() {
@@ -245,7 +246,7 @@ public class SeriesColorsPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanel2.add(jButtonPasteSeries, gridBagConstraints);
 
-        jButtonUseLast.setText(org.openide.util.NbBundle.getMessage(SeriesColorsPanel.class, "SeriesColorsPanel.jButtonUseLast.text")); // NOI18N
+        jButtonUseLast.setText(I18n.getString("SeriesColorsPanel.jButtonUseLast.text")); // NOI18N
         jButtonUseLast.setEnabled(false);
         jButtonUseLast.setMargin(new java.awt.Insets(2, 8, 2, 8));
         jButtonUseLast.addActionListener(new java.awt.event.ActionListener() {
@@ -261,7 +262,7 @@ public class SeriesColorsPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanel2.add(jButtonUseLast, gridBagConstraints);
 
-        jButtonRandomColor.setText(org.openide.util.NbBundle.getMessage(SeriesColorsPanel.class, "SeriesColorsPanel.jButtonRandomColor.text")); // NOI18N
+        jButtonRandomColor.setText(I18n.getString("SeriesColorsPanel.jButtonRandomColor.text")); // NOI18N
         jButtonRandomColor.setMargin(new java.awt.Insets(2, 8, 2, 8));
         jButtonRandomColor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -294,7 +295,7 @@ public class SeriesColorsPanel extends javax.swing.JPanel {
         jPanel1.setPreferredSize(new java.awt.Dimension(320, 23));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButtonOk.setText(org.openide.util.NbBundle.getMessage(SeriesColorsPanel.class, "SeriesColorsPanel.jButtonOk.text")); // NOI18N
+        jButtonOk.setText(I18n.getString("SeriesColorsPanel.jButtonOk.text")); // NOI18N
         jButtonOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOkActionPerformed(evt);
@@ -306,7 +307,7 @@ public class SeriesColorsPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         jPanel1.add(jButtonOk, gridBagConstraints);
 
-        jButtonCancel.setText(org.openide.util.NbBundle.getMessage(SeriesColorsPanel.class, "SeriesColorsPanel.jButtonCancel.text")); // NOI18N
+        jButtonCancel.setText(I18n.getString("SeriesColorsPanel.jButtonCancel.text")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -346,7 +347,7 @@ public class SeriesColorsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jList1ValueChanged
 
     private void jButtonAddColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddColorActionPerformed
-        java.awt.Color c = HexColorChooserPanel.showDialog(this,"Pick a color",null);
+        java.awt.Color c = HexColorChooserPanel.showDialog(this,I18n.getString("SeriesColorsPanel.Dialog.Title"),null);
         if (c != null) {
             ((DefaultListModel)jList1.getModel()).addElement(c);
         }
@@ -356,7 +357,7 @@ public class SeriesColorsPanel extends javax.swing.JPanel {
         int index = jList1.getSelectedIndex();
         if (index >=0) {
             java.awt.Color c = (java.awt.Color)jList1.getSelectedValue();
-            c = HexColorChooserPanel.showDialog(this,"Pick a color",c);
+            c = HexColorChooserPanel.showDialog(this,I18n.getString("SeriesColorsPanel.Dialog.Title"),c);
             if (c != null) {
                 ((DefaultListModel)jList1.getModel()).setElementAt(c, index);
             }

@@ -32,8 +32,6 @@ public class CreateTextFieldFromCrosstabMeasureNodeAction extends CreateTextFiel
     
         if ( !(getPaletteItem().getData() instanceof CrosstabMeasureNode))
         {
-            System.out.println("Not a CrosstabMeasureNode");
-            System.out.flush();
             return;
         }
         

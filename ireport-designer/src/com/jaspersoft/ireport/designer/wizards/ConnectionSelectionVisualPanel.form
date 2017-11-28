@@ -8,7 +8,9 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabelLanguageName">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Report query"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="com/jaspersoft/ireport/locale/Bundle.properties" key="ConnectionSelectionVisualPanel.Label.ReportQuery" replaceFormat="I18n.getString(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -48,7 +50,9 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="jButtonDesign">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Design query"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="com/jaspersoft/ireport/locale/Bundle.properties" key="ConnectionSelectionVisualPanel.Button.DesignQuery" replaceFormat="I18n.getString(&quot;{key}&quot;)"/>
+                </Property>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
@@ -65,7 +69,9 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/com/jaspersoft/ireport/designer/data/folder_database.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Load query"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="com/jaspersoft/ireport/locale/Bundle.properties" key="ConnectionSelectionVisualPanel.Button.LoadQuery" replaceFormat="I18n.getString(&quot;{key}&quot;)"/>
+                </Property>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 4, 2, 4]"/>
                 </Property>
@@ -84,7 +90,9 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/com/jaspersoft/ireport/designer/data/database_save.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Save query"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="com/jaspersoft/ireport/locale/Bundle.properties" key="ConnectionSelectionVisualPanel.Button.SaveQuery" replaceFormat="I18n.getString(&quot;{key}&quot;)"/>
+                </Property>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 4, 2, 4]"/>
                 </Property>
@@ -119,7 +127,9 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Connections / Data Sources"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="com/jaspersoft/ireport/locale/Bundle.properties" key="ConnectionSelectionVisualPanel.Label.ConnDataSources" replaceFormat="I18n.getString(&quot;{key}&quot;)"/>
+        </Property>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -147,7 +157,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="jButton1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="New"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="com/jaspersoft/ireport/locale/Bundle.properties" key="ConnectionSelectionVisualPanel.Button.New" replaceFormat="I18n.getString(&quot;{key}&quot;)"/>
+        </Property>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>

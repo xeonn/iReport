@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.tools;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.JrxmlPreviewView;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -94,8 +95,8 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
         add(jSeparator1);
 
         btnRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/refresh-16.png"))); // NOI18N
-        btnRefresh.setText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnRefresh.text")); // NOI18N
-        btnRefresh.setToolTipText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnRefresh.toolTipText")); // NOI18N
+        btnRefresh.setText(I18n.getString("JrxmlPreviewToolbar.btnRefresh.text")); // NOI18N
+        btnRefresh.setToolTipText(I18n.getString("JrxmlPreviewToolbar.btnRefresh.toolTipText")); // NOI18N
         btnRefresh.setFocusable(false);
         btnRefresh.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnRefresh.setMaximumSize(new java.awt.Dimension(23, 23));
@@ -110,8 +111,8 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
         add(btnRefresh);
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/save.GIF"))); // NOI18N
-        btnSave.setText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnSave.text")); // NOI18N
-        btnSave.setToolTipText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnSave.toolTipText")); // NOI18N
+        btnSave.setText(I18n.getString("JrxmlPreviewToolbar.btnSave.text")); // NOI18N
+        btnSave.setToolTipText(I18n.getString("JrxmlPreviewToolbar.btnSave.toolTipText")); // NOI18N
         btnSave.setFocusable(false);
         btnSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSave.setMaximumSize(new java.awt.Dimension(23, 23));
@@ -126,8 +127,8 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
         add(btnSave);
 
         btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/print.GIF"))); // NOI18N
-        btnPrint.setText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnPrint.text")); // NOI18N
-        btnPrint.setToolTipText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnPrint.toolTipText")); // NOI18N
+        btnPrint.setText(I18n.getString("JrxmlPreviewToolbar.btnPrint.text")); // NOI18N
+        btnPrint.setToolTipText(I18n.getString("JrxmlPreviewToolbar.btnPrint.toolTipText")); // NOI18N
         btnPrint.setFocusable(false);
         btnPrint.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPrint.setMaximumSize(new java.awt.Dimension(23, 23));
@@ -143,8 +144,8 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
         add(jSeparator2);
 
         btnFirst.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/first.GIF"))); // NOI18N
-        btnFirst.setText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnFirst.text")); // NOI18N
-        btnFirst.setToolTipText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnFirst.toolTipText")); // NOI18N
+        btnFirst.setText(I18n.getString("JrxmlPreviewToolbar.btnFirst.text")); // NOI18N
+        btnFirst.setToolTipText(I18n.getString("JrxmlPreviewToolbar.btnFirst.toolTipText")); // NOI18N
         btnFirst.setFocusable(false);
         btnFirst.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnFirst.setMaximumSize(new java.awt.Dimension(23, 23));
@@ -159,8 +160,8 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
         add(btnFirst);
 
         btnPrevious.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/previous.GIF"))); // NOI18N
-        btnPrevious.setText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnPrevious.text")); // NOI18N
-        btnPrevious.setToolTipText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnPrevious.toolTipText")); // NOI18N
+        btnPrevious.setText(I18n.getString("JrxmlPreviewToolbar.btnPrevious.text")); // NOI18N
+        btnPrevious.setToolTipText(I18n.getString("JrxmlPreviewToolbar.btnPrevious.toolTipText")); // NOI18N
         btnPrevious.setFocusable(false);
         btnPrevious.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPrevious.setMaximumSize(new java.awt.Dimension(23, 23));
@@ -175,8 +176,8 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
         add(btnPrevious);
 
         btnNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/next.GIF"))); // NOI18N
-        btnNext.setText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnNext.text")); // NOI18N
-        btnNext.setToolTipText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnNext.toolTipText")); // NOI18N
+        btnNext.setText(I18n.getString("JrxmlPreviewToolbar.btnNext.text")); // NOI18N
+        btnNext.setToolTipText(I18n.getString("JrxmlPreviewToolbar.btnNext.toolTipText")); // NOI18N
         btnNext.setFocusable(false);
         btnNext.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNext.setMaximumSize(new java.awt.Dimension(23, 23));
@@ -191,8 +192,8 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
         add(btnNext);
 
         btnLast.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/last.GIF"))); // NOI18N
-        btnLast.setText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnLast.text")); // NOI18N
-        btnLast.setToolTipText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnLast.toolTipText")); // NOI18N
+        btnLast.setText(I18n.getString("JrxmlPreviewToolbar.btnLast.text")); // NOI18N
+        btnLast.setToolTipText(I18n.getString("JrxmlPreviewToolbar.btnLast.toolTipText")); // NOI18N
         btnLast.setFocusable(false);
         btnLast.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnLast.setMaximumSize(new java.awt.Dimension(23, 23));
@@ -207,7 +208,7 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
         add(btnLast);
 
         txtGoTo.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtGoTo.setText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.txtGoTo.text")); // NOI18N
+        txtGoTo.setText(I18n.getString("JrxmlPreviewToolbar.txtGoTo.text")); // NOI18N
         txtGoTo.setMaximumSize(new java.awt.Dimension(40, 2147483647));
         txtGoTo.setMinimumSize(new java.awt.Dimension(40, 20));
         txtGoTo.setPreferredSize(new java.awt.Dimension(40, 20));
@@ -220,7 +221,7 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
         add(jSeparator3);
 
         btnActualSize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/actualsize.GIF"))); // NOI18N
-        btnActualSize.setText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnActualSize.text")); // NOI18N
+        btnActualSize.setText(I18n.getString("JrxmlPreviewToolbar.btnActualSize.text")); // NOI18N
         btnActualSize.setFocusable(false);
         btnActualSize.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnActualSize.setMaximumSize(new java.awt.Dimension(23, 23));
@@ -235,7 +236,7 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
         add(btnActualSize);
 
         btnFitPage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/fitpage.GIF"))); // NOI18N
-        btnFitPage.setText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnFitPage.text")); // NOI18N
+        btnFitPage.setText(I18n.getString("JrxmlPreviewToolbar.btnFitPage.text")); // NOI18N
         btnFitPage.setFocusable(false);
         btnFitPage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnFitPage.setMaximumSize(new java.awt.Dimension(23, 23));
@@ -250,7 +251,7 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
         add(btnFitPage);
 
         btnFitWidth.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/fitwidth.GIF"))); // NOI18N
-        btnFitWidth.setText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnFitWidth.text")); // NOI18N
+        btnFitWidth.setText(I18n.getString("JrxmlPreviewToolbar.btnFitWidth.text")); // NOI18N
         btnFitWidth.setFocusable(false);
         btnFitWidth.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnFitWidth.setMaximumSize(new java.awt.Dimension(23, 23));
@@ -265,8 +266,8 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
         add(btnFitWidth);
 
         btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/zoomin-16.png"))); // NOI18N
-        btnZoomIn.setText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnZoomIn.text")); // NOI18N
-        btnZoomIn.setToolTipText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnZoomIn.toolTipText")); // NOI18N
+        btnZoomIn.setText(I18n.getString("JrxmlPreviewToolbar.btnZoomIn.text")); // NOI18N
+        btnZoomIn.setToolTipText(I18n.getString("JrxmlPreviewToolbar.btnZoomIn.toolTipText")); // NOI18N
         btnZoomIn.setFocusable(false);
         btnZoomIn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnZoomIn.setMaximumSize(new java.awt.Dimension(23, 23));
@@ -281,8 +282,8 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
         add(btnZoomIn);
 
         btnZoomOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/zoomout-16.png"))); // NOI18N
-        btnZoomOut.setText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnZoomOut.text")); // NOI18N
-        btnZoomOut.setToolTipText(org.openide.util.NbBundle.getMessage(JrxmlPreviewToolbar.class, "JrxmlPreviewToolbar.btnZoomOut.toolTipText")); // NOI18N
+        btnZoomOut.setText(I18n.getString("JrxmlPreviewToolbar.btnZoomOut.text")); // NOI18N
+        btnZoomOut.setToolTipText(I18n.getString("JrxmlPreviewToolbar.btnZoomOut.toolTipText")); // NOI18N
         btnZoomOut.setFocusable(false);
         btnZoomOut.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnZoomOut.setMaximumSize(new java.awt.Dimension(23, 23));
@@ -466,7 +467,7 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
                     catch (JRException e)
                     {
                             e.printStackTrace();
-                            JOptionPane.showMessageDialog(this, getViewerContext().getBundleString("error.saving"));
+                            JOptionPane.showMessageDialog(this, getViewerContext().getBundleString(I18n.getString("JrxmlPreviewToolbar.Message.Warning")));
                     }
             }
 }//GEN-LAST:event_btnSaveActionPerformed
@@ -485,7 +486,7 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
 						catch (Exception ex)
 						{
 							ex.printStackTrace();
-							JOptionPane.showMessageDialog(getView(), getViewerContext().getBundleString("error.printing"));
+							JOptionPane.showMessageDialog(getView(), getViewerContext().getBundleString(I18n.getString("JrxmlPreviewToolbar.Message.Warning2")));
 						}
 					}
 				}

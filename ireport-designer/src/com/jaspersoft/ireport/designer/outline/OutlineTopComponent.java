@@ -1,5 +1,6 @@
 package com.jaspersoft.ireport.designer.outline;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
@@ -8,6 +9,7 @@ import java.beans.PropertyVetoException;
 import java.io.Serializable;
 import java.util.logging.Logger;
 import javax.swing.ActionMap;
+import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultEditorKit;
 import org.openide.awt.UndoRedo;
 import org.openide.explorer.ExplorerManager;
@@ -246,6 +248,14 @@ final public class OutlineTopComponent extends TopComponent implements ExplorerM
                 setUpdatingSelection(false);
             }
         }
+        
+        SwingUtilities.invokeLater(new Runnable() {
+
+            public void run() {
+                IReportManager.getInstance().fireJrxmlVisualViewActivatedListenerEvent(getCurrentJrxmlVisualView());
+            }
+        });
+        
     }
     
     @Override

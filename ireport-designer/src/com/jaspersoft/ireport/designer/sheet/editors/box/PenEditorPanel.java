@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.sheet.editors.box;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.DefaultListModel;
@@ -105,7 +106,7 @@ public class PenEditorPanel extends javax.swing.JPanel  {
         jPanel4.setPreferredSize(new java.awt.Dimension(200, 150));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(PenEditorPanel.class, "PenEditorPanel.jLabel1.text")); // NOI18N
+        jLabel1.setText(I18n.getString("PenEditorPanel.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(8, 4, 4, 4);
         jPanel4.add(jLabel1, gridBagConstraints);
@@ -119,7 +120,7 @@ public class PenEditorPanel extends javax.swing.JPanel  {
         gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 8);
         jPanel4.add(jSpinnerLineWidth, gridBagConstraints);
 
-        jLabel7.setText(org.openide.util.NbBundle.getMessage(PenEditorPanel.class, "PenEditorPanel.jLabel7.text")); // NOI18N
+        jLabel7.setText(I18n.getString("PenEditorPanel.jLabel7.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
@@ -139,7 +140,7 @@ public class PenEditorPanel extends javax.swing.JPanel  {
         gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 8);
         jPanel4.add(jScrollPane1, gridBagConstraints);
 
-        jLabel2.setText(org.openide.util.NbBundle.getMessage(PenEditorPanel.class, "PenEditorPanel.jLabel2.text")); // NOI18N
+        jLabel2.setText(I18n.getString("PenEditorPanel.jLabel2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(8, 4, 4, 4);

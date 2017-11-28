@@ -1,0 +1,17 @@
+app.icon=branding/core/core.jar/org/netbeans/core/startup/frame48.gif
+app.name=ireport
+app.title=iReport
+app.version=3.1.0
+branding.token=${app.name}
+modules=\
+    ${project.com.jaspersoft.ireport}:\
+    ${project.com.jaspersoft.ireport.designer.standalone}:\
+    ${project.com.jaspersoft.ireport.jasperserver}
+project.com.jaspersoft.ireport=ireport-designer
+project.com.jaspersoft.ireport.designer.standalone=ireport-standalone-specific
+distro.zipfilename=${app.title}-nb-${app.version}
+distro.zipfilename.js=jasperserver-plugin-nb-${app.version}
+keystore=nbproject/private/jaspersoft.jks
+nbm_alias={c382aa39-6b5c-4273-a59c-1d89853050e4}
+
+project.com.jaspersoft.ireport.jasperserver=jasperserver-plugin

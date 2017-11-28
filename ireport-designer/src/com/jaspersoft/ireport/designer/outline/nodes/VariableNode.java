@@ -193,6 +193,8 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
         
         String oldName = getVariable().getName();
         getVariable().setName(s);
+        dataset.getVariablesMap().remove(oldName);
+        dataset.getVariablesMap().put(s,getVariable());
         
         ObjectPropertyUndoableEdit opue = new ObjectPropertyUndoableEdit(
                     getVariable(), "Name", String.class, oldName, s);
@@ -287,6 +289,8 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
             }
             String oldName = getVariable().getName();
             getVariable().setName(s);
+            dataset.getVariablesMap().remove(oldName);
+            dataset.getVariablesMap().put(s,getVariable());
 
             ObjectPropertyUndoableEdit opue = new ObjectPropertyUndoableEdit(
                     getVariable(), "Name", String.class, oldName, getVariable().getName());
@@ -363,9 +367,24 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
 
                 String oldValue = getVariable().getValueClassName();
                 String newValue = s;
-                getVariable().setValueClassName( s);
-
+                getVariable().setValueClassName(s);
+                
                 ObjectPropertyUndoableEdit urob = new ObjectPropertyUndoableEdit(getVariable(),"ValueClassName", String.class ,oldValue,newValue );
+                
+                if (getVariable().getExpression() != null)
+                {
+                    ((JRDesignExpression)getVariable().getExpression()).setValueClassName(s);
+                    ObjectPropertyUndoableEdit urob2 = new ObjectPropertyUndoableEdit((JRDesignExpression)getVariable().getExpression(),"ValueClassName", String.class ,oldValue,newValue );
+                    urob.addEdit(urob2);
+                }
+                if (getVariable().getInitialValueExpression() != null)
+                {
+                    ((JRDesignExpression)getVariable().getInitialValueExpression()).setValueClassName(s);
+                    ObjectPropertyUndoableEdit urob2 = new ObjectPropertyUndoableEdit((JRDesignExpression)getVariable().getInitialValueExpression(),"ValueClassName", String.class ,oldValue,newValue );
+                    urob.addEdit(urob2);
+                }
+                
+                
                 // Find the undoRedo manager...
                 IReportManager.getInstance().addUndoableEdit(urob);
             }
@@ -609,7 +628,6 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
                                 "ResetType", 
                                 Byte.TYPE,
                                 oldValue,newValue);
-                    System.out.println("Added undo: " + oldValue + " --> " + newValue);
                     
                     JRGroup oldGroupValue = variable.getResetGroup();
                     JRGroup newGroupValue = null;
@@ -634,7 +652,6 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
                                     oldGroupValue,newGroupValue);
                         variable.setResetGroup(newGroupValue);
                         urob.concatenate(urobGroup);
-                        System.out.println("Added undo->groupUndo: " + urob.getPresentationName());
                     }
                     
                     // Find the undoRedo manager...

@@ -36,6 +36,7 @@ import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlEditorSupport;
 import com.jaspersoft.ireport.designer.JrxmlPreviewView;
+import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import com.jaspersoft.ireport.designer.ReportClassLoader;
 import com.jaspersoft.ireport.designer.ThreadUtils;
 import com.jaspersoft.ireport.designer.compiler.prompt.Prompter;
@@ -46,9 +47,10 @@ import com.jaspersoft.ireport.designer.connection.JRDataSourceProviderConnection
 import com.jaspersoft.ireport.designer.connection.JRHibernateConnection;
 import com.jaspersoft.ireport.designer.connection.MondrianConnection;
 import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
+import com.jaspersoft.ireport.designer.errorhandler.ErrorHandlerTopComponent;
+import com.jaspersoft.ireport.designer.errorhandler.ProblemItem;
 import com.jaspersoft.ireport.designer.logpane.IRConsoleTopComponent;
 import com.jaspersoft.ireport.designer.logpane.LogTextArea;
-import com.jaspersoft.ireport.designer.logpane.ProblemItem;
 import com.jaspersoft.ireport.designer.tools.TimeZoneWrapper;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.lang.reflect.InvocationTargetException;
@@ -76,7 +78,6 @@ import net.sf.jasperreports.engine.query.JRHibernateQueryExecuterFactory;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.view.JasperViewer;
 import org.hibernate.Transaction;
 import org.hibernate.classic.Session;
 import org.netbeans.api.progress.ProgressHandle;
@@ -84,7 +85,6 @@ import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.util.Cancellable;
-import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import org.xml.sax.SAXException;
@@ -468,30 +468,30 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                 {
                     if (compiler_code.equals("1"))
                     {
-                        net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASS, "net.sf.jasperreports.engine.design.JRJdk13Compiler");
+                        net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.design.JRCompiler.COMPILER_PREFIX + "java", "net.sf.jasperreports.engine.design.JRJdk13Compiler");
                         compiler_name = "Java Compiler";
                     }
                     else if (compiler_code.equals("2"))
                     {
-                        net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASS, "it.businesslogic.ireport.compiler.ExtendedJRJdtCompiler" );
+                        net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.design.JRCompiler.COMPILER_PREFIX + "java", "it.businesslogic.ireport.compiler.ExtendedJRJdtCompiler" );
                         compiler_name = "JDT Compiler";
                         jdtCompiler = new ExtendedJRJdtCompiler();
                     }
                     else if (compiler_code.equals("3"))
                     {
-                        net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASS, "net.sf.jasperreports.compilers.JRBshCompiler" );
+                        net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.design.JRCompiler.COMPILER_PREFIX + "java", "net.sf.jasperreports.compilers.JRBshCompiler" );
                         compiler_name = "BeanShell Compiler";
                     }
                     else if (compiler_code.equals("4"))
                     {
-                        net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASS, "net.sf.jasperreports.engine.design.JRJikesCompiler" );
+                        net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.design.JRCompiler.COMPILER_PREFIX + "java", "net.sf.jasperreports.engine.design.JRJikesCompiler" );
                         compiler_name = "Jikes Compiler";
                     }
                 }
                 else
                 {
                      //Force to use the jdtCompiler compiler....
-                     net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.util.JRProperties.COMPILER_CLASS, "it.businesslogic.ireport.compiler.ExtendedJRJdtCompiler" );
+                     net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.design.JRCompiler.COMPILER_PREFIX + "java", "it.businesslogic.ireport.compiler.ExtendedJRJdtCompiler" );
                      jdtCompiler = new ExtendedJRJdtCompiler();
                 }
 
@@ -500,9 +500,18 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                 start = System.currentTimeMillis();
 
                 digester = IReportCompiler.createDigester();
-                JasperDesign jd = IReportCompiler.loadJasperDesign( new FileInputStream(srcFileName) , digester);
-
-                if (jdtCompiler != null)
+                JasperDesign jd = null;
+                
+                if (getJrxmlVisualView().getModel().getJasperDesign() != null)
+                {
+                    jd = getJrxmlVisualView().getModel().getJasperDesign();
+                }
+                else
+                {
+                    IReportCompiler.loadJasperDesign( new FileInputStream(srcFileName) , digester);
+                }
+                
+                if (jdtCompiler != null && jd.getLanguage().equals("java"))
                 {
                     ((ExtendedJRJdtCompiler)jdtCompiler).setDigester(digester);
                     ((ExtendedJRJdtCompiler)jdtCompiler).setErrorHandler(errorsCollector);
@@ -523,10 +532,10 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                     JasperCompileManager.compileReportToFile(jd, fileName);
                 }
 
-                if (errorsCollector != null)
+                if (errorsCollector != null && getJrxmlVisualView() != null)
                 {
-                        //getJrf().setReportProblems( errorsCollector.getProblemItems() );
-                        //MainFrame.getMainInstance().getLogPane().getProblemsPanel().updateProblemsList();
+                    getJrxmlVisualView().setReportProblems(errorsCollector.getProblemItems() );
+                    ErrorHandlerTopComponent.getDefault().refreshErrors();
                 }
 
              }
@@ -541,15 +550,20 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                             SourceLocation sl = digester.getLocation( source );
                             if (sl == null)
                             {
-                                errorsCollector.getProblemItems().add(new ProblemItem(ProblemItem.WARNING, fault.getMessage(), sl, null) );
+                                errorsCollector.getProblemItems().add(new ProblemItem(ProblemItem.WARNING, fault, sl) );
                             }   
                             else
                             {
-                                errorsCollector.getProblemItems().add(new ProblemItem(ProblemItem.WARNING, fault.getMessage(), sl, sl.getXPath()) );
-                                System.out.println(fault + " " + fault.getMessage() + "\nLine: " + sl.getLineNumber() + ", Column: " + sl.getColumnNumber()  + " JRXML Element: " + sl.getXPath() );
+                                errorsCollector.getProblemItems().add(new ProblemItem(ProblemItem.WARNING, fault, sl) );
                             }
 
                             //
+                    }
+                 
+                    if (getJrxmlVisualView() != null)
+                    {
+                        getJrxmlVisualView().setReportProblems(errorsCollector.getProblemItems() );
+                        ErrorHandlerTopComponent.getDefault().refreshErrors();
                     }
                     //getJrf().setReportProblems( errorsCollector.getProblemItems() );
                     //MainFrame.getMainInstance().getLogPane().getProblemsPanel().updateProblemsList();
@@ -564,8 +578,16 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
 
              } catch (JRException jrex)
              {
+                 System.out.println("Compilation exceptions: " + errorsCollector);
+                 System.out.flush();
                  if (errorsCollector != null && errorsCollector.getProblemItems() != null)
                  {
+                    if (getJrxmlVisualView() != null)
+                    {
+                        getJrxmlVisualView().setReportProblems(errorsCollector.getProblemItems() );
+                        ErrorHandlerTopComponent.getDefault().refreshErrors();
+                        
+                    }
                     //getJrf().setReportProblems( errorsCollector.getProblemItems() );
                     //MainFrame.getMainInstance().getLogPane().getProblemsPanel().updateProblemsList();
                  }
@@ -1832,16 +1854,24 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
               {
                   public void run()
                   {
-                      ((TopComponent)getSupport().getDescriptions()[0]).requestVisible();
-                      ((TopComponent)getSupport().getDescriptions()[0]).requestActive();
+                      JrxmlVisualView view = (JrxmlVisualView)(getSupport().getDescriptions()[0]);
+                      view.requestActive();
+                      
                       
                       TopComponent tc =WindowManager.getDefault().findTopComponent("IRConsoleTopComponent");
                       if (tc != null) 
                       {
                           tc.requestVisible();
-                          tc.requestActive();
+                          //tc.requestActive();
                       }
-                  }
+                      ErrorHandlerTopComponent ehtc = ErrorHandlerTopComponent.getDefault();
+                      if (ehtc != null && view.getReportProblems().size() > 0) 
+                      {
+                          ehtc.refreshErrors();
+                          ehtc.requestVisible();
+                          //ehtc.requestActive();
+                      }
+                   }
               });
     }
     
@@ -1849,6 +1879,11 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
     {
         
         return   (JrxmlPreviewView)getSupport().getDescriptions()[2];
+    }
+    
+    public JrxmlVisualView getJrxmlVisualView()
+    {
+        return   (JrxmlVisualView)getSupport().getDescriptions()[0];
     }
                    
 }

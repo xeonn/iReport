@@ -10,6 +10,7 @@
 package com.jaspersoft.ireport.designer.outline.nodes;
 
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.outline.nodes.properties.ElementPropertiesFactory;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.actions.PaddingAndBordersAction;
@@ -28,12 +29,15 @@ import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
 import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
 import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
 import net.sf.jasperreports.engine.JRBoxContainer;
+import net.sf.jasperreports.engine.JRDatasetParameter;
+import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRExpressionCollector;
 import net.sf.jasperreports.engine.JRHyperlink;
-import net.sf.jasperreports.engine.JRLineBox;
-import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
+import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -63,7 +67,7 @@ import org.openide.util.lookup.ProxyLookup;
  *
  * @author gtoffoli
  */
-public class ElementNode extends IRIndexedNode implements PropertyChangeListener {
+public class ElementNode extends IRIndexedNode implements PropertyChangeListener, ExpressionHolder {
 
     JasperDesign jd = null;
     JRDesignElement element = null;
@@ -72,7 +76,7 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
     public JRDesignElement getElement() {
         return element;
     }
-    
+        
     public JasperDesign getJasperDesign() {
         return jd;
     }
@@ -375,6 +379,60 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
         {
             this.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue() );
         }
+    }
+
+    public boolean hasExpression(JRDesignExpression ex) {
+        
+        HasExpressionVisitor hasExpressionVisitor = new HasExpressionVisitor(jd,ex);
+        return hasExpressionVisitor.hasExpression(element);
+    }
+
+    public ExpressionContext getExpressionContext(JRDesignExpression ex) {
+        
+        
+        // The chart is a bit hard to handle. There are some expressions that
+        // always refer to the main dataset (in general all the one used in
+        // the dataset run, others depending by the dataset set in the dataset run.
+        // So if the dataset run uses a particular dataset, the expression context
+        // should use it.
+        if (element instanceof JRDesignChart)
+        {
+            JRDesignChart chart = (JRDesignChart)element;
+            if (chart.getDataset().getDatasetRun() != null &&
+                chart.getDataset().getDatasetRun().getDatasetName() != null)
+            {
+                // The dataset run uses a different dataset.
+                // so let's check if the expression is one of the dataset run or if it
+                // belongs to the chart.
+                if (chart.getDataset().getDatasetRun().getConnectionExpression() != ex &&
+                     chart.getDataset().getDatasetRun().getDataSourceExpression() != ex &&
+                     chart.getDataset().getDatasetRun().getParametersMapExpression() != ex)
+                {
+                    boolean found = false;
+                    JRDatasetParameter[] params = chart.getDataset().getDatasetRun().getParameters();
+                    for (int i=0; i<params.length; ++i)
+                    {
+                        if (params[i].getExpression() == ex)
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!found)
+                    {
+                        return new ExpressionContext( (JRDesignDataset)jd.getDatasetMap().get(chart.getDataset().getDatasetRun().getDatasetName()));
+                    }
+                }
+            }
+        }
+        
+        // For crosstabs the discussion is similar...
+        
+        // Usually this is the element expression context...
+        return new ExpressionContext(ModelUtils.getElementDataset(element, jd));
+        
+        
     }
     
 }

@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.data;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.event.MouseEvent;
@@ -77,8 +78,8 @@ public class SortFieldsDialog extends javax.swing.JDialog {
             }
         };
        
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
         //applyI18n();
         //to make the default button ...
@@ -150,11 +151,11 @@ public class SortFieldsDialog extends javax.swing.JDialog {
         jButtonClose = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Sorting");
+        setTitle(I18n.getString("SortFieldsDialog.Title.Sorting")); // NOI18N
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabelSortBy.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabelSortBy.setText("Sort by...");
+        jLabelSortBy.setText(I18n.getString("SortFieldsDialog.Label.SortBy")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -191,7 +192,7 @@ public class SortFieldsDialog extends javax.swing.JDialog {
         jPanel1.setPreferredSize(new java.awt.Dimension(120, 10));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButtonAdd.setText("Add field");
+        jButtonAdd.setText(I18n.getString("SortFieldsDialog.Button.AddField")); // NOI18N
         jButtonAdd.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonAdd.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonAdd.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -207,7 +208,7 @@ public class SortFieldsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel1.add(jButtonAdd, gridBagConstraints);
 
-        jButtonModify.setText("Modify field");
+        jButtonModify.setText(I18n.getString("SortFieldsDialog.Button.ModifyField")); // NOI18N
         jButtonModify.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonModify.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonModify.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -223,7 +224,7 @@ public class SortFieldsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel1.add(jButtonModify, gridBagConstraints);
 
-        jButtonRemove.setText("Remove field");
+        jButtonRemove.setText(I18n.getString("SortFieldsDialog.Button.RemoveField")); // NOI18N
         jButtonRemove.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonRemove.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonRemove.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -238,7 +239,7 @@ public class SortFieldsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel1.add(jButtonRemove, gridBagConstraints);
 
-        jButtonMoveUp.setText("Move up");
+        jButtonMoveUp.setText(I18n.getString("SortFieldsDialog.Button.MoveUp")); // NOI18N
         jButtonMoveUp.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonMoveUp.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonMoveUp.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -253,7 +254,7 @@ public class SortFieldsDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel1.add(jButtonMoveUp, gridBagConstraints);
 
-        jButtonMoveDown.setText("Move down");
+        jButtonMoveDown.setText(I18n.getString("SortFieldsDialog.Button.MoveDown")); // NOI18N
         jButtonMoveDown.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonMoveDown.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonMoveDown.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -269,7 +270,7 @@ public class SortFieldsDialog extends javax.swing.JDialog {
         jPanel1.add(jButtonMoveDown, gridBagConstraints);
 
         jButtonAscDesc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/data/arrow_refresh.png"))); // NOI18N
-        jButtonAscDesc.setText("Asc / Desc");
+        jButtonAscDesc.setText(I18n.getString("SortFieldsDialog.Button.AscDesc")); // NOI18N
         jButtonAscDesc.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonAscDesc.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonAscDesc.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -288,7 +289,7 @@ public class SortFieldsDialog extends javax.swing.JDialog {
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(jPanel2, gridBagConstraints);
 
-        jButtonClose.setText("Close");
+        jButtonClose.setText(I18n.getString("Global.Button.Close")); // NOI18N
         jButtonClose.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonClose.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonClose.setPreferredSize(new java.awt.Dimension(120, 26));

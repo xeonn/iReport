@@ -25,8 +25,10 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
@@ -118,9 +120,25 @@ public class IReportManager {
      */
     private void initialize()
     {
-        net.sf.jasperreports.engine.util.JRProperties.setProperty("net.sf.jasperreports.query.executer.factory.xmla-mdx",
+        try {
+            net.sf.jasperreports.engine.util.JRProperties.setProperty("net.sf.jasperreports.query.executer.factory.xmla-mdx",
                     "net.sf.jasperreports.engine.query.JRXmlaQueryExecuterFactory");
-    
+        } catch (Exception ex)
+        { 
+            System.out.println("Error initializing JRXmlaQueryExecuterFactory " +ex.getMessage());
+            System.out.flush();
+        }
+        
+        try {
+            net.sf.jasperreports.engine.util.JRProperties.setProperty("net.sf.jasperreports.xpath.executer.factory",
+                    "net.sf.jasperreports.engine.util.xml.JaxenXPathExecuterFactory");
+        } catch (Exception ex)
+        { 
+            System.out.println("Error initializing JaxenXPathExecuterFactory " +ex.getMessage());
+            System.out.flush();
+        }
+        
+        
     
         // Loading fonts...
         RequestProcessor.getDefault().post(new Runnable()
@@ -229,11 +247,16 @@ public class IReportManager {
     public IReportConnection loadConnection(String xml)
     {
         try {
+            
+             ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
+             Thread.currentThread().setContextClassLoader(DOMParser.class.getClassLoader());
              DOMParser parser = new DOMParser();
              org.xml.sax.InputSource input_sss  = new org.xml.sax.InputSource(new java.io.StringReader(xml));
              //input_sss.setSystemId(filename);
              parser.parse( input_sss );
 
+             Thread.currentThread().setContextClassLoader(oldClassLoader);
+             
              Document document = parser.getDocument();
              Node node = document.getDocumentElement();
 
@@ -429,9 +452,9 @@ public class IReportManager {
                 {
                     try {
                         reportClassLoader.addNoRelodablePath( f.getCanonicalPath() );
+                        
                     } catch (IOException ex) {}
                 }
-                
             }
         }
         reportClassLoader.rescanAdditionalClasspath();
@@ -703,6 +726,7 @@ public class IReportManager {
         // register the QE in the JasperServer properties...
         net.sf.jasperreports.engine.util.JRProperties.setProperty("net.sf.jasperreports.query.executer.factory." + qed.getLanguage(), qed.getClassName());
             
+        
         return true;
     }
     
@@ -823,10 +847,16 @@ public class IReportManager {
         addUndoableEdit(edit, false);
     }
     
+    private boolean forceAggregateUndo = false;
+    public void setForceAggregateUndo(boolean b)
+    {
+        forceAggregateUndo = b;
+    }
+    
     public void addUndoableEdit(UndoableEdit edit, boolean aggregate)
     {
         notifyReportChange();
-        if (aggregate)
+        if (aggregate || forceAggregateUndo)
         {
             if (lastUndoableEdit != null &&
                  lastUndoableEdit instanceof AggregatedUndoableEdit &&
@@ -889,4 +919,27 @@ public class IReportManager {
         this.fileResolvers = fileResolvers;
     }
     
+    
+    
+    private final Set<JrxmlVisualViewActivatedListener> listeners = new HashSet<JrxmlVisualViewActivatedListener>(1); // or can use ChangeSupport in NB 6.0
+    public final void addJrxmlVisualViewActivatedListener(JrxmlVisualViewActivatedListener l) {
+        synchronized (listeners) {
+            listeners.add(l);
+        }
+    }
+    public final void removeJrxmlVisualViewActivatedListener(JrxmlVisualViewActivatedListener l) {
+        synchronized (listeners) {
+            listeners.remove(l);
+        }
+    }
+    public final void fireJrxmlVisualViewActivatedListenerEvent(JrxmlVisualView view) {
+        Iterator<JrxmlVisualViewActivatedListener> it;
+        synchronized (listeners) {
+            it = new HashSet<JrxmlVisualViewActivatedListener>(listeners).iterator();
+        }
+    
+        while (it.hasNext()) {
+            it.next().jrxmlVisualViewActivated(view);
+        }
+    }
 }

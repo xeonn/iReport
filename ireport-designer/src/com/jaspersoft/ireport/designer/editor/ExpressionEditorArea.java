@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.editor;
 
+import com.jaspersoft.ireport.locale.I18n;
 import javax.swing.JOptionPane;
 
 /**
@@ -71,7 +72,7 @@ public class ExpressionEditorArea extends javax.swing.JPanel {
         add(jScrollPane1, gridBagConstraints);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/editor/text_edit.png"))); // NOI18N
-        jButton1.setText(org.openide.util.NbBundle.getMessage(ExpressionEditorArea.class, "ExpressionEditorArea.jButton1.text")); // NOI18N
+        jButton1.setText(I18n.getString("ExpressionEditorArea.jButton1.text")); // NOI18N
         jButton1.setMargin(new java.awt.Insets(2, 2, 2, 2));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.charts;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.charts.datasets.CategoryDatasetPanel;
@@ -192,7 +193,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
                         this.jComboBoxDatasetConnectionType.setSelectedIndex(0);
                         this.jRTextExpressionAreaTextConnectionExpression.setEnabled(false);
                         this.jRTextExpressionAreaTextConnectionExpression.setBackground(Color.LIGHT_GRAY);
-                        this.jRTextExpressionAreaTextConnectionExpression.setText("");
+                        this.jRTextExpressionAreaTextConnectionExpression.setText("");//NOI18N
                     }
                     else if (connectionType == 1) {
                         this.jComboBoxDatasetConnectionType.setSelectedIndex(1);
@@ -229,8 +230,8 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
                     this.jComboBoxDatasetConnectionType.setSelectedIndex(0);
                     this.jRTextExpressionAreaTextConnectionExpression.setEnabled(false);
                     this.jRTextExpressionAreaTextConnectionExpression.setBackground(Color.LIGHT_GRAY);
-                    this.jRTextExpressionAreaTextConnectionExpression.setText("");
-                    jRTextExpressionAreaMapExpression.setText("");
+                    this.jRTextExpressionAreaTextConnectionExpression.setText("");//NOI18N
+                    jRTextExpressionAreaMapExpression.setText("");//NOI18N
 
                     jComboBoxSubDataset.setSelectedIndex(0);
                     //jTabbedPaneSubDataset.setVisible(false);
@@ -253,7 +254,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
                 if (chartType == JRChart.CHART_TYPE_PIE ||
                     chartType == JRChart.CHART_TYPE_PIE3D)
                 {
-                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignPieDataset", "Pie dataset"));
+                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignPieDataset", I18n.getString("ChartPropertiesDialog.ComboBox.pie_dataset")));
                 }
                 else if (chartType == JRChart.CHART_TYPE_BAR ||
                          chartType == JRChart.CHART_TYPE_BAR3D ||
@@ -263,38 +264,38 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
                          chartType == JRChart.CHART_TYPE_AREA ||
                          chartType == JRChart.CHART_TYPE_STACKEDAREA )
                 {
-                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignCategoryDataset", "Category dataset"));
+                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignCategoryDataset", I18n.getString("ChartPropertiesDialog.ComboBox.category_dataset")));
                 }
                 else if (chartType == JRChart.CHART_TYPE_XYBAR)
                 {
-                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignTimePeriodDataset", "Time period dataset"));
-                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset", "Time series dataset"));
-                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignXyDataset", "XY dataset"));
+                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignTimePeriodDataset", I18n.getString("ChartPropertiesDialog.ComboBox.time_period_dataset")));
+                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset", I18n.getString("ChartPropertiesDialog.ComboBox.time_series_dataset")));
+                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignXyDataset", I18n.getString("ChartPropertiesDialog.ComboBox.XY_dataset")));
                 }
                 else if ( chartType == JRChart.CHART_TYPE_XYLINE ||
                           chartType == JRChart.CHART_TYPE_XYAREA || 
                           chartType == JRChart.CHART_TYPE_SCATTER )
                 {   
-                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignXyDataset", "XY dataset"));
+                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignXyDataset", I18n.getString("ChartPropertiesDialog.ComboBox.XY_dataset")));
                 }
                 else if ( chartType == JRChart.CHART_TYPE_BUBBLE )
                 {
-                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignXyzDataset", "XYZ dataset"));
+                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignXyzDataset", I18n.getString("ChartPropertiesDialog.ComboBox.XYZ_dataset")));
                 }
                 else if ( chartType == JRChart.CHART_TYPE_TIMESERIES )
                 {
-                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset", "Time series dataset"));
+                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset", I18n.getString("ChartPropertiesDialog.ComboBox.time_series_dataset")));
                 }
                 else if ( chartType == JRChart.CHART_TYPE_HIGHLOW ||
                           chartType == JRChart.CHART_TYPE_CANDLESTICK)
                 {
                     
-                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignHighLowDataset", "High low dataset"));
+                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignHighLowDataset", I18n.getString("ChartPropertiesDialog.ComboBox.high_low_dataset")));
                 }
                 else if ( chartType == JRChart.CHART_TYPE_METER ||
                           chartType == JRChart.CHART_TYPE_THERMOMETER)
                 {
-                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignValueDataset", "Value dataset"));
+                    jComboBoxTypeOfData.addItem(new Tag("net.sf.jasperreports.charts.design.JRDesignValueDataset", I18n.getString("ChartPropertiesDialog.ComboBox.value_dataset")));
                 }
 
                 setDatasetPanel( currentSelectedChartElement.getDataset(), dataset  );
@@ -342,21 +343,21 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         
         //applyI18n();
         
-        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_NONE),"None"));
-        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_REPORT),"Report"));
-        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_PAGE),"Page"));
-        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_COLUMN),"Column"));
-        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_GROUP),"Group"));
+        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_NONE),I18n.getString("ChartPropertiesDialog.ComboBoxReset.none")));
+        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_REPORT),I18n.getString("ChartPropertiesDialog.ComboBoxReset.report")));
+        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_PAGE),I18n.getString("ChartPropertiesDialog.ComboBoxReset.page")));
+        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_COLUMN),I18n.getString("ChartPropertiesDialog.ComboBoxReset.column")));
+        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_GROUP),I18n.getString("ChartPropertiesDialog.ComboBoxReset.group")));
         
-        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_NONE),"None"));
-        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_REPORT),"Report"));
-        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_PAGE),"Page"));
-        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_COLUMN),"Column"));
-        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_GROUP),"Group"));
+        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_NONE),I18n.getString("ChartPropertiesDialog.ComboBoxIncrementType.none")));
+        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_REPORT),I18n.getString("ChartPropertiesDialog.ComboBoxIncrementType.report")));
+        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_PAGE),I18n.getString("ChartPropertiesDialog.ComboBoxIncrementType.page")));
+        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_COLUMN),I18n.getString("ChartPropertiesDialog.ComboBoxIncrementType.column")));
+        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_GROUP),I18n.getString("ChartPropertiesDialog.ComboBoxIncrementType.group")));
          
-        jComboBoxDatasetConnectionType.addItem(new Tag("Don't use connection or datasource","Don't use connection or datasource"));
-        jComboBoxDatasetConnectionType.addItem(new Tag("Use connection expression","Use connection expression"));
-        jComboBoxDatasetConnectionType.addItem(new Tag("Use datasource expression","Use datasource expression"));
+        jComboBoxDatasetConnectionType.addItem(new Tag(I18n.getString("ChartPropertiesDialog.ComboBoxConnectionType.noConnectionNoDatasource"),I18n.getString("ChartPropertiesDialog.ComboBoxConnectionType.noConnectionNoDatasource")));
+        jComboBoxDatasetConnectionType.addItem(new Tag(I18n.getString("ChartPropertiesDialog.ComboBoxConnectionType.connExpression"),I18n.getString("ChartPropertiesDialog.ComboBoxConnectionType.connExpression")));
+        jComboBoxDatasetConnectionType.addItem(new Tag(I18n.getString("ChartPropertiesDialog.ComboBoxConnectionType.datasourceExpr"),I18n.getString("ChartPropertiesDialog.ComboBoxConnectionType.datasourceExpr")));
         
         this.jRTextExpressionAreaMapExpression.getExpressionEditorPane().getDocument().addDocumentListener( new javax.swing.event.DocumentListener() {
             public void changedUpdate(javax.swing.event.DocumentEvent evt) {
@@ -418,8 +419,8 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         ((DefaultTableColumnModel)jTableDatasetParameters.getColumnModel()).getColumn(0).setCellRenderer(dpcr);
         ((DefaultTableColumnModel)jTableDatasetParameters.getColumnModel()).getColumn(1).setCellRenderer(dpcr);
         
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
         
         //to make the default button ...
@@ -437,7 +438,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
                 if (jRTextExpressionAreaMapExpression.getText().trim().length() > 0)
                 {
                     exp = new JRDesignExpression();
-                    exp.setValueClassName("java.util.Map");
+                    exp.setValueClassName("java.util.Map");//NOI18N
                     exp.setText(jRTextExpressionAreaMapExpression.getText());
                 }
                 
@@ -455,7 +456,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
             if (jRTextExpressionAreaFilterExpression.getText().trim().length() > 0)
             {
                 exp = new JRDesignExpression();
-                exp.setValueClassName("java.lang.Boolean");
+                exp.setValueClassName("java.lang.Boolean");//NOI18N
                 exp.setText(jRTextExpressionAreaFilterExpression.getText());
             }
 
@@ -479,12 +480,12 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
             
             if (index == 1)
             {
-                if (exp != null) exp.setValueClassName("java.sql.Connection");
+                if (exp != null) exp.setValueClassName("java.sql.Connection");//NOI18N
                 ((JRDesignDatasetRun) currentSelectedChartElement.getDataset().getDatasetRun()).setConnectionExpression(exp);
             }
             else if (index == 2)
             {
-                if (exp != null) exp.setValueClassName("net.sf.jasperreports.engine.JRDataSource");
+                if (exp != null) exp.setValueClassName("net.sf.jasperreports.engine.JRDataSource");//NOI18N
                 ((JRDesignDatasetRun) currentSelectedChartElement.getDataset().getDatasetRun()).setDataSourceExpression(exp);
             }
             notifyChange();
@@ -555,7 +556,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         jPanel8 = new javax.swing.JPanel();
         jButtonClose = new javax.swing.JButton();
 
-        setTitle("Chart details");
+        setTitle(I18n.getString("ChartPropertiesDialog.Title.ChartDetails")); // NOI18N
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -567,7 +568,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
 
         jPanelData.setLayout(new java.awt.GridBagLayout());
 
-        jLabelTypeOfData.setText("Type of dataset");
+        jLabelTypeOfData.setText(I18n.getString("ChartPropertiesDialog.Label.TypeDataset")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanelData.add(jLabelTypeOfData, gridBagConstraints);
@@ -587,7 +588,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
 
         jPanelDataset.setLayout(new java.awt.GridBagLayout());
 
-        jLabelResetType.setText("Reset type");
+        jLabelResetType.setText(I18n.getString("ChartPropertiesDialog.Label.ResetType")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -609,7 +610,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanelDataset.add(jComboBoxResetType, gridBagConstraints);
 
-        jLabelResetGroup.setText("Reset group");
+        jLabelResetGroup.setText(I18n.getString("ChartPropertiesDialog.Label.ResetGroup")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -631,7 +632,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanelDataset.add(jComboBoxResetGroup, gridBagConstraints);
 
-        jLabelIncrementType.setText("Increment type");
+        jLabelIncrementType.setText(I18n.getString("ChartPropertiesDialog.Label.IncrementType")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -653,7 +654,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanelDataset.add(jComboBoxIncrementType, gridBagConstraints);
 
-        jLabelIncrementGroup.setText("Increment group");
+        jLabelIncrementGroup.setText(I18n.getString("ChartPropertiesDialog.Label.IncrementGroup")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
@@ -675,7 +676,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanelDataset.add(jComboBoxIncrementGroup, gridBagConstraints);
 
-        jLabelIncrementType2.setText("Increment When expression");
+        jLabelIncrementType2.setText(I18n.getString("ChartPropertiesDialog.Label.IncrementWhenExpression")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -687,7 +688,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         jPanel1.setPreferredSize(new java.awt.Dimension(329, 192));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabelIncrementType1.setText("Sub dataset");
+        jLabelIncrementType1.setText(I18n.getString("ChartPropertiesDialog.Label.subDataset")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -755,7 +756,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         jPanel10.setPreferredSize(new java.awt.Dimension(100, 69));
         jPanel10.setLayout(new java.awt.GridBagLayout());
 
-        jButtonAddParameter.setText("Add");
+        jButtonAddParameter.setText(I18n.getString("Global.Button.Add")); // NOI18N
         jButtonAddParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddParameterActionPerformed(evt);
@@ -767,7 +768,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         jPanel10.add(jButtonAddParameter, gridBagConstraints);
 
-        jButtonModParameter.setText("Modify");
+        jButtonModParameter.setText(I18n.getString("Global.Button.Modify")); // NOI18N
         jButtonModParameter.setEnabled(false);
         jButtonModParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -780,7 +781,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         jPanel10.add(jButtonModParameter, gridBagConstraints);
 
-        jButtonRemParameter.setText("Remove");
+        jButtonRemParameter.setText(I18n.getString("Global.Button.Remove")); // NOI18N
         jButtonRemParameter.setEnabled(false);
         jButtonRemParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -809,12 +810,12 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         gridBagConstraints.weighty = 1.0;
         jPanel4.add(jPanel16, gridBagConstraints);
 
-        jTabbedPaneSubDataset.addTab("Parameters", jPanel4);
+        jTabbedPaneSubDataset.addTab(I18n.getString("ChartPropertiesDialog.Pane.Parameters"), jPanel4); // NOI18N
 
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
         jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel26.setText("Parameters Map Expression");
+        jLabel26.setText(I18n.getString("ChartPropertiesDialog.Label.ParamMapExp")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -837,11 +838,11 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(2, 4, 4, 4);
         jPanel5.add(jRTextExpressionAreaMapExpression, gridBagConstraints);
 
-        jTabbedPaneSubDataset.addTab("Parameters map exp", jPanel5);
+        jTabbedPaneSubDataset.addTab(I18n.getString("ChartPropertiesDialog.Pane.ParametersMapExp"), jPanel5); // NOI18N
 
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
-        jLabel41.setText("Connection / Datasource Expression");
+        jLabel41.setText(I18n.getString("ChartPropertiesDialog.Label.ConnDataSourceExp")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -879,7 +880,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(2, 4, 4, 4);
         jPanel6.add(jRTextExpressionAreaTextConnectionExpression, gridBagConstraints);
 
-        jTabbedPaneSubDataset.addTab("Connection/Datasource exp", jPanel6);
+        jTabbedPaneSubDataset.addTab(I18n.getString("ChartPropertiesDialog.Label.ConnDataSourceExp"), jPanel6); // NOI18N
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
@@ -909,7 +910,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jButtonCopy.setText("Copy dataset");
+        jButtonCopy.setText(I18n.getString("ChartPropertiesDialog.Button.CopyDataset")); // NOI18N
         jButtonCopy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCopyActionPerformed(evt);
@@ -919,7 +920,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         jPanel2.add(jButtonCopy, gridBagConstraints);
 
-        jButtonPaste.setText("Paste dataset");
+        jButtonPaste.setText(I18n.getString("ChartPropertiesDialog.Button.PasteDataset")); // NOI18N
         jButtonPaste.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonPasteActionPerformed(evt);
@@ -954,7 +955,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         jTabbedPaneData.addTab("Dataset", jPanelDataset);
 
         jPanelDataDefinition.setLayout(new java.awt.GridBagLayout());
-        jTabbedPaneData.addTab("Details", jPanelDataDefinition);
+        jTabbedPaneData.addTab(I18n.getString("ChartPropertiesDialog.Pane.Details"), jPanelDataDefinition); // NOI18N
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -970,7 +971,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
 
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
-        jButtonClose.setText("Close");
+        jButtonClose.setText(I18n.getString("Global.Button.Close")); // NOI18N
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCloseActionPerformed(evt);
@@ -1130,7 +1131,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
             if (this.jComboBoxSubDataset.getSelectedIndex() > 0)
             {
                     if (currentSelectedChartElement.getDataset().getDatasetRun() == null ||
-                        !("" + jComboBoxSubDataset.getSelectedItem()).equals(currentSelectedChartElement.getDataset().getDatasetRun().getDatasetName()) )
+                        !("" + jComboBoxSubDataset.getSelectedItem()).equals(currentSelectedChartElement.getDataset().getDatasetRun().getDatasetName()) )//NOI18N
                     {
 
                         JRDesignDatasetRun datasetRun = (JRDesignDatasetRun)currentSelectedChartElement.getDataset().getDatasetRun();
@@ -1143,8 +1144,8 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
                             this.jComboBoxDatasetConnectionType.setSelectedIndex(0);
                             this.jRTextExpressionAreaTextConnectionExpression.setEnabled(false);
                             this.jRTextExpressionAreaTextConnectionExpression.setBackground(Color.LIGHT_GRAY);
-                            this.jRTextExpressionAreaTextConnectionExpression.setText("");
-                            jRTextExpressionAreaMapExpression.setText("");
+                            this.jRTextExpressionAreaTextConnectionExpression.setText("");//NOI18N
+                            jRTextExpressionAreaMapExpression.setText("");//NOI18N
                             setInit(false);
                             
                             java.awt.GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1159,7 +1160,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
                             //jTabbedPaneSubDataset.setVisible(true);
                             jPanel7.updateUI();
                         }
-                        datasetRun.setDatasetName("" + jComboBoxSubDataset.getSelectedItem());
+                        datasetRun.setDatasetName("" + jComboBoxSubDataset.getSelectedItem());//NOI18N
                         
                         // Check subdataset parameters.... (TODO)
                     }
@@ -1177,8 +1178,8 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
                 this.jComboBoxDatasetConnectionType.setSelectedIndex(0);
                 this.jRTextExpressionAreaTextConnectionExpression.setEnabled(false);
                 this.jRTextExpressionAreaTextConnectionExpression.setBackground(Color.LIGHT_GRAY);
-                this.jRTextExpressionAreaTextConnectionExpression.setText("");
-                jRTextExpressionAreaMapExpression.setText("");
+                this.jRTextExpressionAreaTextConnectionExpression.setText("");//NOI18N
+                jRTextExpressionAreaMapExpression.setText("");//NOI18N
                 setInit(false);
                 
                 jPanel7.remove(jTabbedPaneSubDataset);
@@ -1195,7 +1196,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
                 
         JRDesignDatasetRun datasetRun = (JRDesignDatasetRun)currentSelectedChartElement.getDataset().getDatasetRun();
         if (jComboBoxDatasetConnectionType.getSelectedIndex() == 0) {
-            jRTextExpressionAreaTextConnectionExpression.setText("");
+            jRTextExpressionAreaTextConnectionExpression.setText("");//NOI18N
             jRTextExpressionAreaTextConnectionExpression.setEnabled(false);
             jRTextExpressionAreaTextConnectionExpression.setBackground(Color.LIGHT_GRAY);
             datasetRun.setConnectionExpression(null);
@@ -1203,29 +1204,29 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         }
         else if (jComboBoxDatasetConnectionType.getSelectedIndex() == 1) {
             
-            jRTextExpressionAreaTextConnectionExpression.setText("$P{REPORT_CONNECTION}");
+            jRTextExpressionAreaTextConnectionExpression.setText("$P{REPORT_CONNECTION}");//NOI18N
             jRTextExpressionAreaTextConnectionExpression.setEnabled(true);
             jRTextExpressionAreaTextConnectionExpression.setBackground(Color.WHITE);
             
             datasetRun.setDataSourceExpression(null);
 
             JRDesignExpression exp = new JRDesignExpression();
-            exp.setValueClassName("java.sql.Connection");
-            exp.setText("$P{REPORT_CONNECTION}");
+            exp.setValueClassName("java.sql.Connection");//NOI18N
+            exp.setText("$P{REPORT_CONNECTION}");//NOI18N
             datasetRun.setConnectionExpression(exp);
 
         }
         else if (jComboBoxDatasetConnectionType.getSelectedIndex() == 2) {
             
-            jRTextExpressionAreaTextConnectionExpression.setText("$P{MyDataource}");
+            jRTextExpressionAreaTextConnectionExpression.setText("$P{MyDataource}");//NOI18N
             jRTextExpressionAreaTextConnectionExpression.setEnabled(true);
             jRTextExpressionAreaTextConnectionExpression.setBackground(Color.WHITE);
             
             datasetRun.setConnectionExpression(null);
 
             JRDesignExpression exp = new JRDesignExpression();
-            exp.setValueClassName("net.sf.jasperreports.engine.JRDataSource");
-            exp.setText("new net.sf.jasperreports.engine.JREmptyDataSource(1)");
+            exp.setValueClassName("net.sf.jasperreports.engine.JRDataSource");//NOI18N
+            exp.setText("new net.sf.jasperreports.engine.JREmptyDataSource(1)");//NOI18N
             datasetRun.setDataSourceExpression(exp);
         }
         
@@ -1260,7 +1261,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         
         if (jComboBoxTypeOfData.getSelectedItem() != null)
         {
-            String typeOfDataset = ((Tag)jComboBoxTypeOfData.getSelectedItem()).getValue()+"";
+            String typeOfDataset = ((Tag)jComboBoxTypeOfData.getSelectedItem()).getValue()+"";//NOI18N
             if (currentSelectedChartElement.getDataset().getClass().getName().equals(typeOfDataset)) return;
             
             try {
@@ -1319,7 +1320,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
                 SwingUtilities.invokeLater(new Runnable(){
                     public void run()
                     {
-                        JOptionPane.showMessageDialog(jComboBoxIncrementGroup, "No groups available");
+                        JOptionPane.showMessageDialog(jComboBoxIncrementGroup, I18n.getString("ChartPropertiesDialog.MessageDialog.NoGroupsAvail"));
                     }
                 });
                 setInit(false);
@@ -1373,7 +1374,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
                 SwingUtilities.invokeLater(new Runnable(){
                     public void run()
                     {
-                        JOptionPane.showMessageDialog(jComboBoxResetGroup, "No groups available");
+                        JOptionPane.showMessageDialog(jComboBoxResetGroup, I18n.getString("ChartPropertiesDialog.MessageDialog.NoGroupsAvail"));
                     }
                 });
                 setInit(false);
@@ -1482,7 +1483,7 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         if (getJasperDesign() == null)
 	{
             jComboBoxSubDataset.removeAllItems();
-            jComboBoxSubDataset.addItem("");
+            jComboBoxSubDataset.addItem("");//NOI18N
         }	
         else
         {

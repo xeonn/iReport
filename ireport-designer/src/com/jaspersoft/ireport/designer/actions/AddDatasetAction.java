@@ -1,14 +1,13 @@
 package com.jaspersoft.ireport.designer.actions;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.outline.nodes.NullBandNode;
 import com.jaspersoft.ireport.designer.outline.nodes.ReportNode;
 import com.jaspersoft.ireport.designer.undo.AddDatasetUndoableEdit;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
-import org.openide.util.NbBundle;
 import org.openide.util.actions.NodeAction;
 
 public final class AddDatasetAction extends NodeAction {
@@ -32,7 +31,7 @@ public final class AddDatasetAction extends NodeAction {
     
     
     public String getName() {
-        return NbBundle.getMessage(AddDatasetAction.class, "CTL_AddDatasetAction");
+        return I18n.getString("AddDatasetAction.Name.CTL_AddDatasetAction");
     }
 
     @Override

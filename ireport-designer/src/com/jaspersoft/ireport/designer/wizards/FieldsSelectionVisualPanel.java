@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.wizards;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public final class FieldsSelectionVisualPanel extends JPanel {
 
     @Override
     public String getName() {
-        return "Fields";
+        return I18n.getString("FieldsSelectionVisualPanel.Name.Fields");
     }
     
     public void updateLists()

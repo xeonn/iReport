@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.charts.datasets;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import net.sf.jasperreports.charts.design.JRDesignPieDataset;
@@ -126,7 +127,7 @@ public class PieDatasetPanel extends javax.swing.JPanel  implements ChartDataset
         if (jRTextExpressionKey.getText().trim().length() > 0)
         {
             exp = new JRDesignExpression();
-            exp.setValueClassName("java.lang.Object");
+            exp.setValueClassName("java.lang.Object");//NOI18N
             exp.setText(jRTextExpressionKey.getText());
         }
         pieDataset.setKeyExpression( exp );
@@ -138,7 +139,7 @@ public class PieDatasetPanel extends javax.swing.JPanel  implements ChartDataset
         if (jRTextExpressionValue.getText().trim().length() > 0)
         {
             exp = new JRDesignExpression();
-            exp.setValueClassName("java.lang.Number");
+            exp.setValueClassName("java.lang.Number");//NOI18N
             exp.setText(jRTextExpressionValue.getText());
         }
         pieDataset.setValueExpression( exp );
@@ -150,7 +151,7 @@ public class PieDatasetPanel extends javax.swing.JPanel  implements ChartDataset
         if (jRTextExpressionLabel.getText().trim().length() > 0)
         {
             exp = new JRDesignExpression();
-            exp.setValueClassName("java.lang.Object");
+            exp.setValueClassName("java.lang.Object");//NOI18N
             exp.setText(jRTextExpressionLabel.getText());
         }
         pieDataset.setLabelExpression( exp );
@@ -181,7 +182,7 @@ public class PieDatasetPanel extends javax.swing.JPanel  implements ChartDataset
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabelKeyExpression.setText("Key expression");
+        jLabelKeyExpression.setText(I18n.getString("PieDatasetPanel.Label.KeyExpression")); 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -200,7 +201,7 @@ public class PieDatasetPanel extends javax.swing.JPanel  implements ChartDataset
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(jRTextExpressionKey, gridBagConstraints);
 
-        jLabelValueExpression.setText("Value expression");
+        jLabelValueExpression.setText(I18n.getString("PieDatasetPanel.Label.ValueExpression"));  
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -220,7 +221,7 @@ public class PieDatasetPanel extends javax.swing.JPanel  implements ChartDataset
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(jRTextExpressionValue, gridBagConstraints);
 
-        jLabelLabelExpression.setText("Label expression");
+        jLabelLabelExpression.setText(I18n.getString("PieDatasetPanel.Label.LabelExpression"));  
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -240,7 +241,7 @@ public class PieDatasetPanel extends javax.swing.JPanel  implements ChartDataset
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(jRTextExpressionLabel, gridBagConstraints);
 
-        jTabbedPane1.addTab("Section value", jPanel1);
+        jTabbedPane1.addTab(I18n.getString("PieDatasetPanel.Tab.SectionValue"), jPanel1);
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -249,7 +250,7 @@ public class PieDatasetPanel extends javax.swing.JPanel  implements ChartDataset
         gridBagConstraints.weighty = 1.0;
         jPanel2.add(sectionItemHyperlinkPanel1, gridBagConstraints);
 
-        jTabbedPane1.addTab("Section hyperlink", jPanel2);
+        jTabbedPane1.addTab(I18n.getString("PieDatasetPanel.Panel.SectionHyperlink"), jPanel2); // NOI18N
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;

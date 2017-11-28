@@ -45,10 +45,13 @@ public class FontNameProperty extends PropertySupport.ReadWrite {
 
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
+        
         if (val == null || val instanceof String)
         {
             String oldValue = element.getOwnFontName();
+            
             String newValue =   (String)val;
+            
             element.setFontName(newValue);
 
             ObjectPropertyUndoableEdit urob =
@@ -92,9 +95,11 @@ public class FontNameProperty extends PropertySupport.ReadWrite {
             //}
 
             String[] names = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+            classes.add(new Tag("sansserif","SansSerif"));
             for (int i = 0; i < names.length; i++) {
                     String name = names[i];
                     classes.add(new Tag(name));
+                    
             }
             editor = new ComboBoxPropertyEditor(true, classes);
         }

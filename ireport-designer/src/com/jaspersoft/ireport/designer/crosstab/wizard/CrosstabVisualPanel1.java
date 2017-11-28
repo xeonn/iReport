@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.crosstab.wizard;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -24,7 +25,7 @@ public final class CrosstabVisualPanel1 extends JPanel {
 
     @Override
     public String getName() {
-        return "Dataset";
+        return I18n.getString("CrosstabVisualPanel1.Label.Dataset");
     }
 
     /** This method is called from within the constructor to
@@ -38,7 +39,7 @@ public final class CrosstabVisualPanel1 extends JPanel {
         jLabelDataset = new javax.swing.JLabel();
         jComboBoxDataset = new javax.swing.JComboBox();
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelDataset, "Dataset");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelDataset, I18n.getString("CrosstabVisualPanel1.Label.Dataset")); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);

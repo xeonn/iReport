@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.data.fieldsproviders;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.data.*;
 import com.jaspersoft.ireport.designer.FieldsProviderEditor;
 import com.jaspersoft.ireport.designer.IReportManager;
@@ -124,7 +125,7 @@ public class BeanInspectorPanel extends javax.swing.JPanel implements FieldsProv
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("Bean");
+        jLabel1.setText(I18n.getString("BeanInspectorPanel.Label.Bean")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanel1.add(jLabel1, gridBagConstraints);
@@ -166,7 +167,7 @@ public class BeanInspectorPanel extends javax.swing.JPanel implements FieldsProv
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jButton2.setText("Add selected field(s)");
+        jButton2.setText(I18n.getString("BeanInspectorPanel.Button.AddFields")); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -178,7 +179,7 @@ public class BeanInspectorPanel extends javax.swing.JPanel implements FieldsProv
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 4);
         jPanel2.add(jButton2, gridBagConstraints);
 
-        jButton3.setText("Clear fields list");
+        jButton3.setText(I18n.getString("BeanInspectorPanel.Button.ClearFields")); // NOI18N
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed1(evt);
@@ -368,13 +369,13 @@ public class BeanInspectorPanel extends javax.swing.JPanel implements FieldsProv
         {
             javax.swing.JOptionPane.showMessageDialog(this, 
                     Misc.formatString( //"messages.BeanInspectorPanel.classNotFoundError",
-                                "Class not found error!!\nCheck your classpath and retry!\n{0}", new Object[]{cnf.getMessage()}),
-                                "Error",javax.swing.JOptionPane.ERROR_MESSAGE);
+                                I18n.getString("BeanInspectorPanel.Message.Error"), new Object[]{cnf.getMessage()}),
+                                I18n.getString("BeanInspectorPanel.Message.Error2"),javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         } catch (Exception ex)
         {
             javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage() ,
-                         "Error",javax.swing.JOptionPane.ERROR_MESSAGE);
+                         I18n.getString("BeanInspectorPanel.Message.Error2"),javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }
     }
@@ -443,7 +444,7 @@ public class BeanInspectorPanel extends javax.swing.JPanel implements FieldsProv
         
         if (getReportQueryDialog() == null) return;
             
-        getReportQueryDialog().getJLabelStatusSQL().setText("Executing HQL query....");
+        getReportQueryDialog().getJLabelStatusSQL().setText(I18n.getString("BeanInspectorPanel.Label.StatusSQL"));
         /////////////////////////////
             
         try {
@@ -483,10 +484,10 @@ public class BeanInspectorPanel extends javax.swing.JPanel implements FieldsProv
         {
             ex.printStackTrace();
             setBeanExplorerFromWorker(null,true,true);
-            setColumnErrorFromWork( "Error: " +  ex.getMessage() );
+            setColumnErrorFromWork( I18n.getString("BeanInspectorPanel.Message.Error3") +  ex.getMessage() );
         }
         
-        getReportQueryDialog().getJLabelStatusSQL().setText("Ready");
+        getReportQueryDialog().getJLabelStatusSQL().setText(I18n.getString("BeanInspectorPanel.Message.StatusSQL2"));
     }
     
     /**

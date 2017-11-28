@@ -1,15 +1,14 @@
 package com.jaspersoft.ireport.designer.actions;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.outline.nodes.BandNode;
-import com.jaspersoft.ireport.designer.outline.nodes.NullBandNode;
 import com.jaspersoft.ireport.designer.undo.DeleteBandUndoableEdit;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.util.HelpCtx;
-import org.openide.util.NbBundle;
 import org.openide.util.actions.NodeAction;
 
 public final class DeleteBandAction extends NodeAction {
@@ -33,7 +32,7 @@ public final class DeleteBandAction extends NodeAction {
     
     
     public String getName() {
-        return NbBundle.getMessage(DeleteBandAction.class, "CTL_DeleteBandAction");
+        return I18n.getString("DeleteBandAction.Name.CTL_DeleteBandAction");
     }
 
     @Override

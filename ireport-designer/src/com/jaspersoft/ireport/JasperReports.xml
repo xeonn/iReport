@@ -15,19 +15,33 @@ and open the template in the editor.
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/commons-digester-1.7.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/commons-logging-1.1.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/groovy-all-1.0.jar!/</resource>
-        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/itext-1.3.1.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jakarta-bcel-20050813.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jaxen-1.1.1.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jcommon-1.0.0.jar!/</resource>
-        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jfreechart-1.0.0.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jfreechart-1.0.3.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jpa.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jxl-2.6.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/png-encoder-1.5.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/poi-3.0.1-FINAL-20070705.jar!/</resource>
-        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-2.0.5.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-3.0.1.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/libs/xalan.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/xercesImpl.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/xml-apis.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/batik-anim.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/batik-awt-util.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/batik-bridge.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/batik-css.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/batik-dom.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/batik-ext.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/batik-gvt.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/batik-parser.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/batik-script.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/batik-svg-dom.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/batik-svggen.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/batik-util.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/batik-xml.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/iText-2.1.0.jar!/</resource>
+
     </volume>
     <volume>
         <type>src</type>

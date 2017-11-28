@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.wizards;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public final class GroupingVisualPanel extends JPanel {
 
     @Override
     public String getName() {
-        return "Group by...";
+        return I18n.getString("GroupingVisualPanel.Name.GroupBy");
     }
     
     
@@ -119,7 +120,7 @@ public final class GroupingVisualPanel extends JPanel {
 
         setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelGroup1, "Group 1");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelGroup1, I18n.getString("GroupingVisualPanel.Label.Group1")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -140,7 +141,7 @@ public final class GroupingVisualPanel extends JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         add(jComboBoxGroup1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelGroup2, "Group 2");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelGroup2, I18n.getString("GroupingVisualPanel.Label.Group2")); // NOI18N
         jLabelGroup2.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -163,7 +164,7 @@ public final class GroupingVisualPanel extends JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         add(jComboBoxGroup2, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelGroup3, "Group 3");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelGroup3, I18n.getString("GroupingVisualPanel.Label.Group3")); // NOI18N
         jLabelGroup3.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -186,7 +187,7 @@ public final class GroupingVisualPanel extends JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         add(jComboBoxGroup3, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelGroup4, "Group 4");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelGroup4, I18n.getString("GroupingVisualPanel.Label.Group4")); // NOI18N
         jLabelGroup4.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

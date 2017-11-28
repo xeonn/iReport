@@ -31,6 +31,8 @@
  */
 
 package com.jaspersoft.ireport.designer.connection.gui;
+
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Dialog;
 import java.awt.Frame;
@@ -77,8 +79,8 @@ public class PasswordDialog extends javax.swing.JDialog {
             }
         };
        
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
         //applyI18n();
         //to make the default button ...
@@ -102,7 +104,7 @@ public class PasswordDialog extends javax.swing.JDialog {
         jSeparator1 = new javax.swing.JSeparator();
         jButton2 = new javax.swing.JButton();
 
-        setTitle("Database password");
+        setTitle(I18n.getString("PasswordDialog.Title.DatabasePwd")); // NOI18N
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -114,7 +116,7 @@ public class PasswordDialog extends javax.swing.JDialog {
         jPanel1.setMaximumSize(new java.awt.Dimension(290, 130));
         jPanel1.setLayout(null);
 
-        jButton1.setText("Ok");
+        jButton1.setText(I18n.getString("Global.Button.Ok")); // NOI18N
         jButton1.setMaximumSize(new java.awt.Dimension(50, 34));
         jButton1.setMinimumSize(new java.awt.Dimension(50, 34));
         jButton1.setPreferredSize(new java.awt.Dimension(50, 34));
@@ -130,15 +132,15 @@ public class PasswordDialog extends javax.swing.JDialog {
         jPanel1.add(jLabel1);
         jLabel1.setBounds(10, 0, 70, 80);
 
-        jLabel2.setText("Password");
+        jLabel2.setText(I18n.getString("Global.Label.Password")); // NOI18N
         jPanel1.add(jLabel2);
         jLabel2.setBounds(90, 20, 130, 14);
         jPanel1.add(jPasswordField1);
-        jPasswordField1.setBounds(90, 40, 180, 20);
+        jPasswordField1.setBounds(90, 40, 180, 23);
         jPanel1.add(jSeparator1);
         jSeparator1.setBounds(10, 80, 260, 2);
 
-        jButton2.setText("Cancel");
+        jButton2.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
         jButton2.setMaximumSize(new java.awt.Dimension(50, 34));
         jButton2.setMinimumSize(new java.awt.Dimension(50, 34));
         jButton2.setPreferredSize(new java.awt.Dimension(50, 34));

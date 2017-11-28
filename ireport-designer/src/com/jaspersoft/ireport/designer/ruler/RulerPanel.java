@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.ruler;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
@@ -109,15 +110,15 @@ public class RulerPanel extends javax.swing.JPanel implements MouseListener, Mou
         this.addMouseMotionListener(this);
         this.scene = scene;
         
-        String newUnitName = IReportManager.getPreferences().get("Unit", "inches");
+        String newUnitName = IReportManager.getPreferences().get(I18n.getString("RulerPanel.Value.Unit"), I18n.getString("RulerPanel.Measure.inches"));
         unitPixels = Unit.getUnit(newUnitName).getConversionValue();
                     
         IReportManager.getPreferences().addPreferenceChangeListener(new PreferenceChangeListener() {
 
             public void preferenceChange(PreferenceChangeEvent evt) {
-                if (evt.getKey() != null && evt.getKey().equals("Unit"))
+                if (evt.getKey() != null && evt.getKey().equals(I18n.getString("RulerPanel.Value.Unit")))
                 {
-                    String newUnitName = IReportManager.getPreferences().get("Unit", "inches");
+                    String newUnitName = IReportManager.getPreferences().get(I18n.getString("RulerPanel.Value.Unit"), I18n.getString("RulerPanel.Measure.inches"));
                     setUnitPixels( Unit.getUnit(newUnitName).getConversionValue() );
                     repaint();
                 }

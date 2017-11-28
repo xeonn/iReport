@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.subreport;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.editor.ExpObject;
 import com.jaspersoft.ireport.designer.editor.ExpObjectCellRenderer;
@@ -61,7 +62,7 @@ public final class SubreportParametersVisualPanel extends JPanel {
 
     @Override
     public String getName() {
-        return "Parameters";
+        return I18n.getString("SubreportParametersVisualPanel.Label.Name");
     }
     
     

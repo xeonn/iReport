@@ -25,6 +25,7 @@
 package com.jaspersoft.ireport.designer.compiler;
 
 import com.jaspersoft.ireport.designer.compiler.xml.SourceLocation;
+import net.sf.jasperreports.engine.JRExpression;
 import org.eclipse.jdt.core.compiler.IProblem;
 
 /**
@@ -39,6 +40,8 @@ public interface JasperReportErrorHandler
 	void addMarker(String message, SourceLocation location);
 
 	void addMarker(IProblem problem, SourceLocation location);
+
+       	void addMarker(IProblem problem, JRExpression expression, SourceLocation location);
 
 }
 

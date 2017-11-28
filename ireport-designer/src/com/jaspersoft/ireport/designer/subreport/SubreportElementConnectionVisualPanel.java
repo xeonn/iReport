@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.subreport;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import javax.swing.JPanel;
@@ -46,7 +47,7 @@ public final class SubreportElementConnectionVisualPanel extends JPanel {
 
     @Override
     public String getName() {
-        return "Connection exp";
+        return I18n.getString("SubreportElementConnectionVisualPanel.Label.Name");
     }
     
     public void validateForm() throws IllegalArgumentException
@@ -76,7 +77,7 @@ public final class SubreportElementConnectionVisualPanel extends JPanel {
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, "Use the same connection used to fill the master report");
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, I18n.getString("SubreportElementConnectionVisualPanel.RadioButton.Util")); // NOI18N
         jRadioButton1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jRadioButton1StateChanged(evt);
@@ -95,7 +96,7 @@ public final class SubreportElementConnectionVisualPanel extends JPanel {
         add(jRadioButton1, gridBagConstraints);
 
         buttonGroup1.add(jRadioButton2);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton2, "Use another connection");
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton2, I18n.getString("SubreportElementConnectionVisualPanel.RadioButton.Util2")); // NOI18N
         jRadioButton2.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jRadioButton2StateChanged(evt);
@@ -119,7 +120,7 @@ public final class SubreportElementConnectionVisualPanel extends JPanel {
         add(connectionExpressionEditorArea, gridBagConstraints);
 
         buttonGroup1.add(jRadioButton3);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton3, "Use a JRDatasource expression");
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton3, I18n.getString("SubreportElementConnectionVisualPanel.RadioButton.Util3")); // NOI18N
         jRadioButton3.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jRadioButton3StateChanged(evt);
@@ -143,7 +144,7 @@ public final class SubreportElementConnectionVisualPanel extends JPanel {
         add(datasourceExpressionEditorArea, gridBagConstraints);
 
         buttonGroup1.add(jRadioButton4);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton4, "Use an empty data source");
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton4, I18n.getString("SubreportElementConnectionVisualPanel.RadioButton.Util4")); // NOI18N
         jRadioButton4.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jRadioButton4StateChanged(evt);
@@ -157,7 +158,7 @@ public final class SubreportElementConnectionVisualPanel extends JPanel {
         add(jRadioButton4, gridBagConstraints);
 
         buttonGroup1.add(jRadioButton5);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton5, "Don't use any connection or data source");
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton5, I18n.getString("SubreportElementConnectionVisualPanel.RadioButton.Util5")); // NOI18N
         jRadioButton5.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jRadioButton5StateChanged(evt);

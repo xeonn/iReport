@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.wizards;
 
+import com.jaspersoft.ireport.locale.I18n;
 import javax.swing.JPanel;
 
 public final class NewJrxmlVisualPanel6 extends JPanel {
@@ -19,7 +20,7 @@ public final class NewJrxmlVisualPanel6 extends JPanel {
 
     @Override
     public String getName() {
-        return "Finish";
+        return I18n.getString("NewJrxmlVisualPanel6.Name.Finish");
     }
 
     
@@ -37,7 +38,7 @@ public final class NewJrxmlVisualPanel6 extends JPanel {
 
         setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, "<html><font size=+1>Congratulation!</font><br><br>You have succesfully created a new report.<br>\nClick finish to generate it.");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, I18n.getString("NewJrxmlVisualPanel6.Label.Congrats")); // NOI18N
         jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel2.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();

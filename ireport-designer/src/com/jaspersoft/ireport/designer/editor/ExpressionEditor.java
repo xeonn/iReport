@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.editor;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
@@ -138,9 +139,9 @@ public class ExpressionEditor extends javax.swing.JPanel {
             if (getExpressionContext().getDatasets().size() > 0)
             {
                 JRDesignDataset ds = getExpressionContext().getDatasets().get(0);
-                dlm1.addElement(new NamedIconItem(PARAMETERS, "Parameters", NamedIconItem.ICON_FOLDER_PARAMETERS) );
-                dlm1.addElement( new NamedIconItem(FIELDS, "Fields", NamedIconItem.ICON_FOLDER_FIELDS) );
-                dlm1.addElement( new NamedIconItem(VARIABLES, "Variables", NamedIconItem.ICON_FOLDER_VARIABLES) );
+                dlm1.addElement(new NamedIconItem(PARAMETERS, I18n.getString("ExpressionEditor.IconName.Parameters"), NamedIconItem.ICON_FOLDER_PARAMETERS) );
+                dlm1.addElement( new NamedIconItem(FIELDS, I18n.getString("ExpressionEditor.IconName.Fields"), NamedIconItem.ICON_FOLDER_FIELDS) );
+                dlm1.addElement( new NamedIconItem(VARIABLES, I18n.getString("ExpressionEditor.IconName.Variables"), NamedIconItem.ICON_FOLDER_VARIABLES) );
             }
             
             int i = 0;
@@ -150,13 +151,13 @@ public class ExpressionEditor extends javax.swing.JPanel {
                 String key = crosstab.getKey();
                 if (key == null) key = "";
                 
-                dlm1.addElement(new NamedIconItem(crosstab, "Crosstab (" + i + ") " + key, NamedIconItem.ICON_CROSSTAB) );
+                dlm1.addElement(new NamedIconItem(crosstab, I18n.getString("ExpressionEditor.IconName.Crosstab") + i + ") " + key, NamedIconItem.ICON_CROSSTAB) );
             }
         }
         
-        dlm1.addElement(new NamedIconItem(USER_DEFINED_EXPRESSIONS, "User Defined Expressions", NamedIconItem.ICON_FOLDER_FORMULAS ) );
-        dlm1.addElement( new NamedIconItem(RECENT_EXPRESSIONS, "Recent Expressions", NamedIconItem.ICON_FOLDER_RECENT_EXPRESSIONS ) );
-        dlm1.addElement( new NamedIconItem(WIZARDS, "Expression Wizards", NamedIconItem.ICON_FOLDER_WIZARDS ) );
+        dlm1.addElement(new NamedIconItem(USER_DEFINED_EXPRESSIONS, I18n.getString("ExpressionEditor.IconName.UserDefinedExpr"), NamedIconItem.ICON_FOLDER_FORMULAS ) );
+        dlm1.addElement( new NamedIconItem(RECENT_EXPRESSIONS, I18n.getString("ExpressionEditor.IconName.RecentExpr"), NamedIconItem.ICON_FOLDER_RECENT_EXPRESSIONS ) );
+        dlm1.addElement( new NamedIconItem(WIZARDS, I18n.getString("ExpressionEditor.IconName.ExprWiz"), NamedIconItem.ICON_FOLDER_WIZARDS ) );
         
         jList1.updateUI();
         if (dlm1.size() > 0)
@@ -290,18 +291,18 @@ public class ExpressionEditor extends javax.swing.JPanel {
 
         jSplitPane1.setRightComponent(jPanel1);
 
-        jButtonImport.setText(org.openide.util.NbBundle.getMessage(ExpressionEditor.class, "ExpressionEditor.jButtonImport.text")); // NOI18N
+        jButtonImport.setText(I18n.getString("ExpressionEditor.jButtonImport.text")); // NOI18N
 
-        jButtonExport.setText(org.openide.util.NbBundle.getMessage(ExpressionEditor.class, "ExpressionEditor.jButtonExport.text")); // NOI18N
+        jButtonExport.setText(I18n.getString("ExpressionEditor.jButtonExport.text")); // NOI18N
 
-        jButtonCancel.setText(org.openide.util.NbBundle.getMessage(ExpressionEditor.class, "ExpressionEditor.jButtonCancel.text")); // NOI18N
+        jButtonCancel.setText(I18n.getString("ExpressionEditor.jButtonCancel.text")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
             }
         });
 
-        jButtonApply.setText(org.openide.util.NbBundle.getMessage(ExpressionEditor.class, "ExpressionEditor.jButtonApply.text")); // NOI18N
+        jButtonApply.setText(I18n.getString("ExpressionEditor.jButtonApply.text")); // NOI18N
         jButtonApply.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonApplyActionPerformed(evt);
@@ -608,7 +609,7 @@ public class ExpressionEditor extends javax.swing.JPanel {
         dialogResult = JOptionPane.CANCEL_OPTION;
         dialog.setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE);
         dialog.setLocationRelativeTo(null);
-        dialog.setTitle("Expression editor");
+        dialog.setTitle(I18n.getString("ExpressionEditor.Title.ExpressionEditor"));
         dialog.setVisible(true);
         return dialogResult;
     }

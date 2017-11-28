@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.tools;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -221,7 +222,7 @@ public class HexColorChooserPanel extends javax.swing.colorchooser.AbstractColor
     }
 
     public String getDisplayName() {
-        return "Hex Value"; 
+        return I18n.getString("HexColorChooserPanel.Display.Name"); 
     }
 
     public Icon getSmallDisplayIcon() {

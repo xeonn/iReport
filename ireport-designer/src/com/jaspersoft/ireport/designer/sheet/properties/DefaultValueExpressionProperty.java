@@ -63,6 +63,7 @@ public final class DefaultValueExpressionProperty extends ExpressionProperty
     @Override
     public void setExpression(JRDesignExpression expression)
     {
+        expression.setValueClassName(parameter.getValueClassName());
         parameter.setDefaultValueExpression(expression);
     }
 

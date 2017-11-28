@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.charts;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.charts.ChartDescriptor;
 import com.jaspersoft.ireport.designer.charts.JListView;
 import java.awt.Dialog;
@@ -87,26 +88,26 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
         
         dlm.removeAllElements();
         
-        if (!isMultiAxisMode())  dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/pie.png","Pie", JRDesignChart.CHART_TYPE_PIE));
-        if (!isMultiAxisMode())dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/pie3d.png","Pie 3D", JRDesignChart.CHART_TYPE_PIE3D));
-        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/bar.png","Bar", JRDesignChart.CHART_TYPE_BAR));
-        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/bar3d.png","Bar 3D", JRDesignChart.CHART_TYPE_BAR3D));
-        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/xybar.png","YX Bar", JRDesignChart.CHART_TYPE_XYBAR));
-        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/stackedbar.png","Stacked Bar", JRDesignChart.CHART_TYPE_STACKEDBAR));
-        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/stackedbar3d.png","Stacked Bar 3D", JRDesignChart.CHART_TYPE_STACKEDBAR3D));
-        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/line.png","Line", JRDesignChart.CHART_TYPE_LINE));
-        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/xyline.png","XY Line", JRDesignChart.CHART_TYPE_XYLINE));
-        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/area.png","Area", JRDesignChart.CHART_TYPE_AREA));
-        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/xyarea.png","YX Area", JRDesignChart.CHART_TYPE_XYAREA));
-        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/stackedarea.png","Stacked Area", JRDesignChart.CHART_TYPE_STACKEDAREA));
-        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/scatter.png","Scatter", JRDesignChart.CHART_TYPE_SCATTER));
-        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/bubble.png","Bubble", JRDesignChart.CHART_TYPE_BUBBLE));
-        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/timeseries.png","Time Series", JRDesignChart.CHART_TYPE_TIMESERIES));
-        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/highlow.png","High Low", JRDesignChart.CHART_TYPE_HIGHLOW));
-        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/candlestick.png","Candlestick", JRDesignChart.CHART_TYPE_CANDLESTICK));
-        if (!isMultiAxisMode()) dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/meter.png","Meter", JRDesignChart.CHART_TYPE_METER));
-        if (!isMultiAxisMode()) dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/thermometer.png","Thermometer", JRDesignChart.CHART_TYPE_THERMOMETER));
-        if (!isMultiAxisMode()) dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/multiaxis.png","Multi Axis", JRDesignChart.CHART_TYPE_MULTI_AXIS));
+        if (!isMultiAxisMode())  dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/pie.png",I18n.getString("ChartSelectionJDialog.Chart.Pie"), JRDesignChart.CHART_TYPE_PIE));
+        if (!isMultiAxisMode())dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/pie3d.png",I18n.getString("ChartSelectionJDialog.Chart.Pie3D"), JRDesignChart.CHART_TYPE_PIE3D));
+        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/bar.png",I18n.getString("ChartSelectionJDialog.Chart.Bar"), JRDesignChart.CHART_TYPE_BAR));
+        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/bar3d.png",I18n.getString("ChartSelectionJDialog.Chart.Bar3D"), JRDesignChart.CHART_TYPE_BAR3D));
+        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/xybar.png",I18n.getString("ChartSelectionJDialog.Chart.YX_Bar"), JRDesignChart.CHART_TYPE_XYBAR));
+        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/stackedbar.png",I18n.getString("ChartSelectionJDialog.Chart.Stacked_Bar"), JRDesignChart.CHART_TYPE_STACKEDBAR));
+        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/stackedbar3d.png",I18n.getString("ChartSelectionJDialog.Chart.Stacked_Bar_3D"), JRDesignChart.CHART_TYPE_STACKEDBAR3D));
+        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/line.png",I18n.getString("ChartSelectionJDialog.Chart.Line"), JRDesignChart.CHART_TYPE_LINE));
+        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/xyline.png",I18n.getString("ChartSelectionJDialog.Chart.XY_Line"), JRDesignChart.CHART_TYPE_XYLINE));
+        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/area.png",I18n.getString("ChartSelectionJDialog.Chart.Area"), JRDesignChart.CHART_TYPE_AREA));
+        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/xyarea.png",I18n.getString("ChartSelectionJDialog.Chart.YX_Area"), JRDesignChart.CHART_TYPE_XYAREA));
+        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/stackedarea.png",I18n.getString("ChartSelectionJDialog.Chart.Stacked_Area"), JRDesignChart.CHART_TYPE_STACKEDAREA));
+        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/scatter.png",I18n.getString("ChartSelectionJDialog.Chart.Scatter"), JRDesignChart.CHART_TYPE_SCATTER));
+        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/bubble.png",I18n.getString("ChartSelectionJDialog.Chart.Bubble"), JRDesignChart.CHART_TYPE_BUBBLE));
+        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/timeseries.png",I18n.getString("ChartSelectionJDialog.Chart.Time_Series"), JRDesignChart.CHART_TYPE_TIMESERIES));
+        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/highlow.png",I18n.getString("ChartSelectionJDialog.Chart.High_Low"), JRDesignChart.CHART_TYPE_HIGHLOW));
+        dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/candlestick.png",I18n.getString("ChartSelectionJDialog.Chart.Candlestick"), JRDesignChart.CHART_TYPE_CANDLESTICK));
+        if (!isMultiAxisMode()) dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/meter.png",I18n.getString("ChartSelectionJDialog.Chart.Meter"), JRDesignChart.CHART_TYPE_METER));
+        if (!isMultiAxisMode()) dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/thermometer.png",I18n.getString("ChartSelectionJDialog.Chart.Thermometer"), JRDesignChart.CHART_TYPE_THERMOMETER));
+        if (!isMultiAxisMode()) dlm.addElement(new ChartDescriptor("/com/jaspersoft/ireport/designer/charts/icons/multiaxis.png",I18n.getString("ChartSelectionJDialog.Chart.Multi_Axis"), JRDesignChart.CHART_TYPE_MULTI_AXIS));
         
         jList1.updateUI();
         
@@ -151,8 +152,8 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
             }
         };
        
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
 
         //to make the default button ...
@@ -164,7 +165,7 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
      * WARNING: Do NOT modify this code. The content of this method is
      * always regenerated by the Form Editor.
      */
-    // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
@@ -178,13 +179,13 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
         jButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
         jPanelChartType.setLayout(new java.awt.BorderLayout());
 
-        jPanel5.setLayout(new java.awt.GridBagLayout());
-
-        jPanel5.setBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EtchedBorder(), "Chart info"));
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Chart info"));
         jPanel5.setMinimumSize(new java.awt.Dimension(10, 50));
         jPanel5.setPreferredSize(new java.awt.Dimension(10, 50));
+        jPanel5.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -194,7 +195,6 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         jPanel5.add(jLabelChartNameVal, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.weighty = 1.0;
@@ -204,15 +204,14 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
 
         getContentPane().add(jPanelChartType, java.awt.BorderLayout.CENTER);
 
-        jPanel1.setLayout(new java.awt.GridBagLayout());
-
         jPanel1.setMinimumSize(new java.awt.Dimension(10, 30));
         jPanel1.setPreferredSize(new java.awt.Dimension(10, 30));
+        jPanel1.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.weightx = 1.0;
         jPanel1.add(jPanel2, gridBagConstraints);
 
-        jButtonOk.setText("OK");
+        jButtonOk.setText(I18n.getString("Global.Button.Ok")); // NOI18N
         jButtonOk.setEnabled(false);
         jButtonOk.setMaximumSize(new java.awt.Dimension(200, 25));
         jButtonOk.setPreferredSize(new java.awt.Dimension(100, 25));
@@ -221,20 +220,18 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
                 jButtonOkActionPerformed(evt);
             }
         });
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(4, 2, 4, 4);
         jPanel1.add(jButtonOk, gridBagConstraints);
 
-        jButtonCancel.setText("Cancel");
+        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
             }
         });
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(4, 2, 4, 2);
         jPanel1.add(jButtonCancel, gridBagConstraints);
@@ -242,8 +239,7 @@ public class ChartSelectionJDialog extends javax.swing.JDialog {
         getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
 
         pack();
-    }
-    // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
         

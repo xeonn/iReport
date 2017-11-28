@@ -5,8 +5,10 @@
 
 package com.jaspersoft.ireport.designer.wizards;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.editor.ExpObject;
 import com.jaspersoft.ireport.designer.editor.ExpObjectCellRenderer;
+import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
@@ -65,10 +67,12 @@ public final class ReportGroupVisualPanel1 extends JPanel {
             jComboBoxObject.addItem(new ExpObject( values.get(i) ));
         }
         
+        jRTextExpressionArea.setExpressionContext(new ExpressionContext(wizardPanel.getJasperDesign().getMainDesignDataset()));
+        
     }
     
     public String getName() {
-        return "Group criteria";
+        return I18n.getString("ReportGroupVisualPanel1.Name.GroupCriteria");
     }
 
     /** This method is called from within the constructor to
@@ -91,7 +95,7 @@ public final class ReportGroupVisualPanel1 extends JPanel {
 
         setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, "Group name");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, I18n.getString("ReportGroupVisualPanel1.Label.GroupName")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -121,7 +125,7 @@ public final class ReportGroupVisualPanel1 extends JPanel {
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, "Group by the following report object:");
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, I18n.getString("ReportGroupVisualPanel1.RadioButton.GroupBy")); // NOI18N
         jRadioButton1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         jRadioButton1.setMargin(new java.awt.Insets(0, 0, 0, 0));
         jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -151,7 +155,7 @@ public final class ReportGroupVisualPanel1 extends JPanel {
         add(jComboBoxObject, gridBagConstraints);
 
         buttonGroup1.add(jRadioButton2);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton2, "Group by the following expression:");
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton2, I18n.getString("ReportGroupVisualPanel1.RadioButton.GroupBy2")); // NOI18N
         jRadioButton2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         jRadioButton2.setMargin(new java.awt.Insets(0, 0, 0, 0));
         jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -235,7 +239,7 @@ public final class ReportGroupVisualPanel1 extends JPanel {
         {
             if (s.equals( ((JRGroup)v.get(i)).getName()))
             {
-               jLabelErrorMessage.setText("This group name is already in use.");
+               jLabelErrorMessage.setText(I18n.getString("ReportGroupVisualPanel1.Message.Error"));
                return false;
             }
         }

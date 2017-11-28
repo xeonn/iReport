@@ -33,7 +33,7 @@
 package com.jaspersoft.ireport.designer.sheet.editors.box;
 
 
-
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.sheet.editors.box.BoxBorderSelectionPanel.Side;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.event.ActionEvent;
@@ -263,7 +263,7 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Padding"));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabel3.setText("Left");
+        jLabel3.setText(I18n.getString("BoxPanel.Label.Left")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -285,7 +285,7 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanel2.add(jSpinnerLeft, gridBagConstraints);
 
-        jLabel4.setText("Top");
+        jLabel4.setText(I18n.getString("BoxPanel.Label.Top")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -302,7 +302,7 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanel2.add(jSpinnerTop, gridBagConstraints);
 
-        jLabel5.setText("Right");
+        jLabel5.setText(I18n.getString("BoxPanel.Label.Right")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -319,7 +319,7 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanel2.add(jSpinnerRight, gridBagConstraints);
 
-        jLabel6.setText("Bottom");
+        jLabel6.setText(I18n.getString("BoxPanel.Label.Bottom")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
@@ -359,7 +359,7 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
         gridBagConstraints.insets = new java.awt.Insets(8, 4, 4, 4);
         jPanel3.add(jPanelPreview, gridBagConstraints);
 
-        jButtonRestoreDefaults.setText("Restore defaults");
+        jButtonRestoreDefaults.setText(I18n.getString("BoxPanel.Button.RestoreDefaults")); // NOI18N
         jButtonRestoreDefaults.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonRestoreDefaultsActionPerformed(evt);
@@ -379,7 +379,7 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
         jPanel4.setPreferredSize(new java.awt.Dimension(200, 150));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("Line width");
+        jLabel1.setText(I18n.getString("BoxPanel.Label.LineWidth")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(8, 4, 4, 4);
         jPanel4.add(jLabel1, gridBagConstraints);
@@ -393,7 +393,7 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
         gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 8);
         jPanel4.add(jSpinnerLineWidth, gridBagConstraints);
 
-        jLabel7.setText("Line Style");
+        jLabel7.setText(I18n.getString("BoxPanel.Label.LineStyle")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
@@ -413,7 +413,7 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
         gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 8);
         jPanel4.add(jScrollPane1, gridBagConstraints);
 
-        jLabel2.setText("Line color");
+        jLabel2.setText(I18n.getString("BoxPanel.Label.LineColor")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(8, 4, 4, 4);
@@ -453,21 +453,21 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 6, 6);
         add(jPanelBorderEditorContainer, gridBagConstraints);
 
-        jButtonCancel.setText("Cancel");
+        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
             }
         });
 
-        jButtonOk.setText("Ok");
+        jButtonOk.setText(I18n.getString("Global.Button.Ok")); // NOI18N
         jButtonOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOkActionPerformed(evt);
             }
         });
 
-        jButtonReset.setText("Reset");
+        jButtonReset.setText(I18n.getString("Global.Button.Reset")); // NOI18N
         jButtonReset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonResetActionPerformed(evt);

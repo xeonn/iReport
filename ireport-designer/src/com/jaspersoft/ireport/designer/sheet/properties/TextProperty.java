@@ -25,6 +25,8 @@ public final class TextProperty extends StringProperty
     {
         super(staticText);
         this.staticText = staticText;
+        setValue("oneline", Boolean.FALSE);
+        setValue("suppressCustomEditor", Boolean.FALSE);
     }
 
     @Override

@@ -420,14 +420,6 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
                                 contents.getEventSupport().firePropertyChange( JRDesignCrosstabGroup.PROPERTY_NAME, null, null);
                             }
                         }
-                        
-                        if (cell != null)
-                        {
-                            System.out.println("Cell: " + cell.getRowTotalGroup() + "/" + cell.getColumnTotalGroup() + "  " + ModelUtils.nameOf((JRDesignCellContents)cell.getContents()));
-                            System.out.flush();
-                        }
-                        
-                        
                     }
                     getGroup().setName(newName);
                     if (getGroup().getTotalHeader() != null)
@@ -634,6 +626,40 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
         public JRDesignCrosstab getCrosstab() {
             return crosstab;
         }
+
+        @Override
+        public Object getDefaultValue() {
+            return null;
+        }
+
+        @Override
+        public boolean isDefaultValue() {
+            return getValue() == null;
+        }
+
+        @Override
+        public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
+            setValue(null);
+        }
+
+        @Override
+        public boolean supportsDefaultValue() {
+            return true;
+        }
+
+        @Override
+        public void setValue(Object newValue) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+            if (newValue != null && (newValue instanceof String) && ((String)newValue).trim().length() == 0)
+            {
+             super.setValue(null);    
+            }
+            super.setValue(newValue);
+        }
+        
+        
+        
+        
+        
     }
     
     

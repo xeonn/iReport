@@ -25,6 +25,7 @@ import java.beans.PropertyEditorSupport;
 import org.openide.explorer.propertysheet.ExPropertyEditor;
 import org.openide.explorer.propertysheet.PropertyEnv;
 import java.beans.FeatureDescriptor;
+import java.util.List;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import org.openide.nodes.Node;
 
@@ -45,7 +46,17 @@ public class JRPropertiesMapPropertyEditor extends PropertyEditorSupport impleme
         if (val == null) {
             return "No properties set";
         }
-        if (val instanceof JRPropertiesMap)
+        if (val instanceof List)
+        {
+            int len = ((List)val).size();
+            switch (len)
+            {
+                case 0: return "No properties set";
+                case 1: return "One property set";
+                default: return len + " properties set";
+            }   
+        }
+        else if (val instanceof JRPropertiesMap)
         {
             int len = ((JRPropertiesMap)val).getPropertyNames().length;
             switch (len)

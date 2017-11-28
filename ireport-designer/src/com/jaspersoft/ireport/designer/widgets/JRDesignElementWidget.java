@@ -315,7 +315,11 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
             dv.setGraphics2D(gr);
             try {
                 e.visit( dv );
-            } catch (Exception ex){}
+            } catch (Exception ex){
+            
+                System.err.println("iReport - Element rendering exception " + getElement() + " " + ex.getMessage());
+                //ex.printStackTrace();
+            }
         }
         gr.setTransform(af);
         //Java2DUtils.resetClip(gr);
@@ -395,6 +399,7 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
                 ((AbstractReportObjectScene)getScene()).refreshElementGroup( (JRElementGroup)getElement() );
             }
         }
+
     }
 
     /**

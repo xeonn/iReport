@@ -98,12 +98,12 @@ public class ExtendedJRJdtCompiler extends JRJdtCompiler {
 					JRExpression expression = sourceCode.getExpressionAtLine(line);
 					if (expression == null)
 					{
-						getErrorHandler().addMarker(problem, null);
+						getErrorHandler().addMarker( problem, null);
 					}
 					else if (addExpressionError(expression, problem))
 					{
 						SourceLocation location = getDigester().getLocation(expression);
-						getErrorHandler().addMarker(problem, location);
+						getErrorHandler().addMarker(problem, expression, location);
 					}
 				}
 			}

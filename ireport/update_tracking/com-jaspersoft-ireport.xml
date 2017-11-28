@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="com.jaspersoft.ireport/1">
-    <module_version install_time="1215420048098" last="true" origin="installer" specification_version="1.0">
+    <module_version install_time="1218467478113" last="true" origin="installer" specification_version="1.0">
         <file crc="2425646588" name="config/Modules/com-jaspersoft-ireport.xml"/>
         <file crc="2666141633" name="libs/xalan.jar"/>
-        <file crc="2799187764" name="modules/com-jaspersoft-ireport.jar"/>
+        <file crc="91285947" name="modules/com-jaspersoft-ireport.jar"/>
         <file crc="2050849624" name="modules/ext/ant-1.5.1.jar"/>
         <file crc="1663336707" name="modules/ext/antlr-2.7.5.jar"/>
         <file crc="1656749251" name="modules/ext/asm-attrs.jar"/>
         <file crc="1662521808" name="modules/ext/asm.jar"/>
+        <file crc="962589662" name="modules/ext/batik-anim.jar"/>
+        <file crc="3603503027" name="modules/ext/batik-awt-util.jar"/>
+        <file crc="388175848" name="modules/ext/batik-bridge.jar"/>
+        <file crc="3760798800" name="modules/ext/batik-css.jar"/>
+        <file crc="1097793942" name="modules/ext/batik-dom.jar"/>
+        <file crc="3224896028" name="modules/ext/batik-ext.jar"/>
+        <file crc="130819665" name="modules/ext/batik-gvt.jar"/>
+        <file crc="3313156350" name="modules/ext/batik-parser.jar"/>
+        <file crc="1024944716" name="modules/ext/batik-script.jar"/>
+        <file crc="1109372578" name="modules/ext/batik-svg-dom.jar"/>
+        <file crc="1566531896" name="modules/ext/batik-svggen.jar"/>
+        <file crc="1061828400" name="modules/ext/batik-util.jar"/>
+        <file crc="3770951844" name="modules/ext/batik-xml.jar"/>
         <file crc="4180749261" name="modules/ext/bsh-2.0b4.jar"/>
         <file crc="695153507" name="modules/ext/cglib-2.1.jar"/>
         <file crc="681046774" name="modules/ext/cincom-jr-xmla.jar"/>
@@ -28,14 +41,14 @@
         <file crc="814369756" name="modules/ext/groovy-all-1.0.jar"/>
         <file crc="360201894" name="modules/ext/hibernate3.jar"/>
         <file crc="3833901688" name="modules/ext/hsqldb-1.7.1.jar"/>
-        <file crc="1854174290" name="modules/ext/itext-1.3.1.jar"/>
+        <file crc="3460807796" name="modules/ext/iText-2.1.0.jar"/>
         <file crc="1545701264" name="modules/ext/jakarta-bcel-20050813.jar"/>
-        <file crc="4151948180" name="modules/ext/jasperreports-3.0.1.jar"/>
+        <file crc="1692902910" name="modules/ext/jasperreports-3.0.1.jar"/>
         <file crc="4248097675" name="modules/ext/javacup.jar"/>
         <file crc="409387958" name="modules/ext/jaxen-1.1.1.jar"/>
         <file crc="69686959" name="modules/ext/jcommon-1.0.0.jar"/>
         <file crc="2659592228" name="modules/ext/jdt-compiler-3.1.1.jar"/>
-        <file crc="1737573325" name="modules/ext/jfreechart-1.0.0.jar"/>
+        <file crc="2113030579" name="modules/ext/jfreechart-1.0.3.jar"/>
         <file crc="3870944862" name="modules/ext/jpa.jar"/>
         <file crc="190545487" name="modules/ext/jta.jar"/>
         <file crc="3654587812" name="modules/ext/jxl-2.6.jar"/>
@@ -43,7 +56,7 @@
         <file crc="353568572" name="modules/ext/mondrian-2.3.2.8944.jar"/>
         <file crc="288180244" name="modules/ext/png-encoder-1.5.jar"/>
         <file crc="3065545554" name="modules/ext/poi-3.0.1-FINAL-20070705.jar"/>
-        <file crc="779064023" name="modules/ext/rex-20070125.jar"/>
+        <file crc="124986839" name="modules/ext/rex-20080421.jar"/>
         <file crc="2898765198" name="modules/ext/saaj-api-1.3.jar"/>
         <file crc="2214162376" name="modules/ext/servlet.jar"/>
         <file crc="995093325" name="modules/ext/spring-2.0-m2.jar"/>
@@ -51,7 +64,7 @@
         <file crc="2232358648" name="modules/ext/spring-hibernate3-2.0-m2.jar"/>
         <file crc="1158755212" name="modules/ext/sqleonardo-2007.03.jar"/>
         <file crc="1581659028" name="modules/ext/swingx-2007_10_07.jar"/>
-        <file crc="2826085111" name="modules/ext/xercesImpl.jar"/>
-        <file crc="3187697746" name="modules/ext/xml-apis.jar"/>
+        <file crc="3886415275" name="modules/ext/xercesImpl.jar"/>
+        <file crc="2669779638" name="modules/ext/xml-apis.jar"/>
     </module_version>
 </module>

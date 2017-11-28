@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.crosstab.wizard;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
@@ -24,8 +25,8 @@ public final class CrosstabVisualPanel2 extends JPanel {
         jPanelGroup1.add(groupPanel1, BorderLayout.CENTER);
         jPanelGroup2.add(groupPanel2, BorderLayout.CENTER);
         
-        groupPanel1.setTitle("Row Group 1");
-        groupPanel2.setTitle("Row Group 2");
+        groupPanel1.setTitle(I18n.getString("CrosstabVisualPanel2.Panel.RowGroup1"));
+        groupPanel2.setTitle(I18n.getString("CrosstabVisualPanel2.Panel.RowGroup2"));
     }
 
     public void setDataset(JRDesignDataset dataset)
@@ -39,7 +40,7 @@ public final class CrosstabVisualPanel2 extends JPanel {
     
     @Override
     public String getName() {
-        return "Rows";
+        return I18n.getString("CrosstabVisualPanel2.Label.Rows");
     }
 
     public JRDesignCrosstabRowGroup getRowGroup1()
@@ -77,7 +78,7 @@ public final class CrosstabVisualPanel2 extends JPanel {
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/wizard_rows.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, "Define row groups");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, I18n.getString("CrosstabVisualPanel2.Label.DefineRowGroups")); // NOI18N
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabel1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 

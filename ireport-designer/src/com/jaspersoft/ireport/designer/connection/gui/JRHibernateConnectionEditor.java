@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.connection.gui;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.connection.JRHibernateConnection;
@@ -23,7 +24,7 @@ public class JRHibernateConnectionEditor extends javax.swing.JPanel implements I
     public JRHibernateConnectionEditor() {
         initComponents();
         //applyI18n();
-        jLabel1.setText("<html>" + "Press the test button.\n\niReport will look in the classpath for a valid hibernate configuration.");
+        jLabel1.setText("<html>" + I18n.getString("JRHibernateConnectionEditor.Label.Info"));
     }
     
     /** This method is called from within the constructor to

@@ -32,7 +32,7 @@
 
 package com.jaspersoft.ireport.designer.tools;
 
-
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.Tag;
@@ -88,6 +88,8 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         // Barcode Evaluation Time...
         jComboBoxLinkTarget.addItem( new Tag( new Byte( JRHyperlink.HYPERLINK_TARGET_SELF ), "Self" ));
         jComboBoxLinkTarget.addItem(new Tag( new Byte( JRHyperlink.HYPERLINK_TARGET_BLANK ), "Blank" ));
+        jComboBoxLinkTarget.addItem(new Tag( new Byte( JRHyperlink.HYPERLINK_TARGET_TOP ), "Top" ));
+        jComboBoxLinkTarget.addItem(new Tag( new Byte( JRHyperlink.HYPERLINK_TARGET_PARENT ), "Parent" ));
         
         this.jRTextExpressionAreaAnchor.getExpressionEditorPane().getDocument().addDocumentListener( new javax.swing.event.DocumentListener() {
             public void changedUpdate(javax.swing.event.DocumentEvent evt) {
@@ -173,6 +175,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
     
     public void setExpressionContext( ExpressionContext ec )
     {
+        jRTextExpressionAreaAnchor.setExpressionContext(ec);
         jRTextExpressionAreaReference.setExpressionContext(ec);
         jRTextExpressionAreaAnchor.setExpressionContext(ec);
         jRTextExpressionAreaPage.setExpressionContext(ec);
@@ -244,8 +247,8 @@ public class HyperlinkPanel extends javax.swing.JPanel {
                 this.jRTextExpressionAreaReference.setEnabled(true);
                 this.jLabelReference.setEnabled(true);
 
-                jTabbedPane2.addTab("Reference",this.jPanelReference);
-                jTabbedPane2.addTab("Link parameters", this.jPanelLinkParams);
+                jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Panel.Reference"),this.jPanelReference);
+                jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Link"), this.jPanelLinkParams);
             } else if (linkType.equals("LocalAnchor")) {
                 this.jRTextExpressionAreaAnchor.setEnabled(true);
                 this.jLabelAnchor.setEnabled(true);
@@ -256,9 +259,9 @@ public class HyperlinkPanel extends javax.swing.JPanel {
 
                 //jTabbedPane2.addTab(I18n.getString("sectionItemHyperlinkPanel.tab.Reference","Reference"),this.jPanelReference);
                 
-                jTabbedPane2.addTab("Anchor", this.jPanelAnchor);
+                jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Anchor"), this.jPanelAnchor);
                 //jTabbedPane2.addTab(I18n.getString("sectionItemHyperlinkPanel.tab.Page","Page"),this.jPanelPage);
-                jTabbedPane2.addTab("Link parameters", this.jPanelLinkParams);
+                jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.LinkParam"), this.jPanelLinkParams);
             } else if (linkType.equals("LocalPage")) {
                 this.jRTextExpressionAreaAnchor.setEnabled(false);
                 this.jLabelAnchor.setEnabled(false);
@@ -269,8 +272,8 @@ public class HyperlinkPanel extends javax.swing.JPanel {
 
                 //jTabbedPane2.addTab(I18n.getString("sectionItemHyperlinkPanel.tab.Reference","Reference"),this.jPanelReference);
                 //jTabbedPane2.addTab(I18n.getString("sectionItemHyperlinkPanel.tab.Anchor","Anchor"), this.jPanelAnchor);
-                jTabbedPane2.addTab("Page",this.jPanelPage);
-                jTabbedPane2.addTab("Link parameters", this.jPanelLinkParams);
+                jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Page"),this.jPanelPage);
+                jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.LinkParam"), this.jPanelLinkParams);
             }
             else if (linkType.equals("RemoteAnchor")) {
                 this.jRTextExpressionAreaAnchor.setEnabled(true);
@@ -280,10 +283,10 @@ public class HyperlinkPanel extends javax.swing.JPanel {
                 this.jRTextExpressionAreaReference.setEnabled(true);
                 this.jLabelReference.setEnabled(true);
 
-                jTabbedPane2.addTab("Reference",this.jPanelReference);
-                jTabbedPane2.addTab("Anchor", this.jPanelAnchor);
+                jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Panel.Reference"),this.jPanelReference);
+                jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Anchor"), this.jPanelAnchor);
                 //jTabbedPane2.addTab(I18n.getString("sectionItemHyperlinkPanel.tab.Page","Page"),this.jPanelPage);
-                jTabbedPane2.addTab("Link parameters", this.jPanelLinkParams);
+                jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.LinkParam"), this.jPanelLinkParams);
             } else if (linkType.equals("RemotePage")) {
                 this.jRTextExpressionAreaAnchor.setEnabled(false);
                 this.jLabelAnchor.setEnabled(false);
@@ -292,11 +295,11 @@ public class HyperlinkPanel extends javax.swing.JPanel {
                 this.jRTextExpressionAreaReference.setEnabled(true);
                 this.jLabelReference.setEnabled(true);
 
-                jTabbedPane2.addTab("Reference",this.jPanelReference);
+                jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Panel.Reference"),this.jPanelReference);
                 //jTabbedPane2.addTab(I18n.getString("sectionItemHyperlinkPanel.tab.Anchor","Anchor"), this.jPanelAnchor);
                 
-                jTabbedPane2.addTab("Page",this.jPanelPage);
-                jTabbedPane2.addTab("Link parameters", this.jPanelLinkParams);
+                jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Page"),this.jPanelPage);
+                jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.LinkParam"), this.jPanelLinkParams);
             } else {
                 this.jRTextExpressionAreaAnchor.setEnabled(true);
                 this.jLabelAnchor.setEnabled(true);
@@ -305,13 +308,13 @@ public class HyperlinkPanel extends javax.swing.JPanel {
                 this.jRTextExpressionAreaReference.setEnabled(true);
                 this.jLabelReference.setEnabled(true);
 
-                jTabbedPane2.addTab("Reference",this.jPanelReference);
-                jTabbedPane2.addTab("Anchor", this.jPanelAnchor);
-                jTabbedPane2.addTab("Page",this.jPanelPage);
-                jTabbedPane2.addTab("Link parameters", this.jPanelLinkParams);
+                jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Panel.Reference"),this.jPanelReference);
+                jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Anchor"), this.jPanelAnchor);
+                jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Page"),this.jPanelPage);
+                jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.LinkParam"), this.jPanelLinkParams);
             }
             
-            jTabbedPane2.addTab("Tooltip", this.jPanelTooltip);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Tooltip"), this.jPanelTooltip);
             
             // Adding parameters...  
             java.util.Iterator enum_parameters = getParametersList().iterator();
@@ -406,7 +409,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         jPanelAnchorName.setPreferredSize(new java.awt.Dimension(426, 116));
         jPanelAnchorName.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("Anchor Name Expression");
+        jLabel1.setText(I18n.getString("HyperlinkPanel.Label.AnchExpr")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -426,7 +429,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jLabel2.setText("Bookmark Level");
+        jLabel2.setText(I18n.getString("HyperlinkPanel.Label.BookLev")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
@@ -463,7 +466,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         add(jPanelAnchorName, gridBagConstraints);
 
         jLabelTarget.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabelTarget.setText("Hyperlink target");
+        jLabelTarget.setText(I18n.getString("HyperlinkPanel.Label.HyperTarg")); // NOI18N
         jLabelTarget.setMaximumSize(new java.awt.Dimension(200, 25));
         jLabelTarget.setMinimumSize(new java.awt.Dimension(100, 20));
         jLabelTarget.setPreferredSize(new java.awt.Dimension(100, 20));
@@ -492,7 +495,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         add(jComboBoxLinkTarget, gridBagConstraints);
 
         jLabel36.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel36.setText("Hyperlink type");
+        jLabel36.setText(I18n.getString("HyperlinkPanel.Label.HypType")); // NOI18N
         jLabel36.setMaximumSize(new java.awt.Dimension(200, 25));
         jLabel36.setMinimumSize(new java.awt.Dimension(100, 20));
         jLabel36.setPreferredSize(new java.awt.Dimension(100, 20));
@@ -528,7 +531,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         jPanelReference.setLayout(new java.awt.GridBagLayout());
 
         jLabelReference.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabelReference.setText("Hyperlink Reference Expression");
+        jLabelReference.setText(I18n.getString("HyperlinkPanel.Label.HypRefExp")); // NOI18N
         jLabelReference.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -554,7 +557,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         jPanelAnchor.setLayout(new java.awt.GridBagLayout());
 
         jLabelAnchor.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabelAnchor.setText("Hyperlink Anchor Expression");
+        jLabelAnchor.setText(I18n.getString("HyperlinkPanel.Label.HypAnchExp")); // NOI18N
         jLabelAnchor.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -581,7 +584,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         jPanelPage.setLayout(new java.awt.GridBagLayout());
 
         jLabelPage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabelPage.setText("Hyperlink Page Expression");
+        jLabelPage.setText(I18n.getString("HyperlinkPanel.Label.hypPagExp")); // NOI18N
         jLabelPage.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -636,7 +639,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
 
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        jButtonAddLinkParameter.setText("Add");
+        jButtonAddLinkParameter.setText(I18n.getString("Global.Button.Add")); // NOI18N
         jButtonAddLinkParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddLinkParameterActionPerformed(evt);
@@ -649,7 +652,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 6, 0);
         jPanel3.add(jButtonAddLinkParameter, gridBagConstraints);
 
-        jButtonModLinkParameter.setText("Modify");
+        jButtonModLinkParameter.setText(I18n.getString("Global.Button.Modify")); // NOI18N
         jButtonModLinkParameter.setEnabled(false);
         jButtonModLinkParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -663,7 +666,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 6, 6, 0);
         jPanel3.add(jButtonModLinkParameter, gridBagConstraints);
 
-        jButtonRemLinkParameter.setText("Remove");
+        jButtonRemLinkParameter.setText(I18n.getString("Global.Button.Remove")); // NOI18N
         jButtonRemLinkParameter.setEnabled(false);
         jButtonRemLinkParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -690,7 +693,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         jPanelTooltip.setLayout(new java.awt.GridBagLayout());
 
         jLabelReference1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabelReference1.setText("Tooltip Expression");
+        jLabelReference1.setText(I18n.getString("HyperlinkPanel.Pane.TooltipExp")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -728,7 +731,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
 
         jPanelClose.setLayout(new java.awt.GridBagLayout());
 
-        jButtonClose.setText("Close");
+        jButtonClose.setText(I18n.getString("Global.Button.Close")); // NOI18N
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCloseActionPerformed(evt);
@@ -874,10 +877,10 @@ public class HyperlinkPanel extends javax.swing.JPanel {
             this.jRTextExpressionAreaReference.setEnabled(true);
             this.jLabelReference.setEnabled(true);
             
-            jTabbedPane2.addTab("Reference", this.jPanelReference);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Panel.Reference"), this.jPanelReference);
             //this.jPanelAnchor.setVisible(false);
             //this.jPanelPage.setVisible(false);
-            jTabbedPane2.addTab("Link parameters", this.jPanelLinkParams);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.LinkParam"), this.jPanelLinkParams);
             
             
         } else if (linkType.equals("LocalAnchor")) {
@@ -897,9 +900,9 @@ public class HyperlinkPanel extends javax.swing.JPanel {
             this.jLabelReference.setEnabled(false);
             
             //jTabbedPane2.addTab(I18n.getString("sectionItemHyperlinkPanel.tab.Reference","Reference"),this.jPanelReference);
-            jTabbedPane2.addTab("Anchor", this.jPanelAnchor);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Anchor"), this.jPanelAnchor);
             //jTabbedPane2.addTab(I18n.getString("sectionItemHyperlinkPanel.tab.Page","Page"),this.jPanelPage);
-            jTabbedPane2.addTab("Link parameters", this.jPanelLinkParams);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.LinkParam"), this.jPanelLinkParams);
             
         } else if (linkType.equals("LocalPage")) {
             // Set to blank all link fields...
@@ -919,8 +922,8 @@ public class HyperlinkPanel extends javax.swing.JPanel {
             
             //jTabbedPane2.addTab(I18n.getString("sectionItemHyperlinkPanel.tab.Reference","Reference"),this.jPanelReference);
             //jTabbedPane2.addTab(I18n.getString("sectionItemHyperlinkPanel.tab.Anchor","Anchor"), this.jPanelAnchor);
-            jTabbedPane2.addTab("Page",this.jPanelPage);
-            jTabbedPane2.addTab("Link parameters", this.jPanelLinkParams);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Page"),this.jPanelPage);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.LinkParam"), this.jPanelLinkParams);
         }
         
         else if (linkType.equals("RemoteAnchor")) {
@@ -939,10 +942,10 @@ public class HyperlinkPanel extends javax.swing.JPanel {
             this.jRTextExpressionAreaReference.setEnabled(true);
             this.jLabelReference.setEnabled(true);
             
-            jTabbedPane2.addTab("Reference",this.jPanelReference);
-            jTabbedPane2.addTab("Anchor", this.jPanelAnchor);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Panel.Reference"),this.jPanelReference);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Anchor"), this.jPanelAnchor);
             //jTabbedPane2.addTab(I18n.getString("sectionItemHyperlinkPanel.tab.Page","Page"),this.jPanelPage);
-            jTabbedPane2.addTab("Link parameters", this.jPanelLinkParams);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.LinkParam"), this.jPanelLinkParams);
         } else if (linkType.equals("RemotePage")) {
             // Set to blank all link fields...
             
@@ -960,10 +963,10 @@ public class HyperlinkPanel extends javax.swing.JPanel {
             this.jRTextExpressionAreaReference.setEnabled(true);
             this.jLabelReference.setEnabled(true);
             
-            jTabbedPane2.addTab("Reference",this.jPanelReference);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Panel.Reference"),this.jPanelReference);
             //jTabbedPane2.addTab(I18n.getString("sectionItemHyperlinkPanel.tab.Anchor","Anchor"), this.jPanelAnchor);
-            jTabbedPane2.addTab("Page",this.jPanelPage);
-            jTabbedPane2.addTab("Link parameters", this.jPanelLinkParams);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Page"),this.jPanelPage);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.LinkParam"), this.jPanelLinkParams);
         } else {
             // Set to blank all link fields...
             
@@ -981,13 +984,13 @@ public class HyperlinkPanel extends javax.swing.JPanel {
             this.jRTextExpressionAreaReference.setEnabled(true);
             this.jLabelReference.setEnabled(true);
             
-            jTabbedPane2.addTab("Reference",this.jPanelReference);
-            jTabbedPane2.addTab("Anchor", this.jPanelAnchor);
-            jTabbedPane2.addTab("Page",this.jPanelPage);
-            jTabbedPane2.addTab("Link parameters",this.jPanelLinkParams);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Panel.Reference"),this.jPanelReference);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Anchor"), this.jPanelAnchor);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Page"),this.jPanelPage);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.LinkParam"),this.jPanelLinkParams);
         }
         
-        jTabbedPane2.addTab("Tooltip", this.jPanelTooltip);
+        jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Tooltip"), this.jPanelTooltip);
     }//GEN-LAST:event_jComboBoxLinkTypeActionPerformed1
 
     private void jComboBoxLinkTargetActionPerformed1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLinkTargetActionPerformed1
@@ -1179,15 +1182,13 @@ public class HyperlinkPanel extends javax.swing.JPanel {
 
         jPanelClose.setVisible(true);
         
-        Window w = (parent != null) ? SwingUtilities.windowForComponent(parent) : null;
-        if (w instanceof Frame) this.dialog = new JDialog((Frame)w, true);
-        else this.dialog = new JDialog((Dialog)w, true);
+        this.dialog = new JDialog(Misc.getMainFrame(), true);
         
         dialog.getContentPane().add(this);
         dialog.pack();
         dialog.setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE);
         dialog.setLocationRelativeTo(null);
-        dialog.setTitle("Hyperlink");
+        dialog.setTitle(I18n.getString("HyperlinkPanel.Dialog.Title"));
         dialog.setVisible(true);
     }
  

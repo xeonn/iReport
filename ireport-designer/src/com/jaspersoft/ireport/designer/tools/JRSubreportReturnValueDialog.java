@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.tools;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.utils.Misc;
@@ -86,8 +87,8 @@ public class JRSubreportReturnValueDialog
             }
         };
        
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
 
         //to make the default button ...
@@ -99,17 +100,17 @@ public class JRSubreportReturnValueDialog
      */
     public void setTypes()
     {
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_NOTHING ),"Nothing"));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_COUNT ), "Count"));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_DISTINCT_COUNT ), "Distinct count"));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_SUM ), "Sum"));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_AVERAGE ), "Average"));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_LOWEST ), "Lowest"));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_HIGHEST ), "Highest"));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_STANDARD_DEVIATION ), "Standard deviation"));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_VARIANCE ), "Variance"));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_SYSTEM ), "System"));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_FIRST ), "First"));
+        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_NOTHING ),I18n.getString("JRSubreportReturnValueDialog.ComboBox.Nothing")));
+        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_COUNT ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.Count")));
+        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_DISTINCT_COUNT ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.DistinctCount")));
+        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_SUM ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.Sum")));
+        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_AVERAGE ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.Average")));
+        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_LOWEST ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.Lowest")));
+        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_HIGHEST ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.Highest")));
+        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_STANDARD_DEVIATION ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.StandardDeviation")));
+        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_VARIANCE ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.Variance")));
+        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_SYSTEM ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.System")));
+        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_FIRST ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.First")));
     }
 
     /**
@@ -145,7 +146,7 @@ public class JRSubreportReturnValueDialog
      */
 
 
-    // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
@@ -161,17 +162,17 @@ public class JRSubreportReturnValueDialog
         jButtonCancel = new javax.swing.JButton();
         jComboBoxSubreportVariable = new javax.swing.JComboBox();
 
-        getContentPane().setLayout(new java.awt.GridBagLayout());
-
-        setTitle("Add/modify variable");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/jaspersoft/ireport/locale/Bundle"); // NOI18N
+        setTitle(bundle.getString("JRSubreportReturnValueDialog.Title.AddModVariable")); // NOI18N
         setModal(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
             }
         });
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("Subreport variable");
+        jLabel1.setText(bundle.getString("JRSubreportReturnValueDialog.Label.SubreportVariable")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -179,7 +180,7 @@ public class JRSubreportReturnValueDialog
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         getContentPane().add(jLabel1, gridBagConstraints);
 
-        jLabel2.setText("Calculation type");
+        jLabel2.setText(bundle.getString("JRSubreportReturnValueDialog.Label.CalculationType")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -187,14 +188,13 @@ public class JRSubreportReturnValueDialog
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         getContentPane().add(jLabel2, gridBagConstraints);
 
-        jLabel5.setText("Local destination variable");
+        jLabel5.setText(bundle.getString("JRSubreportReturnValueDialog.Label.LocalDestinationVariable")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         getContentPane().add(jLabel5, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -203,7 +203,6 @@ public class JRSubreportReturnValueDialog
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         getContentPane().add(jComboBoxCalculationType, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -213,14 +212,13 @@ public class JRSubreportReturnValueDialog
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         getContentPane().add(jComboBoxVariable, gridBagConstraints);
 
-        jLabel8.setText("Custom Incrementer Factory Class");
+        jLabel8.setText(bundle.getString("JRSubreportReturnValueDialog.Label.CustomIncrementerFactoryClass")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         getContentPane().add(jLabel8, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
@@ -234,23 +232,21 @@ public class JRSubreportReturnValueDialog
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         jButtonOK.setMnemonic('o');
-        jButtonOK.setText("OK");
+        jButtonOK.setText(bundle.getString("Global.Button.Ok")); // NOI18N
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOKActionPerformed(evt);
             }
         });
-
         jPanel1.add(jButtonOK);
 
-        jButtonCancel.setText("Cancel");
         jButtonCancel.setMnemonic('c');
+        jButtonCancel.setText(bundle.getString("Global.Button.Cancel")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
             }
         });
-
         jPanel1.add(jButtonCancel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -289,8 +285,8 @@ public class JRSubreportReturnValueDialog
         if ((this.jComboBoxSubreportVariable.getSelectedItem()+"").trim().length() <= 0)
         {
             javax.swing.JOptionPane.showMessageDialog(this, 
-                    "Please insert a valid subreport variable name!",
-                    "Invalid variable!",
+                    I18n.getString("JRSubreportReturnValueDialog.Message.Warning"),
+                    I18n.getString("JRSubreportReturnValueDialog.Message.Error"),
                     javax.swing.JOptionPane.WARNING_MESSAGE);
 
             return;
@@ -303,8 +299,8 @@ public class JRSubreportReturnValueDialog
         if (this.jComboBoxVariable.getSelectedItem() == null)
         {
             javax.swing.JOptionPane.showMessageDialog(this, 
-                    "Please insert a valid local variable! If no variables are available, please close this dialog and create one.",
-                    "Invalid variable!",
+                    I18n.getString("JRSubreportReturnValueDialog.Message.Warning2"),
+                    I18n.getString("JRSubreportReturnValueDialog.Message.Error2"),
                     javax.swing.JOptionPane.WARNING_MESSAGE);
 
             return;
@@ -314,8 +310,14 @@ public class JRSubreportReturnValueDialog
         Object t = this.jComboBoxCalculationType.getSelectedItem();
         if (t != null && t instanceof Tag) subreportReturnValue.setCalculation(  (Byte)((Tag)t).getValue() );
         
-        subreportReturnValue.setIncrementerFactoryClassName( this.jTextFieldNameIncrementerFactoryClass.getText());
-        
+        if (this.jTextFieldNameIncrementerFactoryClass.getText().length() == 0)
+        {
+            subreportReturnValue.setIncrementerFactoryClassName(null);
+        }
+        else
+        {
+            subreportReturnValue.setIncrementerFactoryClassName( this.jTextFieldNameIncrementerFactoryClass.getText());
+        }
         setVisible(false);
         this.setDialogResult(javax.swing.JOptionPane.OK_OPTION);
         dispose();

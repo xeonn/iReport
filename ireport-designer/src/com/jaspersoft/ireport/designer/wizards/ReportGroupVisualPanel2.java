@@ -6,6 +6,7 @@
 package com.jaspersoft.ireport.designer.wizards;
 
 import javax.swing.JPanel;
+import com.jaspersoft.ireport.locale.I18n;
 
 public final class ReportGroupVisualPanel2 extends JPanel {
 
@@ -23,7 +24,7 @@ public final class ReportGroupVisualPanel2 extends JPanel {
 
     @Override
     public String getName() {
-        return "Details";
+        return I18n.getString("ReportGroupVisualPanel2.Name.Details");
     }
 
     /** This method is called from within the constructor to
@@ -41,7 +42,7 @@ public final class ReportGroupVisualPanel2 extends JPanel {
         setLayout(new java.awt.GridBagLayout());
 
         jCheckBox1.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, "Add the group header");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, I18n.getString("ReportGroupVisualPanel2.CheckBox.GroupHeader")); // NOI18N
         jCheckBox1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         jCheckBox1.setMargin(new java.awt.Insets(0, 0, 0, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -51,7 +52,7 @@ public final class ReportGroupVisualPanel2 extends JPanel {
         add(jCheckBox1, gridBagConstraints);
 
         jCheckBox2.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox2, "Add the group footer");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox2, I18n.getString("ReportGroupVisualPanel2.CheckBox.GroupFooter")); // NOI18N
         jCheckBox2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         jCheckBox2.setMargin(new java.awt.Insets(0, 0, 0, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();

@@ -6,13 +6,13 @@
 
 package com.jaspersoft.ireport.designer.connection.gui;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import java.awt.Dialog;
 import java.awt.Frame;
-import java.awt.Window;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -86,8 +86,8 @@ public class ConnectionDialog extends javax.swing.JDialog {
             }
         };
        
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
 
         
@@ -111,7 +111,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
         this.jTextFieldName.setText( iReportConnection.getName());
         this.jLabelTitle.setText( conn.getDescription() );
         
-        jButtonSave.setText("Save");
+        jButtonSave.setText(I18n.getString("Global.Button.Save"));
         jButtonTest.setEnabled(true);
         this.setStep(1);
         jPanelRoot.removeAll();
@@ -162,7 +162,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
 
         jPanelModifyDatasource.setLayout(new java.awt.GridBagLayout());
 
-        jLabelName.setText("Name");
+        jLabelName.setText(I18n.getString("ConnectionDialog.Label.Name")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -198,7 +198,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
         jLabelTitle.setBackground(new java.awt.Color(255, 255, 255));
         jLabelTitle.setFont(new java.awt.Font("Dialog", 1, 12));
         jLabelTitle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/connection/gui/datasource.png"))); // NOI18N
-        jLabelTitle.setText("<html>Datasource");
+        jLabelTitle.setText(I18n.getString("ConnectionDialog.Label.Datasource")); // NOI18N
         jLabelTitle.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jLabelTitle.setOpaque(true);
         jLabelTitle.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -217,7 +217,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
 
         jPanelNewDatasource.setLayout(new java.awt.GridBagLayout());
 
-        jLabel2.setText("Select the datasource type");
+        jLabel2.setText(I18n.getString("ConnectionDialog.Label.DatasourceType")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -264,7 +264,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
         jPanelButtons.setPreferredSize(new java.awt.Dimension(50, 30));
         jPanelButtons.setLayout(new java.awt.GridBagLayout());
 
-        jButtonTest.setText("Test");
+        jButtonTest.setText(I18n.getString("Global.Button.Test")); // NOI18N
         jButtonTest.setEnabled(false);
         jButtonTest.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -277,7 +277,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         jPanelButtons.add(jButtonTest, gridBagConstraints);
 
-        jButtonSave.setText("Next >");
+        jButtonSave.setText(I18n.getString("Global.Button.Next")); // NOI18N
         jButtonSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSaveActionPerformed(evt);
@@ -288,7 +288,7 @@ public class ConnectionDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         jPanelButtons.add(jButtonSave, gridBagConstraints);
 
-        jButtonCancel.setText("Cancel");
+        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -343,8 +343,8 @@ public class ConnectionDialog extends javax.swing.JDialog {
         {
             if (this.jTextFieldName.getText().trim().length() == 0) {
                 javax.swing.JOptionPane.showMessageDialog(this,
-                    "Please insert a valid connection name!", //"messages.connectionDialog.invalidName"
-                    "Invalid connection name!", //"messages.connectionDialog.invalidNameCaption"
+                    I18n.getString("ConnectionDialog.Message.ValidConnName"), //"messages.connectionDialog.invalidName"
+                    I18n.getString("ConnectionDialog.Message.NoConnection"), //"messages.connectionDialog.invalidNameCaption"
                     javax.swing.JOptionPane.WARNING_MESSAGE );
                 return;
             }

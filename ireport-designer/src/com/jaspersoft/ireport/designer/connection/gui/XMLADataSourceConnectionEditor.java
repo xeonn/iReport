@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.connection.gui;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.connection.JRXMLADataSourceConnection;
@@ -62,7 +63,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
 
         jPanelXMLA.setLayout(new java.awt.GridBagLayout());
 
-        jLabelXMLAUrl.setText("Url of XML/A server");
+        jLabelXMLAUrl.setText(I18n.getString("XMLADataSourceConnectionEditor.Label.UrlXML")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 2;
@@ -82,7 +83,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         gridBagConstraints.insets = new java.awt.Insets(2, 4, 4, 4);
         jPanelXMLA.add(jTextFieldXMLAUrl, gridBagConstraints);
 
-        jButtonGetXMLAMetadata.setText("Get metadata");
+        jButtonGetXMLAMetadata.setText(I18n.getString("XMLADataSourceConnectionEditor.Button.Get_metadata")); // NOI18N
         jButtonGetXMLAMetadata.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonGetXMLAMetadataActionPerformed(evt);
@@ -95,7 +96,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanelXMLA.add(jButtonGetXMLAMetadata, gridBagConstraints);
 
-        jLabelXMLADatasource.setText("Datasource");
+        jLabelXMLADatasource.setText(I18n.getString("XMLADataSourceConnectionEditor.Label.Datasource")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -111,7 +112,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanelXMLA.add(jComboBoxXMLADatasource, gridBagConstraints);
 
-        jLabelXMLACatalog.setText("Catalog");
+        jLabelXMLACatalog.setText(I18n.getString("XMLADataSourceConnectionEditor.Label.Catalog")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -134,7 +135,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanelXMLA.add(jSeparator8, gridBagConstraints);
 
-        jLabelXMLACube.setText("Cube");
+        jLabelXMLACube.setText(I18n.getString("XMLADataSourceConnectionEditor.Label.Cube")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -160,7 +161,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
 
         jPanel16.setLayout(new java.awt.GridBagLayout());
 
-        jLabel26.setText("Username");
+        jLabel26.setText(I18n.getString("Global.Label.Username")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -168,7 +169,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
         jPanel16.add(jLabel26, gridBagConstraints);
 
-        jLabel27.setText("Password");
+        jLabel27.setText(I18n.getString("Global.Label.Password")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -190,7 +191,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
         jPanel16.add(jTextFieldPassword1, gridBagConstraints);
 
-        jCheckBoxSavePassword1.setText("Save password");
+        jCheckBoxSavePassword1.setText(I18n.getString("Global.CheckBox.Save_password")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
@@ -199,7 +200,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         jPanel16.add(jCheckBoxSavePassword1, gridBagConstraints);
 
         jLabelAttention.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/connection/gui/warning.png"))); // NOI18N
-        jLabelAttention.setText("<html>ATTENTION! Passwords are stored in clear text. If you dont specify a password now, iReport will ask you for one only when required and will not save it.");
+        jLabelAttention.setText(I18n.getString("XMLADataSourceConnectionEditor.Label.Warning")); // NOI18N
         jLabelAttention.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -289,9 +290,9 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         if (this.jTextFieldXMLAUrl.getText().trim().length() == 0) {
             javax.swing.JOptionPane.showMessageDialog(this,
                     //I18n.getString("messages.connectionDialog.xmla.invalidURL",
-                    "Please specify a valid server URL",
+                    I18n.getString("XMLADataSourceConnectionEditor.Label.Url"),
                     //I18n.getString("messages.connectionDialog.xmla.invalidProperty",
-                    "Invalid property!",javax.swing.JOptionPane.WARNING_MESSAGE );
+                    I18n.getString("XMLADataSourceConnectionEditor.Label.InvalidProperty"),javax.swing.JOptionPane.WARNING_MESSAGE );
             return null;
         }
 
@@ -300,9 +301,9 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         if (this.jComboBoxXMLADatasource.getSelectedIndex() < 0) {
             javax.swing.JOptionPane.showMessageDialog(this,
                     //I18n.getString("messages.connectionDialog.xmla.invalidDatasource",
-                    "Please specify a valid Datasource",
+                    I18n.getString("XMLADataSourceConnectionEditor.Label.Datasource"),
                     //I18n.getString("messages.connectionDialog.setJDBCConnectionCaption",
-                    "Invalid JDBC connection!",javax.swing.JOptionPane.WARNING_MESSAGE );
+                    I18n.getString("XMLADataSourceConnectionEditor.Label.NoJDBC"),javax.swing.JOptionPane.WARNING_MESSAGE );
             return null;
         }
 
@@ -312,9 +313,9 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         if (this.jComboBoxXMLACatalog.getSelectedIndex() < 0) {
             javax.swing.JOptionPane.showMessageDialog(this,
                     //I18n.getString("messages.connectionDialog.xmla.invalidCatalog",
-                    "Please specify a valid Catalog",
+                    I18n.getString("XMLADataSourceConnectionEditor.Message.Catalog"),
                     //I18n.getString("messages.connectionDialog.setJDBCConnectionCaption",
-                    "Invalid JDBC connection!",javax.swing.JOptionPane.WARNING_MESSAGE );
+                    I18n.getString("XMLADataSourceConnectionEditor.Label.NoJDBC"),javax.swing.JOptionPane.WARNING_MESSAGE );
             return null;
         }
 
@@ -324,9 +325,9 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         if (this.jComboBoxXMLACube.getSelectedIndex() < 0) {
             javax.swing.JOptionPane.showMessageDialog(this,
                     //I18n.getString("messages.connectionDialog.xmla.invalidCube",
-                    "Please specify a valid Cube",
+                    I18n.getString("XMLADataSourceConnectionEditor.Message.Cube"),
                     //I18n.getString("messages.connectionDialog.setJDBCConnectionCaption",
-                    "Invalid JDBC connection!",javax.swing.JOptionPane.WARNING_MESSAGE );
+                    I18n.getString("XMLADataSourceConnectionEditor.Label.NoJDBC"),javax.swing.JOptionPane.WARNING_MESSAGE );
             return null;
         }
 
@@ -390,7 +391,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
             if (smd.isValidUrl() == false) {
                 JOptionPane.showMessageDialog(this,
                         //I18n.getString("messages.connectionDialog.xmla.invalidUrl",
-                        "Unable to connect to XMLA server.","",JOptionPane.INFORMATION_MESSAGE);
+                        I18n.getString("XMLADataSourceConnectionEditor.Message.NoXMLA"),"",JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
 
@@ -402,7 +403,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
             if (dste == null || dste.length == 0) {
                 JOptionPane.showMessageDialog(this,
                         //I18n.getString("messages.connectionDialog.xmla.noDatasource",
-                        "No Datasources found.","",JOptionPane.INFORMATION_MESSAGE);
+                        I18n.getString("XMLADataSourceConnectionEditor.Message.NoDatasources"),"",JOptionPane.INFORMATION_MESSAGE);
                 return;
             } 
             //filling catalogs
@@ -423,7 +424,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
             if (catalogs == null || catalogs.length == 0) {
                 JOptionPane.showMessageDialog(this,
                         //I18n.getString("messages.connectionDialog.xmla.noCatalogs",
-                        "No catalogs found for selected datasource.","",JOptionPane.INFORMATION_MESSAGE);
+                        I18n.getString("XMLADataSourceConnectionEditor.Message.NoCatalogs"),"",JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
             this.jComboBoxXMLACatalog.removeAllItems();
@@ -470,7 +471,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         if (smd.isValidUrl() == false) {
             JOptionPane.showMessageDialog(this,
                     //I18n.getString("messages.connectionDialog.xmla.invalidUrl",
-                    "Unable to connect to XMLA server.","",JOptionPane.INFORMATION_MESSAGE);
+                    I18n.getString("XMLADataSourceConnectionEditor.Message.NoXMLA"),"",JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         
@@ -480,7 +481,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         if (dste == null || dste.length == 0) {
             JOptionPane.showMessageDialog(this,
                     //I18n.getString("messages.connectionDialog.xmla.noDatasource",
-                    "No Datasources found.","",JOptionPane.INFORMATION_MESSAGE);
+                    I18n.getString("XMLADataSourceConnectionEditor.Message.NoDatasources"),"",JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         boolean found = false;
@@ -498,7 +499,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         if (catalogs == null || catalogs.length == 0) {
             JOptionPane.showMessageDialog(this,
                     //I18n.getString("messages.connectionDialog.xmla.noCatalogs",
-                    "No catalogs found for selected datasource.","",JOptionPane.INFORMATION_MESSAGE);
+                    I18n.getString("XMLADataSourceConnectionEditor.Message.NoCatalogs"),"",JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         //add catalogs
@@ -523,7 +524,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         if (cubes == null || cubes.length == 0) {
             JOptionPane.showMessageDialog(this,
                     //I18n.getString("messages.connectionDialog.xmla.noCubes",
-                    "No cubes found for selected datasource.","",JOptionPane.INFORMATION_MESSAGE);
+                    I18n.getString("XMLADataSourceConnectionEditor.Message.NoCubes"),"",JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         this.jComboBoxXMLACube.removeAllItems();
@@ -548,7 +549,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         if (smd.isValidUrl() == false) {
             JOptionPane.showMessageDialog(this,
                    // I18n.getString("messages.connectionDialog.xmla.invalidUrl",
-                    "Unable to connect to XMLA server.","",JOptionPane.INFORMATION_MESSAGE);
+                    I18n.getString("XMLADataSourceConnectionEditor.Message.NoXMLA"),"",JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         this.jComboBoxXMLADatasource.removeAllItems();
@@ -557,7 +558,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         rex.graphics.datasourcetree.elements.DataSourceTreeElement dste[] = smd.discoverDataSources();
         if (dste == null) {
             JOptionPane.showMessageDialog(this,
-                    "No Datasources found.","",JOptionPane.INFORMATION_MESSAGE);
+                    I18n.getString("XMLADataSourceConnectionEditor.Message.NoDatasources"),"",JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         for (int i=0;i<dste.length;i++){

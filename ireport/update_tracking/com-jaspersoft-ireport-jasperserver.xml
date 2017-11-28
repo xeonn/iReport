@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="com.jaspersoft.ireport.jasperserver">
-    <module_version install_time="1215420064201" last="true" origin="installer" specification_version="1.0">
+    <module_version install_time="1218467512983" last="true" origin="installer" specification_version="1.0">
         <file crc="13985331" name="config/Modules/com-jaspersoft-ireport-jasperserver.xml"/>
-        <file crc="611322646" name="modules/com-jaspersoft-ireport-jasperserver.jar"/>
+        <file crc="2751482618" name="modules/com-jaspersoft-ireport-jasperserver.jar"/>
         <file crc="1130964003" name="modules/ext/js_activation-1.1.jar"/>
         <file crc="1039580221" name="modules/ext/js_axis-1.4patched.jar"/>
         <file crc="1856893722" name="modules/ext/js_commons-codec-1.3.jar"/>

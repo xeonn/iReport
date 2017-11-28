@@ -310,7 +310,7 @@ public class ReportClassLoader extends java.lang.ClassLoader {
     public synchronized Class findClass(String name) throws ClassNotFoundException {
 
         Class c = null;
-
+        
         if (cachedClasses.containsKey( name ))
         {
             c = (Class)cachedClasses.get(name);
@@ -318,10 +318,7 @@ public class ReportClassLoader extends java.lang.ClassLoader {
         }
         else
         {
-            if (c != null)
-            {
-                c =  loadClassData(name);
-            }
+            c =  loadClassData(name);
         }
         return c;
     }
@@ -392,6 +389,7 @@ public class ReportClassLoader extends java.lang.ClassLoader {
     }
 
     boolean isJar(String pathEntry) {
+        
         return pathEntry.toLowerCase().endsWith(".jar") || pathEntry.toLowerCase().endsWith(".zip");
     }
 
@@ -422,6 +420,8 @@ public class ReportClassLoader extends java.lang.ClassLoader {
     }
 
     private byte[] loadJarData(String path, String fileName) {
+        
+        
         ZipFile zipFile = null;
         InputStream stream = null;
         File archive = new File(path);
@@ -433,7 +433,7 @@ public class ReportClassLoader extends java.lang.ClassLoader {
         try {
             zipFile = new ZipFile(archive);
         } catch (IOException io) {
-            //io.printStackTrace();
+            io.printStackTrace();
             return null;
         }
         
@@ -461,7 +461,7 @@ public class ReportClassLoader extends java.lang.ClassLoader {
                 if (stream != null)
                     stream.close();
             } catch (IOException e) {
-                //e.printStackTrace();
+                e.printStackTrace();
             }
         }
         //System.out.println("Class not found really!");
@@ -561,4 +561,18 @@ public class ReportClassLoader extends java.lang.ClassLoader {
             
         return false;
     }
+    
+//    public String toString()
+//    {
+//        String s = "Report Class Loader:\n";
+//        for (int i = 0; i < fPathChachedItems.size(); i++) {
+//            s += fPathChachedItems.get(i) + "\n";
+//        }
+//        for (int i = 0; i < fPathItems.size(); i++) {
+//            
+//            s +=  fPathItems.get(i) + "\n";
+//        }
+//        
+//        return s;
+//    }
 }

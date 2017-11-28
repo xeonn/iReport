@@ -54,6 +54,39 @@ public abstract class AbstractReportObjectScene extends ObjectScene implements G
     public static Color DESIGN_LINE_COLOR = new Color(170,170,255);
     public static Color EDITING_DESIGN_LINE_COLOR = Color.DARK_GRAY;
     public static Color GRID_LINE_COLOR = new Color(230,230,230);
+
+    public void assureVisible(Object object) {
+    
+        Widget w = findWidget(object);
+        if (w != null)
+        {
+            
+            JComponent view = getView();
+            Rectangle visibleRect = view.getVisibleRect();
+            
+            // be sure the element (0,0) hit the rect...
+            Rectangle bounds = w.getBounds();
+            bounds.x = w.getLocation().x;
+            bounds.y = w.getLocation().y;
+            
+            Rectangle newRect = convertLocalToScene(bounds);
+            
+            newRect = convertSceneToView(newRect);
+            
+            if (visibleRect.width < newRect.width)
+            {
+                newRect.width = visibleRect.width;
+            }
+            
+            if (visibleRect.height < newRect.height)
+            {
+                newRect.height = visibleRect.height;
+            }
+            
+            view.scrollRectToVisible(newRect);
+        }
+    
+    }
     
     /**
      * The most importand method. Returns the JasperDesign to which the

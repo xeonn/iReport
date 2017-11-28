@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.connection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.connection.gui.JDBCNBConnectionEditor;
 import com.jaspersoft.ireport.designer.data.WizardFieldsProvider;
 import com.jaspersoft.ireport.designer.data.fieldsproviders.SQLFieldsProvider;
@@ -244,9 +245,11 @@ public class JDBCNBConnection extends com.jaspersoft.ireport.designer.IReportCon
     {
         // Try the java connection...
         Connection conn = null;
+        ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(IReportManager.getReportClassLoader());
         conn = getConnection();
         if (conn == null) throw new Exception("");
-        
+        Thread.currentThread().setContextClassLoader(oldCL);
         JOptionPane.showMessageDialog(Misc.getMainWindow(),"Connection test successful!","",JOptionPane.INFORMATION_MESSAGE); //"messages.connectionDialog.connectionTestSuccessful"
         return;
     }

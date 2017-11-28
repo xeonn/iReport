@@ -32,6 +32,7 @@ package com.jaspersoft.ireport.designer;
 
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.palette.actions.CreateTextFieldAction;
+import com.jaspersoft.ireport.designer.sheet.GenericProperty;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -62,6 +63,7 @@ import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignChartDataset;
@@ -74,6 +76,7 @@ import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JRDesignPropertyExpression;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
@@ -1189,7 +1192,7 @@ public class ModelUtils {
         replaceChunkText( exp, oldName, newName, chunckType, newClassName);
         if (exp != null && exp.getValueClassName() != null && newClassName != null)
         {
-            CreateTextFieldAction.setMatchingClassExpression(exp, newClassName, true);
+            CreateTextFieldAction.setMatchingClassExpression(exp, exp.getValueClassName(), true);
             textfield.getEventSupport().firePropertyChange( JRDesignTextField.PROPERTY_EXPRESSION, null, exp);
         }
         
@@ -1246,8 +1249,8 @@ public class ModelUtils {
         oldName = pre + oldName + post;
         newName = pre + newName + post;
         
-        if (!exp.getText().contains(oldName)) return;
-    
+        if (exp.getText() == null || exp.getText().indexOf(oldName) < 0) return;
+          
         exp.setText( Misc.string_replace(newName, oldName, exp.getText()));
         if (exp.getValueClassName() != null &&
             newClassName != null &&
@@ -1282,6 +1285,33 @@ public class ModelUtils {
                         dest.removeProperty(propertyNames[i]);
                 }
         }
+    }
+    
+    /**
+     * replace the expression properties in element with the ones found in newExpressionProperties.
+     */
+    public static void replaceExpressionProperties(JRDesignElement element, List<GenericProperty> newExpressionProperties)
+    {
+        // Update names.
+        
+        List usedProps = new ArrayList();
+        List propertyExpressions = element.getPropertyExpressionsList();
+        
+        for(int i = 0; i < propertyExpressions.size(); i++)
+        {
+            element.removePropertyExpression((JRPropertyExpression)propertyExpressions.get(i));
+        }
+        
+        if (newExpressionProperties == null) return;
+        for(GenericProperty prop : newExpressionProperties)
+        {
+            if (!prop.isUseExpression()) continue;
+            JRDesignPropertyExpression newProp = new JRDesignPropertyExpression();
+            newProp.setName(prop.getKey());
+            newProp.setValueExpression(prop.getExpression());
+            element.addPropertyExpression(newProp);
+        }
+        
     }
     
     /**
@@ -1333,6 +1363,63 @@ public class ModelUtils {
                 base = getParentLocation(jd, frame);
                 base.x += frame.getX();
                 base.y += frame.getY();
+                // In this case we return immediatly
+                break;
+            }
+            else
+            {
+                grp = grp.getElementGroup();
+            }
+        }
+        
+        return base;
+        
+    }
+    
+    /**
+     * This utility looks for the phisical parent of an element and returns his position.
+     * This position is refers to the plain document preview, where 0,0 are the coordinates
+     * of the upperleft corner of the document.
+     * If no parent is found, the method returns 0,0
+     */ 
+    public static Rectangle getParentBounds(JasperDesign jd, JRDesignElement element )
+    {
+        Rectangle base = new Rectangle(0,0,0,0);
+        if (element == null) return base;
+        
+        JRElementGroup grp = element.getElementGroup();
+        
+        // I need to discover the first logical parent of this element
+        while (grp != null)    // Element placed in a frame
+        {
+            if (grp instanceof JRDesignBand)    // Element placed in a band
+            {
+                JRDesignBand band = (JRDesignBand)grp;
+                base.x = jd.getLeftMargin();
+                base.y = ModelUtils.getBandLocation(band, jd);
+                base.width = jd.getPageWidth() - jd.getLeftMargin() - jd.getRightMargin();
+                base.height = band.getHeight();
+                break;
+            }
+            else if (grp instanceof JRDesignCellContents)    // Element placed in a cell
+            {
+                // TODO: calculate cell position....
+                JRDesignCellContents cell = (JRDesignCellContents)grp;
+                Point p = getCellLocation(cell.getOrigin().getCrosstab(),cell);
+                base.x = p.x;
+                base.y = p.y;
+                base.width = cell.getWidth();
+                base.height = cell.getHeight();
+                break;
+            }
+            else if (grp instanceof JRDesignFrame)
+            {
+                JRDesignFrame frame = (JRDesignFrame)grp;
+                Point p = getParentLocation(jd, frame);
+                base.x = p.x + frame.getX();
+                base.y = p.y + frame.getY();
+                base.width = frame.getWidth();
+                base.height = frame.getHeight();
                 // In this case we return immediatly
                 break;
             }

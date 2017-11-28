@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.connection.gui;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.connection.JDBCNBConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
@@ -61,7 +62,7 @@ public class JDBCNBConnectionEditor extends javax.swing.JPanel implements IRepor
 
         jPanelJDBC.setLayout(new java.awt.GridBagLayout());
 
-        jLabel2.setText("Connection");
+        jLabel2.setText(I18n.getString("JDBCNBConnectionEditor.Label.Connection")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -125,8 +126,8 @@ public class JDBCNBConnectionEditor extends javax.swing.JPanel implements IRepor
         
         if (jComboBoxJDBCDriver.getSelectedItem() == null) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "Please select a connection!", //"messages.connectionDialog.jdbc.invalidUrl"
-                    "Invalid connection!", //"messages.connectionDialog.jdbc.invalidUrlCaption"
+                    I18n.getString("JDBCNBConnectionEditor.Message.SelectConn"), //"messages.connectionDialog.jdbc.invalidUrl"
+                    I18n.getString("JDBCNBConnectionEditor.Message.InvalidConn"), //"messages.connectionDialog.jdbc.invalidUrlCaption"
                     javax.swing.JOptionPane.WARNING_MESSAGE );
             return null;
         }

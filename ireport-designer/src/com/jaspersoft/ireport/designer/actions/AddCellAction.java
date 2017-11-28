@@ -1,5 +1,6 @@
 package com.jaspersoft.ireport.designer.actions;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.outline.nodes.NullCell;
 import com.jaspersoft.ireport.designer.outline.nodes.NullCellNode;
 import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
@@ -7,7 +8,6 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.util.HelpCtx;
-import org.openide.util.NbBundle;
 import org.openide.util.actions.NodeAction;
 
 public final class AddCellAction extends NodeAction {
@@ -31,7 +31,7 @@ public final class AddCellAction extends NodeAction {
     
     
     public String getName() {
-        return NbBundle.getMessage(AddCellAction.class, "CTL_AddCellAction");
+        return I18n.getString("AddCellAction.Name.CTL_AddCellAction");
     }
 
     @Override

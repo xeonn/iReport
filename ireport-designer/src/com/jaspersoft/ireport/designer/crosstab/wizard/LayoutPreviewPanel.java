@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.crosstab.wizard;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.utils.ColorSchemaGenerator;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -56,7 +57,7 @@ public class LayoutPreviewPanel extends javax.swing.JPanel {
         setOpaque(false);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/wizard_preview.png"))); // NOI18N
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(LayoutPreviewPanel.class, "LayoutPreviewPanel.jLabel1.text")); // NOI18N
+        jLabel1.setText(I18n.getString("LayoutPreviewPanel.jLabel1.text")); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);

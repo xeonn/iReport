@@ -31,6 +31,8 @@
  */
 
 package com.jaspersoft.ireport.designer.data;
+
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.data.fieldsproviders.BeanInspectorPanel;
 import bsh.EvalError;
 import com.jaspersoft.ireport.designer.*;
@@ -153,7 +155,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
             }
         } );
         
-        setColumnsError( "Please open a report." );
+        setColumnsError( I18n.getString("ReportQueryDialog.Message.Error") );
         
         /*
         if (MainFrame.getMainInstance().getProperties().getProperty("beanClass") != null)
@@ -205,8 +207,8 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
             }
         };
        
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
         
         //applyI18n();
@@ -250,12 +252,12 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         
         
         if (dataset == null) {
-            setColumnsError( "Please open a report." );
+            setColumnsError( I18n.getString("ReportQueryDialog.Message.Error") );
             return;
         }
         
         if (query.length() == 0) {
-            setColumnsError( "You must insert a valid query first" );
+            setColumnsError( I18n.getString("ReportQueryDialog.Message.Error2") );
             return;
         }
 
@@ -439,8 +441,8 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
                     while( ip1!=-1 ) {
                         // String replacement, Altering the SQL statement.
                         if( defValue==null ) {
-                            throw new IllegalArgumentException("Please set a " +
-                                "default value for the parameter '" 
+                            throw new IllegalArgumentException(I18n.getString("ReportQueryDialog.Message.Exception") +
+                                I18n.getString("ReportQueryDialog.Message.ExceptionB") 
                                 + parameter.getName() + "'" );
                         }
 
@@ -461,8 +463,8 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
                     while( ip2!=-1 ) {
                         // String replacement, Altering the SQL statement.
                         if( defValue==null ) {
-                            throw new IllegalArgumentException("Please set a " +
-                                "default value for the parameter '" 
+                            throw new IllegalArgumentException(I18n.getString("ReportQueryDialog.Message.Exception") +
+                                I18n.getString("ReportQueryDialog.Message.ExceptionB") 
                                 + parameter.getName() + "'" );
                         }
 
@@ -561,9 +563,9 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
                     } catch (Exception ex)
                     {
                         ex.printStackTrace();
-                        setColumnErrorFromWork( "Error: " +  ex.getMessage() );
+                        setColumnErrorFromWork( I18n.getString("ReportQueryDialog.Message.Error3") +  ex.getMessage() );
                     }
-                    getJLabelStatusSQL().setText("Ready");
+                    getJLabelStatusSQL().setText(I18n.getString("ReportQueryDialog.Label.statusSQL"));
                 }
 
                 /////////////////////
@@ -701,7 +703,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         columnsScrollPane = new javax.swing.JScrollPane();
         jTableFields = new org.jdesktop.swingx.JXTable();
 
-        setTitle("Report query");
+        setTitle(I18n.getString("ReportQueryDialog.Title.ReportQuery")); // NOI18N
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
@@ -727,7 +729,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
 
         jPanel14.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("Query language");
+        jLabel1.setText(I18n.getString("ReportQueryDialog.Label.QueryLanguage")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanel14.add(jLabel1, gridBagConstraints);
@@ -748,7 +750,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         jPanel16.setLayout(new java.awt.GridBagLayout());
 
         jButtonLoadQuery.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/data/folder_database.png"))); // NOI18N
-        jButtonLoadQuery.setText("Load query");
+        jButtonLoadQuery.setText(I18n.getString("ReportQueryDialog.Button.LoadQuery")); // NOI18N
         jButtonLoadQuery.setMargin(new java.awt.Insets(2, 4, 2, 4));
         jButtonLoadQuery.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -761,7 +763,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         jPanel16.add(jButtonLoadQuery, gridBagConstraints);
 
         jButtonSaveQuery.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/data/database_save.png"))); // NOI18N
-        jButtonSaveQuery.setText("Save query");
+        jButtonSaveQuery.setText(I18n.getString("ReportQueryDialog.Button.SaveQuery")); // NOI18N
         jButtonSaveQuery.setMargin(new java.awt.Insets(2, 4, 2, 4));
         jButtonSaveQuery.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -813,7 +815,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         jPanel7.add(jLabelStatusSQL, gridBagConstraints);
 
         automaticlyReadFieldsCheckBox.setSelected(true);
-        automaticlyReadFieldsCheckBox.setText("Automatically Retrieve Fields");
+        automaticlyReadFieldsCheckBox.setText(I18n.getString("ReportQueryDialog.CheckBox.RetrieveFields")); // NOI18N
         automaticlyReadFieldsCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 automaticlyReadFieldsCheckBoxActionPerformed(evt);
@@ -825,7 +827,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 2, 0);
         jPanel7.add(automaticlyReadFieldsCheckBox, gridBagConstraints);
 
-        readFieldsButton.setText("Read Fields");
+        readFieldsButton.setText(I18n.getString("ReportQueryDialog.Button.ReadFields")); // NOI18N
         readFieldsButton.setEnabled(false);
         readFieldsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -838,7 +840,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 0);
         jPanel7.add(readFieldsButton, gridBagConstraints);
 
-        jButtonOpenDesigner.setText("Query designer");
+        jButtonOpenDesigner.setText(I18n.getString("ReportQueryDialog.Button.QueryDesigner")); // NOI18N
         jButtonOpenDesigner.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOpenDesignerActionPerformed(evt);
@@ -851,7 +853,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 0);
         jPanel7.add(jButtonOpenDesigner, gridBagConstraints);
 
-        exportQueryButton.setText("Send to clipboard");
+        exportQueryButton.setText(I18n.getString("ReportQueryDialog.Button.SendClipboard")); // NOI18N
         exportQueryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exportQueryButtonActionPerformed(evt);
@@ -890,7 +892,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         gridBagConstraints.insets = new java.awt.Insets(0, 3, 5, 3);
         jPanel8.add(jTextFieldBeanClass1, gridBagConstraints);
 
-        jLabel3.setText("Class name");
+        jLabel3.setText(I18n.getString("ReportQueryDialog.Label.ClassName")); // NOI18N
         jLabel3.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -899,7 +901,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 5, 3);
         jPanel8.add(jLabel3, gridBagConstraints);
 
-        jButtonReadBeanAttributes3.setText("Read attributes");
+        jButtonReadBeanAttributes3.setText(I18n.getString("ReportQueryDialog.Button.ReadAttributes")); // NOI18N
         jButtonReadBeanAttributes3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonReadBeanAttributes3ActionPerformed(evt);
@@ -936,7 +938,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
 
         jTabbedPane1.addTab("JavaBean Datasource", jPanel8);
 
-        jButton2.setText("Get fields from datasource");
+        jButton2.setText(I18n.getString("ReportQueryDialog.Button.GetFields")); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -946,7 +948,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
 
         jTabbedPane1.addTab("DataSource Provider", jPanel6);
 
-        jButton3.setText("Get fields from datasource");
+        jButton3.setText(I18n.getString("ReportQueryDialog.Button.GetFields")); // NOI18N
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed1(evt);
@@ -970,7 +972,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         jPanel4.setPreferredSize(new java.awt.Dimension(150, 10));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        okButton.setText("OK");
+        okButton.setText(I18n.getString("Global.Button.Ok")); // NOI18N
         okButton.setEnabled(false);
         okButton.setMaximumSize(new java.awt.Dimension(67, 23));
         okButton.setMinimumSize(new java.awt.Dimension(67, 23));
@@ -985,7 +987,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         gridBagConstraints.gridy = 0;
         jPanel4.add(okButton, gridBagConstraints);
 
-        cancelButton.setText("Cancel");
+        cancelButton.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
@@ -1002,7 +1004,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         jPanel9.setMinimumSize(new java.awt.Dimension(100, 20));
         jPanel9.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setText("Filter expression...");
+        jButton1.setText(I18n.getString("ReportQueryDialog.Button.FilterExpr")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -1015,7 +1017,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
         jPanel9.add(jButton1, gridBagConstraints);
 
-        jButton4.setText("Sort options...");
+        jButton4.setText(I18n.getString("ReportQueryDialog.Button.SortOptions")); // NOI18N
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed1(evt);
@@ -1201,7 +1203,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
         
         
         // 1. Look for a special FieldsProvider....
-        getJLabelStatusSQL().setText("Looking for a valid Fields provider for "  +  language + " queries....");
+        getJLabelStatusSQL().setText(I18n.getString("ReportQueryDialog.Label.StatusSQL2")  +  language + I18n.getString("ReportQueryDialog.Label.StatusSQL2B"));
         /////////////////////////////
         setFieldsProvider(null);
             
@@ -1218,7 +1220,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
                 } catch (Throwable t)
                 {
                     t.printStackTrace();
-                    getJLabelStatusSQL().setText("Error creating the fields provider "  +  t.getMessage());
+                    getJLabelStatusSQL().setText(I18n.getString("ReportQueryDialog.Label.StatusSQL3")  +  t.getMessage());
                 }
             }
         }
@@ -1262,7 +1264,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
             jButtonOpenDesigner.setEnabled( false );
             automaticlyReadFieldsCheckBox.setEnabled(false);
             automaticlyReadFieldsCheckBox.setSelected(autoReadFields);
-            getJLabelStatusSQL().setText("No Fields Provider available for "  +  language + " queries!");
+            getJLabelStatusSQL().setText(I18n.getString("ReportQueryDialog.Label.StatusSQL4")  +  language + I18n.getString("ReportQueryDialog.Label.StatusSQL4B"));
         }
         else
         {
@@ -1282,7 +1284,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
             {
                 setSpecialLanguageComponent( null );
             }
-            getJLabelStatusSQL().setText("Fields provider for "  +  language + " queries ready.");
+            getJLabelStatusSQL().setText(I18n.getString("ReportQueryDialog.Label.StatusSQL5")  +  language + I18n.getString("ReportQueryDialog.Label.StatusSQL5B"));
         }
         isSettingSQLExpression = isSettingSQLExpressionOldValue;
         
@@ -1321,7 +1323,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
     private void jButton2ActionPerformed1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed1
         IReportConnection conn = IReportManager.getInstance().getDefaultConnection();
         if (conn == null || !(conn instanceof JRCSVDataSourceConnection)) {
-            setColumnsError( "The active connection is not a JasperReports CSV DataSource." );
+            setColumnsError( I18n.getString("ReportQueryDialog.Message.Error4") );
             return;
         }
         else
@@ -1363,7 +1365,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
        
         IReportConnection conn = IReportManager.getInstance().getDefaultConnection();
         if (conn == null || !(conn instanceof JRDataSourceProviderConnection)) {
-            setColumnsError( "The active connection is not a JasperReports DataSource provider." );
+            setColumnsError( I18n.getString("ReportQueryDialog.Message.Error5") );
             return;
         }
         else
@@ -1506,8 +1508,8 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
             readFieldsButton.setEnabled(true);
             //setColumnsError( "Enter your query above. Then use the Read " +
             //        "Fields button to retrieve the list of fields." );
-            this.jLabelStatusSQL.setText("Enter your query above. Then use the Read " +
-                    "Fields button to retrieve the list of fields." );
+            this.jLabelStatusSQL.setText(I18n.getString("ReportQueryDialog.Label.StatusSQL6") +
+                    I18n.getString("ReportQueryDialog.Label.StatusSQL6B") );
         }
         
         IReportManager.getPreferences().putBoolean( IReportManager.USE_AUTO_REGISTER_FIELDS, automaticlyReadFieldsCheckBox.isSelected());
@@ -1534,8 +1536,8 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
                 num++; // avoid syncronization problems....
 
                 Object obj = jComboBoxQueryType.getSelectedItem();
-                JRDesignQuery query = (JRDesignQuery)dataset.getQuery();
-                if (query == null) query = new JRDesignQuery();
+                //JRDesignQuery query = (JRDesignQuery)dataset.getQuery();
+                JRDesignQuery query = new JRDesignQuery();
 
                 if (obj != null && obj instanceof Tag) 
                 {
@@ -1975,6 +1977,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
         {
             JRDesignExpression exp = new JRDesignExpression();
             exp.setText(fed.getFilterExpression());
+            exp.setValueClassName("java.lang.Boolean");
             getDataset().setFilterExpression( exp );
         }
     }

@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.subreport;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.io.File;
 
@@ -28,7 +29,7 @@ public class SubreportExpressionVisualPanel extends javax.swing.JPanel  {
     
     public String getName()
     {
-        return "Subreport exp";
+        return I18n.getString("SubreportExpressionVisualPanel.Label.Name");
     }
     
     /** This method is called from within the constructor to
@@ -50,7 +51,7 @@ public class SubreportExpressionVisualPanel extends javax.swing.JPanel  {
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setSelected(true);
-        jRadioButton1.setText(org.openide.util.NbBundle.getMessage(SubreportExpressionVisualPanel.class, "SubreportCustomChooserVisualPanel.jRadioButton1.text")); // NOI18N
+        jRadioButton1.setText(I18n.getString("SubreportCustomChooserVisualPanel.jRadioButton1.text")); // NOI18N
         jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton1ActionPerformed(evt);
@@ -64,7 +65,7 @@ public class SubreportExpressionVisualPanel extends javax.swing.JPanel  {
         add(jRadioButton1, gridBagConstraints);
 
         jLabelExpression1.setFont(new java.awt.Font("Courier New", 0, 11));
-        jLabelExpression1.setText(org.openide.util.NbBundle.getMessage(SubreportExpressionVisualPanel.class, "SubreportCustomChooserVisualPanel.jLabelExpression1.text")); // NOI18N
+        jLabelExpression1.setText(I18n.getString("SubreportCustomChooserVisualPanel.jLabelExpression1.text")); // NOI18N
         jLabelExpression1.setMinimumSize(new java.awt.Dimension(34, 20));
         jLabelExpression1.setPreferredSize(new java.awt.Dimension(34, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -75,7 +76,7 @@ public class SubreportExpressionVisualPanel extends javax.swing.JPanel  {
         add(jLabelExpression1, gridBagConstraints);
 
         buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setText(org.openide.util.NbBundle.getMessage(SubreportExpressionVisualPanel.class, "SubreportCustomChooserVisualPanel.jRadioButton2.text")); // NOI18N
+        jRadioButton2.setText(I18n.getString("SubreportCustomChooserVisualPanel.jRadioButton2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -84,7 +85,7 @@ public class SubreportExpressionVisualPanel extends javax.swing.JPanel  {
         add(jRadioButton2, gridBagConstraints);
 
         jLabelExpression2.setFont(new java.awt.Font("Courier New", 0, 11));
-        jLabelExpression2.setText(org.openide.util.NbBundle.getMessage(SubreportExpressionVisualPanel.class, "SubreportCustomChooserVisualPanel.jLabelExpression2.text")); // NOI18N
+        jLabelExpression2.setText(I18n.getString("SubreportCustomChooserVisualPanel.jLabelExpression2.text")); // NOI18N
         jLabelExpression2.setMinimumSize(new java.awt.Dimension(34, 20));
         jLabelExpression2.setPreferredSize(new java.awt.Dimension(34, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();

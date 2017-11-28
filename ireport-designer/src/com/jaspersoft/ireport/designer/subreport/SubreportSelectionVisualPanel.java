@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.subreport;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -38,7 +39,7 @@ public final class SubreportSelectionVisualPanel extends JPanel {
 
     @Override
     public String getName() {
-        return "Subreport";
+        return I18n.getString("SubreportSelectionVisualPanel.Label.Name");
     }
 
     
@@ -72,7 +73,7 @@ public final class SubreportSelectionVisualPanel extends JPanel {
             File f = new File(fname);
             if (fname.trim().length() == 0 || !f.exists())
             {
-                throw new IllegalArgumentException("The specified report does not exist or is invalid.");
+                throw new IllegalArgumentException(I18n.getString("SubreportSelectionVisualPanel.Exception.ReportInvalid"));
             }
             //throw new IllegalArgumentException("Invalid report specified.");
         }
@@ -103,7 +104,7 @@ public final class SubreportSelectionVisualPanel extends JPanel {
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, "Create a new report");
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, I18n.getString("SubreportSelectionVisualPanel.RadioButton.NewReport")); // NOI18N
         jRadioButton1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jRadioButton1StateChanged(evt);
@@ -122,15 +123,15 @@ public final class SubreportSelectionVisualPanel extends JPanel {
         add(jRadioButton1, gridBagConstraints);
 
         buttonGroup1.add(jRadioButton2);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton2, "Use an existing report");
-        jRadioButton2.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jRadioButton2StateChanged(evt);
-            }
-        });
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton2, I18n.getString("SubreportSelectionVisualPanel.RadioButton.UseExisRep")); // NOI18N
         jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton2ActionPerformed(evt);
+            }
+        });
+        jRadioButton2.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRadioButton2StateChanged(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -153,7 +154,7 @@ public final class SubreportSelectionVisualPanel extends JPanel {
         gridBagConstraints.weightx = 1.0;
         jPanel1.add(jTextFieldReportName, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, "Browse");
+        org.openide.awt.Mnemonics.setLocalizedText(jButton1, I18n.getString("Global.Button.Browse")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -169,7 +170,7 @@ public final class SubreportSelectionVisualPanel extends JPanel {
         add(jPanel1, gridBagConstraints);
 
         buttonGroup1.add(jRadioButton3);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton3, "Just create the subreport element");
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton3, I18n.getString("SubreportSelectionVisualPanel.RadioButton.SubrElem")); // NOI18N
         jRadioButton3.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jRadioButton3StateChanged(evt);

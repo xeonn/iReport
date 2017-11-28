@@ -13,6 +13,7 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.dnd.ReportObjectPaletteTransferable;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
+import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
@@ -31,6 +32,7 @@ import javax.swing.Action;
 import net.sf.jasperreports.crosstabs.JRCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpressionChunk;
 import net.sf.jasperreports.engine.JRExpressionCollector;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -45,6 +47,7 @@ import org.openide.nodes.Children;
 import org.openide.nodes.NodeTransfer;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.actions.SystemAction;
 import org.openide.util.datatransfer.ExTransferable;
@@ -293,8 +296,25 @@ public class CrosstabMeasureNode extends IRAbstractNode implements PropertyChang
         @Override
         public void setString(String newName) {
             
+            
+            
             String oldName = getMeasure().getName();
+            int index = crosstab.getMesuresList().indexOf(getMeasure());
+            
+            
+            crosstab.removeMeasure(getMeasure().getName());
+            
             getMeasure().setName(newName);
+            try {
+                crosstab.addMeasure(getMeasure());
+                crosstab.getMesuresList().remove(getMeasure());
+                crosstab.getMesuresList().add(index, getMeasure());
+                crosstab.getEventSupport().firePropertyChange( JRDesignCrosstab.PROPERTY_MEASURES, 0, 1);
+                IReportManager.getInstance().setSelectedObject(getMeasure());
+            } catch (JRException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+            
             
             // replace oldName with newName in all the crosstab expressions...
             
@@ -304,7 +324,6 @@ public class CrosstabMeasureNode extends IRAbstractNode implements PropertyChang
             for (int i=0; i<expressions.size(); ++i)
             {
                 JRDesignExpression exp = (JRDesignExpression)expressions.get(i);
-                if (exp != null) System.out.println("Changing " + exp.getText());
                 ModelUtils.replaceChunkText(exp, oldName, newName, JRExpressionChunk.TYPE_VARIABLE, getMeasure().getValueClassName());
             }
         }
@@ -444,6 +463,10 @@ public class CrosstabMeasureNode extends IRAbstractNode implements PropertyChang
         @Override
         public void setString(String value) {
            getMeasure().setValueClassName(value);
+           if (getMeasure().getValueExpression() != null)
+           {
+               ((JRDesignExpression)getMeasure().getValueExpression()).setValueClassName(value);
+           }
         }
 
     }
@@ -508,7 +531,7 @@ public class CrosstabMeasureNode extends IRAbstractNode implements PropertyChang
         @SuppressWarnings("unchecked")
         public ValueExpressionProperty(JRDesignCrosstabMeasure measure, JRDesignCrosstab crosstab, JasperDesign jd)
         {
-            super(measure, new ExpressionContext( ModelUtils.getElementDataset(crosstab, jd)));
+            super(measure, new ExpressionContext( ModelUtils.getCrosstabDataset(crosstab, jd)));
             setName( JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION);
             setDisplayName("Value Expression");
             setShortDescription("The expression of the measure.");
@@ -521,6 +544,8 @@ public class CrosstabMeasureNode extends IRAbstractNode implements PropertyChang
                     setValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT, ModelUtils.getElementDataset(getCrosstab(), getJasperDesign()));
                 }
             });
+            
+            
 
         }
         
@@ -541,6 +566,7 @@ public class CrosstabMeasureNode extends IRAbstractNode implements PropertyChang
 
         @Override
         public void setExpression(JRDesignExpression expression) {
+            expression.setValueClassName(measure.getValueClassName());
             measure.setValueExpression(expression);
         }
 

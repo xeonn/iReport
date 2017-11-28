@@ -33,12 +33,12 @@ package com.jaspersoft.ireport.designer;
 import com.jaspersoft.ireport.JrxmlDataNode;
 import com.jaspersoft.ireport.JrxmlDataObject;
 import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
+import com.jaspersoft.ireport.designer.errorhandler.DesignVerifyerThread;
+import com.jaspersoft.ireport.designer.errorhandler.ProblemItem;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.outline.nodes.ReportNode;
 import com.jaspersoft.ireport.designer.outline.OutlineTopComponent;
 import com.jaspersoft.ireport.designer.outline.nodes.CellNode;
-import com.jaspersoft.ireport.designer.outline.nodes.CrosstabNode;
-import com.jaspersoft.ireport.designer.outline.nodes.NullCellNode;
 import com.jaspersoft.ireport.designer.tools.JrxmlEditorToolbar;
 import com.jaspersoft.ireport.designer.undo.UndoRedoManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
@@ -62,7 +62,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultEditorKit;
 import net.sf.jasperreports.crosstabs.JRCellContents;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -116,6 +115,10 @@ public class JrxmlVisualView extends TopComponent
     private JrxmlEditorSupport support;
     private ReportDesignerPanel reportDesignerPanel = null;
     private boolean elementInitialized = false;
+    
+    private List<ProblemItem> reportProblems = new ArrayList<ProblemItem>();
+    private DesignVerifyerThread verifyerThread = null;
+    private JrxmlEditorToolbar toolbar = null;
     
     /**
      * This is the model. It could be null if the underline jrxml is not valid of a parsing
@@ -211,6 +214,7 @@ public class JrxmlVisualView extends TopComponent
                 explorerManager = new ExplorerManager();
 
                 ActionMap map = getActionMap();
+                verifyerThread = new DesignVerifyerThread(this);
                 //setActionMap(map);
                 map.put(DefaultEditorKit.copyAction, ExplorerUtils.actionCopy(explorerManager));
                 map.put(DefaultEditorKit.cutAction, ExplorerUtils.actionCut(explorerManager));
@@ -260,6 +264,8 @@ public class JrxmlVisualView extends TopComponent
                 add(reportDesignerPanel, BorderLayout.CENTER);
 
                 reportDesignerPanel.addObjectSelectionListener(this);
+                
+                verifyerThread.start();
 
             } catch (IOException ex) {
                 Exceptions.printStackTrace(ex);
@@ -273,7 +279,11 @@ public class JrxmlVisualView extends TopComponent
     }
     
     public JComponent getToolbarRepresentation() {
-        return new JrxmlEditorToolbar();
+        if (toolbar == null)
+        {
+            toolbar = new JrxmlEditorToolbar();
+        }
+        return toolbar;
     }
     
     @Override
@@ -284,6 +294,7 @@ public class JrxmlVisualView extends TopComponent
     
     @Override
     public void componentClosed() {
+        OutlineTopComponent.getDefault().closingJrxmlVisualView(this);
     }
     
     @Override
@@ -403,6 +414,7 @@ public class JrxmlVisualView extends TopComponent
         if (OutlineTopComponent.getDefault() != null) {
              OutlineTopComponent.getDefault().closingJrxmlVisualView(this);
         }
+        
     }
     
     @Override
@@ -423,6 +435,7 @@ public class JrxmlVisualView extends TopComponent
     public void componentDeactivated() {
         ic.remove(this.getReportDesignerPanel());
         updateGroupVisibility();
+        
     }
     
     public void setMultiViewCallback(MultiViewElementCallback callback) {
@@ -509,6 +522,7 @@ public class JrxmlVisualView extends TopComponent
                                 explorerManager.setSelectedNodes(new Node[]{model});
                             } catch (Exception ex) { 
                             }
+                            fireModelChange();
                     }
                 });
             }
@@ -585,6 +599,14 @@ public class JrxmlVisualView extends TopComponent
             run.run();
         else
             SwingUtilities.invokeLater (run);
+    }
+
+    public List<ProblemItem> getReportProblems() {
+        return reportProblems;
+    }
+
+    public void setReportProblems(List<ProblemItem> reportProblems) {
+        this.reportProblems = reportProblems;
     }
 
   
@@ -712,8 +734,26 @@ public class JrxmlVisualView extends TopComponent
         return undoRedoManager;
     }
 
-    public void modelChanged(JasperDesign model) throws IllegalArgumentException {
-        // Model changed...
+    private Set<ModelChangeListener> listeners = new HashSet<ModelChangeListener>(1); // or can use ChangeSupport in NB 6.0
+    
+    public final void addModelChangeListener(ModelChangeListener l) {
+    synchronized (listeners) {
+    listeners.add(l);
+    }
+    }
+    public final void removeModelChangeListener(ModelChangeListener l) {
+    synchronized (listeners) {
+    listeners.remove(l);
+    }
+    }
+    public final void fireModelChange() {
+    Iterator<ModelChangeListener> it;
+        synchronized (listeners) {
+        it = new HashSet<ModelChangeListener>(listeners).iterator();
+        }
+        while (it.hasNext()) {
+            it.next().modelChanged(this);
+        }
     }
     
     
@@ -724,5 +764,9 @@ public class JrxmlVisualView extends TopComponent
                 super.requestActive();
             }
         }
+
+    public void modelChanged(JasperDesign model) throws IllegalArgumentException {
+        //setNeedModelRefresh(true);
+    }
     
 }

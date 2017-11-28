@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.connection.gui;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.connection.JRDataSourceProviderConnection;
@@ -42,7 +43,7 @@ public class JRDataSourceProviderConnectionEditor extends javax.swing.JPanel imp
 
         jPanelDatasourceProvider.setLayout(new java.awt.GridBagLayout());
 
-        jLabel17.setText("JasperReports DataSource Provider class");
+        jLabel17.setText(I18n.getString("JRDataSourceProviderConnectionEditor.Label.ProviderClass")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;

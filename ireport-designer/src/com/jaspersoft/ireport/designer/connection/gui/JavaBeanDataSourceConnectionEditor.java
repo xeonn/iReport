@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.connection.gui;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.connection.JavaBeanDataSourceConnection;
@@ -48,7 +49,7 @@ public class JavaBeanDataSourceConnectionEditor extends javax.swing.JPanel imple
 
         jPanelBeansSet.setLayout(new java.awt.GridBagLayout());
 
-        jLabel12.setText("Factory class (the class that will produce the set)");
+        jLabel12.setText(I18n.getString("JavaBeanDataSourceConnectionEditor.Label.FactoryClass")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -66,7 +67,7 @@ public class JavaBeanDataSourceConnectionEditor extends javax.swing.JPanel imple
 
         buttonGroup1.add(jRadioButtonJBSetCollection);
         jRadioButtonJBSetCollection.setSelected(true);
-        jRadioButtonJBSetCollection.setText(" Collection of javaBeans");
+        jRadioButtonJBSetCollection.setText(I18n.getString("JavaBeanDataSourceConnectionEditor.RadioButton.Collection_of_javaBeans")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -75,7 +76,7 @@ public class JavaBeanDataSourceConnectionEditor extends javax.swing.JPanel imple
         jPanelBeansSet.add(jRadioButtonJBSetCollection, gridBagConstraints);
 
         buttonGroup1.add(jRadioButtonJBSetArray);
-        jRadioButtonJBSetArray.setText("Array of javaBeans");
+        jRadioButtonJBSetArray.setText(I18n.getString("JavaBeanDataSourceConnectionEditor.RadioButton.Array_of_javaBeans")); // NOI18N
         jRadioButtonJBSetArray.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonJBSetArrayActionPerformed(evt);
@@ -88,7 +89,7 @@ public class JavaBeanDataSourceConnectionEditor extends javax.swing.JPanel imple
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanelBeansSet.add(jRadioButtonJBSetArray, gridBagConstraints);
 
-        jLabel13.setText("The static method to call to retrive the array or the the collection of javaBeans");
+        jLabel13.setText(I18n.getString("JavaBeanDataSourceConnectionEditor.Label.StaticMethod")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -104,7 +105,7 @@ public class JavaBeanDataSourceConnectionEditor extends javax.swing.JPanel imple
         gridBagConstraints.insets = new java.awt.Insets(2, 4, 4, 4);
         jPanelBeansSet.add(jTextFieldJBSetMethodToCall, gridBagConstraints);
 
-        jCheckBoxisUseFieldDescription.setText("Use field description");
+        jCheckBoxisUseFieldDescription.setText(I18n.getString("JavaBeanDataSourceConnectionEditor.CheckBox.Use_field_description")); // NOI18N
         jCheckBoxisUseFieldDescription.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         jCheckBoxisUseFieldDescription.setMargin(new java.awt.Insets(0, 0, 0, 0));
         gridBagConstraints = new java.awt.GridBagConstraints();

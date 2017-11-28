@@ -1,5 +1,6 @@
 package com.jaspersoft.ireport.designer.logpane;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Component;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ final public class IRConsoleTopComponent extends TopComponent implements java.aw
         setToolTipText(NbBundle.getMessage(IRConsoleTopComponent.class, "HINT_IRConsoleTopComponent"));
 //        setIcon(Utilities.loadImage(ICON_PATH, true));
         
-        mainLogTextArea = new LogTextArea("iReport console"); //I18n.getString("logPane.mainConsole",
+        mainLogTextArea = new LogTextArea(I18n.getString("IRConsoleTopComponent.TextArea.iReportConsole")); //I18n.getString("logPane.mainConsole",
         mainLogTextArea.setLogPane( this );
         mainLogTextArea.addActionListener( this );
         
@@ -117,15 +118,15 @@ final public class IRConsoleTopComponent extends TopComponent implements java.aw
         TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
         if (win == null) {
             Logger.getLogger(IRConsoleTopComponent.class.getName()).warning(
-                    "Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
+                    I18n.getString("IRConsoleTopComponent.Message.ErrorA") + PREFERRED_ID + I18n.getString("IRConsoleTopComponent.Message.ErrorB"));
             return getDefault();
         }
         if (win instanceof IRConsoleTopComponent) {
             return (IRConsoleTopComponent)win;
         }
         Logger.getLogger(IRConsoleTopComponent.class.getName()).warning(
-                "There seem to be multiple components with the '" + PREFERRED_ID +
-                "' ID. That is a potential source of errors and unexpected behavior.");
+                I18n.getString("IRConsoleTopComponent.Message.WarningA") + PREFERRED_ID +
+                I18n.getString("IRConsoleTopComponent.Message.WarningB"));
         return getDefault();
     }
 
@@ -160,7 +161,7 @@ final public class IRConsoleTopComponent extends TopComponent implements java.aw
     @SuppressWarnings("unchecked")
     public LogTextArea createNewLog()
     {
-        LogTextArea lta = new LogTextArea("Log");
+        LogTextArea lta = new LogTextArea(I18n.getString("IRConsoleTopComponent.TextArea.Log"));
         lta.setLogPane( this );
         lta.addActionListener( this );
         logsComponents.add(lta);
@@ -232,6 +233,6 @@ final public class IRConsoleTopComponent extends TopComponent implements java.aw
 
     @Override
     public String getDisplayName() {
-        return "iReport output";
+        return I18n.getString("IRConsoleTopComponent.Display.iROutput");
     }
 }

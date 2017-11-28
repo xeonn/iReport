@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.crosstab.wizard;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.utils.ColorSchemaGenerator;
 import com.jaspersoft.ireport.designer.utils.Misc;
@@ -35,7 +36,7 @@ public final class CrosstabVisualPanel5 extends JPanel {
 
     @Override
     public String getName() {
-        return "Layout";
+        return I18n.getString("CrosstabVisualPanel5.Label.Layout");
     }
 
     public void readSettings(WizardDescriptor settings)
@@ -102,7 +103,7 @@ public final class CrosstabVisualPanel5 extends JPanel {
         jCheckBoxWhiteGrid = new javax.swing.JCheckBox();
 
         jCheckBoxRowGroupTotals.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxRowGroupTotals, "Add row group totals");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxRowGroupTotals, I18n.getString("CrosstabVisualPanel5.CheckBox.AddRowGroupTotals")); // NOI18N
         jCheckBoxRowGroupTotals.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxRowGroupTotalsActionPerformed(evt);
@@ -110,7 +111,7 @@ public final class CrosstabVisualPanel5 extends JPanel {
         });
 
         jCheckBoxColumnGroupTotals.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxColumnGroupTotals, "Add column group totals");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxColumnGroupTotals, I18n.getString("CrosstabVisualPanel5.CheckBox.AddColumnGroupTotals")); // NOI18N
         jCheckBoxColumnGroupTotals.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxColumnGroupTotalsActionPerformed(evt);
@@ -118,14 +119,14 @@ public final class CrosstabVisualPanel5 extends JPanel {
         });
 
         jCheckBoxShowGrid.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxShowGrid, "Show grid lines (adding cell border)");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxShowGrid, I18n.getString("CrosstabVisualPanel5.CheckBox.ShowGridLines")); // NOI18N
         jCheckBoxShowGrid.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxShowGridActionPerformed(evt);
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, "Color scheme");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, I18n.getString("CrosstabVisualPanel5.Label.ColorScheme")); // NOI18N
 
         jComboBoxColors.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -133,7 +134,7 @@ public final class CrosstabVisualPanel5 extends JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, "Variations");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, I18n.getString("CrosstabVisualPanel5.Label.Variations")); // NOI18N
 
         jComboBoxVariations.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -141,7 +142,7 @@ public final class CrosstabVisualPanel5 extends JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxWhiteGrid, "Use a white grid");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxWhiteGrid, I18n.getString("CrosstabVisualPanel5.CheckBox.UseWhiteGrid")); // NOI18N
         jCheckBoxWhiteGrid.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxWhiteGridActionPerformed(evt);

@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.connection.gui;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.connection.JRSpringLoadedHibernateConnection;
@@ -45,7 +46,7 @@ public class JRSpringLoadedHibernateConnectionEditor extends javax.swing.JPanel 
 
         jPanelSpringLoadedHibernate.setLayout(new java.awt.GridBagLayout());
 
-        jLabel21.setText("Spring configuration");
+        jLabel21.setText(I18n.getString("JRSpringLoadedHibernateConnectionEditor.Label.Config")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -57,7 +58,7 @@ public class JRSpringLoadedHibernateConnectionEditor extends javax.swing.JPanel 
         gridBagConstraints.insets = new java.awt.Insets(2, 4, 4, 4);
         jPanelSpringLoadedHibernate.add(jTextFieldSLHSpringConfig, gridBagConstraints);
 
-        jLabel22.setText("Session Factory Bean ID");
+        jLabel22.setText(I18n.getString("JRSpringLoadedHibernateConnectionEditor.Label.BeanID")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;

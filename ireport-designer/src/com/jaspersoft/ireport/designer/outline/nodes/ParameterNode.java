@@ -197,6 +197,8 @@ public class ParameterNode extends IRAbstractNode implements PropertyChangeListe
         
         String oldName = getParameter().getName();
         getParameter().setName(s);
+        dataset.getParametersMap().remove(oldName);
+        dataset.getParametersMap().put(s,getParameter());
         
         ObjectPropertyUndoableEdit opue = new ObjectPropertyUndoableEdit(
                     getParameter(), "Name", String.class, oldName, s);
@@ -291,6 +293,8 @@ public class ParameterNode extends IRAbstractNode implements PropertyChangeListe
             }
             String oldName = getParameter().getName();
             getParameter().setName(s);
+            dataset.getParametersMap().remove(oldName);
+            dataset.getParametersMap().put(s,getParameter());
 
             ObjectPropertyUndoableEdit opue = new ObjectPropertyUndoableEdit(
                     getParameter(), "Name", String.class, oldName, getParameter().getName());
@@ -368,8 +372,16 @@ public class ParameterNode extends IRAbstractNode implements PropertyChangeListe
                 String oldValue = getParameter().getValueClassName();
                 String newValue = s;
                 getParameter().setValueClassName( s);
-
+                
                 ObjectPropertyUndoableEdit urob = new ObjectPropertyUndoableEdit(getParameter(),"ValueClassName", String.class ,oldValue,newValue );
+                
+                if (getParameter().getDefaultValueExpression() != null)
+                {
+                    ((JRDesignExpression)getParameter().getDefaultValueExpression()).setValueClassName(s);
+                    ObjectPropertyUndoableEdit urob2 = new ObjectPropertyUndoableEdit((JRDesignExpression)getParameter().getDefaultValueExpression(),"ValueClassName", String.class ,oldValue,newValue );
+                    urob.addEdit(urob2);
+                }
+
                 // Find the undoRedo manager...
                 IReportManager.getInstance().addUndoableEdit(urob);
             }

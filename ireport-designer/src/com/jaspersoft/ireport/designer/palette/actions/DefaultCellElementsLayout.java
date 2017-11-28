@@ -100,11 +100,7 @@ public class DefaultCellElementsLayout {
                     
                 animator.animatePreferredLocation(w, p)  ;
             }
-            else
-            {
-                System.out.println("Widget not found!");
-                System.out.flush();
-            }
+            
         }
     }
     

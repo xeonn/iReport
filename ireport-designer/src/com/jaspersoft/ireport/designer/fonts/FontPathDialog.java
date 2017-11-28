@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.fonts;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -72,8 +73,8 @@ public class FontPathDialog extends javax.swing.JDialog {
             }
         };
 
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
 
         jList1.addMouseListener(new MouseAdapter()
@@ -109,7 +110,7 @@ public class FontPathDialog extends javax.swing.JDialog {
         jButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Font paths");
+        setTitle(I18n.getString("FontPathDialog.Title.fontPaths")); // NOI18N
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
@@ -121,7 +122,7 @@ public class FontPathDialog extends javax.swing.JDialog {
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabelClasspath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabelClasspath.setText("Fonts path");
+        jLabelClasspath.setText(I18n.getString("FontPathDialog.Label.FontsPath")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -153,7 +154,7 @@ public class FontPathDialog extends javax.swing.JDialog {
         jPanel1.setPreferredSize(new java.awt.Dimension(120, 10));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButtonSelectAll.setText("Select all");
+        jButtonSelectAll.setText(I18n.getString("Global.Button.SelectAll")); // NOI18N
         jButtonSelectAll.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonSelectAll.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonSelectAll.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -168,7 +169,7 @@ public class FontPathDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel1.add(jButtonSelectAll, gridBagConstraints);
 
-        jButtonDeselectAll.setText("Deselect all");
+        jButtonDeselectAll.setText(I18n.getString("Global.Button.DeselectAll")); // NOI18N
         jButtonDeselectAll.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonDeselectAll.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonDeselectAll.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -188,7 +189,7 @@ public class FontPathDialog extends javax.swing.JDialog {
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(jPanel2, gridBagConstraints);
 
-        jButtonSave.setText("Save fonts path");
+        jButtonSave.setText(I18n.getString("FontPathDialog.Button.SaveFontsPath")); // NOI18N
         jButtonSave.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonSave.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonSave.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -203,7 +204,7 @@ public class FontPathDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel1.add(jButtonSave, gridBagConstraints);
 
-        jButtonCancel.setText("Cancel");
+        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
         jButtonCancel.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonCancel.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonCancel.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -269,7 +270,7 @@ public class FontPathDialog extends javax.swing.JDialog {
 
         if (modifiedPath)
         {
-            int ret = javax.swing.JOptionPane.showConfirmDialog(this, "Do you want save the font paths ?");
+            int ret = javax.swing.JOptionPane.showConfirmDialog(this, I18n.getString("FontPathDialog.Message.Confirm"));
 
             if (ret == javax.swing.JOptionPane.CANCEL_OPTION)
             {

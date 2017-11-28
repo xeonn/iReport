@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.crosstab.wizard;
 
+import com.jaspersoft.ireport.locale.I18n;
 import javax.swing.JPanel;
 
 public final class CrosstabVisualPanel6 extends JPanel {
@@ -16,7 +17,7 @@ public final class CrosstabVisualPanel6 extends JPanel {
 
     @Override
     public String getName() {
-        return "Step #6";
+        return I18n.getString("CrosstabVisualPanel6.Label.Step6");
     }
 
     /** This method is called from within the constructor to
@@ -30,7 +31,7 @@ public final class CrosstabVisualPanel6 extends JPanel {
         jLabel1 = new javax.swing.JLabel();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, "<html>You have entered all the required information to create a crosstab.<br>\n<br>\nClick Finish to complete the wizard");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, I18n.getString("CrosstabVisualPanel6.Label.Info")); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);

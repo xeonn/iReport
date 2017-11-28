@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.wizards;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportManager;
@@ -63,7 +64,7 @@ public final class NewJrxmlVisualPanel2 extends JPanel {
 
     @Override
     public String getName() {
-        return "Query";
+        return I18n.getString("NewJrxmlVisualPanel2.Name.Query");
     }
     
     
@@ -105,7 +106,7 @@ public final class NewJrxmlVisualPanel2 extends JPanel {
 
         jPanelQuery.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelLanguageName, "Report query");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelLanguageName, I18n.getString("NewJrxmlVisualPanel2.Label.ReportQuery")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -124,7 +125,7 @@ public final class NewJrxmlVisualPanel2 extends JPanel {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonDesign, "Design query");
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonDesign, I18n.getString("NewJrxmlVisualPanel2.Button.DesignQuery")); // NOI18N
         jButtonDesign.setEnabled(false);
         jButtonDesign.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -137,7 +138,7 @@ public final class NewJrxmlVisualPanel2 extends JPanel {
         jPanel1.add(jButtonDesign, gridBagConstraints);
 
         jButtonLoadQuery.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/data/folder_database.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonLoadQuery, "Load query");
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonLoadQuery, I18n.getString("NewJrxmlVisualPanel2.Button.LoadQuery")); // NOI18N
         jButtonLoadQuery.setMargin(new java.awt.Insets(2, 4, 2, 4));
         jButtonLoadQuery.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -150,7 +151,7 @@ public final class NewJrxmlVisualPanel2 extends JPanel {
         jPanel1.add(jButtonLoadQuery, gridBagConstraints);
 
         jButtonSaveQuery.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/data/database_save.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonSaveQuery, "Save query");
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonSaveQuery, I18n.getString("NewJrxmlVisualPanel2.Button.SaveQuery")); // NOI18N
         jButtonSaveQuery.setMargin(new java.awt.Insets(2, 4, 2, 4));
         jButtonSaveQuery.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -170,7 +171,7 @@ public final class NewJrxmlVisualPanel2 extends JPanel {
 
         setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, "Connections / Data Sources");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, I18n.getString("NewJrxmlVisualPanel2.Label.ConnDataSources")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -190,7 +191,7 @@ public final class NewJrxmlVisualPanel2 extends JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         add(jComboBoxConnections, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, "New");
+        org.openide.awt.Mnemonics.setLocalizedText(jButton1, I18n.getString("Global.Button.New")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -227,7 +228,7 @@ public final class NewJrxmlVisualPanel2 extends JPanel {
             }
             else
             {
-                jLabelLanguageName.setText("Query (" + lang + ")");
+                jLabelLanguageName.setText(I18n.getString("NewJrxmlVisualPanel2.Label.Query(") + lang + ")");
                 jEditorPaneQuery.setText("");
                 jPanelMain.add(jPanelQuery, BorderLayout.CENTER);
                 jButtonDesign.setEnabled(wFieldsProvider.supportsDesign());

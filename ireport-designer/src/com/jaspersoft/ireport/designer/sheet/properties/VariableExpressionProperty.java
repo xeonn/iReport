@@ -64,6 +64,9 @@ public final class VariableExpressionProperty extends ExpressionProperty
     @Override
     public void setExpression(JRDesignExpression expression)
     {
+        // This avoid incompatibilities with the
+        // variable...
+        expression.setValueClassName(variable.getValueClassName());
         variable.setExpression(expression);
     }
 

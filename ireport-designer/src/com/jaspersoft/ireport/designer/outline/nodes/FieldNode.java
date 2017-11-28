@@ -34,6 +34,10 @@ import org.openide.actions.DeleteAction;
 import org.openide.actions.RenameAction;
 import org.openide.actions.ReorderAction;
 import org.openide.nodes.Children;
+import org.openide.nodes.NodeEvent;
+import org.openide.nodes.NodeListener;
+import org.openide.nodes.NodeMemberEvent;
+import org.openide.nodes.NodeReorderEvent;
 import org.openide.nodes.NodeTransfer;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
@@ -167,6 +171,9 @@ public class FieldNode extends IRAbstractNode implements PropertyChangeListener 
         
         String oldName = getField().getName();
         getField().setName(s);
+        dataset.getFieldsMap().remove(oldName);
+        dataset.getFieldsMap().put(s,getField());
+        
         
         ObjectPropertyUndoableEdit opue = new ObjectPropertyUndoableEdit(
                     getField(), "Name", String.class, oldName, s);
@@ -261,6 +268,8 @@ public class FieldNode extends IRAbstractNode implements PropertyChangeListener 
             }
             String oldName = getField().getName();
             getField().setName(s);
+            dataset.getFieldsMap().remove(oldName);
+            dataset.getFieldsMap().put(s,getField());
 
             ObjectPropertyUndoableEdit opue = new ObjectPropertyUndoableEdit(
                     getField(), "Name", String.class, oldName, getField().getName());

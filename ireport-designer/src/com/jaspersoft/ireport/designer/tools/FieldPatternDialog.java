@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.tools;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Dimension;
 
 /**
@@ -61,7 +62,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
         "MMM",
         "d/M/yyyy",
         "dd-MMM-yyyy",
-        "yyyy.MM.dd G 'at' HH:mm:ss z",
+        I18n.getString("FieldPatternDialog.Format.Date"),
         "EEE, MMM d, ''yy",
         "yyyy.MMMMM.dd GGG hh:mm aaa",
         "EEE, d MMM yyyy HH:mm:ss Z",
@@ -74,10 +75,10 @@ public class FieldPatternDialog extends javax.swing.JDialog {
         "HH.mm.ss",
         "h.mm.ss a",
         "mm.ss,S",
-        "hh 'o''clock' a, zzzz",
+        I18n.getString("FieldPatternDialog.Format.Date2"),
         "K:mm a, z",
         "yyyy.MMMMM.dd GGG hh:mm aaa",
-        "yyyy.MM.dd G 'at' HH:mm:ss z",
+        I18n.getString("FieldPatternDialog.Format.Date3"),
         "EEE, d MMM yyyy HH:mm:ss Z",
         "yyMMddHHmmssZ"  
     };
@@ -106,12 +107,12 @@ public class FieldPatternDialog extends javax.swing.JDialog {
         javax.swing.DefaultListModel dlm4 = new javax.swing.DefaultListModel();
         
         jListCategory.setModel( dlm );
-        dlm.addElement( "Number" );      // 0
-        dlm.addElement( "Date" );        // 1
-        dlm.addElement( "Time" );        // 2
-        dlm.addElement( "Currency" );    // 3
-        dlm.addElement( "Percentage" );  // 4
-        dlm.addElement( "Scientific" );  // 5
+        dlm.addElement( I18n.getString("Global.List.Number") );      // 0
+        dlm.addElement( I18n.getString("Global.List.Date") );        // 1
+        dlm.addElement( I18n.getString("Global.List.Time") );        // 2
+        dlm.addElement( I18n.getString("Global.List.Currency") );    // 3
+        dlm.addElement( I18n.getString("Global.List.Percentage") );  // 4
+        dlm.addElement( I18n.getString("Global.List.Scientific") );  // 5
         //dlm.addElement( "Custom" );      // 7
         
         jListNegatives.setModel( dlm2 );
@@ -142,8 +143,8 @@ public class FieldPatternDialog extends javax.swing.JDialog {
             }
         };
        
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
 
         //to make the default button ...
@@ -157,8 +158,8 @@ public class FieldPatternDialog extends javax.swing.JDialog {
         {
             javax.swing.DefaultListModel dlm = (javax.swing.DefaultListModel)jListCategory.getModel();
             dlm.removeAllElements();
-            dlm.addElement( "Date" );
-            dlm.addElement( "Time" );        // 2
+            dlm.addElement( I18n.getString("Global.List.Date") );
+            dlm.addElement( I18n.getString("Global.List.Time") );        // 2
             selectedCategory = -1;
             jListCategory.setSelectedIndex(0);
             //jListCategoryValueChanged(null);
@@ -171,8 +172,8 @@ public class FieldPatternDialog extends javax.swing.JDialog {
         {
             javax.swing.DefaultListModel dlm = (javax.swing.DefaultListModel)jListCategory.getModel();
             dlm.removeAllElements();
-            dlm.addElement( "Number" );      // 0
-            dlm.addElement( "Scientific" );  // 5
+            dlm.addElement( I18n.getString("Global.List.Number") );      // 0
+            dlm.addElement( I18n.getString("Global.List.Scientific") );  // 5
             selectedCategory = -1;
             jListCategory.setSelectedIndex(0);
             //jListCategoryValueChanged(null);
@@ -237,7 +238,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Pattern editor");
+        setTitle(I18n.getString("Global.List.Title.PatternEditor")); // NOI18N
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
@@ -251,7 +252,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 0, 11));
-        jLabel1.setText("Category");
+        jLabel1.setText(I18n.getString("Global.Label.Category")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
@@ -291,7 +292,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 0, 11));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel2.setText("Decimal places:");
+        jLabel2.setText(I18n.getString("Global.List.DecimalPlaces:")); // NOI18N
         jLabel2.setMaximumSize(new java.awt.Dimension(75, 50));
         jLabel2.setMinimumSize(new java.awt.Dimension(75, 22));
         jLabel2.setPreferredSize(new java.awt.Dimension(130, 22));
@@ -327,7 +328,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
 
         jLabel3.setFont(new java.awt.Font("SansSerif", 0, 11));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel3.setText("Use 1000 separator");
+        jLabel3.setText(I18n.getString("FieldPatternDialog.Label.1000Separator")); // NOI18N
         jLabel3.setMaximumSize(new java.awt.Dimension(75, 50));
         jLabel3.setMinimumSize(new java.awt.Dimension(75, 22));
         jLabel3.setPreferredSize(new java.awt.Dimension(130, 22));
@@ -352,7 +353,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
 
         jLabel4.setFont(new java.awt.Font("SansSerif", 0, 11));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel4.setText("Negative numbers:");
+        jLabel4.setText(I18n.getString("FieldPatternDialog.Label.NegNumbers")); // NOI18N
         jLabel4.setMaximumSize(new java.awt.Dimension(75, 50));
         jLabel4.setMinimumSize(new java.awt.Dimension(75, 22));
         jLabel4.setPreferredSize(new java.awt.Dimension(130, 22));
@@ -398,7 +399,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
 
         jLabel7.setFont(new java.awt.Font("SansSerif", 0, 11));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel7.setText("Type:");
+        jLabel7.setText(I18n.getString("Global.Label.Type")); // NOI18N
         jLabel7.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         jLabel7.setMaximumSize(new java.awt.Dimension(75, 50));
         jLabel7.setMinimumSize(new java.awt.Dimension(75, 22));
@@ -439,7 +440,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
 
         jLabel8.setFont(new java.awt.Font("SansSerif", 0, 11));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel8.setText("Type:");
+        jLabel8.setText(I18n.getString("Global.Label.Type")); // NOI18N
         jLabel8.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         jLabel8.setMaximumSize(new java.awt.Dimension(75, 50));
         jLabel8.setMinimumSize(new java.awt.Dimension(75, 22));
@@ -480,7 +481,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
 
         jLabel5.setFont(new java.awt.Font("SansSerif", 0, 11));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel5.setText("Decimal places:");
+        jLabel5.setText(I18n.getString("Global.List.DecimalPlaces:")); // NOI18N
         jLabel5.setMaximumSize(new java.awt.Dimension(75, 50));
         jLabel5.setMinimumSize(new java.awt.Dimension(75, 22));
         jLabel5.setPreferredSize(new java.awt.Dimension(130, 22));
@@ -516,7 +517,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
 
         jLabel6.setFont(new java.awt.Font("SansSerif", 0, 11));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel6.setText("Decimal places:");
+        jLabel6.setText(I18n.getString("Global.List.DecimalPlaces:")); // NOI18N
         jLabel6.setMaximumSize(new java.awt.Dimension(75, 50));
         jLabel6.setMinimumSize(new java.awt.Dimension(75, 22));
         jLabel6.setPreferredSize(new java.awt.Dimension(130, 22));
@@ -541,7 +542,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
 
         jLabel9.setFont(new java.awt.Font("SansSerif", 0, 11));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel9.setText("Type:");
+        jLabel9.setText(I18n.getString("Global.Label.Type")); // NOI18N
         jLabel9.setMaximumSize(new java.awt.Dimension(75, 50));
         jLabel9.setMinimumSize(new java.awt.Dimension(75, 22));
         jLabel9.setPreferredSize(new java.awt.Dimension(130, 22));
@@ -580,7 +581,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
 
         jLabel10.setFont(new java.awt.Font("SansSerif", 0, 11));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel10.setText("Decimal places:");
+        jLabel10.setText(I18n.getString("Global.List.DecimalPlaces:")); // NOI18N
         jLabel10.setMaximumSize(new java.awt.Dimension(75, 50));
         jLabel10.setMinimumSize(new java.awt.Dimension(75, 22));
         jLabel10.setPreferredSize(new java.awt.Dimension(130, 22));
@@ -691,7 +692,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
         jPanel5.add(jPanel6, gridBagConstraints);
 
         jButton1.setFont(new java.awt.Font("SansSerif", 0, 11));
-        jButton1.setText("Apply");
+        jButton1.setText(I18n.getString("Global.Button.Apply")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -705,7 +706,7 @@ public class FieldPatternDialog extends javax.swing.JDialog {
         jPanel5.add(jButton1, gridBagConstraints);
 
         jButton2.setFont(new java.awt.Font("SansSerif", 0, 11));
-        jButton2.setText("Cancel");
+        jButton2.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -1121,12 +1122,12 @@ public class FieldPatternDialog extends javax.swing.JDialog {
          int i =0;
         String category = ""+jListCategory.getSelectedValue();
         
-        if (category.equals("Number" )) i = 0;  // 0
-        if (category.equals("Date" )) i = 1;  // 0
-        if (category.equals("Time" )) i = 2;  // 0
-        if (category.equals("Currency" )) i = 3;  // 0
-        if (category.equals("Percentage" )) i = 4;  // 0
-        if (category.equals("Scientific" )) i = 5;  // 0
+        if (category.equals(I18n.getString("Global.List.Number") )) i = 0;  // 0
+        if (category.equals(I18n.getString("Global.List.Date") )) i = 1;  // 0
+        if (category.equals(I18n.getString("Global.List.Time") )) i = 2;  // 0
+        if (category.equals(I18n.getString("Global.List.Currency") )) i = 3;  // 0
+        if (category.equals(I18n.getString("Global.List.Percentage") )) i = 4;  // 0
+        if (category.equals(I18n.getString("Global.List.Scientific") )) i = 5;  // 0
         
         return i;
      }

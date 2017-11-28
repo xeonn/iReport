@@ -18,7 +18,7 @@ public class OutlineAction extends AbstractAction {
     }
 
     public void actionPerformed(ActionEvent evt) {
-        TopComponent win = OutlineTopComponent.findInstance();
+        TopComponent win = OutlineTopComponent.getDefault();
         win.open();
         win.requestActive();
     }

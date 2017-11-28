@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.wizards;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Component;
 import java.util.Enumeration;
 import javax.swing.DefaultListCellRenderer;
@@ -34,7 +35,7 @@ public final class TemplateVisualPanel extends JPanel {
 
     @Override
     public String getName() {
-        return "Layout";
+        return I18n.getString("TemplateVisualPanel.Name.Layout");
     }
 
     private void updateTemplates()
@@ -89,7 +90,7 @@ public final class TemplateVisualPanel extends JPanel {
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, "Columnar Layout");
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton1, I18n.getString("TemplateVisualPanel.RadioButton.ColLayout")); // NOI18N
         jRadioButton1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jRadioButton1StateChanged(evt);
@@ -103,7 +104,7 @@ public final class TemplateVisualPanel extends JPanel {
         add(jRadioButton1, gridBagConstraints);
 
         buttonGroup1.add(jRadioButton2);
-        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton2, "Tabular Layout");
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButton2, I18n.getString("TemplateVisualPanel.RadioButton.TabLayout")); // NOI18N
         jRadioButton2.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jRadioButton2StateChanged(evt);
@@ -150,9 +151,9 @@ public final class TemplateVisualPanel extends JPanel {
         if (jList1.getSelectedIndex() >= 0)
         {
             DataObject dataObject = (DataObject)jList1.getSelectedValue();
-            if (dataObject.getPrimaryFile().existsExt("preview"))
+            if (dataObject.getPrimaryFile().existsExt(I18n.getString("TemplateVisualPanel.List.Preview")))
             {
-                FileObject previewFileObject = dataObject.getFolder().getPrimaryFile().getFileObject(dataObject.getName(), "preview");
+                FileObject previewFileObject = dataObject.getFolder().getPrimaryFile().getFileObject(dataObject.getName(), I18n.getString("TemplateVisualPanel.List.Preview"));
                 if (previewFileObject != null)
                 {
                     try {
@@ -189,7 +190,7 @@ public final class TemplateVisualPanel extends JPanel {
 
     public String getReportType()
     {
-        return jRadioButton1.isSelected() ? "columnar" : "tabular";
+        return jRadioButton1.isSelected() ? I18n.getString("TemplateVisualPanel.RadioButton.columnar") : I18n.getString("TemplateVisualPanel.RadioButton.tabular");
     }
     
     public FileObject getReportTemplate()

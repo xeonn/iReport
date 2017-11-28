@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.connection.gui;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.connection.JDBCConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
@@ -25,21 +26,21 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
         
         jComboBoxJDBCDriver.setModel( new DefaultComboBoxModel(new Object[]{
             "com.mysql.jdbc.Driver",
-            "org.gjt.mm.mysql.Driver",
-            "com.internetcds.jdbc.tds.Driver",
-            "net.sourceforge.jtds.jdbc.Driver",
-            "com.microsoft.jdbc.sqlserver.SQLServerDriver",
-            "sun.jdbc.odbc.JdbcOdbcDriver",
-            "com.ms.jdbc.odbc.JdbcOdbcDriver",
-            "oracle.jdbc.driver.OracleDriver",
-            "COM.ibm.db2.jdbc.app.DB2Driver",
-            "com.informix.jdbc.IfxDriver",
-            "com.sybase.jdbc2.jdbc.SybDriver",
-            "com.merant.datadirect.jdbc.sqlserver.SQLServerDriver",
-            "com.inet.tds.TdsDriver",
-            "org.postgresql.Driver",
-            "org.hsqldb.jdbcDriver",
-            "COM.cloudscape.JDBCDriver"}));
+            "org.gjt.mm.mysql.Driver", // NOI18N
+            "com.internetcds.jdbc.tds.Driver", // NOI18N
+            "net.sourceforge.jtds.jdbc.Driver", // NOI18N
+            "com.microsoft.jdbc.sqlserver.SQLServerDriver", // NOI18N
+            "sun.jdbc.odbc.JdbcOdbcDriver", // NOI18N
+            "com.ms.jdbc.odbc.JdbcOdbcDriver", // NOI18N
+            "oracle.jdbc.driver.OracleDriver", // NOI18N
+            "COM.ibm.db2.jdbc.app.DB2Driver", // NOI18N
+            "com.informix.jdbc.IfxDriver", // NOI18N
+            "com.sybase.jdbc2.jdbc.SybDriver", // NOI18N
+            "com.merant.datadirect.jdbc.sqlserver.SQLServerDriver", // NOI18N
+            "com.inet.tds.TdsDriver", // NOI18N
+            "org.postgresql.Driver", // NOI18N
+            "org.hsqldb.jdbcDriver", // NOI18N
+            "COM.cloudscape.JDBCDriver"})); // NOI18N
             
          jComboBoxJDBCDriver.setSelectedIndex(0);
     }
@@ -75,7 +76,7 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
 
         jPanelJDBC.setLayout(new java.awt.GridBagLayout());
 
-        jLabel2.setText("JDBC Driver");
+        jLabel2.setText(I18n.getString("JDBCConnectionEditor.Label.JDBC_Driver")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -98,7 +99,7 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 6);
         jPanelJDBC.add(jComboBoxJDBCDriver, gridBagConstraints);
 
-        jLabel3.setText("JDBC URL");
+        jLabel3.setText(I18n.getString("JDBCConnectionEditor.Label.JDBC_URL")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -117,7 +118,7 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
         jPanel2.setMinimumSize(new java.awt.Dimension(179, 70));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabel14.setText("Server Address");
+        jLabel14.setText(I18n.getString("JDBCConnectionEditor.Label.Server_Address")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -125,7 +126,7 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
         jPanel2.add(jLabel14, gridBagConstraints);
 
-        jLabel5.setText("Database");
+        jLabel5.setText(I18n.getString("JDBCConnectionEditor.Label.Database")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -147,7 +148,7 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
         jPanel2.add(jTextFieldServerAddress, gridBagConstraints);
 
-        jButtonWizard.setText("Wizard");
+        jButtonWizard.setText(I18n.getString("Global.Button.Wizard")); // NOI18N
         jButtonWizard.setMargin(new java.awt.Insets(2, 2, 2, 2));
         jButtonWizard.setMaximumSize(new java.awt.Dimension(60, 23));
         jButtonWizard.setMinimumSize(new java.awt.Dimension(60, 23));
@@ -173,7 +174,7 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
         gridBagConstraints.weightx = 1.0;
         jPanelJDBC.add(jPanel2, gridBagConstraints);
 
-        jLabel6.setText("Username");
+        jLabel6.setText(I18n.getString("Global.Label.Username")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -181,7 +182,7 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
         jPanelJDBC.add(jLabel6, gridBagConstraints);
 
-        jLabel7.setText("Password");
+        jLabel7.setText(I18n.getString("Global.Label.Password")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -203,7 +204,7 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
         jPanelJDBC.add(jTextFieldUsername, gridBagConstraints);
 
-        jCheckBoxSavePassword.setText("Save password");
+        jCheckBoxSavePassword.setText(I18n.getString("Global.CheckBox.Save_password")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
@@ -212,7 +213,7 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
         jPanelJDBC.add(jCheckBoxSavePassword, gridBagConstraints);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/connection/gui/warning.png"))); // NOI18N
-        jLabel1.setText("jLabel1");
+        jLabel1.setText("Attention! Passwords are saved in clear text.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 3;
@@ -245,17 +246,10 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
         
         String databaseName = jTextFieldDBName.getText().trim();
         
-        if (driver.equalsIgnoreCase("org.gjt.mm.mysql.Driver")) {
+        if (driver.equalsIgnoreCase("org.gjt.mm.mysql.Driver") ||
+            driver.equalsIgnoreCase("com.mysql.jdbc.Driver")) {
             String url = "jdbc:mysql://" + server + "/";
             if ( databaseName.length()>0 )
-                url += databaseName;
-            else
-                url += "MYDATABASE";
-            jTextFieldJDBCUrl.setText(url);
-        }
-        else if (driver.equalsIgnoreCase("com.mysql.jdbc.Driver")) {
-            String url = "jdbc:mysql://" + server + "/";
-            if (databaseName.length()>0)
                 url += databaseName;
             else
                 url += "MYDATABASE";
@@ -424,16 +418,16 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
         ((JDBCConnection)irConn).setJDBCDriver( (this.jComboBoxJDBCDriver.getSelectedItem()+"").trim() );
         if ((this.jComboBoxJDBCDriver.getSelectedItem()+"").trim().length() == 0) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "Please insert a valid JDBC driver!", //"messages.connectionDialog.jdbc.invalidDriver"
-                    "Invalid driver!", //"messages.connectionDialog.jdbc.invalidDriverCaption"
+                    I18n.getString("JDBCConnectionEditor.Message.JDBCDriver"), //"messages.connectionDialog.jdbc.invalidDriver"
+                    I18n.getString("JDBCConnectionEditor.Message.InvalidDriver"), //"messages.connectionDialog.jdbc.invalidDriverCaption"
                     javax.swing.JOptionPane.WARNING_MESSAGE );
             return null;
         }
 
         if (this.jTextFieldJDBCUrl.getText().trim().length() == 0) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "Please insert a valid JDBC URL!", //"messages.connectionDialog.jdbc.invalidUrl"
-                    "Invalid url!", //"messages.connectionDialog.jdbc.invalidUrlCaption"
+                    I18n.getString("JDBCConnectionEditor.Message.JDBCurl"), //"messages.connectionDialog.jdbc.invalidUrl"
+                    I18n.getString("JDBCConnectionEditor.Message.InvalidUrl"), //"messages.connectionDialog.jdbc.invalidUrlCaption"
                     javax.swing.JOptionPane.WARNING_MESSAGE );
             return null;
         }

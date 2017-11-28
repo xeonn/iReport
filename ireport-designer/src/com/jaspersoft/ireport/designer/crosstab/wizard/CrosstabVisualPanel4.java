@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.crosstab.wizard;
 
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
@@ -21,7 +22,7 @@ public final class CrosstabVisualPanel4 extends JPanel {
         initComponents();
         jPanelGroup1.add(groupPanel1, BorderLayout.CENTER);
         
-        groupPanel1.setTitle("Data");
+        groupPanel1.setTitle(I18n.getString("CrosstabVisualPanel4.Title.Data"));
 
     }
 
@@ -35,13 +36,13 @@ public final class CrosstabVisualPanel4 extends JPanel {
     
     @Override
     public String getName() {
-        return "Measure";
+        return I18n.getString("CrosstabVisualPanel4.Label.Measure");
     }
 
     public JRDesignCrosstabMeasure getMeasure()
     {
         JRDesignCrosstabMeasure measure = new JRDesignCrosstabMeasure();
-        measure.setName( groupPanel1.getGroupMeasureName()+"Measure" );
+        measure.setName( groupPanel1.getGroupMeasureName()+I18n.getString("CrosstabVisualPanel4.Label.Measure") );
         measure.setValueExpression( groupPanel1.getDesignExpression() );
         measure.setValueClassName( measure.getValueExpression().getValueClassName() );
         measure.setCalculation( groupPanel1.getCalculationType() );
@@ -63,7 +64,7 @@ public final class CrosstabVisualPanel4 extends JPanel {
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/wizard_details.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, "Define measure");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, I18n.getString("CrosstabVisualPanel4.Label.DefineMeasure")); // NOI18N
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabel1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 

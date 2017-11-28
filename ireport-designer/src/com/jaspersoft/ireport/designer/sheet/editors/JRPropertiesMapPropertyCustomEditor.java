@@ -6,6 +6,10 @@
 
 package com.jaspersoft.ireport.designer.sheet.editors;
 
+import com.jaspersoft.ireport.designer.editor.ExpressionContext;
+import com.jaspersoft.ireport.designer.sheet.GenericProperty;
+import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Window;
@@ -13,6 +17,8 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.SwingUtilities;
@@ -50,6 +56,10 @@ public class JRPropertiesMapPropertyCustomEditor extends javax.swing.JPanel impl
         if (value instanceof JRPropertiesMap && value != null)
         {
             setPropertiesMap((JRPropertiesMap)value);
+        }
+        else if (value instanceof List && value != null)
+        {
+            setPropertiesList((List)value);
         }
     }
     
@@ -117,7 +127,7 @@ public class JRPropertiesMapPropertyCustomEditor extends javax.swing.JPanel impl
         jPanelButtons2.setPreferredSize(new java.awt.Dimension(100, 100));
         jPanelButtons2.setLayout(new java.awt.GridBagLayout());
 
-        jButtonNewProperty.setText(org.openide.util.NbBundle.getMessage(JRPropertiesMapPropertyCustomEditor.class, "JRPropertiesMapPropertyCustomEditor.jButtonNewProperty.text")); // NOI18N
+        jButtonNewProperty.setText(I18n.getString("JRPropertiesMapPropertyCustomEditor.jButtonNewProperty.text")); // NOI18N
         jButtonNewProperty.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonNewPropertyActionPerformed(evt);
@@ -132,7 +142,7 @@ public class JRPropertiesMapPropertyCustomEditor extends javax.swing.JPanel impl
         gridBagConstraints.insets = new java.awt.Insets(5, 4, 0, 4);
         jPanelButtons2.add(jButtonNewProperty, gridBagConstraints);
 
-        jButtonModifyProperty.setText(org.openide.util.NbBundle.getMessage(JRPropertiesMapPropertyCustomEditor.class, "JRPropertiesMapPropertyCustomEditor.jButtonModifyProperty.text")); // NOI18N
+        jButtonModifyProperty.setText(I18n.getString("JRPropertiesMapPropertyCustomEditor.jButtonModifyProperty.text")); // NOI18N
         jButtonModifyProperty.setEnabled(false);
         jButtonModifyProperty.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,7 +158,7 @@ public class JRPropertiesMapPropertyCustomEditor extends javax.swing.JPanel impl
         gridBagConstraints.insets = new java.awt.Insets(3, 4, 0, 4);
         jPanelButtons2.add(jButtonModifyProperty, gridBagConstraints);
 
-        jButtonDeleteProperty.setText(org.openide.util.NbBundle.getMessage(JRPropertiesMapPropertyCustomEditor.class, "JRPropertiesMapPropertyCustomEditor.jButtonDeleteProperty.text")); // NOI18N
+        jButtonDeleteProperty.setText(I18n.getString("JRPropertiesMapPropertyCustomEditor.jButtonDeleteProperty.text")); // NOI18N
         jButtonDeleteProperty.setEnabled(false);
         jButtonDeleteProperty.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -208,21 +218,31 @@ public class JRPropertiesMapPropertyCustomEditor extends javax.swing.JPanel impl
     private void jButtonNewPropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewPropertyActionPerformed
         Window pWin = SwingUtilities.windowForComponent(this);
         
-        JRPropertyDialog jrpd = null;
-        if (pWin instanceof Dialog) jrpd = new JRPropertyDialog((Dialog)pWin, true);
-        else if (pWin instanceof Frame) jrpd = new JRPropertyDialog((Frame)pWin, true);
-        else jrpd = new JRPropertyDialog((Dialog)null, true);
-        
+        boolean canUseExp = false;
+        if (env.getFeatureDescriptor().getValue("canUseExpression") != null &&
+             env.getFeatureDescriptor().getValue("canUseExpression").equals(Boolean.TRUE))
+        {
+            canUseExp = true;
+        }
+        JRPropertyDialog jrpd = new JRPropertyDialog(Misc.getMainFrame(), true, canUseExp);
         //JRPropertyDialog jrpd = new JRPropertyDialog(w, true);
         jrpd.setProperties(getProperties());
+        
+        if (env.getFeatureDescriptor().getValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT) != null)
+        {
+            jrpd.setExpressionContext((ExpressionContext)env.getFeatureDescriptor().getValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT));
+        }
+        
         jrpd.setVisible(true);
         
         DefaultTableModel dtm = (DefaultTableModel)jTableProperties.getModel();
         
         if (jrpd.getDialogResult() == javax.swing.JOptionPane.OK_OPTION) {
-            String pName = jrpd.getPropertyName();
-            String pValue = jrpd.getPropertyValue();
-            dtm.addRow(new Object[]{pName, pValue});
+            
+            GenericProperty prop = jrpd.getProperty();
+            String val =  (prop.isUseExpression()) ? Misc.getExpressionText(prop.getExpression())  : Misc.nvl(prop.getValue(),"");
+            
+            dtm.addRow(new Object[]{prop,val});
             jTableProperties.updateUI();
         }
     }//GEN-LAST:event_jButtonNewPropertyActionPerformed
@@ -231,27 +251,37 @@ public class JRPropertiesMapPropertyCustomEditor extends javax.swing.JPanel impl
         int index = jTableProperties.getSelectedRow();
         //index = jTableProperties.convertRowIndexToModel(index);
         DefaultTableModel dtm = (DefaultTableModel)jTableProperties.getModel();
-        String pName = (String)dtm.getValueAt( index, 0);
-        String pVal = (String)dtm.getValueAt( index, 1);
         
         Window pWin = SwingUtilities.windowForComponent(this);
         
-        JRPropertyDialog jrpd = null;
-        if (pWin instanceof Dialog) jrpd = new JRPropertyDialog((Dialog)pWin, true);
-        else if (pWin instanceof Frame) jrpd = new JRPropertyDialog((Frame)pWin, true);
-        else jrpd = new JRPropertyDialog((Dialog)null, true);
+        boolean canUseExp = false;
+        if (env.getFeatureDescriptor().getValue("canUseExpression") != null &&
+             env.getFeatureDescriptor().getValue("canUseExpression").equals(Boolean.TRUE))
+        {
+            canUseExp = true;
+        }
+        JRPropertyDialog jrpd = new JRPropertyDialog(Misc.getMainFrame(), true, canUseExp);
+        //JRPropertyDialog jrpd = new JRPropertyDialog(w, true);
+        jrpd.setProperties(getProperties());
+        
+        if (env.getFeatureDescriptor().getValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT) != null)
+        {
+            jrpd.setExpressionContext((ExpressionContext)env.getFeatureDescriptor().getValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT));
+        }
         
         
         //JRPropertyDialog jrpd = new JRPropertyDialog(w, true);
-        jrpd.setPropertyName( pName );
-        jrpd.setPropertyValue( pVal );
-        jrpd.setOriginalName(pName);
+        jrpd.setProperty( (GenericProperty)dtm.getValueAt( index, 0));
         jrpd.setProperties(getProperties());
         jrpd.setVisible(true);
         
         if (jrpd.getDialogResult() == javax.swing.JOptionPane.OK_OPTION) {
-            dtm.setValueAt(jrpd.getPropertyName(),  index, 0);
-            dtm.setValueAt(jrpd.getPropertyValue(), index, 1);
+            
+            GenericProperty prop = jrpd.getProperty();
+            String val =  (prop.isUseExpression()) ? Misc.getExpressionText(prop.getExpression())  : Misc.nvl(prop.getValue(),"");
+            
+            dtm.setValueAt(prop,  index, 0);
+            dtm.setValueAt(val, index, 1);
             jTableProperties.updateUI();
         }
     }//GEN-LAST:event_jButtonModifyPropertyActionPerformed
@@ -280,31 +310,59 @@ public class JRPropertiesMapPropertyCustomEditor extends javax.swing.JPanel impl
      @SuppressWarnings("unchecked")
     public void setPropertiesMap(JRPropertiesMap properties) {
         
-        DefaultTableModel dtm = (DefaultTableModel)jTableProperties.getModel();
-        dtm.setRowCount(0);
-    
+        List<GenericProperty> list = new ArrayList<GenericProperty>();
         String[] pNames = properties.getPropertyNames();
         
         for (int i = 0; i < pNames.length; i++) {
-            String name = pNames[i];
-            String val = properties.getProperty(name);
-            Vector row = new Vector();
-            row.addElement( name);
-            row.addElement( val );
-            dtm.addRow(row);  
+            list.add(new GenericProperty(pNames[i], properties.getProperty(pNames[i])));
         }
+        
+        setPropertiesList(list);
     }
 
-    public JRPropertiesMap getProperties() {
+     public void setPropertiesList(List<GenericProperty> properties)
+     {
+         DefaultTableModel dtm = (DefaultTableModel)jTableProperties.getModel();
+         dtm.setRowCount(0);
+        
+         for (GenericProperty prop : properties)
+         {
+            String val =  (prop.isUseExpression()) ? Misc.getExpressionText(prop.getExpression())  : Misc.nvl(prop.getValue(),"");
+            Vector row = new Vector();
+            row.addElement( prop);
+            row.addElement( val );
+            dtm.addRow(row);  
+         }
+         
+     }
+     
+    public JRPropertiesMap getPropertiesMap() {
         JRPropertiesMap properties = new JRPropertiesMap();
         DefaultTableModel dtm = (DefaultTableModel)jTableProperties.getModel();
         for (int i=0; i<dtm.getRowCount(); ++i)
         {
-            properties.setProperty( (String)dtm.getValueAt(i,0), (String)dtm.getValueAt(i,1));
+            GenericProperty prop = (GenericProperty)dtm.getValueAt(i,0);
+            if (!prop.isUseExpression())
+            {
+                properties.setProperty( prop.getKey(), (String)prop.getValue());
+            }
         }
         
         return properties;
     }
+    
+    public List<GenericProperty> getProperties()
+    {
+        List<GenericProperty> props = new ArrayList<GenericProperty>();
+        DefaultTableModel dtm = (DefaultTableModel)jTableProperties.getModel();
+        for (int i=0; i<dtm.getRowCount(); ++i)
+        {
+            props.add( (GenericProperty)dtm.getValueAt(i,0) );
+        }
+        
+        return props;   
+    }
+    
     
     /**
     * @return Returns the property value that is result of the CustomPropertyEditor.
@@ -312,7 +370,12 @@ public class JRPropertiesMapPropertyCustomEditor extends javax.swing.JPanel impl
     *            (and thus it should not be set)
     */
     private Object getPropertyValue () throws IllegalStateException {
-        return getProperties();
+        if (env.getFeatureDescriptor().getValue("useList") != null &&
+            env.getFeatureDescriptor().getValue("useList").equals( Boolean.TRUE ))
+        {
+            return getProperties();
+        }
+        return getPropertiesMap();
     }
 
 

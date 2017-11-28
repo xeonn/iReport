@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.tools;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Dialog;
@@ -82,8 +83,8 @@ public class JRSubreportParameterDialog extends javax.swing.JDialog {
             }
         };
        
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
 
         //to make the default button ...
@@ -109,7 +110,8 @@ public class JRSubreportParameterDialog extends javax.swing.JDialog {
         jRTextExpressionAreaDefaultExpression = new com.jaspersoft.ireport.designer.editor.ExpressionEditorArea();
         jSeparator1 = new javax.swing.JSeparator();
 
-        setTitle("Add/modify parameter");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/jaspersoft/ireport/locale/Bundle"); // NOI18N
+        setTitle(bundle.getString("JRSubreportParameterDialog.Title.AddModParam")); // NOI18N
         setModal(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -120,7 +122,7 @@ public class JRSubreportParameterDialog extends javax.swing.JDialog {
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         jButtonOK.setMnemonic('o');
-        jButtonOK.setText("OK");
+        jButtonOK.setText(bundle.getString("Global.Button.Ok")); // NOI18N
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOKActionPerformed(evt);
@@ -129,7 +131,7 @@ public class JRSubreportParameterDialog extends javax.swing.JDialog {
         jPanel1.add(jButtonOK);
 
         jButtonCancel.setMnemonic('c');
-        jButtonCancel.setText("Cancel");
+        jButtonCancel.setText(bundle.getString("Global.Button.Cancel")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -142,7 +144,7 @@ public class JRSubreportParameterDialog extends javax.swing.JDialog {
         jPanel2.setPreferredSize(new java.awt.Dimension(350, 250));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("Subreport parameter name");
+        jLabel1.setText(bundle.getString("JRSubreportParameterDialog.Label.SubreportParamName")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 0, 3);
@@ -155,7 +157,7 @@ public class JRSubreportParameterDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 3, 3, 3);
         jPanel2.add(jTextFieldName, gridBagConstraints);
 
-        jLabel3.setText("Value expression");
+        jLabel3.setText(bundle.getString("JRSubreportParameterDialog.Label.ValueExpression")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -198,8 +200,8 @@ public class JRSubreportParameterDialog extends javax.swing.JDialog {
         if (newName.length() <= 0)
         {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "Please insert a valid parameter name!",
-                    "Invalid parameter name!",
+                    I18n.getString("JRSubreportParameterDialog.Message.Warning"),
+                    I18n.getString("JRSubreportParameterDialog.Message.Error"),
                     javax.swing.JOptionPane.WARNING_MESSAGE );
             return;
         }
@@ -210,8 +212,8 @@ public class JRSubreportParameterDialog extends javax.swing.JDialog {
             currentParameters.containsKey(newName))
         {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "A parameter with this name is already defined!",
-                    "Invalid parameter name!",
+                    I18n.getString("JRSubreportParameterDialog.Message.Warning2"),
+                    I18n.getString("JRSubreportParameterDialog.Message.Error2"),
                     javax.swing.JOptionPane.WARNING_MESSAGE );
             return;
         }
@@ -221,6 +223,7 @@ public class JRSubreportParameterDialog extends javax.swing.JDialog {
         tmpParameter.setName(this.jTextFieldName.getText().trim());
         JRDesignExpression exp = new JRDesignExpression();
         exp.setText(this.jRTextExpressionAreaDefaultExpression.getText());
+        exp.setValueClassName("java.lang.Object");
         tmpParameter.setExpression(exp);
         setVisible(false);
         this.setDialogResult( javax.swing.JOptionPane.OK_OPTION);

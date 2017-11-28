@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.crosstab;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
@@ -258,21 +259,21 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         
         //applyI18n();
         
-        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_NONE),"None"));
-        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_REPORT),"Report"));
-        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_PAGE),"Page"));
-        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_COLUMN),"Column"));
-        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_GROUP),"Group"));
+        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_NONE),I18n.getString("CrosstabDataDialog.ComboBox.None")));
+        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_REPORT),I18n.getString("CrosstabDataDialog.ComboBox.Report")));
+        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_PAGE),I18n.getString("CrosstabDataDialog.ComboBox.Page")));
+        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_COLUMN),I18n.getString("CrosstabDataDialog.ComboBox.Column")));
+        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_GROUP),I18n.getString("CrosstabDataDialog.ComboBox.Group")));
         
-        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_NONE),"None"));
-        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_REPORT),"Report"));
-        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_PAGE),"Page"));
-        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_COLUMN),"Column"));
-        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_GROUP),"Group"));
+        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_NONE),I18n.getString("CrosstabDataDialog.ComboBox.None")));
+        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_REPORT),I18n.getString("CrosstabDataDialog.ComboBox.Report")));
+        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_PAGE),I18n.getString("CrosstabDataDialog.ComboBox.Page")));
+        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_COLUMN),I18n.getString("CrosstabDataDialog.ComboBox.Column")));
+        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_GROUP),I18n.getString("CrosstabDataDialog.ComboBox.Group")));
          
-        jComboBoxDatasetConnectionType.addItem(new Tag("Don't use connection or datasource","Don't use connection or datasource"));
-        jComboBoxDatasetConnectionType.addItem(new Tag("Use connection expression","Use connection expression"));
-        jComboBoxDatasetConnectionType.addItem(new Tag("Use datasource expression","Use datasource expression"));
+        jComboBoxDatasetConnectionType.addItem(new Tag(I18n.getString("CrosstabDataDialog.ComboBox.Warning1"),I18n.getString("CrosstabDataDialog.ComboBox.Warning1")));
+        jComboBoxDatasetConnectionType.addItem(new Tag(I18n.getString("CrosstabDataDialog.ComboBox.Warning2"),I18n.getString("CrosstabDataDialog.ComboBox.Warning2")));
+        jComboBoxDatasetConnectionType.addItem(new Tag(I18n.getString("CrosstabDataDialog.ComboBox.Warning3"),I18n.getString("CrosstabDataDialog.ComboBox.Warning3")));
         
         this.jRTextExpressionAreaMapExpression.getExpressionEditorPane().getDocument().addDocumentListener( new javax.swing.event.DocumentListener() {
             public void changedUpdate(javax.swing.event.DocumentEvent evt) {
@@ -334,8 +335,8 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         ((DefaultTableColumnModel)jTableDatasetParameters.getColumnModel()).getColumn(0).setCellRenderer(dpcr);
         ((DefaultTableColumnModel)jTableDatasetParameters.getColumnModel()).getColumn(1).setCellRenderer(dpcr);
         
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
         
         //to make the default button ...
@@ -465,7 +466,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         jPanel8 = new javax.swing.JPanel();
         jButtonClose = new javax.swing.JButton();
 
-        setTitle("Crosstab data");
+        setTitle(I18n.getString("CrosstabDataDialog.Title.CrosstabData")); // NOI18N
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -479,7 +480,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
 
         jPanelDataset.setLayout(new java.awt.GridBagLayout());
 
-        jCheckBoxPreSorted.setText("Data is pre-sorted");
+        jCheckBoxPreSorted.setText(I18n.getString("CrosstabDataDialog.CheckBox.DataPreSorted")); // NOI18N
         jCheckBoxPreSorted.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxPreSortedActionPerformed(evt);
@@ -493,7 +494,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Dataset"));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabelResetType.setText("Reset type");
+        jLabelResetType.setText(I18n.getString("CrosstabDataDialog.Label.ResetType")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -515,7 +516,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jComboBoxResetType, gridBagConstraints);
 
-        jLabelResetGroup.setText("Reset group");
+        jLabelResetGroup.setText(I18n.getString("CrosstabDataDialog.Label.ResetGroup")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -537,7 +538,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jComboBoxResetGroup, gridBagConstraints);
 
-        jLabelIncrementType.setText("Increment type");
+        jLabelIncrementType.setText(I18n.getString("CrosstabDataDialog.Label.IncrementType")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -559,7 +560,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jComboBoxIncrementType, gridBagConstraints);
 
-        jLabelIncrementGroup.setText("Increment group");
+        jLabelIncrementGroup.setText(I18n.getString("CrosstabDataDialog.Label.IncrementGroup")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
@@ -581,7 +582,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel2.add(jComboBoxIncrementGroup, gridBagConstraints);
 
-        jLabelIncrementType2.setText("Increment When expression");
+        jLabelIncrementType2.setText(I18n.getString("CrosstabDataDialog.Label.IncrementWhenExp")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -613,7 +614,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         jPanel1.setPreferredSize(new java.awt.Dimension(329, 192));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabelIncrementType1.setText("Sub dataset");
+        jLabelIncrementType1.setText(I18n.getString("CrosstabDataDialog.Label.SubDataset")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -681,7 +682,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         jPanel10.setPreferredSize(new java.awt.Dimension(100, 69));
         jPanel10.setLayout(new java.awt.GridBagLayout());
 
-        jButtonAddParameter.setText("Add");
+        jButtonAddParameter.setText(I18n.getString("Global.Button.Add")); // NOI18N
         jButtonAddParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddParameterActionPerformed(evt);
@@ -693,7 +694,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         jPanel10.add(jButtonAddParameter, gridBagConstraints);
 
-        jButtonModParameter.setText("Modify");
+        jButtonModParameter.setText(I18n.getString("Global.Button.Modify")); // NOI18N
         jButtonModParameter.setEnabled(false);
         jButtonModParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -706,7 +707,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         jPanel10.add(jButtonModParameter, gridBagConstraints);
 
-        jButtonRemParameter.setText("Remove");
+        jButtonRemParameter.setText(I18n.getString("Global.Button.Remove")); // NOI18N
         jButtonRemParameter.setEnabled(false);
         jButtonRemParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -740,7 +741,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
         jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel26.setText("Parameters Map Expression");
+        jLabel26.setText(I18n.getString("CrosstabDataDialog.Label.ParamMapExpr")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -767,7 +768,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
 
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
-        jLabel41.setText("Connection / Datasource Expression");
+        jLabel41.setText(I18n.getString("CrosstabDataDialog.Label.ConnDatasourceExp")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -842,7 +843,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
 
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
-        jButtonClose.setText("Close");
+        jButtonClose.setText(I18n.getString("Global.Button.Close")); // NOI18N
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCloseActionPerformed(evt);
@@ -1134,7 +1135,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
                 SwingUtilities.invokeLater(new Runnable(){
                     public void run()
                     {
-                        JOptionPane.showMessageDialog(jComboBoxIncrementGroup, "No groups available");
+                        JOptionPane.showMessageDialog(jComboBoxIncrementGroup, I18n.getString("CrosstabDataDialog.Message.NoGroupsAvailable"));
                     }
                 });
                 setInit(false);
@@ -1188,7 +1189,7 @@ public class CrosstabDataDialog extends javax.swing.JDialog {
                 SwingUtilities.invokeLater(new Runnable(){
                     public void run()
                     {
-                        JOptionPane.showMessageDialog(jComboBoxResetGroup, "No groups available");
+                        JOptionPane.showMessageDialog(jComboBoxResetGroup, I18n.getString("CrosstabDataDialog.Message.NoGroupsAvailable"));
                     }
                 });
                 setInit(false);

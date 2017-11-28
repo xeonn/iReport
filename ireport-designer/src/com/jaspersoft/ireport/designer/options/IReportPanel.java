@@ -5,6 +5,7 @@
 
 package com.jaspersoft.ireport.designer.options;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.fonts.CheckBoxListEntry;
 import com.jaspersoft.ireport.designer.sheet.Tag;
@@ -109,7 +110,7 @@ final class IReportPanel extends javax.swing.JPanel {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Units"));
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, "Default unit");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, I18n.getString("IReportPanel.Label.DefaultUnit")); // NOI18N
 
         jComboBoxUnits.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -139,7 +140,7 @@ final class IReportPanel extends javax.swing.JPanel {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report execution options"));
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxLimitRecordNumber, "Limit the number of records");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxLimitRecordNumber, I18n.getString("IReportPanel.CheckBox.LimitRecords")); // NOI18N
         jCheckBoxLimitRecordNumber.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jCheckBoxLimitRecordNumberStateChanged(evt);
@@ -151,7 +152,7 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelMaxNumber, "Max number of reports");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelMaxNumber, I18n.getString("IReportPanel.Label.MaxReports")); // NOI18N
         jLabelMaxNumber.setEnabled(false);
 
         jSpinnerMaxRecordNumber.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(5000), Integer.valueOf(1), null, Integer.valueOf(1)));
@@ -164,27 +165,27 @@ final class IReportPanel extends javax.swing.JPanel {
 
         jTextFieldReportLocale.setEditable(false);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonReportLocale, "Select...");
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonReportLocale, I18n.getString("IReportPanel.Button.Select")); // NOI18N
         jButtonReportLocale.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonReportLocaleActionPerformed(evt);
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelReportLocale, "Report Locale");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelReportLocale, I18n.getString("IReportPanel.Label.ReportLocale")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelTimeZone, "Report Time Zone");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelTimeZone, I18n.getString("IReportPanel.Label.ReportTimeZone")); // NOI18N
 
         jTextFieldTimeZone.setEditable(false);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonTimeZone, "Select...");
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonTimeZone, I18n.getString("IReportPanel.Button.Select")); // NOI18N
         jButtonTimeZone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonTimeZoneActionPerformed(evt);
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxIgnorePagination, "Ignore pagination");
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxIgnorePagination, I18n.getString("IReportPanel.CheckBox.IgnorePagination")); // NOI18N
         jCheckBoxIgnorePagination.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jCheckBoxIgnorePaginationStateChanged(evt);
@@ -280,13 +281,13 @@ final class IReportPanel extends javax.swing.JPanel {
                     .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                     .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addContainerGap(49, Short.MAX_VALUE)))
         );
 
         jTabbedPane1.addTab("General", jPanel3);
 
         jLabelClasspath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelClasspath, "Classpath");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelClasspath, I18n.getString("IReportPanel.Label.Classpath")); // NOI18N
 
         jScrollPane1.setViewportView(jListClassPath);
 
@@ -294,7 +295,7 @@ final class IReportPanel extends javax.swing.JPanel {
         jPanel5.setPreferredSize(new java.awt.Dimension(120, 10));
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonAddClasspathItem, "Add JAR");
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonAddClasspathItem, I18n.getString("IReportPanel.Button.AddJAR")); // NOI18N
         jButtonAddClasspathItem.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonAddClasspathItem.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonAddClasspathItem.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -310,7 +311,7 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel5.add(jButtonAddClasspathItem, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonAddClasspathItem1, "Add Folder");
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonAddClasspathItem1, I18n.getString("IReportPanel.Button.AddFolder")); // NOI18N
         jButtonAddClasspathItem1.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonAddClasspathItem1.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonAddClasspathItem1.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -326,7 +327,7 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel5.add(jButtonAddClasspathItem1, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonRemoveClasspathItem, "Remove");
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonRemoveClasspathItem, I18n.getString("Global.Button.Remove")); // NOI18N
         jButtonRemoveClasspathItem.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonRemoveClasspathItem.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonRemoveClasspathItem.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -341,7 +342,7 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel5.add(jButtonRemoveClasspathItem, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonMoveUpClasspathItem, "Move up");
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonMoveUpClasspathItem, I18n.getString("Global.Button.MoveUp")); // NOI18N
         jButtonMoveUpClasspathItem.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonMoveUpClasspathItem.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonMoveUpClasspathItem.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -356,7 +357,7 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel5.add(jButtonMoveUpClasspathItem, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonMoveDownClasspathItem, "Move down");
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonMoveDownClasspathItem, I18n.getString("Global.Button.MoveDown")); // NOI18N
         jButtonMoveDownClasspathItem.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonMoveDownClasspathItem.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonMoveDownClasspathItem.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -401,10 +402,10 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Classpath", jPanel4);
+        jTabbedPane1.addTab(I18n.getString("IReportPanel.Label.Classpath"), jPanel4); // NOI18N
 
         jLabelFontspath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelFontspath, "Fonts path");
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelFontspath, I18n.getString("IReportPanel.Label.FontsPath")); // NOI18N
 
         jListFontspath.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -417,7 +418,7 @@ final class IReportPanel extends javax.swing.JPanel {
         jPanel8.setPreferredSize(new java.awt.Dimension(120, 10));
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonSelectAllFonts, "Select all");
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonSelectAllFonts, I18n.getString("Global.Button.SelectAll")); // NOI18N
         jButtonSelectAllFonts.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonSelectAllFonts.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonSelectAllFonts.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -432,7 +433,7 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel8.add(jButtonSelectAllFonts, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonDeselectAllFonts, "Deselect all");
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonDeselectAllFonts, I18n.getString("Global.Button.DeselectAll")); // NOI18N
         jButtonDeselectAllFonts.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonDeselectAllFonts.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonDeselectAllFonts.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -584,8 +585,8 @@ final class IReportPanel extends javax.swing.JPanel {
         String fileName = "";
         javax.swing.JFileChooser jfc = new javax.swing.JFileChooser( IReportManager.getInstance().getCurrentDirectory());
         
-        jfc.setDialogTitle("Add JAR(s) / path to the classpath");
-        jfc.setDialogTitle("Add JAR(s) / path to the classpath");//"addToClassPath"
+        jfc.setDialogTitle(I18n.getString("IReportPanel.Title.Dialog"));
+        jfc.setDialogTitle(I18n.getString("IReportPanel.Title.Dialog"));//"addToClassPath"
         
         jfc.setAcceptAllFileFilterUsed(true);
         jfc.setFileSelectionMode( JFileChooser.FILES_ONLY  );
@@ -619,8 +620,8 @@ final class IReportPanel extends javax.swing.JPanel {
     private void jButtonAddClasspathItem1jButtonAddActionPerformed1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddClasspathItem1jButtonAddActionPerformed1
         javax.swing.JFileChooser jfc = new javax.swing.JFileChooser( IReportManager.getInstance().getCurrentDirectory());
         
-        jfc.setDialogTitle("Add JAR(s) / path to the classpath");
-        jfc.setDialogTitle("Add JAR(s) / path to the classpath"); //"addToClassPath"
+        jfc.setDialogTitle(I18n.getString("IReportPanel.Title.Dialog"));
+        jfc.setDialogTitle(I18n.getString("IReportPanel.Title.Dialog")); //"addToClassPath"
         
         jfc.setAcceptAllFileFilterUsed(true);
         jfc.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY  );
@@ -709,7 +710,7 @@ final class IReportPanel extends javax.swing.JPanel {
     
         Preferences pref = IReportManager.getPreferences();
         
-        String unit = pref.get("Unit","inches");
+        String unit = pref.get(I18n.getString("IReportPanel.Value.Unit"),I18n.getString("IReportPanel.Measure.inches"));
         Misc.setComboboxSelectedTagValue(jComboBoxUnits, unit);
         
         jCheckBoxLimitRecordNumber.setSelected( pref.getBoolean("limitRecordNumber", false)  );
@@ -756,7 +757,7 @@ final class IReportPanel extends javax.swing.JPanel {
         if (jComboBoxUnits.getSelectedIndex() >= 0)
         {
             String unit = ""+((Tag)jComboBoxUnits.getSelectedItem()).getValue();
-            pref.put("Unit", unit);
+            pref.put(I18n.getString("IReportPanel.Value.Unit"), unit);
         }
         
         pref.putBoolean("limitRecordNumber"  , jCheckBoxLimitRecordNumber.isSelected() );

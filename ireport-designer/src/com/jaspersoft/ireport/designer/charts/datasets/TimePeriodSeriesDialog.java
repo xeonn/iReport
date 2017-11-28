@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.charts.datasets;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import net.sf.jasperreports.engine.JRHyperlink;
@@ -70,8 +71,8 @@ public class TimePeriodSeriesDialog extends javax.swing.JDialog {
             }
         };
        
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
 
         //to make the default button ...
@@ -119,7 +120,7 @@ public class TimePeriodSeriesDialog extends javax.swing.JDialog {
         jButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Time period series");
+        setTitle(I18n.getString("TimePeriodSeriesDialog.Title.TimePeriodSeries")); // NOI18N
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -129,7 +130,7 @@ public class TimePeriodSeriesDialog extends javax.swing.JDialog {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabelSeriesExpression.setText("Series expression (required)");
+        jLabelSeriesExpression.setText(I18n.getString("TimePeriodSeriesDialog.Label.SeriesExpression_(required)")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -137,7 +138,7 @@ public class TimePeriodSeriesDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         jPanel1.add(jLabelSeriesExpression, gridBagConstraints);
 
-        jLabelStartDateExpression.setText("Start date expression (required)");
+        jLabelStartDateExpression.setText(I18n.getString("TimePeriodSeriesDialog.Label.Start_date_expression_(required)")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -146,7 +147,7 @@ public class TimePeriodSeriesDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         jPanel1.add(jLabelStartDateExpression, gridBagConstraints);
 
-        jLabelEndDateExpression.setText("End date expression (required)");
+        jLabelEndDateExpression.setText(I18n.getString("TimePeriodSeriesDialog.Label.End_date_expression_(required)")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -155,7 +156,7 @@ public class TimePeriodSeriesDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         jPanel1.add(jLabelEndDateExpression, gridBagConstraints);
 
-        jLabelValueExpression.setText("Value expression (required)");
+        jLabelValueExpression.setText(I18n.getString("TimePeriodSeriesDialog..Label.Value_expression_(required)")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
@@ -164,7 +165,7 @@ public class TimePeriodSeriesDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         jPanel1.add(jLabelValueExpression, gridBagConstraints);
 
-        jLabelLabelExpression.setText("Label expression");
+        jLabelLabelExpression.setText(I18n.getString("TimePeriodSeriesDialog.Label.LabelExpression")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 14;
@@ -229,7 +230,7 @@ public class TimePeriodSeriesDialog extends javax.swing.JDialog {
         jPanel1.add(jRTextExpressionLabel, gridBagConstraints);
 
         jTabbedPane1.addTab("Data", jPanel1);
-        jTabbedPane1.addTab("Item Hyperlink", sectionItemHyperlinkPanel1);
+        jTabbedPane1.addTab(I18n.getString("TimePeriodSeriesDialog.Pane.ItemHyperlink"), sectionItemHyperlinkPanel1); // NOI18N
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -246,7 +247,7 @@ public class TimePeriodSeriesDialog extends javax.swing.JDialog {
         jPanel6.add(jPanel7, gridBagConstraints);
 
         jButtonOK.setMnemonic('o');
-        jButtonOK.setText("OK");
+        jButtonOK.setText(I18n.getString("Global.Button.Ok")); // NOI18N
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOKActionPerformed(evt);
@@ -258,7 +259,7 @@ public class TimePeriodSeriesDialog extends javax.swing.JDialog {
         jPanel6.add(jButtonOK, gridBagConstraints);
 
         jButtonCancel.setMnemonic('c');
-        jButtonCancel.setText("Cancel");
+        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -291,31 +292,31 @@ public class TimePeriodSeriesDialog extends javax.swing.JDialog {
     private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKActionPerformed
 
         seriesExpression =  Misc.createExpression(null,  jRTextExpressionSeries.getText());
-        startDateExpression =  Misc.createExpression("java.util.Date",  jRTextExpressionStartDate.getText());
-        endDateExpression =  Misc.createExpression("java.util.Date",  jRTextExpressionEndDate.getText());
-        valueExpression =  Misc.createExpression("java.lang.Number",  jRTextExpressionValue.getText());
-        labelExpression =  Misc.createExpression("java.lang.String",  jRTextExpressionLabel.getText());
+        startDateExpression =  Misc.createExpression("java.util.Date",  jRTextExpressionStartDate.getText());//NOI18N
+        endDateExpression =  Misc.createExpression("java.util.Date",  jRTextExpressionEndDate.getText());// NOI18N
+        valueExpression =  Misc.createExpression("java.lang.Number",  jRTextExpressionValue.getText());// NOI18N
+        labelExpression =  Misc.createExpression("java.lang.String",  jRTextExpressionLabel.getText());// NOI18N
 
-        java.text.MessageFormat formatter = new java.text.MessageFormat(  "{0} cannot be blank!");
+        java.text.MessageFormat formatter = new java.text.MessageFormat(  I18n.getString("TimePeriodSeriesDialog.Message.Cannot_be_blank!"));
 
         if (seriesExpression == null) {
             
-           javax.swing.JOptionPane.showMessageDialog(this, formatter.format(new Object[]{"Series expression"}) ,"Invalid expression",javax.swing.JOptionPane.ERROR_MESSAGE);
+           javax.swing.JOptionPane.showMessageDialog(this, formatter.format(new Object[]{I18n.getString("TimePeriodSeriesDialog.Pane.SeriesExpression")}) ,I18n.getString("TimePeriodSeriesDialog.Message.InvalidExpression"),javax.swing.JOptionPane.ERROR_MESSAGE);
            return;
         } 
         
         if (getStartDateExpression() == null) {
-           javax.swing.JOptionPane.showMessageDialog(this, formatter.format(new Object[]{"Start date expression"}) ,"Invalid expression",javax.swing.JOptionPane.ERROR_MESSAGE);
+           javax.swing.JOptionPane.showMessageDialog(this, formatter.format(new Object[]{I18n.getString("TimePeriodSeriesDialog.Message.Start_date_expression")}) ,I18n.getString("TimePeriodSeriesDialog.Message.InvalidExpression"),javax.swing.JOptionPane.ERROR_MESSAGE);
            return;
         } 
         
         if (getEndDateExpression() == null) {
-           javax.swing.JOptionPane.showMessageDialog(this, formatter.format(new Object[]{"End date expression"}) ,"Invalid expression",javax.swing.JOptionPane.ERROR_MESSAGE);
+           javax.swing.JOptionPane.showMessageDialog(this, formatter.format(new Object[]{I18n.getString("TimePeriodSeriesDialog.Message.End_date_expression")}) ,I18n.getString("TimePeriodSeriesDialog.Message.InvalidExpression"),javax.swing.JOptionPane.ERROR_MESSAGE);
            return;
         } 
         
         if (valueExpression == null) {
-           javax.swing.JOptionPane.showMessageDialog(this, formatter.format(new Object[]{"Value expression"}) ,"Invalid expression",javax.swing.JOptionPane.ERROR_MESSAGE);
+           javax.swing.JOptionPane.showMessageDialog(this, formatter.format(new Object[]{I18n.getString("TimePeriodSeriesDialog.Pane.ValueExpression")}) ,I18n.getString("TimePeriodSeriesDialog.Message.InvalidExpression"),javax.swing.JOptionPane.ERROR_MESSAGE);
            return;
         } 
         

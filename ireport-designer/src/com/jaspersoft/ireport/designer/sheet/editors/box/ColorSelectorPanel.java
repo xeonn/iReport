@@ -31,6 +31,8 @@
  */
 
 package com.jaspersoft.ireport.designer.sheet.editors.box;
+
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.tools.HexColorChooserPanel;
 import com.jaspersoft.ireport.designer.tools.MaskedPlainDocument;
 import java.awt.*;
@@ -237,7 +239,7 @@ public class ColorSelectorPanel extends javax.swing.JPanel {
     private void jButtonSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSelectActionPerformed
 
         
-        Color c =HexColorChooserPanel.showDialog(this,"Pick a color!...",this.getColor());
+        Color c =HexColorChooserPanel.showDialog(this,I18n.getString("ColorSelectorPanel.Dialog.PickColor"),this.getColor());
         if (c != null) setColor(c);
         
     }//GEN-LAST:event_jButtonSelectActionPerformed

@@ -6,6 +6,7 @@
 
 package com.jaspersoft.ireport.designer.connection.gui;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.connection.JRCustomDataSourceConnection;
@@ -44,7 +45,7 @@ public class JRCustomDataSourceConnectionEditor extends javax.swing.JPanel imple
 
         jPanelCustomDataSourceFactory.setLayout(new java.awt.GridBagLayout());
 
-        jLabel10.setText("Factory class");
+        jLabel10.setText(I18n.getString("JRCustomDataSourceConnectionEditor.Label.FC")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -61,7 +62,7 @@ public class JRCustomDataSourceConnectionEditor extends javax.swing.JPanel imple
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 3);
         jPanelCustomDataSourceFactory.add(jTextFieldJRCustomDataSourceFactoryClass, gridBagConstraints);
 
-        jLabel11.setText("The static method to call to retrive the JRDataSource");
+        jLabel11.setText(I18n.getString("JRCustomDataSourceConnectionEditor.Label.JRDataSource")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;

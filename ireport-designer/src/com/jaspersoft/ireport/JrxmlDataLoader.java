@@ -5,7 +5,7 @@ import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObjectExistsException;
 import org.openide.loaders.MultiDataObject;
 import org.openide.loaders.UniFileLoader;
-import org.openide.util.NbBundle;
+import com.jaspersoft.ireport.locale.I18n;
 
 public class JrxmlDataLoader extends UniFileLoader {
 
@@ -18,7 +18,7 @@ public class JrxmlDataLoader extends UniFileLoader {
 
     @Override
     protected String defaultDisplayName() {
-        return NbBundle.getMessage(JrxmlDataLoader.class, "LBL_Jrxml_loader_name");
+        return I18n.getString("JrxmlDataLoader.Name.LBL_Jrxml_loader_name");
     }
 
     @Override

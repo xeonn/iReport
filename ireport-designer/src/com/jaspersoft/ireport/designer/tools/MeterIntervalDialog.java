@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.tools;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Color;
@@ -86,8 +87,8 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
             }
         };
        
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
         
         
         jSpinnerAlpha.setModel(new SpinnerNumberModel(1.0d, 0.0d, 1.0d, 0.01d));
@@ -136,13 +137,13 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         jButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Time series");
+        setTitle(I18n.getString("MeterIntervalDialog.Dialog.Title")); // NOI18N
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 250));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabelLabel.setText("Label");
+        jLabelLabel.setText(I18n.getString("MeterIntervalDialog.Label.Label")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -157,7 +158,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         jPanel1.add(jTextFieldLabel, gridBagConstraints);
 
-        jLabelColor.setText("Color");
+        jLabelColor.setText(I18n.getString("MeterIntervalDialog.Label.Color")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -173,7 +174,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 4, 6);
         jPanel2.add(colorSelectorPanel, gridBagConstraints);
 
-        JButtonSelectColor.setText("Select color");
+        JButtonSelectColor.setText(I18n.getString("MeterIntervalDialog.Button.SelectColor")); // NOI18N
         JButtonSelectColor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JButtonSelectColorActionPerformed(evt);
@@ -191,7 +192,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
         jPanel1.add(jPanel2, gridBagConstraints);
 
-        jButtonDefaultColor.setText("Use default color");
+        jButtonDefaultColor.setText(I18n.getString("MeterIntervalDialog.Button.UseDefaultColor")); // NOI18N
         jButtonDefaultColor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDefaultColorActionPerformed(evt);
@@ -204,7 +205,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 4);
         jPanel1.add(jButtonDefaultColor, gridBagConstraints);
 
-        jLabelAlpha.setText("Alpha");
+        jLabelAlpha.setText(I18n.getString("MeterIntervalDialog.Label.Alpha")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -219,7 +220,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         jPanel1.add(jSpinnerAlpha, gridBagConstraints);
 
-        jLabelRangeLow.setText("Data range low expression");
+        jLabelRangeLow.setText(I18n.getString("MeterIntervalDialog.Label.DataRangeLowExpression")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 3;
@@ -240,7 +241,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel1.add(jRTextExpressionLow, gridBagConstraints);
 
-        jLabelRangeHigh.setText("Data range high expression");
+        jLabelRangeHigh.setText(I18n.getString("MeterIntervalDialog.Label.DataRangeHighExpression")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 3;
@@ -284,7 +285,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         jPanel6.add(jPanel7, gridBagConstraints);
 
         jButtonOK.setMnemonic('o');
-        jButtonOK.setText("OK");
+        jButtonOK.setText(I18n.getString("Global.Button.Ok")); // NOI18N
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOKActionPerformed(evt);
@@ -296,7 +297,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         jPanel6.add(jButtonOK, gridBagConstraints);
 
         jButtonCancel.setMnemonic('c');
-        jButtonCancel.setText("Cancel");
+        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -326,7 +327,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
 
     private void JButtonSelectColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JButtonSelectColorActionPerformed
         
-        java.awt.Color c = HexColorChooserPanel.showDialog(this,"Pick a color",null);
+        java.awt.Color c = HexColorChooserPanel.showDialog(this,I18n.getString("MeterIntervalDialog.Dialog.PickColor"),null);
         if (c != null) {
             colorSelectorPanel.setBackground(c);
             backGroundColor = c;

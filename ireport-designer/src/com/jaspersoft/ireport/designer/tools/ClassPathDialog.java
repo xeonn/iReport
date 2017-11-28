@@ -32,6 +32,7 @@
 
 package com.jaspersoft.ireport.designer.tools;
 
+import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.*;
 import com.jaspersoft.ireport.designer.IReportManager;
 import java.awt.Dialog;
@@ -77,8 +78,8 @@ public class ClassPathDialog extends javax.swing.JDialog {
             }
         };
        
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
 
         //applyI18n();
@@ -110,7 +111,7 @@ public class ClassPathDialog extends javax.swing.JDialog {
         jButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("IReport classpath");
+        setTitle(I18n.getString("ClassPathDialog.Title.IRClasspath")); // NOI18N
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
@@ -122,7 +123,7 @@ public class ClassPathDialog extends javax.swing.JDialog {
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabelClasspath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabelClasspath.setText("Classpath");
+        jLabelClasspath.setText(I18n.getString("ClassPathDialog.Label.Classpath")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -148,7 +149,7 @@ public class ClassPathDialog extends javax.swing.JDialog {
         jPanel1.setPreferredSize(new java.awt.Dimension(120, 10));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButtonAdd.setText("Add JAR");
+        jButtonAdd.setText(I18n.getString("ClassPathDialog.Button.AddJAR")); // NOI18N
         jButtonAdd.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonAdd.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonAdd.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -164,7 +165,7 @@ public class ClassPathDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel1.add(jButtonAdd, gridBagConstraints);
 
-        jButtonAdd1.setText("Add Folder");
+        jButtonAdd1.setText(I18n.getString("ClassPathDialog.Button.AddFolder")); // NOI18N
         jButtonAdd1.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonAdd1.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonAdd1.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -180,7 +181,7 @@ public class ClassPathDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel1.add(jButtonAdd1, gridBagConstraints);
 
-        jButtonRemove.setText("Remove");
+        jButtonRemove.setText(I18n.getString("Global.Button.Remove")); // NOI18N
         jButtonRemove.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonRemove.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonRemove.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -195,7 +196,7 @@ public class ClassPathDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel1.add(jButtonRemove, gridBagConstraints);
 
-        jButtonMoveUp.setText("Move up");
+        jButtonMoveUp.setText(I18n.getString("Global.Button.MoveUp")); // NOI18N
         jButtonMoveUp.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonMoveUp.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonMoveUp.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -210,7 +211,7 @@ public class ClassPathDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel1.add(jButtonMoveUp, gridBagConstraints);
 
-        jButtonMoveDown.setText("Move down");
+        jButtonMoveDown.setText(I18n.getString("Global.Button.MoveDown")); // NOI18N
         jButtonMoveDown.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonMoveDown.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonMoveDown.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -229,7 +230,7 @@ public class ClassPathDialog extends javax.swing.JDialog {
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(jPanel2, gridBagConstraints);
 
-        jButtonSave.setText("Save classpath");
+        jButtonSave.setText(I18n.getString("ClassPathDialog.Button.SaveClasspath")); // NOI18N
         jButtonSave.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonSave.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonSave.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -244,7 +245,7 @@ public class ClassPathDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel1.add(jButtonSave, gridBagConstraints);
 
-        jButtonCancel.setText("Cancel");
+        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
         jButtonCancel.setMaximumSize(new java.awt.Dimension(200, 26));
         jButtonCancel.setMinimumSize(new java.awt.Dimension(90, 26));
         jButtonCancel.setPreferredSize(new java.awt.Dimension(120, 26));
@@ -273,8 +274,8 @@ public class ClassPathDialog extends javax.swing.JDialog {
     private void jButtonAddActionPerformed1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed1
         javax.swing.JFileChooser jfc = new javax.swing.JFileChooser( IReportManager.getInstance().getCurrentDirectory());
 
-        jfc.setDialogTitle("Add JAR(s) / path to the classpath");
-        jfc.setDialogTitle("Add JAR(s) / path to the classpath"); //"addToClassPath"
+        jfc.setDialogTitle(I18n.getString("ClassPathDialog.DialogTitle.AddJAR"));
+        jfc.setDialogTitle(I18n.getString("ClassPathDialog.DialogTitle.AddJAR")); //"addToClassPath"
 
         jfc.setAcceptAllFileFilterUsed(true);
         jfc.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY  );
@@ -302,7 +303,7 @@ public class ClassPathDialog extends javax.swing.JDialog {
         if (modifiedPath)
         {
             int ret = javax.swing.JOptionPane.showConfirmDialog(this, 
-                    "Do you want save the classpath ?"); //"message.classpath.save"
+                    I18n.getString("ClassPathDialog.Dialog.Confirm")); //"message.classpath.save"
 
             if (ret == javax.swing.JOptionPane.CANCEL_OPTION)
             {
@@ -381,8 +382,8 @@ public class ClassPathDialog extends javax.swing.JDialog {
         String fileName = "";
         javax.swing.JFileChooser jfc = new javax.swing.JFileChooser( IReportManager.getInstance().getCurrentDirectory());
 
-        jfc.setDialogTitle("Add JAR(s) / path to the classpath");
-        jfc.setDialogTitle("Add JAR(s) / path to the classpath");//"addToClassPath"
+        jfc.setDialogTitle(I18n.getString("ClassPathDialog.DialogTitle.AddJAR"));
+        jfc.setDialogTitle(I18n.getString("ClassPathDialog.DialogTitle.AddJAR"));//"addToClassPath"
 
         jfc.setAcceptAllFileFilterUsed(true);
         jfc.setFileSelectionMode( JFileChooser.FILES_ONLY  );

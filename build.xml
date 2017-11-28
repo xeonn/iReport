@@ -105,6 +105,8 @@
                 <include name="nbproject/**"/>
                 <include name="ireport-standalone-specific/**"/>
                 <include name="ireport-designer/**"/>
+                <include name="jasperserver-plugin/**"/>
+                <include name="heartbeat/**"/>
                 <include name="branding/**"/>
                 <exclude name="**/private/**"/>
                 <exclude name="**/build/**"/>
@@ -133,7 +135,17 @@
     ============================================================= -->
     <target name="create-ireport-distro-nbm" depends="nbms" description="Creates an unzipped platform from the suite, launchers, and selected modules from the platform.">
         <mkdir dir="dist"/>
-        <copyfile dest="dist/${distro.zipfilename}.nbm" src="build/updates/com-jaspersoft-ireport.nbm"/>
+        <copy file="build/updates/com-jaspersoft-ireport.nbm" tofile="dist/${distro.zipfilename}.nbm" />
+        <copy file="build/updates/com-jaspersoft-ireport-jasperserver.nbm" tofile="dist/${distro.zipfilename.js}.nbm" />
+        <copy file="build/updates/com-jaspersoft-ireport-heartbeat.nbm" tofile="dist/${distro.zipfilename.hb}.nbm" />
+        <zip destfile="dist/${distro.zipfilename}-plugin.zip">
+            <zipfileset dir="dist" prefix="dist/${distro.zipfilename}.nbms.zip">
+                <include name="${distro.zipfilename}.nbm"/>
+                <include name="${distro.zipfilename.js}.nbm"/>
+                <include name="${distro.zipfilename.hb}.nbm"/>
+            </zipfileset>
+        </zip>
+    
     </target>
     
     <!-- =========================================================

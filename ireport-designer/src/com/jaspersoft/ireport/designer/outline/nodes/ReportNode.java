@@ -9,6 +9,7 @@
 
 package com.jaspersoft.ireport.designer.outline.nodes;
 
+import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.properties.LanguageProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.WhenNoDataTypeProperty;
 import com.jaspersoft.ireport.designer.IReportManager;
@@ -26,6 +27,7 @@ import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import javax.swing.Action;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.ErrorManager;
@@ -44,7 +46,7 @@ import org.openide.util.lookup.ProxyLookup;
  *
  * @author gtoffoli
  */
-public class ReportNode extends IRAbstractNode implements PropertyChangeListener {
+public class ReportNode extends IRAbstractNode implements PropertyChangeListener, ExpressionHolder {
 
     JasperDesign jd = null;
     
@@ -140,7 +142,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         Sheet.Set moreSet = Sheet.createPropertiesSet();
         moreSet.setName("PAGE_MORE");
         moreSet.setDisplayName("More...");
-        DatasetNode.fillDatasetPropertySet(moreSet, jd.getMainDesignDataset() );
+        DatasetNode.fillDatasetPropertySet(moreSet, jd.getMainDesignDataset(), jd );
         moreSet.put(new JRPropertiesMapProperty( jd ));
         moreSet.put(new TitleNewPageProperty( jd ));
         moreSet.put(new SummaryNewPageProperty( jd ));
@@ -1104,6 +1106,15 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         }
         
         return o instanceof Node.Cookie ? (T)o : null;
+    }
+
+    public boolean hasExpression(JRDesignExpression ex) {
+        if (jd.getFilterExpression() == ex) return true;
+        return false;
+    }
+
+    public ExpressionContext getExpressionContext(JRDesignExpression ex) {
+        return new ExpressionContext( jd.getMainDesignDataset() );
     }
     
 }
