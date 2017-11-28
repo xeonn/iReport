@@ -217,7 +217,7 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
         
         AbstractReportObjectScene sc = getActiveScene();
         
-        SceneAnimator sa = new SceneAnimator(sc);
+        //SceneAnimator sa = new SceneAnimator(sc);//let's do animation later, after we fix all bugs
         double zoom = sc.getZoomFactor();
         
         for (int i=0; i<zoomSteps.length; ++i)
@@ -229,15 +229,16 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
             }
         }
         
-        sa.animateZoomFactor(zoom);
-        //sc.validate();
+        //sa.animateZoomFactor(zoom);
+        sc.setZoomFactor(zoom);
+        sc.validate();
     }
     
     public void zoomOut() {
         
         AbstractReportObjectScene sc = getActiveScene();
         
-        SceneAnimator sa = new SceneAnimator(sc);
+        //SceneAnimator sa = new SceneAnimator(sc);
         double zoom = sc.getZoomFactor();
         
         for (int i=zoomSteps.length-1; i>=0; --i)
@@ -249,8 +250,9 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
             }
         }
         
-        sa.animateZoomFactor(zoom);
-        //sc.validate();
+        //sa.animateZoomFactor(zoom);
+        sc.setZoomFactor(zoom);
+        sc.validate();
     }
 
     /**

@@ -9,20 +9,18 @@ package com.jaspersoft.ireport.designer.tools;
 import com.jaspersoft.ireport.designer.menu.OpenQueryDialogAction;
 import com.jaspersoft.ireport.designer.menu.ZoomInAction;
 import com.jaspersoft.ireport.designer.menu.ZoomOutAction;
+import javax.swing.JToolBar;
 import org.openide.util.actions.SystemAction;
 
 /**
  *
  * @author  gtoffoli
  */
-public class JrxmlEditorToolbar extends javax.swing.JPanel {
+public class JrxmlEditorToolbar extends JToolBar {
     
     /** Creates new form JrxmlEditorToolbar */
     public JrxmlEditorToolbar() {
         initComponents();
-        jToolBar1.add( SystemAction.get(OpenQueryDialogAction.class) );
-        jToolBar1.add( SystemAction.get(ZoomInAction.class) );
-        jToolBar1.add( SystemAction.get(ZoomOutAction.class) );
     }
     
     /** This method is called from within the constructor to
@@ -33,22 +31,49 @@ public class JrxmlEditorToolbar extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jToolBar1 = new javax.swing.JToolBar();
         jSeparator1 = new javax.swing.JToolBar.Separator();
+        btnOpenQuery = add(SystemAction.get(OpenQueryDialogAction.class));
+        btnZoomIn = add(SystemAction.get(ZoomInAction.class));
+        btnZoomOut = add(SystemAction.get(ZoomOutAction.class));
 
-        setLayout(new java.awt.BorderLayout());
+        setBorder(null);
+        setRollover(true);
+        add(jSeparator1);
 
-        jToolBar1.setFloatable(false);
-        jToolBar1.setRollover(true);
-        jToolBar1.add(jSeparator1);
+        btnOpenQuery.setText(org.openide.util.NbBundle.getMessage(JrxmlEditorToolbar.class, "JrxmlEditorToolbar.btnOpenQuery.text")); // NOI18N
+        btnOpenQuery.setFocusable(false);
+        btnOpenQuery.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnOpenQuery.setMaximumSize(new java.awt.Dimension(23, 23));
+        btnOpenQuery.setMinimumSize(new java.awt.Dimension(23, 23));
+        btnOpenQuery.setPreferredSize(new java.awt.Dimension(23, 23));
+        btnOpenQuery.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        add(btnOpenQuery);
 
-        add(jToolBar1, java.awt.BorderLayout.CENTER);
+        btnZoomIn.setText(org.openide.util.NbBundle.getMessage(JrxmlEditorToolbar.class, "JrxmlEditorToolbar.btnZoomIn.text")); // NOI18N
+        btnZoomIn.setFocusable(false);
+        btnZoomIn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnZoomIn.setMaximumSize(new java.awt.Dimension(23, 23));
+        btnZoomIn.setMinimumSize(new java.awt.Dimension(23, 23));
+        btnZoomIn.setPreferredSize(new java.awt.Dimension(23, 23));
+        btnZoomIn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        add(btnZoomIn);
+
+        btnZoomOut.setText(org.openide.util.NbBundle.getMessage(JrxmlEditorToolbar.class, "JrxmlEditorToolbar.btnZoomOut.text")); // NOI18N
+        btnZoomOut.setFocusable(false);
+        btnZoomOut.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnZoomOut.setMaximumSize(new java.awt.Dimension(23, 23));
+        btnZoomOut.setMinimumSize(new java.awt.Dimension(23, 23));
+        btnZoomOut.setPreferredSize(new java.awt.Dimension(23, 23));
+        btnZoomOut.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        add(btnZoomOut);
     }// </editor-fold>//GEN-END:initComponents
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnOpenQuery;
+    private javax.swing.JButton btnZoomIn;
+    private javax.swing.JButton btnZoomOut;
     private javax.swing.JToolBar.Separator jSeparator1;
-    private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
     
 }

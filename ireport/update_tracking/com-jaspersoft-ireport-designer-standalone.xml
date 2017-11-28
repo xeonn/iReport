@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="com.jaspersoft.ireport.designer.standalone">
-    <module_version install_time="1207577901853" last="true" origin="installer" specification_version="1.0">
+    <module_version install_time="1215420055849" last="true" origin="installer" specification_version="1.0">
         <file crc="2709821011" name="config/Modules/com-jaspersoft-ireport-designer-standalone.xml"/>
-        <file crc="2342907899" name="modules/com-jaspersoft-ireport-designer-standalone.jar"/>
+        <file crc="3885699525" name="modules/com-jaspersoft-ireport-designer-standalone.jar"/>
     </module_version>
 </module>

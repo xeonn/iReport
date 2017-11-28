@@ -19,21 +19,30 @@ import com.jaspersoft.ireport.designer.utils.Misc;
 import java.beans.PropertyChangeSupport;
 import java.beans.PropertyVetoException;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoableEdit;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.JRProperties;
 import org.apache.xerces.parsers.DOMParser;
+import org.netbeans.api.db.explorer.JDBCDriver;
+import org.netbeans.api.db.explorer.JDBCDriverManager;
 import org.openide.awt.StatusDisplayer;
+import org.openide.modules.InstalledFileLocator;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbPreferences;
@@ -68,6 +77,7 @@ public class IReportManager {
     private java.util.ArrayList<IReportConnection> connections = null;
     private java.util.ArrayList<QueryExecuterDef> queryExecuters = null;
     private java.util.List<IRFont> fonts = null;
+    private java.util.List<FileResolver> fileResolvers = null;
     private java.util.HashMap parameterValues = new java.util.HashMap();
 
     public List<IRFont> getFonts() {
@@ -136,6 +146,17 @@ public class IReportManager {
                 
             }
         });
+        
+        /*
+         System.out.println("Gif writers");
+        Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("gif");
+        while (writers.hasNext())
+        {
+            ImageWriter w=writers.next();
+            System.out.println("For gif: " + w);
+        }
+        System.out.flush();
+         */
     }
     
     public static IReportManager getInstance()
@@ -385,7 +406,35 @@ public class IReportManager {
         
         ProxyClassLoader 
         */
+        // Add all the dabatase classpath entries...
+        JDBCDriverManager manager = JDBCDriverManager.getDefault();
         
+        JDBCDriver[] drivers = manager.getDrivers();
+        InstalledFileLocator locator = InstalledFileLocator.getDefault();
+
+        
+        for (int i=0; i<drivers.length; ++i)
+        {
+            URL[] urls = drivers[i].getURLs();
+            for (int j=0; j<urls.length; ++j)
+            {
+                String path = urls[j].getPath();
+                if (path.startsWith("/"))
+                {
+                    path = path.substring(1);
+                }
+                if (path.length() == 0) continue;
+                File f = locator.locate(path, null, false);
+                if (f != null && f.exists())
+                {
+                    try {
+                        reportClassLoader.addNoRelodablePath( f.getCanonicalPath() );
+                    } catch (IOException ex) {}
+                }
+                
+            }
+        }
+        reportClassLoader.rescanAdditionalClasspath();
         return reportClassLoader;
     }
 
@@ -826,4 +875,18 @@ public class IReportManager {
           if (p == null || value == null || p.getValueClass() == null) return;
           parameterValues.put(p.getName() + " " + p.getValueClassName(), value);
     }
+
+    public java.util.List<FileResolver> getFileResolvers() {
+        
+        if (fileResolvers == null)
+        {
+            fileResolvers = new ArrayList<FileResolver>();
+        }
+        return fileResolvers;
+    }
+
+    public void setFileResolvers(java.util.List<FileResolver> fileResolvers) {
+        this.fileResolvers = fileResolvers;
+    }
+    
 }

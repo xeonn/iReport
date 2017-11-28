@@ -192,7 +192,16 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
     }
 
     public void setCurrentModel(JasperDesign currentModel) {
+        
+        // Update the lookup...
+        if (this.currentModel != null)
+        {
+            ((JrxmlDataObject)getDataObject()).getIc().remove(this.currentModel);
+        }
         this.currentModel = currentModel;
+        if (this.currentModel != null)
+        {
+            ((JrxmlDataObject)getDataObject()).getIc().add(this.currentModel);
+        }
     }
-
 }

@@ -114,6 +114,50 @@ public class ModelUtils {
         return newStyle;
     }
 
+    public static List<JRDesignElement> getAllElements(JasperDesign jd) {
+        
+        List<JRDesignElement> list = new ArrayList<JRDesignElement>();
+        
+        List<JRBand> bands = getBands(jd);
+        for (JRBand band : bands)
+        {
+            list.addAll(getAllElements(band));
+        }
+        
+        return list;
+    }
+    
+    public static List<JRDesignElement> getAllElements(JRElementGroup group) {
+        List list = new ArrayList();
+        
+        List elements = group.getChildren();
+        
+        for (Object ele : elements)
+        {
+            if (ele instanceof JRElementGroup)
+            {
+                list.addAll(getAllElements((JRElementGroup)ele));
+            }
+            else if (ele instanceof JRDesignElement)
+            {
+                list.add((JRDesignElement)ele);
+                
+                if(ele instanceof JRDesignCrosstab)
+                {
+                    JRDesignCrosstab crosstab = (JRDesignCrosstab)ele;
+                    List cells = crosstab.getCellsList();
+                    for (int i=0; i<cells.size(); ++i)
+                    {
+                        JRCrosstabCell cell = (JRCrosstabCell)cells.get(i);
+                        list.addAll(getAllElements(cell.getContents()));
+                    }
+                }
+            }
+        }
+        
+        return list;
+    }
+
     /**
      * Return the ordered list of bands available in the current report
      * @param jd the JasperDesign

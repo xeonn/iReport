@@ -45,6 +45,8 @@ import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.*;
+import javax.swing.JOptionPane;
+import org.openide.util.Lookup;
 
 /**
  * This special class loader is used when running a report.
@@ -316,7 +318,10 @@ public class ReportClassLoader extends java.lang.ClassLoader {
         }
         else
         {
-            c =  loadClassData(name);
+            if (c != null)
+            {
+                c =  loadClassData(name);
+            }
         }
         return c;
     }

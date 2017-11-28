@@ -22,14 +22,14 @@ import java.beans.BeanInfo;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.view.JRViewer;
+import net.sf.jasperreports.swing.JRViewerController;
+import net.sf.jasperreports.swing.JRViewerPanel;
 import org.netbeans.core.spi.multiview.CloseOperationState;
 import org.netbeans.core.spi.multiview.MultiViewDescription;
 import org.netbeans.core.spi.multiview.MultiViewElement;
 import org.netbeans.core.spi.multiview.MultiViewElementCallback;
 import org.openide.nodes.Node;
 import org.openide.windows.TopComponent;
-import rex.graphics.StatusBar;
 
 /**
  *
@@ -40,9 +40,10 @@ public class JrxmlPreviewView extends TopComponent
     
     private boolean needRefresh = true;
 
-    JPanel toolbarRepresentation = null;
     MultiViewElementCallback multiViewCallback = null;
     
+    JRViewerController viewerContext = new JRViewerController(null, null);
+    JrxmlPreviewToolbar viewerToolbar = new JrxmlPreviewToolbar(this, viewerContext);
     
     private JrxmlEditorSupport support;
     
@@ -111,9 +112,12 @@ public class JrxmlPreviewView extends TopComponent
         
                 if (print != null)
                 {
-                    JRViewer jrViewer = new JRViewer(print);
-                    add(jrViewer, BorderLayout.CENTER);
-                    jrViewer.updateUI();
+                    JRViewerPanel viewerPanel = new JRViewerPanel(viewerContext);
+                    add(viewerPanel, BorderLayout.CENTER);
+                    viewerContext.loadReport(print);
+                    viewerToolbar.init();
+                    viewerContext.refreshPage();
+                    viewerPanel.updateUI();
                 }
                 updateUI();
                 
@@ -121,6 +125,7 @@ public class JrxmlPreviewView extends TopComponent
         });
         
     }
+    
     
     public MultiViewElement createElement() {
         this.setLayout(new BorderLayout());
@@ -132,7 +137,7 @@ public class JrxmlPreviewView extends TopComponent
     }
 
     public JComponent getToolbarRepresentation() {
-        return new JrxmlPreviewToolbar(this);
+        return new JrxmlPreviewToolbar(this, viewerContext);
     }
 
     public void setMultiViewCallback(MultiViewElementCallback callback) {

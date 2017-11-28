@@ -9,8 +9,13 @@
 
 package com.jaspersoft.ireport.designer;
 
+import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.EventQueue;
 import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlDigester;

@@ -10,7 +10,9 @@
 package com.jaspersoft.ireport.designer.widgets;
 
 import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlVisualView;
+import com.jaspersoft.ireport.designer.utils.ProxyFileResolver;
 import java.awt.Component;
 import java.io.File;
 import net.sf.jasperreports.engine.design.JRDesignImage;
@@ -58,7 +60,9 @@ public class JRDesignImageWidget extends JRDesignElementWidget {
             }
         }
 
-        FileResolver fileResolver = new SimpleFileResolver(reportFolder);//FIXMETD can we keep the parent folder somewhere? in the draw visitor maybe?
+        ProxyFileResolver fileResolver = new ProxyFileResolver(IReportManager.getInstance().getFileResolvers());
+        fileResolver.addResolver(new SimpleFileResolver(reportFolder));//FIXMETD can we keep the parent folder somewhere? in the draw visitor maybe?
+
         JRResourcesUtil.setThreadFileResolver(fileResolver);
         
         try
