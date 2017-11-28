@@ -23,7 +23,7 @@ and open the template in the editor.
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jxl-2.6.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/png-encoder-1.5.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/poi-3.2-FINAL-20081019.jar!/</resource>
-        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-3.5.6.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-3.7.0.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/libs/xalan.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/xercesImpl-2.7.0.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/xml-apis.jar!/</resource>
@@ -45,7 +45,7 @@ and open the template in the editor.
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/xml-apis-ext.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-chart-themes-3.6.2.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/castor-1.2.jar!/</resource>
-        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-dejavu-fonts.jar!/</resource>
+        <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/jasperreports-fonts-3.6.1.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/barbecue-1.5-beta1.jar!/</resource>
         <resource>jar:nbinst://com.jaspersoft.ireport/modules/ext/barcode4j-2.0.jar!/</resource>
     </volume>

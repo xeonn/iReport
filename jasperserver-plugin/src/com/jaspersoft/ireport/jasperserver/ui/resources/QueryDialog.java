@@ -829,5 +829,7 @@ public class QueryDialog extends javax.swing.JDialog {
         {
             jComboBoxDatasources.setSelectedIndex(0);
         }
+
+         updateDataSourceFromType();
     }
 }

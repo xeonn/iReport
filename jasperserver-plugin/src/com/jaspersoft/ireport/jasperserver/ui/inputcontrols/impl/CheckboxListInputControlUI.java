@@ -176,8 +176,7 @@ public class CheckboxListInputControlUI extends javax.swing.JPanel implements In
         for (int i=0; i<values.size(); ++i)
         {
             ListItemWrapper iw =  (ListItemWrapper)values.get(i);
-            
-            
+
             JCheckBox rb = new JCheckBox(iw.getItem().getLabel());
             rb.setSelected(false);
             itemValues.put(rb, iw.getItem().getValue() );

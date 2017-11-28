@@ -61,6 +61,13 @@ public class JasperServerManager {
     
 
     private static JasperServerManager mainInstance = null;
+    private static JrxmlNotifier jrxmlNotifier = null;
+
+    public static JrxmlNotifier getJrxmlNotifier()
+    {
+        return jrxmlNotifier;
+    }
+
     public static JasperServerManager getMainInstance() {
         if (mainInstance == null)
         {
@@ -121,6 +128,8 @@ public class JasperServerManager {
         pluginLocale = Locale.getDefault();
 
         ActiveEditorTopComponentListener.getDefaultInstance().startListening();
+        jrxmlNotifier = new JrxmlNotifier();
+        this.addFileResourceUpdatingListener(jrxmlNotifier);
     }
     
     

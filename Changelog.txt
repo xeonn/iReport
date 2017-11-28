@@ -1,3 +1,13 @@
+2009-12-09 Version 3.7.0 released
+_______________________________________________________________________________
+- Fixed Bug 0004452 Settings import fails to import
+- Updated to JasperReports 3.7.0
+- Support for the new custom property "net.sf.jasperreports.export.html.id" added at element level
+- Fixed Bug 0004435 Database Connection Resets
+- Fixed Bug 0004396 Option dialog - the topmost classpath item can't be moved
+- Fixed Bug 0004404 Dataset parameter can't be altered
+- Added a Warning message while adding a report using xmla-mdx query language on JasperServer (mdx must be used instead).
+
 2009-11-24 Version 3.6.2 released
 _______________________________________________________________________________
 - Fixed Bug 0004394 iReport 3.6.1 options throws NullPointerException

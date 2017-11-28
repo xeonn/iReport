@@ -309,6 +309,7 @@ final class IReportPanel extends javax.swing.JPanel {
         jCheckBoxShowBackgroundAsSeparatedDocument = new javax.swing.JCheckBox();
         jCheckBoxAskConfirmationOnDelete = new javax.swing.JCheckBox();
         jCheckBoxDebugMode = new javax.swing.JCheckBox();
+        jCheckBoxShowPositionErrors = new javax.swing.JCheckBox();
         jPanel22 = new javax.swing.JPanel();
         jLabelExpressions = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -554,6 +555,13 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxShowPositionErrors, "Show element position errors in the designer");
+        jCheckBoxShowPositionErrors.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxShowPositionErrorsActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout jPanel26Layout = new org.jdesktop.layout.GroupLayout(jPanel26);
         jPanel26.setLayout(jPanel26Layout);
         jPanel26Layout.setHorizontalGroup(
@@ -565,7 +573,8 @@ final class IReportPanel extends javax.swing.JPanel {
                     .add(jCheckBoxCrosstabAutoLayout)
                     .add(jCheckBoxShowBackgroundAsSeparatedDocument)
                     .add(jCheckBoxAskConfirmationOnDelete)
-                    .add(jCheckBoxDebugMode))
+                    .add(jCheckBoxDebugMode)
+                    .add(jCheckBoxShowPositionErrors))
                 .addContainerGap(235, Short.MAX_VALUE))
         );
         jPanel26Layout.setVerticalGroup(
@@ -581,7 +590,9 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jCheckBoxAskConfirmationOnDelete)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxDebugMode)
-                .addContainerGap(135, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxShowPositionErrors)
+                .addContainerGap(112, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Designer", jPanel26);
@@ -2103,7 +2114,7 @@ final class IReportPanel extends javax.swing.JPanel {
             DefaultTableModel tbm = (DefaultTableModel)jTable1.getModel();
             jTable1.clearSelection();
             for (int i=rows.length-1; i>=0; --i) {
-                if (rows[i] == 0) continue;
+                if (rows[i] == jTable1.getRowCount()-1) continue;
                 Object[] theRow = new Object[]{tbm.getValueAt(rows[i], 0),tbm.getValueAt(rows[i], 1)  };
                 tbm.removeRow(rows[i]);
                 tbm.insertRow(rows[i]+1, theRow);
@@ -2704,6 +2715,10 @@ private void jButtonExportFontsActionPerformed(java.awt.event.ActionEvent evt) {
         IRFontUtils.export(jListFonts.getSelectedValues());
 
 }//GEN-LAST:event_jButtonExportFontsActionPerformed
+
+private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxShowPositionErrorsActionPerformed
+    notifyChange();
+}//GEN-LAST:event_jCheckBoxShowPositionErrorsActionPerformed
     
             
     void load() {
@@ -2725,6 +2740,10 @@ private void jButtonExportFontsActionPerformed(java.awt.event.ActionEvent evt) {
         jCheckBoxShowCompatibilityWarning.setSelected( pref.getBoolean("show_compatibility_warning", true) ); // NOI18N
         jCheckBoxCompileSubreports.setSelected( pref.getBoolean("compile_subreports", true) ); // NOI18N
         jCheckBoxDebugMode.setSelected( pref.getBoolean("designer_debug_mode", false) ); // NOI18N
+        
+        jCheckBoxShowPositionErrors.setSelected( pref.getBoolean("showPositionErrors", true) ); // NOI18N
+
+
 
 
         jCheckBoxKeyInReportInspector.setSelected( pref.getBoolean("showKeyInReportInspector", false)  );  // NOI18N
@@ -2966,27 +2985,28 @@ private void jButtonExportFontsActionPerformed(java.awt.event.ActionEvent evt) {
         Preferences pref = IReportManager.getPreferences();
         if (jComboBoxUnits.getSelectedIndex() >= 0)
         {
-            String unit = ""+((Tag)jComboBoxUnits.getSelectedItem()).getValue();
+            String unit = ""+((Tag)jComboBoxUnits.getSelectedItem()).getValue();// NOI18N
             pref.put("Unit", unit); // NOI18N
         }
         
-        pref.putBoolean("limitRecordNumber"  , jCheckBoxLimitRecordNumber.isSelected() );
-        pref.putInt( "maxRecordNumber", ((SpinnerNumberModel)jSpinnerMaxRecordNumber.getModel()).getNumber().intValue() );
-        pref.putBoolean("isIgnorePagination"  , jCheckBoxIgnorePagination.isSelected() );
-        pref.putBoolean("isUseReportVirtualizer"  , jCheckBoxVirtualizer.isSelected() );
-        pref.putBoolean("noMagnetic"  , jCheckBoxMagneticGuideLines.isSelected() );
-        pref.putBoolean("ShowBackgroundAsSeparatedDocument"  , jCheckBoxShowBackgroundAsSeparatedDocument.isSelected() );
-        pref.putBoolean("noConfirmElementDelete"  , !jCheckBoxAskConfirmationOnDelete.isSelected() );
-        pref.putBoolean("show_compatibility_warning"  ,jCheckBoxShowCompatibilityWarning.isSelected() );
+        pref.putBoolean("limitRecordNumber"  , jCheckBoxLimitRecordNumber.isSelected() );// NOI18N
+        pref.putInt( "maxRecordNumber", ((SpinnerNumberModel)jSpinnerMaxRecordNumber.getModel()).getNumber().intValue() );// NOI18N
+        pref.putBoolean("isIgnorePagination"  , jCheckBoxIgnorePagination.isSelected() );// NOI18N
+        pref.putBoolean("isUseReportVirtualizer"  , jCheckBoxVirtualizer.isSelected() );// NOI18N
+        pref.putBoolean("noMagnetic"  , jCheckBoxMagneticGuideLines.isSelected() );// NOI18N
+        pref.putBoolean("ShowBackgroundAsSeparatedDocument"  , jCheckBoxShowBackgroundAsSeparatedDocument.isSelected() );// NOI18N
+        pref.putBoolean("noConfirmElementDelete"  , !jCheckBoxAskConfirmationOnDelete.isSelected() );// NOI18N
+        pref.putBoolean("show_compatibility_warning"  ,jCheckBoxShowCompatibilityWarning.isSelected() );// NOI18N
 
-        pref.putBoolean("showKeyInReportInspector"  , jCheckBoxKeyInReportInspector.isSelected() );
-        pref.putBoolean("disableCrosstabAutoLayout"  , jCheckBoxCrosstabAutoLayout.isSelected() );
+        pref.putBoolean("showKeyInReportInspector"  , jCheckBoxKeyInReportInspector.isSelected() );// NOI18N
+        pref.putBoolean("disableCrosstabAutoLayout"  , jCheckBoxCrosstabAutoLayout.isSelected() );// NOI18N
 
-        pref.putBoolean("useReportDirectoryToCompile"  , jCheckBoxUseReportDirectoryToCompile.isSelected() );
-        pref.put("reportDirectoryToCompile", jTextFieldCompilationDirectory.getText());
-        pref.putBoolean("compile_subreports", jCheckBoxCompileSubreports.isSelected());
-        pref.putBoolean("designer_debug_mode", jCheckBoxDebugMode.isSelected());
+        pref.putBoolean("useReportDirectoryToCompile"  , jCheckBoxUseReportDirectoryToCompile.isSelected() );// NOI18N
+        pref.put("reportDirectoryToCompile", jTextFieldCompilationDirectory.getText());// NOI18N
+        pref.putBoolean("compile_subreports", jCheckBoxCompileSubreports.isSelected());// NOI18N
+        pref.putBoolean("designer_debug_mode", jCheckBoxDebugMode.isSelected());// NOI18N
 
+        pref.putBoolean("showPositionErrors", jCheckBoxShowPositionErrors.isSelected());// NOI18N
 
         if (getCurrentReportLocale() != null) pref.put("reportLocale", getCurrentReportLocale().toString());
         else pref.remove("reportLocale");
@@ -3174,6 +3194,7 @@ private void jButtonExportFontsActionPerformed(java.awt.event.ActionEvent evt) {
     private javax.swing.JCheckBox jCheckBoxMagneticGuideLines;
     private javax.swing.JCheckBox jCheckBoxShowBackgroundAsSeparatedDocument;
     private javax.swing.JCheckBox jCheckBoxShowCompatibilityWarning;
+    private javax.swing.JCheckBox jCheckBoxShowPositionErrors;
     private javax.swing.JCheckBox jCheckBoxUseReportDirectoryToCompile;
     private javax.swing.JCheckBox jCheckBoxVirtualizer;
     private javax.swing.JComboBox jComboBoxCompatibility;

@@ -982,6 +982,9 @@
        <folder name="decorators">
             <folder name="elements">
                <file name="com-jaspersoft-ireport-designer-pdf508-Pdf508TagDecorator"/>
+               <file name="com-jaspersoft-ireport-designer-utils-PositionErrorDecorator"/>
+
+
             </folder>
        </folder>
        <folder name="export_options">

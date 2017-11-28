@@ -237,6 +237,10 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
                     System.out.println("resourceFile = " + resourceFile);
                     System.out.flush();
 
+
+                    JasperServerManager.getJrxmlNotifier().resourceWillBeUpdated(null, null, resourceFile);
+
+
                     if (resourceFile != null)
                     {
                         addRequiredResources(resourceFile, newResourceDescriptor);
@@ -285,6 +289,7 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
         boolean useTemporaryFile = report == null;
 
         if (report == null) report = JRXmlLoader.load(resourceFile);
+
         List children = RepositoryJrxmlFile.identifyElementValidationItems(report, reportUnitDescriptor, resourceFile.getParent());
 
         if (children.size() > 0)

@@ -6,19 +6,11 @@
 
 package com.jaspersoft.ireport.jasperserver;
 
-import com.jaspersoft.ireport.designer.JrxmlEditorSupport;
-import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
-import org.openide.text.DataEditorSupport;
-import org.openide.text.EditorSupport;
-import org.openide.util.Mutex;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 

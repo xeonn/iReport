@@ -27,7 +27,6 @@ import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
 import com.jaspersoft.ireport.jasperserver.RepositoryReportUnit;
-import com.jaspersoft.ireport.jasperserver.ui.nodes.FolderNode;
 import com.jaspersoft.ireport.jasperserver.ui.nodes.ResourceNode;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.util.ArrayList;
@@ -145,6 +144,17 @@ public final class DeleteAction extends NodeAction {
                         {
                             RepositoryFolder parentFolder = parentResourceNode.getRepositoryObject();
                             parentFolder.getDescriptor().getChildren().remove( rf.getDescriptor());
+                            // update the RepositoryFolder too...
+                            List children = parentFolder.getChildren();
+                            for (int k=0; k<children.size(); ++k)
+                            {
+                                RepositoryFolder child = (RepositoryFolder)children.get(k);
+                                if (child.getDescriptor().equals(rf.getDescriptor()))
+                                {
+                                    children.remove(child);
+                                    break;
+                                }
+                            }
                             parentResourceNode.refreshChildrens(false);
                         }
                  

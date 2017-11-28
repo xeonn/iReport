@@ -60,9 +60,15 @@ public class SingleSelectInputControl extends BasicInputControl{
          else if (inputControl.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY_RADIO ||
              inputControl.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES_RADIO)
          {
-             if (getInputControlUI() == null || !(getInputControlUI() instanceof RadioListInputControlUI))
+
+            if (getInputControlUI() == null || !(getInputControlUI() instanceof RadioListInputControlUI))
             {
                 setInputControlUI( new RadioListInputControlUI());
+                defaultNullLabel = "-None-";
+            }
+
+            if (getInputControlUI() instanceof RadioListInputControlUI)
+            {
                 defaultNullLabel = "-None-";
             }
          }

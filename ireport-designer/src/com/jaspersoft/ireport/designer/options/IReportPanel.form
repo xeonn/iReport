@@ -230,6 +230,7 @@
                                   <Component id="jCheckBoxShowBackgroundAsSeparatedDocument" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jCheckBoxAskConfirmationOnDelete" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jCheckBoxDebugMode" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jCheckBoxShowPositionErrors" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace pref="235" max="32767" attributes="0"/>
                           </Group>
@@ -248,7 +249,9 @@
                               <Component id="jCheckBoxAskConfirmationOnDelete" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jCheckBoxDebugMode" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="135" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jCheckBoxShowPositionErrors" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="112" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -292,6 +295,14 @@
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxDebugModeActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JCheckBox" name="jCheckBoxShowPositionErrors">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Show element position errors in the designer"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxShowPositionErrorsActionPerformed"/>
                       </Events>
                     </Component>
                   </SubComponents>
@@ -471,7 +482,7 @@
                               <Component id="jComboBoxCompatibility" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jCheckBoxShowCompatibilityWarning" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="146" max="32767" attributes="0"/>
+                              <EmptySpace pref="160" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>

@@ -27,7 +27,6 @@ import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
-import com.jaspersoft.ireport.jasperserver.RepoImageCache;
 import com.jaspersoft.ireport.jasperserver.RepositoryReportUnit;
 import com.jaspersoft.ireport.jasperserver.ui.ResourceChooser;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -41,11 +40,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignImage;
-import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.JRExpressionUtil;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
 /**

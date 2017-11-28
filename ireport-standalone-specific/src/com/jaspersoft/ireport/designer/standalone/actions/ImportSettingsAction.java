@@ -44,7 +44,8 @@ public final class ImportSettingsAction extends CallableSystemAction {
                 String selectedVersion = (String)wizardDescriptor.getProperty("version");
                 if (selectedVersion != null)
                 {
-                    dir = new File(System.getProperty("netbeans.user"), selectedVersion);
+                    dir = new File(System.getProperty("netbeans.user"));
+                    dir = new File(dir.getParentFile(),selectedVersion);
                 }
             }
             else
@@ -54,7 +55,7 @@ public final class ImportSettingsAction extends CallableSystemAction {
             }
 
             try {
-                ImportSettingsUtilities.importSettings(dir);
+                ImportSettingsJob.importSettings(dir, false);
                 JOptionPane.showMessageDialog(Misc.getMainFrame(), NbBundle.getMessage(ImportSettingsVisualPanel1PlatformSelection.class, "ImportSettingsAction.success"));
             } catch (Exception ex)
             {

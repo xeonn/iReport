@@ -145,12 +145,10 @@ public class JRPropertyDialog extends javax.swing.JDialog {
             I18n.getString("JRPropertyDialog.List.Prop21") +
             I18n.getString("JRPropertyDialog.List.DefaultNull")));
 
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.html.id",
+            I18n.getString("JRPropertyDialog.List.html.id") +
+            I18n.getString("JRPropertyDialog.List.html.id.value")));
 
-
-
-
-
-        
     }
     
     public void addExporterHints()

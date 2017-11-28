@@ -68,44 +68,9 @@ public class ImportSettingsUtilities {
         return s;
     }
 
-    public static void importSettings(File dir) throws Exception
+    public static void importSettings(File dir, boolean useStatusWindow) throws Exception
     {
         
-        File iReportSettingsFile = new File(dir, "config/Preferences/com/jaspersoft/ireport.properties");
-
-        // remove UUID...
-        Preferences prefs = NbPreferences.forModule(IReportManager.class);
-        if (iReportSettingsFile.exists())
-        {
-            Properties props = new java.util.Properties();
-            props.load(new FileInputStream(iReportSettingsFile));
-
-            Enumeration enumer = props.keys();
-            while (enumer.hasMoreElements())
-            {
-                String key = (String)enumer.nextElement();
-                if (key.equals("UUID")) continue;
-
-                prefs.put(key, props.getProperty(key));
-            }
-        }
-
-        File jasperPluginSettingsFile = new File(dir, "config/Preferences/com/jaspersoft/ireport/jasperserver.properties");
-
-        // remove UUID...
-        prefs = NbPreferences.forModule(JasperServerManager.class);
-        if (jasperPluginSettingsFile.exists())
-        {
-            Properties props = new java.util.Properties();
-            props.load(new FileInputStream(jasperPluginSettingsFile));
-
-            Enumeration enumer = props.keys();
-            while (enumer.hasMoreElements())
-            {
-                String key = (String)enumer.nextElement();
-                prefs.put(key, props.getProperty(key));
-            }
-        }
     }
 
     public static final boolean isValidConfigurationDirectory(File f)
