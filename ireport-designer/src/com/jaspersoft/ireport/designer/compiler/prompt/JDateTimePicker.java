@@ -69,9 +69,9 @@ public class JDateTimePicker extends javax.swing.JPanel {
         
         gc.setTime( d );
         
-        jSpinnerH.setValue( new Integer(gc.get( gc.HOUR_OF_DAY)) );
-        jSpinnerM.setValue( new Integer(gc.get( gc.MINUTE)) );
-        jSpinnerS.setValue( new Integer(gc.get( gc.SECOND)) );
+        jSpinnerH.setValue( gc.get( gc.HOUR_OF_DAY) );
+        jSpinnerM.setValue( gc.get( gc.MINUTE) );
+        jSpinnerS.setValue( gc.get( gc.SECOND) );
         try {
             datePicker.setDate( d );
         } catch (Exception ex)

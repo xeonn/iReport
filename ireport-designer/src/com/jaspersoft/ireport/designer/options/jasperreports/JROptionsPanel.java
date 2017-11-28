@@ -381,7 +381,15 @@ public class JROptionsPanel extends javax.swing.JPanel implements OptionsPanel{
 
             if (IReportManager.getInstance().getDefaultJasperReportsProperties().containsKey(key))
             {
-                String oldValue = JRProperties.getProperty(key);
+
+                String oldValue = IReportManager.getInstance().getDefaultJasperReportsProperties().getProperty(key);
+                
+                if (key.contains("xpath.executer.factory"))
+                {
+                    System.out.println(oldValue + " " + value);
+                    System.out.flush();
+                }
+
                 if (oldValue == null || !oldValue.equals(value))
                 {
                     IReportManager.getPreferences().put(IReportManager.PROPERTY_JRPROPERTY_PREFIX + key, Misc.removeSlashesString(value));

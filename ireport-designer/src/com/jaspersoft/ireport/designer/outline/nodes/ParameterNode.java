@@ -42,6 +42,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Action;
+import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -237,6 +238,16 @@ public class ParameterNode extends IRAbstractNode implements PropertyChangeListe
         {
             super.setName(getParameter().getName());
             this.setDisplayName(getParameter().getName());
+            // update sorting of childrens...
+            if (this.getParentNode() != null && this.getParentNode() instanceof ParametersNode)
+            {
+                SwingUtilities.invokeLater(new Runnable() {
+
+                    public void run() {
+                        ((ParametersNode)(ParameterNode.this.getParentNode())).updateSorting();
+                    }
+                });
+            }
         }
         
         // Update the sheet

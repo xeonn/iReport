@@ -58,7 +58,7 @@ public class MultilineToolbarLayout implements LayoutManager {
     }
 
     public Dimension minimumLayoutSize(Container parent) {
-        return preferredLayoutSize(parent);
+        return new Dimension(0,0);//preferredLayoutSize(parent);
     }
 
     public void layoutContainer(Container parent) {

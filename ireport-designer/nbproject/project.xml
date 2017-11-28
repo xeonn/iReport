@@ -624,10 +624,10 @@
                 <runtime-relative-path>ext/jpa.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/jpa.jar</binary-origin>
             </class-path-extension>
-            <class-path-extension>
+            <!-- <class-path-extension>
                 <runtime-relative-path>ext/hsqldb-1.8.0-10.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/hsqldb-1.8.0-10.jar</binary-origin>
-            </class-path-extension>
+            </class-path-extension> -->
             <class-path-extension>
                 <runtime-relative-path>ext/commons-collections-3.2.1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/commons-collections-3.2.1.jar</binary-origin>
@@ -645,8 +645,8 @@
                 <binary-origin>release/modules/ext/ant-1.7.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/commons-beanutils-1.8.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/commons-beanutils-1.8.0.jar</binary-origin>
+                <runtime-relative-path>ext/commons-beanutils-1.8.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/commons-beanutils-1.8.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jakarta-bcel-20050813.jar</runtime-relative-path>
@@ -673,8 +673,8 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-3.7.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-3.7.0.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-3.7.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-3.7.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jasperreports-fonts-3.6.1.jar</runtime-relative-path>

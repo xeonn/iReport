@@ -224,7 +224,7 @@ public class PenEditorPanel extends javax.swing.JPanel  {
         {
             if (pen.getLineWidth() != null)
             {
-                jSpinnerLineWidth.setValue(pen.getLineWidth());
+                jSpinnerLineWidth.setValue(pen.getLineWidth().doubleValue());
             }
             
             if (pen.getLineStyle() != null)

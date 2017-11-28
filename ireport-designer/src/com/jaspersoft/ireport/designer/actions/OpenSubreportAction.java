@@ -162,7 +162,7 @@ public final class OpenSubreportAction extends NodeAction {
                         }
                     }
                         
-                    f = new File(url.getPath());
+                    f = new File(url.toURI().getPath());
                     if (f.exists())
                     {
                         fileToOpen = f;

@@ -25,6 +25,7 @@ package com.jaspersoft.ireport.designer.outline.nodes;
 
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.actions.PaddingAndBordersAction;
+import com.jaspersoft.ireport.designer.crosstab.CellInfo;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.outline.nodes.properties.CrosstabCellPropertiesFactory;
 import java.awt.datatransfer.Transferable;
@@ -84,6 +85,7 @@ public class CellNode extends IRIndexedNode implements PropertyChangeListener {
         this.cellContents.getEventSupport().addPropertyChangeListener(this);
         
         
+        
         setDisplayName ( ModelUtils.nameOf(cellContents));
         
         this.addNodeListener(new NodeListener() {
@@ -122,7 +124,21 @@ public class CellNode extends IRIndexedNode implements PropertyChangeListener {
         {
             return super.getDisplayName();
         }
-        return ModelUtils.nameOf(cellContents);
+        String cellInfo = "";
+
+        List<CellInfo> infos = ModelUtils.getCellInfos(crosstab);
+
+        for (CellInfo ci : infos)
+        {
+            if (ci.getCellContents() == this.cellContents)
+            {
+                cellInfo = "["+ ci.getTop() + "," + ci.getLeft() + "][" + ci.getX() + "," + ci.getY() + "," + ci.getColSpan() + ","+ci.getRowSpan() + "]";
+                break;
+            }
+
+        }
+
+        return ModelUtils.nameOf(cellContents) + " " + cellInfo;
     }
 
     
@@ -179,6 +195,7 @@ public class CellNode extends IRIndexedNode implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         
         com.jaspersoft.ireport.designer.IReportManager.getInstance().notifyReportChange();
+        fireNameChange(null, "");
         if (evt.getPropertyName() == null) return;
         
         if (ModelUtils.containsProperty(  this.getPropertySets(), evt.getPropertyName()))

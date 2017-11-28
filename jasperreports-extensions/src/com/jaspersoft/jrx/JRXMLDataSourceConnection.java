@@ -30,6 +30,8 @@ import javax.swing.*;
 
 import com.jaspersoft.jrx.query.JRXPathQueryExecuterFactory;
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import org.w3c.dom.Document;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 import java.util.Locale;
@@ -330,17 +332,35 @@ public class JRXMLDataSourceConnection extends IReportConnection {
      
     public void test() throws Exception
     {
-
+            URL url = null;
+            InputStream is = null;
             try {
-                
+
+
+                url = new URL(getFilename());
+
+                if (getFilename().startsWith("file://"))
+                {
+                    is = url.openStream();
+                }
                 JOptionPane.showMessageDialog(Misc.getMainFrame(),I18n.getString("messages.connectionDialog.connectionTestSuccessful"),"",JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
             catch (Exception ex)
             {
-                //JOptionPane.showMessageDialog(MainFrame.getMainInstance(),ex.getMessage(),I18n.getString("message.title.error","Error"),JOptionPane.ERROR_MESSAGE);
+                //JOptionPane.showMessageDialog(Misc.getMainFrame(),ex.getMessage(),I18n.getString("message.title.error","Error"),JOptionPane.ERROR_MESSAGE);
 		//ex.printStackTrace();
+
+                JOptionPane.showMessageDialog(Misc.getMainWindow(),ex.getMessage(),
+                        "Error",JOptionPane.ERROR_MESSAGE);		
+
                 throw ex;
+            } finally {
+
+                if (is != null)
+                {
+                    try { is.close(); } catch (Exception ex){}
+                }
             }
     }
 }

@@ -242,4 +242,10 @@
         </folder>
         <file name="WindowManager.wswmgr" url="WindowManager.wswmgr"/>
     </folder>
+<!--    <folder name="About">
+        <folder name="Licenses">
+            <file name="license.txt" url="nbresloc:/org/netbeans/core/startup/LICENSE.txt"/>
+        </folder>
+    </folder>
+ -->
 </filesystem>

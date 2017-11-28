@@ -26,6 +26,8 @@ package com.jaspersoft.ireport.designer.outline.nodes;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -86,6 +88,38 @@ public class FieldsChildren extends Index.KeysChildren implements PropertyChange
         List l = (List)lock();
         l.clear();
         l.addAll(dataset.getFieldsList());
+        if (getNode() != null && getNode() instanceof FieldsNode)
+        {
+            if (((FieldsNode)getNode()).isSort())
+            {
+                // Order elements by name...
+                Object[] fields = dataset.getFieldsList().toArray();
+                Arrays.sort(fields, new Comparator() {
+
+                    public int compare(Object o1, Object o2) {
+                        return ((JRDesignField)o1).getName().compareToIgnoreCase(((JRDesignField)o2).getName());
+                    }
+                });
+                l.clear();
+                l.addAll(Arrays.asList(fields));
+            }
+        }
+
+        update();
+    }
+
+    @Override
+    protected void reorder(int[] ints) {
+
+        if (getNode() != null && getNode() instanceof FieldsNode && ((FieldsNode)getNode()).isSort())
+        {
+            return;
+        }
+        super.reorder(ints);
+    }
+    
+    protected void forceReorder(int[] ints) {
+        super.reorder(ints);
         update();
     }
     

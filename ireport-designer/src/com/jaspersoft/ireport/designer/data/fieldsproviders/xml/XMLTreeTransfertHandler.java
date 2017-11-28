@@ -27,6 +27,7 @@ import com.jaspersoft.ireport.designer.dnd.TransferableObject;
 import java.awt.datatransfer.Transferable;
 import javax.swing.*;
 import javax.swing.tree.*;
+import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.design.JRDesignField;
 /**
  *
@@ -69,7 +70,7 @@ public class XMLTreeTransfertHandler extends javax.swing.TransferHandler
             TreePath path = tree.getLeadSelectionPath();
 	    DefaultMutableTreeNode dmtn = (DefaultMutableTreeNode)path.getLastPathComponent();
             
-            JRDesignField field = getXmlEditor().createField(path, true);
+            JRField field = getXmlEditor().createField(path, true);
             
             return new TransferableObject(field);           
         }

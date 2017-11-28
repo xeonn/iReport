@@ -55,7 +55,7 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
         jSpinnerCharacterWidth.getModel().addChangeListener(snmcl);
         jSpinnerCharacterHeight.getModel().addChangeListener(snmcl);
 
-        SpinnerNumberModel snm = new SpinnerNumberModel(0,0, Float.MAX_VALUE,1);
+        SpinnerNumberModel snm = new SpinnerNumberModel(0,0, Integer.MAX_VALUE,1);
         jSpinnerPageWidth.setModel(snm);
         snm.addChangeListener(snmcl);
 

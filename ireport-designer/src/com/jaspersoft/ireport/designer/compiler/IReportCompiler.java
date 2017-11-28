@@ -76,7 +76,6 @@ import net.sf.jasperreports.engine.export.*;
 import net.sf.jasperreports.engine.query.JRHibernateQueryExecuterFactory;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRProperties;
-import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.hibernate.Transaction;
@@ -1126,6 +1125,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                       exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME,fileName);
                       exporter.setParameter(JRExporterParameter.JASPER_PRINT,print);
                       exporter.setParameter(JRExporterParameter.PROGRESS_MONITOR, this);
+                      //exporter.setParameter(JRExporterParameter.CLASS_LOADER, Thread.currentThread().getContextClassLoader() );
 
                       
                       exporter.exportReport();
@@ -1468,13 +1468,13 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                         urls = new URL[]{ reportFolder.toURI().toURL()};
                     }
                     URLClassLoader urlClassLoader = new URLClassLoader(urls, cl);
-                    URL url = urlClassLoader.findResource(resourceName);
+                    URL url = urlClassLoader.getResource(resourceName);
                     if (url == null)
                     {
                         return null;
                     }
 
-                    f = new File(url.getPath());
+                    f = new File(url.toURI().getPath());
                     if (f.exists())
                     {
                         return f;

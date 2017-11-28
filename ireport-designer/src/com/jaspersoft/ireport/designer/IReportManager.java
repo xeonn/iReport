@@ -966,7 +966,7 @@ public class IReportManager {
             }
         }
 
-        ClassLoader newClassLoader = new URLClassLoader( urls.toArray(new URL[urls.size()]) , reportClassLoader);
+        ClassLoader newClassLoader = new IRURLClassLoader( urls.toArray(new URL[urls.size()]) , reportClassLoader);
         
         return newClassLoader;
     }

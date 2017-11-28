@@ -158,7 +158,7 @@ public class TemplatesFrame extends javax.swing.JDialog {
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jLabelSize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/maximize_win.png"))); // NOI18N
-        jLabelSize.setText(org.openide.util.NbBundle.getMessage(TemplatesFrame.class, "TemplatesFrame.jLabelSize.text")); // NOI18N
+        jLabelSize.setText(org.openide.util.NbBundle.getMessage(TemplatesFrame.class, "TemplatesFrame.jLabelSize.text_1")); // NOI18N
         jLabelSize.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabelSizeMouseClicked(evt);
@@ -265,7 +265,7 @@ public class TemplatesFrame extends javax.swing.JDialog {
         jPanel1.add(jButton1, gridBagConstraints);
 
         jLabelDescription.setBackground(new java.awt.Color(255, 255, 255));
-        jLabelDescription.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabelDescription.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabelDescription.setText(org.openide.util.NbBundle.getMessage(TemplatesFrame.class, "TemplatesFrame.jLabelDescription.text")); // NOI18N
         jLabelDescription.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabelDescription.setOpaque(true);
@@ -374,37 +374,6 @@ public class TemplatesFrame extends javax.swing.JDialog {
     }//GEN-LAST:event_jLabel2MouseClicked
 
 
-    private void jLabelSizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelSizeMouseClicked
-
-        int index = -1;
-        if (templatesPanel1.isFullPageView())
-        {
-            index = templatesPanel1.getList().getFirstVisibleIndex();
-        }
-
-        if (minimizeBounds == null)
-        {
-            minimizeBounds = new Rectangle(getBounds());
-
-            // Use the parent size...
-            setBounds(getParent().getBounds());
-            jLabelSize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/minimize_window.png"))); // NOI18N
-        }
-        else
-        {
-            setBounds(minimizeBounds);
-            minimizeBounds = null;
-            jLabelSize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/maximize_win.png"))); // NOI18N
-        }
-
-        if (templatesPanel1.isFullPageView() && index >= 0)
-        {
-            templatesPanel1.getList().ensureIndexIsVisible(index);
-        }
-
-        jLabelSize.updateUI();
-}//GEN-LAST:event_jLabelSizeMouseClicked
-
     private void jSlider1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jSlider1PropertyChange
 
     }//GEN-LAST:event_jSlider1PropertyChange
@@ -423,6 +392,32 @@ public class TemplatesFrame extends javax.swing.JDialog {
     private void jListTemplateItemsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListTemplateItemsValueChanged
         updateSelection();
     }//GEN-LAST:event_jListTemplateItemsValueChanged
+
+    private void jLabelSizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelSizeMouseClicked
+
+        int index = -1;
+        if (templatesPanel1.isFullPageView()) {
+            index = templatesPanel1.getList().getFirstVisibleIndex();
+        }
+
+        if (minimizeBounds == null) {
+            minimizeBounds = new Rectangle(getBounds());
+
+            // Use the parent size...
+            setBounds(getParent().getBounds());
+            jLabelSize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/minimize_window.png"))); // NOI18N
+        } else {
+            setBounds(minimizeBounds);
+            minimizeBounds = null;
+            jLabelSize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/maximize_win.png"))); // NOI18N
+        }
+
+        if (templatesPanel1.isFullPageView() && index >= 0) {
+            templatesPanel1.getList().ensureIndexIsVisible(index);
+        }
+
+        jLabelSize.updateUI();
+}//GEN-LAST:event_jLabelSizeMouseClicked
 
     /**
      * Just create a new file from the template selected.

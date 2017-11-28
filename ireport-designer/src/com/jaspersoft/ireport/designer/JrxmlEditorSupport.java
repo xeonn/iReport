@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
@@ -60,6 +59,7 @@ import org.openide.util.lookup.InstanceContent;
  */
 public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie, EditorCookie, EditCookie, SaveAsCapable  {
 
+    
     private static Logger LOG = Logger.getLogger(JrxmlEditorSupport.class.getName());
     
     private InstanceContent specialNodeLookupIC = null;
@@ -130,7 +130,7 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
                 //((JrxmlDataNode)obj.getNodeDelegate()).cookieSetChanged();
             }
             ((JrxmlPreviewView)descriptions[2]).setNeedRefresh(true);
-            ((JrxmlVisualView)descriptions[0]).fireModelChange();
+            //((JrxmlVisualView)descriptions[0]).fireModelChange();
         }
         return retValue;
     }
@@ -156,6 +156,11 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
         {
             //set the document content...
             JasperDesign jd = getCurrentModel();
+
+            // Call the decorators...
+
+
+
             String content = null;
             try {
 
@@ -203,6 +208,21 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
             {
                 //set the document content...
                 JasperDesign jd = getCurrentModel();
+                
+                // Store some info like zoom factor a position...
+                if ((getDescriptions()[0]) != null &&
+                     ((JrxmlVisualView)getDescriptions()[0]).getModel() != null)
+                {
+                    ReportObjectScene scene = ((JrxmlVisualView)getDescriptions()[0]).getReportDesignerPanel().getScene();
+                    double zoomFactor = scene.getZoomFactor();
+                    int x = scene.getView().getVisibleRect().x;
+                    int y = scene.getView().getVisibleRect().y;
+
+                    jd.setProperty("ireport.zoom", ""+zoomFactor);
+                    jd.setProperty("ireport.x", ""+x);
+                    jd.setProperty("ireport.y", ""+y);
+                }
+
                 String content = null;
                 try {
                     // Check the compatibility...
@@ -305,10 +325,12 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
         {
             ((JrxmlDataObject)getDataObject()).getIc().remove(this.currentModel);
         }
+
         this.currentModel = currentModel;
         if (this.currentModel != null)
         {
             ((JrxmlDataObject)getDataObject()).getIc().add(this.currentModel);
         }
+
     }
 }

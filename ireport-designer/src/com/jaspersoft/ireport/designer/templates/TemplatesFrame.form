@@ -74,7 +74,7 @@
               <Image iconType="3" name="/com/jaspersoft/ireport/designer/resources/maximize_win.png"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="com/jaspersoft/ireport/designer/templates/Bundle.properties" key="TemplatesFrame.jLabelSize.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="com/jaspersoft/ireport/designer/templates/Bundle.properties" key="TemplatesFrame.jLabelSize.text_1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Events>

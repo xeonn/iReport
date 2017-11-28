@@ -95,7 +95,7 @@ public class ImageExpressionFileResolver implements FileResolver {
                         URL url = urlClassLoader.findResource(resourceName);
                         if (url != null)
                         {
-                            f = new File(url.getPath());
+                            f = new File(url.toURI());
                             if (f.exists())
                             {
                                 file = f;

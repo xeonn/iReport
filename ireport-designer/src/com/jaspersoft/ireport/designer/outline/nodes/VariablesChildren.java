@@ -27,6 +27,8 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
@@ -107,6 +109,29 @@ public class VariablesChildren extends Index.KeysChildren implements PropertyCha
         {
             l.addAll(dataset.getVariablesList());
         }
+
+        if (getNode() != null && getNode() instanceof VariablesNode)
+        {
+            if (((VariablesNode)getNode()).isSort())
+            {
+                // Order elements by name...
+                Object[] variables = l.toArray();
+                Arrays.sort(variables, new Comparator() {
+
+                    public int compare(Object o1, Object o2) {
+                        return ((JRDesignVariable)o1).getName().compareToIgnoreCase(((JRDesignVariable)o2).getName());
+                    }
+                });
+                l.clear();
+                l.addAll(Arrays.asList(variables));
+            }
+        }
+
+        update();
+    }
+
+    protected void forceReorder(int[] ints) {
+        super.reorder(ints);
         update();
     }
     
@@ -120,6 +145,17 @@ public class VariablesChildren extends Index.KeysChildren implements PropertyCha
             }; 
             MUTEX.writeAccess(action); 
         }
+
+    @Override
+    protected void reorder(int[] ints) {
+
+        if (getNode() != null && getNode() instanceof VariablesNode && ((VariablesNode)getNode()).isSort())
+        {
+            return;
+        }
+        super.reorder(ints);
+    }
+
 
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName() == null) return;

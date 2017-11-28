@@ -107,7 +107,7 @@ public class JrxmlVisualView extends TopComponent
      */
     private transient ExplorerManager explorerManager;
     public static final String PREFERRED_ID = "ireport_visual_view"; // NOI18N
-    
+
     private JrxmlEditorSupport support;
     private ReportDesignerPanel reportDesignerPanel = null;
     private boolean elementInitialized = false;
@@ -520,6 +520,7 @@ public class JrxmlVisualView extends TopComponent
 
                             if (reportDesignerPanel == null) return;
                             reportDesignerPanel.setJasperDesign(jasperDesign);
+
                             
                             model = new ReportNode(jasperDesign, support.getSpecialNodeLookup());
                             getUndoRedoManager().discardAllEdits();

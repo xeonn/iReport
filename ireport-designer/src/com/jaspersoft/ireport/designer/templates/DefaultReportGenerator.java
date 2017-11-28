@@ -455,6 +455,8 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
             }
 
             // Copy resources (Images)
+            //Misc.log("Copying resources...");
+
             List<JRDesignElement> elements = ModelUtils.getAllElements(jasperDesign);
             for (JRDesignElement ele : elements)
             {
@@ -467,22 +469,29 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
                         // If this refers to a static position... copy the image locally to the
                         // document page if the file does not exists...
                         File file = FileUtil.toFile(reportTemplate);
+                        
                         if (file.getParentFile() != null)
                         {
                               File reportFolder = file.getParentFile();
                               ImageExpressionFileResolver fr = new ImageExpressionFileResolver(imgelement, reportFolder+"", jasperDesign);
                               File f = fr.resolveFile(null);
+
+                              //Misc.log("Resolving: " + Misc.getExpressionText(imgelement.getExpression()) + " "+ f);
+
                               if (f != null)
                               {
                                   JRDesignExpression exp = Misc.createExpression("java.lang.String", "\"" + f.getName() + "\"");
                                   imgelement.setExpression(exp);
                                   File destFolder = getFile(wizard).getParentFile();
+                                  //Misc.log("Destination Folder: " + destFolder);
                                   if (destFolder != null)
                                   {
+
                                     File destFile = new File(destFolder, f.getName());
+                                    //Misc.log("Destination File: " + destFile);
                                     if (!destFile.exists())
                                     {
-                                        FileUtil.copy(new FileInputStream(f), new FileOutputStream(destFile));
+                                        Misc.copyFile(f, destFile);
                                     }
                                   }
                               }
@@ -500,7 +509,6 @@ public class DefaultReportGenerator extends AbstractReportGenerator {
         if (container instanceof JRDesignElementGroup)
        {
            ((JRDesignElementGroup)container).removeElement(element);
-
        }
        if (container instanceof JRDesignFrame)
        {

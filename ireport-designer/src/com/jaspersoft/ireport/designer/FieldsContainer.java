@@ -23,7 +23,7 @@
  */
 package com.jaspersoft.ireport.designer;
 
-import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.JRField;
 
 /**
  *
@@ -31,6 +31,6 @@ import net.sf.jasperreports.engine.design.JRDesignField;
  */
 public interface FieldsContainer {
 
-    public void addField(JRDesignField f);
+    public void addField(JRField f);
 
 }

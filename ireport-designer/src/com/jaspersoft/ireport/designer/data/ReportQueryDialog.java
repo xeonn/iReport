@@ -35,7 +35,6 @@ import com.jaspersoft.ireport.designer.*;
 //import com.jaspersoft.ireport.designer.data.SQLFieldsProvider;
 //import com.jaspersoft.ireport.designer.data.XMLFieldsProvider;
 import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
-import com.jaspersoft.ireport.designer.data.SortFieldsDialog;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.table.*;
@@ -51,7 +50,11 @@ import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.utils.CustomColumnControlButton;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import javax.swing.event.*;
 import java.awt.datatransfer.*;
 import net.sf.jasperreports.engine.JRField;
@@ -75,6 +78,9 @@ import org.jdesktop.swingx.icon.ColumnControlIcon;
 public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardOwner, FieldsContainer {
     
     private BeanInspectorPanel bip1 = null;
+    private boolean winMaximized = false;
+    private boolean adjustingFrameSize = false;
+    private Rectangle normalBounds = null;
     
     private FieldsProvider fieldsProvider = null;
         
@@ -201,6 +207,32 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
         getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
+
+        javax.swing.KeyStroke F11KeyStroke =  javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F11, 0, false);
+        javax.swing.Action maximizeAction = new javax.swing.AbstractAction() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+
+                setAdjustingFrameSize(true);
+                if (isWinMaximized())
+                {
+                    if (getNormalBounds() != null)
+                    {
+                         ReportQueryDialog.this.setBounds(getNormalBounds());
+                    }
+                }
+                else
+                {
+                    setNormalBounds(getBounds());
+                    ReportQueryDialog.this.setBounds(Misc.getMainFrame().getBounds());
+                }
+                setWinMaximized(!isWinMaximized());
+                setAdjustingFrameSize(false);
+            }
+        };
+
+        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(F11KeyStroke, "MaximizeWindow");
+        getRootPane().getActionMap().put("MaximizeWindow", maximizeAction);
+
         
         //applyI18n();
         
@@ -212,9 +244,71 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         //columnsErrorScrollPane.setTransferHandler( fcth);
         
         jTableFields.setColumnControl(new CustomColumnControlButton(jTableFields, new ColumnControlIcon() ));
+
+        FieldsContainerTransferHandler fcth = new FieldsContainerTransferHandler(this);
+        jTableFields.setTransferHandler( fcth );
+        columnsErrorMsgLabel.setTransferHandler( fcth);
+        columnsScrollPane.setTransferHandler(fcth);
+        columnsErrorScrollPane.setTransferHandler( fcth);
+
+        //jTableFields.setDropMode(DropMode.INSERT_ROWS);
+
+        /*jTableFields.setTransferHandler(new TransferHandler() {
+
+          final DataFlavor designFieldDF = new java.awt.datatransfer.DataFlavor(JRDesignField.class, JRDesignField.class.getName());
+
+          public boolean canImport(TransferSupport support) {
+            // for the demo, we'll only support drops (not clipboard paste)
+            if (!support.isDrop()) {
+              return false;
+            }
+
+
+            // we only import Strings
+            if (!support.isDataFlavorSupported(designFieldDF)) {
+              return false;
+            }
+
+            return true;
+          }
+
+          public boolean importData(TransferSupport support) {
+            // if we can't handle the import, say so
+            if (!canImport(support)) {
+              return false;
+            }
+
+            // fetch the drop location
+            JTable.DropLocation dl = (JTable.DropLocation) support
+                .getDropLocation();
+
+            int row = dl.getRow();
+
+            // fetch the data and bail if this fails
+            JRDesignField field;
+            try {
+               field= (JRDesignField) support.getTransferable().getTransferData(designFieldDF);
+            } catch (Exception e) {
+                e.printStackTrace();
+              return false;
+            }
+            Vector rowData = new Vector();
+            rowData.add(field);
+            rowData.add(field.getValueClassName());
+            rowData.add(field.getDescription());
+            //String[] rowData = data.split(",");
+            ((DefaultTableModel)jTableFields.getModel()).insertRow(row, rowData);
+
+            Rectangle rect = jTableFields.getCellRect(row, 0, false);
+            if (rect != null) {
+              jTableFields.scrollRectToVisible(rect);
+            }
+            return true;
+          }
+        });
+        */
         
-        
-    }
+    } 
     
     /**
      * A timer to detect when the SQL expression area has not been changed, for
@@ -281,6 +375,48 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
     }
     
     public static int elaborationSequence = 0;
+
+    /**
+     * @return the adjustingFrameSize
+     */
+    public boolean isAdjustingFrameSize() {
+        return adjustingFrameSize;
+    }
+
+    /**
+     * @param adjustingFrameSize the adjustingFrameSize to set
+     */
+    public void setAdjustingFrameSize(boolean adjustingFrameSize) {
+        this.adjustingFrameSize = adjustingFrameSize;
+    }
+
+    /**
+     * @return the winMaximized
+     */
+    public boolean isWinMaximized() {
+        return winMaximized;
+    }
+
+    /**
+     * @param winMaximized the winMaximized to set
+     */
+    public void setWinMaximized(boolean winMaximized) {
+        this.winMaximized = winMaximized;
+    }
+
+    /**
+     * @return the normalBounds
+     */
+    public Rectangle getNormalBounds() {
+        return normalBounds;
+    }
+
+    /**
+     * @param normalBounds the normalBounds to set
+     */
+    public void setNormalBounds(Rectangle normalBounds) {
+        this.normalBounds = normalBounds;
+    }
     
     /**
      * A Thread class to extract field names from a SQL query.
@@ -760,6 +896,11 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
                 formWindowOpened(evt);
             }
         });
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
 
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setResizeWeight(0.5);
@@ -1039,8 +1180,8 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
         jPanel4.add(okButton, gridBagConstraints);
@@ -1052,7 +1193,6 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -1699,6 +1839,15 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
             }
         }
     }//GEN-LAST:event_jButton5jButton2ActionPerformed1
+
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        
+        if (isWinMaximized() == true && !isAdjustingFrameSize())
+        {
+            setWinMaximized(false);
+            setNormalBounds(getBounds());
+        }
+    }//GEN-LAST:event_formComponentResized
     
     /**
      * @param args the command line arguments
@@ -2103,7 +2252,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
     }
 
     @SuppressWarnings("unchecked")
-    public void addField(JRDesignField field) {
+    public void addField(JRField field) {
         
         // Add the field if there is not already a fiels with the same name...
         if (field == null) return;
@@ -2131,7 +2280,69 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
         jTableFields.addRowSelectionInterval(jTableFields.getRowCount()-1, jTableFields.getRowCount()-1);
   
         jTableFields.updateUI();                
-    }           
+    }
+
+    public void setVisible(boolean b)
+    {
+        try {
+            setAdjustingFrameSize(true);
+            if (b)
+            {
+                // Check for the last used size...
+                int w = IReportManager.getPreferences().getInt("ReportQueryDialog.size.width", getPreferredSize().width);
+                int h = IReportManager.getPreferences().getInt("ReportQueryDialog.size.height", getPreferredSize().height);
+                int x = IReportManager.getPreferences().getInt("ReportQueryDialog.position.x", getLocation().x);
+                int y = IReportManager.getPreferences().getInt("ReportQueryDialog.position.y", getLocation().y);
+
+                setWinMaximized(IReportManager.getPreferences().getBoolean("ReportQueryDialog.position.maximized", false));
+
+                // Multi screen is not handled here...
+                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
+                // Adjust size based on the screen size...
+                w = Math.min(w,dim.width);
+                h = Math.min(h, dim.height);
+
+                // Adjust position based on screen size and window size...
+                x = Math.min( x, dim.width - w);
+                y = Math.min( y, dim.height - y);
+
+                setNormalBounds(new Rectangle(x, y, w, h));
+
+                if (!isWinMaximized())
+                {
+                    this.setBounds(getNormalBounds());
+                }
+                else
+                {
+                    this.setBounds(Misc.getMainFrame().getBounds());
+                }
+            }
+            else
+            {
+                // Store position and location...
+
+                if (getNormalBounds() != null)
+                {
+                    IReportManager.getPreferences().putInt("ReportQueryDialog.size.width", getSize().width);
+                    IReportManager.getPreferences().putInt("ReportQueryDialog.size.height", getSize().height);
+                    IReportManager.getPreferences().putInt("ReportQueryDialog.position.x", getLocation().x);
+                    IReportManager.getPreferences().putInt("ReportQueryDialog.position.y", getLocation().y);
+                }
+
+                IReportManager.getPreferences().putBoolean("ReportQueryDialog.position.maximized", isWinMaximized());
+                
+            }
+        } catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        finally {
+
+            setAdjustingFrameSize(false);
+            super.setVisible(b);
+        }
+    }
 }
 
 

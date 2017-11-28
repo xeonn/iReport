@@ -30,10 +30,12 @@ import com.jaspersoft.ireport.designer.dnd.DesignerDropTarget;
 import com.jaspersoft.ireport.designer.ruler.RulerPanel;
 import com.jaspersoft.ireport.designer.utils.MultilineToolbarLayout;
 import java.awt.BorderLayout;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -59,6 +61,7 @@ import org.netbeans.api.visual.model.ObjectState;
 import org.openide.explorer.ExplorerManager;
 import org.openide.nodes.Node;
 import org.openide.util.Mutex;
+import org.w3c.dom.events.EventListener;
 
         
 /**
@@ -66,8 +69,11 @@ import org.openide.util.Mutex;
  * @author  gtoffoli
  */
 public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSceneListener {
- 
+
+    public static final String JASPERDESIGN_PROPERTY = "jasperdesign";
+
     private boolean adjustingSelection = false;
+    private boolean firstLoad = true;
     
     
     private Set<ObjectSceneListener> listeners = new HashSet<ObjectSceneListener>(1); // or can use ChangeSupport in NB 6.0
@@ -134,7 +140,7 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
 
     /**
      * The jasperDesign is loaded in background, since it involves in some I/O operations.
-     * To get the JasperDesign currenctly active invoke getJasperDesign. If it returns true,
+     * To get the JasperDesign currenctly active invoke getJasperDesign. If it returns null,
      * register yourself as JasperDesignObserver to get the design as soon it is available.
      * The Observer return the JasperDesign. If you get null again, this is
      * because the JasperDesign loading is failed for some reason (like a wrong XML syntax).
@@ -144,16 +150,72 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
     }
     
     /**
-     * Update the JasperDesign to edit and notify all the JasperDesignObserver(s) registered using
-     * addJasperDesignObserver.
+     * Update the JasperDesign to edit.
      * When an observer is notified, it is removed from the list of objects to notify.
      * See getJasperDesign for more details.
      */
     public void setJasperDesign(JasperDesign jasperDesign) {
         this.jasperDesign = jasperDesign;
-        
+
         getScene().setJasperDesign(jasperDesign);
 
+        if (firstLoad)
+        {
+            firstLoad = false;
+            // check if there are info about the scene...
+            if (jasperDesign.getProperty("ireport.zoom") != null)
+            {
+                try {
+                    final double zoom = Double.parseDouble(jasperDesign.getProperty("ireport.zoom"));
+                    final Rectangle rect = new Rectangle(0,0,0,0);
+
+                    if (jasperDesign.getProperty("ireport.x") != null)
+                    {
+                        int x = Integer.parseInt(jasperDesign.getProperty("ireport.x"));
+                        if (rect.width < x)
+                        {
+                            rect.x = x;
+                        }
+
+                    }
+
+                    if (jasperDesign.getProperty("ireport.y") != null)
+                    {
+                        final int y = Integer.parseInt(jasperDesign.getProperty("ireport.y"));
+                        if (rect.height < y)
+                        {
+                            rect.y = y;
+                        }
+
+                    }
+
+                   SwingUtilities.invokeLater(new Runnable() {
+
+                        public void run() {
+                            scene.setZoomFactor(zoom);
+                            SwingUtilities.invokeLater(new Runnable() {
+
+                                public void run() {
+                                    Rectangle visibleRect = scene.getView().getVisibleRect();
+                                    if (rect.x != 0) {
+                                        visibleRect.x = rect.x;
+                                        visibleRect.width += rect.x;
+                                    }
+                                    if (rect.y != 0)
+                                    {
+                                        visibleRect.y = rect.y;
+                                        visibleRect.height += rect.y;
+                                    }
+                                    scene.getView().scrollRectToVisible(visibleRect);
+                                }
+                            });
+                        }
+                    });
+                }
+                catch (Exception ex){}
+            }
+
+        }
         // Remove all the listeners...
         for (CrosstabPanel p : crosstabs)
         {
@@ -188,6 +250,15 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
                 }
             });
             
+        // Notify model change in the view...
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+                firePropertyChange(JASPERDESIGN_PROPERTY, null, getJasperDesign());
+            }
+        });
+
     }
     
     
@@ -573,7 +644,10 @@ public class ReportDesignerPanel extends javax.swing.JPanel implements ObjectSce
         else
         {
             jPanelContainer.add(crosstabs.get(cIndex), BorderLayout.CENTER);
-            ((JToggleButton)jToolBar1.getComponent(cIndex+1)).setSelected(true);
+            if (jToolBar1.getComponentCount() > cIndex+1)
+            {
+                ((JToggleButton)jToolBar1.getComponent(cIndex+1)).setSelected(true);
+            }
         }
 
         try {

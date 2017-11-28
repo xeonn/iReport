@@ -27,6 +27,8 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
@@ -108,6 +110,30 @@ public class ParametersChildren extends Index.KeysChildren implements PropertyCh
         {
             l.addAll(dataset.getParametersList());
         }
+
+        if (getNode() != null && getNode() instanceof ParametersNode)
+        {
+            if (((ParametersNode)getNode()).isSort())
+            {
+                // Order elements by name...
+                Object[] parameters = l.toArray();
+                Arrays.sort(parameters, new Comparator() {
+
+                    public int compare(Object o1, Object o2) {
+                        return ((JRDesignParameter)o1).getName().compareToIgnoreCase(((JRDesignParameter)o2).getName());
+                    }
+                });
+                l.clear();
+                l.addAll(Arrays.asList(parameters));
+            }
+        }
+
+        update();
+
+    }
+
+    protected void forceReorder(int[] ints) {
+        super.reorder(ints);
         update();
     }
     
@@ -135,5 +161,15 @@ public class ParametersChildren extends Index.KeysChildren implements PropertyCh
         {
             recalculateKeys();
         }
+    }
+
+    @Override
+    protected void reorder(int[] ints) {
+
+        if (getNode() != null && getNode() instanceof ParametersNode && ((ParametersNode)getNode()).isSort())
+        {
+            return;
+        }
+        super.reorder(ints);
     }
 }

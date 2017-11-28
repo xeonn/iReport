@@ -27,7 +27,6 @@ import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.FieldsProviderEditor;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.connection.JRXMLDataSourceConnection;
 import com.jaspersoft.ireport.designer.data.ReportQueryDialog;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.util.Enumeration;
@@ -41,9 +40,19 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.xml.transform.TransformerException;
 import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.util.JRXmlUtils;
 import com.sun.org.apache.xpath.internal.CachedXPathAPI;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.net.URL;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.util.xml.JRXPathExecuter;
+import net.sf.jasperreports.engine.util.xml.JRXPathExecuterUtils;
+import org.openide.util.Exceptions;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -57,7 +66,9 @@ public class XMLFieldMappingEditor extends javax.swing.JPanel  implements Fields
     
     private String xpathExpression = null;
     private Document document = null;
-    private CachedXPathAPI xpathAPI = new CachedXPathAPI();
+    //private CachedXPathAPI xpathAPI = new CachedXPathAPI();
+
+    private JRXPathExecuter xpathExecuter = null;
     private ReportQueryDialog reportQueryDialog = null;
 
     public ReportQueryDialog getReportQueryDialog() {
@@ -77,14 +88,7 @@ public class XMLFieldMappingEditor extends javax.swing.JPanel  implements Fields
         this.recordNodes = recordNodes;
     }
 
-    public CachedXPathAPI getXpathAPI() {
-        return xpathAPI;
-    }
-
-    public void setXpathAPI(CachedXPathAPI xpathAPI) {
-        this.xpathAPI = xpathAPI;
-    }
-
+   
     public Document getDocument() {
         return document;
     }
@@ -109,6 +113,12 @@ public class XMLFieldMappingEditor extends javax.swing.JPanel  implements Fields
      */
     public XMLFieldMappingEditor(ReportQueryDialog rqd) {
         initComponents();
+        try {
+            Thread.currentThread().setContextClassLoader( IReportManager.getReportClassLoader());
+            xpathExecuter = JRXPathExecuterUtils.getXPathExecuter();
+        } catch (JRException ex) {
+           ex.printStackTrace();
+        }
         this.reportQueryDialog = rqd;
         jTree1.setCellRenderer(new XMLDocumentTreeCellRenderer(this));
         jTree1.setTransferHandler( new XMLTreeTransfertHandler( this ));
@@ -411,6 +421,35 @@ private void jPopupMenuFieldsPopupMenuWillBecomeVisible(javax.swing.event.PopupM
     
     public void updateView()
     {
+
+        IReportConnection conn = IReportManager.getInstance().getDefaultConnection();
+
+        InputStream inputStream = getInputStream(conn);
+
+        if (inputStream == null)
+        {
+            jTree1.setModel(new DefaultTreeModel(new DefaultMutableTreeNode(I18n.getString("XMLFieldMappingEditor.Node.Warning"))));
+        }
+        else
+        {
+                try {
+                    // Create a document builder Namespace aware...
+
+
+                    document = createDocumentBuilder().parse(inputStream);
+                    DefaultMutableTreeNode root = addTreeDocument(document.getDocumentElement());
+                    jTree1.setModel(new DefaultTreeModel(root));
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    jTree1.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Error loading the XML file.")));
+                }
+        }
+
+        updateXpathView();
+        jTree1.updateUI();
+        
+        /*
         IReportConnection conn = IReportManager.getInstance().getDefaultConnection();
         
         String file = "";
@@ -437,6 +476,8 @@ private void jPopupMenuFieldsPopupMenuWillBecomeVisible(javax.swing.event.PopupM
         
         updateXpathView();
         jTree1.updateUI();
+
+         */
     }
     
     public DefaultMutableTreeNode addTreeDocument(Node node)
@@ -508,8 +549,8 @@ private void jPopupMenuFieldsPopupMenuWillBecomeVisible(javax.swing.event.PopupM
     {
         if (document == null || getXpathExpression() == null || getXpathExpression().trim().length() == 0) return;
         try {
-            
-            NodeList nodeList = xpathAPI.selectNodeList(document, getXpathExpression());
+
+            NodeList nodeList = xpathExecuter.selectNodeList(document, getXpathExpression());
             
             getRecordNodes().clear();
             for (int i=0; nodeList != null && i<nodeList.getLength(); ++i)
@@ -576,11 +617,16 @@ private void jPopupMenuFieldsPopupMenuWillBecomeVisible(javax.swing.event.PopupM
                 {
                     try {
                         org.w3c.dom.Node currentNode = (org.w3c.dom.Node) getRecordNodes().get(i);
-                        org.w3c.dom.Node foundNode = xpathAPI.selectSingleNode(currentNode, exp);
+                        NodeList list = xpathExecuter.selectNodeList(currentNode, exp);
+                        org.w3c.dom.Node foundNode = null;
+                        if (list.getLength() > 0)
+                        {
+                            foundNode = list.item(0);
+                        }
                         if (foundNode == node) {
                             return exp + postfix;
                         }
-                    } catch (TransformerException ex) {
+                    } catch (Exception ex) {
                         //ex.printStackTrace();
                     }
                 }
@@ -680,4 +726,62 @@ private void jPopupMenuFieldsPopupMenuWillBecomeVisible(javax.swing.event.PopupM
         jMenuItemCollapseAll.setText(I18n.getString("XMLFieldMappingEditor.menuItemCollapseAll","Collapse All"));
     }
     */
+
+    /**
+     * This method look for a method called getFilename with a String as return to locate
+     * the file pointed by this connection. The returned string can be an URL or an absolute path...
+     * @param conn
+     * @return
+     */
+    private InputStream getInputStream(IReportConnection conn) {
+
+            String file = null;
+            try {
+
+                Method m = conn.getClass().getMethod("getFilename", new Class[]{});
+                if (m!=null)
+                {
+                    file = (String)m.invoke(conn, new Object[]{});
+                }
+                
+
+            } catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+            if (file == null) return null;
+
+            try {
+                return  new FileInputStream(new File(file));
+            } catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+
+            try {
+                    URL url = new URL(file);
+                    return url.openStream();
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            return null;
+    }
+
+    public static DocumentBuilder createDocumentBuilder() throws JRException
+    {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            dbf.setValidating(false);
+            dbf.setIgnoringComments(true);
+            dbf.setNamespaceAware(true);
+
+            try
+            {
+                    return dbf.newDocumentBuilder();
+            }
+            catch (ParserConfigurationException e)
+            {
+                    throw new JRException("Failed to create a document builder factory", e);
+            }
+    }
 }

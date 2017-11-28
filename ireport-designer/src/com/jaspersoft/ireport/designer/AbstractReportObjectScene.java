@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer;
 
+import com.jaspersoft.ireport.designer.actions.ElementF2Action;
 import com.jaspersoft.ireport.designer.actions.ReportElementPopupMenuProvider;
 import com.jaspersoft.ireport.designer.actions.ReportPopupMenuProvider;
 import com.jaspersoft.ireport.designer.actions.ReportTextElementInplaceEditorProvider;
@@ -43,7 +44,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -83,6 +87,8 @@ public abstract class AbstractReportObjectScene extends ObjectScene implements G
         super();
         selectionManager = new ObjectSceneSelectionManager(this);
         reportSelectAction = createReportSelectAction();
+        elementInputMap.put(KeyStroke.getKeyStroke("F2"), "ElementF2Action");
+        elementActionMap.put("ElementF2Action", new ElementF2Action());
     }
 
     public void assureVisible(Object object) {
@@ -224,7 +230,10 @@ public abstract class AbstractReportObjectScene extends ObjectScene implements G
     
     protected static final WidgetAction elementPopupMenuAction = ActionFactory.createPopupMenuAction(new ReportElementPopupMenuProvider());
     protected static final WidgetAction reportPopupMenuAction = ActionFactory.createPopupMenuAction(new ReportPopupMenuProvider());
-    
+
+    protected static final InputMap elementInputMap = new InputMap();
+    protected static final ActionMap elementActionMap = new ActionMap();
+
     final protected WidgetAction inplaceEditorAction = ActionFactory.createInplaceEditorAction(new ReportTextElementInplaceEditorProvider(new TextFieldInplaceEditor() {
             public boolean isEnabled (Widget widget) {
                 JRDesignElement element = getElement(widget);

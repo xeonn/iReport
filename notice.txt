@@ -1,5 +1,37 @@
 
 
+Project lead
+Giulio Toffoli (giulio at jaspersoft.com)
+
+Contributors
+Alexander (akhorahil at users.sourceforge.net) 
+Andre Legendre (andleg2000 at users.sourceforge.net) 
+Wade Chandler (brainjava at users.sourceforge.net) 
+Craig B Spengler (craigbs at users.sourceforge.net) 
+David Walters (david1203 at users.sourceforge.net) 
+ErtanO (ertano at users.sourceforge.net) 
+G Raghavan (geeraghav at users.sourceforge.net) 
+Octavio Luna (itaqua at users.sourceforge.net) 
+Kees Kuip (keeskuip at users.sourceforge.net) 
+Peter Henderson (phenderson at users.sourceforge.net) 
+Vinod Kumar Singh (vinodsingh at users.sourceforge.net) 
+Heiko Wenzel (webhsw at users.sourceforge.net) 
+Egon R Pereira (egonrp at users.sourceforge.net)
+Robert F Lamping (rlamping at users.sourceforge.net) 
+Cincom Systems, Inc.
+Piotr Ciechanski (piotrekciechanski at o2.pl)
+nickyb (SQLeonardo project)
+Christopher Andre
+
+iReport uses icons created by
+Mark James (mjames at gmail.com)
+http://www.famfamfam.com/lab/icons/silk/
+
+NetBeans IDE and NetBeans Platform are based on software from netbeans.org,
+which has been dual licensed under the Common Development and Distribution
+License (CDDL) and the GNU General Public License version 2 with Classpath
+exception. For more information, please visit www.netbeans.org.
+
 iReport uses several other open source libraries.
 
 You can refer to the following links in order to

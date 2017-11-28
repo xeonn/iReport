@@ -81,17 +81,17 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
         
         if (lineBox != null)
         {
-            jSpinnerBottom.setValue( new Integer(lineBox.getBottomPadding() ));
-            jSpinnerTop.setValue( new Integer(lineBox.getTopPadding() ));
-            jSpinnerLeft.setValue( new Integer(lineBox.getLeftPadding() ));
-            jSpinnerRight.setValue( new Integer(lineBox.getRightPadding() ));
+            jSpinnerBottom.setValue( lineBox.getBottomPadding() );
+            jSpinnerTop.setValue( lineBox.getTopPadding() );
+            jSpinnerLeft.setValue( lineBox.getLeftPadding() );
+            jSpinnerRight.setValue(lineBox.getRightPadding() );
         }
         else
         {
-            jSpinnerBottom.setValue( new Integer(0));
-            jSpinnerTop.setValue( new Integer(0));
-            jSpinnerLeft.setValue( new Integer(0));
-            jSpinnerRight.setValue( new Integer(0));
+            jSpinnerBottom.setValue( 0);
+            jSpinnerTop.setValue( 0);
+            jSpinnerLeft.setValue( 0);
+            jSpinnerRight.setValue( 0);
         }
         setInit(oldInit);
         selectionChanged(getSelectionPanel().getSelectedBorders());
@@ -618,7 +618,7 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
                     {
                         if (first)
                         {
-                            spinnedModel.setValue(pen.getLineWidth());
+                            spinnedModel.setValue(pen.getLineWidth().doubleValue());
                             colorSelector.setColor( pen.getLineColor() ); 
                             if (pen.getLineStyle() != null)
                             {

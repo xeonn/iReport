@@ -227,7 +227,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
             if (hyperlink instanceof JRAnchor)
             {
                 jPanelAnchorName.setVisible(true);
-                jSpinnerBookmarkLevel.setValue( new Integer( ((JRAnchor)hyperlink).getBookmarkLevel() ));
+                jSpinnerBookmarkLevel.setValue(  ((JRAnchor)hyperlink).getBookmarkLevel() );
                 jRTextExpressionAreaAnchorName.setText( Misc.getExpressionText( ((JRAnchor)hyperlink).getAnchorNameExpression()) );
             }
             else

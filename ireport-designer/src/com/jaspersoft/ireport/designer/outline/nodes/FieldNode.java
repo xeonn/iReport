@@ -39,6 +39,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Action;
+import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -212,6 +213,16 @@ public class FieldNode extends IRAbstractNode implements PropertyChangeListener 
         {
             super.setName(getField().getName());
             this.setDisplayName(getField().getName());
+            // update sorting of childrens...
+            if (this.getParentNode() != null && this.getParentNode() instanceof FieldsNode)
+            {
+                SwingUtilities.invokeLater(new Runnable() {
+
+                    public void run() {
+                        ((FieldsNode)(FieldNode.this.getParentNode())).updateSorting();
+                    }
+                });
+            }
         }
         
         // Update the sheet

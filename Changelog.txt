@@ -1,3 +1,29 @@
+2010-02-02 Version 3.7.1 released
+_______________________________________________________________________________
+- Updated to JasperReports 3.7.1
+- Fixed bug 0004548: when <crosstabHeaderCell> tag added to crosstab, rest of the elements will be displaced
+- Added samples to the Help menu
+- Added wizardas for pie and category datasets based charts
+- fixed JasperServer plugin to avoid import of images referenced with an url inside the JasperServer repository
+- New Callouts/notes tool to review or add comments to a report (in design mode)
+- New report samples are now shipped with iReport.
+- Alphabetical sorting for variables, parameters and fields
+- Remember ZoomFactor and design position with JRXML 
+- Sample DB shipped with iReport (Help -> Samples -> Run Sample Database)
+- Fixed Bug  0004543 Copy/Paste Variable = JRRuntimeException 
+- Fixed Bug 0004492 Line component shows a exception when the 'pen propertie' is selected 
+- Fixed Bug 0004490 Exception occurs when I select "Tools > Options > iReport" (Linux specific)
+- Fixed min percentage value in the PieDataset panel
+- Fixed Bug 0004498 Group lists not updated in variable properties
+- Fixed Bug 0004491 Unclosable Connections/Datasources window in certain window managers
+- Remember window size of the query dialog, F11 to maximize/restore the dialog 
+- JAVA_HOME check at startup if a JVM is not found in the Windows registry
+- New shortcut F2 to open the expression editor for a selected textfield
+- Fixed a problem about keeping custom JRProperty values
+- Fixed Bug 17251 - Remote XML file datasource Test button always returns successful 
+- Fixed drag and drop from the XML mapping tool to the list of fields in the query dialog.
+- Improved XML fields provider to work with remote XML data sources.
+
 2009-12-09 Version 3.7.0 released
 _______________________________________________________________________________
 - Fixed Bug 0004452 Settings import fails to import

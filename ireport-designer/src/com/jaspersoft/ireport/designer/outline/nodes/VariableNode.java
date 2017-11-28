@@ -27,8 +27,6 @@ import com.jaspersoft.ireport.designer.sheet.properties.VariableExpressionProper
 import com.jaspersoft.ireport.designer.sheet.properties.InitialValueExpressionProperty;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.dnd.ReportObjectPaletteTransferable;
-import com.jaspersoft.ireport.designer.editor.ExpressionContext;
-import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
@@ -42,11 +40,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Action;
-import net.sf.jasperreports.engine.JRExpression;
+import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignVariable;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.ErrorManager;
@@ -60,6 +58,7 @@ import org.openide.nodes.NodeTransfer;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
 import org.openide.util.Lookup;
+import org.openide.util.WeakListeners;
 import org.openide.util.actions.SystemAction;
 import org.openide.util.datatransfer.ExTransferable;
 import org.openide.util.lookup.Lookups;
@@ -233,6 +232,15 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
         {
             super.setName(getVariable().getName());
             this.setDisplayName(getVariable().getName());
+            if (this.getParentNode() != null && this.getParentNode() instanceof VariablesNode)
+            {
+                SwingUtilities.invokeLater(new Runnable() {
+
+                    public void run() {
+                        ((VariablesNode)(VariableNode.this.getParentNode())).updateSorting();
+                    }
+                });
+            }
         }
         
         // Update the sheet
@@ -687,7 +695,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
     /**
      *  Class to manage the JRDesignVariable.PROPERTY_CALCULATION property
      */
-    private static final class ResetGroupProperty extends PropertySupport
+    private static final class ResetGroupProperty extends PropertySupport implements PropertyChangeListener
     {
             private JRDesignDataset dataset = null;
             private JRDesignVariable variable = null;
@@ -700,6 +708,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
                 super( JRDesignVariable.PROPERTY_RESET_GROUP,JRGroup.class, I18n.getString("VariableNode.Property.Resetgroup"), I18n.getString("VariableNode.Property.Resetgroupdetail"), true, true);
                 this.variable = variable;
                 this.dataset = dataset;
+                dataset.getEventSupport().addPropertyChangeListener(WeakListeners.propertyChange(this, dataset.getEventSupport()));
                 setValue("suppressCustomEditor", Boolean.TRUE);
             }
 
@@ -715,15 +724,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
 
                 if (editor == null)
                 {
-                    java.util.ArrayList l = new java.util.ArrayList();
-                    
-                    List groups = dataset.getGroupsList();
-                    for (int i=0; i<groups.size(); ++i)
-                    {
-                        JRGroup group = (JRGroup)groups.get(i);
-                        l.add(new Tag( group , group.getName()));
-                    }
-                    editor = new ComboBoxPropertyEditor(false, l);
+                    editor = new ComboBoxPropertyEditor(false, getListOfTags());
                 }
                 return editor;
             }
@@ -749,6 +750,31 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
                     IReportManager.getInstance().addUndoableEdit(urob);
                 }
             }
+
+        public void propertyChange(PropertyChangeEvent evt) {
+            if (editor == null) return;
+            if (evt.getPropertyName() == null) return;
+            if (evt.getPropertyName().equals( JRDesignDataset.PROPERTY_GROUPS) ||
+                evt.getPropertyName().equals( JRDesignGroup.PROPERTY_NAME))
+            {
+               editor.setTagValues(getListOfTags());
+            }
+        }
+
+       private java.util.ArrayList getListOfTags()
+        {
+            java.util.ArrayList l = new java.util.ArrayList();
+            List groups = dataset.getGroupsList();
+            l.add(new Tag( null , ""));
+            for (int i=0; i<groups.size(); ++i)
+            {
+                JRDesignGroup group = (JRDesignGroup)groups.get(i);
+                l.add(new Tag( group , group.getName()));
+                group.getEventSupport().removePropertyChangeListener(JRDesignGroup.PROPERTY_NAME, this); // Just in case...
+                group.getEventSupport().addPropertyChangeListener(JRDesignGroup.PROPERTY_NAME, WeakListeners.propertyChange(this, group.getEventSupport()));
+            }
+            return l;
+        }
     }
     
     
@@ -873,7 +899,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
     /**
      *  Class to manage the JRDesignVariable.PROPERTY_INCREMENT_GROUP property
      */
-    private static final class IncrementGroupProperty extends PropertySupport
+    private static final class IncrementGroupProperty extends PropertySupport implements PropertyChangeListener
     {
             private JRDesignDataset dataset = null;
             private JRDesignVariable variable = null;
@@ -886,6 +912,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
                 super( JRDesignVariable.PROPERTY_INCREMENT_GROUP,JRGroup.class, I18n.getString("VariableNode.Property.Incrementgroup"), I18n.getString("VariableNode.Property.Incrementgroupdetail"), true, true);
                 this.variable = variable;
                 this.dataset = dataset;
+                dataset.getEventSupport().addPropertyChangeListener(WeakListeners.propertyChange(this, dataset.getEventSupport()));
                 setValue("suppressCustomEditor", Boolean.TRUE);
             }
 
@@ -901,15 +928,8 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
 
                 if (editor == null)
                 {
-                    java.util.ArrayList l = new java.util.ArrayList();
-                    
-                    List groups = dataset.getGroupsList();
-                    for (int i=0; i<groups.size(); ++i)
-                    {
-                        JRGroup group = (JRGroup)groups.get(i);
-                        l.add(new Tag( group , group.getName()));
-                    }
-                    editor = new ComboBoxPropertyEditor(false, l);
+                    editor = new ComboBoxPropertyEditor(false, getListOfTags());
+
                 }
                 return editor;
             }
@@ -935,6 +955,31 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
                     IReportManager.getInstance().addUndoableEdit(urob);
                 }
             }
+
+        public void propertyChange(PropertyChangeEvent evt) {
+            if (editor == null) return;
+            if (evt.getPropertyName() == null) return;
+            if (evt.getPropertyName().equals( JRDesignDataset.PROPERTY_GROUPS) ||
+                evt.getPropertyName().equals( JRDesignGroup.PROPERTY_NAME))
+            {
+                editor.setTagValues(getListOfTags());
+            }
+        }
+
+        private java.util.ArrayList getListOfTags()
+        {
+            java.util.ArrayList l = new java.util.ArrayList();
+            List groups = dataset.getGroupsList();
+            l.add(new Tag( null , ""));
+            for (int i=0; i<groups.size(); ++i)
+            {
+                JRDesignGroup group = (JRDesignGroup)groups.get(i);
+                l.add(new Tag( group , group.getName()));
+                group.getEventSupport().removePropertyChangeListener(JRDesignGroup.PROPERTY_NAME, this); // Just in case...
+                group.getEventSupport().addPropertyChangeListener(JRDesignGroup.PROPERTY_NAME, WeakListeners.propertyChange(this, group.getEventSupport()));
+            }
+            return l;
+        }
     }
     
     

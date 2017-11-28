@@ -27,6 +27,8 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.charts.ChartSelectionJDialog;
+import com.jaspersoft.ireport.designer.charts.datasets.wizards.CategoryDatasetWizardAction;
+import com.jaspersoft.ireport.designer.charts.datasets.wizards.PieWizardAction;
 import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Dialog;
@@ -34,14 +36,18 @@ import java.awt.Frame;
 import java.awt.Point;
 import java.awt.dnd.DropTargetDropEvent;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.charts.design.JRDesignCategoryDataset;
+import net.sf.jasperreports.charts.design.JRDesignPieDataset;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.netbeans.api.visual.widget.Scene;
 import org.openide.util.Mutex;
+import org.openide.util.actions.SystemAction;
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
@@ -78,6 +84,16 @@ public class CreateChartAction extends CreateReportElementAction
             element = dialog.getChart();
             element.setWidth(200);
             element.setHeight(100);
+
+            if ( ((JRDesignChart)element).getDataset() instanceof JRDesignPieDataset)
+            {
+                SystemAction.get(PieWizardAction.class).configureChart(  (JRDesignPieDataset)((JRDesignChart)element).getDataset()  );
+            }
+            else if ( ((JRDesignChart)element).getDataset() instanceof JRDesignCategoryDataset)
+            {
+                SystemAction.get(CategoryDatasetWizardAction.class).configureChart(  (JRDesignCategoryDataset)((JRDesignChart)element).getDataset(), ((JRDesignChart)element).getChartType()  );
+            }
+
             String s = IReportManager.getPreferences().get("DefaultTheme","");
             if (s.length() > 0)
             {
@@ -87,6 +103,8 @@ public class CreateChartAction extends CreateReportElementAction
                 }
             }
         }
+
+
 
         return element;
     }

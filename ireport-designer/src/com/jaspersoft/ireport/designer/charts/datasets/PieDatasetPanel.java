@@ -112,7 +112,7 @@ public class PieDatasetPanel extends javax.swing.JPanel  implements ChartDataset
 
         jSpinnerMaxCount.setModel( maxCountSpinner);
 
-        SpinnerNumberModel minPercentagetSpinner = new SpinnerNumberModel(0,0d,100d,1d);
+        SpinnerNumberModel minPercentagetSpinner = new SpinnerNumberModel(0d,0d,100d,1d);
         minPercentagetSpinner.addChangeListener(new ChangeListener() {
 
             public void stateChanged(ChangeEvent e) {
@@ -177,13 +177,28 @@ public class PieDatasetPanel extends javax.swing.JPanel  implements ChartDataset
 
         try {
             SpinnerNumberModel model = (SpinnerNumberModel)jSpinnerMaxCount.getModel();
+            if (pieDataset.getMaxCount() == null)
+            {
+                model.setValue(0);
+            }
+            else
+            {
+                model.setValue(pieDataset.getMaxCount());
+            }
+        } catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+        try {
+            SpinnerNumberModel model = (SpinnerNumberModel)jSpinnerMinPercentage.getModel();
             if (pieDataset.getMinPercentage() == null)
             {
                 model.setValue(new Double(0));
             }
             else
             {
-                model.setValue(pieDataset.getMinPercentage());
+                model.setValue(pieDataset.getMinPercentage().doubleValue());
             }
         } catch (Exception ex)
         {

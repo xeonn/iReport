@@ -48,6 +48,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabParameter;
 import net.sf.jasperreports.crosstabs.fill.calculation.BucketDefinition;
 import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementDataset;
 import net.sf.jasperreports.engine.JRElementGroup;
@@ -62,6 +63,7 @@ import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.JRSection;
+import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -526,13 +528,14 @@ public class ModelUtils {
             JRCrosstabRowGroup[] row_groups = crosstab.getRowGroups();
             JRCrosstabColumnGroup[] col_groups = crosstab.getColumnGroups();
 
+            /*
+            // The size of the crosstab matrix...
             Point size = new Point(0,1);
 
             for (int i=0; i<row_groups.length; ++i)
             {
                 size.x++;
             }
-
 
             for (int i=0; i<col_groups.length; ++i)
             {
@@ -543,6 +546,7 @@ public class ModelUtils {
                     size.x++;
                 }
             }
+            */
 
             int x =0;
             int y =0;
@@ -559,7 +563,16 @@ public class ModelUtils {
             y = 0;
 
             // Add column headers...
-            int w = col_groups.length;
+            int w = 1; // holds the total number of columns.
+            for (int i=0; i<col_groups.length; ++i)
+            {
+                JRCrosstabColumnGroup group = col_groups[i];
+                //if (group.getTotalPosition() != BucketDefinition.TOTAL_POSITION_NONE)
+                {
+                    w++;
+                }
+            }
+
             int h = col_groups.length;
 
 
@@ -577,14 +590,14 @@ public class ModelUtils {
                 CellInfo ci2 = new CellInfo(x, y, w, 1, group.getHeader());
                 cellInfos.add(ci2);
 
-
                 if (group.getTotalPosition() == BucketDefinition.TOTAL_POSITION_END)
                 {
-                     CellInfo ci = new CellInfo(x+w, y, 1, h, group.getTotalHeader());
+                     CellInfo ci = new CellInfo(x+w-1, y, 1, h, group.getTotalHeader());
                      cellInfos.add(ci);
+                     w--;
                 }
 
-                w--;
+                
                 h--;
                 y++;
             }
@@ -595,7 +608,17 @@ public class ModelUtils {
 
             // Add column headers...
             w = row_groups.length;
-            h = row_groups.length;
+
+            h = 1; //row_groups.length;
+
+            for (int i=0; i<row_groups.length; ++i)
+            {
+                JRCrosstabRowGroup group = row_groups[i];
+                //if (group.getTotalPosition() != BucketDefinition.TOTAL_POSITION_NONE)
+                {
+                    h++;
+                }
+            }
 
             for (int i=0; i<row_groups.length; ++i)
             {
@@ -613,12 +636,12 @@ public class ModelUtils {
 
                 if (group.getTotalPosition() == BucketDefinition.TOTAL_POSITION_END)
                 {
-                    CellInfo ci = new CellInfo(x, y+h, w, 1, group.getTotalHeader());
+                    CellInfo ci = new CellInfo(x, y+h-1, w, 1, group.getTotalHeader());
                     cellInfos.add(ci);
+                    h--;
                 }
 
                 w--;
-                h--;
                 x++;
             }
 
@@ -643,46 +666,121 @@ public class ModelUtils {
                 }
             }
 
+            // Find x lines and y lines (create the position of the grid).
+            Integer[][] separators = getColumnWidths(crosstab,cells);
 
             for (int i=0; i < cellInfos.size(); ++i)
             {
                 CellInfo ci = cellInfos.get(i);
                 // calculate the width...
                 // find the max with of the CI with x = ci.getX();
-                int posX = 0;
-                int posY = 0;
-
-                for (int index = 0; index < ci.getX(); ++index)
-                {
-
-                    for (int k=0; k < cellInfos.size(); ++k)
-                    {
-                        CellInfo ci2 = cellInfos.get(k);
-                        if (ci2.getX() == index)
-                        {
-                            posX += ci2.getCellContents().getWidth();
-                            break;
-                        }
-                    }
-                }
-
-                ci.setLeft(posX);
-                for (int index = 0; index < ci.getY(); ++index)
-                {
-                    for (int k=0; k < cellInfos.size(); ++k)
-                    {
-                        CellInfo ci2 = cellInfos.get(k);
-                        if (ci2.getY() == index)
-                        {
-                            posY += ci2.getCellContents().getHeight();
-                            break;
-                        }
-                    }
-                }
-                ci.setTop(posY);
+                ci.setTop(separators[0][ci.getY()]);
+                ci.setLeft(separators[1][ci.getX()]);
+//
+//                int posX = 0;
+//                int posY = 0;
+//
+//                for (int index = 0; index < ci.getX(); ++index)
+//                {
+//
+//                    for (int k=0; k < cellInfos.size(); ++k)
+//                    {
+//                        CellInfo ci2 = cellInfos.get(k);
+//                        if (ci2.getX() == index)
+//                        {
+//                            posX += ci2.getCellContents().getWidth();
+//                            break;
+//                        }
+//                    }
+//                }
+//
+//                ci.setLeft(posX);
+//                for (int index = 0; index < ci.getY(); ++index)
+//                {
+//                    for (int k=0; k < cellInfos.size(); ++k)
+//                    {
+//                        CellInfo ci2 = cellInfos.get(k);
+//                        if (ci2.getY() == index)
+//                        {
+//                            posY += ci2.getCellContents().getHeight();
+//                            break;
+//                        }
+//                    }
+//                }
+//                ci.setTop(posY);
             }
             
             return cellInfos;
+    }
+
+
+    /*
+     * Returns an array of 2 lists of integers.
+     * The first list is for horizontal lines (rows)
+     * the second for vertical lines (columns)
+     */
+    private static Integer[][] getColumnWidths(JRDesignCrosstab designCrosstab, JRCrosstabCell[][] cells)
+    {
+        // Add a line for each crosstab intersection....
+        List<JRDesignCellContents> cellContents = new ArrayList<JRDesignCellContents>();
+        cellContents.add( (JRDesignCellContents)designCrosstab.getHeaderCell() );
+
+        List<Integer> verticalSeparator = new ArrayList<Integer>();
+        List<Integer> horizontalSeparator = new ArrayList<Integer>();
+
+        verticalSeparator.add(0);
+        horizontalSeparator.add(0);
+
+
+        JRCrosstabColumnGroup[] col_groups = designCrosstab.getColumnGroups();
+        JRCrosstabRowGroup[] row_groups = designCrosstab.getRowGroups();
+
+        int current_x = 0;
+        for (int i=0; i<row_groups.length; ++i)
+        {
+            current_x += row_groups[i].getHeader().getWidth();
+            verticalSeparator.add(current_x);
+
+            cellContents.add( (JRDesignCellContents)row_groups[i].getHeader());
+            if (row_groups[i].getTotalPosition() != BucketDefinition.TOTAL_POSITION_NONE )
+            {
+                cellContents.add( (JRDesignCellContents)row_groups[i].getTotalHeader());
+            }
+        }
+        for (int i=cells[0].length-1; i>=0; --i)
+        {
+            current_x += ModelUtils.findColumnWidth(cells, i);
+            verticalSeparator.add(current_x);
+        }
+
+        int current_y = 0;
+        for (int i=0; i<col_groups.length; ++i)
+        {
+            current_y += col_groups[i].getHeader().getHeight();
+            horizontalSeparator.add(current_y);
+
+            cellContents.add( (JRDesignCellContents)col_groups[i].getHeader());
+            if (col_groups[i].getTotalPosition() != BucketDefinition.TOTAL_POSITION_NONE )
+            {
+                cellContents.add( (JRDesignCellContents)col_groups[i].getTotalHeader());
+            }
+        }
+        for (int i=cells.length-1; i>=0; --i)
+        {
+            current_y += ModelUtils.findRowHeight(cells, i);
+            horizontalSeparator.add(current_y);
+        }
+
+        Integer[] hs = horizontalSeparator.toArray(new Integer[horizontalSeparator.size()]);
+        Integer[] vs = verticalSeparator.toArray(new Integer[verticalSeparator.size()]);
+
+        Integer[][] result = new Integer[2][];
+        result[0]=hs;
+        result[1]=vs;
+
+        return result;
+
+
     }
 
 
@@ -931,7 +1029,7 @@ public class ModelUtils {
                     break;
             }
         }
-        
+
         return title;
         
     }
@@ -2082,6 +2180,19 @@ public class ModelUtils {
      */
     public static JRDesignVariable cloneVariable(JRDesignVariable variable)
     {
+        return cloneVariable(variable, null);
+    }
+
+    /**
+     *  Utility function to duplicate a parameter. All the variable properties
+     *  and variable default value expression are duplicated as well.
+     *
+     *  The design dataset can be null, and it is used to check the existens of the group
+     *  (if not null) in the desitination dataset.
+     *
+     */
+    public static JRDesignVariable cloneVariable(JRDesignVariable variable, JRDesignDataset ds)
+    {
         JRDesignVariable newVariable = new JRDesignVariable();
         newVariable.setName( variable.getName() );
         newVariable.setValueClassName( variable.getValueClassName() );
@@ -2091,8 +2202,52 @@ public class ModelUtils {
         newVariable.setIncrementType( variable.getIncrementType() );
         newVariable.setIncrementerFactoryClassName( variable.getIncrementerFactoryClassName() );
         newVariable.setInitialValueExpression( cloneExpression( variable.getInitialValueExpression() ));
-        newVariable.setResetGroup( variable.getResetGroup() );
         newVariable.setResetType( variable.getResetType());
+        
+        JRGroup group = variable.getIncrementGroup();
+        if (group != null && ds != null)
+        {
+            if (ds.getGroupsMap().containsKey( group.getName()))
+            {
+                newVariable.setIncrementGroup( (JRGroup)ds.getGroupsMap().get(group.getName()));
+            }
+            else
+            {
+                if (newVariable.getIncrementType() == JRVariable.RESET_TYPE_GROUP)
+                {
+                    newVariable.setIncrementType(JRVariable.RESET_TYPE_REPORT);
+                    newVariable.setIncrementGroup(null);
+                }
+            }
+        }
+        else
+        {
+            newVariable.setIncrementGroup( group );
+        }
+
+
+        group = variable.getResetGroup();
+        if (group != null && ds != null)
+        {
+            if (ds.getGroupsMap().containsKey( group.getName()))
+            {
+                newVariable.setResetGroup( (JRGroup)ds.getGroupsMap().get(group.getName()));
+            }
+            else
+            {
+                if (newVariable.getResetType() == JRVariable.RESET_TYPE_GROUP)
+                {
+                    newVariable.setResetType(JRVariable.RESET_TYPE_REPORT);
+                    newVariable.setResetGroup(null);
+                }
+            }
+        }
+        else
+        {
+            newVariable.setResetGroup( group );
+        }
+
+        
         newVariable.setSystemDefined( variable.isSystemDefined() );
         return newVariable;
     }

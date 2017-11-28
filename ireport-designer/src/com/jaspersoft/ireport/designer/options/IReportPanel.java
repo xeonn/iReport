@@ -243,6 +243,8 @@ final class IReportPanel extends javax.swing.JPanel {
         //jTabbedPane1.remove(5);
 
         jComboBoxCompatibility.addItem(new Tag("", "Last version"));
+        jComboBoxCompatibility.addItem(new Tag("", "JasperReports 3.7.0"));
+        jComboBoxCompatibility.addItem(new Tag("3_6_2", "JasperReports 3.6.2"));
         jComboBoxCompatibility.addItem(new Tag("3_6_1", "JasperReports 3.6.1"));
         jComboBoxCompatibility.addItem(new Tag("3_6_0", "JasperReports 3.6.0"));
         jComboBoxCompatibility.addItem(new Tag("3_5_2", "JasperReports 3.5.2-3.5.3"));
@@ -2730,7 +2732,7 @@ private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEve
         Misc.setComboboxSelectedTagValue(jComboBoxUnits, unit);
         
         jCheckBoxLimitRecordNumber.setSelected( pref.getBoolean("limitRecordNumber", false)  );  // NOI18N
-        ((SpinnerNumberModel)jSpinnerMaxRecordNumber.getModel()).setValue(  pref.getInt("maxRecordNumber", 1)  );  // NOI18N
+        ((SpinnerNumberModel)jSpinnerMaxRecordNumber.getModel()).setValue( pref.getInt("maxRecordNumber", 1) );  // NOI18N
 
         jCheckBoxMagneticGuideLines.setSelected( pref.getBoolean("noMagnetic", false)  );  // NOI18N
         jCheckBoxIgnorePagination.setSelected( pref.getBoolean("isIgnorePagination", false)  );  // NOI18N
@@ -2829,7 +2831,7 @@ private void jCheckBoxShowPositionErrorsActionPerformed(java.awt.event.ActionEve
         jTextFieldDOCXViewer.setText(pref.get("ExternalDOCXViewer", ""));
         jTextFieldExternalEditor.setText(pref.get("ExternalEditor", ""));
 
-        this.jTextFieldVirtualizerDir.setText(  pref.get("ReportVirtualizerDirectory", Misc.nvl(JRProperties.getProperty(JRProperties.COMPILER_TEMP_DIR),"")));
+        this.jTextFieldVirtualizerDir.setText( pref.get("ReportVirtualizerDirectory", Misc.nvl(JRProperties.getProperty(JRProperties.COMPILER_TEMP_DIR),"")));
         this.jSpinnerVirtualizerSize.setValue(pref.getInt("ReportVirtualizerSize",100));
         Misc.setComboboxSelectedTagValue(jComboBoxVirtualizer, pref.get("ReportVirtualizer", "JRFileVirtualizer") );
         this.jSpinnerVirtualizerBlockSize.setValue(pref.getInt("ReportVirtualizerBlockSize",100));

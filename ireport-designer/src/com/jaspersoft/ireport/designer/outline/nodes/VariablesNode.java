@@ -25,6 +25,7 @@ package com.jaspersoft.ireport.designer.outline.nodes;
 
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
+import com.jaspersoft.ireport.designer.menu.SortVariablesAction;
 import com.jaspersoft.ireport.designer.outline.NewTypesUtils;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.datatransfer.Transferable;
@@ -33,6 +34,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import javax.swing.Action;
@@ -66,7 +69,10 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
 
     private JasperDesign jd = null;
     private JRDesignDataset dataset = null;
-    
+
+    private boolean sort = false;
+    private boolean sorting = false;
+
     public VariablesNode(JasperDesign jd, Lookup doLkp) {
         this(jd, (JRDesignDataset)jd.getMainDataset(), doLkp);
     }
@@ -90,6 +96,11 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
 
             @SuppressWarnings("unchecked")
             public void childrenReordered(NodeReorderEvent ev) {
+
+                if (isSorting() || isSort())
+                {
+                    return;
+                }
 
                 List list = getDataset().getVariablesList();
                 ArrayList newList = new ArrayList();
@@ -147,8 +158,12 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
         
         final int insertAt = index;
         if (null != dropNode) {
+
             final JRDesignVariable variable = dropNode.getLookup().lookup(JRDesignVariable.class);
             if (null != variable) {
+
+                if (isSort() && getDataset().getVariablesList().contains(variable)) return null;
+
                 return new PasteType() {
 
                     @SuppressWarnings("unchecked")
@@ -202,7 +217,7 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
                             else // Adding a copy to the list 
                             {
                                 try {
-                                    JRDesignVariable newVariable = ModelUtils.cloneVariable(variable);
+                                    JRDesignVariable newVariable = ModelUtils.cloneVariable(variable, getDataset());
                                     Map map = getDataset().getVariablesMap();
                                     int k = 1;
                                     while (map.containsKey(newVariable.getName())) {
@@ -223,7 +238,7 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
                         else // Duplicating
                         {
                             try {
-                                JRDesignVariable newVariable = ModelUtils.cloneVariable(variable);
+                                JRDesignVariable newVariable = ModelUtils.cloneVariable(variable, getDataset());
                                 Map map = getDataset().getVariablesMap();
                                 int k = 1;
                                 while (map.containsKey(newVariable.getName())) {
@@ -260,7 +275,8 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
         return new Action[]{
             SystemAction.get(NewAction.class),
             SystemAction.get(PasteAction.class),
-            SystemAction.get(ReorderAction.class)};
+            SystemAction.get(ReorderAction.class),
+            SystemAction.get(SortVariablesAction.class)};
     }
 
     @Override
@@ -311,4 +327,97 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
             ((VariablesChildren)this.getChildren()).recalculateKeys();
         }
     }
+
+
+
+    /**
+     *
+     * @return the sort
+     */
+    public boolean isSort() {
+        return sort;
+    }
+
+    /**
+     * Activate/Disable alphabetical sort.
+     * A recalculation of the children is performed.
+     * @param sort the sort to set
+     */
+    public void setSort(boolean sort) {
+        this.sort = sort;
+        if (sort)
+        {
+            setIconBaseWithExtension("com/jaspersoft/ireport/designer/resources/variables-sort-16.png");
+        }
+        else
+        {
+            setIconBaseWithExtension("com/jaspersoft/ireport/designer/resources/variables-16.png");
+        }
+        this.fireIconChange();
+        if (this.getChildren() != null && this.getChildren() instanceof VariablesChildren)
+        {
+            this.setSorting(true);
+            ((VariablesChildren)this.getChildren()).recalculateKeys();
+            this.setSorting(false);
+        }
+    }
+
+    /**
+     * This value says if a sorting operation is occurring.
+     * In that case no changes must be made to the model.
+     * This value is not related to the sorting status,
+     * see isSort() for that.
+     * @return sorting status sorting
+     */
+    public boolean isSorting() {
+        return sorting;
+    }
+
+    /**
+     * See isSorting() for an explanation of this method.
+     * @param sorting the sorting to set
+     */
+    public void setSorting(boolean sorting) {
+        this.sorting = sorting;
+    }
+
+    /**
+     * This method recalculates the childrens if the sort is set to true,
+     * without recreate the list of nodes.
+     * It is called i.e. when the name of a child node changes...
+     */
+    public void updateSorting()
+    {
+        if (!isSort()) return;
+
+
+        setSorting(true);
+        try {
+
+            Node[] nodes = getChildren().getNodes();
+            List nodesList = new ArrayList(Arrays.asList(nodes));
+            Arrays.sort(nodes, new Comparator<Node>() {
+
+                public int compare(Node o1, Node o2) {
+                    return o1.getName().compareToIgnoreCase(o2.getName());
+                }
+            });
+
+
+            int ints[] = new int[nodes.length];
+
+            for (int i=0; i<ints.length; ++i)
+            {
+                ints[ nodesList.indexOf(nodes[i])]=i;
+            }
+
+
+            ((VariablesChildren)getChildren()).forceReorder(ints);
+
+        } finally
+        {
+            setSorting(false);
+        }
+    }
+
 }

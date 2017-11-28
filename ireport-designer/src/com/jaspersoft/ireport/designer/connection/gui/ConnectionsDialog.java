@@ -160,6 +160,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         jButtonDefault = new javax.swing.JButton();
         jButtonImport = new javax.swing.JButton();
         jButtonExport = new javax.swing.JButton();
+        jButtonClose = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Connections / Datasources");
@@ -311,6 +312,19 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 3, 5, 3);
         jPanelButtons.add(jButtonExport, gridBagConstraints);
+
+        jButtonClose.setText("Close");
+        jButtonClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCloseActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 3, 0, 3);
+        jPanelButtons.add(jButtonClose, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -592,6 +606,10 @@ public class ConnectionsDialog extends javax.swing.JDialog {
         setVisible(false);
     }//GEN-LAST:event_closeDialog
 
+    private void jButtonCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCloseActionPerformed
+        setVisible(false);
+    }//GEN-LAST:event_jButtonCloseActionPerformed
+
     
     public void updateConnections() {
        /*
@@ -613,6 +631,7 @@ public class ConnectionsDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonClose;
     private javax.swing.JButton jButtonDefault;
     private javax.swing.JButton jButtonDeleteParameter;
     private javax.swing.JButton jButtonExport;

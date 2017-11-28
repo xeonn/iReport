@@ -314,7 +314,7 @@ public class CrosstabNode extends ElementNode {
         @Override
         public Boolean getDefaultBoolean()
         {
-            return Boolean.FALSE;
+            return null;
         }
 
         @Override

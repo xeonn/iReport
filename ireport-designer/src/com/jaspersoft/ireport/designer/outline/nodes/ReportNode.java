@@ -282,7 +282,9 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         myactions.add(null);
         myactions.add(SystemAction.get(OpenReportDirectoryInFavoritesAction.class));
         //testPropertiesAction);
-        
+
+
+
         return myactions.toArray(new Action[myactions.size()]);
     }
     
