@@ -293,6 +293,7 @@ public final class TransformElementAction extends NodeAction {
       newElement.setHyperlinkPageExpression( cloneExpression(element.getHyperlinkPageExpression()));
       newElement.setHyperlinkReferenceExpression( cloneExpression(element.getHyperlinkReferenceExpression()));
       newElement.setHyperlinkTarget( element.getHyperlinkTarget());
+      newElement.setLinkTarget(element.getLinkTarget());
       newElement.setHyperlinkTooltipExpression( cloneExpression(element.getHyperlinkTooltipExpression()));
       newElement.setHyperlinkType( element.getHyperlinkType());
       newElement.setLegendBackgroundColor( element.getOwnLegendBackgroundColor());

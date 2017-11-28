@@ -33,7 +33,7 @@ public final class ODFPreviewAction extends AbstractPreviewAction {
 
     @Override
     public String getPreviewType() {
-        return "odf";
+        return "odt";
     }
 
     

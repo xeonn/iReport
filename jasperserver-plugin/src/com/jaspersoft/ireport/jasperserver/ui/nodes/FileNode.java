@@ -167,10 +167,19 @@ public class FileNode extends IRAbstractNode implements ResourceNode {
     public Action[] getActions(boolean arg0) {
         
         List<Action> actions = new ArrayList<Action>();
-        
-        actions.add(SystemAction.get( OpenFileAction.class));
-        actions.add(SystemAction.get( ReplaceFileAction.class));
-        
+
+        ResourceDescriptor resource = getFile().getDescriptor();
+
+        if (resource.getWsType().equals(ResourceDescriptor.TYPE_IMAGE) ||
+            resource.getWsType().equals(ResourceDescriptor.TYPE_JRXML) ||
+            resource.getWsType().equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE) ||
+            resource.getWsType().equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE))
+        {
+            actions.add(SystemAction.get( OpenFileAction.class));
+            actions.add(SystemAction.get( ReplaceFileAction.class));
+        }
+
+
         if (ReportUnitNode.getParentReportUnit(this) == null)
         {
             actions.add(SystemAction.get( CopyAction.class));

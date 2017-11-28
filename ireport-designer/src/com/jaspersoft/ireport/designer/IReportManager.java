@@ -197,7 +197,7 @@ public class IReportManager {
         for (int i=0; i<keys.size(); ++i)
         {
             PropertySuffix k = (JRProperties.PropertySuffix)keys.get(i);
-            if (!props.contains(k.getKey()))
+            if (!props.containsKey(k.getKey()))
             {
                 JRProperties.removePropertyValue(k.getKey());
             }
@@ -503,6 +503,9 @@ public class IReportManager {
         try {
             setJRProperty("net.sf.jasperreports.xpath.executer.factory",
                     "net.sf.jasperreports.engine.util.xml.JaxenXPathExecuterFactory");
+
+            System.out.println("Prop1: net.sf.jasperreports.xpath.executer.factory: "  + JRProperties.getProperty("net.sf.jasperreports.xpath.executer.factory"));
+            System.out.flush();
         } catch (Exception ex)
         { 
             System.out.println(I18n.getString("IReportManager.Error.ErrorJaxenXP") +ex.getMessage());
@@ -513,6 +516,8 @@ public class IReportManager {
         getQueryExecuters();
 
         reloadJasperReportsProperties();
+        System.out.println("Prop2: net.sf.jasperreports.xpath.executer.factory: "  + JRProperties.getProperty("net.sf.jasperreports.xpath.executer.factory"));
+        System.out.flush();
         
 
         // Loading fonts...
@@ -1626,7 +1631,7 @@ public class IReportManager {
             exporterFactories.add(new DefaultExporterFactory("java2D"));
             exporterFactories.add(new DefaultExporterFactory("txt"));
             exporterFactories.add(new DefaultExporterFactory("rtf"));
-            exporterFactories.add(new DefaultExporterFactory("odf"));
+            exporterFactories.add(new DefaultExporterFactory("odt"));
             exporterFactories.add(new DefaultExporterFactory("ods"));
             exporterFactories.add(new DefaultExporterFactory("docx"));
             exporterFactories.add(new DefaultExporterFactory("xml"));

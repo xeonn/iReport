@@ -26,6 +26,7 @@ package com.jaspersoft.ireport.designer.connection.gui;
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.connection.IReportConnectionFactory;
 import javax.swing.table.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -685,13 +686,26 @@ public class ConnectionsDialog extends javax.swing.JDialog {
                         }
                         
                         // If the name exists, rename it as "name (2)"
-                        connectionName = getAvailableConnectionName(connectionName);
-                        
                         try {
-                            IReportConnection con = (IReportConnection) Class.forName(connectionClass).newInstance();
-                            con.loadProperties(hm);
-                            con.setName(connectionName);
-                            v.add( con );
+                            List<IReportConnectionFactory> types = IReportManager.getInstance().getIReportConnectionFactories(); //ConnectionImplementations();
+                            boolean found = false;
+                            for (IReportConnectionFactory factory : types) //int i=0; i<types.size(); ++i)
+                            {
+                                if (factory.getConnectionClassName().equals(connectionClass))
+                                {
+                                    IReportConnection con = factory.createConnection();
+                                    con.loadProperties(hm);
+                                    connectionName = getAvailableConnectionName(connectionName);
+                                    con.setName(connectionName);
+                                    v.add( con );
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if (!found)
+                            {
+                                throw new Exception("Unable to import the connection " + connectionName + "\nNo factory available for connections of type " + connectionClass + "");
+                            }
                         } catch (Exception ex) {
                                 
                             JOptionPane.showMessageDialog(this,

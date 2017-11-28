@@ -54,13 +54,19 @@ public class MultiSelectInputControl extends BasicInputControl{
              inputControl.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY)
          {
             useCheckboxes = false;
-            setInputControlUI( new TableListInputControlUI());
+            if (getInputControlUI() == null || !(getInputControlUI() instanceof TableListInputControlUI))
+            {
+                setInputControlUI( new TableListInputControlUI());
+            }
          }
          else if (inputControl.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX ||
              inputControl.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX)
          {
             useCheckboxes = true;
-            setInputControlUI( new CheckboxListInputControlUI());
+            if (getInputControlUI() == null || !(getInputControlUI() instanceof CheckboxListInputControlUI))
+            {
+                setInputControlUI( new CheckboxListInputControlUI());
+            }
          }
          
          String label = inputControl.getLabel() + ((inputControl.isMandatory()) ? "*" : "");

@@ -40,6 +40,7 @@ import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.sheet.properties.BandPrintWhenExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import com.jaspersoft.ireport.locale.I18n;
@@ -245,6 +246,10 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
             groupPropertiesSet.put(new ResetPageNumberProperty(group));
             groupPropertiesSet.put(new ReprintHeaderProperty(group));
             groupPropertiesSet.put(new MinHeightToStartNewPageProperty(group));
+            groupPropertiesSet.put(new MinHeightToStartNewPageProperty(group));
+            groupPropertiesSet.put(new FooterPositionProperty(group));
+            groupPropertiesSet.put(new KeepTogetherProperty(group));
+            
         }
         
         return groupPropertiesSet;
@@ -987,5 +992,134 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
             return true;
         }
     }
+    
+    private static final class FooterPositionProperty extends ByteProperty
+    {
+        private final JRDesignGroup group;
+
+        @SuppressWarnings("unchecked")
+        public FooterPositionProperty(JRDesignGroup group)
+        {
+            super(group);
+            this.group = group;
+        }
+        @Override
+        public String getName()
+        {
+            return JRDesignGroup.PROPERTY_FOOTER_POSITION;
+        }
+
+        @Override
+        public String getDisplayName()
+        {
+            return I18n.getString("Global.Property.FooterPosition");
+        }
+
+        @Override
+        public String getShortDescription()
+        {
+            return I18n.getString("Global.Property.FooterPosition.description");
+        }
+
+        @Override
+        public List getTagList()
+        {
+            List tags = new java.util.ArrayList();
+            tags.add(new Tag(new Byte(JRDesignGroup.FOOTER_POSITION_NORMAL), I18n.getString("Global.Property.FooterPosition.normal")));
+            tags.add(new Tag(new Byte(JRDesignGroup.FOOTER_POSITION_STACK_AT_BOTTOM), I18n.getString("Global.Property.FooterPosition.stackAtBottom")));
+            tags.add(new Tag(new Byte(JRDesignGroup.FOOTER_POSITION_FORCE_AT_BOTTOM), I18n.getString("Global.Property.FooterPosition.forceAtBottom")));
+            tags.add(new Tag(new Byte(JRDesignGroup.FOOTER_POSITION_COLLATE_AT_BOTTOM), I18n.getString("Global.Property.FooterPosition.collateAtBottom")));
+            
+            return tags;
+        }
+
+        @Override
+        public Byte getByte()
+        {
+            return group.getFooterPosition();
+        }
+
+        @Override
+        public Byte getOwnByte()
+        {
+            return group.getFooterPosition();
+        }
+
+        @Override
+        public Byte getDefaultByte()
+        {
+            return JRDesignGroup.FOOTER_POSITION_NORMAL;
+        }
+
+        @Override
+        public void setByte(Byte position)
+        {
+            group.setFooterPosition(position);
+        }
+
+    }
+
+
+    /**
+     *  Class to manage the JRDesignGroup.PROPERTY_START_NEW_PAGE property
+     */
+    private static final class KeepTogetherProperty extends BooleanProperty
+    {
+
+        private final JRDesignGroup group;
+
+        @SuppressWarnings("unchecked")
+        public KeepTogetherProperty(JRDesignGroup group)
+        {
+            super(group);
+            this.group = group;
+        }
+
+         @Override
+        public String getName()
+        {
+            return JRDesignGroup.PROPERTY_KEEP_TOGETHER;
+        }
+
+        @Override
+        public String getDisplayName()
+        {
+            return I18n.getString("Global.Property.KeepTogether");
+        }
+
+        @Override
+        public String getShortDescription()
+        {
+            return I18n.getString("Global.Property.KeepTogether.description");
+        }
+
+        @Override
+        public Boolean getBoolean() {
+            return getOwnBoolean();
+        }
+
+        @Override
+        public Boolean getOwnBoolean() {
+            return group.isKeepTogether();
+        }
+
+        @Override
+        public Boolean getDefaultBoolean() {
+            return false;
+        }
+
+        @Override
+        public void setBoolean(Boolean value) {
+            if (value == null)
+            {
+                value = false;
+            }
+            group.setKeepTogether(value);
+        }
+
+    }
+
+
+
     
 }

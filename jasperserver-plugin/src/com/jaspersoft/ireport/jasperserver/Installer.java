@@ -25,5 +25,11 @@ public class Installer extends ModuleInstall {
         {
             IReportManager.getInstance().setJRProperty("net.sf.jasperreports.query.executer.factory.sl", "net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory");
         }
+
+
+        if (JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.domain") == null)
+        {
+            IReportManager.getInstance().setJRProperty("net.sf.jasperreports.query.executer.factory.domain", "net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory");
+        }
     }
 }

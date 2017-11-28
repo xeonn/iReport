@@ -23,14 +23,14 @@
  */
 package com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl;
 
-import javax.swing.JLabel;
+import java.awt.event.ActionListener;
 
 /**
  *
  * @author  gtoffoli
  */
 public class BasicInputControlUI extends javax.swing.JPanel implements InputControlUI {
-    
+
     /** Creates new form BasicInputControlUI */
     public BasicInputControlUI() {
         initComponents();
@@ -138,4 +138,9 @@ public class BasicInputControlUI extends javax.swing.JPanel implements InputCont
     public void setJComboBoxValue(javax.swing.JComboBox jComboBoxValue) {
         this.jComboBoxValue = jComboBoxValue;
     }
+
+    public void addActionListener(ActionListener listener) {
+        jComboBoxValue.addActionListener(listener);
+    }
+
 }

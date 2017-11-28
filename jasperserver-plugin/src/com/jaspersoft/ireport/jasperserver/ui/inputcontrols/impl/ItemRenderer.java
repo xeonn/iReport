@@ -23,16 +23,16 @@
  */
 package com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl;
 
+import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.InputControlQueryDataRow;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
-import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 /**
  *
@@ -48,7 +48,6 @@ public // The combobox's renderer...
  
 		public ItemRenderer(int columns)
 		{
-			setOpaque(true);
 			//setLayout(new GridBagLayout());
                         GridLayout g = new GridLayout(1,columns);
                         setLayout(g);
@@ -104,7 +103,8 @@ public // The combobox's renderer...
                         }
                         else
                         {
-                            getLabels()[0].setText(value+"");
+
+                            getLabels()[0].setText(Misc.nvl(value, " "));
                             
                             for (int i=1; i<this.columns; ++i)
                             {
@@ -112,25 +112,37 @@ public // The combobox's renderer...
                             }
                         }
                      
-			
-			if (isSelected)
-			{
-				setBackground(Color.black);
-                                for (int i=0; i<this.columns; ++i)
-                                {
-                                    getLabels()[i].setForeground(Color.white);
-                                }
-			}
- 
-			else
-			{
-				setBackground(Color.white);
-                                for (int i=0; i<this.columns; ++i)
-                                {
-                                    getLabels()[i].setForeground(Color.black);
-                                }
-			}
-			
+
+                        setOpaque(isSelected);
+                        
+                        if (!isSelected)
+                        {
+                            Color bg = UIManager.getColor("List.background");
+                            if (bg != null) this.setBackground(bg);
+                            Color fg = UIManager.getColor("List.foreground");
+                            for (int i=0; i<this.columns; ++i)
+                            {
+                                getLabels()[i].setForeground(fg);
+                                getLabels()[i].setBackground(bg);
+                            }
+                        }
+                        else
+                        {
+                            Color bg = UIManager.getColor("List.selectionBackground");
+                            if (bg != null) this.setBackground(bg);
+                            Color fg = UIManager.getColor("List.selectionForeground");
+                            for (int i=0; i<this.columns; ++i)
+                            {
+                                getLabels()[i].setForeground(fg);
+                                getLabels()[i].setBackground(bg);
+                            }
+                        }
+
+                        for (int i=0; i<this.columns; ++i)
+                        {
+                            getLabels()[i].setOpaque(isSelected);
+                        }
+
 			return this;
 		}
 

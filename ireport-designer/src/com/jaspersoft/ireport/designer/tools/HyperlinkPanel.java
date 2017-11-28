@@ -30,6 +30,7 @@ import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Vector;
@@ -85,7 +86,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         jComboBoxLinkTarget.addItem(new Tag( new Byte( JRHyperlink.HYPERLINK_TARGET_BLANK ), "Blank" ));
         jComboBoxLinkTarget.addItem(new Tag( new Byte( JRHyperlink.HYPERLINK_TARGET_TOP ), "Top" ));
         jComboBoxLinkTarget.addItem(new Tag( new Byte( JRHyperlink.HYPERLINK_TARGET_PARENT ), "Parent" ));
-        
+
         this.jRTextExpressionAreaAnchor.getExpressionEditorPane().getDocument().addDocumentListener( new javax.swing.event.DocumentListener() {
             public void changedUpdate(javax.swing.event.DocumentEvent evt) {
                 jRTextExpressionAreaAnchorTextChanged();
@@ -203,9 +204,16 @@ public class HyperlinkPanel extends javax.swing.JPanel {
                 {
                     jComboBoxLinkType.setSelectedItem(hyperlink.getLinkType());
                 }
-                
-                Misc.setComboboxSelectedTagValue(jComboBoxLinkTarget, new Byte(hyperlink.getHyperlinkTarget()));
-                
+
+                if (JRHyperlinkHelper.getHyperlinkTarget(hyperlink) != JRHyperlink.HYPERLINK_TARGET_CUSTOM)
+                {
+                    Misc.setComboboxSelectedTagValue(jComboBoxLinkTarget, new Byte(hyperlink.getHyperlinkTarget()));
+                }
+                else
+                {
+                    jComboBoxLinkTarget.setSelectedItem(hyperlink.getLinkTarget());
+                }
+
                 jRTextExpressionAreaReference.setText( Misc.getExpressionText( hyperlink.getHyperlinkReferenceExpression()) );
                 jRTextExpressionAreaAnchor.setText( Misc.getExpressionText( hyperlink.getHyperlinkAnchorExpression()) );
                 jRTextExpressionAreaPage.setText( Misc.getExpressionText( hyperlink.getHyperlinkPageExpression()) );
@@ -410,7 +418,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         jPanelAnchorName.setPreferredSize(new java.awt.Dimension(426, 116));
         jPanelAnchorName.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText(I18n.getString("HyperlinkPanel.Label.AnchExpr")); // NOI18N
+        jLabel1.setText("Anchor Name Expression");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -430,7 +438,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jLabel2.setText(I18n.getString("HyperlinkPanel.Label.BookLev")); // NOI18N
+        jLabel2.setText("Bookmark Level");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
@@ -467,7 +475,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         add(jPanelAnchorName, gridBagConstraints);
 
         jLabelTarget.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabelTarget.setText(I18n.getString("HyperlinkPanel.Label.HyperTarg")); // NOI18N
+        jLabelTarget.setText("Hyperlink target");
         jLabelTarget.setMaximumSize(new java.awt.Dimension(200, 25));
         jLabelTarget.setMinimumSize(new java.awt.Dimension(100, 20));
         jLabelTarget.setPreferredSize(new java.awt.Dimension(100, 20));
@@ -480,6 +488,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(8, 8, 5, 0);
         add(jLabelTarget, gridBagConstraints);
 
+        jComboBoxLinkTarget.setEditable(true);
         jComboBoxLinkTarget.setMinimumSize(new java.awt.Dimension(180, 20));
         jComboBoxLinkTarget.setPreferredSize(new java.awt.Dimension(180, 20));
         jComboBoxLinkTarget.addActionListener(new java.awt.event.ActionListener() {
@@ -496,7 +505,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         add(jComboBoxLinkTarget, gridBagConstraints);
 
         jLabel36.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel36.setText(I18n.getString("HyperlinkPanel.Label.HypType")); // NOI18N
+        jLabel36.setText("Hyperlink type");
         jLabel36.setMaximumSize(new java.awt.Dimension(200, 25));
         jLabel36.setMinimumSize(new java.awt.Dimension(100, 20));
         jLabel36.setPreferredSize(new java.awt.Dimension(100, 20));
@@ -532,7 +541,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         jPanelReference.setLayout(new java.awt.GridBagLayout());
 
         jLabelReference.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabelReference.setText(I18n.getString("HyperlinkPanel.Label.HypRefExp")); // NOI18N
+        jLabelReference.setText("Hyperlink Reference Expression");
         jLabelReference.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -558,7 +567,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         jPanelAnchor.setLayout(new java.awt.GridBagLayout());
 
         jLabelAnchor.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabelAnchor.setText(I18n.getString("HyperlinkPanel.Label.HypAnchExp")); // NOI18N
+        jLabelAnchor.setText("Hyperlink Anchor Expression");
         jLabelAnchor.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -585,7 +594,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         jPanelPage.setLayout(new java.awt.GridBagLayout());
 
         jLabelPage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabelPage.setText(I18n.getString("HyperlinkPanel.Label.hypPagExp")); // NOI18N
+        jLabelPage.setText("Hyperlink Page Expression");
         jLabelPage.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -640,7 +649,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
 
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        jButtonAddLinkParameter.setText(I18n.getString("Global.Button.Add")); // NOI18N
+        jButtonAddLinkParameter.setText("Add");
         jButtonAddLinkParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddLinkParameterActionPerformed(evt);
@@ -653,7 +662,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 6, 0);
         jPanel3.add(jButtonAddLinkParameter, gridBagConstraints);
 
-        jButtonModLinkParameter.setText(I18n.getString("Global.Button.Modify")); // NOI18N
+        jButtonModLinkParameter.setText("Modify");
         jButtonModLinkParameter.setEnabled(false);
         jButtonModLinkParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -667,7 +676,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(4, 6, 6, 0);
         jPanel3.add(jButtonModLinkParameter, gridBagConstraints);
 
-        jButtonRemLinkParameter.setText(I18n.getString("Global.Button.Remove")); // NOI18N
+        jButtonRemLinkParameter.setText("Remove");
         jButtonRemLinkParameter.setEnabled(false);
         jButtonRemLinkParameter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -694,7 +703,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         jPanelTooltip.setLayout(new java.awt.GridBagLayout());
 
         jLabelReference1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabelReference1.setText(I18n.getString("HyperlinkPanel.Pane.TooltipExp")); // NOI18N
+        jLabelReference1.setText("Tooltip Expression");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -732,7 +741,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
 
         jPanelClose.setLayout(new java.awt.GridBagLayout());
 
-        jButtonClose.setText(I18n.getString("Global.Button.Close")); // NOI18N
+        jButtonClose.setText("Close");
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCloseActionPerformed(evt);
@@ -999,7 +1008,25 @@ public class HyperlinkPanel extends javax.swing.JPanel {
 
     private void jComboBoxLinkTargetActionPerformed1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLinkTargetActionPerformed1
         if (this.isInit()) return;
-        setHyperlinkAttribute("HyperlinkTarget", Byte.TYPE, (Byte)((Tag)jComboBoxLinkTarget.getSelectedItem()).getValue());
+
+
+
+        Object target = jComboBoxLinkTarget.getSelectedItem();
+        
+        if (target != null && target instanceof Tag)
+        {
+            setHyperlinkAttribute("HyperlinkTarget", Byte.TYPE, (Byte)((Tag)target).getValue());
+        }
+        else if (target != null)
+        {
+            //setHyperlinkAttribute("HyperlinkTarget", Byte.TYPE, JRHyperlink.HYPERLINK_TARGET_CUSTOM);
+            setHyperlinkAttribute("LinkTarget", String.class, "" + target);
+        }
+        else
+        {
+            setHyperlinkAttribute("HyperlinkTarget", Byte.TYPE, JRHyperlink.HYPERLINK_TARGET_SELF);
+        }
+        
         fireHyperlinkChanged();
     }//GEN-LAST:event_jComboBoxLinkTargetActionPerformed1
 
@@ -1235,8 +1262,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
             IReportManager.getInstance().notifyReportChange();
         }
         catch (Throwable t) { t.printStackTrace(); }
-    }
-    
+    }    
     
     public void setAnchorNameVisible(boolean b)
     {

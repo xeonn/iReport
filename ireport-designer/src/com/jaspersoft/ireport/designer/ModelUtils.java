@@ -2290,6 +2290,7 @@ public class ModelUtils {
             setHyperlinkAttribute(to, "HyperlinkAnchorExpression", JRExpression.class, (from.getHyperlinkAnchorExpression() == null) ? null : from.getHyperlinkAnchorExpression().clone() );
             setHyperlinkAttribute(to, "HyperlinkPageExpression", JRExpression.class, (from.getHyperlinkPageExpression() == null) ? null : from.getHyperlinkPageExpression().clone() );
             setHyperlinkAttribute(to, "HyperlinkReferenceExpression", JRExpression.class, (from.getHyperlinkReferenceExpression() == null) ? null : from.getHyperlinkReferenceExpression().clone() );
+            setHyperlinkAttribute(to, "LinkTarget", String.class, from.getLinkTarget() );
             setHyperlinkAttribute(to, "HyperlinkTarget", Byte.TYPE, from.getHyperlinkTarget() );
             setHyperlinkAttribute(to, "HyperlinkTooltipExpression", JRExpression.class, (from.getHyperlinkTooltipExpression() == null) ? null : from.getHyperlinkTooltipExpression().clone() );
             setHyperlinkAttribute(to, "LinkType", String.class, (from.getLinkType() == null) ? null : from.getLinkType() );

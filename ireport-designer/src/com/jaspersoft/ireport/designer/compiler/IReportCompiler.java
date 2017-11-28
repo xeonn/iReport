@@ -34,6 +34,7 @@ import com.jaspersoft.ireport.designer.compiler.prompt.Prompter;
 import com.jaspersoft.ireport.designer.compiler.xml.SourceLocation;
 import com.jaspersoft.ireport.designer.compiler.xml.SourceTraceDigester;
 import com.jaspersoft.ireport.designer.connection.EJBQLConnection;
+import com.jaspersoft.ireport.designer.connection.JDBCConnection;
 import com.jaspersoft.ireport.designer.connection.JRDataSourceProviderConnection;
 import com.jaspersoft.ireport.designer.connection.JRHibernateConnection;
 import com.jaspersoft.ireport.designer.connection.MondrianConnection;
@@ -75,6 +76,7 @@ import net.sf.jasperreports.engine.export.*;
 import net.sf.jasperreports.engine.query.JRHibernateQueryExecuterFactory;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRProperties;
+import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.hibernate.Transaction;
@@ -670,7 +672,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                List<QueryExecuterDef> configuredExecuters = IReportManager.getInstance().getQueryExecuters();
                for (QueryExecuterDef qe : configuredExecuters)
                {
-                   if (qe.getLanguage().equals( queryLanguage ))
+                   if (qe != null && qe.getLanguage() != null && qe.getLanguage().equals( queryLanguage ))
                    {
                        net.sf.jasperreports.engine.util.JRProperties.setProperty("net.sf.jasperreports.query.executer.factory." + qe.getLanguage(), qe.getClassName());
                        getLogTextArea().logOnConsole(
@@ -859,7 +861,12 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                            throw ex;
                        } finally
                        {
-                            if (con != null) try {  con.close(); } catch (Exception ex) { }
+                           // FIXMEGT This way of closing connection based on the connection class is not very clean...
+
+                           if (connection instanceof JDBCConnection)
+                           {
+                                if (con != null) try {  con.close(); } catch (Exception ex) { }
+                           }
                        }
                    }
                    else if (connection.isJRDataSource())
@@ -1628,7 +1635,19 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
    protected void init()
    {
        thread = Thread.currentThread();
-       
+
+       synchronized(this) {
+          executingReport++;
+          if (executingReport == 1)
+          {
+              this.systemCpBackup = System.getProperty("java.class.path");
+          }
+       }
+
+       // Print all the properties...
+       System.out.println("Prop3: net.sf.jasperreports.xpath.executer.factory: "  + JRProperties.getProperty("net.sf.jasperreports.xpath.executer.factory"));
+       System.out.flush();
+
        handle = ProgressHandleFactory.createHandle(status,
                new Cancellable() {
                 public boolean cancel() {
@@ -1764,21 +1783,8 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
         getLogTextArea().setRemovable(true);
         
     }
-   
-   public void start()
-   {
-      synchronized(this) {
-          executingReport++;
-          if (executingReport == 1)
-          {
-              this.systemCpBackup = System.getProperty("java.class.path");
-          }
-      }
-      this.thread = new Thread(this);
-      init();
-      this.thread.start();
-   }
 
+   
    
    /**
     * Initially a way to parse output, today this method just print as html

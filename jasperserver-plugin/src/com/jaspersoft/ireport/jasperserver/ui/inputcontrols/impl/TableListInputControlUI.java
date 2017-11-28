@@ -25,9 +25,15 @@ package com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.InputControlQueryDataRow;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import javax.swing.JCheckBox;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -36,6 +42,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class TableListInputControlUI extends javax.swing.JPanel implements InputControlUI {
 
+    private List<ActionListener> listeners = new ArrayList<ActionListener>();
+
     private java.util.List itemValues = new java.util.ArrayList();
     
     /** Creates new form BasicInputControlUI */
@@ -43,6 +51,19 @@ public class TableListInputControlUI extends javax.swing.JPanel implements Input
         initComponents();
         
         jTable1.getParent().setBackground( jTable1.getBackground() );
+
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            public void valueChanged(ListSelectionEvent e) {
+                if (e.getValueIsAdjusting() == true) return;
+                for (ActionListener listener : listeners)
+                {
+                    try {
+                        listener.actionPerformed(new ActionEvent(this, 0, ""));
+                    } catch (Exception ex) {}
+                }
+            }
+        });
     }
     
     public Object getValue()
@@ -217,6 +238,11 @@ public class TableListInputControlUI extends javax.swing.JPanel implements Input
                ((JCheckBox)c).setEnabled(!b);
             }
         }
+    }
+
+    public void addActionListener(ActionListener listener) {
+
+        listeners.add(listener);
     }
 
 }

@@ -148,9 +148,11 @@ Section Uninstall
   RMDir "$SMPROGRAMS\Jaspersoft"
 
   NO_SHORTCUTS:
-  
-  MessageBox MB_YESNO "Do you want to delete the ${PRODUCT_NAME} configuration files too? ($APPDATA\.${PRODUCT_NAME}\${PRODUCT_VERSION})" IDNO configDone
-    RMDir /r /REBOOTOK "$APPDATA\.${PRODUCT_NAME}\${PRODUCT_VERSION}"
+
+  SetShellVarContext current
+
+  MessageBox MB_YESNO "Do you want to delete the ${PRODUCT_NAME} configuration files too? ($PROFILE\.${PRODUCT_NAME}\${PRODUCT_VERSION})" IDNO configDone
+    RMDir /r /REBOOTOK "$PROFILE\.${PRODUCT_NAME}\${PRODUCT_VERSION}"
   configDone:
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"

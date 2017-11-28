@@ -37,12 +37,15 @@ import com.jaspersoft.ireport.jasperserver.ui.nodes.ResourceNode;
 import com.jaspersoft.ireport.jasperserver.ui.wizards.ReportUnitWizardDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.io.File;
+import java.io.IOException;
 import java.util.Set;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import org.openide.cookies.SaveCookie;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
 import org.openide.text.DataEditorSupport;
+import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.openide.util.Mutex;
 import org.openide.util.NbBundle;
@@ -117,6 +120,26 @@ public final class ReplaceFileAction extends NodeAction {
                     JrxmlDataObject dobject = view.getLookup().lookup(JrxmlDataObject.class);
                     if (dobject != null)
                     {
+                        SaveCookie scookie = view.getLookup().lookup(SaveCookie.class);
+                        if (scookie != null)
+                        {
+                            int answer = MessageDisplayer.displayMessage("The current file has been modified, do you want to save it before send its content to the server?", "Updating report");
+                            if (answer == JOptionPane.CANCEL_OPTION)
+                            {
+                                return;
+
+                            }
+
+                            if (answer == JOptionPane.YES_OPTION)
+                            {
+                                try {
+                                    scookie.save();
+                                } catch (IOException ex) {
+                                    Exceptions.printStackTrace(ex);
+                                }
+                            }
+                        }
+
                         final String fileName = FileUtil.toFile(dobject.getPrimaryFile()).getPath();
                         
 

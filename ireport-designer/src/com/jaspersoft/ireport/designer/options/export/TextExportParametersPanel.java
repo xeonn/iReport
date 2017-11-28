@@ -30,6 +30,8 @@ import java.util.prefs.Preferences;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import net.sf.jasperreports.engine.export.JRTextExporter;
+import net.sf.jasperreports.engine.export.JRTextExporterParameter;
 import net.sf.jasperreports.engine.util.JRProperties;
 
 /**
@@ -42,21 +44,18 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
     public TextExportParametersPanel() {
         initComponents();
 
+        jTextAreaBetweenPagesText.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        
         ChangeListener snmcl = new ChangeListener() {
                 public void stateChanged(ChangeEvent e) {
                     notifyChange();
                 }
         };
 
-        SpinnerNumberModel snm = new SpinnerNumberModel(0,0, Integer.MAX_VALUE,1);
-        jSpinnerCharacterWidth.setModel(snm);
-        snm.addChangeListener(snmcl);
+        jSpinnerCharacterWidth.getModel().addChangeListener(snmcl);
+        jSpinnerCharacterHeight.getModel().addChangeListener(snmcl);
 
-        snm = new SpinnerNumberModel(0,0, Integer.MAX_VALUE,1);
-        jSpinnerCharacterHeight.setModel(snm);
-        snm.addChangeListener(snmcl);
-
-        snm = new SpinnerNumberModel(0,0, Integer.MAX_VALUE,1);
+        SpinnerNumberModel snm = new SpinnerNumberModel(0,0, Float.MAX_VALUE,1);
         jSpinnerPageWidth.setModel(snm);
         snm.addChangeListener(snmcl);
 
@@ -80,10 +79,36 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
             }
         };
 
-         jTextAreaBetweenPagesText.getDocument().addDocumentListener(textfieldListener);
+         jTextAreaBetweenPagesText.getDocument().addDocumentListener(new javax.swing.event.DocumentListener()
+        {
+            public void changedUpdate(javax.swing.event.DocumentEvent evt)
+            {
+                if (jTextAreaBetweenPagesText.getText().length() > 0)
+                {
+                    jCheckBoxNothingBetweenPages.setSelected(false);
+                }
+                notifyChange();
+            }
+            public void insertUpdate(javax.swing.event.DocumentEvent evt)
+            {
+                if (jTextAreaBetweenPagesText.getText().length() > 0)
+                {
+                    jCheckBoxNothingBetweenPages.setSelected(false);
+                }
+                notifyChange();
+            }
+            public void removeUpdate(javax.swing.event.DocumentEvent evt)
+            {
+                if (jTextAreaBetweenPagesText.getText().length() > 0)
+                {
+                    jCheckBoxNothingBetweenPages.setSelected(false);
+                }
+                notifyChange();
+            } });
          jTextFieldLineSeparator.getDocument().addDocumentListener(textfieldListener);
 
-        applyI18n();
+         jLabelNote.setText(I18n.getString("TextExportParametersPanel.jLabelNode.text", Misc.addSlashesString(System.getProperty("line.separator"))));
+         applyI18n();
     }
 
     public void applyI18n()
@@ -100,6 +125,7 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
         jLabelDefault3.setText(I18n.getString("TextExportParametersPanel.jLabelDefault3.text")); // NOI18N
         jLabelDefault4.setText(I18n.getString("TextExportParametersPanel.jLabelDefault4.text")); // NOI18N
         jLabelDefault5.setText(I18n.getString("TextExportParametersPanel.jLabelDefault5.text")); // NOI18N
+        jCheckBoxNothingBetweenPages.setText(I18n.getString("TextExportParametersPanel.jCheckBoxNothingBetweenPages.text")); //NOI18N
 
     }
 
@@ -132,13 +158,19 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
         jLabelDefault3 = new javax.swing.JLabel();
         jLabelDefault4 = new javax.swing.JLabel();
         jLabelDefault5 = new javax.swing.JLabel();
+        jCheckBoxNothingBetweenPages = new javax.swing.JCheckBox();
+        jLabelNote = new javax.swing.JLabel();
 
-        jLabelTitle.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabelTitle.setFont(new java.awt.Font("Tahoma", 1, 12));
         jLabelTitle.setText("Text Export parameters");
 
         jLabelCharacterWidth.setText("Character Width");
 
+        jSpinnerCharacterWidth.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), null, Float.valueOf(1.0f)));
+
         jLabelCharacterHeight.setText("Character Height");
+
+        jSpinnerCharacterHeight.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), null, Float.valueOf(1.0f)));
 
         jLabelPageWidth.setText("Page Width");
 
@@ -147,6 +179,7 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
         jLabelBetweenPagesText.setText("Between Pages Text");
 
         jTextAreaBetweenPagesText.setColumns(20);
+        jTextAreaBetweenPagesText.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         jTextAreaBetweenPagesText.setRows(5);
         jScrollPane1.setViewportView(jTextAreaBetweenPagesText);
 
@@ -162,6 +195,15 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
 
         jLabelDefault5.setText("Usually \"\\n\" in Unix and \"\\r\\n\" in Windows");
 
+        jCheckBoxNothingBetweenPages.setText("Don't put any text between pages");
+        jCheckBoxNothingBetweenPages.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxNothingBetweenPagesActionPerformed(evt);
+            }
+        });
+
+        jLabelNote.setText("Default new line: {0}. For specific new line characters, use \\n or \\r\\n.");
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -174,10 +216,6 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
                 .addContainerGap()
                 .add(jLabelBetweenPagesText)
                 .addContainerGap(311, Short.MAX_VALUE))
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                .addContainerGap())
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
@@ -194,9 +232,9 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jSpinnerCharacterHeight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 45, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(jSpinnerCharacterWidth, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 45, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(jSpinnerPageWidth, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 45, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(jSpinnerPageHeight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 45, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                            .add(jSpinnerPageHeight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 45, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(jSpinnerCharacterWidth, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 81, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabelDefault1)
@@ -204,8 +242,23 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
                     .add(jLabelDefault3)
                     .add(jLabelDefault4)
                     .add(jLabelDefault5))
+                .addContainerGap(42, Short.MAX_VALUE))
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jCheckBoxNothingBetweenPages)
+                .addContainerGap(223, Short.MAX_VALUE))
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                .addContainerGap())
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jLabelNote)
                 .addContainerGap(78, Short.MAX_VALUE))
         );
+
+        layout.linkSize(new java.awt.Component[] {jSpinnerCharacterHeight, jSpinnerCharacterWidth, jSpinnerPageHeight, jSpinnerPageWidth}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
@@ -240,13 +293,22 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jLabelBetweenPagesText)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jLabelNote)
+                .add(12, 12, 12)
+                .add(jCheckBoxNothingBetweenPages)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jCheckBoxNothingBetweenPagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxNothingBetweenPagesActionPerformed
+        notifyChange();
+    }//GEN-LAST:event_jCheckBoxNothingBetweenPagesActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox jCheckBoxNothingBetweenPages;
     private javax.swing.JLabel jLabelBetweenPagesText;
     private javax.swing.JLabel jLabelCharacterHeight;
     private javax.swing.JLabel jLabelCharacterWidth;
@@ -256,6 +318,7 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
     private javax.swing.JLabel jLabelDefault4;
     private javax.swing.JLabel jLabelDefault5;
     private javax.swing.JLabel jLabelLineSeparator;
+    private javax.swing.JLabel jLabelNote;
     private javax.swing.JLabel jLabelPageHeight;
     private javax.swing.JLabel jLabelPageWidth;
     private javax.swing.JLabel jLabelTitle;
@@ -274,18 +337,19 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
         Preferences pref = IReportManager.getPreferences();
 
         SpinnerNumberModel model = (SpinnerNumberModel)jSpinnerCharacterHeight.getModel();
-        model.setValue( pref.getInt(JRProperties.PROPERTY_PREFIX + "export.txt.characterHeight", 0));
+        model.setValue( pref.getFloat(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT, 0));
 
         model = (SpinnerNumberModel)jSpinnerCharacterWidth.getModel();
-        model.setValue( pref.getInt(JRProperties.PROPERTY_PREFIX + "export.txt.characterWidth", 0));
+        model.setValue( pref.getFloat(JRTextExporterParameter.PROPERTY_CHARACTER_WIDTH, 0));
 
         model = (SpinnerNumberModel)jSpinnerPageHeight.getModel();
-        model.setValue( pref.getInt(JRProperties.PROPERTY_PREFIX + "export.txt.pageHeight", 0));
+        model.setValue( pref.getInt(JRTextExporterParameter.PROPERTY_PAGE_HEIGHT, 0));
 
         model = (SpinnerNumberModel)jSpinnerPageWidth.getModel();
-        model.setValue( pref.getInt(JRProperties.PROPERTY_PREFIX + "export.txt.pageWidth", 0));
+        model.setValue( pref.getInt(JRTextExporterParameter.PROPERTY_PAGE_WIDTH, 0));
 
-        jTextAreaBetweenPagesText.setText(pref.get(JRProperties.PROPERTY_PREFIX + "export.txt.betweenPagesText", ""));
+        jTextAreaBetweenPagesText.setText(Misc.addSlashesString(pref.get(JRProperties.PROPERTY_PREFIX + "export.txt.betweenPagesText", "")));
+        jCheckBoxNothingBetweenPages.setSelected(pref.getBoolean(JRProperties.PROPERTY_PREFIX + "export.txt.nothingBetweenPages", false)); // This is an iReport specific option!
 
         jTextFieldLineSeparator.setText( Misc.addSlashesString(pref.get(JRProperties.PROPERTY_PREFIX + "export.txt.lineSeparator", System.getProperty("line.separator"))));
         setInit(false);
@@ -296,21 +360,23 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
         Preferences pref = IReportManager.getPreferences();
 
         SpinnerNumberModel model = (SpinnerNumberModel)jSpinnerCharacterHeight.getModel();
-        pref.putInt(JRProperties.PROPERTY_PREFIX + "export.txt.characterHeight", model.getNumber().intValue());
+        pref.putFloat(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT, model.getNumber().floatValue());
 
         model = (SpinnerNumberModel)jSpinnerCharacterWidth.getModel();
-        pref.putInt(JRProperties.PROPERTY_PREFIX + "export.txt.characterWidth", model.getNumber().intValue());
+        pref.putFloat(JRTextExporterParameter.PROPERTY_CHARACTER_WIDTH, model.getNumber().floatValue());
 
         model = (SpinnerNumberModel)jSpinnerPageHeight.getModel();
-        pref.putInt(JRProperties.PROPERTY_PREFIX + "export.txt.pageHeight", model.getNumber().intValue());
+        pref.putInt(JRTextExporterParameter.PROPERTY_PAGE_HEIGHT, model.getNumber().intValue());
 
         model = (SpinnerNumberModel)jSpinnerPageWidth.getModel();
-        pref.putInt(JRProperties.PROPERTY_PREFIX + "export.txt.pageWidth", model.getNumber().intValue());
+        pref.putInt(JRTextExporterParameter.PROPERTY_PAGE_WIDTH, model.getNumber().intValue());
 
         
-        pref.put(JRProperties.PROPERTY_PREFIX + "export.txt.betweenPagesText", jTextAreaBetweenPagesText.getText());
+        pref.put(JRProperties.PROPERTY_PREFIX + "export.txt.betweenPagesText", Misc.removeSlashesString(jTextAreaBetweenPagesText.getText()));
         pref.put(JRProperties.PROPERTY_PREFIX + "export.txt.lineSeparator", Misc.removeSlashesString(jTextFieldLineSeparator.getText()));
 
+        pref.putBoolean(JRProperties.PROPERTY_PREFIX + "export.txt.nothingBetweenPages", jCheckBoxNothingBetweenPages.isSelected());
+ 
     }
 
     public boolean valid() {

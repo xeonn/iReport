@@ -27,22 +27,27 @@ import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
+import com.jaspersoft.ireport.jasperserver.ui.actions.ICActionListener;
+import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.InputControlsUpdater;
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.BasicInputControl;
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.BooleanInputControl;
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.InputValidationException;
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.MultiColumnListInputControl;
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.MultiSelectInputControl;
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.SingleSelectInputControl;
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.InputControlQueryDataRow;
-import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.List;
 import javax.swing.JOptionPane;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import net.sf.jasperreports.engine.JRQueryChunk;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
 
 /**
  *
@@ -54,15 +59,31 @@ public class ReportUnitRunDialog extends javax.swing.JDialog {
     private java.util.HashMap parametersValues = null;
     private java.util.List inputControls = null;
     private JServer server = null;
+
+    private Thread updaterThread = null;
+    private String reportUnitUri = null;
+    private org.jdesktop.swingx.JXBusyLabel busyLabel = new org.jdesktop.swingx.JXBusyLabel();
+
+    private HashMap<String, Object> valuesCache = new HashMap<String, Object>();
+
+    /**
+     * This variable tracks which input controls (names) must be updated when a specific input control changes it's value.
+     */
+    private HashMap<String,List<String>> cascadingDependenciesMap = null;
     
     /** Creates new form NewReportUnitDialog */
     public ReportUnitRunDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         inputControls = new java.util.ArrayList();
+        cascadingDependenciesMap = new HashMap<String,List<String>>();
         jScrollPane1.setViewportView( jPanelInputControls );
         
         setLocationRelativeTo(null);
+        busyLabel.setBusy(false);
+        jPanelStatus.add(busyLabel, BorderLayout.CENTER);
+        busyLabel.setVisible(false);
+
         applyI18n();
     }
     
@@ -88,10 +109,10 @@ public class ReportUnitRunDialog extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jSeparator4 = new javax.swing.JSeparator();
         jPanel4 = new javax.swing.JPanel();
+        jPanelStatus = new javax.swing.JPanel();
         jButtonSave = new javax.swing.JButton();
         jButtonClose = new javax.swing.JButton();
 
@@ -129,16 +150,16 @@ public class ReportUnitRunDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         getContentPane().add(jSeparator1, gridBagConstraints);
 
-        jPanel2.setPreferredSize(new java.awt.Dimension(400, 185));
-        jPanel2.setLayout(new java.awt.GridBagLayout());
-
         jScrollPane1.setBorder(null);
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(421, 246));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(421, 246));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel2.add(jScrollPane1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 8, 4);
+        getContentPane().add(jScrollPane1, gridBagConstraints);
 
         jSeparator4.setMinimumSize(new java.awt.Dimension(0, 2));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -146,18 +167,18 @@ public class ReportUnitRunDialog extends javax.swing.JDialog {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 6, 4);
-        jPanel2.add(jSeparator4, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        getContentPane().add(jPanel2, gridBagConstraints);
+        getContentPane().add(jSeparator4, gridBagConstraints);
 
         jPanel4.setMinimumSize(new java.awt.Dimension(10, 30));
         jPanel4.setPreferredSize(new java.awt.Dimension(10, 30));
         jPanel4.setLayout(new java.awt.GridBagLayout());
+
+        jPanelStatus.setLayout(new java.awt.BorderLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
+        jPanel4.add(jPanelStatus, gridBagConstraints);
 
         jButtonSave.setText("Run report");
         jButtonSave.addActionListener(new java.awt.event.ActionListener() {
@@ -202,6 +223,7 @@ public class ReportUnitRunDialog extends javax.swing.JDialog {
             for (int i=0; i<inputControls.size(); ++i)
             {
                 BasicInputControl ic = (BasicInputControl)inputControls.get(i);
+                
                 Object val = ic.validate();
                 if (val != null)
                 {
@@ -282,6 +304,13 @@ public class ReportUnitRunDialog extends javax.swing.JDialog {
         for (int i=0; i<inputControlsDescriptors.size(); ++i)
         {
             ResourceDescriptor rd = (ResourceDescriptor)inputControlsDescriptors.get(i);
+            
+            if (rd.getResourcePropertyValue(  ResourceDescriptor.PROP_INPUTCONTROL_IS_VISIBLE ) != null &&
+                rd.getResourcePropertyValue(  ResourceDescriptor.PROP_INPUTCONTROL_IS_VISIBLE ).equals("false"))
+            {
+                continue;
+            }
+
             Object defaultValue = null;
             if (defaultValues != null && defaultValues.containsKey(rd.getName()))
             {
@@ -416,6 +445,12 @@ public class ReportUnitRunDialog extends javax.swing.JDialog {
         for (int i=0; i<inputControls.size(); ++i)
         {
             BasicInputControl ic = (BasicInputControl)inputControls.get(i);
+
+            // This is used for cascading input controls....
+            ic.addActionListener(new ICActionListener(ic, this));
+            cascadingDependencies(ic);
+
+
             java.awt.GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -437,6 +472,30 @@ public class ReportUnitRunDialog extends javax.swing.JDialog {
             
         jPanelInputControls.doLayout();
         jPanelInputControls.updateUI();
+        int panelHeight = jPanelInputControls.getPreferredSize().height;
+        if (panelHeight > 0)
+        {
+            panelHeight = Math.min((int)(Misc.getMainFrame().getHeight()*0.8), panelHeight);
+            jScrollPane1.setPreferredSize(new Dimension(jScrollPane1.getPreferredSize().width, panelHeight));
+        }
+        pack();
+        setLocationRelativeTo(null);
+
+        Thread t = new Thread(new Runnable() {
+
+            public void run() {
+                for (int i=0; i<inputControls.size(); ++i)
+                {
+                    BasicInputControl ic = (BasicInputControl)inputControls.get(i);
+                    actionPerformed(ic);
+                }
+            }
+        });
+
+        t.start();
+        
+        
+        
     }
     
     public java.util.Map getParametersValues()
@@ -457,11 +516,223 @@ public class ReportUnitRunDialog extends javax.swing.JDialog {
     private javax.swing.JButton jButtonSave;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanelInputControls;
+    private javax.swing.JPanel jPanelStatus;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator4;
     // End of variables declaration//GEN-END:variables
+
+    public void actionPerformed(BasicInputControl ic) {
+
+        try {
+            //jLabel2.setText(ic.getInputControl().getName() + "=" + ic.getValue());
+
+            String updateICName = ic.getInputControl().getName();
+            
+            // get the first input control having this param in the list...
+
+            for (int k=0; k<inputControls.size(); ++k)
+            {
+                BasicInputControl icToUpdate = (BasicInputControl)inputControls.get(k);
+                if (icToUpdate == null || icToUpdate == ic) continue;
+
+                String icName = icToUpdate.getInputControl().getName();
+
+                 if ( cascadingDependenciesMap.get(icName) == null ||
+                      !cascadingDependenciesMap.get(icName).contains(updateICName))
+                 {
+                     continue;
+                 }
+
+                HashMap parameters = new HashMap();
+                List<String> parametersICs = cascadingDependenciesMap.get(icName);
+                for (String paramName : parametersICs)
+                {
+
+                    try {
+                        Object value = getInputControlValue(paramName);
+                        parameters.put(paramName, value);
+                    } catch (InputValidationException ex)
+                    {
+                        JOptionPane.showMessageDialog(Misc.getMainFrame(),ex.getMessage());
+                        ex.printStackTrace();
+                        return;
+                    }
+                }
+
+                if (updaterThread != null)
+                {
+                    updaterThread.interrupt();
+                }
+
+                updaterThread = new Thread(new InputControlsUpdater(this.getServer(), icToUpdate, getReportUnitUri(), parameters, this));
+                updaterThread.start();
+                
+
+                break;
+            }
+
+
+        } catch (Exception ex) {
+            
+        }
+    }
+
+    /**
+     * Keep track of input parameters required to update this input control...
+     * @param ic
+     */
+    private void cascadingDependencies(BasicInputControl bic) {
+
+        ResourceDescriptor ic = bic.getInputControl();
+
+        if (ic.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY ||
+            ic.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY_RADIO ||
+            ic.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY ||
+            ic.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX)
+        {
+            // Look if this query has a specific datasource...
+            for (int k=0; k<ic.getChildren().size(); ++k)
+            {
+                ResourceDescriptor sub_ic = (ResourceDescriptor)ic.getChildren().get(k);
+                if (sub_ic.getWsType().equals(ResourceDescriptor.TYPE_QUERY) )
+                {
+                    String queryString = sub_ic.getResourceProperty(ResourceDescriptor.PROP_QUERY).getValue();
+                    String lang = sub_ic.getResourceProperty(ResourceDescriptor.PROP_QUERY_LANGUAGE).getValue();
+                    // Check for parameters...
+                    List<String> parameters = new ArrayList<String>();
+
+
+
+                    if (queryString != null && queryString.length() > 0)
+                    {
+                        JRDesignQuery query = new JRDesignQuery();
+                        query.setText(queryString);
+                        if (lang != null) query.setLanguage(lang);
+                        JRQueryChunk[] chunks = query.getChunks();
+                        
+                        for (int i=0; i<chunks.length; ++i)
+                        {
+                            switch (chunks[i].getType())
+                            {
+                                case JRQueryChunk.TYPE_TEXT:
+                                    break;
+                                case JRQueryChunk.TYPE_PARAMETER_CLAUSE:
+                                {
+                                    // adding a parameter...
+                                    String paramName = chunks[i].getText();
+                                    if(!parameters.contains(paramName) )
+                                    {
+                                        parameters.add(paramName);
+                                    }
+                                    break;
+                                }
+                                case JRQueryChunk.TYPE_PARAMETER:
+                                {
+                                    // adding a parameter...
+                                    String paramName = chunks[i].getText();
+                                    if(!parameters.contains(paramName) )
+                                    {
+                                        parameters.add(paramName);
+                                    }
+                                    break;
+                                }
+                                case JRQueryChunk.TYPE_CLAUSE_TOKENS:
+                                {
+                                    String[] tokens = chunks[i].getTokens();
+                                    if (tokens.length > 2)
+                                    {
+                                        for (int t=2; t<tokens.length; ++t)
+                                        {
+                                            if(!parameters.contains(tokens[t].trim()) )
+                                            {
+                                                parameters.add(tokens[t].trim());
+                                            }
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    
+                    if (parameters.size() > 0)
+                    {
+                        cascadingDependenciesMap.put(ic.getName(), parameters);
+                    }
+
+                    break;
+                }
+            }
+        }
+
+    }
+
+    public Object getInputControlValue(String paramName) throws InputValidationException
+    {
+        for (int i=0; i<inputControls.size(); ++i)
+        {
+                BasicInputControl ic = (BasicInputControl)inputControls.get(i);
+                if (ic.getInputControl().getName().equals(paramName))
+                {
+
+                    Object val = ic.validate();
+                    if (val != null)
+                    {
+                        if (val instanceof java.util.Date)
+                        {
+                            return ""+ ((java.util.Date)val).getTime();
+                        }
+                        else if (val instanceof java.util.Collection)
+                        {
+                            return val;
+                        }
+                        else
+                        {
+                            return ""+val;
+                        }
+                    }
+
+                    return val;
+                }
+        }
+        return null;
+    }
+
+    /**
+     * @return the reportUnitUri
+     */
+    public String getReportUnitUri() {
+        return reportUnitUri;
+    }
+
+    /**
+     * @param reportUnitUri the reportUnitUri to set
+     */
+    public void setReportUnitUri(String reportUnitUri) {
+        this.reportUnitUri = reportUnitUri;
+    }
+
+    public void setBusy(boolean b)
+    {
+        busyLabel.setVisible(b);
+        busyLabel.setBusy(b);
+    }
+
+    /**
+     * @return the valuesCache
+     */
+    public HashMap<String, Object> getValuesCache() {
+        return valuesCache;
+    }
+
+    /**
+     * @param valuesCache the valuesCache to set
+     */
+    public void setValuesCache(HashMap<String, Object> valuesCache) {
+        this.valuesCache = valuesCache;
+    }
+
 }

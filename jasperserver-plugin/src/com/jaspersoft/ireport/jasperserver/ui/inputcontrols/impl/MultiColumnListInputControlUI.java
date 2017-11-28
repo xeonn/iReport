@@ -39,6 +39,7 @@ public class MultiColumnListInputControlUI extends BasicInputControlUI {
         super();
         setComboEditable(false);
         getJComboBoxValue().setMinimumSize(new java.awt.Dimension(400,26));
+        //getJComboBoxValue().setPreferredSize(new java.awt.Dimension(400,30));
     }
     
     public void setHistory(java.util.List values){

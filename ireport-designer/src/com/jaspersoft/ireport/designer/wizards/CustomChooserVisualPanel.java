@@ -273,5 +273,9 @@ public final class CustomChooserVisualPanel extends JPanel {
         updateFileName();
         getPanel().fireChangeEvent();
     }
+
+    void setNameLabel(String string) {
+        jLabel2.setText(string);
+    }
 }
 

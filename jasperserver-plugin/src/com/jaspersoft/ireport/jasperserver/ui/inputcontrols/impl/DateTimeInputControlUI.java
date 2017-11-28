@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl;
 
+import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -177,5 +178,9 @@ public class DateTimeInputControlUI extends javax.swing.JPanel implements InputC
     {
         jLabelName.setEnabled(!b);
         jXDatePicker1.setEnabled(!b);
+    }
+
+    public void addActionListener(ActionListener listener) {
+        jXDatePicker1.addActionListener(listener);
     }
 }

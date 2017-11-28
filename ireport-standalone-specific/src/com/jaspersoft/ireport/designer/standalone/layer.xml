@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.1//EN" "http://www.netbeans.org/dtds/filesystem-1_1.dtd">
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
 <filesystem>
     <attr name="Menu\Format\position" intvalue="350"/>
     <attr name="Menu\Help\Separator1.instance\position" intvalue="200"/>
@@ -54,6 +54,14 @@
             <file name="com-jaspersoft-ireport-designer-standalone-menu-ReportWizardAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-standalone-menu-NewReportResourceBundleAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-standalone-menu-OpenFileAction.instance"/>
+        </folder>
+        <folder name="Tools">
+            <file name="com-jaspersoft-ireport-designer-standalone-actions-ImportSettingsAction.instance">
+                <attr name="delegate" newvalue="com.jaspersoft.ireport.designer.standalone.actions.ImportSettingsAction"/>
+                <attr name="displayName" bundlevalue="com.jaspersoft.ireport.designer.standalone.actions.Bundle#CTL_ImportSettingsAction"/>
+                <attr name="instanceCreate" methodvalue="org.openide.awt.Actions.alwaysEnabled"/>
+                <attr name="noIconInMenu" boolvalue="false"/>
+            </file>
         </folder>
     </folder>
     <folder name="Menu">
@@ -144,6 +152,10 @@
         </folder>
         <folder name="Tools">
             <file name="ServerManagerAction3.instance_hidden"/>
+            <file name="com-jaspersoft-ireport-designer-standalone-actions-ImportSettingsAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Tools/com-jaspersoft-ireport-designer-standalone-actions-ImportSettingsAction.instance"/>
+                <attr name="position" intvalue="1000"/>
+            </file>
         </folder>
         <folder name="Window">
             <attr name="position" intvalue="700"/>

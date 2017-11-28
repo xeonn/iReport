@@ -51,13 +51,20 @@ public class SingleSelectInputControl extends BasicInputControl{
          
          if (inputControl.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES)
          {
-            setInputControlUI( new ListInputControlUI());
+
+            if (getInputControlUI() == null || !(getInputControlUI() instanceof ListInputControlUI))
+            {
+                setInputControlUI( new ListInputControlUI());
+            }
          }
          else if (inputControl.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY_RADIO ||
              inputControl.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES_RADIO)
          {
-            setInputControlUI( new RadioListInputControlUI());
-            defaultNullLabel = "-None-";
+             if (getInputControlUI() == null || !(getInputControlUI() instanceof RadioListInputControlUI))
+            {
+                setInputControlUI( new RadioListInputControlUI());
+                defaultNullLabel = "-None-";
+            }
          }
          
         String label = inputControl.getLabel() + ((inputControl.isMandatory()) ? "*" : "");

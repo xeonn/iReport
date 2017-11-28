@@ -76,6 +76,7 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
         jCheckBoxCreateCustomPalette.setText(I18n.getString("XlsExportParametersPanel.jCheckBoxCreateCustomPalette.text")); // NOI18N
         jLabelPassword.setText(I18n.getString("XlsExportParametersPanel.jLabelPassword.text")); // NOI18N
         jTabbedPane1.setTitleAt(2, I18n.getString("XlsExportParametersPanel.jPanel3.TabConstraints.tabTitle")); // NOI18N
+        jCheckBoxIgnoreCellBackground.setText(I18n.getString("XlsExportParametersPanel.jCheckBoxIgnoreCellBackground.text")); // NOI18N
     }
 
 
@@ -104,6 +105,7 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
         jCheckBoxIgnoreGraphics = new javax.swing.JCheckBox();
         jCheckBoxCollapseRowSpan = new javax.swing.JCheckBox();
         jCheckBoxIgnoreCellBorder = new javax.swing.JCheckBox();
+        jCheckBoxIgnoreCellBackground = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jCheckBoxUseSheetNames = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -114,7 +116,7 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
         jLabelPassword = new javax.swing.JLabel();
         jTextFieldPassword = new javax.swing.JTextField();
 
-        jLabelTitle.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabelTitle.setFont(new java.awt.Font("Tahoma", 1, 12));
         jLabelTitle.setText("CSV Export parameters");
 
         jCheckBoxOnePagePerSheet.setText("One Page per Sheet");
@@ -189,78 +191,67 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
             }
         });
 
+        jCheckBoxIgnoreCellBackground.setText("Ignore Cell Background");
+        jCheckBoxIgnoreCellBackground.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxIgnoreCellBackgroundActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 413, Short.MAX_VALUE)
-            .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(jPanel1Layout.createSequentialGroup()
-                            .add(jCheckBoxOnePagePerSheet)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 184, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(jPanel1Layout.createSequentialGroup()
-                            .add(jCheckBoxRemoveEmptySpaceBetweenRows)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 104, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(jPanel1Layout.createSequentialGroup()
-                            .add(jCheckBoxRemoveEmptySpaceBetweenColumns)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 90, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(jPanel1Layout.createSequentialGroup()
-                            .add(jCheckBoxWhitePageBackground)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 168, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(jPanel1Layout.createSequentialGroup()
-                            .add(jCheckBoxAutoDetectCellType)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 176, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(jPanel1Layout.createSequentialGroup()
-                            .add(jCheckBoxFontSizeFixEnabled)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 180, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(jPanel1Layout.createSequentialGroup()
-                            .add(jCheckBoxImageBorderFixEnabled)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 158, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(jPanel1Layout.createSequentialGroup()
-                            .add(jLabelMaximumRowsPerSheet)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                            .add(jSpinnerMaximumRowsPerSheet, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 67, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(jPanel1Layout.createSequentialGroup()
-                            .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                .add(jCheckBoxIgnoreGraphics)
-                                .add(jCheckBoxCollapseRowSpan)
-                                .add(jCheckBoxIgnoreCellBorder))
-                            .add(196, 196, 196)))
-                    .addContainerGap(90, Short.MAX_VALUE)))
+            .add(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jCheckBoxIgnoreCellBackground)
+                    .add(jCheckBoxOnePagePerSheet)
+                    .add(jCheckBoxRemoveEmptySpaceBetweenRows)
+                    .add(jCheckBoxRemoveEmptySpaceBetweenColumns)
+                    .add(jCheckBoxWhitePageBackground)
+                    .add(jCheckBoxAutoDetectCellType)
+                    .add(jCheckBoxFontSizeFixEnabled)
+                    .add(jCheckBoxImageBorderFixEnabled)
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(jLabelMaximumRowsPerSheet)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jSpinnerMaximumRowsPerSheet, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 67, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jCheckBoxIgnoreGraphics)
+                    .add(jCheckBoxCollapseRowSpan)
+                    .add(jCheckBoxIgnoreCellBorder))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 302, Short.MAX_VALUE)
-            .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .add(jCheckBoxOnePagePerSheet)
-                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                    .add(jCheckBoxRemoveEmptySpaceBetweenRows)
-                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                    .add(jCheckBoxRemoveEmptySpaceBetweenColumns)
-                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                    .add(jCheckBoxWhitePageBackground)
-                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                    .add(jCheckBoxAutoDetectCellType)
-                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                    .add(jCheckBoxFontSizeFixEnabled)
-                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                    .add(jCheckBoxImageBorderFixEnabled)
-                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                    .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                        .add(jLabelMaximumRowsPerSheet)
-                        .add(jSpinnerMaximumRowsPerSheet, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                    .add(jCheckBoxIgnoreGraphics)
-                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                    .add(jCheckBoxCollapseRowSpan)
-                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                    .add(jCheckBoxIgnoreCellBorder)
-                    .addContainerGap(41, Short.MAX_VALUE)))
+            .add(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jCheckBoxOnePagePerSheet)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxRemoveEmptySpaceBetweenRows)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxRemoveEmptySpaceBetweenColumns)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxWhitePageBackground)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxAutoDetectCellType)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxFontSizeFixEnabled)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxImageBorderFixEnabled)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabelMaximumRowsPerSheet)
+                    .add(jSpinnerMaximumRowsPerSheet, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxIgnoreGraphics)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxCollapseRowSpan)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxIgnoreCellBorder)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxIgnoreCellBackground)
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Common", jPanel1);
@@ -410,12 +401,17 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
         notifyChange();
     }//GEN-LAST:event_jCheckBoxCreateCustomPaletteActionPerformed
 
+    private void jCheckBoxIgnoreCellBackgroundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxIgnoreCellBackgroundActionPerformed
+        notifyChange();
+    }//GEN-LAST:event_jCheckBoxIgnoreCellBackgroundActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox jCheckBoxAutoDetectCellType;
     private javax.swing.JCheckBox jCheckBoxCollapseRowSpan;
     private javax.swing.JCheckBox jCheckBoxCreateCustomPalette;
     private javax.swing.JCheckBox jCheckBoxFontSizeFixEnabled;
+    private javax.swing.JCheckBox jCheckBoxIgnoreCellBackground;
     private javax.swing.JCheckBox jCheckBoxIgnoreCellBorder;
     private javax.swing.JCheckBox jCheckBoxIgnoreGraphics;
     private javax.swing.JCheckBox jCheckBoxImageBorderFixEnabled;
@@ -451,6 +447,8 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
         jCheckBoxAutoDetectCellType.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
         jCheckBoxFontSizeFixEnabled.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
         jCheckBoxIgnoreCellBorder.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
+        jCheckBoxIgnoreCellBackground.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND)));
+
         jCheckBoxIgnoreGraphics.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS)));
         jCheckBoxImageBorderFixEnabled.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
         jCheckBoxOnePagePerSheet.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
@@ -478,6 +476,7 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
         pref.putBoolean(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE,  jCheckBoxAutoDetectCellType.isSelected() );
         pref.putBoolean(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED,  jCheckBoxFontSizeFixEnabled.isSelected() );
         pref.putBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER,  jCheckBoxIgnoreCellBorder.isSelected() );
+        pref.putBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND,  jCheckBoxIgnoreCellBackground.isSelected() );
         pref.putBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS,  jCheckBoxIgnoreGraphics.isSelected() );
         pref.putBoolean(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED,  jCheckBoxImageBorderFixEnabled.isSelected() );
         pref.putBoolean(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET,  jCheckBoxOnePagePerSheet.isSelected() );

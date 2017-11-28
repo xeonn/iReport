@@ -1,3 +1,25 @@
+2009-11-24 Version 3.6.2 released
+_______________________________________________________________________________
+- Fixed Bug 0004394 iReport 3.6.1 options throws NullPointerException
+- Fixed Bug 0004399 Reports using Xpath are failling in iReport 3.6.1 but working fine in 3.6.0
+- Fixed Bug 0004383 Connection closed after preview
+- Fixed Bug 0004428 "No query executer factory class registered" when opening report
+- Fixed Bug 0000839 Support for $P!{} parameters in SQL
+- New properties to control the chart Vertical Tick Labels
+- Several fixes for the TXT exporter
+- New feature to import settings from another iReport installation
+- Support for Keep Together property of groups
+- New settings import wizard
+- New Ignore Cell Background export option for XLS/XLSX
+- Full support for JasperReports 3.6.2
+- Support for OrderByExpression in the crosstab bucket
+- Support for the new group property "Footer position" and "KeepTogether"
+- Fixed the font extensions exporter
+- Fixed editable hyperlink target
+- Added support for cascading input control (available in Jasperserver Professional)
+- Fixed the import of custom iReport connections from XML
+- Fixed a problem setting the JasperReports properties leading in an error using XPath based reports
+
 2009-10-28 Version 3.6.1 released
 _______________________________________________________________________________
 - New command line option (-N) to disable the use of a network

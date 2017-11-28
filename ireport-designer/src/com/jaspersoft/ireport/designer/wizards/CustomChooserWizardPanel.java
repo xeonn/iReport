@@ -25,6 +25,7 @@ package com.jaspersoft.ireport.designer.wizards;
 
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.locale.I18n;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
@@ -159,6 +160,7 @@ public class CustomChooserWizardPanel implements WizardDescriptor.Panel {
 
                             component.setReportName(tmpName);
                             component.setExtension(".properties");
+                            component.setNameLabel(I18n.getString("CustomChooserVisualPanel.Label.BundleName"));
                             break;
                         }
                     }
@@ -173,6 +175,7 @@ public class CustomChooserWizardPanel implements WizardDescriptor.Panel {
 
                             component.setReportName("report" + i);
                             component.setExtension(".jrxml");
+                            component.setNameLabel(I18n.getString("CustomChooserVisualPanel.Label.ReportName"));
                             break;
                         }
                     }
@@ -186,6 +189,7 @@ public class CustomChooserWizardPanel implements WizardDescriptor.Panel {
 
                             component.setReportName(name + i);
                             component.setExtension(ext);
+                            component.setNameLabel(I18n.getString("CustomChooserVisualPanel.Label.Name"));
                             break;
                         }
                     }

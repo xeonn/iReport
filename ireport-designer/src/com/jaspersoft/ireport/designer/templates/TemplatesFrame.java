@@ -103,7 +103,7 @@ public class TemplatesFrame extends javax.swing.JDialog {
 
     }
 
-    private void loadItems() {
+    private synchronized void loadItems() {
 
         ((DefaultListModel)jListTemplateItems.getModel()).removeAllElements();
 

@@ -26,8 +26,11 @@ package com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl;
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.ListItemWrapper;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 
@@ -38,6 +41,7 @@ import javax.swing.JCheckBox;
 public class CheckboxListInputControlUI extends javax.swing.JPanel implements InputControlUI {
 
     private java.util.HashMap itemValues = new java.util.HashMap();
+    private List<ActionListener> listeners = new ArrayList<ActionListener>();
     
     
     /** Creates new form BasicInputControlUI */
@@ -185,6 +189,11 @@ public class CheckboxListInputControlUI extends javax.swing.JPanel implements In
             d = new Dimension(w,(rb.getPreferredSize().height)* values.size());
             
             jPanelList.add(rb); //, gridBagConstraints);
+
+            for (ActionListener listener : listeners)
+            {
+                rb.addActionListener(listener);
+            }
         }
         
         jPanelList.setPreferredSize(d);
@@ -215,6 +224,18 @@ public class CheckboxListInputControlUI extends javax.swing.JPanel implements In
             if (c instanceof JCheckBox)
             {
                ((JCheckBox)c).setEnabled(!b);
+            }
+        }
+    }
+
+    public void addActionListener(ActionListener listener) {
+        listeners.add(listener);
+        for (int i=0; i<jPanelList.getComponentCount(); ++i)
+        {
+            Component c = jPanelList.getComponent(i);
+            if (c instanceof JCheckBox)
+            {
+               ((JCheckBox)c).addActionListener(listener);
             }
         }
     }

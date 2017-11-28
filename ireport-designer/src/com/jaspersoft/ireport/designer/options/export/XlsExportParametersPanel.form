@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <SyntheticProperties>
+    <SyntheticProperty name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,103,0,0,1,-94"/>
+  </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -63,64 +66,61 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="413" max="32767" attributes="0"/>
-                  <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jCheckBoxOnePagePerSheet" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxRemoveEmptySpaceBetweenRows" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxRemoveEmptySpaceBetweenColumns" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxWhitePageBackground" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxAutoDetectCellType" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxFontSizeFixEnabled" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxImageBorderFixEnabled" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jLabelMaximumRowsPerSheet" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jSpinnerMaximumRowsPerSheet" min="-2" pref="67" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="jCheckBoxIgnoreGraphics" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxCollapseRowSpan" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxIgnoreCellBorder" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jCheckBoxIgnoreCellBackground" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jCheckBoxOnePagePerSheet" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jCheckBoxRemoveEmptySpaceBetweenRows" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jCheckBoxRemoveEmptySpaceBetweenColumns" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jCheckBoxWhitePageBackground" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jCheckBoxAutoDetectCellType" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jCheckBoxFontSizeFixEnabled" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jCheckBoxImageBorderFixEnabled" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabelMaximumRowsPerSheet" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jSpinnerMaximumRowsPerSheet" min="-2" pref="67" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="96" max="32767" attributes="0"/>
+                          <Component id="jCheckBoxIgnoreGraphics" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jCheckBoxCollapseRowSpan" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jCheckBoxIgnoreCellBorder" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace pref="96" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="302" max="32767" attributes="0"/>
-                  <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jCheckBoxOnePagePerSheet" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jCheckBoxRemoveEmptySpaceBetweenRows" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jCheckBoxRemoveEmptySpaceBetweenColumns" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jCheckBoxWhitePageBackground" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jCheckBoxAutoDetectCellType" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jCheckBoxFontSizeFixEnabled" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jCheckBoxImageBorderFixEnabled" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabelMaximumRowsPerSheet" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jSpinnerMaximumRowsPerSheet" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jCheckBoxIgnoreGraphics" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jCheckBoxCollapseRowSpan" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jCheckBoxIgnoreCellBorder" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="41" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBoxOnePagePerSheet" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBoxRemoveEmptySpaceBetweenRows" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBoxRemoveEmptySpaceBetweenColumns" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBoxWhitePageBackground" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBoxAutoDetectCellType" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBoxFontSizeFixEnabled" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBoxImageBorderFixEnabled" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabelMaximumRowsPerSheet" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jSpinnerMaximumRowsPerSheet" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBoxIgnoreGraphics" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBoxCollapseRowSpan" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBoxIgnoreCellBorder" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBoxIgnoreCellBackground" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="18" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -211,6 +211,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxIgnoreCellBorderActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="jCheckBoxIgnoreCellBackground">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Ignore Cell Background"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxIgnoreCellBackgroundActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

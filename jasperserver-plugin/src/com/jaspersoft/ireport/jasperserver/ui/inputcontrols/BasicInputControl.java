@@ -29,6 +29,7 @@ import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl.BasicInputContr
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl.DateTimeInputControlUI;
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl.InputControlUI;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.util.regex.Pattern;
 import javax.swing.JComponent;
@@ -47,11 +48,16 @@ public class BasicInputControl {
      *
      */
     public static java.util.Map valueHistories = new java.util.HashMap();
+
+    public void addActionListener(ActionListener listener)
+    {
+        getInputControlUI().addActionListener(listener);
+    }
     
     protected ResourceDescriptor inputControl = null;
     private ResourceDescriptor dataType = null;
     private InputControlUI inputControlUI;
-    
+
     private Object defaultValue = null;
 
     public Object getDefaultValue() {

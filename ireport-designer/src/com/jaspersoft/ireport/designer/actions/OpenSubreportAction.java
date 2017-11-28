@@ -131,6 +131,7 @@ public final class OpenSubreportAction extends NodeAction {
                 File f = new File(resourceName);
                 if (!f.exists())
                 {
+                    String jrxmlFileName = f.getName();
                     File reportFolder = null;
                     JrxmlVisualView visualView = IReportManager.getInstance().getActiveVisualView();
                     if (visualView != null)
@@ -152,7 +153,13 @@ public final class OpenSubreportAction extends NodeAction {
                     URL url = urlClassLoader.getResource(resourceName);
                     if (url == null)
                     {
-                        throw new Exception(resourceName + " not found.");
+                        // try just the file name...
+                        url = urlClassLoader.getResource(jrxmlFileName);
+
+                        if (url == null)
+                        {
+                            throw new Exception(resourceName + " not found.");
+                        }
                     }
                         
                     f = new File(url.getPath());

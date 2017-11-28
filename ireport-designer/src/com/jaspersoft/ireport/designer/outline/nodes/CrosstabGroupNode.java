@@ -131,7 +131,8 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
         set.put(new BucketExpressionProperty((JRDesignCrosstabBucket)getGroup().getBucket(), getCrosstab(), jd));
         set.put(new BucketComparatorExpressionProperty((JRDesignCrosstabBucket)getGroup().getBucket(), getCrosstab(), jd));
         set.put(new BucketOrderProperty((JRDesignCrosstabBucket)getGroup().getBucket(), getCrosstab()));
-        
+        set.put(new BucketOrderByExpressionProperty((JRDesignCrosstabBucket)getGroup().getBucket(), getCrosstab(), jd));
+
         sheet.put(set);
         
          return sheet;
@@ -676,7 +677,92 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
         
     }
     
-    
+    /**
+     */
+    public static final class BucketOrderByExpressionProperty extends ExpressionProperty
+    {
+        private final JRDesignCrosstabBucket bucket;
+        private final JRDesignCrosstab crosstab;
+        private final JasperDesign jd;
+
+        @SuppressWarnings("unchecked")
+        public BucketOrderByExpressionProperty(JRDesignCrosstabBucket bucket, JRDesignCrosstab crosstab, JasperDesign jd)
+        {
+            super(bucket, new ExpressionContext( ModelUtils.getCrosstabDataset(crosstab, jd)));
+            setName( JRDesignCrosstabBucket.PROPERTY_ORDER_BY_EXPRESSION);
+            setDisplayName("Order by exp.");
+            setShortDescription("The 'Order by' expression can be used to specify a custom sorting of the data. The expressions's type should be compatible with java.lang.Comparable (otherwise a custom comparator expression would be required)");
+            this.crosstab = crosstab;
+            this.bucket = bucket;
+            this.jd = jd;
+            crosstab.getEventSupport().addPropertyChangeListener(JRDesignCrosstab.PROPERTY_DATASET,  new PropertyChangeListener() {
+
+                public void propertyChange(PropertyChangeEvent evt) {
+                    setValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT, ModelUtils.getElementDataset(getCrosstab(), getJasperDesign()));
+                }
+            });
+
+        }
+
+
+        public JasperDesign getJasperDesign()
+        {
+            return jd;
+        }
+
+        @Override
+        public String getDefaultExpressionClassName() {
+            return "java.lang.Comparable";
+        }
+
+        @Override
+        public JRDesignExpression getExpression() {
+            return (JRDesignExpression)bucket.getOrderByExpression();
+        }
+
+        @Override
+        public void setExpression(JRDesignExpression expression) {
+            bucket.setOrderByExpression(expression);
+        }
+
+        public JRDesignCrosstabBucket getBucket() {
+            return bucket;
+        }
+
+        public JRDesignCrosstab getCrosstab() {
+            return crosstab;
+        }
+
+        @Override
+        public Object getDefaultValue() {
+            return null;
+        }
+
+        @Override
+        public boolean isDefaultValue() {
+            return getValue() == null;
+        }
+
+        @Override
+        public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
+            setValue(null);
+        }
+
+        @Override
+        public boolean supportsDefaultValue() {
+            return true;
+        }
+
+        @Override
+        public void setValue(Object newValue) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+            if (newValue != null && (newValue instanceof String) && ((String)newValue).trim().length() == 0)
+            {
+             super.setValue(null);
+            }
+            super.setValue(newValue);
+        }
+    }
+
     /**
      *  Class to manage the JRDesignElement.PROPERTY_POSITION_TYPE property
      */

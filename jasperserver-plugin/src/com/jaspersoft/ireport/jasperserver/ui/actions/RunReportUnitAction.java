@@ -176,11 +176,17 @@ public final class RunReportUnitAction extends NodeAction {
                 }
                 
                
-                
+                boolean atLeastOneVisible = false;
                 for (int i=0; i<inputcontrols.size(); ++i)
                 {
                         ResourceDescriptor ic = (ResourceDescriptor)inputcontrols.get(i);
-                
+
+                        if (ic.getResourcePropertyValue(  ResourceDescriptor.PROP_INPUTCONTROL_IS_VISIBLE ) == null ||
+                            ic.getResourcePropertyValue(  ResourceDescriptor.PROP_INPUTCONTROL_IS_VISIBLE ).equals("true"))
+                        {
+                            atLeastOneVisible = true;
+                        }
+
                         //System.out.println("Got:  " + ic.getName() + " " + ic.getControlType());
                         if (ic.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY ||
                             ic.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY_RADIO ||
@@ -192,7 +198,6 @@ public final class RunReportUnitAction extends NodeAction {
 
                             String language = "sql";
                             String query = null;
-                            System.out.println("Looking for the right ds...");
                             // Ask to add values to the control....
                             java.util.List args = new java.util.ArrayList();
                             // reset query data...
@@ -220,6 +225,7 @@ public final class RunReportUnitAction extends NodeAction {
                             }
                             if (dsUriQuery == null) dsUriQuery = dsUri;
                             ic.setResourceProperty(ic.PROP_QUERY_DATA, null);
+
 
 //                            if (JasperServerManager.getMainInstance().getDataProvidersMap().containsKey(language))
 //                            {
@@ -300,10 +306,11 @@ public final class RunReportUnitAction extends NodeAction {
                         }
                 }
                 java.util.Map map = null;
-                if (inputcontrols.size() > 0)
+                if (atLeastOneVisible)
                 {
                     ReportUnitRunDialog rurd = new ReportUnitRunDialog(Misc.getMainFrame(), true);
                     rurd.setServer(server);
+                    rurd.setReportUnitUri( reportUnit.getDescriptor().getUriString() );
                     rurd.setInputControls( inputcontrols, defaultValues);
 
                     rurd.setVisible(true);

@@ -243,6 +243,7 @@ final class IReportPanel extends javax.swing.JPanel {
         //jTabbedPane1.remove(5);
 
         jComboBoxCompatibility.addItem(new Tag("", "Last version"));
+        jComboBoxCompatibility.addItem(new Tag("3_6_1", "JasperReports 3.6.1"));
         jComboBoxCompatibility.addItem(new Tag("3_6_0", "JasperReports 3.6.0"));
         jComboBoxCompatibility.addItem(new Tag("3_5_2", "JasperReports 3.5.2-3.5.3"));
         jComboBoxCompatibility.addItem(new Tag("3_5_1", "JasperReports 3.5.1"));
@@ -719,7 +720,7 @@ final class IReportPanel extends javax.swing.JPanel {
             jPanelCompatibilityLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanelCompatibilityLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jLabel3)
+                .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jComboBoxCompatibility, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(18, 18, 18)
@@ -1413,7 +1414,7 @@ final class IReportPanel extends javax.swing.JPanel {
             jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel18Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jLabelClasspath1)
+                .add(jLabelClasspath1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel19, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
@@ -1881,7 +1882,7 @@ final class IReportPanel extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 399, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE)
         );
 
         jTabbedPane1.getAccessibleContext().setAccessibleName("General");
@@ -2848,8 +2849,11 @@ private void jButtonExportFontsActionPerformed(java.awt.event.ActionEvent evt) {
         ((DefaultTableModel)jTableQueryExecuters.getModel()).setRowCount(0);
         for (QueryExecuterDef qeOriginal : queryExecuters)
         {
-            QueryExecuterDef qe = qeOriginal.cloneMe();
-            ((DefaultTableModel)jTableQueryExecuters.getModel()).addRow(new Object[]{qe, qe.getClassName(),qe.getFieldsProvider()});
+            if (qeOriginal != null)
+            {
+                QueryExecuterDef qe = qeOriginal.cloneMe();
+                ((DefaultTableModel)jTableQueryExecuters.getModel()).addRow(new Object[]{qe, qe.getClassName(),qe.getFieldsProvider()});
+            }
         }
 
         jTableQueryExecutersSelectionChanged();
@@ -3088,10 +3092,10 @@ private void jButtonExportFontsActionPerformed(java.awt.event.ActionEvent evt) {
             pref.put("customexpression."+i, ""+jTableExpressions.getValueAt(i, 0));
         }
 
-        IReportManager.getInstance().reloadQueryExecuters();
-
         exportOptionsPanel.store();
         jrOptionsPanel.store();
+
+        IReportManager.getInstance().reloadQueryExecuters();
 
         pref.put("compatibility", ((Tag)jComboBoxCompatibility.getSelectedItem()).getValue()+"");
     }

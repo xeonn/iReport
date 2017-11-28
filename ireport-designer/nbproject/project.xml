@@ -248,6 +248,7 @@
                 <package>com.jaspersoft.ireport.designer.charts</package>
                 <package>com.jaspersoft.ireport.designer.charts.datasets</package>
                 <package>com.jaspersoft.ireport.designer.charts.multiaxis</package>
+                <package>com.jaspersoft.ireport.designer.compatibility</package>
                 <package>com.jaspersoft.ireport.designer.compiler</package>
                 <package>com.jaspersoft.ireport.designer.compiler.prompt</package>
                 <package>com.jaspersoft.ireport.designer.compiler.xml</package>
@@ -370,7 +371,9 @@
                 <package>net.sf.jasperreports.engine.export.draw</package>
                 <package>net.sf.jasperreports.engine.export.legacy</package>
                 <package>net.sf.jasperreports.engine.export.oasis</package>
+                <package>net.sf.jasperreports.engine.export.ooxml</package>
                 <package>net.sf.jasperreports.engine.export.xmlss</package>
+                <package>net.sf.jasperreports.engine.export.zip</package>
                 <package>net.sf.jasperreports.engine.fill</package>
                 <package>net.sf.jasperreports.engine.fonts</package>
                 <package>net.sf.jasperreports.engine.print</package>
@@ -670,8 +673,8 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-3.6.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-3.6.1.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-3.6.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-3.6.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jasperreports-fonts-3.6.1.jar</runtime-relative-path>
@@ -689,10 +692,10 @@
                 <runtime-relative-path>ext/jxl-2.6.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/jxl-2.6.jar</binary-origin>
             </class-path-extension>
-            <class-path-extension>
+            <!-- <class-path-extension>
                 <runtime-relative-path>ext/servlet.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/servlet.jar</binary-origin>
-            </class-path-extension>
+            </class-path-extension> -->
             <class-path-extension>
                 <runtime-relative-path>ext/saaj-api-1.3.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/saaj-api-1.3.jar</binary-origin>
@@ -802,8 +805,8 @@
                 <binary-origin>release/modules/ext/rhino-1.7R1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-chart-themes-3.5.3.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-chart-themes-3.5.3.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-chart-themes-3.6.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-chart-themes-3.6.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/castor-1.2.jar</runtime-relative-path>

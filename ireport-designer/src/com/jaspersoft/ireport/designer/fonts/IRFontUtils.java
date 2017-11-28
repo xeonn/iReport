@@ -396,7 +396,7 @@ public class IRFontUtils {
 
 
                 pw.println("net.sf.jasperreports.extension.registry.factory.fonts=net.sf.jasperreports.extensions.SpringExtensionsRegistryFactory");
-                pw.println("net.sf.jasperreports.extension.fonts.spring.beans.resource=/fonts/" + fontXmlFile);
+                pw.println("net.sf.jasperreports.extension.fonts.spring.beans.resource=fonts/" + fontXmlFile);
 
                 pw.flush();
 

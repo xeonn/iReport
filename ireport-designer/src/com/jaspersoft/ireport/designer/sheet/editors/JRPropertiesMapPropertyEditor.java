@@ -75,7 +75,7 @@ public class JRPropertiesMapPropertyEditor extends PropertyEditorSupport impleme
             {
                 case 0: return I18n.getString("JRPMPE.Property.Nopropertiesset");
                 case 1: return I18n.getString("JRPMPE.Property.Onepropertiesset");
-                default: return len + I18n.getString("JRPMPE.Property.propertiesset");
+                default: return I18n.getString("JRPMPE.Property.propertiesset", len);
             }   
         }
         return "";

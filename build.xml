@@ -323,7 +323,7 @@
 		classname="net.sf.nsisant.Task"
 		classpath="etc/nsisant-1.1.jar"/>
 	<nsisant script="etc/iReportInstaller.nsi">
-		<define name="PRODUCT_VERSION" value="nb-${app.version}"/>
+		<define name="PRODUCT_VERSION" value="${app.version}"/>
 		<define name="PRODUCT_NAME" value="${app.title}"/>
 		<define name="PRODUCT_WEB_SITE" value="http://ireport.sourceforge.net"/>
 	</nsisant>

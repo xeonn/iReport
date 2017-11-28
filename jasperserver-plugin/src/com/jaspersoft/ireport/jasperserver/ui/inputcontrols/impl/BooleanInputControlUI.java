@@ -23,14 +23,14 @@
  */
 package com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl;
 
-import javax.swing.JLabel;
+import java.awt.event.ActionListener;
 
 /**
  *
  * @author  gtoffoli
  */
 public class BooleanInputControlUI extends javax.swing.JPanel implements InputControlUI {
-    
+
     /** Creates new form BasicInputControlUI */
     public BooleanInputControlUI() {
         initComponents();
@@ -97,4 +97,10 @@ public class BooleanInputControlUI extends javax.swing.JPanel implements InputCo
     {
         jCheckBox1.setEnabled(!b);
     }
+
+
+    public void addActionListener(ActionListener listener) {
+        jCheckBox1.addActionListener(listener);
+    }
+
 }

@@ -42,7 +42,7 @@ public class Installer extends ModuleInstall {
     @Override
     public void restored() {
 
-        /*
+        
         if (System.getProperty("javax.xml.parsers.SAXParserFactory") == null)
         {
             System.setProperty("javax.xml.parsers.SAXParserFactory","com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl");
@@ -57,7 +57,7 @@ public class Installer extends ModuleInstall {
         {
             System.setProperty("javax.xml.datatype.DatatypeFactory","com.sun.org.apache.xerces.internal.jaxp.datatype.DatatypeFactoryImpl");
         }
-        */
+        
         
 
         /*

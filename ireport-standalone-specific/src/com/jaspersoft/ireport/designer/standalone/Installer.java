@@ -23,9 +23,13 @@
  */
 package com.jaspersoft.ireport.designer.standalone;
 
+import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.standalone.actions.ImportSettingsAction;
+import com.jaspersoft.ireport.designer.standalone.actions.ImportSettingsUtilities;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.openide.modules.ModuleInstall;
+import org.openide.util.actions.SystemAction;
 import org.openide.windows.TopComponent.Registry;
 import org.openide.windows.WindowManager;
 
@@ -45,6 +49,22 @@ public class Installer extends ModuleInstall {
                 if (evt.getPropertyName().equals( Registry.PROP_TC_CLOSED))
                 {
                     System.gc();
+                }
+            }
+        });
+
+        // Import settings...
+        WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+
+            public void run() {
+                String[] versions = ImportSettingsUtilities.getAvailableVersions();
+                if (versions != null && versions.length > 0 && IReportManager.getPreferences().getBoolean("askForImportingSettings", true))
+                {
+                    try {
+                        SystemAction.get(ImportSettingsAction.class).performAction();
+                    } catch (Exception ex)
+                    {}
+                    IReportManager.getPreferences().putBoolean("askForImportingSettings", false);
                 }
             }
         });

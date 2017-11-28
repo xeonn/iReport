@@ -80,6 +80,20 @@ public final class InitialValueExpressionProperty extends ExpressionProperty
     @Override
     public void setExpression(JRDesignExpression expression)
     {
+        // This avoid incompatibilities with the
+        // variable...
+        if (expression != null)
+        {
+            if (variable.getCalculation() == JRDesignVariable.CALCULATION_COUNT ||
+                variable.getCalculation() == JRDesignVariable.CALCULATION_DISTINCT_COUNT)
+            {
+                expression.setValueClassName("java.lang.Object");
+            }
+            else
+            {
+                expression.setValueClassName(variable.getValueClassName());
+            }
+        }
         variable.setInitialValueExpression(expression);
     }
 

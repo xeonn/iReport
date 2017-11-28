@@ -56,6 +56,7 @@ public class DefaultExporterFactory implements ExporterFactory {
     public String getExporterFileExtension() {
         if (format.equals("xhtml")) return "html";
         if (format.equals("xml")) return "jrpxml";
+        if (format.equals("xls2")) return "xls";
         return format;
     }
 
@@ -96,7 +97,7 @@ public class DefaultExporterFactory implements ExporterFactory {
        else if (format.equalsIgnoreCase("xlsx"))
        {
           exporter = new  net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter();
-          //configureXlsExporter(exporter);
+          configureXlsExporter(exporter);
        }
        else if (format.equalsIgnoreCase("java2D"))
        {
@@ -111,7 +112,7 @@ public class DefaultExporterFactory implements ExporterFactory {
        {
           exporter = new  net.sf.jasperreports.engine.export.JRRtfExporter();
        }
-       else if (format.equalsIgnoreCase("odf"))
+       else if (format.equalsIgnoreCase("odt"))
        {
           exporter = new  net.sf.jasperreports.engine.export.oasis.JROdtExporter();
        }
@@ -167,7 +168,7 @@ public class DefaultExporterFactory implements ExporterFactory {
        {
           return Misc.nvl( IReportManager.getInstance().getProperty("ExternalRTFViewer"), "");
        }
-       else if (format.equalsIgnoreCase("odf"))
+       else if (format.equalsIgnoreCase("odt"))
        {
           return Misc.nvl( IReportManager.getInstance().getProperty("ExternalODFViewer"), "");
        }
@@ -187,21 +188,29 @@ public class DefaultExporterFactory implements ExporterFactory {
 
         Preferences pref = IReportManager.getPreferences();
 
-        int val = pref.getInt(JRProperties.PROPERTY_PREFIX + "export.txt.characterHeight", 0);
-        if (val > 0) exporter.setParameter( JRTextExporterParameter.CHARACTER_HEIGHT, new Integer(val));
+        float floatVal = pref.getFloat(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT, 0);
+        if (floatVal > 0) exporter.setParameter( JRTextExporterParameter.CHARACTER_HEIGHT, new Float(floatVal));
 
-        val = pref.getInt(JRProperties.PROPERTY_PREFIX + "export.txt.characterWidth", 0);
-        if (val > 0) exporter.setParameter( JRTextExporterParameter.CHARACTER_WIDTH, new Integer(val));
+        floatVal = pref.getFloat(JRTextExporterParameter.PROPERTY_CHARACTER_WIDTH, 0);
+        if (floatVal > 0) exporter.setParameter( JRTextExporterParameter.CHARACTER_WIDTH, new Float(floatVal));
 
-        val = pref.getInt(JRProperties.PROPERTY_PREFIX + "export.txt.pageHeight", 0);
+        int val = pref.getInt(JRTextExporterParameter.PROPERTY_PAGE_HEIGHT, 0);
         if (val > 0) exporter.setParameter( JRTextExporterParameter.PAGE_HEIGHT, new Integer(val));
 
-        val = pref.getInt(JRProperties.PROPERTY_PREFIX + "export.txt.pageWidth", 0);
+        val = pref.getInt(JRTextExporterParameter.PROPERTY_PAGE_WIDTH, 0);
         if (val > 0) exporter.setParameter( JRTextExporterParameter.PAGE_WIDTH, new Integer(val));
 
-        String s = pref.get(JRProperties.PROPERTY_PREFIX + "export.txt.betweenPagesText", "");
-        if (s.length() > 0) exporter.setParameter( JRTextExporterParameter.BETWEEN_PAGES_TEXT, s);
-
+        String s = null;
+        if (pref.getBoolean(JRProperties.PROPERTY_PREFIX + "export.txt.nothingBetweenPages", false))
+        {
+            exporter.setParameter( JRTextExporterParameter.BETWEEN_PAGES_TEXT, "");
+        }
+        else
+        {
+            s = pref.get(JRProperties.PROPERTY_PREFIX + "export.txt.betweenPagesText", "");
+            if (s.length() > 0) exporter.setParameter( JRTextExporterParameter.BETWEEN_PAGES_TEXT, s);
+        }
+        
         s = pref.get(JRProperties.PROPERTY_PREFIX + "export.txt.lineSeparator", "");
         if (s.length() > 0) exporter.setParameter( JRTextExporterParameter.LINE_SEPARATOR, s);
 
@@ -223,6 +232,7 @@ public class DefaultExporterFactory implements ExporterFactory {
         exporter.setParameter( JRXlsAbstractExporterParameter.IS_DETECT_CELL_TYPE , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE))));
         exporter.setParameter( JRXlsAbstractExporterParameter.IS_FONT_SIZE_FIX_ENABLED , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED))));
         exporter.setParameter( JRXlsAbstractExporterParameter.IS_IGNORE_CELL_BORDER , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER))));
+        exporter.setParameter( JRXlsAbstractExporterParameter.IS_IGNORE_CELL_BACKGROUND , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND))));
         exporter.setParameter( JRXlsAbstractExporterParameter.IS_IGNORE_GRAPHICS , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS))));
         exporter.setParameter( JRXlsAbstractExporterParameter.IS_IMAGE_BORDER_FIX_ENABLED , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED))));
         exporter.setParameter( JRXlsAbstractExporterParameter.IS_ONE_PAGE_PER_SHEET , new Boolean(pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET))));
@@ -350,6 +360,8 @@ public class DefaultExporterFactory implements ExporterFactory {
         exporter.setParameter( JRHtmlExporterParameter.IS_WHITE_PAGE_BACKGROUND, pref.getBoolean(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND, JRProperties.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND)));
         exporter.setParameter( JRHtmlExporterParameter.IS_WRAP_BREAK_WORD, pref.getBoolean(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD, JRProperties.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD)));
 
+        //FIXME these properties do not actually exist!!!!!!!..... check all properties
+        
         if (pref.get(JRProperties.PROPERTY_PREFIX + "export.html.imagesDirectory","").length() > 0)
         {
             exporter.setParameter( JRHtmlExporterParameter.IMAGES_DIR_NAME , pref.get(JRProperties.PROPERTY_PREFIX + "export.html.imagesDirectory",""));

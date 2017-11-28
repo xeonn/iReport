@@ -23,6 +23,8 @@
  */
 package com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl;
 
+import java.awt.event.ActionListener;
+
 /**
  *
  * @author gtoffoli
@@ -34,7 +36,5 @@ public interface InputControlUI {
     public void setLabel(String lbl);
     public void setHistory(java.util.List values);
     public void setReadOnly( boolean b );
-    
-    
-    
+    public void addActionListener(ActionListener listener);
 }

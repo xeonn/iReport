@@ -210,28 +210,46 @@ import com.jaspersoft.ireport.designer.sheet.properties.charts.AreaValueAxisLabe
 import com.jaspersoft.ireport.designer.sheet.properties.charts.AreaCategoryAxisLabelExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.RenderTypeProperty;
 import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.AreaCategoryAxisTickLabelRotationProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.AreaCategoryAxisVerticalTickLabelsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.AreaRangeAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.AreaRangeAxisMinValueExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.AreaValueAxisVerticalTickLabelsProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DCategoryAxisTickLabelRotationProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DCategoryAxisVerticalTickLabelsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DItemLabelProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DRangeAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DRangeAxisMinValueExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.Bar3DValueAxisVerticalTickLabelsProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.BarCategoryAxisTickLabelRotationProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.BarCategoryAxisVerticalTickLabelsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.BarItemLabelProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.BarRangeAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.BarRangeAxisMinValueExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.BarValueAxisVerticalTickLabelsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.BubbleDomainAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.BubbleDomainAxisMinValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.BubbleRangeAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.BubbleRangeAxisMinValueExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.BubbleXAxisVerticalTickLabelsProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.BubbleYAxisVerticalTickLabelsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.CandlestickDomainAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.CandlestickDomainAxisMinValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.CandlestickRangeAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.CandlestickRangeAxisMinValueExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.CandlestickTimeAxisVerticalTickLabelsProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.CandlestickValueAxisVerticalTickLabelsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.HighLowDomainAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.HighLowDomainAxisMinValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.HighLowRangeAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.HighLowRangeAxisMinValueExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.HighLowTimeAxisVerticalTickLabelsProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.HighLowValueAxisVerticalTickLabelsProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.LineCategoryAxisTickLabelRotationProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.LineCategoryAxisVerticalTickLabelsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.LineRangeAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.LineRangeAxisMinValueExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.LineValueAxisVerticalTickLabelsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.MeterTickLabelFontProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.PieLabelFormatProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.PieLegendLabelFormatProperty;
@@ -244,10 +262,14 @@ import com.jaspersoft.ireport.designer.sheet.properties.charts.ScatterDomainAxis
 import com.jaspersoft.ireport.designer.sheet.properties.charts.ScatterDomainAxisMinValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.ScatterRangeAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.ScatterRangeAxisMinValueExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.ScatterXAxisVerticalTickLabelsProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.ScatterYAxisVerticalTickLabelsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.TimeSeriesDomainAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.TimeSeriesDomainAxisMinValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.TimeSeriesRangeAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.TimeSeriesRangeAxisMinValueExpressionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.TimeSeriesTimeAxisVerticalTickLabelsProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.TimeSeriesValueAxisVerticalTickLabelsProperty;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.charts.design.JRDesignAreaPlot;
@@ -362,6 +384,8 @@ public class ChartPropertiesFactory {
             propertySet.put(new BarCategoryAxisLabelFontProperty((JRDesignBarPlot)plot, jd));
             propertySet.put(new BarCategoryAxisLabelColorProperty((JRDesignBarPlot)plot));
             propertySet.put(new BarCategoryAxisTickLabelMaskProperty((JRDesignBarPlot)plot));
+            propertySet.put(new BarCategoryAxisVerticalTickLabelsProperty((JRDesignBarPlot)plot));
+            propertySet.put(new BarCategoryAxisTickLabelRotationProperty((JRDesignBarPlot)plot));
             propertySet.put(new BarCategoryAxisTickLabelFontProperty((JRDesignBarPlot)plot, jd));
             propertySet.put(new BarCategoryAxisTickLabelColorProperty((JRDesignBarPlot)plot));
             propertySet.put(new BarCategoryAxisLineColorProperty((JRDesignBarPlot)plot));
@@ -369,6 +393,7 @@ public class ChartPropertiesFactory {
             propertySet.put(new BarValueAxisLabelFontProperty((JRDesignBarPlot)plot, jd));
             propertySet.put(new BarValueAxisLabelColorProperty((JRDesignBarPlot)plot));
             propertySet.put(new BarValueAxisTickLabelMaskProperty((JRDesignBarPlot)plot));
+            propertySet.put(new BarValueAxisVerticalTickLabelsProperty((JRDesignBarPlot)plot));
             propertySet.put(new BarValueAxisTickLabelFontProperty((JRDesignBarPlot)plot, jd));
             propertySet.put(new BarValueAxisTickLabelColorProperty((JRDesignBarPlot)plot));
             propertySet.put(new BarValueAxisLineColorProperty((JRDesignBarPlot)plot));
@@ -387,6 +412,8 @@ public class ChartPropertiesFactory {
             propertySet.put(new Bar3DCategoryAxisLabelFontProperty((JRDesignBar3DPlot)plot, jd));
             propertySet.put(new Bar3DCategoryAxisLabelColorProperty((JRDesignBar3DPlot)plot));
             propertySet.put(new Bar3DCategoryAxisTickLabelMaskProperty((JRDesignBar3DPlot)plot));
+            propertySet.put(new Bar3DCategoryAxisVerticalTickLabelsProperty((JRDesignBar3DPlot)plot));
+            propertySet.put(new Bar3DCategoryAxisTickLabelRotationProperty((JRDesignBar3DPlot)plot));
             propertySet.put(new Bar3DCategoryAxisTickLabelFontProperty((JRDesignBar3DPlot)plot, jd));
             propertySet.put(new Bar3DCategoryAxisTickLabelColorProperty((JRDesignBar3DPlot)plot));
             propertySet.put(new Bar3DCategoryAxisLineColorProperty((JRDesignBar3DPlot)plot));
@@ -394,6 +421,7 @@ public class ChartPropertiesFactory {
             propertySet.put(new Bar3DValueAxisLabelFontProperty((JRDesignBar3DPlot)plot, jd));
             propertySet.put(new Bar3DValueAxisLabelColorProperty((JRDesignBar3DPlot)plot));
             propertySet.put(new Bar3DValueAxisTickLabelMaskProperty((JRDesignBar3DPlot)plot));
+            propertySet.put(new Bar3DValueAxisVerticalTickLabelsProperty((JRDesignBar3DPlot)plot));
             propertySet.put(new Bar3DValueAxisTickLabelFontProperty((JRDesignBar3DPlot)plot, jd));
             propertySet.put(new Bar3DValueAxisTickLabelColorProperty((JRDesignBar3DPlot)plot));
             propertySet.put(new Bar3DValueAxisLineColorProperty((JRDesignBar3DPlot)plot));
@@ -401,7 +429,7 @@ public class ChartPropertiesFactory {
             propertySet.put(new Bar3DRangeAxisMaxValueExpressionProperty((JRDesignBar3DPlot)plot, dataset));
 
         }
-        else if (plot instanceof JRDesignLinePlot)
+        else if (plot instanceof JRDesignLinePlot)//FIXME line plots are use by XYLine charts as well, so X and Y axis props should be present
         {
             propertySet.setDisplayName("LinePlot properties");
             propertySet.put(new LineShowLinesProperty((JRDesignLinePlot)plot));
@@ -410,6 +438,8 @@ public class ChartPropertiesFactory {
             propertySet.put(new LineCategoryAxisLabelFontProperty((JRDesignLinePlot)plot, jd));
             propertySet.put(new LineCategoryAxisLabelColorProperty((JRDesignLinePlot)plot));
             propertySet.put(new LineCategoryAxisTickLabelMaskProperty((JRDesignLinePlot)plot));
+            propertySet.put(new LineCategoryAxisVerticalTickLabelsProperty((JRDesignLinePlot)plot));
+            propertySet.put(new LineCategoryAxisTickLabelRotationProperty((JRDesignLinePlot)plot));
             propertySet.put(new LineCategoryAxisTickLabelFontProperty((JRDesignLinePlot)plot, jd));
             propertySet.put(new LineCategoryAxisTickLabelColorProperty((JRDesignLinePlot)plot));
             propertySet.put(new LineCategoryAxisLineColorProperty((JRDesignLinePlot)plot));
@@ -417,6 +447,7 @@ public class ChartPropertiesFactory {
             propertySet.put(new LineValueAxisLabelFontProperty((JRDesignLinePlot)plot, jd));
             propertySet.put(new LineValueAxisLabelColorProperty((JRDesignLinePlot)plot));
             propertySet.put(new LineValueAxisTickLabelMaskProperty((JRDesignLinePlot)plot));
+            propertySet.put(new LineValueAxisVerticalTickLabelsProperty((JRDesignLinePlot)plot));
             propertySet.put(new LineValueAxisTickLabelFontProperty((JRDesignLinePlot)plot, jd));
             propertySet.put(new LineValueAxisTickLabelColorProperty((JRDesignLinePlot)plot));
             propertySet.put(new LineValueAxisLineColorProperty((JRDesignLinePlot)plot));
@@ -430,6 +461,8 @@ public class ChartPropertiesFactory {
             propertySet.put(new AreaCategoryAxisLabelFontProperty((JRDesignAreaPlot)plot, jd));
             propertySet.put(new AreaCategoryAxisLabelColorProperty((JRDesignAreaPlot)plot));
             propertySet.put(new AreaCategoryAxisTickLabelMaskProperty((JRDesignAreaPlot)plot));
+            propertySet.put(new AreaCategoryAxisVerticalTickLabelsProperty((JRDesignAreaPlot)plot));
+            propertySet.put(new AreaCategoryAxisTickLabelRotationProperty((JRDesignAreaPlot)plot));
             propertySet.put(new AreaCategoryAxisTickLabelFontProperty((JRDesignAreaPlot)plot, jd));
             propertySet.put(new AreaCategoryAxisTickLabelColorProperty((JRDesignAreaPlot)plot));
             propertySet.put(new AreaCategoryAxisLineColorProperty((JRDesignAreaPlot)plot));
@@ -437,6 +470,7 @@ public class ChartPropertiesFactory {
             propertySet.put(new AreaValueAxisLabelFontProperty((JRDesignAreaPlot)plot, jd));
             propertySet.put(new AreaValueAxisLabelColorProperty((JRDesignAreaPlot)plot));
             propertySet.put(new AreaValueAxisTickLabelMaskProperty((JRDesignAreaPlot)plot));
+            propertySet.put(new AreaValueAxisVerticalTickLabelsProperty((JRDesignAreaPlot)plot));
             propertySet.put(new AreaValueAxisTickLabelFontProperty((JRDesignAreaPlot)plot, jd));
             propertySet.put(new AreaValueAxisTickLabelColorProperty((JRDesignAreaPlot)plot));
             propertySet.put(new AreaValueAxisLineColorProperty((JRDesignAreaPlot)plot));
@@ -452,6 +486,7 @@ public class ChartPropertiesFactory {
             propertySet.put(new ScatterXAxisLabelFontProperty((JRDesignScatterPlot)plot, jd));
             propertySet.put(new ScatterXAxisLabelColorProperty((JRDesignScatterPlot)plot));
             propertySet.put(new ScatterXAxisTickLabelMaskProperty((JRDesignScatterPlot)plot));
+            propertySet.put(new ScatterXAxisVerticalTickLabelsProperty((JRDesignScatterPlot)plot));
             propertySet.put(new ScatterXAxisTickLabelFontProperty((JRDesignScatterPlot)plot, jd));
             propertySet.put(new ScatterXAxisTickLabelColorProperty((JRDesignScatterPlot)plot));
             propertySet.put(new ScatterXAxisLineColorProperty((JRDesignScatterPlot)plot));
@@ -459,6 +494,7 @@ public class ChartPropertiesFactory {
             propertySet.put(new ScatterYAxisLabelFontProperty((JRDesignScatterPlot)plot, jd));
             propertySet.put(new ScatterYAxisLabelColorProperty((JRDesignScatterPlot)plot));
             propertySet.put(new ScatterYAxisTickLabelMaskProperty((JRDesignScatterPlot)plot));
+            propertySet.put(new ScatterYAxisVerticalTickLabelsProperty((JRDesignScatterPlot)plot));
             propertySet.put(new ScatterYAxisTickLabelFontProperty((JRDesignScatterPlot)plot, jd));
             propertySet.put(new ScatterYAxisTickLabelColorProperty((JRDesignScatterPlot)plot));
             propertySet.put(new ScatterYAxisLineColorProperty((JRDesignScatterPlot)plot));
@@ -475,6 +511,7 @@ public class ChartPropertiesFactory {
             propertySet.put(new BubbleXAxisLabelFontProperty((JRDesignBubblePlot)plot, jd));
             propertySet.put(new BubbleXAxisLabelColorProperty((JRDesignBubblePlot)plot));
             propertySet.put(new BubbleXAxisTickLabelMaskProperty((JRDesignBubblePlot)plot));
+            propertySet.put(new BubbleXAxisVerticalTickLabelsProperty((JRDesignBubblePlot)plot));
             propertySet.put(new BubbleXAxisTickLabelFontProperty((JRDesignBubblePlot)plot, jd));
             propertySet.put(new BubbleXAxisTickLabelColorProperty((JRDesignBubblePlot)plot));
             propertySet.put(new BubbleXAxisLineColorProperty((JRDesignBubblePlot)plot));
@@ -482,6 +519,7 @@ public class ChartPropertiesFactory {
             propertySet.put(new BubbleYAxisLabelFontProperty((JRDesignBubblePlot)plot, jd));
             propertySet.put(new BubbleYAxisLabelColorProperty((JRDesignBubblePlot)plot));
             propertySet.put(new BubbleYAxisTickLabelMaskProperty((JRDesignBubblePlot)plot));
+            propertySet.put(new BubbleYAxisVerticalTickLabelsProperty((JRDesignBubblePlot)plot));
             propertySet.put(new BubbleYAxisTickLabelFontProperty((JRDesignBubblePlot)plot, jd));
             propertySet.put(new BubbleYAxisTickLabelColorProperty((JRDesignBubblePlot)plot));
             propertySet.put(new BubbleYAxisLineColorProperty((JRDesignBubblePlot)plot));
@@ -499,6 +537,7 @@ public class ChartPropertiesFactory {
             propertySet.put(new TimeSeriesTimeAxisLabelFontProperty((JRDesignTimeSeriesPlot)plot, jd));
             propertySet.put(new TimeSeriesTimeAxisLabelColorProperty((JRDesignTimeSeriesPlot)plot));
             propertySet.put(new TimeSeriesTimeAxisTickLabelMaskProperty((JRDesignTimeSeriesPlot)plot));
+            propertySet.put(new TimeSeriesTimeAxisVerticalTickLabelsProperty((JRDesignTimeSeriesPlot)plot));
             propertySet.put(new TimeSeriesTimeAxisTickLabelFontProperty((JRDesignTimeSeriesPlot)plot, jd));
             propertySet.put(new TimeSeriesTimeAxisTickLabelColorProperty((JRDesignTimeSeriesPlot)plot));
             propertySet.put(new TimeSeriesTimeAxisLineColorProperty((JRDesignTimeSeriesPlot)plot));
@@ -506,6 +545,8 @@ public class ChartPropertiesFactory {
             propertySet.put(new TimeSeriesValueAxisLabelFontProperty((JRDesignTimeSeriesPlot)plot, jd));
             propertySet.put(new TimeSeriesValueAxisLabelColorProperty((JRDesignTimeSeriesPlot)plot));
             propertySet.put(new TimeSeriesValueAxisTickLabelMaskProperty((JRDesignTimeSeriesPlot)plot));
+            propertySet.put(new TimeSeriesValueAxisVerticalTickLabelsProperty((JRDesignTimeSeriesPlot)plot));
+            propertySet.put(new TimeSeriesValueAxisVerticalTickLabelsProperty((JRDesignTimeSeriesPlot)plot));
             propertySet.put(new TimeSeriesValueAxisTickLabelFontProperty((JRDesignTimeSeriesPlot)plot, jd));
             propertySet.put(new TimeSeriesValueAxisTickLabelColorProperty((JRDesignTimeSeriesPlot)plot));
             propertySet.put(new TimeSeriesValueAxisLineColorProperty((JRDesignTimeSeriesPlot)plot));
@@ -523,6 +564,7 @@ public class ChartPropertiesFactory {
             propertySet.put(new HighLowTimeAxisLabelFontProperty((JRDesignHighLowPlot)plot, jd));
             propertySet.put(new HighLowTimeAxisLabelColorProperty((JRDesignHighLowPlot)plot));
             propertySet.put(new HighLowTimeAxisTickLabelMaskProperty((JRDesignHighLowPlot)plot));
+            propertySet.put(new HighLowTimeAxisVerticalTickLabelsProperty((JRDesignHighLowPlot)plot));
             propertySet.put(new HighLowTimeAxisTickLabelFontProperty((JRDesignHighLowPlot)plot, jd));
             propertySet.put(new HighLowTimeAxisTickLabelColorProperty((JRDesignHighLowPlot)plot));
             propertySet.put(new HighLowTimeAxisLineColorProperty((JRDesignHighLowPlot)plot));
@@ -530,6 +572,7 @@ public class ChartPropertiesFactory {
             propertySet.put(new HighLowValueAxisLabelFontProperty((JRDesignHighLowPlot)plot, jd));
             propertySet.put(new HighLowValueAxisLabelColorProperty((JRDesignHighLowPlot)plot));
             propertySet.put(new HighLowValueAxisTickLabelMaskProperty((JRDesignHighLowPlot)plot));
+            propertySet.put(new HighLowValueAxisVerticalTickLabelsProperty((JRDesignHighLowPlot)plot));
             propertySet.put(new HighLowValueAxisTickLabelFontProperty((JRDesignHighLowPlot)plot, jd));
             propertySet.put(new HighLowValueAxisTickLabelColorProperty((JRDesignHighLowPlot)plot));
             propertySet.put(new HighLowValueAxisLineColorProperty((JRDesignHighLowPlot)plot));
@@ -546,6 +589,7 @@ public class ChartPropertiesFactory {
             propertySet.put(new CandlestickTimeAxisLabelFontProperty((JRDesignCandlestickPlot)plot, jd));
             propertySet.put(new CandlestickTimeAxisLabelColorProperty((JRDesignCandlestickPlot)plot));
             propertySet.put(new CandlestickTimeAxisTickLabelMaskProperty((JRDesignCandlestickPlot)plot));
+            propertySet.put(new CandlestickTimeAxisVerticalTickLabelsProperty((JRDesignCandlestickPlot)plot));
             propertySet.put(new CandlestickTimeAxisTickLabelFontProperty((JRDesignCandlestickPlot)plot, jd));
             propertySet.put(new CandlestickTimeAxisTickLabelColorProperty((JRDesignCandlestickPlot)plot));
             propertySet.put(new CandlestickTimeAxisLineColorProperty((JRDesignCandlestickPlot)plot));
@@ -553,6 +597,7 @@ public class ChartPropertiesFactory {
             propertySet.put(new CandlestickValueAxisLabelFontProperty((JRDesignCandlestickPlot)plot, jd));
             propertySet.put(new CandlestickValueAxisLabelColorProperty((JRDesignCandlestickPlot)plot));
             propertySet.put(new CandlestickValueAxisTickLabelMaskProperty((JRDesignCandlestickPlot)plot));
+            propertySet.put(new CandlestickValueAxisVerticalTickLabelsProperty((JRDesignCandlestickPlot)plot));
             propertySet.put(new CandlestickValueAxisTickLabelFontProperty((JRDesignCandlestickPlot)plot, jd));
             propertySet.put(new CandlestickValueAxisTickLabelColorProperty((JRDesignCandlestickPlot)plot));
             propertySet.put(new CandlestickValueAxisLineColorProperty((JRDesignCandlestickPlot)plot));
