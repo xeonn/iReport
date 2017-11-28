@@ -16,6 +16,9 @@
 !include "MUI.nsh"
 !include fileassoc.nsh
 
+; set execution level for Windows Vista
+RequestExecutionLevel user
+
 ; MUI Settings
 !define MUI_ABORTWARNING
 !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\modern-install.ico"
@@ -87,8 +90,10 @@ SectionEnd
 Section -AdditionalIcons
   SetOutPath $INSTDIR
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-  WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME} site.lnk" "$INSTDIR\${PRODUCT_NAME}.url" "URL"
+  
+; CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME} site.lnk" "$INSTDIR\${PRODUCT_NAME}.url" "URL"
+;  WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
+  WriteIniStr "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME} site.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk" "$INSTDIR\uninst.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
@@ -124,16 +129,19 @@ FunctionEnd
 
 Section Uninstall
   !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
+  StrCmp $ICONS_GROUP "" NO_SHORTCUTS
   RMDir /r /REBOOTOK $INSTDIR
 
   Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
-  Delete "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME} site.lnk"
+  Delete "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME} site.url"
   Delete "$DESKTOP\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk"
   Delete "$SMPROGRAMS\$ICONS_GROUP\${PRODUCT_NAME}-${PRODUCT_VERSION}.lnk"
   !insertmacro APP_UNASSOCIATE "jrxml" "iReport.Jrxml"
 
   RMDir "$SMPROGRAMS\$ICONS_GROUP"
   RMDir "$SMPROGRAMS\Jaspersoft"
+
+  NO_SHORTCUTS:
   
   MessageBox MB_YESNO "Do you want to delete the ${PRODUCT_NAME} configuration files too? ($APPDATA\.${PRODUCT_NAME}\${PRODUCT_VERSION})" IDNO configDone
     RMDir /r /REBOOTOK "$APPDATA\.${PRODUCT_NAME}\${PRODUCT_VERSION}"

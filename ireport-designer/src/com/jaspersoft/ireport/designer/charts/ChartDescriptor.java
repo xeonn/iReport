@@ -1,35 +1,26 @@
 /*
- * Copyright (C) 2005 - 2007 JasperSoft Corporation.  All rights reserved. 
- * http://www.jaspersoft.com.
+ * iReport - Visual Designer for JasperReports.
+ * Copyright (C) 2002 - 2009 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
  *
- * Unless you have purchased a commercial license agreement from JasperSoft,
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
  * the following license terms apply:
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as published by
- * the Free Software Foundation.
+ * This program is part of iReport.
  *
- * This program is distributed WITHOUT ANY WARRANTY; and without the
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * iReport is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see http://www.gnu.org/licenses/gpl.txt
- * or write to:
+ * iReport is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
  *
- * Free Software Foundation, Inc.,
- * 59 Temple Place - Suite 330,
- * Boston, MA  USA  02111-1307
- *
- *
- *
- *
- * ChartDescriptor.java
- * 
- * Created on 9 luglio 2005, 0.27
- *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with iReport. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.jaspersoft.ireport.designer.charts;
 
 import net.sf.jasperreports.engine.JRChart;

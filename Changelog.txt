@@ -1,3 +1,13 @@
+2009-09-02 Version 3.6.0 released
+_______________________________________________________________________________
+- Fixed bug 0003991 ClassPath Library for JasperReports netBeans plugin missing files.
+- Fixed bug 0004216 iReport 3.5.3 image height set to 0 causes exception
+- Fixed bug 0004270 "Code39(Extended)" vs. "Code39 (Extended)"
+- Fixed bug 0004196 Missing Expression ID for Barcode Component
+- Support for JasperReports 3.5.3
+- Fixed subreport wizard
+- Fixed bug 15662: "Transform in" should be "Transform to"
+
 2009-08-03 Version 3.5.3 released
 _______________________________________________________________________________
 - Modified ireport.exe to fix a problem when missing the user app data registry key

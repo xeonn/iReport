@@ -5,8 +5,8 @@
         <folder name="palette">
             <folder name="ReportElements">
                  <attr name="SystemFileSystem.localizingBundle" stringvalue="com.jaspersoft.ireport.locale.Bundle"/>
-                 <file name="JRList.irpitem" url="list/JRList.irpitem"/>
-                 <file name="JRBarcode.irpitem" url="barcode/JRBarcode.irpitem"/>
+                 <file name="JRList.irpitem" url="list/jrlist.irpitem"/>
+                 <file name="JRBarcode.irpitem" url="barcode/jrbarcode.irpitem"/>
             </folder>
         </folder>
        <!--

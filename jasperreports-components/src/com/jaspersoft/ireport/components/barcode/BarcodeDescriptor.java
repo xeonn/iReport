@@ -1,8 +1,26 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * iReport - Visual Designer for JasperReports.
+ * Copyright (C) 2002 - 2009 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of iReport.
+ *
+ * iReport is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * iReport is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with iReport. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.jaspersoft.ireport.components.barcode;
 
 import java.util.ArrayList;
@@ -31,7 +49,7 @@ public class BarcodeDescriptor {
             barbecueBarcodes.add(new BarcodeDescriptor("Code128B",                    "/com/jaspersoft/ireport/components/barcode/icons/Code128B.png",                    "Code128B"));
             barbecueBarcodes.add(new BarcodeDescriptor("Code128C",                    "/com/jaspersoft/ireport/components/barcode/icons/Code128C.png",                    "Code128C"));
             barbecueBarcodes.add(new BarcodeDescriptor("Code39",                      "/com/jaspersoft/ireport/components/barcode/icons/Code39.png",                      "Code39"));
-            barbecueBarcodes.add(new BarcodeDescriptor("Code39(Extended)",            "/com/jaspersoft/ireport/components/barcode/icons/Code39_extended.png",             "Code39 (Extended)"));
+            barbecueBarcodes.add(new BarcodeDescriptor("Code39 (Extended)",            "/com/jaspersoft/ireport/components/barcode/icons/Code39_extended.png",             "Code39 (Extended)"));
             barbecueBarcodes.add(new BarcodeDescriptor("EAN128",                      "/com/jaspersoft/ireport/components/barcode/icons/EAN128.png",                      "EAN128"));
             barbecueBarcodes.add(new BarcodeDescriptor("EAN13",                       "/com/jaspersoft/ireport/components/barcode/icons/EAN13.png",                       "EAN13"));
             barbecueBarcodes.add(new BarcodeDescriptor("GlobalTradeItemNumber",       "/com/jaspersoft/ireport/components/barcode/icons/GlobalTradeItemNumber.png",       "GlobalTradeItemNumber"));

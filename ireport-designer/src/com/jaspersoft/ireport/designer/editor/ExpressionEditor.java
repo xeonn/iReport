@@ -1,9 +1,26 @@
 /*
- * ExpressionEditorPanel.java
+ * iReport - Visual Designer for JasperReports.
+ * Copyright (C) 2002 - 2009 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
  *
- * Created on 21 settembre 2007, 9.18
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of iReport.
+ *
+ * iReport is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * iReport is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with iReport. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.jaspersoft.ireport.designer.editor;
 
 import bsh.ParseException;
@@ -416,11 +433,29 @@ public class ExpressionEditor extends javax.swing.JPanel {
         dlm1.addElement( new NamedIconItem(WIZARDS, I18n.getString("ExpressionEditor.IconName.ExprWiz"), NamedIconItem.ICON_FOLDER_WIZARDS ) );
         
         jList1.updateUI();
-        if (dlm1.size() > 0)
-        {
-            jList1.setSelectedIndex(0);
-        }
-        
+
+        // If there are fields, select the fields node by default
+        try {
+            if (dlm1.getSize() > 0)
+            {
+                if (((NamedIconItem)(dlm1.getElementAt(1))).getItem().equals(FIELDS))
+                {
+                    JRDesignDataset ds = getExpressionContext().getDatasets().get(0);
+                    if (ds.getFieldsList().size() > 0)
+                    {
+                        jList1.setSelectedIndex(1);
+                    }
+                    else
+                    {
+                        jList1.setSelectedIndex(0);
+                    }
+                }
+                else
+                {
+                    jList1.setSelectedIndex(0);
+                }
+            }
+        } catch (Exception ex) {}       
         
     }
     
@@ -858,10 +893,14 @@ public class ExpressionEditor extends javax.swing.JPanel {
     }//GEN-LAST:event_jList2MouseClicked
 
     private void jButtonApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonApplyActionPerformed
-        
-        
-        if (dialog != null && dialog.isVisible()) 
+
+        if (dialog != null && dialog.isVisible())
         {
+            // Add the expression to the recent expressions list...
+            String exp = getExpression();
+            recentExpressions.remove(exp);
+            recentExpressions.add(0,exp);
+
             dialogResult = JOptionPane.OK_OPTION;
             dialog.setVisible(false);
             dialog.dispose();
@@ -932,6 +971,7 @@ public class ExpressionEditor extends javax.swing.JPanel {
         dialog.setLocationRelativeTo(null);
         dialog.setTitle(I18n.getString("ExpressionEditor.Title.ExpressionEditor"));
         dialog.setVisible(true);
+
         return dialogResult;
     }
  

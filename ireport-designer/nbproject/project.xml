@@ -649,8 +649,8 @@
                 <binary-origin>release/modules/ext/jfreechart-1.0.12.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/xercesImpl.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/xercesImpl.jar</binary-origin>
+                <runtime-relative-path>ext/xercesImpl-2.7.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/xercesImpl-2.7.0.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/commons-digester-1.7.jar</runtime-relative-path>
@@ -681,8 +681,8 @@
                 <binary-origin>release/modules/ext/xml-apis.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/ant-1.5.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/ant-1.5.1.jar</binary-origin>
+                <runtime-relative-path>ext/ant-1.7.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/ant-1.7.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/commons-beanutils-1.8.0.jar</runtime-relative-path>
@@ -713,8 +713,8 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-3.5.3.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-3.5.3.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-3.6.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-3.6.0.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jaxen-1.1.1.jar</runtime-relative-path>
@@ -897,8 +897,12 @@
                 <binary-origin>release/modules/ext/mondrian-3.1.1.12687-Jaspersoft.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/barcode4j.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/barcode4j.jar</binary-origin>
+                <runtime-relative-path>ext/bcel-5.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/bcel-5.2.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/barcode4j-2.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/barcode4j-2.0.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/commons-pool-1.3.jar</runtime-relative-path>
