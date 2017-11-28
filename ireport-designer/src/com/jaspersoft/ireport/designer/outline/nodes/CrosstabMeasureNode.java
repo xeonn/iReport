@@ -51,6 +51,7 @@ import net.sf.jasperreports.engine.JRExpressionCollector;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.CalculationEnum;
 import org.openide.actions.CopyAction;
 import org.openide.actions.CutAction;
 import org.openide.actions.DeleteAction;
@@ -409,11 +410,11 @@ public class CrosstabMeasureNode extends IRAbstractNode implements PropertyChang
             {
                 measure.setValueClassName( "java.lang.Integer");
             }
-            else if (measure.getValueExpression() != null &&
-                     measure.getValueExpression().getValueClassName() != null)
-            {
-                measure.setValueClassName( measure.getValueExpression().getValueClassName() );
-            }
+            //else if (measure.getValueExpression() != null &&
+            //         measure.getValueExpression().getValueClassName() != null)
+            //{
+            //    measure.setValueClassName( measure.getValueExpression().getValueClassName() );
+            //}
         }
         
         public JRDesignCrosstab getCrosstab() {
@@ -487,10 +488,14 @@ public class CrosstabMeasureNode extends IRAbstractNode implements PropertyChang
         @Override
         public void setString(String value) {
            getMeasure().setValueClassName(value);
+           
            if (getMeasure().getValueExpression() != null)
            {
-               ((JRDesignExpression)getMeasure().getValueExpression()).setValueClassName("java.lang.Object");
-               //((JRDesignExpression)getMeasure().getValueExpression()).setValueClassName(value);
+               if (getMeasure().getCalculationValue() != CalculationEnum.COUNT &&
+                   getMeasure().getCalculationValue() != CalculationEnum.DISTINCT_COUNT)
+               {
+                ((JRDesignExpression)getMeasure().getValueExpression()).setValueClassName(value);
+               }
            }
         }
 
@@ -592,8 +597,8 @@ public class CrosstabMeasureNode extends IRAbstractNode implements PropertyChang
         @Override
         public void setExpression(JRDesignExpression expression) {
             // TODO: check the best way to solve the class expression problem...
-            if (measure.getCalculation() == JRDesignVariable.CALCULATION_COUNT ||
-                measure.getCalculation() == JRDesignVariable.CALCULATION_DISTINCT_COUNT)
+            if (measure.getCalculationValue() == CalculationEnum.COUNT ||
+                measure.getCalculationValue() == CalculationEnum.DISTINCT_COUNT)
             {
                 expression.setValueClassName("java.lang.Object"); //measure.getValueClassName()
             }

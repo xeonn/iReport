@@ -38,7 +38,7 @@ import org.openide.nodes.Node;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
 
-public final class SendElementBackwardAction extends NodeAction {
+public final class SendElementBackwardAction extends AbstractOrderChangeAction {
 
     public String getName() {
         return I18n.getString("SendElementBackwardAction.Name");
@@ -88,11 +88,15 @@ public final class SendElementBackwardAction extends NodeAction {
         Arrays.sort(indexes);
         for (int i=0; i<indexes.length; ++i)
         {
+            if (indexes[i] == 0) continue;
             swap(perms, indexes[i]-1, indexes[i]);
         }
 
 
         ((Index.KeysChildren)parent.getChildren()).getIndex().reorder(perms);
+
+        AbstractOrderChangeAction.fireChangeOrder();
+
 /*
         JRElementGroup groupContainer = null;
         List objectsToMove = new ArrayList();
@@ -229,13 +233,6 @@ public final class SendElementBackwardAction extends NodeAction {
         }
         
         return true;
-    }
-
-    @Override
-    public JMenuItem getPopupPresenter() {
-        JMenuItem item = super.getPopupPresenter();
-        item.setIcon(getIcon());
-        return item;
     }
 
     

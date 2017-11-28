@@ -35,6 +35,8 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.query.JRCsvQueryExecuter;
+import net.sf.jasperreports.engine.query.JRCsvQueryExecuterFactory;
 
 /**
  *
@@ -47,6 +49,7 @@ public class JRCSVDataSourceConnection extends IReportConnection implements Wiza
     private String fieldDelimiter = ",";
     private boolean useFirstRowAsHeader = false;
     private String customDateFormat = "";
+    private boolean qeMode = false;
         
     private String filename;
     
@@ -83,7 +86,8 @@ public class JRCSVDataSourceConnection extends IReportConnection implements Wiza
         map.put("fieldDelimiter", Misc.nvl( Misc.addSlashesString(this.getFieldDelimiter()) ,"") );
         map.put("useFirstRowAsHeader", Misc.nvl(""+this.isUseFirstRowAsHeader() ,"") );
         map.put("customDateFormat", Misc.nvl(this.getCustomDateFormat() ,"") );
-        
+        map.put("queryExecuterMode", ""+isQeMode() );
+
         for (int i=0; i< getColumnNames().size(); ++i)
         {
             map.put("COLUMN_" + i,getColumnNames().elementAt(i) );
@@ -108,7 +112,10 @@ public class JRCSVDataSourceConnection extends IReportConnection implements Wiza
         }
         this.setUseFirstRowAsHeader( ((String)map.get("useFirstRowAsHeader")).equals("true"));
         this.setCustomDateFormat( (String)map.get("customDateFormat"));
-        
+        if (map.get("queryExecuterMode") != null)
+        {
+            this.setQeMode( ((String)map.get("queryExecuterMode")).equals("true"));
+        }
         int i = 0;
         while (map.containsKey("COLUMN_" + i))
         {
@@ -298,6 +305,63 @@ public class JRCSVDataSourceConnection extends IReportConnection implements Wiza
 
     public String designQuery(String query) {
         return query;
+    }
+
+    /**
+     * @return the qeMode
+     */
+    public boolean isQeMode() {
+        return qeMode;
+    }
+
+    /**
+     * @param qeMode the qeMode to set
+     */
+    public void setQeMode(boolean qeMode) {
+        this.qeMode = qeMode;
+    }
+
+    @Override
+    public boolean isJRDataSource() {
+        if (isQeMode()) return false;
+        return true;
+    }
+
+    /**
+     * Add all the CSV parameters required to execute the report
+     * in query execute mode...
+     * @param map
+     * @return
+     * @throws net.sf.jasperreports.engine.JRException
+     */
+    @Override
+    public java.util.Map getSpecialParameters(java.util.Map map) throws net.sf.jasperreports.engine.JRException
+    {
+        if (isQeMode())
+        {
+            System.out.println("Setting parameters for the CSV query executer");
+            map.put( JRCsvQueryExecuterFactory.CSV_FILE, new File(this.getFilename()));
+            if (this.getCustomDateFormat() != null && this.getCustomDateFormat().length() > 0)
+            {
+                map.put( JRCsvQueryExecuterFactory.CSV_DATE_FORMAT, new SimpleDateFormat(this.getCustomDateFormat()) );
+            }
+ 
+            // This particular setting must be fixed in JR first
+            //map.put( JRCsvQueryExecuterFactory.CSV_FIELD_DELIMITER, new java.lang.Character( getFieldDelimiter().charAt(0) ));
+            map.put( JRCsvQueryExecuterFactory.CSV_RECORD_DELIMITER, getRecordDelimiter());
+            map.put( JRCsvQueryExecuterFactory.CSV_USE_FIRST_ROW_AS_HEADER, new java.lang.Boolean(isUseFirstRowAsHeader()));
+
+            if (!isUseFirstRowAsHeader())
+            {
+                String[] names = new String[getColumnNames().size()];
+                for (int i=0; i<names.length; ++i )
+                {
+                    names[i] = ""+getColumnNames().elementAt(i);
+                }
+                map.put( JRCsvQueryExecuterFactory.CSV_COLUMN_NAMES_ARRAY, names);
+            }
+        }
+        return map;
     }
     
 }

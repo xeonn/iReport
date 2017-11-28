@@ -162,8 +162,15 @@ public abstract class CreateReportElementsAction extends PaletteItemAction
                     }
                     else
                     {
+                            // In case the element is added to the band... let's do our best to keep the element inside the band itself...
+                            int newYLocation = pLocationInBand.y;
+                            if (newYLocation + element.getHeight() > b.getHeight())
+                            {
+                                newYLocation = b.getHeight() - element.getHeight();
+                                if (newYLocation < 0) newYLocation=0;
+                            }
                             element.setX(pLocationInBand.x);
-                            element.setY(pLocationInBand.y);
+                            element.setY(newYLocation);
                             adjustElement(elements,k,theScene, jasperDesign, b, location);
                             b.addElement(element);
                     }

@@ -250,12 +250,22 @@
     <delete file="${dist.dir}/${app.name}.app/Contents/Resources/${app.name}.icns"/>
     <copy file="${basedir}/etc/ireport.icns" tofile="${dist.dir}/${app.name}.app/Contents/Resources/${app.name}.icns"/>
     <mkdir dir="${dist.dir}/${distro.zipfilename}"/>
+
     
     <copy todir="${dist.dir}/${app.name}.app/Contents/Resources/${app.name}">
         <fileset dir="${netbeans.dest.dir}">
             <patternset refid="locale.platform.included.files"/>
         </fileset>
     </copy>
+    <!-- Patch the menu name.... -->
+    <replace file="${dist.dir}/${app.name}.app/Contents/Resources/${app.name}/bin/${app.name}" value="-J-Xdock:name='${app.title.short}' \">
+            <replacetoken><![CDATA[-J-Xdock:name='"$APPNAME"' \]]></replacetoken>
+    </replace>
+    <exec executable="chmod">
+        <arg value="755"/>
+        <arg value="${dist.dir}/${app.name}.app/Contents/Resources/${app.name}/bin/${app.name}"/>
+    </exec>
+    <!-- End patch menu name .... -->
     <move file="${dist.dir}/${app.name}.app" tofile="${dist.dir}/${distro.zipfilename}/${app.title}.app"/>
     <symlink link="${dist.dir}/${distro.zipfilename}/Applications" resource="/Applications"/>
     <copy  todir="${dist.dir}/${distro.zipfilename}">

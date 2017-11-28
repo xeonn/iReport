@@ -154,7 +154,7 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
     public PasteType getDropType(Transferable t, final int action, final int index) {
 
         final Node dropNode = NodeTransfer.node(t, DnDConstants.ACTION_COPY_OR_MOVE + NodeTransfer.CLIPBOARD_CUT);
-        final int dropAction = action; //DnDUtilities.getTransferAction(t);
+        final int dropAction = DnDUtilities.getTransferAction(t);
         
         final int insertAt = index;
 
@@ -192,19 +192,7 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
                         // At this point lastSystemDefinedVariableIndex contains the first valid index
                         // to add a variable and currentIndex contains the index of the variable in the list
                         // if present
-/*
-                        boolean duplicate = false;
-                        if (insertAt != -1 && currentIndex>=0)
-                        {
-                            // the variable has been dropped over its parent node.
-                            // check the move type...
-                            if (dropAction == NodeTransfer.COPY)
-                            {
-                                duplicate = true;
-                            }
-                        }
- */
-                        if(dropAction == DnDConstants.ACTION_MOVE) // Moving variable...
+                        if( (dropAction & NodeTransfer.MOVE) != 0 ) // Moving parameter...
                         {
                             int newIndex = -1;
                             if (currentIndex != -1) { // Case 1: Moving in the list...
@@ -217,9 +205,9 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
                                         break;
                                     }
                                 }
-                                
+
                                 list.remove(variable);
-                                if (newIndex == -1) 
+                                if (newIndex == -1)
                                 {
                                     list.add(variable);
                                 }
@@ -227,22 +215,22 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
                                 {
                                     list.add(Math.max(newIndex, lastSystemDefinedVariableIndex+1),variable );
                                 }
-                            } 
-                            else // Adding a copy to the list 
+                            }
+                            else // Adding a copy to the list
                             {
                                 try {
-                                    JRDesignVariable newVariable = ModelUtils.cloneVariable(variable, getDataset());
+                                    JRDesignVariable newVariable = ModelUtils.cloneVariable(variable);
                                     Map map = getDataset().getVariablesMap();
                                     int k = 1;
                                     while (map.containsKey(newVariable.getName())) {
-                                        newVariable.setName(variable.getName() + "_" + k);
+                                        newVariable.setName(newVariable.getName() + "_" + k);
                                         k++;
                                     }
                                     (getDataset()).addVariable(newVariable);
-                                    // Remove the variable from the old list...
+                                    // Remove the parameter from the old list...
                                     if (dropNode.getParentNode() instanceof VariablesNode) {
-                                        VariablesNode pn = (VariablesNode) dropNode.getParentNode();
-                                        pn.getDataset().removeVariable(variable);
+                                        VariablesNode vn = (VariablesNode) dropNode.getParentNode();
+                                        vn.getDataset().removeVariable(variable);
                                     }
                                 } catch (JRException ex) {
                                     Exceptions.printStackTrace(ex);
@@ -252,11 +240,11 @@ public class VariablesNode extends IRIndexedNode implements PropertyChangeListen
                         else // Duplicating
                         {
                             try {
-                                JRDesignVariable newVariable = ModelUtils.cloneVariable(variable, getDataset());
+                                JRDesignVariable newVariable = ModelUtils.cloneVariable(variable);
                                 Map map = getDataset().getVariablesMap();
                                 int k = 1;
                                 while (map.containsKey(newVariable.getName())) {
-                                    newVariable.setName(variable.getName() + "_" + k);
+                                    newVariable.setName(newVariable.getName() + "_" + k);
                                     k++;
                                 }
                                 (getDataset()).addVariable(newVariable);

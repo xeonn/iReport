@@ -28,7 +28,6 @@ import com.jaspersoft.ireport.designer.outline.nodes.ElementGroupNode;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import java.util.Arrays;
 import java.util.List;
-import javax.swing.JMenuItem;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -36,9 +35,9 @@ import org.openide.nodes.Children;
 import org.openide.nodes.Index;
 import org.openide.nodes.Node;
 import org.openide.util.HelpCtx;
-import org.openide.util.actions.NodeAction;
 
-public final class SendElementToBackAction extends NodeAction {
+public final class SendElementToBackAction extends AbstractOrderChangeAction {
+
 
     public String getName() {
         return I18n.getString("SendElementToBackAction.Name");
@@ -86,12 +85,31 @@ public final class SendElementToBackAction extends NodeAction {
         }
 
         Arrays.sort(indexes);
+        int backPosition=0;
+
         for (int i=0; i<indexes.length; ++i)
         {
-            swap(perms, i, indexes[i]);
+            //swap is not correct (bug 0005038)
+            //swap(perms, elementsCount - 1 - processed, indexes[i]);
+            //processed++;
+
+            int currentPos = perms[indexes[i]];
+            // Increment all the others...
+            for (int j=0; j<perms.length; ++j)
+            {
+                if (perms[j] < currentPos && perms[j] >= backPosition)
+                {
+                    perms[j]++;
+                }
+            }
+            perms[indexes[i]]=backPosition;
+
+            backPosition++;
         }
 
+        AbstractOrderChangeAction.fireChangeOrder();
         ((Index.KeysChildren)parent.getChildren()).getIndex().reorder(perms);
+
 
     }
 
@@ -165,12 +183,7 @@ public final class SendElementToBackAction extends NodeAction {
         return true;
     }
 
-    @Override
-    public JMenuItem getPopupPresenter() {
-        JMenuItem item = super.getPopupPresenter();
-        item.setIcon(getIcon());
-        return item;
-    }
+    
 
     
 }

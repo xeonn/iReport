@@ -23,25 +23,22 @@
  */
 package com.jaspersoft.ireport.designer.outline.nodes;
 
-import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.StringListProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.StringProperty;
-import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import java.awt.datatransfer.Transferable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.Action;
-import javax.swing.SwingUtilities;
-import net.sf.jasperreports.crosstabs.JRCrosstabGroup;
 import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
@@ -54,12 +51,11 @@ import net.sf.jasperreports.crosstabs.fill.calculation.BucketDefinition;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRExpressionChunk;
 import net.sf.jasperreports.engine.JRExpressionCollector;
-import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.Pair;
-import org.openide.ErrorManager;
 import org.openide.actions.CopyAction;
 import org.openide.actions.CutAction;
 import org.openide.actions.DeleteAction;
@@ -67,10 +63,8 @@ import org.openide.actions.RenameAction;
 import org.openide.actions.ReorderAction;
 import org.openide.nodes.Children;
 import org.openide.nodes.NodeTransfer;
-import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
 import org.openide.util.Lookup;
-import org.openide.util.Mutex;
 import org.openide.util.actions.SystemAction;
 import org.openide.util.datatransfer.ExTransferable;
 import org.openide.util.lookup.Lookups;
@@ -130,6 +124,7 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
         set.put(new TotalPositionProperty( getGroup(),getCrosstab()));
         
         set.put(new BucketExpressionProperty((JRDesignCrosstabBucket)getGroup().getBucket(), getCrosstab(), jd));
+        set.put(new BucketClassNameProperty((JRDesignCrosstabGroup)getGroup(), getCrosstab(), jd));
         set.put(new BucketComparatorExpressionProperty((JRDesignCrosstabBucket)getGroup().getBucket(), getCrosstab(), jd));
         set.put(new BucketOrderProperty((JRDesignCrosstabBucket)getGroup().getBucket(), getCrosstab()));
         set.put(new BucketOrderByExpressionProperty((JRDesignCrosstabBucket)getGroup().getBucket(), getCrosstab(), jd));
@@ -271,6 +266,11 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
         if (ModelUtils.containsProperty(  this.getPropertySets(), evt.getPropertyName()))
         {
             this.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue() );
+            
+            if (evt.getPropertyName().equals(JRDesignCrosstabBucket.PROPERTY_EXPRESSION))
+            {
+                this.firePropertyChange(JRDesignExpression.PROPERTY_VALUE_CLASS_NAME, null, "");
+            }
         }
         
     }
@@ -563,7 +563,7 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
         
         @Override
         public String getDefaultExpressionClassName() {
-            return "java.lang.String";
+            return "java.lang.Object";
         }
 
         @Override
@@ -585,6 +585,112 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
         }
 
         
+    }
+
+
+    /**
+     *  Class to manage the JRDesignParameter.PROPERTY_VALUE_CLASS_NAME property
+     */
+    public class BucketClassNameProperty extends StringListProperty {
+
+        private final JRDesignCrosstabGroup group;
+        private final JRDesignCrosstab crosstab;
+        private final JasperDesign jd;
+
+        @SuppressWarnings("unchecked")
+        public BucketClassNameProperty(JRDesignCrosstabGroup group, JRDesignCrosstab crosstab, JasperDesign jd)
+        {
+            super(group);
+            this.crosstab = crosstab;
+            setName( JRDesignExpression.PROPERTY_VALUE_CLASS_NAME);
+            setDisplayName("Bucket Value Class");
+            setShortDescription("Bucket Value Class");
+            this.group = group;
+            this.jd = jd;
+            crosstab.getEventSupport().addPropertyChangeListener(JRDesignCrosstab.PROPERTY_DATASET,  new PropertyChangeListener() {
+
+                public void propertyChange(PropertyChangeEvent evt) {
+                    setValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT, ModelUtils.getElementDataset(getCrosstab(), getJasperDesign()));
+                }
+            });
+        }
+
+        @Override
+        public List getTagList() {
+            java.util.List classes = new ArrayList();
+            classes.add(new Tag("java.lang.Boolean"));
+            classes.add(new Tag("java.lang.Byte"));
+            classes.add(new Tag("java.util.Date"));
+            classes.add(new Tag("java.sql.Timestamp"));
+            classes.add(new Tag("java.sql.Time"));
+            classes.add(new Tag("java.lang.Double"));
+            classes.add(new Tag("java.lang.Float"));
+            classes.add(new Tag("java.lang.Integer"));
+            classes.add(new Tag("java.lang.Long"));
+            classes.add(new Tag("java.lang.Short"));
+            classes.add(new Tag("java.math.BigDecimal"));
+            classes.add(new Tag("java.lang.Number"));
+            classes.add(new Tag("java.lang.String"));
+            classes.add(new Tag("java.lang.Object"));
+            return classes;
+        }
+
+        @Override
+        public String getString() {
+            return (getBucket().getExpression() != null) ? getBucket().getExpression().getValueClassName() : null;
+        }
+
+        @Override
+        public String getOwnString() {
+            return getString();
+        }
+
+        @Override
+        public boolean supportsDefaultValue() {
+            return true;
+        }
+
+        @Override
+        public void setString(String value) {
+           if (getBucket().getExpression() != null)
+           {
+               ((JRDesignExpression)getBucket().getExpression()).setValueClassName(value);
+
+               // Introspect the crosstab and change the class for all the expressions which use this group name...
+               List<JRDesignElement> elements = ModelUtils.getAllElements(crosstab);
+               for (JRDesignElement ele : elements)
+               {
+                   if (ele instanceof JRDesignTextField)
+                   {
+                       JRDesignTextField dtf = (JRDesignTextField)ele;
+                       if (dtf.getExpression() != null &&
+                           dtf.getExpression().getText() != null &&
+                           dtf.getExpression().getText().trim().equals("$V{" + group.getName() + "}"))
+                       {
+                           ((JRDesignExpression)dtf.getExpression()).setValueClassName(value);
+                       }
+                   }
+               }
+           }
+        }
+
+        public JasperDesign getJasperDesign()
+        {
+            return jd;
+        }
+
+        public JRDesignCrosstabBucket getBucket() {
+            return (JRDesignCrosstabBucket)group.getBucket();
+        }
+
+        public JRDesignCrosstab getCrosstab() {
+            return crosstab;
+        }
+
+        @Override
+        public String getDefaultString() {
+            return "java.lang.Object";
+        }
     }
  
     /**

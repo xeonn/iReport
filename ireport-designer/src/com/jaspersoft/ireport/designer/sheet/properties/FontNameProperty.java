@@ -112,8 +112,6 @@ public class FontNameProperty extends PropertySupport.ReadWrite implements Prefe
 
     private void updateTags()
     {
-        System.out.println("-----------------------------------------------------------------------------------------------------------\nUpdating tags...");
-
         java.util.List classes = new ArrayList();
 
         ClassLoader oldCL = Thread.currentThread().getContextClassLoader();

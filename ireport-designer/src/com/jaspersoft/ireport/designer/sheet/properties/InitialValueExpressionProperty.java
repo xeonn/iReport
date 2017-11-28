@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
+import net.sf.jasperreports.engine.type.CalculationEnum;
 
 
 /**
@@ -84,15 +85,18 @@ public final class InitialValueExpressionProperty extends ExpressionProperty
         // variable...
         if (expression != null)
         {
-            if (variable.getCalculation() == JRDesignVariable.CALCULATION_COUNT ||
-                variable.getCalculation() == JRDesignVariable.CALCULATION_DISTINCT_COUNT)
-            {
-                expression.setValueClassName("java.lang.Object");
-            }
-            else
+            /*
+             if (variable.getCalculationValue() == CalculationEnum.COUNT ||
+                variable.getCalculationValue() == CalculationEnum.DISTINCT_COUNT)
             {
                 expression.setValueClassName(variable.getValueClassName());
             }
+            else
+            {
+                
+            }
+             */
+            expression.setValueClassName(variable.getValueClassName());
         }
         variable.setInitialValueExpression(expression);
     }

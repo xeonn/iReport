@@ -38,7 +38,7 @@ import org.openide.nodes.Node;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
 
-public final class BringElementToFrontAction extends NodeAction {
+public final class BringElementToFrontAction extends AbstractOrderChangeAction {
 
     public String getName() {
         return I18n.getString("BringElementToFrontAction.Name");
@@ -85,17 +85,32 @@ public final class BringElementToFrontAction extends NodeAction {
             indexes[i] = allNodes.indexOf(activatedNodes[i]);
         }
 
-        int elementsCount = perms.length;
         Arrays.sort(indexes);
 
-        int processed = 0;
+        int frontPosition = perms.length-1;
+
         for (int i=indexes.length-1; i>=0; --i)
         {
-            swap(perms, elementsCount - 1 - processed, indexes[i]);
-            processed++;
+            //swap is not correct (bug 0005038)
+            //swap(perms, elementsCount - 1 - processed, indexes[i]);
+            //processed++;
+
+            int currentPos = perms[indexes[i]];
+            // Increment all the others...
+            for (int j=0; j<perms.length; ++j)
+            {
+                if (perms[j] > currentPos && perms[j] <= frontPosition)
+                {
+                    perms[j]--;
+                }
+            }
+            perms[indexes[i]]=frontPosition;
+
+            frontPosition--;
         }
 
         ((Index.KeysChildren)parent.getChildren()).getIndex().reorder(perms);
+        AbstractOrderChangeAction.fireChangeOrder();
     }
 
 

@@ -1,3 +1,26 @@
+2011-02-28 Version 4.0.1 released
+_______________________________________________________________________________
+- Support for new CSV and namespace aware query executers
+- Fixed Bug 20917 - Single-character typo in tooltip for Stretch With Overflow
+- Fixed Bug 21935 - Copy and Paste Variables not Working
+- Fixed Bug 22299 - cut & paste instead of copy & paste
+- Fixed Bug 21969 - Can't copy & paste a Variable
+- Fixed Bug 21931 - iReport application name on Mac should be shorter
+- Fixed 0005038 "Bring to Front" and "Send to Back" are broken
+- Fixed 0005036 unable to copy/paste variable
+- Fixed Bug 18724 - preview menu
+- Fixed Bug 19791 - JS plugin and custom query executors
+- Fixed Bug 17988 - improve drag & drop behavior
+- Fixed Bug 18717 - behavior when adding a non-renderable image
+- Fixed Bug 18721 - column separator not visible
+- Fixed Bug 18723 - ui improvement: print order property
+- Fixed Bug 18724 - preview menu
+- Fixed Bug 18725 - crosstab groups datatype not editable in properties panel
+- Fixed Bug 18726 - crosstab - group name allows space
+- Fixed Bug 18727 - adding measure via UI causes error in report problems window
+- Fixed Bug 17888 - [Case #11604] Import settings does not really work on Linux
+- Fixed 0004640: Integer variables can't count unless you close/reopen report
+
 2011-01-10 Version 4.0.0 released
 _______________________________________________________________________________
 21066  [Case #16386] Intermittant update problem with default values in XML editor  

@@ -54,8 +54,7 @@ public class IReportOptionProcessor extends OptionProcessor {
     }
 
     @Override
-    protected void process(Env env, Map<Option, String[]> args) throws CommandException {
-
+    protected void process(Env env, Map args) throws CommandException {
         if (args.containsKey(nonetworkOption))
         {
             IReportManager.getInstance().setNoNetwork(true);

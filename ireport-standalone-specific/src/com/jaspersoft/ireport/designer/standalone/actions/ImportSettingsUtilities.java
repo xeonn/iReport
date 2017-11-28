@@ -113,7 +113,7 @@ public class ImportSettingsUtilities {
         try {
         if (f == null || !f.exists() || !f.isDirectory()) return false;
         // Look for the /config/preferences/ directory...
-        File f2 = new File(f, "config/preferences");
+        File f2 = new File(f, "config/Preferences");
         return f2.exists();
         } catch (Exception ex)
         {

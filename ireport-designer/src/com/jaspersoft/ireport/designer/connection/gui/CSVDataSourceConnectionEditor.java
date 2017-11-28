@@ -100,6 +100,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         jLabel15 = new javax.swing.JLabel();
         jTextFieldCSVFilename = new javax.swing.JTextField();
         jButtonCSVFilename = new javax.swing.JButton();
+        jCheckBoxQEMode = new javax.swing.JCheckBox();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel11 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -172,6 +173,19 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         jPanelCSV.add(jButtonCSVFilename, gridBagConstraints);
+
+        jCheckBoxQEMode.setText("Use query executer mode (the report must use the CSV query language)");
+        jCheckBoxQEMode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxQEModeActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        jPanelCSV.add(jCheckBoxQEMode, gridBagConstraints);
 
         jPanel11.setLayout(new java.awt.GridBagLayout());
 
@@ -572,6 +586,10 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
 
         add(jPanelCSV, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jCheckBoxQEModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxQEModeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxQEModeActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -585,6 +603,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
     private javax.swing.JButton jButtonNewParameter;
     private javax.swing.JCheckBox jCheckBoxCVSDateFormat;
     private javax.swing.JCheckBox jCheckBoxCVSFirstRowAsHeader;
+    private javax.swing.JCheckBox jCheckBoxQEMode;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabelSpecialCharacters;
     private javax.swing.JList jListCVSColumns;
@@ -627,6 +646,7 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         {
             JRCSVDataSourceConnection con = (JRCSVDataSourceConnection)iReportConnection;
             this.jTextFieldCSVFilename.setText( con.getFilename() );
+            this.jCheckBoxQEMode.setSelected( con.isQeMode());
             
             if (con.getCustomDateFormat().length() > 0)
             {
@@ -681,7 +701,9 @@ public class CSVDataSourceConnectionEditor extends javax.swing.JPanel implements
         IReportConnection irConn = new JRCSVDataSourceConnection();
 
             ((JRCSVDataSourceConnection)irConn).setFilename( this.jTextFieldCSVFilename.getText().trim() );
-            
+            ((JRCSVDataSourceConnection)irConn).setQeMode(jCheckBoxQEMode.isSelected());
+
+
             if (jRadioButtonCVSSeparatorComma.isSelected()) ((JRCSVDataSourceConnection)irConn).setFieldDelimiter(",");
             if (jRadioButtonCVSSeparatorTab.isSelected()) ((JRCSVDataSourceConnection)irConn).setFieldDelimiter("\t");
             if (jRadioButtonCVSSeparatorSpace.isSelected()) ((JRCSVDataSourceConnection)irConn).setFieldDelimiter(" ");

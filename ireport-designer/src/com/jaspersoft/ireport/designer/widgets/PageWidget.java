@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -179,25 +180,27 @@ public class PageWidget extends Widget {
                 // TODO: show locked document portion 
                 // Column header
                 int c_x = jd.getLeftMargin();
-                if (jd.getPrintOrderValue() != null &&
-                    jd.getPrintOrderValue() == PrintOrderEnum.VERTICAL)
-                {
-                    int c_y0 = ModelUtils.getBandLocation(jd.getColumnHeader(), jd);
-                    int c_y1 = ModelUtils.getBandLocation(jd.getPageFooter(), jd);
-                    for (int i=1; i < jd.getColumnCount(); ++i)
-                    {
-                        c_x += jd.getColumnWidth();
-                        g.drawLine( c_x, c_y0,
-                                    c_x, c_y1);
 
-                        c_x += jd.getColumnSpacing();
-                        g.drawLine( c_x, c_y0,
-                                    c_x, c_y1);
 
-                    }
-                }
-                else
-                {
+//                if (jd.getPrintOrderValue() != null &&
+//                    jd.getPrintOrderValue() == PrintOrderEnum.VERTICAL)
+//                {
+//                    int c_y0 = ModelUtils.getBandLocation(jd.getColumnHeader(), jd);
+//                    int c_y1 = ModelUtils.getBandLocation(jd.getColumnFooter(), jd);
+//                    for (int i=1; i < jd.getColumnCount(); ++i)
+//                    {
+//                        c_x += jd.getColumnWidth();
+//                        g.drawLine( c_x, c_y0,
+//                                    c_x, c_y1);
+//
+//                        c_x += jd.getColumnSpacing();
+//                        g.drawLine( c_x, c_y0,
+//                                    c_x, c_y1);
+//
+//                    }
+//                }
+//                else
+//                {
                     List<JRBand> bands = new ArrayList<JRBand>();
                     if (jd.getColumnHeader() != null) bands.add(jd.getColumnHeader());
                     if (jd.getColumnFooter() != null) bands.add(jd.getColumnFooter());
@@ -206,6 +209,30 @@ public class PageWidget extends Widget {
                     {
                         bands.addAll( Arrays.asList(jd.getDetailSection().getBands()) );
                     }
+
+                    if (jd.getPrintOrderValue() != null &&
+                        jd.getPrintOrderValue() == PrintOrderEnum.VERTICAL)
+                    {
+                          // Add all the group header and footers as well..
+                          List groups = jd.getGroupsList();
+                          for (Object grpObj : groups)
+                          {
+                              JRGroup grp = (JRGroup)grpObj;
+                              if (grp.getGroupHeaderSection() != null &&
+                                  grp.getGroupHeaderSection().getBands() != null &&
+                                  grp.getGroupHeaderSection().getBands().length > 0)
+                              {
+                                  bands.addAll( Arrays.asList( grp.getGroupHeaderSection().getBands() ) );
+                              }
+                              if (grp.getGroupFooterSection() != null &&
+                                  grp.getGroupFooterSection().getBands() != null &&
+                                  grp.getGroupFooterSection().getBands().length > 0)
+                              {
+                                  bands.addAll( Arrays.asList( grp.getGroupFooterSection().getBands() ) );
+                              }
+                          }
+                    }
+
 
                     for (JRBand b : bands)
                     {
@@ -224,7 +251,7 @@ public class PageWidget extends Widget {
 
                         }
                     }
-                }
+//                }
 
             }
             
@@ -415,28 +442,28 @@ public class PageWidget extends Widget {
         if (jd.getColumnCount() <= 1) return;
         // Column header
         int c_x = jd.getLeftMargin();
-        if (jd.getPrintOrderValue() != null &&
-            jd.getPrintOrderValue() == PrintOrderEnum.VERTICAL)
-        {
-            int c_y0 = ModelUtils.getBandLocation(jd.getColumnHeader(), jd);
-            int c_y1 = ModelUtils.getBandLocation(jd.getPageFooter(), jd);
-
-            Paint oldPaint = g.getPaint();
-            g.setPaint(getRestrictedAreaTexture());
-            int x0 = jd.getLeftMargin() + jd.getColumnWidth();
-            int width = jd.getPageWidth() - x0 - jd.getRightMargin();
-
-            if (jd.getColumnDirection() == RunDirectionEnum.RTL)
-            {
-                x0 = jd.getLeftMargin();
-                width = (jd.getColumnCount()-1)*jd.getColumnWidth() + (jd.getColumnCount()-1)*jd.getColumnSpacing();
-            }
-
-            g.fillRect(x0, c_y0, width, c_y1-c_y0);
-            g.setPaint(oldPaint);
-        }
-        else
-        {
+//        if (jd.getPrintOrderValue() != null &&
+//            jd.getPrintOrderValue() == PrintOrderEnum.VERTICAL)
+//        {
+//            int c_y0 = ModelUtils.getBandLocation(jd.getColumnHeader(), jd);
+//            int c_y1 = ModelUtils.getBandLocation(jd.getPageFooter(), jd);
+//
+//            Paint oldPaint = g.getPaint();
+//            g.setPaint(getRestrictedAreaTexture());
+//            int x0 = jd.getLeftMargin() + jd.getColumnWidth();
+//            int width = jd.getPageWidth() - x0 - jd.getRightMargin();
+//
+//            if (jd.getColumnDirection() == RunDirectionEnum.RTL)
+//            {
+//                x0 = jd.getLeftMargin();
+//                width = (jd.getColumnCount()-1)*jd.getColumnWidth() + (jd.getColumnCount()-1)*jd.getColumnSpacing();
+//            }
+//
+//            g.fillRect(x0, c_y0, width, c_y1-c_y0);
+//            g.setPaint(oldPaint);
+//        }
+//        else
+//        {
             List<JRBand> bands = new ArrayList<JRBand>();
             if (jd.getColumnHeader() != null) bands.add(jd.getColumnHeader());
             if (jd.getColumnFooter() != null) bands.add(jd.getColumnFooter());
@@ -446,6 +473,29 @@ public class PageWidget extends Widget {
                 bands.addAll( Arrays.asList(jd.getDetailSection().getBands()) );
             }
 
+            if (jd.getPrintOrderValue() != null &&
+                jd.getPrintOrderValue() == PrintOrderEnum.VERTICAL)
+            {
+                  // Add all the group header and footers as well..
+                  List groups = jd.getGroupsList();
+                  for (Object grpObj : groups)
+                  {
+                      JRGroup grp = (JRGroup)grpObj;
+                      if (grp.getGroupHeaderSection() != null &&
+                          grp.getGroupHeaderSection().getBands() != null &&
+                          grp.getGroupHeaderSection().getBands().length > 0)
+                      {
+                          bands.addAll( Arrays.asList( grp.getGroupHeaderSection().getBands() ) );
+                      }
+                      if (grp.getGroupFooterSection() != null &&
+                          grp.getGroupFooterSection().getBands() != null &&
+                          grp.getGroupFooterSection().getBands().length > 0)
+                      {
+                          bands.addAll( Arrays.asList( grp.getGroupFooterSection().getBands() ) );
+                      }
+                  }
+            }
+            
             int x0 = jd.getLeftMargin() + jd.getColumnWidth();
             int width = jd.getPageWidth() - x0 - jd.getRightMargin();
 
@@ -466,6 +516,6 @@ public class PageWidget extends Widget {
              g.setPaint(oldPaint);
         }
 
-    }
+//    }
     
 }

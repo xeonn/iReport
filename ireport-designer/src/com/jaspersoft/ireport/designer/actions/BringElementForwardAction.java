@@ -38,7 +38,7 @@ import org.openide.nodes.Node;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
 
-public final class BringElementForwardAction extends NodeAction {
+public final class BringElementForwardAction extends AbstractOrderChangeAction {
 
     public String getName() {
         return I18n.getString("BringElementForwardAction.Name");
@@ -93,6 +93,8 @@ public final class BringElementForwardAction extends NodeAction {
         }
 
         ((Index.KeysChildren)parent.getChildren()).getIndex().reorder(perms);
+
+        AbstractOrderChangeAction.fireChangeOrder();
     }
 
 

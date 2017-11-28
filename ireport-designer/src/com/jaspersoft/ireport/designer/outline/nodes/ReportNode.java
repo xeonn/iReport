@@ -236,6 +236,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         columnsSet.put(new ColumnCountProperty( jd ));
         columnsSet.put(new ColumnWidthProperty( jd ));
         columnsSet.put(new ColumnSpacingProperty( jd ));
+        columnsSet.put(new PrintOrderProperty( jd ));
         sheet.put(columnsSet);
         
         Sheet.Set moreSet = Sheet.createPropertiesSet();
@@ -248,7 +249,6 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
         moreSet.put(new SummaryWithPageHeaderAndFooterProperty( jd ));
         moreSet.put(new FloatColumnFooterProperty( jd ));
         moreSet.put(new IgnorePaginationProperty( jd ));
-        moreSet.put(new PrintOrderProperty( jd ));
         moreSet.put(new ColumnDirectionProperty(jd));
         moreSet.put(new WhenNoDataTypeProperty( jd ));
         moreSet.put(new LanguageProperty( jd ));
