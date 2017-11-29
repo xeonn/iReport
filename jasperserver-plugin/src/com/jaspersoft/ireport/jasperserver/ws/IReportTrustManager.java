@@ -1,6 +1,6 @@
 /*
  * iReport - Visual Designer for JasperReports.
- * Copyright (C) 2002 - 2009 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2002 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft,

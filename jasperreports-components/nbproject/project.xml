@@ -99,8 +99,8 @@
             </module-dependencies>
             <public-packages/>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-htmlcomponent-4.7.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-htmlcomponent-4.7.1.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-htmlcomponent-5.0.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-htmlcomponent-5.0.1.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>

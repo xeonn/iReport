@@ -1,6 +1,6 @@
 /*
  * iReport - Visual Designer for JasperReports.
- * Copyright (C) 2002 - 2009 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2002 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -40,7 +40,7 @@ import org.openide.windows.WindowManager;
  */
 public class Installer extends ModuleInstall implements Runnable {
 
-    public static final String VERSION = "5.0.0";//"4.8.0";//"4.7.1";//"4.7.0";//"4.6.0";//"4.5.1";//"4.5.0";//"4.5.0";//"4.1.4";//"4.1.3";//"4.1.2";//"4.1.1";//"4.0.2";//"4.0.1";//"4.0.0";//"3.7.6";//"3.7.6";//"3.7.5";//"3.7.4";//"3.7.3";//"3.7.2";//"3.7.1";//"3.7.0";//"3.6.2";//"3.6.2-RC1";//"3.6.1";//"3.6.0";//"3.6.0";//"3.5.3";//"3.5.2";//"3.5.1";//"3.5.0";//"3.4.0";
+    public static final String VERSION = "5.0.1";//"5.0.0";//"4.8.0";//"4.7.1";//"4.7.0";//"4.6.0";//"4.5.1";//"4.5.0";//"4.5.0";//"4.1.4";//"4.1.3";//"4.1.2";//"4.1.1";//"4.0.2";//"4.0.1";//"4.0.0";//"3.7.6";//"3.7.6";//"3.7.5";//"3.7.4";//"3.7.3";//"3.7.2";//"3.7.1";//"3.7.0";//"3.6.2";//"3.6.2-RC1";//"3.6.1";//"3.6.0";//"3.6.0";//"3.5.3";//"3.5.2";//"3.5.1";//"3.5.0";//"3.4.0";
     
     @Override
     public void restored() {
