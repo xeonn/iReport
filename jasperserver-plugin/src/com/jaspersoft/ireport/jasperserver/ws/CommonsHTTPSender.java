@@ -145,6 +145,7 @@ public class CommonsHTTPSender extends BasicHandler {
     public void invoke(MessageContext msgContext) throws AxisFault {
         
         
+        
         //test();
         
         HttpMethodBase method = null;
@@ -152,6 +153,14 @@ public class CommonsHTTPSender extends BasicHandler {
             log.debug(Messages.getMessage("enter00",
                                           "CommonsHTTPSender::invoke"));
         }
+        
+        
+        
+        HttpClient httpClient = null;
+        InputStream releaseConnectionOnCloseStream = null;
+        
+        httpClient.getHttpConnectionManager().closeIdleConnections(1000l);
+        
         try {
             URL targetURL =
                 new URL(msgContext.getStrProp(MessageContext.TRANS_URL));
@@ -164,7 +173,7 @@ public class CommonsHTTPSender extends BasicHandler {
             
             //org.apache.log4j.LogManager.getRootLogger().setLevel(org.apache.log4j.Level.DEBUG);
             
-            HttpClient httpClient = new HttpClient(this.connectionManager);
+            httpClient = new HttpClient(this.connectionManager);
             // the timeout value for allocation of connections from the pool
             httpClient.getParams().setConnectionManagerTimeout(this.clientProperties.getConnectionPoolTimeout());
 
@@ -282,7 +291,7 @@ public class CommonsHTTPSender extends BasicHandler {
             
             // wrap the response body stream so that close() also releases 
             // the connection back to the pool.
-            InputStream releaseConnectionOnCloseStream = 
+            releaseConnectionOnCloseStream = 
                 createConnectionReleasingInputStream(method);
 
             Header contentEncoding = 
@@ -346,6 +355,11 @@ public class CommonsHTTPSender extends BasicHandler {
         } catch (Exception e) {
             log.debug(e);
             throw AxisFault.makeFault(e);
+        } finally {
+            if (releaseConnectionOnCloseStream != null)
+            {
+                try {releaseConnectionOnCloseStream.close(); } catch (Exception ex){}
+            }
         }
         
         if (log.isDebugEnabled()) {

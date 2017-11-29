@@ -30,6 +30,9 @@ import com.jaspersoft.ireport.designer.connection.JRXMLADataSourceConnection;
 import com.jaspersoft.ireport.designer.connection.CustomHTTPAuthenticator;
 import java.net.Authenticator;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import org.jdesktop.swingx.JXBusyLabel;
+import rex.graphics.datasourcetree.elements.CatalogElement;
 import rex.graphics.datasourcetree.elements.DataSourceTreeElement;
 
 /**
@@ -40,6 +43,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
     
     private IReportConnection iReportConnection = null;
     private boolean init = false;
+    private rex.graphics.datasourcetree.elements.DataSourceTreeElement[] cachedDataSources = null;
     
     /** Creates new form EJBQLConnectionEditor */
     public XMLADataSourceConnectionEditor() {
@@ -59,6 +63,8 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         jPanelXMLA = new javax.swing.JPanel();
         jLabelXMLAUrl = new javax.swing.JLabel();
         jTextFieldXMLAUrl = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
+        jLabelBusy = new org.jdesktop.swingx.JXBusyLabel();
         jButtonGetXMLAMetadata = new javax.swing.JButton();
         jLabelXMLADatasource = new javax.swing.JLabel();
         jComboBoxXMLADatasource = new javax.swing.JComboBox();
@@ -80,7 +86,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
 
         jPanelXMLA.setLayout(new java.awt.GridBagLayout());
 
-        jLabelXMLAUrl.setText(I18n.getString("XMLADataSourceConnectionEditor.Label.UrlXML")); // NOI18N
+        jLabelXMLAUrl.setText("Url of XML/A server");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 2;
@@ -100,20 +106,38 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         gridBagConstraints.insets = new java.awt.Insets(2, 4, 4, 4);
         jPanelXMLA.add(jTextFieldXMLAUrl, gridBagConstraints);
 
-        jButtonGetXMLAMetadata.setText(I18n.getString("XMLADataSourceConnectionEditor.Button.Get_metadata")); // NOI18N
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        jLabelBusy.setText(" ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
+        jPanel1.add(jLabelBusy, gridBagConstraints);
+
+        jButtonGetXMLAMetadata.setText("Get metadata");
         jButtonGetXMLAMetadata.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonGetXMLAMetadataActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
-        jPanelXMLA.add(jButtonGetXMLAMetadata, gridBagConstraints);
+        jPanel1.add(jButtonGetXMLAMetadata, gridBagConstraints);
 
-        jLabelXMLADatasource.setText(I18n.getString("XMLADataSourceConnectionEditor.Label.Datasource")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
+        jPanelXMLA.add(jPanel1, gridBagConstraints);
+
+        jLabelXMLADatasource.setText("Datasource");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -122,6 +146,11 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         jPanelXMLA.add(jLabelXMLADatasource, gridBagConstraints);
 
         jComboBoxXMLADatasource.setMinimumSize(new java.awt.Dimension(23, 22));
+        jComboBoxXMLADatasource.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxXMLADatasourceActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -129,7 +158,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 4);
         jPanelXMLA.add(jComboBoxXMLADatasource, gridBagConstraints);
 
-        jLabelXMLACatalog.setText(I18n.getString("XMLADataSourceConnectionEditor.Label.Catalog")); // NOI18N
+        jLabelXMLACatalog.setText("Catalog");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -138,6 +167,11 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         jPanelXMLA.add(jLabelXMLACatalog, gridBagConstraints);
 
         jComboBoxXMLACatalog.setMinimumSize(new java.awt.Dimension(23, 22));
+        jComboBoxXMLACatalog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxXMLACatalogActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -152,7 +186,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanelXMLA.add(jSeparator8, gridBagConstraints);
 
-        jLabelXMLACube.setText(I18n.getString("XMLADataSourceConnectionEditor.Label.Cube")); // NOI18N
+        jLabelXMLACube.setText("Cube");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -178,7 +212,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
 
         jPanel16.setLayout(new java.awt.GridBagLayout());
 
-        jLabel26.setText(I18n.getString("Global.Label.Username")); // NOI18N
+        jLabel26.setText("Username");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -186,7 +220,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
         jPanel16.add(jLabel26, gridBagConstraints);
 
-        jLabel27.setText(I18n.getString("Global.Label.Password")); // NOI18N
+        jLabel27.setText("Password");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -208,7 +242,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
         jPanel16.add(jTextFieldPassword1, gridBagConstraints);
 
-        jCheckBoxSavePassword1.setText(I18n.getString("Global.CheckBox.Save_password")); // NOI18N
+        jCheckBoxSavePassword1.setText("Save password");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
@@ -217,7 +251,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         jPanel16.add(jCheckBoxSavePassword1, gridBagConstraints);
 
         jLabelAttention.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/connection/gui/warning.png"))); // NOI18N
-        jLabelAttention.setText(I18n.getString("XMLADataSourceConnectionEditor.Label.Warning")); // NOI18N
+        jLabelAttention.setText("<html>ATTENTION! Passwords are stored in clear text. If you dont specify a password now, iReport will ask you for one only when required and will not save it.");
         jLabelAttention.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -239,6 +273,69 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
 
         add(jPanelXMLA, java.awt.BorderLayout.NORTH);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jComboBoxXMLACatalogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxXMLACatalogActionPerformed
+            
+        
+            if (init  || cachedDataSources == null) return;
+            
+            jComboBoxXMLACube.removeAllItems();
+            
+            if (jComboBoxXMLACatalog.getSelectedItem() == null) {
+              return;
+            }
+            
+            if (jComboBoxXMLACatalog.getSelectedItem() instanceof String) return;
+            // Get the catalog cubes...
+            CatalogElement catalog = (CatalogElement)jComboBoxXMLACatalog.getSelectedItem();
+            
+            if (catalog.getChildren() != null)
+            {
+                for (DataSourceTreeElement cube : catalog.getChildren())
+                {
+                    jComboBoxXMLACube.addItem(cube);
+                }
+            }
+            
+    }//GEN-LAST:event_jComboBoxXMLACatalogActionPerformed
+
+    private void jComboBoxXMLADatasourceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxXMLADatasourceActionPerformed
+        
+        if (init || cachedDataSources == null) return;
+            int dsIndex = jComboBoxXMLADatasource.getSelectedIndex();
+            
+            init = true;
+            jComboBoxXMLACatalog.removeAllItems();
+            jComboBoxXMLACube.removeAllItems();
+            
+
+            if (dsIndex >= 0 &&
+                cachedDataSources != null &&
+                dsIndex < cachedDataSources.length)
+            {
+                rex.graphics.datasourcetree.elements.DataSourceTreeElement catalogs[] = cachedDataSources[dsIndex].getChildren();
+                init = true;
+                
+                for (DataSourceTreeElement catalog : catalogs)
+                {
+                    jComboBoxXMLACatalog.addItem(catalog);
+                }
+                
+            }
+            else
+            {
+                jComboBoxXMLACatalog.removeAllItems();
+                jComboBoxXMLACube.removeAllItems();
+            }
+        
+            init = false;
+            
+            if (jComboBoxXMLACatalog.getItemCount() > 0)
+            {
+                jComboBoxXMLACatalog.setSelectedIndex(0);
+            }
+        
+    }//GEN-LAST:event_jComboBoxXMLADatasourceActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -250,10 +347,12 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabelAttention;
+    private javax.swing.JLabel jLabelBusy;
     private javax.swing.JLabel jLabelXMLACatalog;
     private javax.swing.JLabel jLabelXMLACube;
     private javax.swing.JLabel jLabelXMLADatasource;
     private javax.swing.JLabel jLabelXMLAUrl;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanelXMLA;
     private javax.swing.JSeparator jSeparator10;
@@ -336,8 +435,8 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
             return null;
         }
 
-        ((JRXMLADataSourceConnection)irConn).setCatalog( 
-                ((String)this.jComboBoxXMLACatalog.getSelectedItem()).trim());
+            ((JRXMLADataSourceConnection)irConn).setCatalog( 
+                ("" + jComboBoxXMLACatalog.getSelectedItem()).trim());
 
         if (this.jComboBoxXMLACube.getSelectedIndex() < 0) {
             javax.swing.JOptionPane.showMessageDialog(this,
@@ -349,7 +448,7 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
         }
 
         ((JRXMLADataSourceConnection)irConn).setCube( 
-                ((String)this.jComboBoxXMLACube.getSelectedItem()).trim());
+                ("" + this.jComboBoxXMLACube.getSelectedItem()).trim());
 
         ((JRXMLADataSourceConnection)irConn).setUsername( this.jTextFieldUsername1.getText().trim() );
         if (jCheckBoxSavePassword1.isSelected())
@@ -373,233 +472,123 @@ public class XMLADataSourceConnectionEditor extends javax.swing.JPanel implement
                 jLabelXMLACube.setText(I18n.getString("connectionDialog.labelXMLACube","Cube"));
     }
      */
-    
-    
-    /**   
-     * Copyright (C) 2005, 2006 CINCOM SYSTEMS, INC.
-     * All Rights Reserved
-     * www.cincom.com
-     *
-     */
-    private class jComboBoxCatListener implements java.awt.event.ActionListener
-    {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxCatActionPerformed(evt);
-            }
-    }
-    jComboBoxCatListener catListener=new jComboBoxCatListener();
-    
-    private class jComboBoxdsListener implements java.awt.event.ActionListener
-    {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxDatasourceActionPerformed(evt);
-            }
-    }    
-    jComboBoxdsListener dsListener=new jComboBoxdsListener();
-    
-    private void jComboBoxDatasourceActionPerformed(java.awt.event.ActionEvent evt) {                                                    
 
-            jComboBoxXMLACatalog.removeActionListener(catListener);
-            if (this.jComboBoxXMLADatasource.getItemCount() == 0 || this.jComboBoxXMLADatasource.getSelectedIndex() == -1) {
-              return;
-            }
-            String urlstr = this.jTextFieldXMLAUrl.getText().trim();
-            rex.metadata.ServerMetadata smd = new rex.metadata.ServerMetadata(urlstr,this);
-            if (smd.isValidUrl() == false) {
-                JOptionPane.showMessageDialog(this,
-                        //I18n.getString("messages.connectionDialog.xmla.invalidUrl",
-                        I18n.getString("XMLADataSourceConnectionEditor.Message.NoXMLA"),"",JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-
-            this.jComboBoxXMLACatalog.removeAllItems();
-            this.jComboBoxXMLACube.removeAllItems();
-          
-            DataSourceTreeElement dste[] = smd.discoverDataSources();
-            
-            if (dste == null || dste.length == 0) {
-                JOptionPane.showMessageDialog(this,
-                        //I18n.getString("messages.connectionDialog.xmla.noDatasource",
-                        I18n.getString("XMLADataSourceConnectionEditor.Message.NoDatasources"),"",JOptionPane.INFORMATION_MESSAGE);
-                return;
-            } 
-            //filling catalogs
-            boolean found = false;
-            int intI = 0;
-            while (!found && intI < dste.length) {
-                if (dste[intI].getDataSourceInfo().compareTo((String)this.jComboBoxXMLADatasource.getSelectedItem()) == 0){
-                    found = true;
-                }
-                else{
-                    intI++;
-                }
-            }
-            if (!found) {
-                return;
-            }
-            rex.graphics.datasourcetree.elements.DataSourceTreeElement catalogs[] = dste[intI].getChildren();
-            if (catalogs == null || catalogs.length == 0) {
-                JOptionPane.showMessageDialog(this,
-                        //I18n.getString("messages.connectionDialog.xmla.noCatalogs",
-                        I18n.getString("XMLADataSourceConnectionEditor.Message.NoCatalogs"),"",JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-            this.jComboBoxXMLACatalog.removeAllItems();
-   
-            for (intI = 0;intI<catalogs.length;intI++){
-                this.jComboBoxXMLACatalog.addItem(((rex.graphics.datasourcetree.elements.CatalogElement)catalogs[intI]).toString());            
-            }
-        
-            found = false;
-             intI= 0;
-            while (!found && intI < catalogs.length) {
-                if (catalogs[intI].toString().trim().compareTo((String)this.jComboBoxXMLACatalog.getSelectedItem()) == 0){
-                    found = true;
-                }
-                else{
-                    intI++;
-                }
-            }    
-            if (!found) {
-             return;
-            }
-            rex.graphics.datasourcetree.elements.DataSourceTreeElement cubes[] = catalogs[intI].getChildren();
-            if (cubes == null || cubes.length == 0) {
-                return;
-            }
-            this.jComboBoxXMLACube.removeAllItems();
-            for (intI = 0;intI<cubes.length;intI++){
-                this.jComboBoxXMLACube.addItem(((rex.graphics.datasourcetree.elements.CubeElement)cubes[intI]).toString());           
-            }     
-            jComboBoxXMLACatalog.addActionListener(catListener);
-            
-        }
     
     
-    private void jComboBoxCatActionPerformed(java.awt.event.ActionEvent evt) {                                             
-      
-        jComboBoxXMLADatasource.removeActionListener(dsListener);
-         
-       if (this.jComboBoxXMLACatalog.getItemCount() == 0 || this.jComboBoxXMLACatalog.getSelectedIndex() == -1 ) {
-            return;
-       }
-        String urlstr = this.jTextFieldXMLAUrl.getText().trim();
-        rex.metadata.ServerMetadata smd = new rex.metadata.ServerMetadata(urlstr,this);
-        if (smd.isValidUrl() == false) {
-            JOptionPane.showMessageDialog(this,
-                    //I18n.getString("messages.connectionDialog.xmla.invalidUrl",
-                    I18n.getString("XMLADataSourceConnectionEditor.Message.NoXMLA"),"",JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-        
-        this.jComboBoxXMLACube.removeAllItems();
-        
-        rex.graphics.datasourcetree.elements.DataSourceTreeElement dste[] = smd.discoverDataSources();
-        if (dste == null || dste.length == 0) {
-            JOptionPane.showMessageDialog(this,
-                    //I18n.getString("messages.connectionDialog.xmla.noDatasource",
-                    I18n.getString("XMLADataSourceConnectionEditor.Message.NoDatasources"),"",JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-        boolean found = false;
-        int intI = 0;
-        while (!found && intI < dste.length) {
-            if (dste[intI].getDataSourceInfo().compareTo((String)this.jComboBoxXMLADatasource.getSelectedItem()) == 0){
-                found = true;
-            } else{
-                intI++;
-            }
-        }if (!found) {
-            return;
-        }
-        rex.graphics.datasourcetree.elements.DataSourceTreeElement catalogs[] = dste[intI].getChildren();
-        if (catalogs == null || catalogs.length == 0) {
-            JOptionPane.showMessageDialog(this,
-                    //I18n.getString("messages.connectionDialog.xmla.noCatalogs",
-                    I18n.getString("XMLADataSourceConnectionEditor.Message.NoCatalogs"),"",JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-        //add catalogs
-        this.jComboBoxXMLACatalog.removeAllItems();
-        for (intI = 0;intI<catalogs.length;intI++){
-            this.jComboBoxXMLACatalog.addItem(((rex.graphics.datasourcetree.elements.CatalogElement)catalogs[intI]).toString());
-        }
-        found = false;
-        intI = 0;
-        while (!found && intI < catalogs.length) {
-            if (catalogs[intI].toString().compareTo((String)this.jComboBoxXMLACatalog.getSelectedItem()) == 0){
-                found = true;
-            }
-            else{
-                intI++;
-                found=false;
-            }
-        }
-        if (!found) {return;
-        }
-        rex.graphics.datasourcetree.elements.DataSourceTreeElement cubes[] = catalogs[intI].getChildren();
-        if (cubes == null || cubes.length == 0) {
-            JOptionPane.showMessageDialog(this,
-                    //I18n.getString("messages.connectionDialog.xmla.noCubes",
-                    I18n.getString("XMLADataSourceConnectionEditor.Message.NoCubes"),"",JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-        this.jComboBoxXMLACube.removeAllItems();
-        for (intI = 0;intI<cubes.length;intI++){
-            this.jComboBoxXMLACube.addItem(((rex.graphics.datasourcetree.elements.CubeElement)cubes[intI]).toString());
-        }   
-        jComboBoxXMLADatasource.addActionListener(dsListener);
-        
-    }  
     
     private void jButtonGetXMLAMetadataActionPerformed(java.awt.event.ActionEvent evt) {                                                       
-        jComboBoxXMLADatasource.removeActionListener(dsListener);
-        jComboBoxXMLACatalog.removeActionListener(catListener);
         
-        String urlstr = this.jTextFieldXMLAUrl.getText().trim();
+        
+        final String urlstr = this.jTextFieldXMLAUrl.getText().trim();
+        
         
         Authenticator.setDefault(new CustomHTTPAuthenticator( jTextFieldUsername1.getText(), new String(jTextFieldPassword1.getPassword()) ));
 
+        Thread t = new Thread(new Runnable() {
+
+            public void run() {
+                
+                
+                try {
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                        public void run() {
+                            getBusyLabel().setBusy(true);
+                            jButtonGetXMLAMetadata.setEnabled(false);
+                        }
+                    });
+                
+                
+                    rex.metadata.ServerMetadata smd = new rex.metadata.ServerMetadata(urlstr, XMLADataSourceConnectionEditor.this);
+
+                    if (smd.isValidUrl() == false) {
+
+                        SwingUtilities.invokeLater(new Runnable() {
+
+                            public void run() {
+                                JOptionPane.showMessageDialog(XMLADataSourceConnectionEditor.this,
+                               // I18n.getString("messages.connectionDialog.xmla.invalidUrl",
+                                I18n.getString("XMLADataSourceConnectionEditor.Message.NoXMLA"),"",JOptionPane.INFORMATION_MESSAGE);
+
+                            }
+                        });
+                        return;
+                    }
+
+                    try {
+                        cachedDataSources = smd.discoverDataSources();
+
+
+                        SwingUtilities.invokeLater(new Runnable() {
+
+                            public void run() {
+                               refreshDataSources();
+
+                            }
+                        });
+
+                    } catch (Exception ex)
+                    {
+                        SwingUtilities.invokeLater(new Runnable() {
+
+                            public void run() {
+                                JOptionPane.showMessageDialog(XMLADataSourceConnectionEditor.this,
+                               // I18n.getString("messages.connectionDialog.xmla.invalidUrl",
+                                I18n.getString("XMLADataSourceConnectionEditor.Message.NoXMLA"),"",JOptionPane.INFORMATION_MESSAGE);
+
+                            }
+                        });
+                    }
+                }
+                finally
+                {
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                        public void run() {
+                            getBusyLabel().setBusy(false);
+                            jButtonGetXMLAMetadata.setEnabled(true);
+                        }
+                    });
+                }
+            }
+        });
         
-        rex.metadata.ServerMetadata smd = new rex.metadata.ServerMetadata(urlstr,this);
-       
-        if (smd.isValidUrl() == false) {
-            JOptionPane.showMessageDialog(this,
-                   // I18n.getString("messages.connectionDialog.xmla.invalidUrl",
-                    I18n.getString("XMLADataSourceConnectionEditor.Message.NoXMLA"),"",JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
+        t.start();
+        
+    }
+    
+    
+    public void refreshDataSources()
+    {
+        init = true;
         this.jComboBoxXMLADatasource.removeAllItems();
         this.jComboBoxXMLACatalog.removeAllItems();
         this.jComboBoxXMLACube.removeAllItems(); 
-        rex.graphics.datasourcetree.elements.DataSourceTreeElement dste[] = smd.discoverDataSources();
-        if (dste == null) {
+        
+        
+        
+        if (cachedDataSources == null || cachedDataSources.length == 0) {
             JOptionPane.showMessageDialog(this,
                     I18n.getString("XMLADataSourceConnectionEditor.Message.NoDatasources"),"",JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        for (int i=0;i<dste.length;i++){
-            this.jComboBoxXMLADatasource.addItem(dste[i].getDataSourceInfo());
+        
+        
+        for (int i=0;i<cachedDataSources.length;i++){
+            this.jComboBoxXMLADatasource.addItem(cachedDataSources[i].getDataSourceInfo());
         }
-        rex.graphics.datasourcetree.elements.DataSourceTreeElement catalogs[] = dste[0].getChildren();
-        if (catalogs == null || catalogs.length == 0) {
-            return;
+        
+        init = false;
+        
+        if (jComboBoxXMLADatasource.getItemCount() > 0)
+        {
+            jComboBoxXMLADatasource.setSelectedIndex(0);
         }
-        this.jComboBoxXMLACatalog.removeAllItems();
-        for (int i = 0;i<catalogs.length;i++){
-            this.jComboBoxXMLACatalog.addItem(((rex.graphics.datasourcetree.elements.CatalogElement)catalogs[i]).toString());
-        }
-         //get Cube information for the selected catalog...
-         rex.graphics.datasourcetree.elements.DataSourceTreeElement cubes[] = catalogs[0].getChildren();
-        if(cubes ==null || cubes.length==0){
-            return;
-        }
-         this.jComboBoxXMLACube.removeAllItems(); 
-         for(int i=0;i<cubes.length; i++){
-             this.jComboBoxXMLACube.addItem(((rex.graphics.datasourcetree.elements.CubeElement)cubes[i]).toString());
-         }       
-        jComboBoxXMLADatasource.addActionListener(dsListener);
-        jComboBoxXMLACatalog.addActionListener(catListener);
     }
-    
+ 
+    public JXBusyLabel getBusyLabel()
+    {
+        return (JXBusyLabel)jLabelBusy;
+    }
+   
 }
