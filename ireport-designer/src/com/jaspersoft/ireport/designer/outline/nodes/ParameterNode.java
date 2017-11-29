@@ -461,9 +461,11 @@ public class ParameterNode extends IRAbstractNode implements PropertyChangeListe
                     classes.add(new Tag("java.lang.String"));
                     classes.add(new Tag("java.util.Collection"));
                     classes.add(new Tag("java.util.List"));
-                    classes.add(new Tag("java.lang.Object"));
-                    classes.add(new Tag("java.io.InputStream"));
-                    classes.add(new Tag("net.sf.jasperreports.engine.JREmptyDataSource"));
+                    classes.add(new Tag("java.lang.Object","Object"));
+                    classes.add(new Tag("java.io.InputStream","InputStream"));
+                    classes.add(new Tag("net.sf.jasperreports.types.date.DateRange","Date Range"));
+                    classes.add(new Tag("net.sf.jasperreports.types.date.TimestampRange","Timestamp Range"));
+                    classes.add(new Tag("net.sf.jasperreports.engine.JREmptyDataSource","JREmptyDataSource"));
                     editor = new ComboBoxPropertyEditor(true, classes);
                 }
             }

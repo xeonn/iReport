@@ -31,11 +31,14 @@ import java.awt.Frame;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.types.date.DateRange;
+import net.sf.jasperreports.types.date.TimestampRange;
 import org.jdesktop.swingx.JXDatePicker;
 
 
@@ -50,7 +53,7 @@ public class PromptDialog
     private int dialogResult = JOptionPane.CANCEL_OPTION;
     private Object value = null;
     
-    private JXDatePicker datePicker = null;
+    private DateRangeDatePicker datePicker = null;
     private JDateTimePicker datetimePicker = null;
     
     private boolean isCollection = false;
@@ -117,15 +120,16 @@ public class PromptDialog
 
         String format = ""; //NOI18N
         
-        if (param.getValueClassName().equals("java.util.Date"))//NOI18N
+        if (param.getValueClassName().equals("java.util.Date") ||  //NOI18N
+            param.getValueClassName().equals(DateRange.class.getName()) )
         {
             format=IReportManager.getPreferences().get("PromptDateFormat","");//NOI18N
             jPanel4.removeAll();
-            datePicker = new JXDatePicker();
+            datePicker = new DateRangeDatePicker();
             //datePicker.setLocale( I18n.getCurrentLocale() );
             if (format.length() > 0)
             {
-                datePicker.setFormats(new SimpleDateFormat(format));
+                datePicker.setFormats(new DateFormat[]{new SimpleDateFormat(format)});
             }
             
             try {
@@ -133,14 +137,19 @@ public class PromptDialog
                 {
                     datePicker.setDate( (java.util.Date)val );
                 }
+                if (val instanceof String)
+                {
+                    datePicker.setDateRangeExpression( (String)val );
+                }
             } catch (Exception ex)
             {
                 ex.printStackTrace();
             }
             jPanel4.add(datePicker, BorderLayout.CENTER);
         }
-        else if (param.getValueClassName().equals("java.sql.Time") || 
-            param.getValueClassName().equals("java.sql.Timestamp"))
+        else if (param.getValueClassName().equals("java.sql.Time") ||  //NOI18N
+                 param.getValueClassName().equals("java.sql.Timestamp") || //NOI18N
+                 param.getValueClassName().equals(TimestampRange.class.getName()) ) 
         {
             format=IReportManager.getPreferences().get("PromptDateTimeFormat","");//NOI18N
             jPanel4.removeAll();
@@ -153,9 +162,16 @@ public class PromptDialog
             //datetimePicker.setLocale( I18n.getCurrentLocale() );
             
             try {
-                if (val instanceof java.util.Date)
+                if (val != null)
                 {
-                    datetimePicker.setDate( (java.util.Date)val );
+                    if (val instanceof java.util.Date)
+                    {
+                        datetimePicker.setDate( (java.util.Date)val );
+                    }
+                    else if (val instanceof String)
+                    {
+                        datetimePicker.setDateRangeExpression( (String)val );
+                    }
                 }
             } catch (Exception ex)
             {
@@ -445,11 +461,25 @@ public class PromptDialog
         }
         else if (jPanel4.getComponent(0) == datePicker)
         {
-            setValue( datePicker.getDate() );
+            if (datePicker.getDateRangeExpression() != null)
+            {
+                setValue( datePicker.getDateRangeExpression() );
+            }
+            else
+            {
+                setValue( datePicker.getDate() );
+            }
         }
         else if (jPanel4.getComponent(0) == datetimePicker)
         {
-            setValue( datetimePicker.getDate() );
+            if (datetimePicker.getDateRangeExpression() != null)
+            {
+                setValue( datetimePicker.getDateRangeExpression() );
+            }
+            else
+            {
+                setValue( datetimePicker.getDate() );
+            }
         }
         
 

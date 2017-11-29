@@ -26,12 +26,14 @@ package com.jaspersoft.ireport.jasperserver;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.compiler.IReportCompiler;
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -39,11 +41,16 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+import javax.swing.Action;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
+import org.openide.filesystems.Repository;
+import org.openide.loaders.DataFolder;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
+import org.openide.util.lookup.Lookups;
 
 /**
  *
@@ -52,8 +59,8 @@ import org.openide.util.NbPreferences;
     public class JasperServerManager {
 
         
-        public static final int MAX_ID_LENGHT = 30;
-        public static final int MAX_NAME_LENGHT = 30;
+        public static final int MAX_ID_LENGHT = 100;
+        public static final int MAX_NAME_LENGHT = 100;
         
         
     private List<FileResourceUpdatingListener> resourceReplacingListeners = new ArrayList<FileResourceUpdatingListener>();
@@ -549,6 +556,74 @@ import org.openide.util.NbPreferences;
         {
             listener.resourceUpdated(repositoryFile, reportUnit, file);
         }
+    }
+    
+    
+    
+    /**
+     * Look into the virtual file system for element decorators...
+     *
+     * @param element
+     * @return
+     */
+    public static List<Action> getContributedMenuActionsFor(ResourceDescriptor rd) {
+        
+        List<Action> actions = new ArrayList<Action>();
+        
+        FileObject contributorsFileObject = Repository.getDefault().getDefaultFileSystem().getRoot().getFileObject("ireport/server/menucontributors");
+        if (contributorsFileObject == null) return actions;
+        DataFolder contributorsDataFolder = DataFolder.findFolder(contributorsFileObject);
+        if (contributorsDataFolder == null) return actions;
+
+        List<String> list = new ArrayList<String>();
+
+        Collection<? extends ResourceMenuContributor> resourceMenuContributorsInstances = Lookups.forPath("ireport/server/menucontributors").lookupAll(ResourceMenuContributor.class);
+        Iterator<? extends ResourceMenuContributor> it = resourceMenuContributorsInstances.iterator();
+        while (it.hasNext ()) {
+
+            ResourceMenuContributor resourceMenuContributor = it.next();
+            List<Action> tActions = resourceMenuContributor.contributeMenuFor(rd);
+            
+            if (tActions != null)
+            {
+                actions.addAll(tActions);
+            }
+        }
+        
+        return actions;
+    }
+    
+    
+    
+    /**
+     * Look into the virtual file system for element decorators...
+     *
+     * @param element
+     * @return
+     */
+    public static ResourceHandler getResourceHandler(ResourceDescriptor rd) {
+        
+        ResourceHandler handler = null;
+        
+        FileObject contributorsFileObject = Repository.getDefault().getDefaultFileSystem().getRoot().getFileObject("ireport/server/resourcehandlers");
+        if (contributorsFileObject == null) return null;
+        DataFolder contributorsDataFolder = DataFolder.findFolder(contributorsFileObject);
+        if (contributorsDataFolder == null) return null;
+
+        List<String> list = new ArrayList<String>();
+
+        Collection<? extends ResourceHandler> resourceHanlders = Lookups.forPath("ireport/server/resourcehandlers").lookupAll(ResourceHandler.class);
+        Iterator<? extends ResourceHandler> it = resourceHanlders.iterator();
+        while (it.hasNext ()) {
+
+            ResourceHandler resourceHanlder = it.next();
+            if (resourceHanlder.supportsResourceType(rd))
+            {
+                return resourceHanlder;
+            }
+        }
+        
+        return null;
     }
    
 }

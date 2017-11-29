@@ -28,6 +28,7 @@ import com.jaspersoft.ireport.designer.fonts.SimpleFontFamilyEx;
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.ReportClassLoader;
+import com.jaspersoft.ireport.designer.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
 import com.jaspersoft.ireport.designer.editor.ExpressionEditor;
 import com.jaspersoft.ireport.designer.fonts.CheckBoxListEntry;
@@ -52,6 +53,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -248,30 +250,17 @@ final class IReportPanel extends javax.swing.JPanel {
         //jTabbedPane1.remove(5);
 
         jComboBoxCompatibility.addItem(new Tag("", "Last version"));
-        jComboBoxCompatibility.addItem(new Tag("4_5_0", "JasperReports 4.5.0"));
-        jComboBoxCompatibility.addItem(new Tag("4_0_1", "JasperReports 4.0.1"));
-        jComboBoxCompatibility.addItem(new Tag("3_7_4", "JasperReports 3.7.4"));
-        jComboBoxCompatibility.addItem(new Tag("3_7_3", "JasperReports 3.7.3"));
-        jComboBoxCompatibility.addItem(new Tag("3_7_1", "JasperReports 3.7.1-3.7.2"));
-        jComboBoxCompatibility.addItem(new Tag("3_6_2", "JasperReports 3.7.0"));
-        jComboBoxCompatibility.addItem(new Tag("3_6_2", "JasperReports 3.6.2"));
-        jComboBoxCompatibility.addItem(new Tag("3_6_1", "JasperReports 3.6.1"));
-        jComboBoxCompatibility.addItem(new Tag("3_6_0", "JasperReports 3.6.0"));
-        jComboBoxCompatibility.addItem(new Tag("3_5_2", "JasperReports 3.5.2-3.5.3"));
-        jComboBoxCompatibility.addItem(new Tag("3_5_1", "JasperReports 3.5.1"));
-        jComboBoxCompatibility.addItem(new Tag("3_5_0", "JasperReports 3.5.0"));
-        jComboBoxCompatibility.addItem(new Tag("3_1_4", "JasperReports 3.1.4"));
-        jComboBoxCompatibility.addItem(new Tag("3_1_3", "JasperReports 3.1.3"));
-        jComboBoxCompatibility.addItem(new Tag("3_1_2", "JasperReports 3.1.2"));
-        jComboBoxCompatibility.addItem(new Tag("3_1_0", "JasperReports 3.1.0"));
-        jComboBoxCompatibility.addItem(new Tag("3_0_1", "JasperReports 3.0.1"));
-        jComboBoxCompatibility.addItem(new Tag("3_0_0", "JasperReports 3.0.0"));
-        jComboBoxCompatibility.addItem(new Tag("2_0_5", "JasperReports 2.0.5"));
-        jComboBoxCompatibility.addItem(new Tag("2_0_4", "JasperReports 2.0.4"));
-        jComboBoxCompatibility.addItem(new Tag("2_0_3", "JasperReports 2.0.3"));
-        jComboBoxCompatibility.addItem(new Tag("2_0_2", "JasperReports 2.0.2"));
-
-
+        
+        
+        List<String> versions = JRXmlWriterHelper.getJRVersions();
+        Collections.sort(versions);
+        
+        for (String ver : versions)
+        {
+            jComboBoxCompatibility.addItem(new Tag(ver, "JasperReports" + ver));
+        }
+        
+        
         jListFonts.setCellRenderer(new OptionsFontListCellRenderer());
         jListFonts.setModel(new DefaultListModel());
 

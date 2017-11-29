@@ -193,6 +193,8 @@ public class JDBCConnection extends com.jaspersoft.ireport.designer.IReportConne
                                 "{0}\nGeneral problem: {1}\nPlease check your username and password. The DBMS is running?!",
                                 new Object[]{""+ this.getName(), ""+ex.getMessage()}),
                                 "Exception", ex);
+                        
+                        ex.printStackTrace();
 			return null;					
 		}
     }    

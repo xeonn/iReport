@@ -155,7 +155,14 @@ public final class PropertiesAction extends NodeAction {
          {
             if (rf.getDescriptor().getWsType().equals( ResourceDescriptor.TYPE_DATASOURCE_JDBC) ||
                 rf.getDescriptor().getWsType().equals( ResourceDescriptor.TYPE_DATASOURCE_JNDI) ||
-                rf.getDescriptor().getWsType().equals( ResourceDescriptor.TYPE_DATASOURCE_BEAN))
+                rf.getDescriptor().getWsType().equals( ResourceDescriptor.TYPE_DATASOURCE_BEAN) ||
+                rf.getDescriptor().getWsType().equals( ResourceDescriptor.TYPE_DATASOURCE_VIRTUAL) ||
+                (rf.getDescriptor().getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_CUSTOM) &&
+                 rf.getDescriptor().getResourcePropertyValue(ResourceDescriptor.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS) != null &&
+                 ( rf.getDescriptor().getResourcePropertyValue(ResourceDescriptor.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS).equals("com.jaspersoft.hadoop.hive.jasperserver.HiveDataSourceService") ||
+                   rf.getDescriptor().getResourcePropertyValue(ResourceDescriptor.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS).equals("com.jaspersoft.mongodb.jasperserver.MongoDbDataSourceService"))    
+                )
+               )
             {
                 DataSourceDialog dsd = new DataSourceDialog(Misc.getMainFrame(), true);
                 dsd.setParentFolder( rf.getDescriptor().getParentFolder() );

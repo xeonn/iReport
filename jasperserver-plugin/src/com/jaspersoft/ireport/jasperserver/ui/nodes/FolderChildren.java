@@ -23,9 +23,12 @@
  */
 package com.jaspersoft.ireport.jasperserver.ui.nodes;
 
+import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.RepositoryFile;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
 import com.jaspersoft.ireport.jasperserver.RepositoryReportUnit;
+import com.jaspersoft.ireport.jasperserver.ResourceHandler;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -70,6 +73,18 @@ public class FolderChildren extends Index.KeysChildren implements PropertyChange
 
     protected Node[] createNodes(Object key) {
         
+        if (key instanceof RepositoryFolder)
+        {
+            ResourceDescriptor rd = ((RepositoryFolder)key).getDescriptor();
+            ResourceHandler rh = JasperServerManager.getResourceHandler(rd);
+
+            if (rh != null)
+            {
+                return new Node[]{ rh.createRepositoryNode((RepositoryFolder)key, doLkp) };
+            }
+        }
+        
+        
         if (key instanceof RepositoryFile)
         {
             return new Node[]{new FileNode((RepositoryFile)key, doLkp)};
@@ -82,6 +97,7 @@ public class FolderChildren extends Index.KeysChildren implements PropertyChange
         {
             return new Node[]{new FolderNode((RepositoryFolder)key, doLkp)};
         }
+
         return new Node[]{};
     }
     

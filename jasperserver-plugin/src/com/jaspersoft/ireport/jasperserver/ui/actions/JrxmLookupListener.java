@@ -165,47 +165,47 @@ public class JrxmLookupListener implements LookupListener {
 
                                 // Display warning in case of Ad Hoc document...
 
-                                if (jd.getProperty("com.jaspersoft.ji.adhoc") != null &&
-                                    jd.getProperty("com.jaspersoft.ji.adhoc").equals("1"))
-                                {
-                                    try {
-
-                                        SwingUtilities.invokeLater( new Runnable() {
-
-                                           public void run()
-                                           {
-                                               if (javax.swing.JOptionPane.showConfirmDialog(Misc.getMainFrame(),
-                                                JasperServerManager.getString("messages.adhoc", "You have selected to edit an Ad Hoc report.\n" +
-                                               "If you continue, the report will lose its sorting and grouping.\n" +
-                                               "Furthermore, any changes you make in iReport will be lost\n" +
-                                               "next Time you edit it via the Ad Hoc report editor.\nContinue anyway?"),
-                                               JasperServerManager.getString("alert","Alert!"),
-                                               javax.swing.JOptionPane.YES_NO_OPTION,
-                                               javax.swing.JOptionPane.WARNING_MESSAGE) == javax.swing.JOptionPane.NO_OPTION)
-                                               {
-                                                   // Close the document...
-                                                   DataObject dobj = IReportManager.getInstance().getActiveVisualView().getLookup().lookup(DataObject.class);
-                                                   EditorCookie cc = dobj.getCookie(EditorCookie.class);
-                                                   if (cc != null)
-                                                   {
-                                                        cc.close();
-                                                   }
-                                                   else
-                                                   {
-                                                       System.out.println("Unable to close the window!!!");
-                                                       System.out.flush();
-                                                   }
-                                               }
-                                           }
-
-                                        });
-
-                                    } catch (Exception ex)
-                                    {
-
-                                    }
-
-                                }
+//                                if (jd.getProperty("com.jaspersoft.ji.adhoc") != null &&
+//                                    jd.getProperty("com.jaspersoft.ji.adhoc").equals("1"))
+//                                {
+//                                    try {
+//
+//                                        SwingUtilities.invokeLater( new Runnable() {
+//
+//                                           public void run()
+//                                           {
+//                                               if (javax.swing.JOptionPane.showConfirmDialog(Misc.getMainFrame(),
+//                                                JasperServerManager.getString("messages.adhoc", "You have selected to edit an Ad Hoc report.\n" +
+//                                               "If you continue, the report will lose its sorting and grouping.\n" +
+//                                               "Furthermore, any changes you make in iReport will be lost\n" +
+//                                               "next Time you edit it via the Ad Hoc report editor.\nContinue anyway?"),
+//                                               JasperServerManager.getString("alert","Alert!"),
+//                                               javax.swing.JOptionPane.YES_NO_OPTION,
+//                                               javax.swing.JOptionPane.WARNING_MESSAGE) == javax.swing.JOptionPane.NO_OPTION)
+//                                               {
+//                                                   // Close the document...
+//                                                   DataObject dobj = IReportManager.getInstance().getActiveVisualView().getLookup().lookup(DataObject.class);
+//                                                   EditorCookie cc = dobj.getCookie(EditorCookie.class);
+//                                                   if (cc != null)
+//                                                   {
+//                                                        cc.close();
+//                                                   }
+//                                                   else
+//                                                   {
+//                                                       System.out.println("Unable to close the window!!!");
+//                                                       System.out.flush();
+//                                                   }
+//                                               }
+//                                           }
+//
+//                                        });
+//
+//                                    } catch (Exception ex)
+//                                    {
+//
+//                                    }
+//
+//                                }
 
                             } catch (Exception ex) { }
                         }

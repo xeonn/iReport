@@ -26,6 +26,7 @@ package com.jaspersoft.ireport.components.map;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.palette.actions.*;
+import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Point;
 import java.awt.dnd.DropTargetDropEvent;
 import net.sf.jasperreports.components.map.StandardMapComponent;
@@ -54,6 +55,11 @@ public class CreateMapAction extends CreateReportElementAction {
         JRDesignComponentElement component = new JRDesignComponentElement();
         StandardMapComponent componentImpl = new StandardMapComponent();
 
+        
+        componentImpl.setLatitudeExpression(Misc.createExpression(null, "37.7750f"));
+        componentImpl.setLongitudeExpression(Misc.createExpression(null, "-122.4183f"));
+        
+        
         component.setComponent(componentImpl);
         component.setComponentKey(new ComponentKey(
                                     "http://jasperreports.sourceforge.net/jasperreports/components",

@@ -91,6 +91,8 @@ public class JRParameterDialog extends javax.swing.JDialog {
         classes.add(new Tag("java.lang.String","Text"));
         classes.add(new Tag("java.util.Date","Date"));
         classes.add(new Tag("java.sql.Time","Date/Time"));
+        classes.add(new Tag("net.sf.jasperreports.types.date.DateRange","Date Range"));
+        classes.add(new Tag("net.sf.jasperreports.types.date.TimestampRange","Time Range"));
         classes.add(new Tag("java.lang.Boolean","Boolean"));
         classes.add(new Tag("java.lang.Integer","Integer"));
         classes.add(new Tag("java.lang.Double","Double"));
@@ -338,21 +340,31 @@ public class JRParameterDialog extends javax.swing.JDialog {
         
         String className = tmpParameter.getValueClassName();
         
+        
+        
         if (className != null)
         {
+            boolean found = false;
             for (int i=0; i<jComboBox1.getItemCount(); ++i)
             {
                 Object val=jComboBox1.getItemAt(i);
                 if (val instanceof Tag && className.equals(((Tag)val).getValue()))
                 {
                     jComboBox1.setSelectedIndex(i);
+                    found = true;
                     break;
                 }
                 else if (className.equals(val))
                 {
+                    found = true;
                     jComboBox1.setSelectedIndex(i);
                     break;
                 }
+            }
+            
+            if (!found)
+            {
+                jComboBox1.setSelectedItem(className);
             }
         }
 

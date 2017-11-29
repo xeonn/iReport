@@ -66,7 +66,6 @@ public class TableSectionNode  extends IRIndexedNode {
         this.sectionType = sectionType;
         this.group = group;
 
-
         updateDisplayName();
 
         if (group != null)

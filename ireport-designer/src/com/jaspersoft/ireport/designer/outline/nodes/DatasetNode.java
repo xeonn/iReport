@@ -27,6 +27,7 @@ import com.jaspersoft.ireport.designer.sheet.properties.FilterExpressionProperty
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
 import com.jaspersoft.ireport.designer.menu.EditQueryAction;
+import com.jaspersoft.ireport.designer.sheet.JRPropertiesMapProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.sheet.properties.EnumProperty;
@@ -108,6 +109,8 @@ public class DatasetNode extends IRAbstractNode implements PropertyChangeListene
         datasetPropertySet.put(new QueryTextProperty( dataset ));
         datasetPropertySet.put(new QueryLanguageProperty( dataset ));
         datasetPropertySet.put(new FilterExpressionProperty( dataset ));
+        
+        datasetPropertySet.put(new JRPropertiesMapProperty(dataset));
         
         return datasetPropertySet;
     }

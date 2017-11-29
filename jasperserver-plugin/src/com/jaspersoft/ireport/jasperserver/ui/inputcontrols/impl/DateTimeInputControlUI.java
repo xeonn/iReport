@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -44,7 +45,16 @@ public class DateTimeInputControlUI extends javax.swing.JPanel implements InputC
     
     public Object getValue()
     {
-        Date date = jXDatePicker1.getDate();
+        if (IReportManager.getPreferences().getBoolean("jasperserver.useRelativeDateExpressions", true))
+        {
+            if (dateRangePicker.getDateRangeExpression() != null)
+            {
+                return dateRangePicker.getDateRangeExpression();
+
+            }
+        }
+        
+        Date date = dateRangePicker.getDate();
         GregorianCalendar gc = new GregorianCalendar();
         gc.setTime(date);
         gc.set(GregorianCalendar.HOUR, ((Number)jSpinnerH.getValue()).intValue());
@@ -69,16 +79,19 @@ public class DateTimeInputControlUI extends javax.swing.JPanel implements InputC
         
         getJComboBoxValue().setSelectedItem(v);
         */
+        if (v == null) return;
         if (v instanceof Date)
         {
-            jXDatePicker1.setDate((Date)v);
+            dateRangePicker.setDate((Date)v);
             GregorianCalendar gc = new GregorianCalendar();
             gc.setTime((Date)v);
             jSpinnerH.setValue( gc.get(GregorianCalendar.HOUR));
             jSpinnerM.setValue( gc.get(GregorianCalendar.MINUTE));
             jSpinnerS.setValue( gc.get(GregorianCalendar.SECOND));
-
-
+        }
+        if (v instanceof String)
+        {
+            dateRangePicker.setDateRangeExpression((String)v);
         }
     }
     
@@ -92,7 +105,7 @@ public class DateTimeInputControlUI extends javax.swing.JPanel implements InputC
         java.awt.GridBagConstraints gridBagConstraints;
 
         jLabelName = new javax.swing.JLabel();
-        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
+        dateRangePicker = new com.jaspersoft.ireport.designer.compiler.prompt.DateRangeDatePicker();
         jLabelH = new javax.swing.JLabel();
         jSpinnerH = new javax.swing.JSpinner();
         jLabelMin = new javax.swing.JLabel();
@@ -113,7 +126,7 @@ public class DateTimeInputControlUI extends javax.swing.JPanel implements InputC
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 14, 0, 4);
-        add(jXDatePicker1, gridBagConstraints);
+        add(dateRangePicker, gridBagConstraints);
 
         jLabelH.setText("Time");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -171,16 +184,17 @@ public class DateTimeInputControlUI extends javax.swing.JPanel implements InputC
     private javax.swing.JSpinner jSpinnerH;
     private javax.swing.JSpinner jSpinnerM;
     private javax.swing.JSpinner jSpinnerS;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
+    private com.jaspersoft.ireport.designer.compiler.prompt.DateRangeDatePicker dateRangePicker;
     // End of variables declaration//GEN-END:variables
     
     public void setReadOnly( boolean b )
     {
         jLabelName.setEnabled(!b);
-        jXDatePicker1.setEnabled(!b);
+        dateRangePicker.setEnabled(!b);
+
     }
 
     public void addActionListener(ActionListener listener) {
-        jXDatePicker1.addActionListener(listener);
+        dateRangePicker.addActionListener(listener);
     }
 }

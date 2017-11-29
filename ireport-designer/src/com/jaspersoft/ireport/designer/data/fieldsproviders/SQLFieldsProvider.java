@@ -25,30 +25,30 @@ package com.jaspersoft.ireport.designer.data.fieldsproviders;
 
 import com.jaspersoft.ireport.designer.FieldsProvider;
 import com.jaspersoft.ireport.designer.FieldsProviderEditor;
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.connection.JDBCNBConnection;
 import com.jaspersoft.ireport.designer.data.ReportQueryDialog;
-import com.jaspersoft.ireport.designer.utils.Misc;
-import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.JRQueryChunk;
+import net.sf.jasperreports.engine.JRValueParameter;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.query.JRJdbcQueryExecuter;
 
 /**
  *
@@ -95,335 +95,67 @@ public class SQLFieldsProvider implements FieldsProvider {
     @SuppressWarnings("unchecked")
     public JRField[] getFields(IReportConnection irConn, JRDataset reportDataset, Map parameters) throws JRException, UnsupportedOperationException {
         
+        String error_msg = "";
+        Connection con = null;
+        JRJdbcQueryExecuter qe = null;
+        
         if (irConn == null || !irConn.isJDBCConnection()) {
              throw new JRException("The active connection is not of type JDBC. Activate a JDBC connection first.");
         }
         
-        String query = "";
-        String error_msg = "";
-        Connection con = null;
-        PreparedStatement ps = null;
-
-        if (reportDataset.getQuery() == null || reportDataset.getQuery().getText() == null || reportDataset.getQuery().getText().length() == 0)
-        {
-           return new JRField[0];
-        }
-
+        
         try {
-
-
-            StringBuffer queryBuf = new StringBuffer("");
-
-            JRQueryChunk[] chunks = reportDataset.getQuery().getChunks();
-
-            java.util.List queryParams = new ArrayList();
-            java.util.List<Class> queryParamsClass = new ArrayList<Class>();
-
-            for (int i=0; i<chunks.length; ++i)
-            {
-                switch (chunks[i].getType())
-                {
-                    case JRQueryChunk.TYPE_TEXT:
-                        queryBuf.append(chunks[i].getText());
-                        break;
-                    case JRQueryChunk.TYPE_PARAMETER_CLAUSE:
-                    {
-                        // adding a parameter...
-                        String paramName = chunks[i].getText();
-
-
-                        if(!parameters.containsKey(paramName) ) {
-                            throw new IllegalArgumentException("The parameter '" + paramName + "' is not defined.");
-                        }
-
-                        Object defValue = parameters.get(paramName);
-                        if( defValue==null ) {
-                            throw new IllegalArgumentException("Please set a " +
-                            "default value for the parameter '" +
-                            paramName + "'" );
-                        }
-                        queryBuf.append(defValue.toString());
-                        break;
-                    }
-                    case JRQueryChunk.TYPE_PARAMETER:
-                    {
-                        // adding a parameter...
-                        String paramName = chunks[i].getText();
-
-                        if(!parameters.containsKey(paramName) ) {
-                            throw new IllegalArgumentException("The parameter '" + paramName + "' is not defined.");
-                        }
-                        
-                        Object defValue = parameters.get(paramName);
-                        queryBuf.append("?");
-                        queryParams.add(defValue);
-                        queryParamsClass.add(findParameterClass(paramName, reportDataset));
-                        break;
-                    }
-                    case JRQueryChunk.TYPE_CLAUSE_TOKENS:
-                    {
-                        String[] tokens = chunks[i].getTokens();
-
-                        if (tokens.length == 3)
-                        {
-                            String clauseText = "";
-                            clauseText =  tokens[1].trim() + " " + tokens[0].trim() + " (";
-
-                            String paramName = tokens[2].trim();
-
-                            if (parameters.containsKey(paramName))
-                            {
-                                Object defValue = parameters.get(paramName);
-                                if (defValue == null)
-                                {
-                                    clauseText = "0 = 0";
-                                }
-                                else
-                                {
-                                    List items = new ArrayList();
-                                    if (defValue.getClass().isArray())
-                                    {
-                                        items = Arrays.asList((Object[])defValue);
-                                    }
-                                    else if (defValue instanceof Collection)
-                                    {
-                                        items.addAll((Collection)defValue);
-                                    }
-                                    else
-                                    {
-                                        items.add(defValue);
-                                    }
-
-                                    Iterator iter = items.iterator();
-                                    if (iter.hasNext())
-                                    {
-                                        Object itemVal = iter.next();
-                                        clauseText +=  "?";
-                                        queryParams.add(itemVal);
-                                        queryParamsClass.add(null);
-
-                                        while (iter.hasNext())
-                                        {
-                                            itemVal = iter.next();
-                                            clauseText += ",?";
-                                            queryParams.add(itemVal);
-                                            queryParamsClass.add(null);
-                                        }
-
-                                        clauseText += ")";
-                                    }
-                                    else
-                                    {
-                                        clauseText = "0 = 0";
-                                    }
-                                }
-
-                                queryBuf.append(clauseText);
-                            }
-                            else
-                            {
-                                throw new IllegalArgumentException("The parameter '" + paramName + "' is not defined.");
-                            }
-                        }
-                        else
-                        {
-                           throw new IllegalArgumentException("Invalid $X{} clause");
-                        }
-                        break;
-                    }
-                }
-            }
-
-            query = queryBuf.toString();
-
-            System.out.println("Query buffer: " + queryBuf);
-            System.out.println("Parameters: " + queryParams);
-
-
+        
+            // JasperReports query executer instances requires
+            // REPORT_PARAMETERS_MAP parameter to be defined and not null
+            Map<String, JRValueParameter> tmpMap = convertMap(parameters);
+            
+            
             con = irConn.getConnection();
+            
+            tmpMap.put(JRParameter.REPORT_CONNECTION, new SimpleValueParameter(con));
 
-            ps = con.prepareStatement( query );
+            tmpMap.put(JRParameter.REPORT_PARAMETERS_MAP,
+                            new SimpleValueParameter(
+                                            new HashMap<String, JRValueParameter>()));
+            
+            tmpMap.put(JRParameter.REPORT_MAX_COUNT,
+                            new SimpleValueParameter(null));
 
-            for(int pc=0; pc<queryParams.size(); pc++ ) {
+            qe = new JRJdbcQueryExecuter(IRLocalJasperReportsContext.getInstance(), reportDataset,tmpMap);
+            qe.createDatasource();
+            ResultSet rs = qe.getResultSet();
+            if (rs != null) {
+                    ResultSetMetaData metaData = rs.getMetaData();
+                    int cc = metaData.getColumnCount();
+                    Set<String> colset = new HashSet<String>();
+                    List<JRDesignField> columns = new ArrayList<JRDesignField>(cc);
+                    for (int i = 1; i <= cc; i++) {
+                            String name = metaData.getColumnLabel(i);
+                            if (colset.contains(name))
+                                    continue;
+                            colset.add(name);
+                            JRDesignField field = new JRDesignField();
+                            field.setName(name);
 
-                Class parameterType = (queryParams.get(pc) == null) ? queryParamsClass.get(pc) : queryParams.get(pc).getClass();
-                
-                if (java.lang.Boolean.class.isAssignableFrom(parameterType))
-                {
-                    if (queryParams.get(pc) == null)
-                    {
-                        ps.setNull(pc+1, Types.BIT);
+                            field.setValueClassName(getJdbcTypeClass(metaData, i));
+                            try {
+                                    String catalog = metaData.getCatalogName(i);
+                                    String schema = metaData.getSchemaName(i);
+                                    String table = metaData.getTableName(i);
+                                    ResultSet rsmc = con.getMetaData().getColumns(catalog,
+                                                    schema, table, name);
+                                    while (rsmc.next()) {
+                                            field.setDescription(rsmc.getString("REMARKS"));
+                                            break;
+                                    }
+                            } catch (SQLException se) {
+                                    se.printStackTrace();
+                            }
+                            columns.add(field);
                     }
-                    else
-                    {
-                        ps.setBoolean(pc+1, ((Boolean)queryParams.get(pc)).booleanValue());
-                    }
-                }
-                else if (java.lang.Byte.class.isAssignableFrom(parameterType))
-                {
-                    if (queryParams.get(pc) == null)
-                    {
-                        ps.setNull(pc+1, Types.TINYINT);
-                    }
-                    else
-                    {
-                        ps.setByte(pc+1, ((Byte)queryParams.get(pc)).byteValue());
-                    }
-                }
-                else if (java.lang.Double.class.isAssignableFrom(parameterType))
-                {
-                    if (queryParams.get(pc) == null)
-                    {
-                        ps.setNull(pc+1, Types.DOUBLE);
-                    }
-                    else
-                    {
-                        ps.setDouble(pc+1, ((Double)queryParams.get(pc)).doubleValue());
-                    }
-                }
-                else if (java.lang.Float.class.isAssignableFrom(parameterType))
-                {
-                    if (queryParams.get(pc) == null)
-                    {
-                        ps.setNull(pc+1, Types.FLOAT);
-                    }
-                    else
-                    {
-                        ps.setFloat(pc+1, ((Float)queryParams.get(pc)).floatValue());
-                    }
-                }
-                else if (java.lang.Integer.class.isAssignableFrom(parameterType))
-                {
-                    if (queryParams.get(pc) == null)
-                    {
-                        ps.setNull(pc+1, Types.INTEGER);
-                    }
-                    else
-                    {
-                        ps.setInt(pc+1, ((Integer)queryParams.get(pc)).intValue());
-                    }
-                }
-                else if (java.lang.Long.class.isAssignableFrom(parameterType))
-                {
-                    if (queryParams.get(pc) == null)
-                    {
-                        ps.setNull(pc+1, Types.BIGINT);
-                    }
-                    else
-                    {
-                        ps.setLong(pc+1, ((Long)queryParams.get(pc)).longValue());
-                    }
-                }
-                else if (java.lang.Short.class.isAssignableFrom(parameterType))
-                {
-                    if (queryParams.get(pc) == null)
-                    {
-                        ps.setNull(pc+1, Types.SMALLINT);
-                    }
-                    else
-                    {
-                        ps.setShort(pc+1, ((Short)queryParams.get(pc)).shortValue());
-                    }
-                }
-                else if (java.math.BigDecimal.class.isAssignableFrom(parameterType))
-                {
-                    if (queryParams.get(pc) == null)
-                    {
-                        ps.setNull(pc+1, Types.DECIMAL);
-                    }
-                    else
-                    {
-                        ps.setBigDecimal(pc+1, (BigDecimal)queryParams.get(pc));
-                    }
-                }
-                else if (java.lang.String.class.isAssignableFrom(parameterType))
-                {
-                    if (queryParams.get(pc) == null)
-                    {
-                        ps.setNull(pc+1, Types.VARCHAR);
-                    }
-                    else
-                    {
-                        ps.setString(pc+1, queryParams.get(pc).toString());
-                    }
-                }
-                else if (java.sql.Timestamp.class.isAssignableFrom(parameterType))
-                {
-                    if (queryParams.get(pc) == null)
-                    {
-                        ps.setNull(pc+1, Types.TIMESTAMP);
-                    }
-                    else
-                    {
-                        ps.setTimestamp( pc+1, (java.sql.Timestamp)queryParams.get(pc) );
-                    }
-                }
-                else if (java.sql.Time.class.isAssignableFrom(parameterType))
-                {
-                    if (queryParams.get(pc) == null)
-                    {
-                        ps.setNull(pc+1, Types.TIME);
-                    }
-                    else
-                    {
-                        ps.setTime( pc+1, (java.sql.Time)queryParams.get(pc) );
-                    }
-                }
-                else if (java.util.Date.class.isAssignableFrom(parameterType))
-                {
-                    if (queryParams.get(pc) == null)
-                    {
-                        ps.setNull(pc+1, Types.DATE);
-                    }
-                    else
-                    {
-                        ps.setDate( pc+1, new java.sql.Date( ((java.util.Date)queryParams.get(pc)).getTime() ) );
-                    }
-                }
-                else
-                {
-                    if (queryParams.get(pc) == null)
-                    {
-                        ps.setNull(pc+1, Types.JAVA_OBJECT);
-                    }
-                    else
-                    {
-                        ps.setObject(pc+1, queryParams.get(pc));
-                    }
-                }
+                    return columns.toArray(new JRDesignField[columns.size()]);
             }
-
-
-
-            // Some JDBC drivers don't supports this method...
-            try { ps.setFetchSize(0); } catch(Exception e ) {}
-
-
-            ResultSet rs = ps.executeQuery();
-
-            //if (in < num) return;
-
-            ResultSetMetaData rsmd = rs.getMetaData();
-
-            //if (in < num) return;
-
-            List columns = new ArrayList();
-            for (int i=1; i <=rsmd.getColumnCount(); ++i) {
-                JRDesignField field = new JRDesignField();
-                field.setName( rsmd.getColumnLabel(i) );
-                field.setValueClassName( Misc.getJdbcTypeClass(rsmd, i) );
-                field.setDescription(null);
-                columns.add( field );
-            }
-
-            JRField[] final_fields = new JRField[columns.size()];
-            for (int i=0; i<final_fields.length; ++i)
-            {
-                final_fields[i] = (JRField)columns.get(i);
-            }
-
-            return final_fields;
-
         } catch( IllegalArgumentException ie ) {
             throw new JRException( ie.getMessage() );
         } catch (NoClassDefFoundError ex) {
@@ -443,10 +175,83 @@ public class SQLFieldsProvider implements FieldsProvider {
             t.printStackTrace();
           throw new JRException( t.getMessage() );
         } finally {
-            if(ps!=null) try { ps.close(); } catch(Exception e ) {}
+            if(qe!=null) try { qe.close(); } catch(Exception e ) {}
             if(con !=null && !(irConn instanceof JDBCNBConnection)) try { con.close(); } catch(Exception e ) {}
         }
+                        
+        return new JRField[0];
     }
+    
+    	public static String getJdbcTypeClass(java.sql.ResultSetMetaData rsmd, int t) {
+		try {
+			return getJRFieldType(rsmd.getColumnClassName(t));
+		} catch (SQLException ex) {
+			// if getColumnClassName is not supported...
+			try {
+				int type = rsmd.getColumnType(t);
+				switch (type) {
+				case Types.CHAR:
+				case Types.VARCHAR:
+				case Types.LONGVARCHAR:
+					return "java.lang.String";
+				case Types.NUMERIC:
+				case Types.DECIMAL:
+					return "java.math.BigDecimal";
+				case Types.BIT:
+					return "java.lang.Boolean";
+				case Types.TINYINT:
+					return "java.lang.Byte";
+				case Types.SMALLINT:
+					return "java.lang.Short";
+				case Types.INTEGER:
+					return "java.lang.Integer";
+				case Types.BIGINT:
+					return "java.lang.Long";
+				case Types.REAL:
+					return "java.lang.Real";
+				case Types.FLOAT:
+				case Types.DOUBLE:
+					return "java.lang.Double";
+				case Types.BINARY:
+				case Types.VARBINARY:
+				case Types.LONGVARBINARY:
+					return "java.lang.Byte[]";
+				case Types.DATE:
+					return "java.sql.Date";
+				case Types.TIME:
+					return "java.sql.Time";
+				case Types.TIMESTAMP:
+					return "java.sql.Timestamp";
+				}
+			} catch (SQLException ex2) {
+				ex2.printStackTrace();
+			}
+		}
+		return Object.class.getName();
+	}
+
+	public static String getJRFieldType(String type) {
+		if (type == null)
+			return Object.class.getName();
+		if (type.equals(boolean.class.getName()))
+			return Boolean.class.getName();
+		if (type.equals(byte.class.getName()))
+			return Byte.class.getName();
+		if (type.equals(int.class.getName()))
+			return Integer.class.getName();
+		if (type.equals(long.class.getName()))
+			return Long.class.getName();
+		if (type.equals(double.class.getName()))
+			return Double.class.getName();
+		if (type.equals(float.class.getName()))
+			return Float.class.getName();
+		if (type.equals(short.class.getName()))
+			return Short.class.getName();
+		if (type.startsWith("["))
+			return Object.class.getName();
+		return type;
+	}
+        
 
     private Class findParameterClass(String paramName, JRDataset reportDataset)
     {
@@ -514,6 +319,15 @@ public class SQLFieldsProvider implements FieldsProvider {
         SQLFieldsProviderEditor dpe = new SQLFieldsProviderEditor();
         dpe.setReportQueryDialog( reportQueryDialog );
         return dpe;
+    }
+    
+    
+    public static Map<String, JRValueParameter> convertMap(Map<String, ?> inmap) {
+            Map<String, JRValueParameter> outmap = new HashMap<String, JRValueParameter>();
+            for (String key : inmap.keySet())
+                    outmap.put(key, new SimpleValueParameter(inmap.get(key)));
+
+            return outmap;
     }
     
 }

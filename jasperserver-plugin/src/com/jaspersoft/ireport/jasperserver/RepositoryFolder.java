@@ -182,7 +182,16 @@ public class RepositoryFolder {
         {
             rf = new RepositoryBundleFile(srv, rd );
         }
-        else
+        
+        
+        ResourceHandler rh = JasperServerManager.getResourceHandler(rd);
+        
+        if (rh != null)
+        {
+            rf = rh.createRepositoryObject(srv, rd);
+        }
+        
+        if (rf == null)
         {
             rf = new RepositoryFile(srv, rd );
         }
@@ -211,8 +220,9 @@ public class RepositoryFolder {
           rd.getWsType().equals( rd.TYPE_DATASOURCE_JDBC) ||
           rd.getWsType().equals( rd.TYPE_DATASOURCE_JNDI) ||
           rd.getWsType().equals( rd.TYPE_DATASOURCE_BEAN) ||
-          rd.getWsType().equals("Domain") ||
-          (rd.getWsType().equals("custom") && rd.getResourcePropertyValue("PROP_RESOURCE_TYPE") != null && rd.getResourcePropertyValue("PROP_RESOURCE_TYPE").equals("com.jaspersoft.jasperserver.api.metadata.jasperreports.domain.CustomReportDataSource")))
+          rd.getWsType().equals( rd.TYPE_DATASOURCE_VIRTUAL) ||
+          rd.getWsType().equals( "Domain") ||
+          rd.getWsType().equals(rd.TYPE_DATASOURCE_CUSTOM))
       {
           return true;
       }

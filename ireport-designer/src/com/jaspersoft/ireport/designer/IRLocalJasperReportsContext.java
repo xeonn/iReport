@@ -59,7 +59,7 @@ public class IRLocalJasperReportsContext extends LocalJasperReportsContext {
         return instance;
     }
     
-    private IRLocalJasperReportsContext()
+    protected IRLocalJasperReportsContext()
     {
         super( DefaultJasperReportsContext.getInstance());
     }

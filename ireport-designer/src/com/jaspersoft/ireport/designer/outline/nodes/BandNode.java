@@ -39,10 +39,14 @@ import com.jaspersoft.ireport.designer.actions.MoveGroupUpAction;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
-import com.jaspersoft.ireport.designer.sheet.properties.AbstractProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.BandPrintWhenExpressionProperty;
-import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
-import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.FooterPositionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.KeepTogetherProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.MinHeightToStartNewPageProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.ReprintHeaderProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.ResetPageNumberProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.StartNewColumnProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.StartNewPageProperty;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.datatransfer.Transferable;
@@ -56,8 +60,6 @@ import java.util.List;
 import javax.swing.Action;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRGroup;
-import net.sf.jasperreports.engine.JROrigin;
-import net.sf.jasperreports.engine.base.JRBaseBand;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -67,9 +69,7 @@ import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
-import net.sf.jasperreports.engine.type.FooterPositionEnum;
 import net.sf.jasperreports.engine.type.SplitTypeEnum;
-import net.sf.jasperreports.engine.xml.JRXmlConstants;
 import org.openide.ErrorManager;
 import org.openide.actions.PasteAction;
 import org.openide.nodes.Node;
@@ -244,18 +244,17 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
         groupPropertiesSet.put(new GroupNameProperty(group, dataset));
         groupPropertiesSet.put(new GroupExpressionProperty(group, dataset));
         
-        if (dataset.isMainDataset())
-        {
-            groupPropertiesSet.put(new StartNewPageProperty(group));
-            groupPropertiesSet.put(new StartNewColumnProperty(group));
-            groupPropertiesSet.put(new ResetPageNumberProperty(group));
-            groupPropertiesSet.put(new ReprintHeaderProperty(group));
-            groupPropertiesSet.put(new MinHeightToStartNewPageProperty(group));
-            groupPropertiesSet.put(new MinHeightToStartNewPageProperty(group));
-            groupPropertiesSet.put(new FooterPositionProperty(group));
-            groupPropertiesSet.put(new KeepTogetherProperty(group));
+       
+        groupPropertiesSet.put(new StartNewPageProperty(group));
+        groupPropertiesSet.put(new StartNewColumnProperty(group));
+        groupPropertiesSet.put(new ResetPageNumberProperty(group));
+        groupPropertiesSet.put(new ReprintHeaderProperty(group));
+        groupPropertiesSet.put(new MinHeightToStartNewPageProperty(group));
+        groupPropertiesSet.put(new MinHeightToStartNewPageProperty(group));
+        groupPropertiesSet.put(new FooterPositionProperty(group));
+        groupPropertiesSet.put(new KeepTogetherProperty(group));
             
-        }
+       
         
         return groupPropertiesSet;
     }
@@ -627,309 +626,8 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
     }
     
     
-    /**
-     *  Class to manage the JRDesignGroup.PROPERTY_START_NEW_PAGE property
-     */
-    private static final class StartNewPageProperty extends PropertySupport
-    {
-            private final JRDesignGroup group;
-        
-            @SuppressWarnings("unchecked")
-            public StartNewPageProperty(JRDesignGroup group)
-            {
-                super(JRDesignGroup.PROPERTY_START_NEW_PAGE,Boolean.class, I18n.getString("BandNode.Property.NewPage"), I18n.getString("BandNode.Property.NewPagedetail"), true, true);
-                this.group = group;
-            }
-            
-            public Object getValue() throws IllegalAccessException, InvocationTargetException {
-                return group.isStartNewPage();
-            }
-
-            @Override
-            public boolean isDefaultValue() {
-                return group.isStartNewPage() == false;
-            }
-
-            @Override
-            public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
-                setPropertyValue(false);
-            }
-
-            @Override
-            public boolean supportsDefaultValue() {
-                return true;
-            }
-
-            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                if (val instanceof Boolean)
-                {
-                    setPropertyValue((Boolean)val);
-                }
-            }
-            
-            private void setPropertyValue(boolean val)
-            {
-                Boolean oldValue = group.isStartNewPage();
-                Boolean newValue = val;
-                group.setStartNewPage(newValue);
-                
-                ObjectPropertyUndoableEdit urob =
-                            new ObjectPropertyUndoableEdit(
-                                group,
-                                "StartNewPage", 
-                                Boolean.TYPE,
-                                oldValue,newValue);
-                    // Find the undoRedo manager...
-                IReportManager.getInstance().addUndoableEdit(urob);
-            }
-    }
-    
-    /**
-     *  Class to manage the JRDesignGroup.PROPERTY_START_NEW_PAGE property
-     */
-    private static final class StartNewColumnProperty extends PropertySupport
-    {
-            private final JRDesignGroup group;
-        
-            @SuppressWarnings("unchecked")
-            public StartNewColumnProperty(JRDesignGroup group)
-            {
-                super(JRDesignGroup.PROPERTY_START_NEW_COLUMN,Boolean.class, I18n.getString("BandNode.Property.NewCol"), I18n.getString("BandNode.Property.NewColdetail"), true, true);
-                this.group = group;
-            }
-            
-            public Object getValue() throws IllegalAccessException, InvocationTargetException {
-                return group.isStartNewColumn();
-            }
-
-            @Override
-            public boolean isDefaultValue() {
-                return group.isStartNewColumn() == false;
-            }
-
-            @Override
-            public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
-                setPropertyValue(false);
-            }
-
-            @Override
-            public boolean supportsDefaultValue() {
-                return true;
-            }
-
-            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                if (val instanceof Boolean)
-                {
-                    setPropertyValue((Boolean)val);
-                }
-            }
-            
-            private void setPropertyValue(boolean val)
-            {
-                Boolean oldValue = group.isStartNewColumn();
-                Boolean newValue = val;
-                group.setStartNewColumn(newValue);
-                
-                ObjectPropertyUndoableEdit urob =
-                            new ObjectPropertyUndoableEdit(
-                                group,
-                                "StartNewColumn", 
-                                Boolean.TYPE,
-                                oldValue,newValue);
-                    // Find the undoRedo manager...
-                IReportManager.getInstance().addUndoableEdit(urob);
-            }
-    }
-    
-    /**
-     *  Class to manage the JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER property
-     */
-    private static final class ResetPageNumberProperty extends PropertySupport
-    {
-            private final JRDesignGroup group;
-        
-            @SuppressWarnings("unchecked")
-            public ResetPageNumberProperty(JRDesignGroup group)
-            {
-                super(JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER,Boolean.class, I18n.getString("BandNode.Property.ResetPageNumber"), I18n.getString("BandNode.Property.ResetPageNumberdetail"), true, true);
-                this.group = group;
-            }
-            
-            public Object getValue() throws IllegalAccessException, InvocationTargetException {
-                return group.isResetPageNumber();
-            }
-
-            @Override
-            public boolean isDefaultValue() {
-                return group.isResetPageNumber() == false;
-            }
-
-            @Override
-            public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
-                setPropertyValue(false);
-            }
-
-            @Override
-            public boolean supportsDefaultValue() {
-                return true;
-            }
-
-            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                if (val instanceof Boolean)
-                {
-                    setPropertyValue((Boolean)val);
-                }
-            }
-            
-            private void setPropertyValue(boolean val)
-            {
-                Boolean oldValue = group.isResetPageNumber();
-                Boolean newValue = val;
-                group.setResetPageNumber(newValue);
-                
-                ObjectPropertyUndoableEdit urob =
-                            new ObjectPropertyUndoableEdit(
-                                group,
-                                "ResetPageNumber", 
-                                Boolean.TYPE,
-                                oldValue,newValue);
-                    // Find the undoRedo manager...
-                IReportManager.getInstance().addUndoableEdit(urob);
-            }
-    }
-    
-    /**
-     *  Class to manage the JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE property
-     */
-    private static final class ReprintHeaderProperty extends PropertySupport
-    {
-            private final JRDesignGroup group;
-        
-            @SuppressWarnings("unchecked")
-            public ReprintHeaderProperty(JRDesignGroup group)
-            {
-                super(JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE,Boolean.class, I18n.getString("BandNode.Property.ReprintHeader"), I18n.getString("BandNode.Property.ReprintHeaderdetail"), true, true);
-                this.group = group;
-            }
-            
-            public Object getValue() throws IllegalAccessException, InvocationTargetException {
-                return group.isReprintHeaderOnEachPage();
-            }
-
-            @Override
-            public boolean isDefaultValue() {
-                return group.isReprintHeaderOnEachPage() == false;
-            }
-
-            @Override
-            public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
-                setPropertyValue(false);
-            }
-
-            @Override
-            public boolean supportsDefaultValue() {
-                return true;
-            }
-
-            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                if (val instanceof Boolean)
-                {
-                    setPropertyValue((Boolean)val);
-                }
-            }
-            
-            private void setPropertyValue(boolean val)
-            {
-                Boolean oldValue = group.isReprintHeaderOnEachPage();
-                Boolean newValue = val;
-                group.setReprintHeaderOnEachPage(newValue);
-                
-                ObjectPropertyUndoableEdit urob =
-                            new ObjectPropertyUndoableEdit(
-                                group,
-                                "ReprintHeaderOnEachPage", 
-                                Boolean.TYPE,
-                                oldValue,newValue);
-                    // Find the undoRedo manager...
-                IReportManager.getInstance().addUndoableEdit(urob);
-            }
-    }
     
     
-    /**
-     *  Class to manage the JRDesignBand.PROPERTY_HEIGHT property
-     */
-    private static final class MinHeightToStartNewPageProperty extends PropertySupport
-    {
-            private final JRDesignGroup group;
-        
-            @SuppressWarnings("unchecked")
-            public MinHeightToStartNewPageProperty(JRDesignGroup group)
-            {
-                super(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE,Integer.class, I18n.getString("BandNode.Property.MinHeight"), I18n.getString("BandNode.Property.MinHeightdetail"), true, true);
-                this.group = group;
-            }
-            
-             @Override
-            public boolean isDefaultValue() {
-                return group.getMinHeightToStartNewPage() == 0;
-            }
-
-            @Override
-            public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
-                setPropertyValue(0);
-            }
-
-            @Override
-            public boolean supportsDefaultValue() {
-                return true;
-            }
-            
-            public Object getValue() throws IllegalAccessException, InvocationTargetException {
-                return group.getMinHeightToStartNewPage();
-            }
-
-            // TODO: check page height consistency
-            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                if (val instanceof Integer)
-                {
-                    setPropertyValue((Integer)val);
-                }
-            }
-            
-            private void setPropertyValue(int val) throws IllegalArgumentException
-            {
-                    Integer oldValue = group.getMinHeightToStartNewPage();
-                    Integer newValue = val;
-                    
-                    // Check if the height is too big....
-                    if (newValue < 0)
-                    {
-                        IllegalArgumentException iae = annotateException(I18n.getString("BandNode.Property.Nodemessage")); 
-                        throw iae; 
-                    }
-                    
-                    group.setMinHeightToStartNewPage(newValue);
-                    ObjectPropertyUndoableEdit urob =
-                            new ObjectPropertyUndoableEdit(
-                                group,
-                                "MinHeightToStartNewPage", 
-                                Integer.TYPE,
-                                oldValue,newValue);
-                    // Find the undoRedo manager...
-                    IReportManager.getInstance().addUndoableEdit(urob);
-            }
-            
-            public IllegalArgumentException annotateException(String msg)
-            {
-                IllegalArgumentException iae = new IllegalArgumentException(msg); 
-                ErrorManager.getDefault().annotate(iae, 
-                                        ErrorManager.EXCEPTION,
-                                        msg,
-                                        msg, null, null); 
-                return iae;
-            }
-    }
 
     
     private static final class SplitTypeProperty extends PropertySupport
@@ -999,149 +697,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
         }
     }
     
-    private static final class FooterPositionProperty extends AbstractProperty
-    {
-        private final JRDesignGroup group;
-        private ComboBoxPropertyEditor editor;
-
-        @SuppressWarnings("unchecked")
-        public FooterPositionProperty(JRDesignGroup group)
-        {
-            super(FooterPositionEnum.class, group);
-            this.group = group;
-            setValue("suppressCustomEditor", Boolean.TRUE);
-        }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public PropertyEditor getPropertyEditor()
-        {
-            if (editor == null)
-            {
-                editor = new ComboBoxPropertyEditor(false, getTagList());
-            }
-            return editor;
-        }
-
-
-        @Override
-        public String getName()
-        {
-            return JRDesignGroup.PROPERTY_FOOTER_POSITION;
-        }
-
-        @Override
-        public String getDisplayName()
-        {
-            return I18n.getString("Global.Property.FooterPosition");
-        }
-
-        @Override
-        public String getShortDescription()
-        {
-            return I18n.getString("Global.Property.FooterPosition.description");
-        }
-
     
-        public List getTagList()
-        {
-            List tags = new java.util.ArrayList();
-            tags.add(new Tag(FooterPositionEnum.NORMAL, I18n.getString("Global.Property.FooterPosition.normal")));
-            tags.add(new Tag(FooterPositionEnum.STACK_AT_BOTTOM, I18n.getString("Global.Property.FooterPosition.stackAtBottom")));
-            tags.add(new Tag(FooterPositionEnum.FORCE_AT_BOTTOM, I18n.getString("Global.Property.FooterPosition.forceAtBottom")));
-            tags.add(new Tag(FooterPositionEnum.COLLATE_AT_BOTTOM, I18n.getString("Global.Property.FooterPosition.collateAtBottom")));
-            
-            return tags;
-        }
-
-
-        @Override
-        public Object getPropertyValue() {
-            return group.getFooterPositionValue();
-        }
-
-        @Override
-        public Object getOwnPropertyValue() {
-            return getPropertyValue();
-        }
-
-        @Override
-        public Object getDefaultValue() {
-            return FooterPositionEnum.NORMAL;
-        }
-
-        @Override
-        public void validate(Object value) {
-        }
-
-        @Override
-        public void setPropertyValue(Object value) {
-
-            group.setFooterPosition((FooterPositionEnum)value);
-
-        }
-
-    }
-
-
-    /**
-     *  Class to manage the JRDesignGroup.PROPERTY_START_NEW_PAGE property
-     */
-    private static final class KeepTogetherProperty extends BooleanProperty
-    {
-
-        private final JRDesignGroup group;
-
-        @SuppressWarnings("unchecked")
-        public KeepTogetherProperty(JRDesignGroup group)
-        {
-            super(group);
-            this.group = group;
-        }
-
-         @Override
-        public String getName()
-        {
-            return JRDesignGroup.PROPERTY_KEEP_TOGETHER;
-        }
-
-        @Override
-        public String getDisplayName()
-        {
-            return I18n.getString("Global.Property.KeepTogether");
-        }
-
-        @Override
-        public String getShortDescription()
-        {
-            return I18n.getString("Global.Property.KeepTogether.description");
-        }
-
-        @Override
-        public Boolean getBoolean() {
-            return getOwnBoolean();
-        }
-
-        @Override
-        public Boolean getOwnBoolean() {
-            return group.isKeepTogether();
-        }
-
-        @Override
-        public Boolean getDefaultBoolean() {
-            return false;
-        }
-
-        @Override
-        public void setBoolean(Boolean value) {
-            if (value == null)
-            {
-                value = false;
-            }
-            group.setKeepTogether(value);
-        }
-
-    }
 
 
 

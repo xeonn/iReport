@@ -26,6 +26,7 @@ package com.jaspersoft.ireport.designer.logpane;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
 import java.io.File;
+import java.io.PrintStream;
 import java.net.URL;
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
@@ -43,6 +44,8 @@ public class LogTextArea extends javax.swing.JPanel {
     private String title = null;
     private IRConsoleTopComponent logPane = null;
     private boolean removable = false;
+    
+    private static final PrintStream originalOutputStrean = System.out;
     
     private int maxlines = 5000;
 
@@ -260,6 +263,8 @@ public class LogTextArea extends javax.swing.JPanel {
     public void logOnConsole(String s, boolean isHTML) {
         try {
 
+            
+            originalOutputStrean.println(s);
             //String text = Misc.string_replace("","</body></html>",this.jEditorPaneOutput.getText());
 
             //s =  + s+"</body></html>";
@@ -318,6 +323,10 @@ public class LogTextArea extends javax.swing.JPanel {
 
         } catch (Exception exsx) {
             JOptionPane.showMessageDialog(this,""+exsx.getMessage());
+        }
+        finally
+        {
+            
         }
     }
 

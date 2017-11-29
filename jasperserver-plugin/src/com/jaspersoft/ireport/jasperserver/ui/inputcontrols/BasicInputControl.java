@@ -26,14 +26,19 @@ package com.jaspersoft.ireport.jasperserver.ui.inputcontrols;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl.BasicInputControlUI;
+import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl.DateInputControlUI;
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl.DateTimeInputControlUI;
 import com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl.InputControlUI;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.awt.event.ActionListener;
+
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.regex.Pattern;
 import javax.swing.JComponent;
 import java.text.SimpleDateFormat;
+import net.sf.jasperreports.types.date.DateRangeBuilder;
+import net.sf.jasperreports.types.date.InvalidDateRangeExpressionException;
 
 /**
  *
@@ -102,9 +107,11 @@ public class BasicInputControl {
         this.inputControl = inputControl;
         this.dataType = dataType;
 
-        if (dataType != null && (
-                    dataType.getDataType() == dataType.DT_TYPE_DATE ||
-                    dataType.getDataType() == ResourceDescriptor.DT_TYPE_DATE_TIME))
+        if (dataType != null && dataType.getDataType() == dataType.DT_TYPE_DATE)
+        {
+            setInputControlUI(new DateInputControlUI());
+        }
+        else if (dataType != null && dataType.getDataType() == ResourceDescriptor.DT_TYPE_DATE_TIME)
         {
             setInputControlUI(new DateTimeInputControlUI());
         }
@@ -243,42 +250,99 @@ public class BasicInputControl {
 			}
 			case ResourceDescriptor.DT_TYPE_DATE_TIME :
                         {
-                            if (!(val instanceof java.util.Date))
+                            if (val instanceof String)
                             {
-                                SimpleDateFormat format = new SimpleDateFormat(IReportManager.getInstance().getProperty("timeformat", "d/M/y H:m:s"));
+                                 if (strVal.trim().length() == 0) return null;
+                                
+                                 // Check if the format is either  "d/M/y H:m:s" or "a date range"
+                                 SimpleDateFormat format = new SimpleDateFormat(IReportManager.getInstance().getProperty("timeformat", "d/M/y H:m:s"));
+                                 ParseException pe = null;
+                                         
                                 try
                                 { 
-                                        if (strVal.trim().length() == 0) return null;
                                         val = format.parse(strVal);
                                 }
                                 catch (ParseException e)
                                 {
-                                        throw new InputValidationException(
-                                                JasperServerManager.getFormattedString("basicInputControl.invalidDatetime","Invalid value set for {0} is not a valid datetime in the form {1}",new Object[]{getInputControl().getLabel(),IReportManager.getInstance().getProperty("timeformat", "d/M/y H:m:s")}));
+                                    pe = e;
+                                        
                                 }
+                                
+                                if (pe != null)
+                                {
+                                    boolean validDate = false;
+                                    if (IReportManager.getPreferences().getBoolean("jasperserver.useRelativeDateExpressions", true))
+                                    {
+                                        DateRangeBuilder drb = new DateRangeBuilder(strVal);
+                                        try {
+
+                                            drb.set(Timestamp.class).toDateRange();
+                                            validDate = true;
+                                        } catch (InvalidDateRangeExpressionException ex)
+                                        {
+
+                                        }
+                                    }
+                                    
+                                    if (!validDate)
+                                    {
+                                        throw new InputValidationException(
+                                                JasperServerManager.getFormattedString("basicInputControl.invalidDatetime","Invalid value set for {0} is not a valid datetime in the form {1} or a date range expression.",new Object[]{getInputControl().getLabel(),IReportManager.getInstance().getProperty("timeformat", "d/M/y H:m:s")}));
+                                    }
+                                }
+                                 
                             }
+                            
                             break;
                         }
                             
                             
 			case ResourceDescriptor.DT_TYPE_DATE :
 			{
-                            if (!(val instanceof java.util.Date))
+                            
+                            if (val instanceof String)
                             {
-				SimpleDateFormat format = new SimpleDateFormat( IReportManager.getInstance().getProperty("dateformat", "d/M/y") );
+                                 if (strVal.trim().length() == 0) return null;
+                                
+                                 // Check if the format is either  "d/M/y H:m:s" or "a date range"
+                                 SimpleDateFormat format = new SimpleDateFormat(IReportManager.getInstance().getProperty("dateformat", "d/M/y") );
+                                 ParseException pe = null;
+                                         
+                                try
+                                { 
+                                        val = format.parse(strVal);
+                                }
+                                catch (ParseException e)
+                                {
+                                    pe = e;
+                                        
+                                }
+                                 
+                                if (pe != null)
+                                {
+                                    boolean validDate = false;
+                                    if (IReportManager.getPreferences().getBoolean("jasperserver.useRelativeDateExpressions", true))
+                                    {
+                                        DateRangeBuilder drb = new DateRangeBuilder(strVal);
+                                        try {
 
-				try
-				{
-                                        if (strVal.trim().length() == 0) return null;
-					val = format.parse(strVal);
-				}
-				catch (ParseException e)
-				{
-					throw new InputValidationException(
-                                                JasperServerManager.getFormattedString("basicInputControl.invalidDate","Invalid value set for {0} is not a valid date in the form {1}",new Object[]{getInputControl().getLabel(),IReportManager.getInstance().getProperty("dateformat", "d/M/y")}));
-                                                
-				}
+                                            drb.toDateRange();
+                                            validDate = true;
+                                        } catch (InvalidDateRangeExpressionException ex)
+                                        {
 
+                                        }
+                                    }
+                                    
+                                    if (!validDate)
+                                    {
+                                        throw new InputValidationException(
+                                                JasperServerManager.getFormattedString("basicInputControl.invalidDate","Invalid value set for {0} is not a valid date in the form {1} or a valid date range expression.",new Object[]{getInputControl().getLabel(),IReportManager.getInstance().getProperty("dateformat", "d/M/y")}));
+                                    }
+                                }
+                                
+                                 
+                                 
                             }
                             break;
 			}

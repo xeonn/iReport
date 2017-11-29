@@ -24,16 +24,17 @@
 package com.jaspersoft.ireport.designer.compiler.prompt;
 
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.ThreadUtils;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.sql.Timestamp;
 import java.util.*;
 import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import org.openide.util.Exceptions;
+import net.sf.jasperreports.types.date.DateRange;
+import net.sf.jasperreports.types.date.DateRangeBuilder;
+import net.sf.jasperreports.types.date.TimestampRange;
 
 
 /**
@@ -193,6 +194,50 @@ public class Prompter
                             java.util.Date d = (java.util.Date)value; // sdf.parse("" + value);
                             java.sql.Timestamp time = new java.sql.Timestamp(d.getTime());
                             hm.put(param.getName(), time);
+                        }
+                        catch (Exception ex)
+                        {
+                            System.out.println(ex.getMessage());
+                        }
+                    }
+                    else if (param.getValueClassName().equals(DateRange.class.getName()))
+                    {
+
+                        try
+                        {
+                            DateRangeBuilder drb = null;
+                            if (value instanceof Date)
+                            {
+                                drb = new DateRangeBuilder((Date)value);
+                            }
+                            else if (value instanceof String)
+                            {
+                                drb = new DateRangeBuilder((String)value);
+                                
+                            }
+                            hm.put(param.getName(), drb.toDateRange());
+                        }
+                        catch (Exception ex)
+                        {
+                            System.out.println(ex.getMessage());
+                        }
+                    }
+                    else if (param.getValueClassName().equals(TimestampRange.class.getName()))
+                    {
+
+                        try
+                        {
+                            DateRangeBuilder drb = null;
+                            if (value instanceof Date)
+                            {
+                                drb = new DateRangeBuilder((Date)value);
+                            }
+                            else if (value instanceof String)
+                            {
+                                drb = new DateRangeBuilder((String)value);
+                                
+                            }
+                            hm.put(param.getName(), drb.set(Timestamp.class).toDateRange());
                         }
                         catch (Exception ex)
                         {

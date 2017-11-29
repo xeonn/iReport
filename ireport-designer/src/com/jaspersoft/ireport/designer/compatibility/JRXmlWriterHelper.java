@@ -23,17 +23,15 @@
  */
 package com.jaspersoft.ireport.designer.compatibility;
 
-import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.SwingUtilities;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
-import org.openide.util.Exceptions;
-import org.openide.util.Mutex;
 
 
 /**
@@ -42,46 +40,43 @@ import org.openide.util.Mutex;
  */
 public class JRXmlWriterHelper {
 
-    private static final Map<String, Class> writers = new HashMap();
-
+    private static final List<String> jrVersions = new ArrayList<String>();
+    
     static {
-        writers.put("4_5_0", JRXmlWriter_4_5_0.class);
-        writers.put("4_0_1", JRXmlWriter_4_0_1.class);
-        writers.put("3_7_4", JRXmlWriter_3_7_4.class);
-        writers.put("3_7_3", JRXmlWriter_3_7_3.class);
-        writers.put("3_7_1", JRXmlWriter_3_7_1.class);
-        writers.put("3_6_2", JRXmlWriter_3_6_2.class);
-        writers.put("3_6_1", JRXmlWriter_3_6_1.class);
-        writers.put("3_6_0", JRXmlWriter_3_6_0.class);
-        writers.put("3_5_2", JRXmlWriter_3_5_2.class);
-        writers.put("3_5_1", JRXmlWriter_3_5_1.class);
-        writers.put("3_5_0", JRXmlWriter_3_5_0.class);
-        /*
-        writers.put("3_1_4", JRXmlWriter_3_1_4.class);
-        writers.put("3_1_3", JRXmlWriter_3_1_3.class);
-        writers.put("3_1_2", JRXmlWriter_3_1_2.class);
-        writers.put("3_1_0", JRXmlWriter_3_1_0.class);
-        writers.put("3_0_1", JRXmlWriter_3_0_1.class);
-        writers.put("3_0_0", JRXmlWriter_3_0_0.class);
-        writers.put("2_0_5", JRXmlWriter_2_0_5.class);
-        writers.put("2_0_4", JRXmlWriter_2_0_4.class);
-        writers.put("2_0_3", JRXmlWriter_2_0_3.class);
-        writers.put("2_0_2", JRXmlWriter_2_0_2.class);
-        */
+        
+        
+        for (Field f : JRConstants.class.getFields())
+        {
+            if (f.getName().startsWith("VERSION_"))
+                    try {
+                            jrVersions.add((String) f.get(null));
+                    } catch (Exception ex) {
+                            ex.printStackTrace();
+                    }
+        }
     }
-
+    
+    public static List<String> getJRVersions()
+    {
+        return jrVersions;
+        
+    }
+    
+    
     private static VersionWarningDialog dialog = null;
 
     public static String writeReport(JRReport report, String encoding) throws Exception
     {
-        JRXmlWriter writer = new JRXmlWriter(IRLocalJasperReportsContext.getInstance());
+        
+        // The user does not want to use compatibility...
+        JRXmlWriter writer = new JRXmlWriter(new VersionJRContext(null));
         return writer.write(report, encoding);
     }
     
     
     public static String writeReport(JRReport report, String encoding, String version) throws Exception
     {
-        JRXmlWriter writer = new JRXmlWriter(IRLocalJasperReportsContext.getInstance());
+        JRXmlWriter writer = new JRXmlWriter(new VersionJRContext(version));
         if (IReportManager.getPreferences().getBoolean("show_compatibility_warning", true))
         {
             setDialog(null); // force the instance of a new dialog...
@@ -111,21 +106,14 @@ public class JRXmlWriterHelper {
 
            if (res == VersionWarningDialog.DIALOG_RESULT_USE_LAST_VERSION)
            {
-               version = "";
+               version = null;
            }
 
         }
-        if (writers.containsKey(version))
-        {
-            Class clazz = writers.get(version);
-            return (String)clazz.getMethod("writeReport", new Class[]{JRReport.class, String.class}).invoke(null, new Object[]{report, encoding});
-        }
-        else if (version.length() == 0)
-        {
-            return writer.writeReport(report, encoding);
-        }
-
-        throw new Exception("XML writer for version " +version + " not found.");
+        
+        writer = new JRXmlWriter(new VersionJRContext(version));
+        return writer.write(report, encoding);
+        
     }
 
     /**

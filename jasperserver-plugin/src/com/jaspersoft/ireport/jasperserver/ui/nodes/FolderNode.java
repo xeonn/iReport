@@ -26,6 +26,7 @@ package com.jaspersoft.ireport.jasperserver.ui.nodes;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.outline.nodes.IRIndexedNode;
+import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
 import com.jaspersoft.ireport.jasperserver.ui.actions.AddResourceAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.DeleteAction;
@@ -205,7 +206,17 @@ public class FolderNode extends IRIndexedNode implements ResourceNode {
             list.add(SystemAction.get( PasteAction.class ));
             list.add(SystemAction.get( DeleteAction.class));
         }
+        
         list.add(null);
+        
+        List<Action> actionsToAdd = JasperServerManager.getContributedMenuActionsFor( this.getResourceDescriptor() );
+        
+        if (actionsToAdd != null)
+        {
+            list.addAll(actionsToAdd);
+        }
+        
+        
         list.add(SystemAction.get( RefreshAction.class));
         list.add(SystemAction.get( PropertiesAction.class));
 

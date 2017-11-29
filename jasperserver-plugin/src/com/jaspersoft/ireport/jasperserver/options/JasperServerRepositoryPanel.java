@@ -84,6 +84,7 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
         jRadioButtonMIME = new javax.swing.JRadioButton();
         jLabel2 = new javax.swing.JLabel();
         jCheckBoxTreeLabels = new javax.swing.JCheckBox();
+        jCheckBoxUseRelativeDateExpressions = new javax.swing.JCheckBox();
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(JasperServerRepositoryPanel.class, "JasperServerRepositoryPanel.jLabel1.text")); // NOI18N
 
@@ -134,6 +135,13 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxUseRelativeDateExpressions, org.openide.util.NbBundle.getMessage(JasperServerRepositoryPanel.class, "JasperServerRepositoryPanel.jCheckBoxUseRelativeDateExpressions.text")); // NOI18N
+        jCheckBoxUseRelativeDateExpressions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxUseRelativeDateExpressionsActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -155,13 +163,16 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
                             .add(layout.createSequentialGroup()
                                 .add(2, 2, 2)
                                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(jCheckBoxPreventChunkedRequests, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
-                                    .add(jCheckBoxProMode, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)))
+                                    .add(jCheckBoxPreventChunkedRequests, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+                                    .add(jCheckBoxProMode, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)))
                             .add(jLabel2)
                             .add(jButtonClearCertificatesCache)))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(22, 22, 22)
-                        .add(jCheckBoxTreeLabels, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)))
+                        .add(jCheckBoxTreeLabels, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .add(22, 22, 22)
+                        .add(jCheckBoxUseRelativeDateExpressions, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -185,7 +196,9 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
                 .add(jButtonClearCertificatesCache)
                 .add(18, 18, 18)
                 .add(jCheckBoxTreeLabels)
-                .addContainerGap(110, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxUseRelativeDateExpressions)
+                .addContainerGap(87, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -216,6 +229,10 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
         notifyChange();
     }//GEN-LAST:event_jCheckBoxTreeLabelsActionPerformed
 
+    private void jCheckBoxUseRelativeDateExpressionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxUseRelativeDateExpressionsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxUseRelativeDateExpressionsActionPerformed
+
     void load() {
         setInit(true);
         //jCheckBoxJS30Compatibility.setSelected(IReportManager.getPreferences().getBoolean("use_jrxml_DTD", false));
@@ -227,6 +244,8 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
         
         jRadioButtonMIME.setSelected(IReportManager.getPreferences().getBoolean("jasperserver.useMIME", true));
         jRadioButtonDIME.setSelected(!jRadioButtonMIME.isSelected());
+        
+        jCheckBoxUseRelativeDateExpressions.setSelected(IReportManager.getPreferences().getBoolean("jasperserver.useRelativeDateExpressions", true));
         
         setInit(false);
     }
@@ -252,6 +271,7 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox jCheckBoxPreventChunkedRequests;
     private javax.swing.JCheckBox jCheckBoxProMode;
     private javax.swing.JCheckBox jCheckBoxTreeLabels;
+    private javax.swing.JCheckBox jCheckBoxUseRelativeDateExpressions;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JRadioButton jRadioButtonDIME;

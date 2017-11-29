@@ -26,8 +26,10 @@ package com.jaspersoft.ireport.jasperserver.ui.nodes;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.dnd.ReportObjectPaletteTransferable;
 import com.jaspersoft.ireport.designer.outline.nodes.IRAbstractNode;
+import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.RepositoryFile;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
+import com.jaspersoft.ireport.jasperserver.ui.RepositoryListCellRenderer;
 import com.jaspersoft.ireport.jasperserver.ui.actions.DeleteAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.ImportDatasourceAction;
 import com.jaspersoft.ireport.jasperserver.ui.actions.ImportXMLADatasourceAction;
@@ -60,50 +62,7 @@ import org.openide.util.datatransfer.ExTransferable;
  */
 public class FileNode extends IRAbstractNode implements ResourceNode {
 
-    static ImageIcon datasourceJndiIcon;
-    static ImageIcon datasourceJdbcIcon;
-    static ImageIcon datasourceBeanIcon;
-    static ImageIcon datasourceIcon;
-    static ImageIcon imageIcon;
-    static ImageIcon jrxmlIcon;
-    static ImageIcon fontIcon;
-    static ImageIcon jarIcon;
-    static ImageIcon refIcon;
-    static ImageIcon bundleIcon;
-    static ImageIcon inputcontrolIcon;
-    static ImageIcon datatypeIcon;
-    static ImageIcon lovIcon;
-    static ImageIcon unknowIcon;
-    static ImageIcon queryIcon;
-    static ImageIcon waitingIcon;
-    static ImageIcon styleTemplateIcon;
-    static ImageIcon reportOptionsResourceIcon;
     
-    static 
-    {
-        if (datasourceJndiIcon == null) datasourceJndiIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/datasource_jndi.png"));
-        if (datasourceIcon == null) datasourceIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/datasource.png"));
-        if (datasourceJdbcIcon == null) datasourceJdbcIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/datasource_jdbc.png"));
-        if (imageIcon == null) imageIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/picture.png"));
-        if (jrxmlIcon == null) jrxmlIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/jrxml_file.png"));
-        if (styleTemplateIcon == null) styleTemplateIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/style-16.png"));
-
-        if (refIcon == null) refIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/link.png"));
-        if (bundleIcon == null) bundleIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/bundle.png"));
-        if (fontIcon == null) fontIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/font.png"));
-        if (jarIcon == null) jarIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/jar.png"));
-        if (inputcontrolIcon == null) inputcontrolIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/inputcontrol.png"));
-        if (datatypeIcon == null) datatypeIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/datatype.png"));
-        if (lovIcon == null) lovIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/lov.png"));
-        
-        if (datasourceBeanIcon == null) datasourceBeanIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/datasource_bean.png"));
-        if (unknowIcon == null) unknowIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/unknow.png"));
-        if (queryIcon == null) queryIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/query.png"));
-        
-        if (waitingIcon == null) waitingIcon = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/waiting.png"));
-
-        if (reportOptionsResourceIcon == null) reportOptionsResourceIcon  = new javax.swing.ImageIcon(FileNode.class.getResource("/com/jaspersoft/ireport/jasperserver/res/reportunit_options.png"));
-    }
     
     private RepositoryFile file = null;
     
@@ -147,31 +106,7 @@ public class FileNode extends IRAbstractNode implements ResourceNode {
     
     public static ImageIcon getResourceIcon(ResourceDescriptor resource)
     {
-        if (resource == null) return unknowIcon;
-        else if (resource.getWsType() == null) return unknowIcon;
-        else if (resource.getIsReference()) return refIcon;
-        //else if (resource.getWsType().equals(ResourceDescriptor.TYPE_FOLDER)) return folderIcon;
-        //else if (resource.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) return reportUnitIcon;
-        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_JNDI)) return datasourceJndiIcon;
-        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_JDBC)) return datasourceJdbcIcon;
-        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_BEAN)) return datasourceBeanIcon;
-        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION)) return datasourceIcon;
-        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_IMAGE)) return imageIcon;
-        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_JRXML)) return jrxmlIcon;
-        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_XML_FILE)) return jrxmlIcon;
-        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_FONT)) return fontIcon;
-        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_CLASS_JAR)) return jarIcon;
-        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE)) return bundleIcon;
-        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) return inputcontrolIcon;
-        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATA_TYPE)) return datatypeIcon;
-        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_LOV)) return lovIcon;
-        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_QUERY)) return queryIcon;
-        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE)) return styleTemplateIcon;
-        else if (resource.getWsType().equals("ReportOptionsResource")) return reportOptionsResourceIcon;
-        else if (resource.getWsType().equals("custom") && RepositoryFolder.isDataSource(resource)) return datasourceIcon;
-        
-        return unknowIcon;
-        
+        return RepositoryListCellRenderer.getResourceIcon(resource);
     }
     
     public RepositoryFile getFile() {
@@ -226,8 +161,18 @@ public class FileNode extends IRAbstractNode implements ResourceNode {
             actions.add(SystemAction.get( ImportXMLADatasourceAction.class));
         }
 
-
+        
         actions.add(null);
+        
+        List<Action> actionsToAdd = JasperServerManager.getContributedMenuActionsFor( this.getResourceDescriptor() );
+        
+        if (actionsToAdd != null)
+        {
+            actions.addAll(actionsToAdd);
+        }
+        
+
+        
         actions.add(SystemAction.get( RefreshAction.class));
         actions.add(SystemAction.get( PropertiesAction.class));
             

@@ -79,6 +79,8 @@ public class ComponentDatasetRunPanel extends javax.swing.JPanel {
             }
         });
 
+        
+        jButtonResetButton.setVisible(false);
 
 
         DatasetParametersTableCellRenderer dpcr = new DatasetParametersTableCellRenderer();
@@ -113,6 +115,16 @@ public class ComponentDatasetRunPanel extends javax.swing.JPanel {
     }
 
 
+    public void setShowRemoveDatasetRun(boolean b)
+    {
+        jButtonResetButton.setVisible(b);
+        this.updateUI();
+    }
+    
+    public boolean getShowRemoveDatasetRun()
+    {
+        return jButtonResetButton.isVisible();
+    }
 
     public void jRTextExpressionAreaMapExpressionTextChanged() {
         if (this.isInit()) return;
@@ -198,8 +210,12 @@ public class ComponentDatasetRunPanel extends javax.swing.JPanel {
         jPanel5 = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
         jRTextExpressionAreaMapExpression = new com.jaspersoft.ireport.designer.editor.ExpressionEditorArea();
+        jPanel2 = new javax.swing.JPanel();
         jButtonOk = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
+        jButtonResetButton = new javax.swing.JButton();
+
+        setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), org.openide.util.NbBundle.getMessage(ComponentDatasetRunPanel.class, "ComponentDatasetRunPanel.jPanel1.border.title"))); // NOI18N
         jPanel1.setPreferredSize(new java.awt.Dimension(329, 192));
@@ -416,6 +432,19 @@ public class ComponentDatasetRunPanel extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(jPanel7, gridBagConstraints);
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 61;
+        gridBagConstraints.ipady = 46;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        add(jPanel1, gridBagConstraints);
+
         jButtonOk.setText(org.openide.util.NbBundle.getMessage(ComponentDatasetRunPanel.class, "ComponentDatasetRunPanel.jButtonOk.text")); // NOI18N
         jButtonOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -430,32 +459,41 @@ public class ComponentDatasetRunPanel extends javax.swing.JPanel {
             }
         });
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 450, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(344, Short.MAX_VALUE)
+        jButtonResetButton.setText(org.openide.util.NbBundle.getMessage(ComponentDatasetRunPanel.class, "ComponentDatasetRunPanel.jButtonResetButton.text")); // NOI18N
+        jButtonResetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonResetButtonActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jButtonResetButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jButtonOk)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jButtonCancel)
-                .addContainerGap())
+                .add(jButtonCancel))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 274, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .add(8, 8, 8)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jButtonCancel)
-                    .add(jButtonOk))
+                    .add(jButtonOk)
+                    .add(jButtonResetButton))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        add(jPanel2, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
 
@@ -643,6 +681,12 @@ public class ComponentDatasetRunPanel extends javax.swing.JPanel {
         dialog.dispose();
     }//GEN-LAST:event_jButtonOkActionPerformed
 
+    private void jButtonResetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResetButtonActionPerformed
+        this.setDialogResult(JOptionPane.NO_OPTION);
+        dialog.setVisible(false);
+        dialog.dispose();
+    }//GEN-LAST:event_jButtonResetButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddParameter;
@@ -650,6 +694,7 @@ public class ComponentDatasetRunPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButtonModParameter;
     private javax.swing.JButton jButtonOk;
     private javax.swing.JButton jButtonRemParameter;
+    private javax.swing.JButton jButtonResetButton;
     private javax.swing.JComboBox jComboBoxDatasetConnectionType;
     private javax.swing.JComboBox jComboBoxSubDataset;
     private javax.swing.JLabel jLabel26;
@@ -658,6 +703,7 @@ public class ComponentDatasetRunPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -830,7 +876,7 @@ public class ComponentDatasetRunPanel extends javax.swing.JPanel {
         dialog.setLocationRelativeTo(null);
         dialog.setMinimumSize( dialog.getSize() );
         dialog.setMaximumSize( dialog.getSize());
-        dialog.setResizable(false);
+        dialog.setResizable(true);
         dialog.setVisible(dialog.isModal());
 
         javax.swing.KeyStroke escape =  javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0, false);

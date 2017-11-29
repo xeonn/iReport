@@ -26,6 +26,7 @@ package com.jaspersoft.ireport.jasperserver.ui.nodes;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.dnd.ReportObjectPaletteTransferable;
 import com.jaspersoft.ireport.designer.outline.nodes.IRIndexedNode;
+import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
 import com.jaspersoft.ireport.jasperserver.RepositoryReportUnit;
 import com.jaspersoft.ireport.jasperserver.ui.actions.AddResourceAction;
@@ -38,6 +39,8 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import java.awt.Image;
 import java.awt.datatransfer.Transferable;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 import javax.swing.Action;
@@ -146,17 +149,31 @@ public class ReportUnitNode extends IRIndexedNode implements ResourceNode {
     
     @Override
     public Action[] getActions(boolean arg0) {
-        return new Action[]{
-            SystemAction.get( RunReportUnitAction.class),
-            SystemAction.get( AddResourceAction.class),
-            null,
-            SystemAction.get( CopyAction.class),
-            SystemAction.get( CutAction.class),
-            SystemAction.get( DeleteAction.class),
-            null,
-            SystemAction.get( RefreshAction.class),
-            SystemAction.get( PropertiesAction.class)
-        };
+        
+        
+        List<Action> actions = new ArrayList<Action>();
+
+        
+        actions.add(SystemAction.get( RunReportUnitAction.class));
+        actions.add(SystemAction.get( AddResourceAction.class));
+        actions.add(null);
+        actions.add(SystemAction.get( CopyAction.class));
+        actions.add(SystemAction.get( CutAction.class));
+        actions.add(SystemAction.get( DeleteAction.class));
+        actions.add(null);
+        
+        List<Action> actionsToAdd = JasperServerManager.getContributedMenuActionsFor( this.getResourceDescriptor() );
+        
+        if (actionsToAdd != null)
+        {
+            actions.addAll(actionsToAdd);
+        }
+        
+
+        actions.add(SystemAction.get( RefreshAction.class));
+        actions.add(SystemAction.get( PropertiesAction.class));
+            
+        return actions.toArray(new Action[actions.size()]);
     }
 
     public ResourceDescriptor getResourceDescriptor() {

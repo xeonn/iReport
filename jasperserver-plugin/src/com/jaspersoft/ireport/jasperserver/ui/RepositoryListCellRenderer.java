@@ -43,6 +43,10 @@ public class RepositoryListCellRenderer extends DefaultListCellRenderer  {
     final static ImageIcon folderIcon = new ImageIcon(RepositoryListCellRenderer.class.getResource("/com/jaspersoft/ireport/jasperserver/res/folder.png"));
     final static ImageIcon reportUnitIcon = new ImageIcon(RepositoryListCellRenderer.class.getResource("/com/jaspersoft/ireport/jasperserver/res/reportunit.png"));
     final static ImageIcon datasourceJndiIcon = new ImageIcon(RepositoryListCellRenderer.class.getResource("/com/jaspersoft/ireport/jasperserver/res/datasource_jndi.png"));
+    final static ImageIcon datasourceMongoDBIcon = new ImageIcon(RepositoryListCellRenderer.class.getResource("/com/jaspersoft/ireport/jasperserver/res/datasource_mongodb.png"));
+    final static ImageIcon datasourceHiveIcon = new ImageIcon(RepositoryListCellRenderer.class.getResource("/com/jaspersoft/ireport/jasperserver/res/datasource_hive.png"));
+    final static ImageIcon datasourceVirtualIcon = new ImageIcon(RepositoryListCellRenderer.class.getResource("/com/jaspersoft/ireport/jasperserver/res/datasource_virtual.png"));
+    
     final static ImageIcon datasourceIcon = new ImageIcon(RepositoryListCellRenderer.class.getResource("/com/jaspersoft/ireport/jasperserver/res/datasource.png"));
     final static ImageIcon datasourceJdbcIcon = new ImageIcon(RepositoryListCellRenderer.class.getResource("/com/jaspersoft/ireport/jasperserver/res/datasource_jdbc.png"));
     final static ImageIcon imageIcon = new ImageIcon(RepositoryListCellRenderer.class.getResource("/com/jaspersoft/ireport/jasperserver/res/picture.png"));
@@ -138,6 +142,7 @@ public class RepositoryListCellRenderer extends DefaultListCellRenderer  {
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) return reportUnitIcon;
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_JNDI)) return datasourceJndiIcon;
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_JDBC)) return datasourceJdbcIcon;
+        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_VIRTUAL)) return datasourceVirtualIcon;
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_BEAN)) return datasourceBeanIcon;
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION)) return datasourceIcon;
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_IMAGE)) return imageIcon;
@@ -150,7 +155,28 @@ public class RepositoryListCellRenderer extends DefaultListCellRenderer  {
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_LOV)) return lovIcon;
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_QUERY)) return queryIcon;
         else if (resource.getWsType().equals("ReportOptionsResource")) return reportOptionsResourceIcon;
-        else if (resource.getWsType().equals("custom") && RepositoryFolder.isDataSource(resource)) return datasourceIcon;
+        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE_CUSTOM) && RepositoryFolder.isDataSource(resource))
+        {
+            String serviceClass = resource.getResourcePropertyValue(ResourceDescriptor.PROP_DATASOURCE_CUSTOM_SERVICE_CLASS);
+            
+            if (serviceClass != null)
+            {
+                if (serviceClass.equals("com.jaspersoft.hadoop.hive.jasperserver.HiveDataSourceService"))
+                {
+                    return datasourceHiveIcon;
+                }
+                else if (serviceClass.equals("com.jaspersoft.mongodb.jasperserver.MongoDbDataSourceService"))
+                {
+                    return datasourceMongoDBIcon;
+                }
+            }
+                    
+            
+        }
+        else if (RepositoryFolder.isDataSource(resource))
+        {
+            return datasourceIcon;
+        }
         return unknowIcon;
     }
 }

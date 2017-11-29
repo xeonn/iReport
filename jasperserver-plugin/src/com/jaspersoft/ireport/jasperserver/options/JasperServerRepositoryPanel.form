@@ -40,8 +40,8 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jCheckBoxPreventChunkedRequests" alignment="0" pref="429" max="32767" attributes="0"/>
-                                  <Component id="jCheckBoxProMode" alignment="0" pref="429" max="32767" attributes="0"/>
+                                  <Component id="jCheckBoxPreventChunkedRequests" alignment="0" pref="512" max="32767" attributes="0"/>
+                                  <Component id="jCheckBoxProMode" alignment="0" pref="512" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -50,7 +50,11 @@
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                      <Component id="jCheckBoxTreeLabels" pref="429" max="32767" attributes="0"/>
+                      <Component id="jCheckBoxTreeLabels" pref="512" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                      <Component id="jCheckBoxUseRelativeDateExpressions" pref="512" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -79,7 +83,9 @@
               <Component id="jButtonClearCertificatesCache" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jCheckBoxTreeLabels" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="110" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jCheckBoxUseRelativeDateExpressions" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="87" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -165,6 +171,16 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxTreeLabelsActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="jCheckBoxUseRelativeDateExpressions">
+      <Properties>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="com/jaspersoft/ireport/jasperserver/options/Bundle.properties" key="JasperServerRepositoryPanel.jCheckBoxUseRelativeDateExpressions.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxUseRelativeDateExpressionsActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

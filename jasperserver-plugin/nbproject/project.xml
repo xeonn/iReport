@@ -169,11 +169,13 @@
                 <package>com.ibm.wsdl.util.xml</package>
                 <package>com.ibm.wsdl.xml</package>
                 <package>com.jaspersoft.ireport.jasperserver</package>
+                <package>com.jaspersoft.ireport.jasperserver.options</package>
                 <package>com.jaspersoft.ireport.jasperserver.ui</package>
                 <package>com.jaspersoft.ireport.jasperserver.ui.actions</package>
                 <package>com.jaspersoft.ireport.jasperserver.ui.inputcontrols</package>
                 <package>com.jaspersoft.ireport.jasperserver.ui.inputcontrols.impl</package>
                 <package>com.jaspersoft.ireport.jasperserver.ui.nodes</package>
+                <package>com.jaspersoft.ireport.jasperserver.ui.nodes.dnd</package>
                 <package>com.jaspersoft.ireport.jasperserver.ui.resources</package>
                 <package>com.jaspersoft.ireport.jasperserver.ui.wizards</package>
                 <package>com.jaspersoft.ireport.jasperserver.validation</package>
@@ -310,8 +312,8 @@
                 <binary-origin>release/modules/ext/js_commons-discovery-0.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/js_jasperserver-common-ws-3.5.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/js_jasperserver-common-ws-3.5.0.jar</binary-origin>
+                <runtime-relative-path>ext/js_jasperserver-common-ws-4.7.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/js_jasperserver-common-ws-4.7.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/js_jaxrpc.jar</runtime-relative-path>

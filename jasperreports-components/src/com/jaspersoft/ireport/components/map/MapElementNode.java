@@ -24,8 +24,15 @@
 package com.jaspersoft.ireport.components.map;
 
 
+import com.jaspersoft.ireport.components.map.properties.LatitudeExpressionProperty;
+import com.jaspersoft.ireport.components.map.properties.LongitudeExpressionProperty;
+import com.jaspersoft.ireport.components.map.properties.ZoomExpressionProperty;
 import com.jaspersoft.ireport.components.map.properties.EvaluationGroupProperty;
 import com.jaspersoft.ireport.components.map.properties.EvaluationTimeProperty;
+import com.jaspersoft.ireport.components.map.properties.LanguageExpressionProperty;
+import com.jaspersoft.ireport.components.map.properties.MapImageTypeProperty;
+import com.jaspersoft.ireport.components.map.properties.MapScaleProperty;
+import com.jaspersoft.ireport.components.map.properties.MapTypeProperty;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.locale.I18n;
@@ -39,6 +46,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.nodes.Sheet;
 import org.openide.util.Lookup;
+import org.openide.util.actions.SystemAction;
 
 /**
  *
@@ -68,6 +76,8 @@ public class MapElementNode extends ElementNode {
         List<Action> actions = new ArrayList<Action>();
         Action[] originalActions = super.getActions(popup);
 
+        actions.add( SystemAction.get( EditMarkerDatasetAction.class));
+        
         for (int i=0; i<originalActions.length; ++i)
         {
             actions.add(originalActions[i]);
@@ -99,6 +109,12 @@ public class MapElementNode extends ElementNode {
         propertySet.put(new LongitudeExpressionProperty(component,dataset));
         
         propertySet.put(new ZoomExpressionProperty(component,dataset));
+        
+        propertySet.put(new MapTypeProperty(component));
+        propertySet.put(new MapScaleProperty(component));
+        propertySet.put(new MapImageTypeProperty(component));
+        
+        propertySet.put(new LanguageExpressionProperty(component,dataset));
 
 
         sheet.put( propertySet );

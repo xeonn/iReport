@@ -1,3 +1,19 @@
+
+2012-11-05 Version 4.8.0 released
+_______________________________________________________________________________
+- Updated to JasperReports 4.7.8
+- Updated iText jar to 2.7.1.js1
+- Added support for relative dates
+- Added support for expression functions
+- Added support for language, map type, markers and other properties in Map component
+- New compatibility support based on JasperReports new features
+- Added layout options to subdataset groups to be leveraged in Table components
+- Added support for properties at subdataset level
+- Added support for VDS, MongoDB and Hadoop-Hive data sources to the JasperReports Server repository explorer
+- Fixed bug Bug 28714 [Case #23402] ID and Name properties fields are blank on v4.7.0 if name is long
+- Minor bug fixes
+
+
 2012-09-21 Version 4.7.1 released
 _______________________________________________________________________________
 - Updated to JasperReports 4.7.1
