@@ -24,7 +24,6 @@
 package com.jaspersoft.ireport.designer;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -168,7 +167,7 @@ public class IRLocalJasperReportsContext extends LocalJasperReportsContext {
         return false;
     }
 
-   
+    
    
     
 }

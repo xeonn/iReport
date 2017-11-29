@@ -76,6 +76,8 @@ public class Barcode4JComponentWidget extends JRDesignElementWidget {
             evt.getPropertyName().equals(PDF417Component.PROPERTY_ERROR_CORRECTION_LEVEL) ||
             evt.getPropertyName().equals(PDF417Component.PROPERTY_MAX_COLUMNS) ||
             evt.getPropertyName().equals(PDF417Component.PROPERTY_MIN_COLUMNS) ||
+            evt.getPropertyName().equals(PDF417Component.PROPERTY_QUIET_ZONE) ||
+            evt.getPropertyName().equals(PDF417Component.PROPERTY_VERTICAL_QUIET_ZONE) ||
             evt.getPropertyName().equals(PDF417Component.PROPERTY_MAX_ROWS) ||
             evt.getPropertyName().equals(PDF417Component.PROPERTY_MIN_ROWS)
             )

@@ -98,7 +98,7 @@ public class HtmlElementNode extends ElementNode {
 
         propertySet.put(new ScaleTypeProperty(component));
 
-        //propertySet.put(new LatitudeExpressionProperty(component,dataset));
+        propertySet.put(new ClipOnOverflowProperty(component));
         //propertySet.put(new ZoomExpressionProperty(component,dataset));
 
 

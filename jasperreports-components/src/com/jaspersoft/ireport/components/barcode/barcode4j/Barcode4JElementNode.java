@@ -125,6 +125,9 @@ public class Barcode4JElementNode extends ElementNode {
         set.put(new Barcode4JTextPositionProperty(component));
         set.put(new Barcode4JModuleWidthProperty(component));
 
+        set.put(new Barcode4JQuietZoneProperty(component));
+        set.put(new Barcode4JVerticalQuietZoneProperty(component));
+        
         //set.put(new BarbecueDrawTextProperty(component) );
         //set.put(new BarbecueChecksumRequiredProperty(component) );
         //set.put(new BarbecueApplicationIdentifierExpressionProperty(component, ModelUtils.getElementDataset(getElement(), getJasperDesign())));
