@@ -54,6 +54,8 @@ final public class JRViewerTopComponent extends TopComponent {
     JRViewerController viewerContext = new JRViewerController(IRLocalJasperReportsContext.getInstance(), null, null);
     JrxmlPreviewToolbar viewerToolbar = new JrxmlPreviewToolbar(viewerContext);
     
+    JRViewerPanel viewerPanel = null;
+    
 
     private JRViewerTopComponent() {
         initComponents();
@@ -83,8 +85,9 @@ final public class JRViewerTopComponent extends TopComponent {
         
                 if (print != null)
                 {
-                    JRViewerPanel viewerPanel = 
-                        new JRViewerPanel(viewerContext)
+                    if (viewerPanel == null)
+                    {
+                        viewerPanel = new JRViewerPanel(viewerContext)
                         {
                             protected void paintPage(Graphics2D grx) 
                             {
@@ -99,14 +102,15 @@ final public class JRViewerTopComponent extends TopComponent {
                                     Thread.currentThread().setContextClassLoader(oldClassLoader);
                                 }
                             }
-                    	};
-
+                        };
+                    }
+                        
                     add(viewerPanel, BorderLayout.CENTER);
                     add(viewerToolbar, BorderLayout.NORTH);
-
-                    viewerContext.loadReport(print);
-                                        
+                    
                     viewerToolbar.init();
+                    
+                    viewerContext.loadReport(print);
                     viewerContext.refreshPage();
                     viewerPanel.updateUI();
                 }

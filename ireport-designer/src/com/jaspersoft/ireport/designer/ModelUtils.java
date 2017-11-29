@@ -1035,6 +1035,9 @@ public class ModelUtils {
                 case JRCrosstabOrigin.TYPE_COLUMN_GROUP_TOTAL_HEADER:
                     title = origin.getColumnGroupName() + I18n.getString("ModelUtils.Title.Totalheader");
                     break;
+                case JRCrosstabOrigin.TYPE_COLUMN_GROUP_CROSSTAB_HEADER:
+                    title = origin.getColumnGroupName() + " " + I18n.getString("ModelUtils.Title.Header");
+                    break;
                 case JRCrosstabOrigin.TYPE_ROW_GROUP_HEADER:
                     title = origin.getRowGroupName() + I18n.getString("ModelUtils.Title.HeaderH");
                     break;

@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer.sheet.editors;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.fonts.JRFontPanel;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -92,6 +93,7 @@ public class JRFontPropertyCustomEditor extends JRFontPanel implements PropertyC
     public void propertyChange(PropertyChangeEvent evt) {
         if (PropertyEnv.PROP_STATE.equals(evt.getPropertyName()) && evt.getNewValue() == PropertyEnv.STATE_VALID) {
             editor.setValue(getPropertyValue());
+            IReportManager.getInstance().notifyReportChange();
         }
     }
 

@@ -121,6 +121,16 @@ public class CrosstabChildren  extends Index.KeysChildren implements PropertyCha
                 l.add( columns[i].getTotalHeader());
             }
             
+            if ( columns[i].getCrosstabHeader() == null)
+            {
+                NullCell cell = new NullCell(new JRCrosstabOrigin( crosstab, JRCrosstabOrigin.TYPE_COLUMN_GROUP_CROSSTAB_HEADER, null, columns[i].getName() ));
+                l.add( cell );
+            }
+            else
+            {
+                l.add( columns[i].getCrosstabHeader());
+            }
+            
         }
         // Add all the rows...
         JRCrosstabRowGroup[] rows = crosstab.getRowGroups();

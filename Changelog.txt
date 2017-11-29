@@ -1,3 +1,14 @@
+2013-04-29 Version 5.1.0 released
+_______________________________________________________________________________
+- Updated to JasperReports 5.1.0
+- Improved support for Markers for the Google Map Component
+- Fixed Bug 32103 "The Document has no pages" message appears multiple times
+- Fixed Bug 31656 [Case #32490] iReport font changes to chart do not apply
+- Fixed Bug 27013 [case #25478] Ability to view resources by ID in repository navigator
+- Fixed Bug 30702 [case 30575 + 1] ireport 5.0 query editor now returns a generic database error, instead of something meaningful
+- Fixed Bug 30938 [Case #31240,+2] Cannot have a Date type parameter in the query text
+
+
 2013-04-02 Version 5.0.4 released
 _______________________________________________________________________________
 - Updated to JasperReports 5.0.4

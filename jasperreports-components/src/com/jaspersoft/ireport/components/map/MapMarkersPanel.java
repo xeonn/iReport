@@ -11,10 +11,7 @@
 
 package com.jaspersoft.ireport.components.map;
 
-import com.jaspersoft.ireport.components.spiderchart.*;
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.ModelUtils;
-import com.jaspersoft.ireport.designer.charts.datasets.DatasetListsCellRenderer;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.utils.ExpressionInterpreter;
@@ -35,10 +32,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableColumnModel;
-import net.sf.jasperreports.charts.JRCategorySeries;
-import net.sf.jasperreports.charts.design.JRDesignCategorySeries;
-import net.sf.jasperreports.components.spiderchart.SpiderChartComponent;
-import net.sf.jasperreports.components.spiderchart.StandardSpiderDataset;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetParameter;
 import net.sf.jasperreports.engine.JRGroup;
@@ -46,20 +39,14 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetParameter;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import com.jaspersoft.ireport.designer.tools.*;
 import javax.swing.JComponent;
 import net.sf.jasperreports.components.map.Item;
-import net.sf.jasperreports.components.map.ItemData;
 import net.sf.jasperreports.components.map.ItemProperty;
-import net.sf.jasperreports.components.map.MapComponent;
-import net.sf.jasperreports.components.map.Marker;
-import net.sf.jasperreports.components.map.MarkerProperty;
 import net.sf.jasperreports.components.map.StandardItem;
 import net.sf.jasperreports.components.map.StandardItemData;
 import net.sf.jasperreports.components.map.StandardMapComponent;
-import net.sf.jasperreports.components.map.StandardMarker;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.type.IncrementTypeEnum;
 import net.sf.jasperreports.engine.type.ResetTypeEnum;
@@ -435,7 +422,7 @@ public class MapMarkersPanel extends javax.swing.JPanel {
             }
         });
 
-        jPanel4.setLayout(new java.awt.BorderLayout());
+        jPanel4.setLayout(new java.awt.GridBagLayout());
 
         jPanelDataset.setLayout(new java.awt.GridBagLayout());
 
@@ -773,7 +760,11 @@ public class MapMarkersPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 3, 3, 3);
         jPanelDataset.add(jRTextExpressionAreaFilterExpression, gridBagConstraints);
 
-        jPanel4.add(jPanelDataset, java.awt.BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel4.add(jPanelDataset, gridBagConstraints);
 
         jTabbedPane2.addTab(org.openide.util.NbBundle.getMessage(MapMarkersPanel.class, "MapMarkersPanel.jPanel4.TabConstraints.tabTitle"), jPanel4); // NOI18N
 
