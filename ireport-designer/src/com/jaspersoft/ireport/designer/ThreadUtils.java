@@ -23,7 +23,9 @@
  */
 package com.jaspersoft.ireport.designer;
 
+import java.lang.reflect.InvocationTargetException;
 import javax.swing.SwingUtilities;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -33,13 +35,27 @@ public class ThreadUtils {
 
     public static final void invokeInAWTThread(Runnable r)
     {
+        invokeInAWTThread(r, false);
+    }
+        
+    public static final void invokeInAWTThread(Runnable r, boolean wait) 
+    {
         if (SwingUtilities.isEventDispatchThread())
         {
             r.run();
         }
         else
         {
-            SwingUtilities.invokeLater(r);
+            if (wait)
+            {
+                try {
+                    SwingUtilities.invokeAndWait(r);
+                } catch (Exception ex) {}
+            }
+            else
+            {
+                SwingUtilities.invokeLater(r);
+            }
         }
     }
 }

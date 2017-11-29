@@ -104,6 +104,9 @@
                 <include name="notice.txt"/>
                 <include name="readme.txt"/>
                 <include name="LICENSE_ireport.txt"/>
+                <include name="Third-Party-Notices.pdf"/>
+                <include name="license-text-files/*.txt"/>
+                <include name="license-text-files/*.html"/>
             </zipfileset>
             <!-- <zipfileset  dir="etc/" filemode="755" prefix="${distro.zipfilename}/etc"/> -->
             <zipfileset dir="${netbeans.dest.dir}" prefix="${distro.zipfilename}">
@@ -141,6 +144,9 @@
                 <include name="notice.txt"/>
                 <include name="readme.txt"/>
                 <include name="LICENSE_ireport.txt"/>
+                <include name="Third-Party-Notices.pdf"/>
+                <include name="license-text-files/*.txt"/>
+                <include name="license-text-files/*.html"/>
             </tarfileset>
             <!-- <tarfileset  dir="etc/" filemode="755" prefix="${distro.zipfilename}/etc"/> -->
 
@@ -186,6 +192,8 @@
                 <include name="readme.txt"/>
                 <include name="build.xml"/>
                 <include name="LICENSE_ireport.txt"/>
+                <include name="license-text-files/*.txt"/>
+                <include name="license-text-files/*.html"/>
                 <include name="nbproject/**"/>
                 <include name="ireport-addons/**"/>
                 <include name="ireport-designer/**"/>
@@ -242,6 +250,12 @@
                 <include name="${distro.zipfilename.components}.nbm"/>
                 <include name="${distro.zipfilename.extensions}.nbm"/>
             </zipfileset>
+            <fileset dir="${basedir}">
+                <include name="Changelog.txt"/>
+                <include name="Third-Party-Notices.pdf"/>
+                <include name="license-text-files/*.txt"/>
+                <include name="license-text-files/*.html"/>
+            </fileset>
         </zip>
 
     </target>
@@ -274,6 +288,9 @@
                 <fileset dir="${basedir}">
                 <include name="Changelog.txt"/>
                 <include name="notice.txt"/>
+                <include name="Third-Party-Notices.pdf"/>
+                <include name="license-text-files/*.txt"/>
+                <include name="license-text-files/*.html"/>
                 </fileset>
     </copy>
     <copy file="${basedir}/LICENSE_ireport.txt" tofile="${dist.dir}/${distro.zipfilename}/license.txt"/>
@@ -314,6 +331,9 @@
                 <include name="notice.txt"/>
                 <include name="readme.txt"/>
                 <include name="LICENSE_ireport.txt"/>
+                <include name="Third-Party-Notices.pdf"/>
+                <include name="license-text-files/*.txt"/>
+                <include name="license-text-files/*.html"/>
             </fileset>
 
             <fileset dir="${netbeans.dest.dir}">

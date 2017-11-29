@@ -80,6 +80,7 @@ public class JrxmlPreviewView extends TopComponent
             }
         });
         this.visualView = visualView;
+        this.viewerToolbar.setFloatable(false);
     }
     
     @Override
@@ -151,12 +152,12 @@ public class JrxmlPreviewView extends TopComponent
                                 ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader(); 
                                 try
                                 {
-                                    Thread.currentThread().setContextClassLoader(IReportManager.getJRExtensionsClassLoader());
+                                    //Thread.currentThread().setContextClassLoader(IReportManager.getJRExtensionsClassLoader());
                                     super.paintPage(grx);
                                 }
                                 finally
                                 {
-                                    Thread.currentThread().setContextClassLoader(oldClassLoader);
+                                    //Thread.currentThread().setContextClassLoader(oldClassLoader);
                                 }
                             }
                     	};
@@ -241,9 +242,9 @@ public class JrxmlPreviewView extends TopComponent
                         removeAll();
                         JPanel p = new JPanel();
                         p.setLayout(new GridBagLayout());
-                        label.setBusy(true);
                         p.add(label);
                         add(p, BorderLayout.CENTER);
+                        label.setBusy(true);
                         updateUI();
                     }
                 });

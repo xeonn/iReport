@@ -409,7 +409,8 @@
                 <package>net.sf.jasperreports.components.charts</package>
                 <package>net.sf.jasperreports.components.headertoolbar</package>
                 <package>net.sf.jasperreports.components.headertoolbar.actions</package>
-                <package>net.sf.jasperreports.components.headertoolbar.htmlv2</package>
+                <package>net.sf.jasperreports.components.headertoolbar.json</package>
+                <package>net.sf.jasperreports.components.iconlabel</package>
                 <package>net.sf.jasperreports.components.list</package>
                 <package>net.sf.jasperreports.components.map</package>
                 <package>net.sf.jasperreports.components.map.fill</package>
@@ -426,6 +427,7 @@
                 <package>net.sf.jasperreports.crosstabs.design</package>
                 <package>net.sf.jasperreports.crosstabs.fill</package>
                 <package>net.sf.jasperreports.crosstabs.fill.calculation</package>
+                <package>net.sf.jasperreports.crosstabs.interactive</package>
                 <package>net.sf.jasperreports.crosstabs.type</package>
                 <package>net.sf.jasperreports.crosstabs.xml</package>
                 <package>net.sf.jasperreports.data</package>
@@ -435,6 +437,7 @@
                 <package>net.sf.jasperreports.data.ds</package>
                 <package>net.sf.jasperreports.data.ejbql</package>
                 <package>net.sf.jasperreports.data.empty</package>
+                <package>net.sf.jasperreports.data.excel</package>
                 <package>net.sf.jasperreports.data.hibernate</package>
                 <package>net.sf.jasperreports.data.hibernate.spring</package>
                 <package>net.sf.jasperreports.data.jdbc</package>
@@ -459,7 +462,6 @@
                 <package>net.sf.jasperreports.engine.export</package>
                 <package>net.sf.jasperreports.engine.export.data</package>
                 <package>net.sf.jasperreports.engine.export.draw</package>
-                <package>net.sf.jasperreports.engine.export.legacy</package>
                 <package>net.sf.jasperreports.engine.export.oasis</package>
                 <package>net.sf.jasperreports.engine.export.ooxml</package>
                 <package>net.sf.jasperreports.engine.export.ooxml.type</package>
@@ -474,24 +476,29 @@
                 <package>net.sf.jasperreports.engine.style</package>
                 <package>net.sf.jasperreports.engine.type</package>
                 <package>net.sf.jasperreports.engine.util</package>
-                <package>net.sf.jasperreports.engine.util.sample</package>
                 <package>net.sf.jasperreports.engine.util.xml</package>
+                <package>net.sf.jasperreports.engine.virtualization</package>
                 <package>net.sf.jasperreports.engine.xml</package>
+                <package>net.sf.jasperreports.export</package>
+                <package>net.sf.jasperreports.export.annotations</package>
+                <package>net.sf.jasperreports.export.parameters</package>
+                <package>net.sf.jasperreports.export.type</package>
                 <package>net.sf.jasperreports.expressions</package>
-                <package>net.sf.jasperreports.expressions.annotations</package>
-                <package>net.sf.jasperreports.expressions.functions</package>
-                <package>net.sf.jasperreports.expressions.functions.errors</package>
-                <package>net.sf.jasperreports.expressions.functions.util</package>
                 <package>net.sf.jasperreports.extensions</package>
+                <package>net.sf.jasperreports.functions</package>
+                <package>net.sf.jasperreports.functions.annotations</package>
+                <package>net.sf.jasperreports.functions.standard</package>
                 <package>net.sf.jasperreports.governors</package>
                 <package>net.sf.jasperreports.j2ee.servlets</package>
                 <package>net.sf.jasperreports.olap</package>
                 <package>net.sf.jasperreports.olap.mapping</package>
                 <package>net.sf.jasperreports.olap.mondrian</package>
+                <package>net.sf.jasperreports.olap.olap4j</package>
                 <package>net.sf.jasperreports.olap.result</package>
                 <package>net.sf.jasperreports.olap.xmla</package>
                 <package>net.sf.jasperreports.renderers</package>
                 <package>net.sf.jasperreports.repo</package>
+                <package>net.sf.jasperreports.search</package>
                 <package>net.sf.jasperreports.swing</package>
                 <package>net.sf.jasperreports.types.date</package>
                 <package>net.sf.jasperreports.util</package>
@@ -564,6 +571,14 @@
                 <package>org.apache.batik.svggen</package>
                 <package>org.apache.batik.svggen.font</package>
                 <package>org.apache.batik.svggen.font.table</package>
+                <package>org.apache.batik.transcoder</package>
+                <package>org.apache.batik.transcoder.image</package>
+                <package>org.apache.batik.transcoder.image.resources</package>
+                <package>org.apache.batik.transcoder.keys</package>
+                <package>org.apache.batik.transcoder.print</package>
+                <package>org.apache.batik.transcoder.svg2svg</package>
+                <package>org.apache.batik.transcoder.wmf</package>
+                <package>org.apache.batik.transcoder.wmf.tosvg</package>
                 <package>org.apache.batik.util</package>
                 <package>org.apache.batik.util.io</package>
                 <package>org.apache.batik.util.resources</package>
@@ -813,6 +828,7 @@
                 <package>org.codehaus.groovy.ast.builder</package>
                 <package>org.codehaus.groovy.ast.expr</package>
                 <package>org.codehaus.groovy.ast.stmt</package>
+                <package>org.codehaus.groovy.ast.tools</package>
                 <package>org.codehaus.groovy.binding</package>
                 <package>org.codehaus.groovy.bsf</package>
                 <package>org.codehaus.groovy.classgen</package>
@@ -821,6 +837,7 @@
                 <package>org.codehaus.groovy.control.messages</package>
                 <package>org.codehaus.groovy.groovydoc</package>
                 <package>org.codehaus.groovy.jsr223</package>
+                <package>org.codehaus.groovy.plugin</package>
                 <package>org.codehaus.groovy.reflection</package>
                 <package>org.codehaus.groovy.reflection.stdclasses</package>
                 <package>org.codehaus.groovy.runtime</package>
@@ -875,6 +892,10 @@
                 <package>org.eclipse.jdt.internal.compiler.problem</package>
                 <package>org.eclipse.jdt.internal.compiler.util</package>
                 <package>org.eclipse.jdt.internal.core.util</package>
+                <package>org.eigenbase.resgen</package>
+                <package>org.eigenbase.util.property</package>
+                <package>org.eigenbase.xom</package>
+                <package>org.eigenbase.xom.wrappers</package>
                 <package>org.exolab.castor.core.exceptions</package>
                 <package>org.exolab.castor.dsml</package>
                 <package>org.exolab.castor.dsml.jndi</package>
@@ -1030,9 +1051,14 @@
                 <package>org.krysalis.barcode4j.xalan</package>
                 <package>org.mozilla.classfile</package>
                 <package>org.mozilla.javascript</package>
+                <package>org.mozilla.javascript.annotations</package>
+                <package>org.mozilla.javascript.ast</package>
+                <package>org.mozilla.javascript.commonjs.module</package>
+                <package>org.mozilla.javascript.commonjs.module.provider</package>
                 <package>org.mozilla.javascript.debug</package>
                 <package>org.mozilla.javascript.jdk13</package>
                 <package>org.mozilla.javascript.jdk15</package>
+                <package>org.mozilla.javascript.json</package>
                 <package>org.mozilla.javascript.optimizer</package>
                 <package>org.mozilla.javascript.regexp</package>
                 <package>org.mozilla.javascript.serialize</package>
@@ -1122,24 +1148,21 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-5.5.2.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-5.5.2.jar</binary-origin>
-            </class-path-extension>
-            
-            <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-functions-5.5.2.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-functions-5.5.2.jar</binary-origin>
-            </class-path-extension>
-            
-            <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-fonts-5.5.2.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-fonts-5.5.2.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-5.6.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-5.6.0.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-chart-themes-5.5.2.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-chart-themes-5.5.2.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-functions-5.6.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-functions-5.6.0.jar</binary-origin>
             </class-path-extension>
-            
+            <class-path-extension>
+                <runtime-relative-path>ext/jasperreports-fonts-5.6.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-fonts-5.6.0.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jasperreports-chart-themes-5.6.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-chart-themes-5.6.0.jar</binary-origin>
+            </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jaxen-1.1.1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/jaxen-1.1.1.jar</binary-origin>
@@ -1203,6 +1226,10 @@
             <class-path-extension>
                 <runtime-relative-path>ext/batik-svggen.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/batik-svggen.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/batik-transcoder.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/batik-transcoder.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/batik-util.jar</runtime-relative-path>
@@ -1408,18 +1435,17 @@
                 <binary-origin>release/modules/ext/xbean.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jackson-core-2.0.5.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jackson-core-2.0.5.jar</binary-origin>
+                <runtime-relative-path>ext/jackson-core-2.1.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jackson-core-2.1.4.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jackson-annotations-2.0.5.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jackson-annotations-2.0.5.jar</binary-origin>
+                <runtime-relative-path>ext/jackson-annotations-2.1.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jackson-annotations-2.1.4.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jackson-databind-2.0.5.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jackson-databind-2.0.5.jar</binary-origin>
+                <runtime-relative-path>ext/jackson-databind-2.1.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jackson-databind-2.1.4.jar</binary-origin>
             </class-path-extension>
-            
             <class-path-extension>
                 <runtime-relative-path>ext/joda-time-2.1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/joda-time-2.1.jar</binary-origin>

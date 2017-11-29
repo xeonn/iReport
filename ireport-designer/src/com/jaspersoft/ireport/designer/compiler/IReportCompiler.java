@@ -1149,7 +1149,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                                         ((JrxmlPreviewView)getSupport().getDescriptions()[2]).requestActive();
                                         ((JrxmlPreviewView)getSupport().getDescriptions()[2]).updateUI();
                                     }
-                      });
+                      }, true);
                       //JasperViewer jasperViewer = new JasperViewer(print,false);
                       //jasperViewer.setTitle("iReport JasperViewer");
                       //jasperViewer.setVisible(true);
