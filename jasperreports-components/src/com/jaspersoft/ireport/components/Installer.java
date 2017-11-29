@@ -64,11 +64,23 @@ public class Installer extends ModuleInstall {
         {
             File[] jars = libDir.listFiles(new FilenameFilter() {
 
+                
+                
                 public boolean accept(File dir, String name) {
-                    if (name.toLowerCase().startsWith("jasperreports-") &&
-                        name.toLowerCase().endsWith(".jar"))
+                    
+                    if (!name.toLowerCase().endsWith(".jar")) return false;
+                    
+                    
+                    
+                    String[] jars = new String[]{
+                        "jasperreports-core-renderer",
+                        "asperreports-htmlcomponent",
+                        "asperreports-jtidy"
+                    };
+                    
+                    for (String jar : jars)
                     {
-                        return true;
+                        if (name.toLowerCase().startsWith(jar)) return true;
                     }
                     return false;
                 }

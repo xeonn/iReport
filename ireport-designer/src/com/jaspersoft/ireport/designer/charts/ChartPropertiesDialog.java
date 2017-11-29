@@ -553,7 +553,6 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         jRTextExpressionAreaFilterExpression = new com.jaspersoft.ireport.designer.editor.ExpressionEditorArea();
         jPanelDataDefinition = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
-        jButtonAdvancedOptions = new javax.swing.JButton();
         jButtonClose = new javax.swing.JButton();
 
         setTitle("Chart details");
@@ -970,9 +969,6 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         getContentPane().add(jPanelData, java.awt.BorderLayout.CENTER);
 
         jPanel8.setLayout(new java.awt.GridBagLayout());
-
-        jButtonAdvancedOptions.setText("Advanced options");
-        jPanel8.add(jButtonAdvancedOptions, new java.awt.GridBagConstraints());
 
         jButtonClose.setText("Close");
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
@@ -1445,7 +1441,6 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddParameter;
-    private javax.swing.JButton jButtonAdvancedOptions;
     private javax.swing.JButton jButtonClose;
     private javax.swing.JButton jButtonCopy;
     private javax.swing.JButton jButtonModParameter;

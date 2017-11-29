@@ -63,6 +63,7 @@ import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.NodeAction;
 
+
 public class AddResourceAction extends NodeAction {
 
     JMenu jMenuAdd = null;
@@ -77,6 +78,7 @@ public class AddResourceAction extends NodeAction {
     JMenuItem jMenuItemImage = null;
     JMenuItem jMenuItemBundle = null;
     JMenuItem jMenuItemJrxml = null;
+    JMenuItem jMenuItemXml = null;
     JMenuItem jMenuItemJar = null;
     JMenuItem jMenuItemFont = null;
     JMenuItem jMenuItemStyleTemplate = null;
@@ -109,6 +111,8 @@ public class AddResourceAction extends NodeAction {
         jMenuItemXMLADatasource.setEnabled( getActivatedNodes()[0] instanceof FolderNode);
         jMenuItemDataType.setEnabled( getActivatedNodes()[0] instanceof FolderNode);
         jMenuItemListOfValues.setEnabled( getActivatedNodes()[0] instanceof FolderNode);
+        jMenuItemXml.setEnabled( getActivatedNodes()[0] instanceof FolderNode);
+        
         
         
         
@@ -186,6 +190,18 @@ public class AddResourceAction extends NodeAction {
             }
         });
         jMenuAdd.add(jMenuItemJrxml);
+        
+        
+        jMenuItemXml = new javax.swing.JMenuItem();
+        jMenuItemXml.setText( JasperServerManager.getString("menu.xml", "XML File") );
+        jMenuItemXml.setIcon( new ImageIcon(AddResourceAction.class.getResource("/com/jaspersoft/ireport/jasperserver/res/jrxml_file.png")));
+        jMenuItemXml.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                addResource( ResourceDescriptor.TYPE_XML_FILE);
+            }
+        });
+        jMenuAdd.add(jMenuItemXml);
+        
         
         jMenuItemJar = new javax.swing.JMenuItem();
         jMenuItemJar.setText( JasperServerManager.getString("menu.jar", "Jar archive") );

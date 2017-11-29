@@ -140,6 +140,7 @@ public class FileNode extends IRAbstractNode implements ResourceNode {
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_OLAP_XMLA_CONNECTION)) return datasourceIcon;
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_IMAGE)) return imageIcon;
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_JRXML)) return jrxmlIcon;
+        else if (resource.getWsType().equals(ResourceDescriptor.TYPE_XML_FILE)) return jrxmlIcon;
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_FONT)) return fontIcon;
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_CLASS_JAR)) return jarIcon;
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE)) return bundleIcon;
@@ -176,6 +177,7 @@ public class FileNode extends IRAbstractNode implements ResourceNode {
         if (resource.getWsType().equals(ResourceDescriptor.TYPE_IMAGE) ||
             resource.getWsType().equals(ResourceDescriptor.TYPE_JRXML) ||
             resource.getWsType().equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE) ||
+            resource.getWsType().equals(ResourceDescriptor.TYPE_XML_FILE) ||
             resource.getWsType().equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE))
         {
             actions.add(SystemAction.get( OpenFileAction.class));

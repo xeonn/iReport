@@ -235,10 +235,8 @@
             <public-packages>
                 <package>bsh</package>
                 <package>bsh.classpath</package>
-                <package>bsh.collection</package>
                 <package>bsh.commands</package>
                 <package>bsh.org.objectweb.asm</package>
-                <package>bsh.reflect</package>
                 <package>bsh.servlet</package>
                 <package>bsh.util</package>
                 <package>com.jaspersoft.ireport</package>
@@ -427,7 +425,6 @@
                 <package>net.sf.jasperreports.engine.scriptlets</package>
                 <package>net.sf.jasperreports.engine.type</package>
                 <package>net.sf.jasperreports.engine.util</package>
-                <package>net.sf.jasperreports.engine.util.sample</package>
                 <package>net.sf.jasperreports.engine.util.xml</package>
                 <package>net.sf.jasperreports.engine.xml</package>
                 <package>net.sf.jasperreports.extensions</package>
@@ -540,6 +537,14 @@
                 <package>org.apache.commons.dbcp.cpdsadapter</package>
                 <package>org.apache.commons.dbcp.datasources</package>
                 <package>org.apache.commons.digester</package>
+                <package>org.apache.commons.digester.annotations</package>
+                <package>org.apache.commons.digester.annotations.handlers</package>
+                <package>org.apache.commons.digester.annotations.internal</package>
+                <package>org.apache.commons.digester.annotations.providers</package>
+                <package>org.apache.commons.digester.annotations.reflect</package>
+                <package>org.apache.commons.digester.annotations.rules</package>
+                <package>org.apache.commons.digester.annotations.spi</package>
+                <package>org.apache.commons.digester.annotations.utils</package>
                 <package>org.apache.commons.digester.parser</package>
                 <package>org.apache.commons.digester.plugins</package>
                 <package>org.apache.commons.digester.plugins.strategies</package>
@@ -1035,12 +1040,12 @@
                 <binary-origin>release/modules/ext/xercesImpl-2.7.0.jar</binary-origin>
             </class-path-extension> -->
             <class-path-extension>
-                <runtime-relative-path>ext/commons-digester-1.7.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/commons-digester-1.7.jar</binary-origin>
+                <runtime-relative-path>ext/commons-digester-2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/commons-digester-2.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/bsh-2.0b4.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/bsh-2.0b4.jar</binary-origin>
+                <runtime-relative-path>ext/bsh-2.1b5.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/bsh-2.1b5.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jpa.jar</runtime-relative-path>
@@ -1095,8 +1100,8 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-		<runtime-relative-path>ext/jasperreports-4.5.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-4.5.0.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-4.5.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-4.5.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jasperreports-fonts-4.5.0.jar</runtime-relative-path>
@@ -1380,7 +1385,7 @@
             <class-path-extension>
                 <runtime-relative-path>ext/jackson-mapper-lgpl-1.7.4.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/jackson-mapper-lgpl-1.7.4.jar</binary-origin>
-            </class-path-extension>          
+            </class-path-extension>
         </data>
     </configuration>
 </project>

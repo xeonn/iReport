@@ -105,7 +105,7 @@ public class InstallFontWizardDescriptor extends WizardDescriptor {
 
     /**
      * Run the wizard.
-     * If a new font is succesfully installed, the return true.
+     * If a new font is successfully installed, the return true.
      * otherwise the wizard has been cancelled...
      *
      * @return new font result
@@ -188,6 +188,7 @@ public class InstallFontWizardDescriptor extends WizardDescriptor {
                     if (mappings != null)
                     {
                         font.setExportFonts(mappings);
+                        
                     }
 
                     if (locales != null)

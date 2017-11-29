@@ -55,7 +55,7 @@ import org.openide.util.NbPreferences;
  *
  * @author gtoffoli
  */
-public class JasperServerManager {
+    public class JasperServerManager {
 
     private List<FileResourceUpdatingListener> resourceReplacingListeners = new ArrayList<FileResourceUpdatingListener>();
 

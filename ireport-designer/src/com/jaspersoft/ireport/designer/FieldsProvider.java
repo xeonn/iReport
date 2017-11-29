@@ -91,7 +91,7 @@ public interface FieldsProvider {
     
     /**
      * The component that will stay on the right of the query panel. To listen for query changes, the component must implement
-     * the interface FieldsProviderEditor. The component will be visible only when a queryCahnged is succesfully executed.
+     * the interface FieldsProviderEditor. The component will be visible only when a queryCahnged is successfully executed.
      * The component can store the reference to the report query dialog in which it will appear.
      *
      * The editor can 

@@ -128,13 +128,13 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         jButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(I18n.getString("MeterIntervalDialog.Dialog.Title")); // NOI18N
+        setTitle("Meter Interval");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 250));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabelLabel.setText(I18n.getString("MeterIntervalDialog.Label.Label")); // NOI18N
+        jLabelLabel.setText("Label");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -149,7 +149,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         jPanel1.add(jTextFieldLabel, gridBagConstraints);
 
-        jLabelColor.setText(I18n.getString("MeterIntervalDialog.Label.Color")); // NOI18N
+        jLabelColor.setText("Color");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -165,7 +165,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 4, 6);
         jPanel2.add(colorSelectorPanel, gridBagConstraints);
 
-        JButtonSelectColor.setText(I18n.getString("MeterIntervalDialog.Button.SelectColor")); // NOI18N
+        JButtonSelectColor.setText("Select color");
         JButtonSelectColor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JButtonSelectColorActionPerformed(evt);
@@ -183,7 +183,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
         jPanel1.add(jPanel2, gridBagConstraints);
 
-        jButtonDefaultColor.setText(I18n.getString("MeterIntervalDialog.Button.UseDefaultColor")); // NOI18N
+        jButtonDefaultColor.setText("Use default color");
         jButtonDefaultColor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDefaultColorActionPerformed(evt);
@@ -196,7 +196,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 4);
         jPanel1.add(jButtonDefaultColor, gridBagConstraints);
 
-        jLabelAlpha.setText(I18n.getString("MeterIntervalDialog.Label.Alpha")); // NOI18N
+        jLabelAlpha.setText("Alpha");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -211,7 +211,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         jPanel1.add(jSpinnerAlpha, gridBagConstraints);
 
-        jLabelRangeLow.setText(I18n.getString("MeterIntervalDialog.Label.DataRangeLowExpression")); // NOI18N
+        jLabelRangeLow.setText("Data range low expression");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 3;
@@ -232,7 +232,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         jPanel1.add(jRTextExpressionLow, gridBagConstraints);
 
-        jLabelRangeHigh.setText(I18n.getString("MeterIntervalDialog.Label.DataRangeHighExpression")); // NOI18N
+        jLabelRangeHigh.setText("Data range high expression");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 3;
@@ -276,7 +276,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         jPanel6.add(jPanel7, gridBagConstraints);
 
         jButtonOK.setMnemonic('o');
-        jButtonOK.setText(I18n.getString("Global.Button.Ok")); // NOI18N
+        jButtonOK.setText("OK");
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOKActionPerformed(evt);
@@ -288,7 +288,7 @@ public class MeterIntervalDialog extends javax.swing.JDialog {
         jPanel6.add(jButtonOK, gridBagConstraints);
 
         jButtonCancel.setMnemonic('c');
-        jButtonCancel.setText(I18n.getString("Global.Button.Cancel")); // NOI18N
+        jButtonCancel.setText("Cancel");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);

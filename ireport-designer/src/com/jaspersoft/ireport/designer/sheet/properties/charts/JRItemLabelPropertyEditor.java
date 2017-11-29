@@ -78,7 +78,14 @@ public class JRItemLabelPropertyEditor extends PropertyEditorSupport implements 
         JRItemLabel itemLabel = (JRItemLabel)getValue();
         if (itemLabel == null) itemLabel = new JRDesignItemLabel(null, chart);
 
-        return itemLabel.getFont().getFontName() + " " + itemLabel.getFont().getFontSize();
+        if (itemLabel.getFont() != null)
+        {
+            return itemLabel.getFont().getFontName() + " " + itemLabel.getFont().getFontSize();
+        }
+        else
+        {
+            return "";
+        }
     }
 
     public boolean supportsCustomEditor () {

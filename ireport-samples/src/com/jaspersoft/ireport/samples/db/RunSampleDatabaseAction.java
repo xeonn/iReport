@@ -47,7 +47,7 @@ public final class RunSampleDatabaseAction implements ActionListener {
                                             int state = getServer().getState();
                                             if (state == 1)
                                             {
-                                                JOptionPane.showMessageDialog(Misc.getMainFrame(), "Sample database succesfully started" + s, "Running sample database", JOptionPane.INFORMATION_MESSAGE);
+                                                JOptionPane.showMessageDialog(Misc.getMainFrame(), "Sample database successfully started" + s, "Running sample database", JOptionPane.INFORMATION_MESSAGE);
                                             }
                                             else if (state == 16 || state == 8)
                                             {

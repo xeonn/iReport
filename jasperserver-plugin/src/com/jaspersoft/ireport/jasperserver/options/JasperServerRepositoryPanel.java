@@ -74,10 +74,15 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jSpinner1 = new javax.swing.JSpinner();
         jCheckBoxProMode = new javax.swing.JCheckBox();
         jButtonClearCertificatesCache = new javax.swing.JButton();
+        jCheckBoxPreventChunkedRequests = new javax.swing.JCheckBox();
+        jRadioButtonDIME = new javax.swing.JRadioButton();
+        jRadioButtonMIME = new javax.swing.JRadioButton();
+        jLabel2 = new javax.swing.JLabel();
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(JasperServerRepositoryPanel.class, "JasperServerRepositoryPanel.jLabel1.text")); // NOI18N
 
@@ -101,6 +106,26 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxPreventChunkedRequests, org.openide.util.NbBundle.getMessage(JasperServerRepositoryPanel.class, "JasperServerRepositoryPanel.jCheckBoxPreventChunkedRequests.text")); // NOI18N
+        jCheckBoxPreventChunkedRequests.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxPreventChunkedRequestsActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButtonDIME);
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButtonDIME, org.openide.util.NbBundle.getMessage(JasperServerRepositoryPanel.class, "JasperServerRepositoryPanel.jRadioButtonDIME.text")); // NOI18N
+
+        buttonGroup1.add(jRadioButtonMIME);
+        org.openide.awt.Mnemonics.setLocalizedText(jRadioButtonMIME, org.openide.util.NbBundle.getMessage(JasperServerRepositoryPanel.class, "JasperServerRepositoryPanel.jRadioButtonMIME.text")); // NOI18N
+        jRadioButtonMIME.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonMIMEActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(JasperServerRepositoryPanel.class, "JasperServerRepositoryPanel.jLabel2.text")); // NOI18N
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -109,13 +134,20 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
+                        .add(21, 21, 21)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jRadioButtonMIME)
+                            .add(jRadioButtonDIME)))
+                    .add(layout.createSequentialGroup()
                         .add(jLabel1)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jSpinner1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 82, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 46, Short.MAX_VALUE))
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .add(jSpinner1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 82, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(layout.createSequentialGroup()
                         .add(2, 2, 2)
-                        .add(jCheckBoxProMode, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE))
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jCheckBoxPreventChunkedRequests, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
+                            .add(jCheckBoxProMode, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)))
+                    .add(jLabel2)
                     .add(jButtonClearCertificatesCache))
                 .addContainerGap())
         );
@@ -128,9 +160,17 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
                     .add(jLabel1))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jCheckBoxProMode)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jCheckBoxPreventChunkedRequests)
+                .add(26, 26, 26)
+                .add(jLabel2)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jRadioButtonMIME)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jRadioButtonDIME)
                 .add(18, 18, 18)
                 .add(jButtonClearCertificatesCache)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(151, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -149,12 +189,25 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
         JOptionPane.showMessageDialog(Misc.getMainFrame(), "All the trusted certificate fingerprints have been removed from the cache.");
     }//GEN-LAST:event_jButtonClearCertificatesCacheActionPerformed
 
+    private void jCheckBoxPreventChunkedRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxPreventChunkedRequestsActionPerformed
+        notifyChange();
+    }//GEN-LAST:event_jCheckBoxPreventChunkedRequestsActionPerformed
+
+    private void jRadioButtonMIMEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMIMEActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButtonMIMEActionPerformed
+
     void load() {
         setInit(true);
         //jCheckBoxJS30Compatibility.setSelected(IReportManager.getPreferences().getBoolean("use_jrxml_DTD", false));
         int timeout = IReportManager.getPreferences().getInt("client_timeout", 0);
         jSpinner1.setValue(new Integer(timeout));
         jCheckBoxProMode.setSelected(IReportManager.getPreferences().getBoolean("proMode", false));
+        jCheckBoxPreventChunkedRequests.setSelected(IReportManager.getPreferences().getBoolean("jasperserver.preventChunkedRequests", true));
+        
+        jRadioButtonMIME.setSelected(IReportManager.getPreferences().getBoolean("jasperserver.useMIME", true));
+        jRadioButtonDIME.setSelected(!jRadioButtonMIME.isSelected());
+        
         setInit(false);
     }
 
@@ -162,6 +215,9 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
         //IReportManager.getPreferences().putBoolean("use_jrxml_DTD", jCheckBoxJS30Compatibility.isSelected());
         IReportManager.getPreferences().putInt("client_timeout", ((SpinnerNumberModel)jSpinner1.getModel()).getNumber().intValue() );
         IReportManager.getPreferences().putBoolean("proMode", jCheckBoxProMode.isSelected());
+        IReportManager.getPreferences().putBoolean("jasperserver.preventChunkedRequests", jCheckBoxPreventChunkedRequests.isSelected());
+        
+        IReportManager.getPreferences().putBoolean("jasperserver.useMIME", jRadioButtonMIME.isSelected());
     }
 
     boolean valid() {
@@ -170,9 +226,14 @@ final class JasperServerRepositoryPanel extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonClearCertificatesCache;
+    private javax.swing.JCheckBox jCheckBoxPreventChunkedRequests;
     private javax.swing.JCheckBox jCheckBoxProMode;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JRadioButton jRadioButtonDIME;
+    private javax.swing.JRadioButton jRadioButtonMIME;
     private javax.swing.JSpinner jSpinner1;
     // End of variables declaration//GEN-END:variables
 }

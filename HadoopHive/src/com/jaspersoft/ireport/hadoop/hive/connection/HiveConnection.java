@@ -1,5 +1,7 @@
 package com.jaspersoft.ireport.hadoop.hive.connection;
 
+import com.jaspersoft.hadoop.hive.connection.HiveConnectionManager;
+import com.jaspersoft.ireport.designer.connection.JDBCConnection;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,17 +22,21 @@ import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportConnectionEditor;
 import com.jaspersoft.ireport.designer.data.WizardFieldsProvider;
 import com.jaspersoft.ireport.designer.utils.Misc;
+import com.jaspersoft.ireport.hadoop.hive.Installer;
 import com.jaspersoft.ireport.hadoop.hive.designer.HiveFieldsProvider;
 
 /**
- * 
+ *
  * @author Eric Diaz
- * 
+ *
  */
-public class HiveConnection extends IReportConnection implements WizardFieldsProvider {
+public class HiveConnection extends JDBCConnection implements WizardFieldsProvider {
+
 	private static final String URL = "HiveURL";
 
 	private String url;
+
+	private com.jaspersoft.hadoop.hive.connection.HiveConnection currentConnection;
 
 	public HiveConnection() {
 		super();
@@ -58,43 +64,45 @@ public class HiveConnection extends IReportConnection implements WizardFieldsPro
 	@Override
 	public Connection getConnection() {
 		try {
-			return new com.jaspersoft.hadoop.hive.HiveConnection(url);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (JRException e) {
+			return createConnection();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
+	private com.jaspersoft.hadoop.hive.connection.HiveConnection createConnection() throws Exception {
+		HiveConnectionManager connectionManager = Installer.getConnectionManager();
+		if (currentConnection != null) {
+			connectionManager.returnConnection(currentConnection);
+		}
+		connectionManager.setJdbcURL(url);
+		return connectionManager.borrowConnection();
+	}
+
 	@Override
 	public void test() throws Exception {
-		com.jaspersoft.hadoop.hive.HiveConnection connection = null;
-		boolean success = false;
-		String message = "";
+		com.jaspersoft.hadoop.hive.connection.HiveConnection connection = null;
+		String errorMessage = "";
 		try {
-			connection = new com.jaspersoft.hadoop.hive.HiveConnection(url);
-			success = connection.test();
+			connection = createConnection();
+			if (connection != null) {
+				JOptionPane.showMessageDialog(Misc.getMainWindow(), connection.test(), "",
+						JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
+			errorMessage = "A connection could not be created. Please review the IDE log";
 		} catch (Exception e) {
-			success = false;
-			message = e.getMessage();
+			e.printStackTrace();
+			errorMessage = String.valueOf(e);
 		} finally {
 			// Clean up
-			if (connection != null)
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+			if (connection != null) {
+				Installer.getConnectionManager().returnConnection(connection);
+			}
 		}
-		if (!success) {
-			JOptionPane.showMessageDialog(Misc.getMainWindow(), "Connection test failed!\n" + message, "",
-					JOptionPane.ERROR_MESSAGE);
-		} else {
-			JOptionPane.showMessageDialog(Misc.getMainWindow(), "Connection test successful!", "",
-					JOptionPane.INFORMATION_MESSAGE);
-		}
-		return;
+		JOptionPane.showMessageDialog(Misc.getMainWindow(), "Error: " + String.valueOf(errorMessage), "",
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	@Override
@@ -149,5 +157,4 @@ public class HiveConnection extends IReportConnection implements WizardFieldsPro
 		}
 		return result;
 	}
-
 }

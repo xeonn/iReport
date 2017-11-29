@@ -97,6 +97,7 @@ public class NewResourceDialog extends javax.swing.JDialog {
         jComboBoxResourceType.addItem( new Tag(ResourceDescriptor.TYPE_CLASS_JAR, "Jar"));
         jComboBoxResourceType.addItem( new Tag(ResourceDescriptor.TYPE_FONT, "Font"));
         jComboBoxResourceType.addItem( new Tag(ResourceDescriptor.TYPE_STYLE_TEMPLATE, "Style Template"));
+        jComboBoxResourceType.addItem( new Tag(ResourceDescriptor.TYPE_XML_FILE, "xml"));
         
         applyI18n();
         jTextFieldName.requestFocusInWindow();
@@ -441,6 +442,18 @@ public class NewResourceDialog extends javax.swing.JDialog {
                 }
                 public String getDescription() {
                     return "Style Template *.jrtx";
+                }
+            });
+        }
+        else if (resType.equals( ResourceDescriptor.TYPE_XML_FILE))
+        {
+            jfc.setFileFilter( new javax.swing.filechooser.FileFilter() {
+                public boolean accept(java.io.File file) {
+                    String filename = file.getName();
+                    return (filename.toLowerCase().endsWith(".xml") || file.isDirectory() || filename.toLowerCase().endsWith(".xml")) ;
+                }
+                public String getDescription() {
+                    return "XML *.xml";
                 }
             });
         }

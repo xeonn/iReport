@@ -62,12 +62,12 @@ public class Installer extends ModuleInstall {
                     {
                         return true;
                     }
-
-                    if (name.toLowerCase().startsWith("jasperreports-json") ||
-                        name.toLowerCase().endsWith(".jar"))
-                    {
-                        return true;
-                    }
+//
+//                    if (name.toLowerCase().startsWith("jasperreports-json") ||
+//                        name.toLowerCase().endsWith(".jar"))
+//                    {
+//                        return true;
+//                    }
                     return false;
                 }
             });

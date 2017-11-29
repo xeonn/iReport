@@ -564,7 +564,7 @@ public class XMLAConnectionDialog extends javax.swing.JDialog {
 
         IReportManager.getInstance().addConnection(conn);
         IReportManager.getInstance().setDefaultConnection(conn);
-        JOptionPane.showMessageDialog(this, "XML/A Connection succesfully imported (" + name + ")" );
+        JOptionPane.showMessageDialog(this, "XML/A Connection successfully imported (" + name + ")" );
     }//GEN-LAST:event_jButtonImportConnection1ActionPerformed
     
 

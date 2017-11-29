@@ -42,6 +42,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.util.JRFontUtil;
 import org.apache.xerces.parsers.DOMParser;
@@ -75,6 +76,19 @@ public class IRFontUtils {
              Thread.currentThread().setContextClassLoader(DOMParser.class.getClassLoader());
 
              DOMParser parser = new DOMParser();
+             
+             
+             
+//             System.out.println("Font files:" + xmlFile);
+//             java.io.Reader afis = new java.io.FileReader(xmlFile);
+//             char[] line = new char[1024];
+//             int b = 0;
+//             while ((b = afis.read(line)) > 0)
+//             {
+//                 System.out.println(new String(line, 0, b));
+//             }
+             
+             
              java.io.FileInputStream fis = new FileInputStream(xmlFile);
              org.xml.sax.InputSource input_sss  = new org.xml.sax.InputSource(fis);
              //input_sss.setSystemId(filename);
@@ -131,7 +145,7 @@ public class IRFontUtils {
                     }
 
                     fontsList.add(family);
-
+                    
                 }
              }
         } catch (Exception ex)
@@ -174,7 +188,6 @@ public class IRFontUtils {
          if (tmpNode.getNodeName() != null && tmpNode.getNodeName().equals(subNodeName))
          {
              nodes.add(tmpNode);
-             break;
          }
         }
 
@@ -425,6 +438,14 @@ public class IRFontUtils {
                                 {
                                     files.add(fromFile);
                                 }
+                                else
+                                {
+                                    if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(Misc.getMainFrame(), "I' unable to find the file: " + fromFile + "\nThe font extension may be corrupted. I'l skip this file.\n\nDo you want to continue anyway?"))
+                                    {
+                                        return;
+                                    }
+                                }
+                                        
                             }
                         }
                         
@@ -450,7 +471,7 @@ public class IRFontUtils {
                 zipos.finish();
 
                 javax.swing.JOptionPane.showMessageDialog(Misc.getMainFrame(),
-                    "Extension Jar succesfully created",
+                    "Extension Jar successfully created",
                     "Done",
                     javax.swing.JOptionPane.INFORMATION_MESSAGE);
                 

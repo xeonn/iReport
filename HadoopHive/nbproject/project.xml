@@ -34,45 +34,49 @@
             </module-dependencies>
             <public-packages/>
             <class-path-extension>
-                <runtime-relative-path>ext/hadoop-core-0.20.2.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/hadoop-core-0.20.2.jar</binary-origin>
+                <runtime-relative-path>ext/hadoop-core-1.0.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/hadoop-core-1.0.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/hive-common-0.7.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/hive-common-0.7.0.jar</binary-origin>
+                <runtime-relative-path>ext/hive-common-0.8.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/hive-common-0.8.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/hive-exec-0.7.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/hive-exec-0.7.0.jar</binary-origin>
+                <runtime-relative-path>ext/hive-exec-0.8.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/hive-exec-0.8.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/hive-jdbc-0.7.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/hive-jdbc-0.7.0.jar</binary-origin>
+                <runtime-relative-path>ext/hive-jdbc-0.8.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/hive-jdbc-0.8.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/hive-metastore-0.7.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/hive-metastore-0.7.0.jar</binary-origin>
+                <runtime-relative-path>ext/hive-metastore-0.8.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/hive-metastore-0.8.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/hive-service-0.7.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/hive-service-0.7.0.jar</binary-origin>
+                <runtime-relative-path>ext/hive-service-0.8.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/hive-service-0.8.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/js-hive-datasource-0.9.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/js-hive-datasource-0.9.0.jar</binary-origin>
+                <runtime-relative-path>ext/js-hive-datasource-1.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/js-hive-datasource-1.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/libfb303-0.6.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/libfb303-0.6.1.jar</binary-origin>
+                <runtime-relative-path>ext/libfb303-0.7.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/libfb303-0.7.0.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/slf4j-api-1.5.8.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/slf4j-api-1.5.8.jar</binary-origin>
             </class-path-extension>
-        <class-path-extension>
-            <runtime-relative-path>ext/slf4j-log4j12-1.5.8.jar</runtime-relative-path>
-            <binary-origin>release/modules/ext/slf4j-log4j12-1.5.8.jar</binary-origin>
-        </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/slf4j-log4j12-1.5.8.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/slf4j-log4j12-1.5.8.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/commons-pool-1.6.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/commons-pool-1.6.jar</binary-origin>
+            </class-path-extension>
         </data>
     </configuration>
 </project>

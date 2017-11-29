@@ -3240,6 +3240,10 @@ private void jSpinnerEditorFontSizeStateChanged(javax.swing.event.ChangeEvent ev
             fonts.add(sff);
             String fname = sff.getName();
             names.add(fname);
+            
+            System.out.println("Dumping editable fonts: " + sff.getName() + " " + sff.getExportFonts());
+            System.out.flush();
+            
         }
 
 

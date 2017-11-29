@@ -362,7 +362,7 @@ public final class RunReportUnitAction extends NodeAction {
 
                             public void run() {
                                 JOptionPane.showMessageDialog(Misc.getMainFrame(),
-                                JasperServerManager.getString("repositoryExplorer.message.fileUpdated", "File succesfully updated."),
+                                JasperServerManager.getString("repositoryExplorer.message.fileUpdated", "File successfully updated."),
                                 JasperServerManager.getString("repositoryExplorer.message.operationResult", "Operation result"), JOptionPane.INFORMATION_MESSAGE);
 
                             }

@@ -84,6 +84,13 @@ public class RepositoryFile extends RepositoryFolder {
             ext = name.substring(name.lastIndexOf(".")+1);
         }
         if (ext != null && ext.length() > 0) return ext;
+        
+        
+        // Often the wstype is the same as the typical file extension...
+        // Let's try to use it, even better than nothing...
+        if (getDescriptor().getWsType() != null &&
+            getDescriptor().getWsType().length() <= 5) return getDescriptor().getWsType();
+        
         return null;
     }
     /**

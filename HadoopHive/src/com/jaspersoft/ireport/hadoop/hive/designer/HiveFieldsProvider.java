@@ -30,7 +30,7 @@ public class HiveFieldsProvider extends SQLFieldsProvider {
 					"The active connection is not of type Hive Connection. Activate a Hive Connection first.");
 		}
 		return com.jaspersoft.hadoop.hive.HiveFieldsProvider.getInstance().getFields(
-				(com.jaspersoft.hadoop.hive.HiveConnection) ((HiveConnection) iReportConnection).getConnection(),
+				(com.jaspersoft.hadoop.hive.connection.HiveConnection) ((HiveConnection) iReportConnection).getConnection(),
 				reportDataset, parameters);
 	}
 }
