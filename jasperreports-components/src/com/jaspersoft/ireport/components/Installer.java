@@ -53,6 +53,7 @@ public class Installer extends ModuleInstall {
         I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/map/Bundle"));
         I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/html/Bundle"));
         I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/sort/Bundle"));
+        I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/sort/properties/Bundle"));
 
         // Adding the fusion maps jar to the iReport classpath...
         List<String> classpath = IReportManager.getInstance().getClasspath();

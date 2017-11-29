@@ -24,11 +24,6 @@
 package com.jaspersoft.ireport.designer.sheet.editors;
 
 import com.jaspersoft.ireport.locale.I18n;
-import java.beans.FeatureDescriptor;
-import java.beans.PropertyEditorSupport;
-import org.openide.explorer.propertysheet.ExPropertyEditor;
-import org.openide.explorer.propertysheet.PropertyEnv;
-import org.openide.nodes.Node;
 
 import java.beans.PropertyEditorSupport;
 

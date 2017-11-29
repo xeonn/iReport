@@ -78,6 +78,7 @@ import net.sf.jasperreports.engine.export.*;
 import net.sf.jasperreports.engine.query.JRHibernateQueryExecuterFactory;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRProperties;
+import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
 import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.hibernate.Transaction;
@@ -1145,20 +1146,38 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                    
                    if (exporter != null)
                    {
-                      //Adding final common properties...
-                      configureExporter(exporter);
 
-                      exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME,fileName);
-                      exporter.setParameter(JRExporterParameter.JASPER_PRINT,print);
-                      exporter.setParameter(JRExporterParameter.PROGRESS_MONITOR, this);
-                      //exporter.setParameter(JRExporterParameter.CLASS_LOADER, Thread.currentThread().getContextClassLoader() );
+                       // Save all properties...
+                       List<PropertySuffix> oldProperties = JRProperties.getProperties("");
 
-                      
-                      exporter.exportReport();
-                      getLogTextArea().logOnConsole(outputBuffer.toString());
+                       try {
+                              //Adding final common properties...
+                              configureExporter(exporter);
+
+                              exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME,fileName);
+                              exporter.setParameter(JRExporterParameter.JASPER_PRINT,print);
+                              exporter.setParameter(JRExporterParameter.PROGRESS_MONITOR, this);
+                              //exporter.setParameter(JRExporterParameter.CLASS_LOADER, Thread.currentThread().getContextClassLoader() );
+
+
+                              exporter.exportReport();
+                              
+
+                              
+
+                       } finally
+                       {
+                            // Restore properties
+                            for (PropertySuffix p : oldProperties)
+                            {
+                                JRProperties.setProperty(p.getKey(), p.getValue());
+                            }
+                       }
+
+                       getLogTextArea().logOnConsole(outputBuffer.toString());
                       outputBuffer = new StringBuffer();
-
                       fireCompileListner(this, CL_EXPORT_OK, CLS_NONE);
+
                    }
     //               else if (format.equalsIgnoreCase("java2D") )
     //               {

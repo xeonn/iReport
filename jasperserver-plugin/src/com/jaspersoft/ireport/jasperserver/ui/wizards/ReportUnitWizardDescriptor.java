@@ -293,14 +293,26 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
 
         boolean useTemporaryFile = false; //report == null;
 
+        JrxmlVisualView view = Misc.getViewForFile(resourceFile);
+        
         Thread.currentThread().setContextClassLoader( IReportManager.getReportClassLoader());
-        if (report == null) report = JRXmlLoader.load(resourceFile);
+        if (report == null)
+        {
+            if (view != null && !useTemporaryFile)
+            {
+                report = view.getEditorSupport().getCurrentModel();
+            }
+            else
+            {
+                report = JRXmlLoader.load(resourceFile);
+            }
+        }
 
         List children = RepositoryJrxmlFile.identifyElementValidationItems(report, reportUnitDescriptor, resourceFile.getParent());
 
         if (children.size() > 0)
         {
-            JrxmlVisualView view = null;
+            
             // We will create a temporary file somewhere else...
             if (useTemporaryFile)
             {
@@ -310,7 +322,7 @@ public class ReportUnitWizardDescriptor extends WizardDescriptor {
             }
             else
             {
-                view = Misc.getViewForFile(resourceFile);
+                view = null;
             }
 
             long modified = resourceFile.lastModified();

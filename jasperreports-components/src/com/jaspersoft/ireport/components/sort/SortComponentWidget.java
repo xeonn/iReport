@@ -39,6 +39,7 @@ import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import net.sf.jasperreports.components.map.StandardMapComponent;
 import net.sf.jasperreports.components.sort.SortComponent;
+import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
@@ -67,7 +68,7 @@ public class SortComponentWidget extends JRDesignElementWidget {
 
 
         if (evt.getPropertyName().equals(SortComponent.PROPERTY_HANDLER_COLOR) ||
-            evt.getPropertyName().equals(SortComponent.PROPERTY_HANDLER_FONT_SIZE) ||
+            evt.getPropertyName().equals(SortComponent.PROPERTY_SYMBOL_FONT) ||
             evt.getPropertyName().equals(SortComponent.PROPERTY_HANDLER_HORIZONTAL_ALIGN) ||
             evt.getPropertyName().equals(SortComponent.PROPERTY_HANDLER_VERTICAL_ALIGN) )
         {
@@ -127,6 +128,7 @@ public class SortComponentWidget extends JRDesignElementWidget {
 
             SortComponent c = (SortComponent)((JRDesignComponentElement)e).getComponent();
 
+            /*
             int size = 10;
             try {
                 size = Integer.parseInt(c.getHandlerFontSize());
@@ -134,18 +136,24 @@ public class SortComponentWidget extends JRDesignElementWidget {
             {
                 size = 10;
             }
+             
+             */
 
-
-            Font f = new java.awt.Font("Dialog", Font.PLAIN, size );
+            JRFont jrFont = c.getSymbolFont();
+            
+            if (jrFont != null)
+            {
+                
+                Font f = new java.awt.Font(jrFont.getFontName(), jrFont.isBold() ? Font.BOLD : Font.PLAIN, jrFont.getFontSize() );
+                gr.setFont(f);
+            }
 
             
-
-            gr.setFont(f);
             Rectangle2D stringBounds = gr.getFontMetrics().getStringBounds("\u25B2", gr);
 
             
             Color col = Color.white;
-            if (c.getHandlerColor() != null) col = JRColorUtil.getColor(c.getHandlerColor(), null);
+            if (c.getHandlerColor() != null) col = c.getHandlerColor();
 
             gr.setColor( col );
 

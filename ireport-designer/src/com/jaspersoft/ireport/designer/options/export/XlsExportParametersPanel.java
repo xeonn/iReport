@@ -26,12 +26,15 @@ package com.jaspersoft.ireport.designer.options.export;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.prefs.Preferences;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import net.sf.jasperreports.engine.export.JExcelApiExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
 import net.sf.jasperreports.engine.util.JRProperties;
+import com.jaspersoft.ireport.designer.sheet.Tag;
+import net.sf.jasperreports.engine.export.JRXlsAbstractExporter;
 
 /**
  *
@@ -45,6 +48,10 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
         SpinnerNumberModel snm = new SpinnerNumberModel(0,0, Integer.MAX_VALUE,1);
         jSpinnerMaximumRowsPerSheet.setModel(snm);
 
+        jSpinnerFreezeRow.setModel(new SpinnerNumberModel(0,0, Integer.MAX_VALUE,1));
+
+        //jComboBoxColumnEdge.setModel(new DefaultComboBoxModel(new Tag[]{new Tag(null,""),new Tag("Left","Left"), new Tag("Right","Right")  }));
+        //jComboBoxRowEdge.setModel(new DefaultComboBoxModel(new Tag[]{new Tag(null,""),new Tag("Top","Top"), new Tag("Bottom","Bottom")  }));
         snm.addChangeListener(new ChangeListener() {
 
             public void stateChanged(ChangeEvent e) {
@@ -92,6 +99,7 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
         jLabelTitle = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jTabbedPane1 = new javax.swing.JTabbedPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jCheckBoxOnePagePerSheet = new javax.swing.JCheckBox();
         jCheckBoxRemoveEmptySpaceBetweenRows = new javax.swing.JCheckBox();
@@ -106,6 +114,11 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
         jCheckBoxCollapseRowSpan = new javax.swing.JCheckBox();
         jCheckBoxIgnoreCellBorder = new javax.swing.JCheckBox();
         jCheckBoxIgnoreCellBackground = new javax.swing.JCheckBox();
+        jSpinnerFreezeRow = new javax.swing.JSpinner();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jTextFieldColumn = new javax.swing.JTextField();
+        jCheckBoxFixFontSize = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jCheckBoxUseSheetNames = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -118,6 +131,9 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
 
         jLabelTitle.setFont(new java.awt.Font("Tahoma", 1, 12));
         jLabelTitle.setText("CSV Export parameters");
+
+        jScrollPane2.setBorder(null);
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         jCheckBoxOnePagePerSheet.setText("One Page per Sheet");
         jCheckBoxOnePagePerSheet.addActionListener(new java.awt.event.ActionListener() {
@@ -198,6 +214,23 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
             }
         });
 
+        jSpinnerFreezeRow.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinnerFreezeRowStateChanged(evt);
+            }
+        });
+
+        jLabel1.setText("Freeze pane on column (i.e. A or AB)");
+
+        jLabel2.setText("Freeze pane on row");
+
+        jCheckBoxFixFontSize.setText("Decrease font size so that texts fit into the specified cell height");
+        jCheckBoxFixFontSize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxFixFontSizeActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -219,8 +252,18 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
                         .add(jSpinnerMaximumRowsPerSheet, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 67, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(jCheckBoxIgnoreGraphics)
                     .add(jCheckBoxCollapseRowSpan)
-                    .add(jCheckBoxIgnoreCellBorder))
-                .addContainerGap(96, Short.MAX_VALUE))
+                    .add(jCheckBoxIgnoreCellBorder)
+                    .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                        .add(jPanel1Layout.createSequentialGroup()
+                            .add(jLabel1)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(jTextFieldColumn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 44, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(jPanel1Layout.createSequentialGroup()
+                            .add(jLabel2)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(jSpinnerFreezeRow, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 45, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                    .add(jCheckBoxFixFontSize))
+                .add(0, 4, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -251,10 +294,22 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
                 .add(jCheckBoxIgnoreCellBorder)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxIgnoreCellBackground)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel1)
+                    .add(jTextFieldColumn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel2)
+                    .add(jSpinnerFreezeRow, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(9, 9, 9)
+                .add(jCheckBoxFixFontSize)
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Common", jPanel1);
+        jScrollPane2.setViewportView(jPanel1);
+
+        jTabbedPane1.addTab("Common", jScrollPane2);
 
         jCheckBoxUseSheetNames.setText("Use Sheet Names");
         jCheckBoxUseSheetNames.addActionListener(new java.awt.event.ActionListener() {
@@ -278,7 +333,7 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jCheckBoxUseSheetNames)
                     .add(jLabelList)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -289,8 +344,8 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jLabelList)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
-                .add(17, 17, 17))
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                .add(73, 73, 73))
         );
 
         jTabbedPane1.addTab("Sheet Names", jPanel2);
@@ -316,7 +371,7 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
                         .add(jLabelPassword)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jTextFieldPassword, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 141, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(212, Short.MAX_VALUE))
+                .addContainerGap(257, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -327,7 +382,7 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabelPassword)
                     .add(jTextFieldPassword, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(245, Short.MAX_VALUE))
+                .addContainerGap(261, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("JExcelAPI options", jPanel3);
@@ -338,9 +393,9 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .add(jLabelTitle)
-                .addContainerGap(276, Short.MAX_VALUE))
-            .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
-            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
+                .addContainerGap(369, Short.MAX_VALUE))
+            .add(jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
+            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -349,7 +404,7 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE))
+                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -405,11 +460,20 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
         notifyChange();
     }//GEN-LAST:event_jCheckBoxIgnoreCellBackgroundActionPerformed
 
+    private void jSpinnerFreezeRowStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerFreezeRowStateChanged
+        notifyChange();
+    }//GEN-LAST:event_jSpinnerFreezeRowStateChanged
+
+    private void jCheckBoxFixFontSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxFixFontSizeActionPerformed
+        notifyChange();
+    }//GEN-LAST:event_jCheckBoxFixFontSizeActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox jCheckBoxAutoDetectCellType;
     private javax.swing.JCheckBox jCheckBoxCollapseRowSpan;
     private javax.swing.JCheckBox jCheckBoxCreateCustomPalette;
+    private javax.swing.JCheckBox jCheckBoxFixFontSize;
     private javax.swing.JCheckBox jCheckBoxFontSizeFixEnabled;
     private javax.swing.JCheckBox jCheckBoxIgnoreCellBackground;
     private javax.swing.JCheckBox jCheckBoxIgnoreCellBorder;
@@ -420,6 +484,8 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
     private javax.swing.JCheckBox jCheckBoxRemoveEmptySpaceBetweenRows;
     private javax.swing.JCheckBox jCheckBoxUseSheetNames;
     private javax.swing.JCheckBox jCheckBoxWhitePageBackground;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelList;
     private javax.swing.JLabel jLabelMaximumRowsPerSheet;
     private javax.swing.JLabel jLabelPassword;
@@ -428,10 +494,13 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSpinner jSpinnerFreezeRow;
     private javax.swing.JSpinner jSpinnerMaximumRowsPerSheet;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField jTextFieldColumn;
     private javax.swing.JTextField jTextFieldPassword;
     // End of variables declaration//GEN-END:variables
 
@@ -444,24 +513,40 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
         jTextFieldPassword.setText(  pref.get(JExcelApiExporterParameter.PROPERTY_PASSWORD, JRProperties.getProperty(JExcelApiExporterParameter.PROPERTY_PASSWORD)));
 
         jCheckBoxCollapseRowSpan.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
+        
         jCheckBoxAutoDetectCellType.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
         jCheckBoxFontSizeFixEnabled.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
         jCheckBoxIgnoreCellBorder.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
         jCheckBoxIgnoreCellBackground.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND)));
 
         jCheckBoxIgnoreGraphics.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS)));
-        jCheckBoxImageBorderFixEnabled.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
-        jCheckBoxOnePagePerSheet.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
-        jCheckBoxRemoveEmptySpaceBetweenColumns.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
-        jCheckBoxRemoveEmptySpaceBetweenRows.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
-        jCheckBoxWhitePageBackground.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
+        jCheckBoxImageBorderFixEnabled.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED)));
+        jCheckBoxOnePagePerSheet.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET)));
+        jCheckBoxRemoveEmptySpaceBetweenColumns.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS)));
+        jCheckBoxRemoveEmptySpaceBetweenRows.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS)));
+        jCheckBoxWhitePageBackground.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND)));
 
         SpinnerNumberModel model = (SpinnerNumberModel)jSpinnerMaximumRowsPerSheet.getModel();
         model.setValue( pref.getInt(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET, JRProperties.getIntegerProperty(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET)));
 
         jCheckBoxUseSheetNames.setSelected( pref.getBoolean(JRProperties.PROPERTY_PREFIX + "export.xls.useSheetNames", false));
 
-        jTextArea1.setText(pref.get(JRProperties.PROPERTY_PREFIX + "export.xls.sheetNames", ""));
+        // freeze pane...
+        String columnIndex = JRProperties.getProperty(JRXlsAbstractExporter.PROPERTY_FREEZE_COLUMN);
+        if (columnIndex == null) columnIndex = "";
+        jTextFieldColumn.setText( pref.get(JRXlsAbstractExporter.PROPERTY_FREEZE_COLUMN, columnIndex));
+        ((SpinnerNumberModel)jSpinnerFreezeRow.getModel()).setValue( pref.getInt(JRXlsAbstractExporter.PROPERTY_FREEZE_ROW, JRProperties.getIntegerProperty(JRXlsAbstractExporter.PROPERTY_FREEZE_ROW,0)));
+
+        //com.jaspersoft.ireport.designer.utils.Misc.setComboBoxTag(true, pref.get(JRXlsAbstractExporter.PROPERTY_FREEZE_COLUMN_EDGE, JRProperties.getProperty(JRXlsAbstractExporter.PROPERTY_FREEZE_COLUMN_EDGE)), jComboBoxColumnEdge);
+        //com.jaspersoft.ireport.designer.utils.Misc.setComboBoxTag(true, pref.get(JRXlsAbstractExporter.PROPERTY_FREEZE_ROW_EDGE, JRProperties.getProperty(JRXlsAbstractExporter.PROPERTY_FREEZE_ROW_EDGE)), jComboBoxRowEdge);
+
+        
+        jTextArea1.setText(pref.get(JRProperties.PROPERTY_PREFIX + "export.xls.sheetNames", JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET)));
+
+        
+        jCheckBoxFixFontSize.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED)));
+
+        
         setInit(false);
     }
 
@@ -490,6 +575,31 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
         pref.putBoolean(JRProperties.PROPERTY_PREFIX + "export.xls.useSheetNames",  jCheckBoxUseSheetNames.isSelected() );
         pref.put(JRProperties.PROPERTY_PREFIX + "export.xls.sheetNames", jTextArea1.getText().trim());
 
+
+        pref.put(JRXlsAbstractExporter.PROPERTY_FREEZE_COLUMN,  jTextFieldColumn.getText() );
+        pref.putInt(JRXlsAbstractExporter.PROPERTY_FREEZE_ROW,  ((SpinnerNumberModel)jSpinnerFreezeRow.getModel()).getNumber().intValue() );
+        
+        pref.putBoolean(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED, jCheckBoxFixFontSize.isSelected());
+
+
+//        if (jComboBoxColumnEdge.getSelectedIndex() > 0)
+//        {
+//            pref.put(JRXlsAbstractExporter.PROPERTY_FREEZE_COLUMN_EDGE, (String) ((Tag)jComboBoxColumnEdge.getSelectedItem()).getValue());
+//        }
+//        else
+//        {
+//            pref.remove(JRXlsAbstractExporter.PROPERTY_FREEZE_COLUMN_EDGE);
+//        }
+
+//        if (jComboBoxRowEdge.getSelectedIndex() > 0)
+//        {
+//            pref.put(JRXlsAbstractExporter.PROPERTY_FREEZE_ROW_EDGE, (String) ((Tag)jComboBoxRowEdge.getSelectedItem()).getValue());
+//            System.out.println("Saved " + (String) ((Tag)jComboBoxRowEdge.getSelectedItem()).getValue());
+//        }
+//        else
+//        {
+//            pref.remove(JRXlsAbstractExporter.PROPERTY_FREEZE_ROW_EDGE);
+//        }
     }
 
     public boolean valid() {

@@ -23,13 +23,19 @@
  */
 package com.jaspersoft.ireport.jasperserver.validation;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlVisualView;
+import com.jaspersoft.ireport.designer.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.RepositoryReportUnit;
 import com.jaspersoft.ireport.jasperserver.ui.ResourceChooser;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.NumberFormat;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -40,6 +46,9 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignImage;
+import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
@@ -387,9 +396,8 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
                 selectedItems.add(jTable1.getValueAt(i,1));
             }
         }
-
-        System.out.println("Items selected: " + selectedItems.size());
-        System.out.flush();
+        
+        boolean reportChanged = false;
 
         if (selectedItems.size() > 0)
         {
@@ -398,29 +406,37 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
              urd.setValidationDialog( this );
              urd.setVisible(true);
 
-             // Expressions are been already replaced...
-             /*
-             JasperDesign jd = getReport();
-             for (int i=0; i<selectedItems.size(); ++i)
-             {
-                 System.out.println("Replacing the expressions...");
-                 System.out.flush();
-                 ElementValidationItem iev = (ElementValidationItem)selectedItems.get(i);
-                 JRDesignElement element = iev.getReportElement();
-                 if (element instanceof JRDesignImage)
-                 {
-                     ((JRDesignImage)element).setExpression(Misc.createExpression("java.lang.String", iev.getProposedExpression()));
-                     
-                 }
-                 else if (element instanceof JRDesignSubreport)
-                 {
-                     ((JRDesignSubreport)element).setExpression(Misc.createExpression("java.lang.String", iev.getProposedExpression()));
-                 }
-             }
-             */
+             // Expressions have been already replaced...
+             
+             //JasperDesign jd = getReport();
+             //for (int i=0; i<selectedItems.size(); ++i)
+             //{
+//                 System.out.println("Replacing the expressions...");
+//                 System.out.flush();
+//                 ElementValidationItem iev = (ElementValidationItem)selectedItems.get(i);
+//                 JRDesignElement element = iev.getReportElement();
+//                 if (element instanceof JRDesignImage)
+//                 {
+//                     ((JRDesignImage)element).setExpression(Misc.createExpression("java.lang.String", iev.getProposedExpression()));
+//                     
+//                     reportChanged = true;
+//                 }
+//                 else if (element instanceof JRDesignSubreport)
+//                 {
+//                     ((JRDesignSubreport)element).setExpression(Misc.createExpression("java.lang.String", iev.getProposedExpression()));
+//                     
+//                     reportChanged = true;
+//                 }
+             //}
+             //*/
+             
+//             return;
+             
              saveReport();
              return;
         }
+        
+        
 
         // We need to modify the expression requested...
         elaborationFinished(true);
@@ -597,13 +613,37 @@ public class JrxmlValidationDialog extends javax.swing.JDialog {
     {
         try {
 
+            System.out.println("JRS Plugin --> Saving report " + getFileName() + " " + view);
             if (view != null)
             {
+                
+                // We cannot use the view directly, since we are operating
                 view.getEditorSupport().saveDocument();
             }
             else
             {
-                JRXmlWriter.writeReport(getReport(), new java.io.FileOutputStream(getFileName()), "UTF-8");
+                JRXmlWriter.writeReport(getReport(),  "UTF-8");
+                
+                final String compatibility = IReportManager.getPreferences().get("compatibility", "");
+
+                if (compatibility.length() == 0)
+                {
+                    JRXmlWriter.writeReport(getReport(), new java.io.FileOutputStream(getFileName()), "UTF-8"); // IReportManager.getInstance().getProperty("jrxmlEncoding", System.getProperty("file.encoding") ));
+                }
+                else
+                {
+                    String content = JRXmlWriterHelper.writeReport(getReport(), "UTF-8", compatibility);
+                    PrintWriter fos = null;
+                    try {
+                        fos = new PrintWriter(getFileName());
+                        fos.write(content);
+                    } finally
+                    {
+                        fos.close();
+                    }
+                }
+                    
+                    
             }
         } catch (Exception ex)
         {

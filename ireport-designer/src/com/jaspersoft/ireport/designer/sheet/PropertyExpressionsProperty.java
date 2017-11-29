@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRPropertyExpression;
+import net.sf.jasperreports.engine.JRTextField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -56,6 +57,15 @@ public class PropertyExpressionsProperty  extends PropertySupport {
        setValue("useList", Boolean.TRUE);
        setValue("canUseExpression", Boolean.TRUE);
        this.setValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT, new ExpressionContext(dataset));
+       
+       if(element instanceof JRTextField)
+       {
+           setValue("hintType", com.jaspersoft.ireport.designer.sheet.editors.JRPropertyDialog.SCOPE_TEXT_ELEMENT);
+       }
+       else 
+       {
+           setValue("hintType", com.jaspersoft.ireport.designer.sheet.editors.JRPropertyDialog.SCOPE_ELEMENT);
+       }
        
        this.element = element;
     }

@@ -27,10 +27,10 @@ import com.jaspersoft.ireport.components.sort.properties.EvaluationGroupProperty
 import com.jaspersoft.ireport.components.sort.properties.EvaluationTimeProperty;
 import com.jaspersoft.ireport.components.sort.properties.ColumnProperty;
 import com.jaspersoft.ireport.components.sort.properties.HandlerColorProperty;
-import com.jaspersoft.ireport.components.sort.properties.HandlerFontSizeProperty;
 import com.jaspersoft.ireport.components.sort.properties.HandlerHorizontalAlignmentProperty;
 import com.jaspersoft.ireport.components.sort.properties.HandlerVerticalAlignmentProperty;
 
+import com.jaspersoft.ireport.components.sort.properties.SymbolFontProperty;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.locale.I18n;
@@ -111,8 +111,8 @@ public class SortElementNode extends ElementNode {
         propertySetHandler.put(new HandlerColorProperty(component));
         propertySetHandler.put(new HandlerHorizontalAlignmentProperty(component));
         propertySetHandler.put(new HandlerVerticalAlignmentProperty(component));
-        propertySetHandler.put(new HandlerFontSizeProperty(component));
-
+        propertySetHandler.put(new SymbolFontProperty(component, getJasperDesign()));
+        
         sheet.put( propertySetHandler );
 
         

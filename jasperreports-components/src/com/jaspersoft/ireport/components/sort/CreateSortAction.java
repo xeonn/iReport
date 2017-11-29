@@ -26,6 +26,7 @@ package com.jaspersoft.ireport.components.sort;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.ReportObjectScene;
 import com.jaspersoft.ireport.designer.palette.actions.*;
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.dnd.DropTargetDropEvent;
 import net.sf.jasperreports.components.sort.SortComponent;
@@ -57,7 +58,7 @@ public class CreateSortAction extends CreateReportElementAction {
 
 
         componentImpl.setHandlerHorizontalAlign(HorizontalAlignEnum.CENTER);
-        componentImpl.setHandlerColor("#000000");
+        componentImpl.setHandlerColor(Color.BLACK);
 
 
         component.setComponent(componentImpl);

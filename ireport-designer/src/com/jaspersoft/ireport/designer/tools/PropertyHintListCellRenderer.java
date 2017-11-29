@@ -54,7 +54,57 @@ public class PropertyHintListCellRenderer extends javax.swing.JPanel implements 
     {
         if (s == null) s ="";
         if (!s.startsWith("<html>")) s = "<html>" + s;
-        jLabelDescription.setText(s);
+
+        // Parse s to introduce a BR in the first blank after each 30 chars.
+        // skip tags...
+        boolean inTag = false;
+        StringBuilder newString = new StringBuilder();
+        int count = 0;
+        String lastTag = "";
+        for (int i=0; i<s.length(); ++i)
+        {
+            char c = s.charAt(i);
+
+            if (inTag)
+            {
+                // skip char..
+                
+                newString.append(c);
+                if (c == '>')
+                {
+                    inTag = false;
+                    if (lastTag.equals("br") || lastTag.equals("br/") ||
+                        lastTag.equals("li") || lastTag.equals("/li") ||
+                        lastTag.equals("ul") || lastTag.equals("/ul"))
+                    {
+                        count = 0;
+                    }
+                }
+                lastTag += c;
+                continue;
+            }
+            if (c == '<')
+            {
+                lastTag="";
+                inTag = true;
+                newString.append(c);
+                continue;
+            }
+
+            count++;
+            newString.append(c);
+            if (count > 80)
+            {
+                if (Character.isSpaceChar(c) ||
+                   !Character.isLetterOrDigit(c))
+                {
+                    newString.append("<br>");
+                    count = 0;
+                }
+            }
+        }
+
+        jLabelDescription.setText(newString.toString());
     }
     
     /** Creates new form PropertyHintRendererPanel */
@@ -75,6 +125,7 @@ public class PropertyHintListCellRenderer extends javax.swing.JPanel implements 
         jLabelDescription = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
 
+        setMaximumSize(new java.awt.Dimension(450, 2147483647));
         setLayout(new java.awt.GridBagLayout());
 
         jLabelProperty.setText("<html><b>Property");
@@ -85,8 +136,9 @@ public class PropertyHintListCellRenderer extends javax.swing.JPanel implements 
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
         add(jLabelProperty, gridBagConstraints);
 
-        jLabelDescription.setText("jLabel1");
+        jLabelDescription.setText("<html>");
         jLabelDescription.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabelDescription.setMaximumSize(new java.awt.Dimension(350, 500));
         jLabelDescription.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -137,5 +189,7 @@ public class PropertyHintListCellRenderer extends javax.swing.JPanel implements 
         
         return this;
     }
-    
+
+
+
 }

@@ -26,6 +26,7 @@ package com.jaspersoft.jrx;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
 import com.jaspersoft.ireport.locale.I18n;
+import com.jaspersoft.jrx.json.JsonDataSourceConnectionFactory;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.List;
@@ -61,6 +62,12 @@ public class Installer extends ModuleInstall {
                     {
                         return true;
                     }
+
+                    if (name.toLowerCase().startsWith("jasperreports-json") ||
+                        name.toLowerCase().endsWith(".jar"))
+                    {
+                        return true;
+                    }
                     return false;
                 }
             });
@@ -76,6 +83,10 @@ public class Installer extends ModuleInstall {
         // Plugging the new datasource implementation.
         IReportManager.getInstance().addConnectionImplementationFactory(new JRXMLDataSourceConnectionFactory());
 
+        System.out.println("Adding JSON data source...");
+        System.out.flush();
+        IReportManager.getInstance().addConnectionImplementationFactory(new JsonDataSourceConnectionFactory());
+
         // adding the query executer for xpath2...
         QueryExecuterDef qed = new QueryExecuterDef("xpath2",
                 "com.jaspersoft.jrx.query.JRXPathQueryExecuterFactory",
@@ -87,6 +98,16 @@ public class Installer extends ModuleInstall {
                 "com.jaspersoft.jrx.query.PlSqlQueryExecuterFactory",
                 "com.jaspersoft.ireport.designer.data.fieldsproviders.SQLFieldsProvider");
 
+        QueryExecuterDef qedjson = new QueryExecuterDef("json",
+                "net.sf.jasperreports.engine.query.JsonQueryExecuterFactory",
+                "com.jaspersoft.ireport.designer.data.fieldsproviders.SQLFieldsProvider");
+
+        QueryExecuterDef qedJSON = new QueryExecuterDef("JSON",
+                "net.sf.jasperreports.engine.query.JsonQueryExecuterFactory",
+                "com.jaspersoft.ireport.designer.data.fieldsproviders.SQLFieldsProvider");
+
+        IReportManager.getInstance().addQueryExecuterDef(qedjson, false);
+        IReportManager.getInstance().addQueryExecuterDef(qedJSON, false);
         IReportManager.getInstance().addQueryExecuterDef(qedPlSQL, false);
 
 

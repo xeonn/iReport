@@ -251,6 +251,13 @@ public class JRPropertiesMapPropertyCustomEditor extends javax.swing.JPanel impl
             jrpd.addExporterHints();
         }
 
+        if (env.getFeatureDescriptor().getValue("hintType") != null)
+        {
+            int type = Integer.parseInt(""+env.getFeatureDescriptor().getValue("hintType"));
+            jrpd.addHints(type);
+        }
+
+
         if (env.getFeatureDescriptor().getValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT) != null)
         {
             jrpd.setExpressionContext((ExpressionContext)env.getFeatureDescriptor().getValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT));
@@ -298,6 +305,11 @@ public class JRPropertiesMapPropertyCustomEditor extends javax.swing.JPanel impl
             jrpd.setExpressionContext((ExpressionContext)env.getFeatureDescriptor().getValue(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT));
         }
         
+        if (env.getFeatureDescriptor().getValue("hintType") != null)
+        {
+            int type = Integer.parseInt(""+env.getFeatureDescriptor().getValue("hintType"));
+            jrpd.addHints(type);
+        }
         
         //JRPropertyDialog jrpd = new JRPropertyDialog(w, true);
         jrpd.setProperty( (GenericProperty)dtm.getValueAt( index, 0));

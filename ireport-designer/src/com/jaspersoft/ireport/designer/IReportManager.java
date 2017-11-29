@@ -502,7 +502,24 @@ public class IReportManager {
     {
 
         // Save the properties like they are when loaded from the default.jasperreports.properties file...
-
+        // Add the custom properties to JasperReports properties as defaults...
+        Properties ireportProps = new Properties();
+        try
+        {
+              ireportProps.load( getClass().getResourceAsStream("/ireport.jasperreports.properties"));
+              // add (or replace) the properties...
+              Enumeration<String> names = (Enumeration<String>) ireportProps.propertyNames();
+              while (names.hasMoreElements())
+              {
+                  String name = names.nextElement();
+                  JRProperties.setProperty(name, ireportProps.getProperty(name));
+              }
+              
+        } catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        
         List props = JRProperties.getProperties("");
 
         for (int i=0; i<props.size(); ++i)
@@ -525,8 +542,6 @@ public class IReportManager {
             setJRProperty("net.sf.jasperreports.xpath.executer.factory",
                     "net.sf.jasperreports.engine.util.xml.JaxenXPathExecuterFactory");
 
-            System.out.println("Prop1: net.sf.jasperreports.xpath.executer.factory: "  + JRProperties.getProperty("net.sf.jasperreports.xpath.executer.factory"));
-            System.out.flush();
         } catch (Exception ex)
         { 
             System.out.println(I18n.getString("IReportManager.Error.ErrorJaxenXP") +ex.getMessage());
@@ -537,8 +552,6 @@ public class IReportManager {
         getQueryExecuters();
 
         reloadJasperReportsProperties();
-        System.out.println("Prop2: net.sf.jasperreports.xpath.executer.factory: "  + JRProperties.getProperty("net.sf.jasperreports.xpath.executer.factory"));
-        System.out.flush();
         
 
         // Loading fonts...

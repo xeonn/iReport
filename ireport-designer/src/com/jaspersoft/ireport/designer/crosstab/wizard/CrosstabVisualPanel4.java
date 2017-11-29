@@ -64,6 +64,7 @@ public final class CrosstabVisualPanel4 extends JPanel {
         measure.setName( groupPanel1.getGroupMeasureName()+I18n.getString("CrosstabVisualPanel4.Label.Measure") );
         measure.setValueExpression( groupPanel1.getDesignExpression() );
         measure.setCalculation( groupPanel1.getCalculationType() );
+        measure.setValueClassName( groupPanel1.getDesignExpression().getValueClassName() );
         if (groupPanel1.getCalculationType() == CalculationEnum.COUNT)
         {
             measure.setValueClassName( "java.lang.Integer");

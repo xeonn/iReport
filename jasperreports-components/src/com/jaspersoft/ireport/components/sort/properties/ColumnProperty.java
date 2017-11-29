@@ -29,6 +29,7 @@ import java.beans.PropertyEditor;
 import net.sf.jasperreports.components.sort.SortComponent;
 
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 
     
 /**
@@ -83,7 +84,7 @@ public final class ColumnProperty extends AbstractProperty
         String field = component.getSortFieldName();
 
         if (field == null || field.length() == 0) return null;
-        if (component.getSortFieldType() != null && component.getSortFieldType().equals("Variable") ) return "V"+field;
+        if (component.getSortFieldType() != null && component.getSortFieldType() == SortFieldTypeEnum.VARIABLE ) return "V"+field;
         return "F"+field;
 
     }
@@ -116,12 +117,12 @@ public final class ColumnProperty extends AbstractProperty
             if (value instanceof String && ((String)value).startsWith("F"))
             {
                 component.setSortFieldName(((String)value).substring(1));
-                component.setSortFieldType("Field");
+                component.setSortFieldType(SortFieldTypeEnum.FIELD);
             }
             else if (value instanceof String && ((String)value).startsWith("V"))
             {
                 component.setSortFieldName(((String)value).substring(1));
-                component.setSortFieldType("Variable");
+                component.setSortFieldType(SortFieldTypeEnum.VARIABLE);
             }
             else
             {

@@ -67,6 +67,7 @@ public final class CrosstabVisualPanel2 extends JPanel {
         group.setName( groupPanel1.getGroupMeasureName() + "" );
         JRDesignCrosstabBucket bucket = new JRDesignCrosstabBucket();
         bucket.setExpression( groupPanel1.getDesignExpression() );
+        bucket.setValueClassName( groupPanel1.getDesignExpression().getValueClassName() );
         group.setBucket(bucket);
         return group;
     }
@@ -78,6 +79,7 @@ public final class CrosstabVisualPanel2 extends JPanel {
         group.setName( groupPanel2.getGroupMeasureName() + "" );
         JRDesignCrosstabBucket bucket = new JRDesignCrosstabBucket();
         bucket.setExpression( groupPanel2.getDesignExpression() );
+        bucket.setValueClassName( groupPanel2.getDesignExpression().getValueClassName() );
         group.setBucket(bucket);
         return group;
     }

@@ -44,6 +44,13 @@ public class JRPropertyDialog extends javax.swing.JDialog {
     com.jaspersoft.ireport.designer.editor.ExpressionEditorArea expressionArea = null;
     private List<GenericProperty> properties = null;
     private String originalName = null;
+
+
+
+    public static final int SCOPE_ELEMENT = 1;
+    public static final int SCOPE_REPORT_ELEMENT = 2;
+    public static final int SCOPE_REPORT = 3;
+    public static final int SCOPE_TEXT_ELEMENT=4;
     
     
     /**
@@ -108,6 +115,30 @@ public class JRPropertyDialog extends javax.swing.JDialog {
             I18n.getString("JRPropertyDialog.List.Prop11") +
             I18n.getString("JRPropertyDialog.List.DefaultNull")));
 
+
+/*
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.xls.auto.filter",
+        I18n.getString("JRPropertyDialog.List.net.sf.jasperreports.export.xls.auto.filter") +
+        I18n.getString("JRPropertyDialog.List.DefaultNull")));
+
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.xls.column.width",
+        I18n.getString("JRPropertyDialog.List.net.sf.jasperreports.export.xls.column.width") +
+        I18n.getString("JRPropertyDialog.List.DefaultNull")));
+
+
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.xls.column.width.ratio",
+        I18n.getString("JRPropertyDialog.List.net.sf.jasperreports.export.xls.column.width.ratio") +
+        I18n.getString("JRPropertyDialog.List.DefaultNull")));
+
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.xls.freeze.column.edge",
+        I18n.getString("JRPropertyDialog.List.net.sf.jasperreports.export.xls.freeze.column.edge") +
+        I18n.getString("JRPropertyDialog.List.DefaultNull")));
+
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.xls.freeze.row.edge",
+        I18n.getString("JRPropertyDialog.List.net.sf.jasperreports.export.xls.freeze.row.edge") +
+        I18n.getString("JRPropertyDialog.List.DefaultNull")));
+
+*/
         dlm.addElement(new PropertyHint("net.sf.jasperreports.export.pdf.tag.h1",
             I18n.getString("JRPropertyDialog.List.Prop14") +
             I18n.getString("JRPropertyDialog.List.DefaultNull")));
@@ -209,6 +240,7 @@ public class JRPropertyDialog extends javax.swing.JDialog {
         I18n.getString("JRPropertyDialog.List.Prop7") +
         I18n.getString("JRPropertyDialog.List.DefaultFalse")));
 
+        /*
         dlm.addElement(new PropertyHint("net.sf.jasperreports.export.xls.create.custom.palette",
         I18n.getString("JRPropertyDialog.List.Prop8") +
         I18n.getString("JRPropertyDialog.List.DefaultFalse")));
@@ -253,13 +285,18 @@ public class JRPropertyDialog extends javax.swing.JDialog {
         I18n.getString("JRPropertyDialog.List.Prop8") +
         I18n.getString("JRPropertyDialog.List.Default0")));
 
-        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.xml.validation",
-        I18n.getString("JRPropertyDialog.List.Prop9") +
-        I18n.getString("JRPropertyDialog.List.DefaultTrue")));
+
+        dlm.addElement(new PropertyHint("net.sf.jasperreports.export.xls.max.rows.per.sheet",
+        I18n.getString("JRPropertyDialog.List.Prop8") +
+        I18n.getString("JRPropertyDialog.List.Default0")));
+         *
+         */
+
 
         dlm.addElement(new PropertyHint("net.sf.jasperreports.export.csv.field.delimiter",
         I18n.getString("JRPropertyDialog.List.Prop10") +
         I18n.getString("JRPropertyDialog.List.Default")));
+
 
         dlm.addElement(new PropertyHint("net.sf.jasperreports.export.csv.record.delimiter",
         I18n.getString("JRPropertyDialog.List.Prop10") +
@@ -613,5 +650,76 @@ public class JRPropertyDialog extends javax.swing.JDialog {
 
     public void setProperties(List<GenericProperty> properties) {
         this.properties = properties;
+    }
+
+    public void addHints(int scope)
+    {
+            if (scope == SCOPE_TEXT_ELEMENT) {
+                addHint("net.sf.jasperreports.export.xls.formula");
+                addHint("net.sf.jasperreports.export.xls.pattern");
+            }
+
+            if (scope == SCOPE_ELEMENT || scope == SCOPE_TEXT_ELEMENT) {
+            addHint("net.sf.jasperreports.export.xls.auto.filter");
+            addHint("net.sf.jasperreports.export.xls.column.name");
+            addHint("net.sf.jasperreports.export.xls.data");
+            addHint("net.sf.jasperreports.export.xls.break.before.row");
+            addHint("net.sf.jasperreports.export.xls.break.after.row");
+            addHint("net.sf.jasperreports.export.xls.repeat.value");
+            addHint("net.sf.jasperreports.export.xls.sheet.name");
+            addHint("net.sf.jasperreports.export.xls.write.header");
+            addHint("net.sf.jasperreports.export.xls.column.width");
+            addHint("net.sf.jasperreports.export.xls.row.outline.level.{arbitrary_level}");
+            }
+
+
+
+            if (scope == SCOPE_REPORT || scope== SCOPE_ELEMENT || scope == SCOPE_TEXT_ELEMENT) {
+            addHint("net.sf.jasperreports.export.xls.column.width.ratio");
+            addHint("net.sf.jasperreports.export.xls.cell.hidden");
+            addHint("net.sf.jasperreports.export.xls.cell.locked");
+            addHint("net.sf.jasperreports.export.xls.wrap.text");
+            addHint("net.sf.jasperreports.export.xls.freeze.column.edge");
+            addHint("net.sf.jasperreports.export.xls.freeze.row.edge");
+            addHint("net.sf.jasperreports.export.flash.element.allow.script.access");
+            }
+
+            if (scope == SCOPE_REPORT) {
+            addHint("net.sf.jasperreports.export.xls.collapse.row.span");
+            addHint("net.sf.jasperreports.export.xls.create.custom.palette");
+            addHint("net.sf.jasperreports.export.xls.detect.cell.type");
+            addHint("net.sf.jasperreports.export.xls.fit.height");
+            addHint("net.sf.jasperreports.export.xls.fit.width");
+            addHint("net.sf.jasperreports.export.xls.font.size.fix.enabled");
+            addHint("net.sf.jasperreports.export.xls.ignore.cell.background");
+            addHint("net.sf.jasperreports.export.xls.ignore.cell.border");
+            addHint("net.sf.jasperreports.export.xls.ignore.graphics");
+            addHint("net.sf.jasperreports.export.xls.image.border.fix.enabled");
+            addHint("net.sf.jasperreports.export.xls.max.rows.per.sheet");
+            addHint("net.sf.jasperreports.export.xls.one.page.per.sheet");
+            addHint("net.sf.jasperreports.export.xls.remove.empty.space.between.columns");
+            addHint("net.sf.jasperreports.export.xls.remove.empty.space.between.rows");
+            addHint("net.sf.jasperreports.export.xls.white.page.background");
+            addHint("net.sf.jasperreports.export.xls.freeze.column");
+            addHint("net.sf.jasperreports.export.xls.freeze.row");
+            addHint("net.sf.jasperreports.export.xls.password");
+            addHint("net.sf.jasperreports.export.xls.sheet.direction");
+            addHint("net.sf.jasperreports.export.xls.sheet.footer.center");
+            addHint("net.sf.jasperreports.export.xls.sheet.footer.left");
+            addHint("net.sf.jasperreports.export.xls.sheet.footer.right");
+            addHint("net.sf.jasperreports.export.xls.sheet.header.center");
+            addHint("net.sf.jasperreports.export.xls.sheet.header.left");
+            addHint("net.sf.jasperreports.export.xls.sheet.header.right");
+            addHint("net.sf.jasperreports.export.xls.column.names");
+            addHint("net.sf.jasperreports.export.xls.sheet.names.{arbitrary_name}");
+            addHint("net.sf.jasperreports.virtual.page.element.size");
+            
+            }
+    }
+
+    public void addHint(String propName)
+    {
+        DefaultListModel dlm = (DefaultListModel)jList1.getModel();
+        dlm.addElement(new PropertyHint(propName, I18n.getString(propName)));
     }
 }

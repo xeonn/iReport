@@ -46,6 +46,10 @@
                 <runtime-relative-path>ext/jasperreports-extensions-3.5.3.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/jasperreports-extensions-3.5.3.jar</binary-origin>
             </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jasperreports-json.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-json.jar</binary-origin>
+            </class-path-extension>
         </data>
     </configuration>
 </project>

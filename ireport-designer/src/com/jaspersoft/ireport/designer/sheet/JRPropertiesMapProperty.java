@@ -24,12 +24,15 @@
 package com.jaspersoft.ireport.designer.sheet;
 
 import com.jaspersoft.ireport.designer.ModelUtils;
+import com.jaspersoft.ireport.designer.options.jasperreports.JRPropertyDialog;
 import com.jaspersoft.ireport.designer.sheet.editors.JRPropertiesMapPropertyEditor;
 import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.nodes.PropertySupport;
 
@@ -51,6 +54,15 @@ public class JRPropertiesMapProperty  extends PropertySupport {
        if (holder instanceof JasperDesign)
        {
            setValue("reportProperties", Boolean.TRUE);
+           setValue("hintType", com.jaspersoft.ireport.designer.sheet.editors.JRPropertyDialog.SCOPE_REPORT);
+       }
+       else if(holder instanceof JRTextField)
+       {
+           setValue("hintType", com.jaspersoft.ireport.designer.sheet.editors.JRPropertyDialog.SCOPE_TEXT_ELEMENT);
+       }
+       else if(holder instanceof JRElement)
+       {
+           setValue("hintType", com.jaspersoft.ireport.designer.sheet.editors.JRPropertyDialog.SCOPE_ELEMENT);
        }
     }
 

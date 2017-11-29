@@ -44,6 +44,7 @@ import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignHyperlinkParameter;
 import net.sf.jasperreports.engine.type.HyperlinkTargetEnum;
 import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
+import net.sf.jasperreports.engine.type.JREnum;
 
 
 /**
@@ -66,12 +67,12 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         jPanelClose.setVisible(false);
         hyperlink = new JRDesignHyperlink();
         setInit(true);
-        jComboBoxLinkType.addItem(new Tag( HyperlinkTypeEnum.NONE) );
-        jComboBoxLinkType.addItem(new Tag( HyperlinkTypeEnum.REFERENCE) );
-        jComboBoxLinkType.addItem(new Tag( HyperlinkTypeEnum.LOCAL_ANCHOR) );
-        jComboBoxLinkType.addItem(new Tag( HyperlinkTypeEnum.LOCAL_PAGE) );
-        jComboBoxLinkType.addItem(new Tag( HyperlinkTypeEnum.REMOTE_ANCHOR) );
-        jComboBoxLinkType.addItem(new Tag( HyperlinkTypeEnum.REMOTE_PAGE) );
+        jComboBoxLinkType.addItem(new Tag( HyperlinkTypeEnum.NONE.getName()) );
+        jComboBoxLinkType.addItem(new Tag( HyperlinkTypeEnum.REFERENCE.getName()) );
+        jComboBoxLinkType.addItem(new Tag( HyperlinkTypeEnum.LOCAL_ANCHOR.getName()) );
+        jComboBoxLinkType.addItem(new Tag( HyperlinkTypeEnum.LOCAL_PAGE.getName()) );
+        jComboBoxLinkType.addItem(new Tag( HyperlinkTypeEnum.REMOTE_ANCHOR.getName()) );
+        jComboBoxLinkType.addItem(new Tag( HyperlinkTypeEnum.REMOTE_PAGE.getName()) );
 
         // Adding extra link types...
         for (Tag t : IReportManager.getInstance().getCustomLinkTypes())
@@ -210,9 +211,9 @@ public class HyperlinkPanel extends javax.swing.JPanel {
                     jComboBoxLinkType.setSelectedItem(hyperlink.getLinkType());
                 }
 
-                if ( HyperlinkTargetEnum.getByValue(JRHyperlinkHelper.getHyperlinkTarget( hyperlink)) == HyperlinkTargetEnum.CUSTOM)
+                if ( HyperlinkTargetEnum.getByValue(JRHyperlinkHelper.getHyperlinkTarget( hyperlink)) != HyperlinkTargetEnum.CUSTOM)
                 {
-                    Misc.setComboboxSelectedTagValue(jComboBoxLinkTarget, hyperlink.getHyperlinkTarget());
+                    Misc.setComboboxSelectedTagValue(jComboBoxLinkTarget, hyperlink.getLinkTarget());
                 }
                 else
                 {
@@ -853,7 +854,15 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         {
             if (val instanceof Tag)
             {
-                val = ""+ ((Tag)val).getValue();
+                val = ((Tag)val).getValue();
+                if (val instanceof JREnum)
+                {
+                    val =((JREnum)val).getName();
+                }
+                else
+                {
+                    val = ""+ val;
+                }
             }
             
             linkType = "" + val;
@@ -1021,7 +1030,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         
         if (target != null && target instanceof Tag)
         {
-            setHyperlinkAttribute("LinkTarget",String.class, JRHyperlinkHelper.getLinkTarget( HyperlinkTargetEnum.getByValue( (Byte)((Tag)target).getValue()) ) );
+            setHyperlinkAttribute("LinkTarget",String.class, ((HyperlinkTargetEnum) ((Tag)target).getValue() ).getName() );
         }
         else if (target != null)
         {
@@ -1030,7 +1039,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         }
         else
         {
-            setHyperlinkAttribute("LinkTarget", String.class,JRHyperlinkHelper.getLinkTarget( HyperlinkTargetEnum.SELF ));
+            setHyperlinkAttribute("LinkTarget", String.class,  HyperlinkTargetEnum.SELF.getName());
         }
         
         fireHyperlinkChanged();

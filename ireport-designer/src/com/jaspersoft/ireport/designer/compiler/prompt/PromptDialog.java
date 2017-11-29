@@ -125,7 +125,7 @@ public class PromptDialog
             //datePicker.setLocale( I18n.getCurrentLocale() );
             if (format.length() > 0)
             {
-                datetimePicker.setDateFormat(new SimpleDateFormat(format));
+                datePicker.setFormats(new SimpleDateFormat(format));
             }
             
             try {

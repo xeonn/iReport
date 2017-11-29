@@ -27,7 +27,6 @@ import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
-import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.EnumProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.StringListProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.StringProperty;
@@ -48,7 +47,6 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
-import net.sf.jasperreports.crosstabs.fill.calculation.BucketDefinition;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRExpressionChunk;
 import net.sf.jasperreports.engine.JRExpressionCollector;
@@ -655,7 +653,7 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
 
         @Override
         public String getString() {
-            return (getBucket().getExpression() != null) ? getBucket().getExpression().getValueClassName() : null;
+            return getBucket().getValueClassName();
         }
 
         @Override
@@ -672,6 +670,7 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
         public void setString(String value) {
            if (getBucket().getExpression() != null)
            {
+               getBucket().setValueClassName(value);
                ((JRDesignExpression)getBucket().getExpression()).setValueClassName(value);
 
                // Introspect the crosstab and change the class for all the expressions which use this group name...
@@ -690,6 +689,7 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
                    }
                }
            }
+            
         }
 
         public JasperDesign getJasperDesign()

@@ -1,4 +1,22 @@
-2011-09-16 Version 4.1.1 released
+2011-10-28 Version 4.1.3 released
+_______________________________________________________________________________
+- Updated to JasperReports 4.1.3
+- Fixed Bug 0005457: iReport 4.1.2 fails to open reports which contains Barcode4J elements
+- Improved Excel exporter options
+- New Json data source support
+- Fixed crosstab wizard to work with new buckets in 4.1.3
+- Improved export options to use JasperReports properties instead of parameters, to allow report and element properties to override iReport settings.
+- Fixed Bug 0005457: iReport 4.1.2 fails to open reports which contains Barcode4J elements
+- Fixed hyperlink type problem
+- Fixed Bug 0005199: Error in the setParameter(JRParameter param) in class com.jaspersoft.ireport.designer.compiler.prompt.PromptDialog
+- Fixed bug 0005437: Piechart hyperlink reference generates incorrect XML 
+- Fixed bug 0004582: When Adding a new Row/Column group in a crosstab, the Bucket Expression's class asigned by default is "java.lang.String"
+- Fixed Bug 24986 - iReport 4.2 generates invalid crosstab report
+- Fixed bug 22412 - Error creating usual report using template with images
+
+
+
+2011-09-16 Version 4.1.2 released
 _______________________________________________________________________________
 - Updated to JasperReports 4.1.2
 - Support for Sort Component

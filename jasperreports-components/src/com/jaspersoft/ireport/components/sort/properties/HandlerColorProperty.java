@@ -67,7 +67,7 @@ public final class HandlerColorProperty extends ColorProperty
     @Override
     public Color getColor() 
     {
-        return net.sf.jasperreports.engine.util.JRColorUtil.getColor(component.getHandlerColor(), null) ;
+        return component.getHandlerColor();
     }
 
     @Override
@@ -91,9 +91,7 @@ public final class HandlerColorProperty extends ColorProperty
         }
         else
         {
-            String s = net.sf.jasperreports.engine.util.JRColorUtil.getColorHexa(color);
-            s="#"+s;
-            component.setHandlerColor(s);
+            component.setHandlerColor(color);
         }
     }
 
