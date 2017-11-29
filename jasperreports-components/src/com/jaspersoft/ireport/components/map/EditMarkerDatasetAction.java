@@ -82,6 +82,7 @@ public final class EditMarkerDatasetAction extends NodeAction {
         if (node.getElement() instanceof JRDesignComponentElement &&
             ((JRDesignComponentElement)node.getElement()).getComponent() instanceof StandardMapComponent)
         {
+            /*
             JRDesignDataset newDataset = null;
             if (IReportManager.getInstance().getActiveReport().getDatasetsList().isEmpty())
             {
@@ -104,7 +105,7 @@ public final class EditMarkerDatasetAction extends NodeAction {
                     return;
                 }
             }
-            
+            */
             MapMarkersPanel panel = new MapMarkersPanel();
             panel.setShowRemoveDatasetRun(true);
             panel.setJasperDesign( node.getJasperDesign() );
@@ -121,6 +122,7 @@ public final class EditMarkerDatasetAction extends NodeAction {
             
             JRDesignDatasetRun datasetRun = (JRDesignDatasetRun)markerDataset.getDatasetRun();
             
+            /*
             if (datasetRun == null)
             {
                 datasetRun = new JRDesignDatasetRun();
@@ -139,6 +141,7 @@ public final class EditMarkerDatasetAction extends NodeAction {
                 
                 markerDataset.setDatasetRun(datasetRun);
             }
+            */
             
             
             

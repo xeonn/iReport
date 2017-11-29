@@ -281,7 +281,7 @@ public class MapMarkersPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel1.add(jComboBoxSubDataset, gridBagConstraints);
 
-        jPanel7.setLayout(new java.awt.GridBagLayout());
+        jPanel7.setLayout(new java.awt.BorderLayout());
 
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
@@ -453,14 +453,7 @@ public class MapMarkersPanel extends javax.swing.JPanel {
 
         jTabbedPaneSubDataset.addTab(org.openide.util.NbBundle.getMessage(MapMarkersPanel.class, "MapMarkersPanel.jPanel5.TabConstraints.tabTitle"), jPanel5); // NOI18N
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
-        jPanel7.add(jTabbedPaneSubDataset, gridBagConstraints);
+        jPanel7.add(jTabbedPaneSubDataset, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -621,35 +614,40 @@ public class MapMarkersPanel extends javax.swing.JPanel {
 
     private void jComboBoxSubDatasetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSubDatasetActionPerformed
 
-        if (this.isInit() || getDatasetRun()== null) return;
+        if (this.isInit() || this.markerDataset == null) return;
          // Check subdataset parameters....
-        if (getDatasetRun()== null ||
-                !("" + jComboBoxSubDataset.getSelectedItem()).equals(getDatasetRun().getDatasetName()) )//NOI18N
+        
+        if (jComboBoxSubDataset.getSelectedIndex() ==0)
         {
-            if (getDatasetRun()== null) {
-                this.markerDataset.setDatasetRun(new JRDesignDatasetRun());
+            this.markerDataset.setDatasetRun(null);
+            jTabbedPaneSubDataset.setVisible(false);
+            
+            
+        }
+        else
+        {
+            if (getDatasetRun()== null ||
+                !("" + jComboBoxSubDataset.getSelectedItem()).equals(getDatasetRun().getDatasetName()) )//NOI18N
+            {
+                if (getDatasetRun()== null) {
+                    this.markerDataset.setDatasetRun(new JRDesignDatasetRun());
 
-                setInit(true);
-                this.jComboBoxDatasetConnectionType.setSelectedIndex(0);
-                this.jRTextExpressionAreaTextConnectionExpression.setEnabled(false);
-                this.jRTextExpressionAreaTextConnectionExpression.setBackground(Color.LIGHT_GRAY);
-                this.jRTextExpressionAreaTextConnectionExpression.setText("");//NOI18N
-                jRTextExpressionAreaMapExpression.setText("");//NOI18N
-                setInit(false);
+                    setInit(true);
+                    this.jComboBoxDatasetConnectionType.setSelectedIndex(0);
+                    this.jRTextExpressionAreaTextConnectionExpression.setEnabled(false);
+                    this.jRTextExpressionAreaTextConnectionExpression.setBackground(Color.LIGHT_GRAY);
+                    this.jRTextExpressionAreaTextConnectionExpression.setText("");//NOI18N
+                    jRTextExpressionAreaMapExpression.setText("");//NOI18N
+                    setInit(false);
 
-                java.awt.GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.gridy = 1;
-                gridBagConstraints.gridwidth = 2;
-                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-                gridBagConstraints.weightx = 1.0;
-                gridBagConstraints.weighty = 1.0;
-                gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
-                jPanel7.add(jTabbedPaneSubDataset, gridBagConstraints);
+                }
+                getDatasetRun().setDatasetName("" + jComboBoxSubDataset.getSelectedItem());//NOI18N
+            
+                jTabbedPaneSubDataset.setVisible(true);
 
-                //jTabbedPaneSubDataset.setVisible(true);
                 jPanel7.updateUI();
+
             }
-            getDatasetRun().setDatasetName("" + jComboBoxSubDataset.getSelectedItem());//NOI18N
         }
 }//GEN-LAST:event_jComboBoxSubDatasetActionPerformed
 
@@ -858,7 +856,6 @@ public class MapMarkersPanel extends javax.swing.JPanel {
 
          if (markerDataset == null) {             
              return;
-         
          }
          
          if (jList1.getSelectedIndex() >= 0) {             
@@ -871,7 +868,7 @@ public class MapMarkersPanel extends javax.swing.JPanel {
              markerDialog.setVisible(true);
              if (markerDialog.getDialogResult() == javax.swing.JOptionPane.OK_OPTION) {             
 
-                 StandardMarker newMarker = markerDialog.getMarker();
+               StandardMarker newMarker = markerDialog.getMarker();
 
                while (marker.getProperties().size() > 0)
                {
@@ -880,12 +877,11 @@ public class MapMarkersPanel extends javax.swing.JPanel {
                  
                 for (MarkerProperty p : newMarker.getProperties())
                 {
-                marker.addMarkerProperty(p);
+                    marker.addMarkerProperty(p);
                 }
 
                 jList1.updateUI();
              }     
-         
          }     
     
     }//GEN-LAST:event_jButtonModifyActionPerformed
@@ -1003,7 +999,7 @@ public class MapMarkersPanel extends javax.swing.JPanel {
         this.markerDataset = (StandardMarkerDataset)markerDataset.clone();
         updateDatasetRun();
         
-        for (Marker m : markerDataset.getMarkers())
+        for (Marker m : this.markerDataset.getMarkers())
         {
             ((DefaultListModel)jList1.getModel()).addElement(m);
         }
@@ -1021,71 +1017,68 @@ public class MapMarkersPanel extends javax.swing.JPanel {
 
         setInit(true);
 
-        jComboBoxSubDataset.setSelectedItem(getDatasetRun().getDatasetName());
-        //jPanel7.remove(jTabbedPaneSubDataset);
-        //jTabbedPaneSubDataset.setVisible(true);
-        if (jPanel7.getComponentCount() == 0)
+        if (getDatasetRun() != null)
         {
-            java.awt.GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.gridwidth = 2;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.weighty = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
-            jPanel7.add(jTabbedPaneSubDataset, gridBagConstraints);
-            jPanel7.updateUI();
+            jComboBoxSubDataset.setSelectedItem(getDatasetRun().getDatasetName());
+            jRTextExpressionAreaMapExpression.setText( Misc.getExpressionText( getDatasetRun().getParametersMapExpression() ) );
+
+            int connectionType = 0;
+
+            if ( getDatasetRun().getConnectionExpression() != null)
+            {
+                connectionType = 1;
+            }
+            if ( getDatasetRun().getDataSourceExpression() != null)
+            {
+                connectionType = 2;
+            }
+
+
+            if (connectionType == 0) {
+                this.jComboBoxDatasetConnectionType.setSelectedIndex(0);
+                this.jRTextExpressionAreaTextConnectionExpression.setEnabled(false);
+                this.jRTextExpressionAreaTextConnectionExpression.setBackground(Color.LIGHT_GRAY);
+                this.jRTextExpressionAreaTextConnectionExpression.setText("");//NOI18N
+            }
+            else if (connectionType == 1) {
+                this.jComboBoxDatasetConnectionType.setSelectedIndex(1);
+                this.jRTextExpressionAreaTextConnectionExpression.setEnabled(true);
+                this.jRTextExpressionAreaTextConnectionExpression.setBackground(Color.WHITE);
+                this.jRTextExpressionAreaTextConnectionExpression.setText( Misc.getExpressionText( getDatasetRun().getConnectionExpression() ));
+            }
+            else {
+                this.jComboBoxDatasetConnectionType.setSelectedIndex(2);
+                this.jRTextExpressionAreaTextConnectionExpression.setEnabled(true);
+                this.jRTextExpressionAreaTextConnectionExpression.setBackground(Color.WHITE);
+                this.jRTextExpressionAreaTextConnectionExpression.setText( Misc.getExpressionText( getDatasetRun().getDataSourceExpression()) );
+            }
+
+            //Add parameters...
+            javax.swing.table.DefaultTableModel dtm = (javax.swing.table.DefaultTableModel)jTableDatasetParameters.getModel();
+            dtm.setRowCount(0);
+
+            JRDatasetParameter[] params = getDatasetRun().getParameters();
+            for (int i=0; i<params.length; ++i) {
+                JRDatasetParameter parameter = params[i];
+                Vector row = new Vector();
+                row.addElement(parameter);
+                row.addElement( Misc.getExpressionText( parameter.getExpression() ) );
+                dtm.addRow(row);
+            }
+            // Set expression context...
+            ExpressionContext docEc = new ExpressionContext(getJasperDesign().getMainDesignDataset() );
+            jRTextExpressionAreaMapExpression.setExpressionContext(docEc);
+            jRTextExpressionAreaTextConnectionExpression.setExpressionContext(docEc);
+            
+            jTabbedPaneSubDataset.setVisible(true);
         }
-
-        jRTextExpressionAreaMapExpression.setText( Misc.getExpressionText( getDatasetRun().getParametersMapExpression() ) );
-
-        int connectionType = 0;
-
-        if ( getDatasetRun().getConnectionExpression() != null)
+        else
         {
-            connectionType = 1;
+            jComboBoxSubDataset.setSelectedIndex(0);
+            jTabbedPaneSubDataset.setVisible(false);
         }
-        if ( getDatasetRun().getDataSourceExpression() != null)
-        {
-            connectionType = 2;
-        }
+        
 
-
-        if (connectionType == 0) {
-            this.jComboBoxDatasetConnectionType.setSelectedIndex(0);
-            this.jRTextExpressionAreaTextConnectionExpression.setEnabled(false);
-            this.jRTextExpressionAreaTextConnectionExpression.setBackground(Color.LIGHT_GRAY);
-            this.jRTextExpressionAreaTextConnectionExpression.setText("");//NOI18N
-        }
-        else if (connectionType == 1) {
-            this.jComboBoxDatasetConnectionType.setSelectedIndex(1);
-            this.jRTextExpressionAreaTextConnectionExpression.setEnabled(true);
-            this.jRTextExpressionAreaTextConnectionExpression.setBackground(Color.WHITE);
-            this.jRTextExpressionAreaTextConnectionExpression.setText( Misc.getExpressionText( getDatasetRun().getConnectionExpression() ));
-        }
-        else {
-            this.jComboBoxDatasetConnectionType.setSelectedIndex(2);
-            this.jRTextExpressionAreaTextConnectionExpression.setEnabled(true);
-            this.jRTextExpressionAreaTextConnectionExpression.setBackground(Color.WHITE);
-            this.jRTextExpressionAreaTextConnectionExpression.setText( Misc.getExpressionText( getDatasetRun().getDataSourceExpression()) );
-        }
-
-        //Add parameters...
-        javax.swing.table.DefaultTableModel dtm = (javax.swing.table.DefaultTableModel)jTableDatasetParameters.getModel();
-        dtm.setRowCount(0);
-
-        JRDatasetParameter[] params = getDatasetRun().getParameters();
-        for (int i=0; i<params.length; ++i) {
-            JRDatasetParameter parameter = params[i];
-            Vector row = new Vector();
-            row.addElement(parameter);
-            row.addElement( Misc.getExpressionText( parameter.getExpression() ) );
-            dtm.addRow(row);
-        }
-        // Set expression context...
-        ExpressionContext docEc = new ExpressionContext(getJasperDesign().getMainDesignDataset() );
-        jRTextExpressionAreaMapExpression.setExpressionContext(docEc);
-        jRTextExpressionAreaTextConnectionExpression.setExpressionContext(docEc);
 
         setInit(false);
     }
@@ -1118,6 +1111,7 @@ public class MapMarkersPanel extends javax.swing.JPanel {
         this.jasperDesign = jasperDesign;
 
         List<String> datasetNames = new ArrayList<String>();
+        datasetNames.add("Report main dataset");
         for (int i=0; i<getJasperDesign().getDatasetsList().size(); ++i)
         {
             datasetNames.add( ((JRDataset)getJasperDesign().getDatasetsList().get(i)).getName());

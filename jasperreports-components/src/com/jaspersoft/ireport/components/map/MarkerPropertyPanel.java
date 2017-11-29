@@ -32,7 +32,7 @@ public class MarkerPropertyPanel extends javax.swing.JPanel {
         
         this.jrExpressionArea.getExpressionEditorPane().getDocument().addDocumentListener( new javax.swing.event.DocumentListener() {
             public void changedUpdate(javax.swing.event.DocumentEvent evt) {
-                jRTextExpressionAreaTextChanged();
+                // As for documentation, plain text components do not fire these events
             }
             public void insertUpdate(javax.swing.event.DocumentEvent evt) {
                 jRTextExpressionAreaTextChanged();
@@ -44,6 +44,7 @@ public class MarkerPropertyPanel extends javax.swing.JPanel {
         
         this.jTextArea1.getDocument().addDocumentListener( new javax.swing.event.DocumentListener() {
             public void changedUpdate(javax.swing.event.DocumentEvent evt) {
+                if (evt.getLength() == 0) return;
                 jTextAreaTextChanged();
             }
             public void insertUpdate(javax.swing.event.DocumentEvent evt) {
@@ -71,10 +72,11 @@ public class MarkerPropertyPanel extends javax.swing.JPanel {
         }
     }
      
-     public void jTextAreaTextChanged() {
+    public void jTextAreaTextChanged() {
         if (this.isInit()) return;
         if (markerProperty != null)
         {
+            markerProperty.setValueExpression(null);
             markerProperty.setValue( jTextArea1.getText() );
         }
     }
@@ -130,6 +132,7 @@ public class MarkerPropertyPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        if (isInit()) return;
         
         if (jCheckBox1.isSelected())
         {
@@ -157,6 +160,9 @@ public class MarkerPropertyPanel extends javax.swing.JPanel {
      * @return the markerProperty
      */
     public StandardMarkerProperty getMarkerProperty() {
+        
+        
+        
         return markerProperty;
     }
 
@@ -172,10 +178,10 @@ public class MarkerPropertyPanel extends javax.swing.JPanel {
         ((TitledBorder)getBorder()).setTitle( markerProperty.getName() );
         this.updateUI();
         
-        jCheckBox1.setSelected(markerProperty.getValue() == null);
+        jCheckBox1.setSelected(markerProperty.getValueExpression() != null);
         updateEditorComponent();
         
-        if (markerProperty.getValue() != null)
+        if (markerProperty.getValueExpression() == null)
         {
             jTextArea1.setText( markerProperty.getValue() + "");
         }
