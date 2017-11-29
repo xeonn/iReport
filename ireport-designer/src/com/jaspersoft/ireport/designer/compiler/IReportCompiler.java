@@ -55,6 +55,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
 import java.util.prefs.Preferences;
+import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -1257,11 +1258,23 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                 {
                    try
                    {
-                       String execute_string = viewer_program + " \""+fileName+"\"";
+                       String execute_string = "";
+                       
+                       if (viewer_program.indexOf("{URL}") >= 0)
+                       {
+                           viewer_program = Misc.string_replace("\""+fileName+"\"","{URL}", viewer_program);
+                       }
+                       else
+                       {
+                        viewer_program += " \""+fileName+"\"";
+                       }
                           getLogTextArea().logOnConsole("<font face=\"SansSerif\"  size=\"3\">" +
                              Misc.formatString("Executing: {0}",
-                                    new Object[]{execute_string}) + "</font>",true);
+                                    new Object[]{viewer_program}) + "</font>",true);
 
+                       rt.exec(Misc.getTokens(viewer_program));
+
+                       /*
                       if (Utilities.isWindows())
                       {
                         rt.exec( execute_string );
@@ -1270,6 +1283,8 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                       {
                           rt.exec(new String[]{viewer_program, fileName});
                       }
+
+                        */
                    } catch (Exception ex)
                    {
 

@@ -70,6 +70,7 @@ import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRDatasetParameter;
 import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
+import net.sf.jasperreports.engine.base.JRBaseParagraph;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignChartDataset;
@@ -84,6 +85,7 @@ import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignRectangle;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
+import net.sf.jasperreports.engine.design.JRDesignTextElement;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.actions.CopyAction;
@@ -155,6 +157,12 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
             ((JRBasePen)baseBox.getBottomPen()).getEventSupport().addPropertyChangeListener(this);
             ((JRBasePen)baseBox.getLeftPen()).getEventSupport().addPropertyChangeListener(this);
             ((JRBasePen)baseBox.getRightPen()).getEventSupport().addPropertyChangeListener(this);
+        }
+
+        if (element instanceof JRDesignTextElement)
+        {
+            ((JRBaseParagraph)((JRDesignTextElement)element).getParagraph()).getEventSupport().addPropertyChangeListener(this);
+
         }
         
     }
@@ -451,6 +459,11 @@ public class ElementNode extends IRIndexedNode implements PropertyChangeListener
         {
                 this.firePropertyChange(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION, evt.getOldValue(), evt.getNewValue() );
                 this.firePropertyChange("PROPERTY_CONNECTION_TYPE", evt.getOldValue(), evt.getNewValue() );
+        }
+        if (evt.getPropertyName().equals(JRBaseParagraph.PROPERTY_LINE_SPACING))
+        {
+                this.firePropertyChange(JRBaseParagraph.PROPERTY_LINE_SPACING, evt.getOldValue(), evt.getNewValue() );
+                this.firePropertyChange(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE, evt.getOldValue(), evt.getNewValue() );
         }
         
         if (evt.getPropertyName().equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE) ||

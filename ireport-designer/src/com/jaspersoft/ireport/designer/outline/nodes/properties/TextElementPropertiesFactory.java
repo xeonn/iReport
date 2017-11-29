@@ -35,14 +35,22 @@ import com.jaspersoft.ireport.designer.sheet.properties.VerticalAlignmentPropert
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.sheet.properties.MarkupProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.BoldProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.FirstLineIndentProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.FontNameProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.FontSizeProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.ItalicProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.LeftIndentProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.LineSpacingSizeProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.PdfEmbeddedProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.PdfEncodingProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.PdfFontNameProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.ReportFontProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.RightIndentProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.SpacingAfterProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.SpacingBeforeProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.StrikeThroughProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.TabStopWidthProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.TabStopsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.TextFieldEvaluationGroupProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.TextFieldEvaluationTimeProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.TextFieldExpressionClassNameProperty;
@@ -82,17 +90,29 @@ public class TextElementPropertiesFactory {
         propertySet.put(new UnderlineProperty( element ));
         propertySet.put(new StrikeThroughProperty( element ));
         
-        propertySet.put(new PdfFontNameProperty( element ));
-        propertySet.put(new PdfEmbeddedProperty( element ));
-        propertySet.put(new PdfEncodingProperty( element ));
-        
         propertySet.put(new HorizontalAlignmentProperty( element ));
         propertySet.put(new VerticalAlignmentProperty( element ));
         propertySet.put(new RotationProperty( element ));
         propertySet.put(new LineSpacingProperty( element ));
+        propertySet.put(new LineSpacingSizeProperty( element ));
         propertySet.put(new MarkupProperty( element ));
-        
+
+        propertySet.put(new FirstLineIndentProperty( element ));
+        propertySet.put(new LeftIndentProperty( element ));
+        propertySet.put(new RightIndentProperty( element));
+        propertySet.put(new SpacingBeforeProperty( element ));
+        propertySet.put(new SpacingAfterProperty( element ));
+
+        propertySet.put(new TabStopWidthProperty( element ));
+        propertySet.put(new TabStopsProperty( element ));
+
+        propertySet.put(new PdfFontNameProperty( element ));
+        propertySet.put(new PdfEmbeddedProperty( element ));
+        propertySet.put(new PdfEncodingProperty( element ));
+
         propertySet.put(new ReportFontProperty( element, jd ));
+
+
         
         
         //propertySet.put(new LeftProperty( element ));
@@ -161,5 +181,7 @@ public class TextElementPropertiesFactory {
         
         return sets;
     }
-    
+
+
+
 }

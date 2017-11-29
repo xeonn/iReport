@@ -27,8 +27,10 @@ import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
+import net.sf.jasperreports.engine.base.JRBaseParagraph;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextElement;
+import net.sf.jasperreports.engine.type.LineSpacingEnum;
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
@@ -46,7 +48,7 @@ public final class LineSpacingProperty extends ByteProperty
     @Override
     public String getName()
     {
-        return JRBaseStyle.PROPERTY_LINE_SPACING;
+        return JRBaseParagraph.PROPERTY_LINE_SPACING;
     }
 
     @Override
@@ -65,22 +67,28 @@ public final class LineSpacingProperty extends ByteProperty
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRDesignTextElement.LINE_SPACING_SINGLE), I18n.getString("Global.Property.Single")));
-        tags.add(new Tag(new Byte(JRDesignTextElement.LINE_SPACING_1_1_2), I18n.getString("Global.Property.1.5")));
-        tags.add(new Tag(new Byte(JRDesignTextElement.LINE_SPACING_DOUBLE), I18n.getString("Global.Property.Double")));
+        tags.add(new Tag(LineSpacingEnum.SINGLE.getValueByte(), I18n.getString("Global.Property.Single")));
+        tags.add(new Tag(LineSpacingEnum.ONE_AND_HALF.getValueByte(), I18n.getString("Global.Property.1.5")));
+        tags.add(new Tag(LineSpacingEnum.DOUBLE.getValueByte(), I18n.getString("Global.Property.Double")));
+        tags.add(new Tag(LineSpacingEnum.AT_LEAST.getValueByte(), I18n.getString("Global.Property.LineSpacingAtLeast")));
+        tags.add(new Tag(LineSpacingEnum.FIXED.getValueByte(), I18n.getString("Global.Property.LineSpacingFixed")));
+        tags.add(new Tag(LineSpacingEnum.PROPORTIONAL.getValueByte(), I18n.getString("Global.Property.LineSpacingProportional")));
+
         return tags;
     }
 
     @Override
     public Byte getByte()
     {
-        return element.getLineSpacing();
+        return (element.getParagraph().getLineSpacing() != null) ?
+            element.getParagraph().getLineSpacing().getValueByte() : null;
     }
 
     @Override
     public Byte getOwnByte()
     {
-        return element.getOwnLineSpacing();
+        return (element.getParagraph().getOwnLineSpacing() != null) ?
+            element.getParagraph().getOwnLineSpacing().getValueByte() : null;
     }
 
     @Override
@@ -92,7 +100,7 @@ public final class LineSpacingProperty extends ByteProperty
     @Override
     public void setByte(Byte lineSpacing)
     {
-        element.setLineSpacing(lineSpacing);
+        element.getParagraph().setLineSpacing(LineSpacingEnum.getByValue(lineSpacing));
     }
 
 }

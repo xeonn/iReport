@@ -33,10 +33,12 @@ import java.awt.Point;
 import java.awt.dnd.DropTargetDropEvent;
 import java.util.ArrayList;
 import java.util.List;
+import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
+import net.sf.jasperreports.engine.JRStaticText;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.convert.StaticTextConverter;
 import net.sf.jasperreports.engine.design.JRDesignBand;
@@ -47,6 +49,7 @@ import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
 import org.netbeans.api.visual.widget.Scene;
 import org.openide.util.Exceptions;
 
@@ -103,6 +106,8 @@ public class CreateTextFieldFromFieldAction extends CreateTextFieldAction {
 
         JRDesignStaticText label = null; // If label != null, add the label too...
         Point labelLocation = null;
+
+        List<JRDesignElement> elements = new ArrayList<JRDesignElement>();
 
         if (theScene instanceof ReportObjectScene)
         {
@@ -217,11 +222,8 @@ public class CreateTextFieldFromFieldAction extends CreateTextFieldAction {
                 else if (b.getOrigin().getBandType() == JROrigin.DETAIL)
                 {
                     // Check if the column band exists and it is not zero height...
-                    if (getJasperDesign().getColumnHeader() != null &&
-                        getJasperDesign().getColumnHeader().getHeight() >= 20 &&
-                        IReportManager.getPreferences().getBoolean("createLabelForField", true))
+                    if (IReportManager.getPreferences().getBoolean("createLabelForField", true))
                     {
-                        // Add a label for this textfield...
                         label = new JRDesignStaticText( getJasperDesign() );
                         if (newField.getDescription() != null &&
                             newField.getDescription().trim().length() > 0)
@@ -234,32 +236,44 @@ public class CreateTextFieldFromFieldAction extends CreateTextFieldAction {
                         }
                         label.setWidth(100);
                         label.setHeight(20);
-                        
-                        int y = ModelUtils.getBandLocation(getJasperDesign().getColumnHeader(), getJasperDesign());
-                        
-                        labelLocation = theScene.convertSceneToView(new Point(0,y+2));
-                        labelLocation.x = location.x;
-                    }
 
+                        if (getJasperDesign().getColumnHeader() != null &&
+                            getJasperDesign().getColumnHeader().getHeight() >= 20 &&
+                            IReportManager.getPreferences().getBoolean("createLabelForField", true))
+                        {
+                            // Add a label for this textfield...
+
+
+                            int y = ModelUtils.getBandLocation(getJasperDesign().getColumnHeader(), getJasperDesign());
+
+                            labelLocation = theScene.convertSceneToView(new Point(0,y+2));
+                            labelLocation.x = location.x;
+                            super.dropElementsAt(theScene, jasperDesign, new JRDesignElement[]{label}, labelLocation);
+                        }
+                        else // if the column header is too small, or it does not exist, add the label to the left of this textfield...
+                        {
+                            elements.add(label);
+                        }
+                    }
                 }
             }
 
         }
 
-        super.dropElementsAt(theScene, jasperDesign, new JRDesignElement[]{element}, location);
+
+        elements.add(element);
+
+        super.dropElementsAt(theScene, jasperDesign, elements.toArray(new JRDesignElement[elements.size()]), location);
         
-        if (label != null && labelLocation != null)
-        {
-            super.dropElementsAt(theScene, jasperDesign, new JRDesignElement[]{label}, labelLocation);
-        }
+        
     }
 
     @Override
     public void adjustElement(JRDesignElement[] elements, int index, Scene theScene, JasperDesign jasperDesign, Object parent, Point dropLocation) {
 
-        if (elements[index] instanceof JRDesignStaticText)
+        if (index == 1) // If the index is > 0, that means we have a label on the left of the field...
         {
-            elements[index].setY(0);
+                elements[1].setX( elements[0].getX() + elements[0].getWidth());
         }
 
         super.adjustElement(elements, index, theScene, jasperDesign, parent, dropLocation);

@@ -757,16 +757,16 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-4.0.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-4.0.1.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-4.0.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-4.0.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-fonts-4.0.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-fonts-4.0.1.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-fonts-4.0.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-fonts-4.0.2.jar</binary-origin>
             </class-path-extension>
              <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-chart-themes-4.0.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-chart-themes-4.0.1.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-chart-themes-4.0.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-chart-themes-4.0.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jaxen-1.1.1.jar</runtime-relative-path>

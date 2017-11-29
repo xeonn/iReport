@@ -31,7 +31,7 @@ import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.convert.ConvertVisitor;
 import net.sf.jasperreports.engine.convert.ReportConverter;
-import net.sf.jasperreports.engine.export.TextRenderer;
+import net.sf.jasperreports.engine.export.AwtTextRenderer;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 import net.sf.jasperreports.engine.export.draw.FrameDrawer;
 
@@ -51,7 +51,7 @@ public class ConfigurableDrawVisitor extends DrawVisitor {
 	 */
 	public ConfigurableDrawVisitor(JRReport report, Graphics2D grx)
 	{
-		this(new ReportConverter(report, true, true), grx);
+		this(new ReportConverter(report, true), grx);
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class ConfigurableDrawVisitor extends DrawVisitor {
 
             if (frameDrawer == null)
             {
-                frameDrawer = new FrameDrawer(null, new TextRenderer(false, true));
+                frameDrawer = new FrameDrawer(null, new AwtTextRenderer(false, true));
                 frameDrawer.setClip(true);
             }
             JRPrintFrame element = (JRPrintFrame)convertVisitor.getVisitPrintElement(frame);

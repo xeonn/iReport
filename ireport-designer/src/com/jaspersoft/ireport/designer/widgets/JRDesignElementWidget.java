@@ -47,12 +47,13 @@ import net.sf.jasperreports.charts.design.JRDesignPiePlot;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.base.JRBaseLine;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
+import net.sf.jasperreports.engine.base.JRBaseParagraph;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.base.JRBaseStaticText;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.base.JRBaseTextElement;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -60,6 +61,7 @@ import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JRDesignGenericElement;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
+import net.sf.jasperreports.engine.design.JRDesignTextElement;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
@@ -120,6 +122,7 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
         });
         
         element.getEventSupport().addPropertyChangeListener(this);
+
         if (element instanceof JRDesignGraphicElement)
         {
             JRDesignGraphicElement gele = (JRDesignGraphicElement)element;
@@ -136,6 +139,12 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
             ((JRBasePen)baseBox.getBottomPen()).getEventSupport().addPropertyChangeListener(this);
             ((JRBasePen)baseBox.getLeftPen()).getEventSupport().addPropertyChangeListener(this);
             ((JRBasePen)baseBox.getRightPen()).getEventSupport().addPropertyChangeListener(this);
+        }
+
+        if (element instanceof JRDesignTextElement)
+        {
+            ((JRBaseParagraph)((JRDesignTextElement)element).getParagraph()).getEventSupport().addPropertyChangeListener(this);
+
         }
     }
     
@@ -515,7 +524,16 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
             propertyName.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING) ||
             propertyName.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING) ||
             propertyName.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING) ||
-            propertyName.equals(JRDesignPiePlot.PROPERTY_ITEM_LABEL)
+            propertyName.equals(JRDesignPiePlot.PROPERTY_ITEM_LABEL) ||
+            propertyName.equals(JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT) ||
+            propertyName.equals(JRBaseParagraph.PROPERTY_LEFT_INDENT) ||
+            propertyName.equals(JRBaseParagraph.PROPERTY_LINE_SPACING) ||
+            propertyName.equals(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE) ||
+            propertyName.equals(JRBaseParagraph.PROPERTY_RIGHT_INDENT) ||
+            propertyName.equals(JRBaseParagraph.PROPERTY_SPACING_AFTER) ||
+            propertyName.equals(JRBaseParagraph.PROPERTY_SPACING_BEFORE) ||
+            propertyName.equals(JRBaseParagraph.PROPERTY_TAB_STOPS) ||
+            propertyName.equals(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH)
             )
         {        
             updateBounds();
@@ -531,7 +549,6 @@ public class JRDesignElementWidget extends Widget implements PropertyChangeListe
                 }
             
         }
-        
         if (propertyName.equals( JRDesignFrame.PROPERTY_CHILDREN))
         {
             

@@ -200,9 +200,7 @@ final class JRCTXVisualView extends TopComponent
                         viewerContext.loadReport(
                             new ReportConverter(
                                 chartTypeReports[reportIndex], 
-                                false, 
-                                true
-                                ).getJasperPrint()
+                                false).getJasperPrint()
                             );
                         //viewerToolbar.init();
                         viewerContext.refreshPage();

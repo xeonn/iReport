@@ -246,6 +246,7 @@ final class IReportPanel extends javax.swing.JPanel {
         //jTabbedPane1.remove(5);
 
         jComboBoxCompatibility.addItem(new Tag("", "Last version"));
+        jComboBoxCompatibility.addItem(new Tag("4_0_1", "JasperReports 4_0_1"));
         jComboBoxCompatibility.addItem(new Tag("3_7_4", "JasperReports 3.7.4"));
         jComboBoxCompatibility.addItem(new Tag("3_7_3", "JasperReports 3.7.3"));
         jComboBoxCompatibility.addItem(new Tag("3_7_1", "JasperReports 3.7.1-3.7.2"));
@@ -397,6 +398,7 @@ final class IReportPanel extends javax.swing.JPanel {
         jLabelPPTXViewer = new javax.swing.JLabel();
         jTextFieldPPTXViewer = new javax.swing.JTextField();
         jButtonPPTXViewer = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
         jPanel18 = new javax.swing.JPanel();
         jLabelClasspath1 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -541,7 +543,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jPanel24Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabelTimeZone2)
                     .add(jComboBoxTheme, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(205, Short.MAX_VALUE))
+                .addContainerGap(266, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Report defaults", jPanel24);
@@ -639,7 +641,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jCheckBoxSaveZoom)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jCheckBoxLabelForField)
-                .addContainerGap(71, Short.MAX_VALUE))
+                .addContainerGap(132, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Designer", jPanel26);
@@ -747,7 +749,7 @@ final class IReportPanel extends javax.swing.JPanel {
                         .add(jButtonRemoveExpression, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonRestoreExpressions))
-                    .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE))
+                    .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -783,7 +785,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jComboBoxCompatibility, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(18, 18, 18)
                 .add(jCheckBoxShowCompatibilityWarning)
-                .addContainerGap(151, Short.MAX_VALUE))
+                .addContainerGap(212, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Compatibility", jPanelCompatibility);
@@ -837,7 +839,7 @@ final class IReportPanel extends javax.swing.JPanel {
             .add(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(167, Short.MAX_VALUE))
+                .addContainerGap(228, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("Other", jPanel8);
@@ -859,7 +861,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jTabbedPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                .add(jTabbedPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1001,8 +1003,8 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelClasspath)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
-                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE))
+                    .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
+                    .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -1437,9 +1439,18 @@ final class IReportPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         jPanel10.add(jPanel30, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(IReportPanel.class, "ReportViewer.jLabel1.text")); // NOI18N
+        jLabel4.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        jPanel10.add(jLabel4, gridBagConstraints);
 
         jTabbedPane1.addTab("Viewers", jPanel10);
 
@@ -1554,8 +1565,8 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jLabelClasspath1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel18Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel19, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
-                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE))
+                    .add(jPanel19, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
+                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -1756,7 +1767,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jCheckBoxIgnorePagination)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jCheckBoxVirtualizer)
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(70, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Execution options", jPanel2);
@@ -1813,7 +1824,7 @@ final class IReportPanel extends javax.swing.JPanel {
                     .add(jLabelDateTimeFormat)
                     .add(jTextPromptFieldDateTimeFormat, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jButtonDateTimeFormat))
-                .addContainerGap(139, Short.MAX_VALUE))
+                .addContainerGap(200, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Parameters prompt", jPanelParameterPromptOptions);
@@ -1939,7 +1950,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .add(jSpinnerVirtualizerSize, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(0, 0, 0)
                 .add(jPanel23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Virtualizer", jPanelVirtualizer);
@@ -1961,7 +1972,7 @@ final class IReportPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(jPanel27, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                .add(jTabbedPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2062,7 +2073,7 @@ final class IReportPanel extends javax.swing.JPanel {
                         .add(jButtonModifyQueryExecuter, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonRemoveQueryExecuter, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE))
+                    .add(jScrollPane5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -2076,7 +2087,9 @@ final class IReportPanel extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 404, Short.MAX_VALUE)
+            .add(layout.createSequentialGroup()
+                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.getAccessibleContext().setAccessibleName("General");
@@ -2354,7 +2367,7 @@ private void jButtonPDFViewerActionPerformed(java.awt.event.ActionEvent evt) {//
             jfc.setDialogTitle("Choose a PDF viewer...");
 	    jfc.setMultiSelectionEnabled(false);
 	    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-		    jTextFieldPDFViewer.setText( jfc.getSelectedFile().getPath());
+		    jTextFieldPDFViewer.setText( "\"" + jfc.getSelectedFile().getPath() + "\"");
             }
 }//GEN-LAST:event_jButtonPDFViewerActionPerformed
 
@@ -2365,7 +2378,7 @@ private void jButtonHTMLViewerActionPerformed(java.awt.event.ActionEvent evt) {/
             jfc.setDialogTitle("Choose a HTML viewer...");
 	    jfc.setMultiSelectionEnabled(false);
 	    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-		    jTextFieldHTMLViewer.setText( jfc.getSelectedFile().getPath());
+		    jTextFieldHTMLViewer.setText( "\"" + jfc.getSelectedFile().getPath() + "\"");
             }
 }//GEN-LAST:event_jButtonHTMLViewerActionPerformed
 
@@ -2376,7 +2389,7 @@ private void jButtonXLSViewerActionPerformed(java.awt.event.ActionEvent evt) {//
             jfc.setDialogTitle("Choose a XLS viewer...");
 	    jfc.setMultiSelectionEnabled(false);
 	    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-		    jTextFieldXLSViewer.setText( jfc.getSelectedFile().getPath());
+		    jTextFieldXLSViewer.setText( "\"" + jfc.getSelectedFile().getPath() + "\"");
             }
 }//GEN-LAST:event_jButtonXLSViewerActionPerformed
 
@@ -2387,7 +2400,7 @@ private void jButtonCSVViewerActionPerformed(java.awt.event.ActionEvent evt) {//
             jfc.setDialogTitle("Choose a CSV viewer...");
 	    jfc.setMultiSelectionEnabled(false);
 	    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-		    jTextFieldCSVViewer.setText( jfc.getSelectedFile().getPath());
+		    jTextFieldCSVViewer.setText( "\"" + jfc.getSelectedFile().getPath() + "\"");
             }
 }//GEN-LAST:event_jButtonCSVViewerActionPerformed
 
@@ -2398,7 +2411,7 @@ private void jButtonTXTViewerActionPerformed(java.awt.event.ActionEvent evt) {//
             jfc.setDialogTitle("Choose a Text viewer...");
 	    jfc.setMultiSelectionEnabled(false);
 	    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-		    jTextFieldTXTViewer.setText( jfc.getSelectedFile().getPath());
+		    jTextFieldTXTViewer.setText( "\"" + jfc.getSelectedFile().getPath() + "\"");
             }
 }//GEN-LAST:event_jButtonTXTViewerActionPerformed
 
@@ -2409,7 +2422,7 @@ private void jButtonRTFViewerActionPerformed(java.awt.event.ActionEvent evt) {//
             jfc.setDialogTitle("Choose a RTF viewer...");
 	    jfc.setMultiSelectionEnabled(false);
 	    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-		    jTextFieldRTFViewer.setText( jfc.getSelectedFile().getPath());
+		    jTextFieldRTFViewer.setText( "\"" + jfc.getSelectedFile().getPath() + "\"");
             }
 }//GEN-LAST:event_jButtonRTFViewerActionPerformed
 
@@ -2420,7 +2433,7 @@ private void jButtonODFViewerActionPerformed(java.awt.event.ActionEvent evt) {//
             jfc.setDialogTitle("Choose an ODF viewer...");
 	    jfc.setMultiSelectionEnabled(false);
 	    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-		    jTextFieldODFViewer.setText( jfc.getSelectedFile().getPath());
+		    jTextFieldODFViewer.setText( "\"" + jfc.getSelectedFile().getPath() + "\"");
             }
 }//GEN-LAST:event_jButtonODFViewerActionPerformed
 
@@ -2436,8 +2449,7 @@ private void jButtonAddTemplateActionPerformed(java.awt.event.ActionEvent evt) {
         jfc.addChoosableFileFilter( new javax.swing.filechooser.FileFilter() {
             public boolean accept(java.io.File file) {
                 String filename = file.getName();
-                return (filename.toLowerCase().endsWith("c.jrxml") || file.isDirectory() ||
-                        filename.toLowerCase().endsWith("t.jrxml") ||
+                return (filename.toLowerCase().endsWith(".jrxml") || file.isDirectory() ||
                         filename.toLowerCase().endsWith("c.xml") ||
                         filename.toLowerCase().endsWith("t.xml")
                         ) ;
@@ -2773,7 +2785,7 @@ private void jButtonDOCXViewerActionPerformed(java.awt.event.ActionEvent evt) {/
         jfc.setDialogTitle("Choose a DOCX viewer...");
         jfc.setMultiSelectionEnabled(false);
         if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            jTextFieldDOCXViewer.setText( jfc.getSelectedFile().getPath());
+            jTextFieldDOCXViewer.setText( "\"" + jfc.getSelectedFile().getPath() + "\"");
         }
 }//GEN-LAST:event_jButtonDOCXViewerActionPerformed
 
@@ -2802,7 +2814,7 @@ private void jButtonODSViewerActionPerformed(java.awt.event.ActionEvent evt) {//
             jfc.setDialogTitle("Choose an ODS viewer...");
 	    jfc.setMultiSelectionEnabled(false);
 	    if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-		    jTextFieldODSViewer.setText( jfc.getSelectedFile().getPath());
+		    jTextFieldODSViewer.setText( "\"" + jfc.getSelectedFile().getPath() + "\"");
             }
 }//GEN-LAST:event_jButtonODSViewerActionPerformed
 
@@ -2966,7 +2978,7 @@ private void jButtonPPTXViewerActionPerformed(java.awt.event.ActionEvent evt) {/
         jfc.setDialogTitle("Choose a PPTX viewer...");
         jfc.setMultiSelectionEnabled(false);
         if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            jTextFieldPPTXViewer.setText( jfc.getSelectedFile().getPath());
+            jTextFieldPPTXViewer.setText( "\"" + jfc.getSelectedFile().getPath() + "\"");
         }
 }//GEN-LAST:event_jButtonPPTXViewerActionPerformed
 
@@ -3505,6 +3517,7 @@ private void jCheckBoxLabelForFieldActionPerformed(java.awt.event.ActionEvent ev
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelCSVViewer;
     private javax.swing.JLabel jLabelClasspath;
     private javax.swing.JLabel jLabelClasspath1;

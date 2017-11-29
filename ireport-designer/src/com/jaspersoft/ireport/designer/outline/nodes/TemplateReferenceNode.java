@@ -24,6 +24,7 @@
 package com.jaspersoft.ireport.designer.outline.nodes;
 
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.actions.RefreshStylesAction;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
@@ -48,7 +49,6 @@ import org.openide.ErrorManager;
 import org.openide.actions.DeleteAction;
 import org.openide.actions.RenameAction;
 import org.openide.nodes.AbstractNode;
-import org.openide.nodes.Children;
 import org.openide.nodes.NodeTransfer;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
@@ -172,6 +172,7 @@ public class TemplateReferenceNode extends AbstractNode implements PropertyChang
     public Action[] getActions(boolean popup) {
         return new Action[] {
             SystemAction.get( RenameAction.class ),
+            SystemAction.get( RefreshStylesAction.class ),
             null,
             SystemAction.get( DeleteAction.class ) };
     }

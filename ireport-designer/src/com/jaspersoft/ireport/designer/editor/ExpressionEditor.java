@@ -52,6 +52,8 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabParameter;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 
 /**
@@ -71,8 +73,6 @@ public class ExpressionEditor extends javax.swing.JPanel {
     private JDialog dialog = null;
     private int dialogResult = JOptionPane.CANCEL_OPTION;
     private boolean refreshingContext = false;
-    
-    
     
     public String getExpression() {
         return jEditorPane1.getText();
@@ -149,6 +149,14 @@ public class ExpressionEditor extends javax.swing.JPanel {
         
         jList2.setCellRenderer(new ExpObjectCellRenderer(jList2));
         jList3.setCellRenderer(new MethodsListCellRenderer((jList3)));
+
+
+        jToggleButtonBuiltinParameters.setSelected(
+                IReportManager.getPreferences().getBoolean("filter_parameters_in_editor", false));
+
+        jToggleButtonBuiltinVariables.setSelected(
+                IReportManager.getPreferences().getBoolean("filter_variables_in_editor", false));
+        
 
         //jList4.setModel(new DefaultListModel());
 
@@ -519,8 +527,12 @@ public class ExpressionEditor extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
         jSplitPane3 = new javax.swing.JSplitPane();
+        jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList();
+        jToolBar2 = new javax.swing.JToolBar();
+        jToggleButtonBuiltinParameters = new javax.swing.JToggleButton();
+        jToggleButtonBuiltinVariables = new javax.swing.JToggleButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         jList3 = new javax.swing.JList();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -570,11 +582,16 @@ public class ExpressionEditor extends javax.swing.JPanel {
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jSplitPane2.setBorder(null);
+        jSplitPane2.setDividerSize(6);
         jSplitPane2.setResizeWeight(0.3);
 
         jSplitPane3.setBorder(null);
+        jSplitPane3.setDividerSize(6);
         jSplitPane3.setResizeWeight(0.5);
+
+        jPanel4.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane3.setBorder(null);
 
         jList2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -588,7 +605,43 @@ public class ExpressionEditor extends javax.swing.JPanel {
         });
         jScrollPane3.setViewportView(jList2);
 
-        jSplitPane3.setLeftComponent(jScrollPane3);
+        jPanel4.add(jScrollPane3, java.awt.BorderLayout.CENTER);
+
+        jToolBar2.setBorder(null);
+        jToolBar2.setFloatable(false);
+        jToolBar2.setRollover(true);
+
+        jToggleButtonBuiltinParameters.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/filter-parameters.png"))); // NOI18N
+        jToggleButtonBuiltinParameters.setToolTipText(org.openide.util.NbBundle.getMessage(ExpressionEditor.class, "ExpressionEditor.jToggleButtonBuiltinParameters.toolTipText")); // NOI18N
+        jToggleButtonBuiltinParameters.setBorderPainted(false);
+        jToggleButtonBuiltinParameters.setFocusPainted(false);
+        jToggleButtonBuiltinParameters.setFocusable(false);
+        jToggleButtonBuiltinParameters.setMargin(new java.awt.Insets(0, 6, 0, 6));
+        jToggleButtonBuiltinParameters.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButtonBuiltinParametersActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(jToggleButtonBuiltinParameters);
+
+        jToggleButtonBuiltinVariables.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/resources/filter-variables.png"))); // NOI18N
+        jToggleButtonBuiltinVariables.setToolTipText(org.openide.util.NbBundle.getMessage(ExpressionEditor.class, "ExpressionEditor.jToggleButtonBuiltinVariables.toolTipText")); // NOI18N
+        jToggleButtonBuiltinVariables.setBorderPainted(false);
+        jToggleButtonBuiltinVariables.setFocusPainted(false);
+        jToggleButtonBuiltinVariables.setFocusable(false);
+        jToggleButtonBuiltinVariables.setMargin(new java.awt.Insets(0, 6, 0, 6));
+        jToggleButtonBuiltinVariables.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButtonBuiltinVariablesActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(jToggleButtonBuiltinVariables);
+
+        jPanel4.add(jToolBar2, java.awt.BorderLayout.SOUTH);
+
+        jSplitPane3.setLeftComponent(jPanel4);
+
+        jScrollPane4.setBorder(null);
 
         jList3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -600,6 +653,8 @@ public class ExpressionEditor extends javax.swing.JPanel {
         jSplitPane3.setRightComponent(jScrollPane4);
 
         jSplitPane2.setRightComponent(jSplitPane3);
+
+        jScrollPane2.setBorder(null);
 
         jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -664,7 +719,7 @@ public class ExpressionEditor extends javax.swing.JPanel {
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jSplitPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE)
+                .add(jSplitPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
                 .add(6, 6, 6)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jButtonImport)
@@ -824,6 +879,10 @@ public class ExpressionEditor extends javax.swing.JPanel {
         dlm2.removeAllElements();
         dlm3.removeAllElements();
 
+        jToggleButtonBuiltinParameters.setEnabled(false);
+        jToggleButtonBuiltinVariables.setEnabled(false);
+
+
         if (jList1.getSelectedValue() != null) {
             NamedIconItem item = (NamedIconItem)jList1.getSelectedValue();
             if (item.getItem().equals( USER_DEFINED_EXPRESSIONS)) {
@@ -832,10 +891,13 @@ public class ExpressionEditor extends javax.swing.JPanel {
             } else if (item.getItem().equals( RECENT_EXPRESSIONS)) {
                 for (String s : recentExpressions) dlm2.addElement(s);
             } else if (item.getItem().equals( PARAMETERS)) {
+                jToggleButtonBuiltinParameters.setEnabled(true);
                 JRDesignDataset ds = getExpressionContext().getDatasets().get(0);
                 Iterator parameters = ds.getParametersList().iterator();
                 while (parameters.hasNext()) {
-                    dlm2.addElement(new ExpObject(parameters.next()));
+                    JRParameter parameter = (JRParameter) parameters.next();
+                    if (parameter.isSystemDefined() && jToggleButtonBuiltinParameters.isSelected()) continue;
+                    dlm2.addElement(new ExpObject(parameter));
                 }
             } else if (item.getItem().equals( FIELDS)) {
                 JRDesignDataset ds = getExpressionContext().getDatasets().get(0);
@@ -845,10 +907,14 @@ public class ExpressionEditor extends javax.swing.JPanel {
                     dlm2.addElement(eo);
                 }
             } else if (item.getItem().equals( VARIABLES)) {
+                jToggleButtonBuiltinVariables.setEnabled(true);
                 JRDesignDataset ds = getExpressionContext().getDatasets().get(0);
                 Iterator variables = ds.getVariablesList().iterator();
                 while (variables.hasNext()) {
-                    dlm2.addElement(new ExpObject(variables.next()));
+
+                    JRVariable variable = (JRVariable) variables.next();
+                    if (variable.isSystemDefined() && jToggleButtonBuiltinParameters.isSelected()) continue;
+                    dlm2.addElement(new ExpObject(variable));
                 }
             } else if (item.getItem() instanceof JRDesignCrosstab) {
                 JRDesignCrosstab crosstab = (JRDesignCrosstab)item.getItem();
@@ -905,6 +971,16 @@ public class ExpressionEditor extends javax.swing.JPanel {
         }
 
     }//GEN-LAST:event_jList1ValueChanged
+
+    private void jToggleButtonBuiltinParametersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonBuiltinParametersActionPerformed
+        IReportManager.getPreferences().putBoolean("filter_parameters_in_editor", jToggleButtonBuiltinParameters.isSelected());
+        jList1ValueChanged(null);
+}//GEN-LAST:event_jToggleButtonBuiltinParametersActionPerformed
+
+    private void jToggleButtonBuiltinVariablesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonBuiltinVariablesActionPerformed
+        IReportManager.getPreferences().putBoolean("filter_variables_in_editor", jToggleButtonBuiltinVariables.isSelected());
+        jList1ValueChanged(null);
+}//GEN-LAST:event_jToggleButtonBuiltinVariablesActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -921,6 +997,7 @@ public class ExpressionEditor extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -928,6 +1005,11 @@ public class ExpressionEditor extends javax.swing.JPanel {
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JSplitPane jSplitPane3;
+    private javax.swing.JToggleButton jToggleButton2;
+    private javax.swing.JToggleButton jToggleButtonBuiltinParameters;
+    private javax.swing.JToggleButton jToggleButtonBuiltinVariables;
+    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
     // End of variables declaration//GEN-END:variables
     
     /**

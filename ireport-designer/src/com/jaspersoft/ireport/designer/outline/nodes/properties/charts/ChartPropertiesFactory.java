@@ -265,7 +265,9 @@ import com.jaspersoft.ireport.designer.sheet.properties.charts.OrientationProper
 import com.jaspersoft.ireport.designer.sheet.properties.charts.Pie3DItemLabelProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.Pie3DLabelFormatProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.Pie3DLegendLabelFormatProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.Pie3DShowLabelsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.PieItemLabelProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.charts.PieShowLabelsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.ScatterDomainAxisMaxValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.ScatterDomainAxisMinValueExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.charts.ScatterRangeAxisMaxValueExpressionProperty;
@@ -367,6 +369,7 @@ public class ChartPropertiesFactory {
             propertySet.setDisplayName("PiePlot properties");
             propertySet.put(new PieCircularProperty((JRDesignPiePlot)plot));
             propertySet.put(new PieLabelFormatProperty((JRDesignPiePlot)plot));
+            propertySet.put(new PieShowLabelsProperty((JRDesignPiePlot)plot));
             propertySet.put(new PieItemLabelProperty((JRDesignPiePlot)plot));
             propertySet.put(new PieLegendLabelFormatProperty((JRDesignPiePlot)plot));
             
@@ -375,6 +378,7 @@ public class ChartPropertiesFactory {
         {
             propertySet.setDisplayName("Pie3DPlot properties");
             propertySet.put(new Pie3DLabelFormatProperty((JRDesignPie3DPlot)plot));
+            propertySet.put(new Pie3DShowLabelsProperty((JRDesignPie3DPlot)plot));
             propertySet.put(new Pie3DItemLabelProperty((JRDesignPie3DPlot)plot));
             propertySet.put(new Pie3DLegendLabelFormatProperty((JRDesignPie3DPlot)plot));
             propertySet.put(new Pie3DCircularProperty((JRDesignPie3DPlot)plot));

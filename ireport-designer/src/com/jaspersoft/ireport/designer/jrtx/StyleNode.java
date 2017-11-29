@@ -32,22 +32,30 @@ import com.jaspersoft.ireport.designer.sheet.properties.style.BackcolorProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.BlankWhenNullProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.BoldProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.FillProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.style.FirstLineIndentProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.FontNameProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.FontSizeProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.ForecolorProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.HorizontalAlignmentProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.ItalicProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.style.LeftIndentProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.LineSpacingProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.style.LineSpacingSizeProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.ModeProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.PaddingAndBordersProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.PdfEmbeddedProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.PdfEncodingProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.PdfFontNameProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.RadiusProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.style.RightIndentProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.RotationProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.ScaleImageProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.style.SpacingAfterProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.style.SpacingBeforeProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.StrikeThroughProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.StyledTextProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.style.TabStopWidthProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.style.TabStopsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.UnderlineProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.VerticalAlignmentProperty;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
@@ -63,6 +71,7 @@ import javax.swing.Action;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
+import net.sf.jasperreports.engine.base.JRBaseParagraph;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
@@ -123,7 +132,7 @@ public class StyleNode extends AbstractNode implements PropertyChangeListener
         ((JRBasePen)baseBox.getLeftPen()).getEventSupport().addPropertyChangeListener(this);
         ((JRBasePen)baseBox.getRightPen()).getEventSupport().addPropertyChangeListener(this);
 
-        
+        ((JRBaseParagraph)style.getParagraph()).getEventSupport().addPropertyChangeListener(this);
     }
 
 
@@ -174,12 +183,7 @@ public class StyleNode extends AbstractNode implements PropertyChangeListener
         set.put(new FillProperty( getStyle()));
         set.put(new RadiusProperty( getStyle()));
         set.put(new ScaleImageProperty( getStyle()));
-        set.put(new HorizontalAlignmentProperty( getStyle()));
-        set.put(new VerticalAlignmentProperty( getStyle()));
-
-        set.put(new RotationProperty( getStyle() ));
-        set.put(new LineSpacingProperty( getStyle() ));
-        set.put(new StyledTextProperty( getStyle() ));
+        
 
         set.put(new FontNameProperty( getStyle() ));
         set.put(new FontSizeProperty( getStyle() ));
@@ -188,6 +192,26 @@ public class StyleNode extends AbstractNode implements PropertyChangeListener
         set.put(new ItalicProperty( getStyle() ));
         set.put(new UnderlineProperty( getStyle() ));
         set.put(new StrikeThroughProperty( getStyle() ));
+
+        set.put(new HorizontalAlignmentProperty( getStyle()));
+        set.put(new VerticalAlignmentProperty( getStyle()));
+        set.put(new RotationProperty( getStyle() ));
+
+        set.put(new LineSpacingProperty( getStyle() ));
+        set.put(new LineSpacingSizeProperty( getStyle() ));
+        set.put(new StyledTextProperty( getStyle() ));
+
+
+        set.put(new FirstLineIndentProperty( getStyle()  ));
+        set.put(new LeftIndentProperty( getStyle()  ));
+        set.put(new RightIndentProperty( getStyle() ));
+        set.put(new SpacingBeforeProperty( getStyle()  ));
+        set.put(new SpacingAfterProperty( getStyle()  ));
+
+        set.put(new TabStopWidthProperty( getStyle()  ));
+        set.put(new TabStopsProperty( getStyle()  ));
+
+
 
         set.put(new PdfFontNameProperty( getStyle() ));
         set.put(new PdfEmbeddedProperty( getStyle() ));

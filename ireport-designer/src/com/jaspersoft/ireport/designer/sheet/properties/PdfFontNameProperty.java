@@ -25,6 +25,7 @@ package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.IRFont;
 import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.ReportClassLoader;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
@@ -32,9 +33,15 @@ import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import net.sf.jasperreports.engine.JRFont;
+import net.sf.jasperreports.engine.JRTextElement;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.fonts.FontInfo;
+import net.sf.jasperreports.engine.util.JRFontUtil;
 import org.openide.nodes.PropertySupport;
 
 /**
@@ -46,6 +53,7 @@ public class PdfFontNameProperty extends PropertySupport.ReadWrite
     private final JRFont font;
     PropertyEditor editor = null;
 
+
     @SuppressWarnings("unchecked")
     public PdfFontNameProperty(JRFont font)
     {
@@ -54,13 +62,18 @@ public class PdfFontNameProperty extends PropertySupport.ReadWrite
               I18n.getString("Global.Property.PdfFontname"));
         this.font = font;
 
+        
         setValue("canEditAsText",true);
         setValue("oneline",true);
         setValue("suppressCustomEditor",true);
     }
 
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
-        return font.getPdfFontName();
+        if (this.isDefaultValue())
+        {
+            return null;
+        }
+        return font.getOwnPdfFontName();
     }
 
     @Override
@@ -68,6 +81,29 @@ public class PdfFontNameProperty extends PropertySupport.ReadWrite
         return "<html><s>" + getDisplayName();
     }
 
+
+    @Override
+    public boolean canWrite() {
+        if (font.getFontName() == null) return true;
+        String fontName = font.getFontName();
+
+        // If the font name comes from a font extension, this
+        // property should be disables...
+        JRFontUtil.getFontFamilyNames();
+
+        Collection extensionFonts = JRFontUtil.getFontFamilyNames();
+        if (extensionFonts.contains(fontName))
+        {
+            FontInfo fontInfo = JRFontUtil.getFontInfo(fontName, null);
+            if (fontInfo.getFontFamily() != null &&
+                fontInfo.getFontFamily().getNormalPdfFont() != null)
+            {
+                System.out.println(fontInfo.getFontFamily().getNormalPdfFont());
+                return false;
+            }
+        }
+        return true;
+    }
 
 
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -114,6 +150,7 @@ public class PdfFontNameProperty extends PropertySupport.ReadWrite
             java.util.List classes = new ArrayList();
 
             // Add regular PDF fonts...
+            classes.add(new Tag(null,"<Default>"));
             classes.add(new Tag("Helvetica"));
             classes.add(new Tag("Helvetica-Bold"));
             classes.add(new Tag("Helvetica-BoldOblique"));
@@ -135,6 +172,23 @@ public class PdfFontNameProperty extends PropertySupport.ReadWrite
             classes.add(new Tag("HeiseiMin-W3"));
             classes.add(new Tag("HYGoThic-Medium"));
             classes.add(new Tag("HYSMyeongJo-Medium"));
+//
+//            // Add the fonts coming from the registry...
+//            classes.add(new Tag(null, null));
+//
+//            ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+//            Thread.currentThread().setContextClassLoader(new ReportClassLoader(IReportManager.getReportClassLoader()));
+//
+//            Collection extensionFonts = JRFontUtil.getFontFamilyNames();
+//
+//
+//            for(Iterator it = extensionFonts.iterator(); it.hasNext();)
+//            {
+//                String fname = (String)it.next();
+//                classes.add(new Tag(fname));
+//            }
+//
+//            classes.add(new Tag(null, null));
 
             List<IRFont> fonts = IReportManager.getInstance().getIRFonts();
 
@@ -142,6 +196,8 @@ public class PdfFontNameProperty extends PropertySupport.ReadWrite
             {
                 classes.add(new Tag(f.getFile(), f.toString()));
             }
+
+
 
             editor = new ComboBoxPropertyEditor(true, classes);
         }

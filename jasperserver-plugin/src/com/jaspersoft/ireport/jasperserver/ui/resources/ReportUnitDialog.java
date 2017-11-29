@@ -74,6 +74,9 @@ public class ReportUnitDialog extends javax.swing.JDialog {
                                                   JasperServerManager.getString("reportUnitDialog.controlLayout.separatePage", "Separate page")));
         jComboBoxControlsLayout.addItem(new Tag( ""+ResourceDescriptor.RU_CONTROLS_LAYOUT_TOP_OF_PAGE,
                                                   JasperServerManager.getString("reportUnitDialog.controlLayout.topOfPage", "Top of page")));
+        jComboBoxControlsLayout.addItem(new Tag( ""+4, // there is no constant for this one.
+                                                  JasperServerManager.getString("reportUnitDialog.controlLayout.inPage", "In page")));
+
         setLocationRelativeTo(null);
         this.jTextFieldLabel.getDocument().addDocumentListener( new javax.swing.event.DocumentListener() {
             public void changedUpdate(javax.swing.event.DocumentEvent evt) {

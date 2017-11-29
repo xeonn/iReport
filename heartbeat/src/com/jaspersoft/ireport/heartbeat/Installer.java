@@ -30,6 +30,7 @@ import java.net.URLConnection;
 import java.util.UUID;
 import java.util.prefs.Preferences;
 import javax.swing.JOptionPane;
+import org.openide.awt.StatusDisplayer;
 import org.openide.modules.ModuleInstall;
 import org.openide.windows.WindowManager;
 
@@ -39,7 +40,7 @@ import org.openide.windows.WindowManager;
  */
 public class Installer extends ModuleInstall implements Runnable {
 
-    public static final String VERSION = "4.0.1";//"4.0.0";//"3.7.6";//"3.7.6";//"3.7.5";//"3.7.4";//"3.7.3";//"3.7.2";//"3.7.1";//"3.7.0";//"3.6.2";//"3.6.2-RC1";//"3.6.1";//"3.6.0";//"3.6.0";//"3.5.3";//"3.5.2";//"3.5.1";//"3.5.0";//"3.4.0";
+    public static final String VERSION = "4.0.2";//"4.0.1";//"4.0.0";//"3.7.6";//"3.7.6";//"3.7.5";//"3.7.4";//"3.7.3";//"3.7.2";//"3.7.1";//"3.7.0";//"3.6.2";//"3.6.2-RC1";//"3.6.1";//"3.6.0";//"3.6.0";//"3.5.3";//"3.5.2";//"3.5.1";//"3.5.0";//"3.4.0";
     
     @Override
     public void restored() {
@@ -52,7 +53,7 @@ public class Installer extends ModuleInstall implements Runnable {
     
     public void run()
     {
-            if (IReportManager.getInstance().isNoNetwork()) return;
+            if (IReportManager.getInstance().isNoNetwork() || IReportManager.getPreferences().getBoolean("disable_heartbeat", false)) return;
             Preferences props = IReportManager.getPreferences();
             
             try {
@@ -100,13 +101,31 @@ public class Installer extends ModuleInstall implements Runnable {
 
             if (version.compareTo(VERSION) > 0)
             {
-                WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+                
+                    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 
-                    public void run() {
+                        public void run() {
 
-                        JOptionPane.showMessageDialog(Misc.getMainFrame(), I18n.getString("new.version.available", version), I18n.getString("new.version.available.title"), JOptionPane.INFORMATION_MESSAGE);
-                    }
-                });
+                            String message = I18n.getString("new.version.available", version);
+                            if (IReportManager.getPreferences().getBoolean("show_update_dialog", true))
+                            {
+                                        UpdateDialog ud = new UpdateDialog(Misc.getMainFrame(), true);
+                                        ud.setMessage(message, I18n.getString("new.version.available.title"));
+                                        ud.setVisible(true);
+
+                                        if (ud.isNotShowAgain())
+                                        {
+                                            IReportManager.getPreferences().putBoolean("show_update_dialog", false);
+                                        }
+                            }
+                            else
+                            {
+                                StatusDisplayer.getDefault().setStatusText("<html><b>" + message);
+                            }
+                        }
+                    });
+
+
 
             }
             

@@ -45,6 +45,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.sql.Connection;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -1412,6 +1413,78 @@ public class Misc {
         }
 
         return fileToOpen;
+    }
+
+    /**
+     * Split a string in tokens. Tokens are divided by the single white character
+     * Strings can be kept together with quotes. I.e.: '"This \"is\"" a String' results in [This "is"] [a] [String]
+     * @param str
+     * @return
+     */
+    public static String[] getTokens(String str)
+    {
+        List<String> tokens = new ArrayList<String>();
+
+        boolean escaped = false;
+        boolean inQuotes = false;
+
+        StringBuffer token = new StringBuffer();
+        for (int i=0; i<str.length(); ++i)
+        {
+           // case 1: the char is a "...
+            char c = str.charAt(i);
+            if (c == '\\')
+            {
+                if (escaped)
+                {
+                    token.append('\\');
+                    token.append('\\');
+                }
+                escaped= !escaped;  // If we find it for two times in a row, it is autoescaped...
+            }
+            else if (c == '\"')
+            {
+                if (escaped)
+                {
+                    token.append(c);
+                    escaped = false;
+                }
+                else if (!inQuotes && token.length() == 0)
+                {
+                    inQuotes = true;
+                }
+                else if (inQuotes)
+                {
+                    inQuotes = false;
+                }
+                else
+                {
+                    token.append(c);
+                }
+
+            }
+            else if (!inQuotes && c == ' ')
+            {
+                // close the scring.
+                if (escaped) token.append('\\');
+                escaped = false;
+                String t = token.toString();
+                if (t.length() > 0) tokens.add(t);
+                token = new StringBuffer();
+            }
+            else
+            {
+                if (escaped) token.append('\\');
+                token.append(c);
+                escaped = false;
+            }
+        }
+
+        String t = token.toString();
+        if (t.length() > 0) tokens.add(t);
+
+        return tokens.toArray(new String[tokens.size()]);
+
     }
 }
 

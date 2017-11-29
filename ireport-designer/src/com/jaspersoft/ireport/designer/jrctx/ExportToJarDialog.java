@@ -284,7 +284,7 @@ public class ExportToJarDialog extends javax.swing.JDialog {
 	    });
 
 	    jfc.setMultiSelectionEnabled(false);
-	    jfc.setDialogType( javax.swing.JFileChooser.OPEN_DIALOG);
+	    jfc.setDialogType( javax.swing.JFileChooser.SAVE_DIALOG);
 	    if  (jfc.showOpenDialog( this) == javax.swing.JOptionPane.OK_OPTION) {
 		    java.io.File file = jfc.getSelectedFile();
                     try {
