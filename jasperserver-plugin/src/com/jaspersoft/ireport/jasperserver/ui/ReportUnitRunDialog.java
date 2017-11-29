@@ -44,6 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.JRQueryChunk;
@@ -60,7 +61,7 @@ public class ReportUnitRunDialog extends javax.swing.JDialog {
     private java.util.List inputControls = null;
     private JServer server = null;
 
-    private Thread updaterThread = null;
+    private Map<BasicInputControl, Thread> updaterThreads = new HashMap<BasicInputControl, Thread>();
     private String reportUnitUri = null;
     private org.jdesktop.swingx.JXBusyLabel busyLabel = new org.jdesktop.swingx.JXBusyLabel();
 
@@ -561,17 +562,19 @@ public class ReportUnitRunDialog extends javax.swing.JDialog {
                         return;
                     }
                 }
+                
+                Thread updaterThread = updaterThreads.get(icToUpdate);
 
                 if (updaterThread != null)
                 {
                     updaterThread.interrupt();
                 }
 
+                System.out.println("Updating input control: " + icToUpdate.getInputControl().getName());
+                System.out.flush();
                 updaterThread = new Thread(new InputControlsUpdater(this.getServer(), icToUpdate, getReportUnitUri(), parameters, this));
+                updaterThreads.put(icToUpdate, updaterThread);
                 updaterThread.start();
-                
-
-                break;
             }
 
 

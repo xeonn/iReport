@@ -24,6 +24,7 @@
 package com.jaspersoft.ireport.jasperserver.ui.resources;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.designer.utils.ConfigurablePlainDocument;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
@@ -70,6 +71,10 @@ public class QueryDialog extends javax.swing.JDialog {
                 updateSaveButton();
             }
         };
+        
+        this.jTextFieldName.setDocument(new ConfigurablePlainDocument(100));
+        this.jTextFieldLabel.setDocument(new ConfigurablePlainDocument(100));
+        this.jEditorPaneDescription.setDocument(new ConfigurablePlainDocument(250));
         
         this.jTextFieldLabel.getDocument().addDocumentListener(changesListener);
         this.jTextFieldName.getDocument().addDocumentListener(changesListener);

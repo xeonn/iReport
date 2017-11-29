@@ -55,15 +55,15 @@ public class TimeSeriesDatasetPanel extends javax.swing.JPanel implements ChartD
         
         // Year | Quarter | Month | Week | Day | Hour | Minute | Second | Milisecond
         // Year | Quarter | Month | Week | Day | Hour | Minute | Second | Milisecond
-        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.YEAR,I18n.getString("Global.ComboBox.Year")));
-        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.QUARTER,I18n.getString("Global.ComboBox.Quarter")));
-        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.MONTH,I18n.getString("Global.ComboBox.Month")));
-        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.WEEK,I18n.getString("Global.ComboBox.Week")));
-        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.DAY,I18n.getString("Global.ComboBox.Day")));
-        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.HOUR,I18n.getString("Global.ComboBox.Hour")));
-        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.MINUTE,I18n.getString("Global.ComboBox.Minute")));
-        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.SECOND,I18n.getString("Global.ComboBox.Second")));
-        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.MILLISECOND,I18n.getString("Global.ComboBox.Milisecond")));
+        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.YEAR.getTimePeriod() ,I18n.getString("Global.ComboBox.Year")));
+        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.QUARTER.getTimePeriod(),I18n.getString("Global.ComboBox.Quarter")));
+        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.MONTH.getTimePeriod(),I18n.getString("Global.ComboBox.Month")));
+        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.WEEK.getTimePeriod(),I18n.getString("Global.ComboBox.Week")));
+        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.DAY.getTimePeriod(),I18n.getString("Global.ComboBox.Day")));
+        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.HOUR.getTimePeriod(),I18n.getString("Global.ComboBox.Hour")));
+        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.MINUTE.getTimePeriod(),I18n.getString("Global.ComboBox.Minute")));
+        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.SECOND.getTimePeriod(),I18n.getString("Global.ComboBox.Second")));
+        this.jComboBoxPeriod.addItem(new Tag(TimePeriodEnum.MILLISECOND.getTimePeriod(),I18n.getString("Global.ComboBox.Milisecond")));
         
         jList1.setModel( new javax.swing.DefaultListModel());
         jList1.setCellRenderer(new DatasetListsCellRenderer());
@@ -315,7 +315,8 @@ public class TimeSeriesDatasetPanel extends javax.swing.JPanel implements ChartD
     private void jComboBoxPeriodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxPeriodActionPerformed
 
         if (init || timeSeriesDataset == null) return;
-        timeSeriesDataset.setTimePeriod( (Class) ((Tag)jComboBoxPeriod.getSelectedItem()).getValue());
+        
+        timeSeriesDataset.setTimePeriod( (Class<?>)((Tag)jComboBoxPeriod.getSelectedItem()).getValue() );
         
     }//GEN-LAST:event_jComboBoxPeriodActionPerformed
 

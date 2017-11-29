@@ -15,6 +15,7 @@ import java.util.Locale;
 import java.util.Map;
 import javax.swing.SwingUtilities;
 import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRCommonText;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignTextElement;
@@ -206,7 +207,7 @@ public class DefaultTableCellElementsLayout {
                                     );
 
 
-                                JRTextMeasurer measurer = JRTextMeasurerUtil.createTextMeasurer(dte);
+                                JRTextMeasurer measurer = JRTextMeasurerUtil.getInstance(DefaultJasperReportsContext.getInstance()).createTextMeasurer(dte);
                                 JRMeasuredText measuredText = measurer.measure(  styledText, 0, dte.getHeight(), true);
 
                                 if  (measuredText.getTextHeight() > dte.getHeight())

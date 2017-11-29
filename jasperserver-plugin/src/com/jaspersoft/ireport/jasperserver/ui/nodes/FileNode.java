@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.jasperserver.ui.nodes;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.dnd.ReportObjectPaletteTransferable;
 import com.jaspersoft.ireport.designer.outline.nodes.IRAbstractNode;
 import com.jaspersoft.ireport.jasperserver.RepositoryFile;
@@ -41,6 +42,8 @@ import java.awt.datatransfer.Transferable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import org.openide.actions.CopyAction;
@@ -109,11 +112,26 @@ public class FileNode extends IRAbstractNode implements ResourceNode {
     public FileNode(RepositoryFile file, Lookup doLkp) {
         super(Children.LEAF, doLkp);
         this.file = file;
+        
+        IReportManager.getPreferences().addPreferenceChangeListener(new PreferenceChangeListener() {
+
+            public void preferenceChange(PreferenceChangeEvent pce) {
+                fireDisplayNameChange(null, getDisplayName());
+            }
+        });
     }
     
     @Override
     public String getDisplayName() {
-        return getFile().getDescriptor().getLabel();
+        
+        if (!IReportManager.getPreferences().getBoolean("jasperserver.showResourceIDs", false))
+        {
+            return ""+getFile().getDescriptor().getLabel();
+        }
+        else
+        {
+            return ""+getFile().getDescriptor().getName();
+        }
     }
 
     @Override

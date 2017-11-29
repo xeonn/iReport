@@ -72,7 +72,7 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
          jComboBoxJDBCDriver.setModel(new DefaultComboBoxModel(definitions));
          // Select the first MySQL driver...
 
-         jComboBoxJDBCDriver.setSelectedIndex(15);
+         jComboBoxJDBCDriver.setSelectedIndex(17);
          jLabel1.setText(I18n.getString("XMLADataSourceConnectionEditor.Label.Warning"));
     }
     
@@ -90,30 +90,17 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
         jComboBoxJDBCDriver = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
         jTextFieldJDBCUrl = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jTextFieldDBName = new javax.swing.JTextField();
-        jTextFieldServerAddress = new javax.swing.JTextField();
-        jButtonWizard = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
+        jTextFieldUsername = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jTextFieldPassword = new javax.swing.JPasswordField();
-        jTextFieldUsername = new javax.swing.JTextField();
         jCheckBoxSavePassword = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
 
         setLayout(new java.awt.BorderLayout());
 
-        jPanelJDBC.setLayout(new java.awt.GridBagLayout());
-
         jLabel2.setText(I18n.getString("JDBCConnectionEditor.Label.JDBC_Driver")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
-        jPanelJDBC.add(jLabel2, gridBagConstraints);
 
         jComboBoxJDBCDriver.setEditable(true);
         jComboBoxJDBCDriver.addActionListener(new java.awt.event.ActionListener() {
@@ -121,139 +108,92 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
                 jComboBoxJDBCDriverActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 6);
-        jPanelJDBC.add(jComboBoxJDBCDriver, gridBagConstraints);
 
         jLabel3.setText(I18n.getString("JDBCConnectionEditor.Label.JDBC_URL")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
-        jPanelJDBC.add(jLabel3, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 6);
-        jPanelJDBC.add(jTextFieldJDBCUrl, gridBagConstraints);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("JDBC URL Wizard"));
-        jPanel2.setMinimumSize(new java.awt.Dimension(179, 70));
-        jPanel2.setLayout(new java.awt.GridBagLayout());
-
-        jLabel14.setText(I18n.getString("JDBCConnectionEditor.Label.Server_Address")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
-        jPanel2.add(jLabel14, gridBagConstraints);
-
-        jLabel5.setText(I18n.getString("JDBCConnectionEditor.Label.Database")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
-        jPanel2.add(jLabel5, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
-        jPanel2.add(jTextFieldDBName, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
-        jPanel2.add(jTextFieldServerAddress, gridBagConstraints);
-
-        jButtonWizard.setText(I18n.getString("Global.Button.Wizard")); // NOI18N
-        jButtonWizard.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        jButtonWizard.setMaximumSize(new java.awt.Dimension(60, 23));
-        jButtonWizard.setMinimumSize(new java.awt.Dimension(60, 23));
-        jButtonWizard.setPreferredSize(new java.awt.Dimension(60, 23));
-        jButtonWizard.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonWizardActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 0);
-        jPanel2.add(jButtonWizard, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        jPanelJDBC.add(jPanel2, gridBagConstraints);
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Credentials"));
+        jPanel3.setMinimumSize(new java.awt.Dimension(179, 70));
 
         jLabel6.setText(I18n.getString("Global.Label.Username")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
-        jPanelJDBC.add(jLabel6, gridBagConstraints);
 
         jLabel7.setText(I18n.getString("Global.Label.Password")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
-        jPanelJDBC.add(jLabel7, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
-        jPanelJDBC.add(jTextFieldPassword, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 0);
-        jPanelJDBC.add(jTextFieldUsername, gridBagConstraints);
 
         jCheckBoxSavePassword.setText(I18n.getString("Global.CheckBox.Save_password")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 0, 6);
-        jPanelJDBC.add(jCheckBoxSavePassword, gridBagConstraints);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jaspersoft/ireport/designer/connection/gui/warning.png"))); // NOI18N
         jLabel1.setText("Attention! Passwords are saved in clear text.");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        jPanelJDBC.add(jLabel1, gridBagConstraints);
+
+        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel3Layout.createSequentialGroup()
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel3Layout.createSequentialGroup()
+                        .add(jLabel7)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jCheckBoxSavePassword)
+                            .add(jTextFieldPassword, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)))
+                    .add(jPanel3Layout.createSequentialGroup()
+                        .add(jLabel6)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jTextFieldUsername, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE))
+                    .add(jLabel1))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel3Layout.createSequentialGroup()
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel6)
+                    .add(jTextFieldUsername, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel7)
+                    .add(jTextFieldPassword, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jCheckBoxSavePassword)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jLabel1)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        org.jdesktop.layout.GroupLayout jPanelJDBCLayout = new org.jdesktop.layout.GroupLayout(jPanelJDBC);
+        jPanelJDBC.setLayout(jPanelJDBCLayout);
+        jPanelJDBCLayout.setHorizontalGroup(
+            jPanelJDBCLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanelJDBCLayout.createSequentialGroup()
+                .add(jPanelJDBCLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanelJDBCLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jPanelJDBCLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel2)
+                            .add(jLabel3))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanelJDBCLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jTextFieldJDBCUrl, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+                            .add(jComboBoxJDBCDriver, 0, 247, Short.MAX_VALUE)))
+                    .add(jPanelJDBCLayout.createSequentialGroup()
+                        .add(9, 9, 9)
+                        .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanelJDBCLayout.setVerticalGroup(
+            jPanelJDBCLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanelJDBCLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanelJDBCLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel2)
+                    .add(jComboBoxJDBCDriver, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanelJDBCLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel3)
+                    .add(jTextFieldJDBCUrl, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         add(jPanelJDBC, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
@@ -266,14 +206,15 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
     private void jButtonWizardActionPerformed(java.awt.event.ActionEvent evt) {                                              
           
         if (jComboBoxJDBCDriver.getSelectedIndex() < 0) return;
-
+//
         if (jComboBoxJDBCDriver.getSelectedItem() instanceof JDBCDriverDefinition)
         {
-            String server = jTextFieldServerAddress.getText().trim();
-            if( server.length()==0 ) {
-                server = "localhost";
-            }
-            String databaseName = jTextFieldDBName.getText().trim();
+            String server = "localhost"; //jTextFieldServerAddress.getText().trim();
+            String databaseName = "DatabaseName";
+//            if( server.length()==0 ) {
+//                server = "localhost";
+//            }
+//            String databaseName = jTextFieldDBName.getText().trim();
             jTextFieldJDBCUrl.setText( ((JDBCDriverDefinition)jComboBoxJDBCDriver.getSelectedItem()).getUrl(server, databaseName) );
         }
         
@@ -302,8 +243,8 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
             }
             
             this.jTextFieldJDBCUrl.setText( con.getUrl());
-            this.jTextFieldServerAddress.setText( con.getServerAddress() );
-            this.jTextFieldDBName.setText( con.getDatabase() );
+            //this.jTextFieldServerAddress.setText( con.getServerAddress() );
+            //this.jTextFieldDBName.setText( con.getDatabase() );
             this.jTextFieldUsername.setText( con.getUsername());
             if (con.isSavePassword())
                 this.jTextFieldPassword.setText( con.getPassword());
@@ -318,8 +259,8 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
         
         IReportConnection irConn = new JDBCConnection();
         //irConn.setName( this.jTextFieldName.getText().trim() );
-        ((JDBCConnection)irConn).setServerAddress( this.jTextFieldServerAddress.getText().trim() );
-        ((JDBCConnection)irConn).setDatabase( this.jTextFieldDBName.getText().trim() );
+//        ((JDBCConnection)irConn).setServerAddress( this.jTextFieldServerAddress.getText().trim() );
+//        ((JDBCConnection)irConn).setDatabase( this.jTextFieldDBName.getText().trim() );
         ((JDBCConnection)irConn).setUsername( this.jTextFieldUsername.getText().trim() );
         if (jCheckBoxSavePassword.isSelected())
             ((JDBCConnection)irConn).setPassword( new String( this.jTextFieldPassword.getPassword() ) );
@@ -378,22 +319,17 @@ public class JDBCConnectionEditor extends javax.swing.JPanel implements IReportC
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonWizard;
     private javax.swing.JCheckBox jCheckBoxSavePassword;
     private javax.swing.JComboBox jComboBoxJDBCDriver;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelJDBC;
-    private javax.swing.JTextField jTextFieldDBName;
     private javax.swing.JTextField jTextFieldJDBCUrl;
     private javax.swing.JPasswordField jTextFieldPassword;
-    private javax.swing.JTextField jTextFieldServerAddress;
     private javax.swing.JTextField jTextFieldUsername;
     // End of variables declaration//GEN-END:variables
     

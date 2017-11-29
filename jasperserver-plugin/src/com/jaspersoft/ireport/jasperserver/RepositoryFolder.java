@@ -23,12 +23,14 @@
  */
 package com.jaspersoft.ireport.jasperserver;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 import javax.swing.JOptionPane;
-import org.openide.util.Exceptions;
 import org.openide.util.Mutex;
 
 
@@ -62,7 +64,14 @@ public class RepositoryFolder {
     {
         if (getDescriptor() != null)
         {
-            return ""+getDescriptor().getLabel();
+            if (!IReportManager.getPreferences().getBoolean("jasperserver.showResourceIDs", false))
+            {
+                return ""+getDescriptor().getLabel();
+            }
+            else
+            {
+                return ""+getDescriptor().getName();
+            }
         }
         
         return "???";

@@ -23,8 +23,8 @@
  */
 package com.jaspersoft.ireport.designer.options.jasperreports;
 
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import java.lang.reflect.InvocationTargetException;
-import net.sf.jasperreports.engine.util.JRProperties;
 import org.openide.nodes.PropertySupport;
 
 /**
@@ -42,7 +42,8 @@ public class StringProperty extends PropertySupport.ReadWrite {
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
         if (getName() != null)
         {
-            String val = JRProperties.getProperty(getName());
+            
+            String val = IRLocalJasperReportsContext.getUtilities().getProperty(getName());
             return val == null ? "" : val+"";
         }
 

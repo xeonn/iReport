@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer.options.jasperreports;
 
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.options.IReportOptionsPanelController;
 import com.jaspersoft.ireport.designer.options.OptionsPanel;
@@ -31,9 +32,9 @@ import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
@@ -41,8 +42,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import net.sf.jasperreports.engine.util.JRProperties;
-import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.SortOrder;
 
@@ -241,7 +242,7 @@ public class JROptionsPanel extends javax.swing.JPanel implements OptionsPanel{
 
             String key = (String)((DefaultTableModel)jTable1.getModel()).getValueAt(modelIndex, 0);
 
-            if (IReportManager.getInstance().getDefaultJasperReportsProperties().containsKey(key))
+            if (IRLocalJasperReportsContext.isJasperReportsDefaultProperty(key, null, true))
             {
                 JOptionPane.showMessageDialog(this, "The property \n" + key + "\ncan not be deleted since it is set by default by JasperReports.", "System property",JOptionPane.INFORMATION_MESSAGE );
             }
@@ -295,10 +296,12 @@ public class JROptionsPanel extends javax.swing.JPanel implements OptionsPanel{
         {
             int modelIndex = ((JXTable)jTable1).convertRowIndexToModel(selectedRows[i]);
             String key = (String)((DefaultTableModel)jTable1.getModel()).getValueAt(modelIndex, 0);
-            if (IReportManager.getInstance().getDefaultJasperReportsProperties().containsKey(key))
+            
+            String defValue = DefaultJasperReportsContext.getInstance().getProperty(key);
+            
+            if (defValue != null)
             {
-                String def = IReportManager.getInstance().getDefaultJasperReportsProperties().getProperty(key);
-                dtm.setValueAt(Misc.addSlashesString(def), modelIndex, 1);
+                dtm.setValueAt(Misc.addSlashesString(defValue), modelIndex, 1);
             }
         }
         jTable1.updateUI();
@@ -350,14 +353,14 @@ public class JROptionsPanel extends javax.swing.JPanel implements OptionsPanel{
         DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
         dtm.setRowCount(0);
 
-        Properties props = IReportManager.getInstance().getPersistentJRProperties();
+        Map<String, String> props = IRLocalJasperReportsContext.getInstance().getProperties();
 
-        Enumeration propNames = props.propertyNames();
+        Iterator propNames = props.keySet().iterator();// prop ertyNames();
 
-        while (propNames.hasMoreElements())
+        while (propNames.hasNext())
         {
-            String propName = (String) propNames.nextElement();
-            dtm.addRow(new Object[]{propName, Misc.addSlashesString(props.getProperty(propName) )});
+            String propName = (String) propNames.next();
+            dtm.addRow(new Object[]{propName, Misc.addSlashesString(props.get(propName) )});
         }
 
         jTable1.updateUI();
@@ -379,52 +382,30 @@ public class JROptionsPanel extends javax.swing.JPanel implements OptionsPanel{
 
             usedKeys.add(key);
 
-            if (IReportManager.getInstance().getDefaultJasperReportsProperties().containsKey(key))
+            if (!IRLocalJasperReportsContext.isJasperReportsDefaultProperty(key, Misc.removeSlashesString(value), false))
             {
 
-                String oldValue = IReportManager.getInstance().getDefaultJasperReportsProperties().getProperty(key);
-                
-                if (key.contains("xpath.executer.factory"))
-                {
-                    System.out.println(oldValue + " " + value);
-                    System.out.flush();
-                }
-
-                if (oldValue == null || !oldValue.equals(value))
-                {
-                    IReportManager.getPreferences().put(IReportManager.PROPERTY_JRPROPERTY_PREFIX + key, Misc.removeSlashesString(value));
-                }
-                else
-                {
-                    IReportManager.getPreferences().remove(IReportManager.PROPERTY_JRPROPERTY_PREFIX + key);
-                }
-            }
-            else
-            {
-                
                 IReportManager.getPreferences().put(IReportManager.PROPERTY_JRPROPERTY_PREFIX + key, Misc.removeSlashesString(value));
             }
+            
         }
 
         // Check removed keys...
-        List props = JRProperties.getProperties("");
+        List props =  IRLocalJasperReportsContext.getUtilities().getProperties("");
         for (int i=0; i<props.size(); ++i)
         {
             String oldKey = ((PropertySuffix)props.get(i)).getKey();
             if (!usedKeys.contains(oldKey))
             {
-                // This key has been removed...
-                if (!IReportManager.getInstance().getDefaultJasperReportsProperties().containsKey(oldKey))
-                {
-                    // it is not a predefined property
-                    // To remove this property a restart is suggested...
-                    IReportManager.getPreferences().remove(IReportManager.PROPERTY_JRPROPERTY_PREFIX + oldKey);
-                    JRProperties.removePropertyValue(oldKey);
-                }
+                IReportManager.getPreferences().remove(IReportManager.PROPERTY_JRPROPERTY_PREFIX + oldKey);
+                IRLocalJasperReportsContext.getInstance().removeProperty(oldKey);
             }
         }
         
-        IReportManager.getInstance().reloadJasperReportsProperties();
+        
+        
+        // No need to reload anything...
+        //IReportManager.getInstance().reloadJasperReportsProperties();
     }
 
     public boolean valid() {

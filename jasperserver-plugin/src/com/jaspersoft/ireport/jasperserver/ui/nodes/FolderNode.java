@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.jasperserver.ui.nodes;
 
+import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.outline.nodes.IRIndexedNode;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
@@ -38,19 +39,16 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import java.awt.Image;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
-import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import org.openide.actions.CopyAction;
 import org.openide.actions.CutAction;
 import org.openide.actions.PasteAction;
 import org.openide.nodes.Node;
-import org.openide.nodes.NodeEvent;
-import org.openide.nodes.NodeListener;
-import org.openide.nodes.NodeMemberEvent;
-import org.openide.nodes.NodeReorderEvent;
 import org.openide.nodes.NodeTransfer;
 import org.openide.util.Lookup;
 import org.openide.util.actions.SystemAction;
@@ -88,6 +86,13 @@ public class FolderNode extends IRIndexedNode implements ResourceNode {
         super(pc, pc.getIndex(), new ProxyLookup(doLkp, Lookups.fixed(folder, folder.getServer())));
         this.root = root;
         this.folder = folder;
+        
+        IReportManager.getPreferences().addPreferenceChangeListener(new PreferenceChangeListener() {
+
+            public void preferenceChange(PreferenceChangeEvent pce) {
+                fireDisplayNameChange(null, getDisplayName());
+            }
+        });
     }
 
     
@@ -108,10 +113,29 @@ public class FolderNode extends IRIndexedNode implements ResourceNode {
         this.folder = folder;
     }
 
+    
     @Override
     public String getDisplayName() {
-        return getFolder().getDescriptor().getLabel() + ( (isLoading()) ? " (Loading....)" : "");
+        
+            
+        String baseName = "";
+        if (!IReportManager.getPreferences().getBoolean("jasperserver.showResourceIDs", false))
+        {
+            baseName =  ""+ getFolder().getDescriptor().getLabel();
+        }
+        else
+        {
+            baseName =  ""+getFolder().getDescriptor().getName();
+            
+            if (getFolder().isRoot())
+            {
+                baseName += " (" + getFolder().getDescriptor().getLabel() + ")";
+            }
+        }
+        
+        return baseName + ( (isLoading()) ? " (Loading....)" : "");
     }
+        
     
     @Override
     public Image getIcon(int arg0) {

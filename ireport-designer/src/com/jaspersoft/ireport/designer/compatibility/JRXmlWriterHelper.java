@@ -44,7 +44,7 @@ public class JRXmlWriterHelper {
     private static final Map<String, Class> writers = new HashMap();
 
     static {
-
+        writers.put("4_5_0", JRXmlWriter_4_5_0.class);
         writers.put("4_0_1", JRXmlWriter_4_0_1.class);
         writers.put("3_7_4", JRXmlWriter_3_7_4.class);
         writers.put("3_7_3", JRXmlWriter_3_7_3.class);

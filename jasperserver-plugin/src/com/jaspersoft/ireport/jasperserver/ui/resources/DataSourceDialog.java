@@ -28,6 +28,7 @@ import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.connection.JDBCConnection;
 import com.jaspersoft.ireport.designer.connection.JDBCNBConnection;
+import com.jaspersoft.ireport.designer.utils.ConfigurablePlainDocument;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
@@ -72,6 +73,10 @@ public class DataSourceDialog extends javax.swing.JDialog {
             }
         };
         
+        this.jTextFieldName.setDocument(new ConfigurablePlainDocument(100));
+        this.jTextFieldLabel.setDocument(new ConfigurablePlainDocument(100));
+        this.jEditorPaneDescription.setDocument(new ConfigurablePlainDocument(250));
+        
         this.jTextFieldLabel.getDocument().addDocumentListener(changesListener);
         this.jTextFieldName.getDocument().addDocumentListener(changesListener);
         this.jTextFieldDriver.getDocument().addDocumentListener(changesListener);
@@ -80,6 +85,8 @@ public class DataSourceDialog extends javax.swing.JDialog {
         this.jTextFieldServiceName.getDocument().addDocumentListener(changesListener);
         this.jPasswordField.getDocument().addDocumentListener(changesListener);
         this.jTextFieldBeanName.getDocument().addDocumentListener(changesListener);
+        
+        
         
         applyI18n();
         

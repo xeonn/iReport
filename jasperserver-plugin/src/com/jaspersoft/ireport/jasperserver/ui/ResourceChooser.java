@@ -659,7 +659,6 @@ public class ResourceChooser extends javax.swing.JPanel {
      
      private void selectionChanged()
      {
-         System.out.println("Selection changed: " + selectedDescriptors);
          selectedDescriptors.clear();
          if (jList1.getSelectedIndex() >= 0)
          {

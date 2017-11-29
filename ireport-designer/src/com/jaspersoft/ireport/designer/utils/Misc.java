@@ -1399,7 +1399,7 @@ public class Misc {
 
             fileToOpen = null;
             error = ex.getMessage();
-            ex.printStackTrace();
+            //ex.printStackTrace();
         }
 
 
@@ -1407,7 +1407,7 @@ public class Misc {
         {
             if (error == null)
             {
-                error = "The file expression returned null. I'm unable to locate the file";
+                error = "The file expression cannot be interpreted, and I'm unable to locate the file.";
             }
             throw new Exception(error);
         }

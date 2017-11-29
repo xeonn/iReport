@@ -23,13 +23,15 @@
  */
 package com.jaspersoft.ireport.designer.options.export;
 
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.options.IReportOptionsPanelController;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.prefs.Preferences;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.export.JRCsvExporterParameter;
-import net.sf.jasperreports.engine.util.JRProperties;
 
 /**
  *
@@ -159,8 +161,11 @@ public class CSVExportParametersPanel extends AbstractExportParametersPanel {
 
     private void jButtonResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResetActionPerformed
 
-        jTextField1.setText( Misc.addSlashesString(JRProperties.getProperty(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER)) );
-        jTextField2.setText( Misc.addSlashesString(JRProperties.getProperty(JRCsvExporterParameter.PROPERTY_RECORD_DELIMITER)) );
+        JRPropertiesUtil jrPropUtils = IRLocalJasperReportsContext.getUtilities();
+        JasperReportsContext context = IRLocalJasperReportsContext.getInstance();
+        
+        jTextField1.setText( Misc.addSlashesString(jrPropUtils.getProperty(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER)) );
+        jTextField2.setText( Misc.addSlashesString(jrPropUtils.getProperty(JRCsvExporterParameter.PROPERTY_RECORD_DELIMITER)) );
         notifyChange();
     }//GEN-LAST:event_jButtonResetActionPerformed
 
@@ -180,9 +185,11 @@ public class CSVExportParametersPanel extends AbstractExportParametersPanel {
 
         setInit(true);
         Preferences pref = IReportManager.getPreferences();
-
-        jTextField1.setText( Misc.addSlashesString(pref.get(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER, JRProperties.getProperty(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER))));
-        jTextField2.setText( Misc.addSlashesString(pref.get(JRCsvExporterParameter.PROPERTY_RECORD_DELIMITER, JRProperties.getProperty(JRCsvExporterParameter.PROPERTY_RECORD_DELIMITER))));
+        
+        JRPropertiesUtil jrPropUtils = IRLocalJasperReportsContext.getUtilities();
+        
+        jTextField1.setText( Misc.addSlashesString(pref.get(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER, jrPropUtils.getProperty(JRCsvExporterParameter.PROPERTY_FIELD_DELIMITER))));
+        jTextField2.setText( Misc.addSlashesString(pref.get(JRCsvExporterParameter.PROPERTY_RECORD_DELIMITER, jrPropUtils.getProperty(JRCsvExporterParameter.PROPERTY_RECORD_DELIMITER))));
         
         setInit(false);
     }

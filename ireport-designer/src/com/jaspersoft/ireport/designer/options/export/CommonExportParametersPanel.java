@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer.options.export;
 
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.prefs.Preferences;
@@ -30,7 +31,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.util.JRProperties;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 /**
  *
@@ -326,15 +328,18 @@ public class CommonExportParametersPanel extends AbstractExportParametersPanel {
         setInit(true);
         Preferences pref = IReportManager.getPreferences();
 
-        jCheckBoxIgnorePageMargins.setSelected( pref.getBoolean(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS, JRProperties.getBooleanProperty(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS)));
-        int pageMode = pref.getInt(JRProperties.PROPERTY_PREFIX + "export.printrange", 0);
+        JRPropertiesUtil jrPropUtils = IRLocalJasperReportsContext.getUtilities();
+        JasperReportsContext context = IRLocalJasperReportsContext.getInstance();
+        
+        jCheckBoxIgnorePageMargins.setSelected( pref.getBoolean(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS,    jrPropUtils.getBooleanProperty(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS)));
+        int pageMode = pref.getInt(JRPropertiesUtil.PROPERTY_PREFIX + "export.printrange", 0);
 
         jRadioButtonExportAll.setSelected( pageMode == 0);
         jRadioButtonExportPageIndex.setSelected( pageMode == 1);
         jTextFieldPageIndex.setEnabled(pageMode == 1);
         if (pageMode == 1)
         {
-            jTextFieldPageIndex.setText( pref.getInt(JRProperties.PROPERTY_PREFIX + "export.printrange.index", 1) +"");
+            jTextFieldPageIndex.setText( pref.getInt(JRPropertiesUtil.PROPERTY_PREFIX + "export.printrange.index", 1) +"");
         }
 
         jRadioButtonExportRange.setSelected( pageMode == 2);
@@ -342,17 +347,17 @@ public class CommonExportParametersPanel extends AbstractExportParametersPanel {
         jTextFieldPageRangeTo.setEnabled( pageMode == 2 );
         if (pageMode == 2)
         {
-            jTextFieldPageRangeFrom.setText( pref.getInt(JRProperties.PROPERTY_PREFIX + "export.printrange.from", 1) +"");
-            jTextFieldPageRangeTo.setText( pref.getInt(JRProperties.PROPERTY_PREFIX + "export.printrange.to", 1) +"");
+            jTextFieldPageRangeFrom.setText( pref.getInt(JRPropertiesUtil.PROPERTY_PREFIX + "export.printrange.from", 1) +"");
+            jTextFieldPageRangeTo.setText( pref.getInt(JRPropertiesUtil.PROPERTY_PREFIX + "export.printrange.to", 1) +"");
         }
 
-        String encoding = pref.get(JRExporterParameter.PROPERTY_CHARACTER_ENCODING, JRProperties.getProperty(JRExporterParameter.PROPERTY_CHARACTER_ENCODING));
+        String encoding = pref.get(JRExporterParameter.PROPERTY_CHARACTER_ENCODING, jrPropUtils.getProperty(JRExporterParameter.PROPERTY_CHARACTER_ENCODING));
         jTextFieldCharacterEncoding.setText( (encoding == null) ? "" : encoding );
 
         SpinnerNumberModel m = (SpinnerNumberModel)jSpinnerOffsetX.getModel();
-        m.setValue(pref.getInt(JRProperties.PROPERTY_PREFIX + "export.offset.x", 0));
+        m.setValue(pref.getInt(JRPropertiesUtil.PROPERTY_PREFIX + "export.offset.x", 0));
         m = (SpinnerNumberModel)jSpinnerOffsetY.getModel();
-        m.setValue(pref.getInt(JRProperties.PROPERTY_PREFIX + "export.offset.y", 0));
+        m.setValue(pref.getInt(JRPropertiesUtil.PROPERTY_PREFIX + "export.offset.y", 0));
         setInit(false);
     }
 
@@ -361,18 +366,18 @@ public class CommonExportParametersPanel extends AbstractExportParametersPanel {
         Preferences pref = IReportManager.getPreferences();
         if (jRadioButtonExportAll.isSelected())
         {
-            pref.putInt(JRProperties.PROPERTY_PREFIX + "export.printrange", 0);
+            pref.putInt(JRPropertiesUtil.PROPERTY_PREFIX + "export.printrange", 0);
         }
         else if (jRadioButtonExportPageIndex.isSelected())
         {
-            pref.putInt(JRProperties.PROPERTY_PREFIX + "export.printrange", 1);
-            pref.putInt(JRProperties.PROPERTY_PREFIX + "export.printrange.index", Integer.valueOf( jTextFieldPageIndex.getText() ) );
+            pref.putInt(JRPropertiesUtil.PROPERTY_PREFIX + "export.printrange", 1);
+            pref.putInt(JRPropertiesUtil.PROPERTY_PREFIX + "export.printrange.index", Integer.valueOf( jTextFieldPageIndex.getText() ) );
         }
         else if (jRadioButtonExportRange.isSelected())
         {
-            pref.putInt(JRProperties.PROPERTY_PREFIX + "export.printrange", 2);
-            pref.putInt(JRProperties.PROPERTY_PREFIX + "export.printrange.from", Integer.valueOf( jTextFieldPageRangeFrom.getText() ) );
-            pref.putInt(JRProperties.PROPERTY_PREFIX + "export.printrange.to", Integer.valueOf( jTextFieldPageRangeTo.getText() ) );
+            pref.putInt(JRPropertiesUtil.PROPERTY_PREFIX + "export.printrange", 2);
+            pref.putInt(JRPropertiesUtil.PROPERTY_PREFIX + "export.printrange.from", Integer.valueOf( jTextFieldPageRangeFrom.getText() ) );
+            pref.putInt(JRPropertiesUtil.PROPERTY_PREFIX + "export.printrange.to", Integer.valueOf( jTextFieldPageRangeTo.getText() ) );
         }
 
         if (jTextFieldCharacterEncoding.getText().trim().length() == 0)
@@ -387,21 +392,21 @@ public class CommonExportParametersPanel extends AbstractExportParametersPanel {
         SpinnerNumberModel m = (SpinnerNumberModel)jSpinnerOffsetX.getModel();
         if (m.getNumber().intValue() == 0)
         {
-           pref.remove(JRProperties.PROPERTY_PREFIX + "export.offset.x");
+           pref.remove(JRPropertiesUtil.PROPERTY_PREFIX + "export.offset.x");
         }
         else
         {
-            pref.putInt(JRProperties.PROPERTY_PREFIX + "export.offset.x", m.getNumber().intValue());
+            pref.putInt(JRPropertiesUtil.PROPERTY_PREFIX + "export.offset.x", m.getNumber().intValue());
         }
 
         m = (SpinnerNumberModel)jSpinnerOffsetY.getModel();
         if (m.getNumber().intValue() == 0)
         {
-           pref.remove(JRProperties.PROPERTY_PREFIX + "export.offset.y");
+           pref.remove(JRPropertiesUtil.PROPERTY_PREFIX + "export.offset.y");
         }
         else
         {
-            pref.putInt(JRProperties.PROPERTY_PREFIX + "export.offset.y", m.getNumber().intValue());
+            pref.putInt(JRPropertiesUtil.PROPERTY_PREFIX + "export.offset.y", m.getNumber().intValue());
         }
 
         pref.putBoolean(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS, jCheckBoxIgnorePageMargins.isSelected());

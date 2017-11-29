@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer.options.export;
 
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.locale.I18n;
@@ -30,8 +31,8 @@ import java.util.prefs.Preferences;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.lowagie.text.pdf.PdfWriter;
 import javax.swing.JFileChooser;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
-import net.sf.jasperreports.engine.util.JRProperties;
 
 /**
  *
@@ -92,24 +93,27 @@ public class PdfExportParametersPanel extends AbstractExportParametersPanel {
     public void load() {
         setInit(true);
         Preferences pref = IReportManager.getPreferences();
+        
 
-        Misc.setComboboxSelectedTagValue(jComboBoxPDFVersion, pref.get(JRPdfExporterParameter.PROPERTY_PDF_VERSION, JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDF_VERSION)));
-        Misc.setComboboxSelectedTagValue(jComboBoxPdfA, pref.get(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE, JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE)));
+        JRPropertiesUtil jrPropUtils = IRLocalJasperReportsContext.getUtilities();
+        
+        Misc.setComboboxSelectedTagValue(jComboBoxPDFVersion, pref.get(JRPdfExporterParameter.PROPERTY_PDF_VERSION, jrPropUtils.getProperty(JRPdfExporterParameter.PROPERTY_PDF_VERSION)));
+        Misc.setComboboxSelectedTagValue(jComboBoxPdfA, pref.get(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE, jrPropUtils.getProperty(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE)));
 
-        jTextFieldICC.setText(pref.get(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH, Misc.nvl(JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH),"")));
+        jTextFieldICC.setText(pref.get(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH, Misc.nvl(jrPropUtils.getProperty(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH),"")));
 
-        jCheckBoxCreatingBatchModeBookmarks.setSelected( pref.getBoolean(JRPdfExporterParameter.PROPERTY_CREATE_BATCH_MODE_BOOKMARKS, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_CREATE_BATCH_MODE_BOOKMARKS)));
-        jCheckBoxCompressed.setSelected( pref.getBoolean(JRPdfExporterParameter.PROPERTY_COMPRESSED, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_COMPRESSED)));
-        jCheckBoxForceLinebreakPolicy.setSelected( pref.getBoolean(JRPdfExporterParameter.PROPERTY_FORCE_LINEBREAK_POLICY, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_FORCE_LINEBREAK_POLICY)));
-        jCheckBoxForceSVGShapes.setSelected( pref.getBoolean(JRPdfExporterParameter.PROPERTY_FORCE_SVG_SHAPES, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_FORCE_SVG_SHAPES)));
-        jCheckBoxIsTagged.setSelected( pref.getBoolean(JRPdfExporterParameter.PROPERTY_TAGGED, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_TAGGED)));
+        jCheckBoxCreatingBatchModeBookmarks.setSelected( pref.getBoolean(JRPdfExporterParameter.PROPERTY_CREATE_BATCH_MODE_BOOKMARKS, jrPropUtils.getBooleanProperty(JRPdfExporterParameter.PROPERTY_CREATE_BATCH_MODE_BOOKMARKS)));
+        jCheckBoxCompressed.setSelected( pref.getBoolean(JRPdfExporterParameter.PROPERTY_COMPRESSED, jrPropUtils.getBooleanProperty(JRPdfExporterParameter.PROPERTY_COMPRESSED)));
+        jCheckBoxForceLinebreakPolicy.setSelected( pref.getBoolean(JRPdfExporterParameter.PROPERTY_FORCE_LINEBREAK_POLICY, jrPropUtils.getBooleanProperty(JRPdfExporterParameter.PROPERTY_FORCE_LINEBREAK_POLICY)));
+        jCheckBoxForceSVGShapes.setSelected( pref.getBoolean(JRPdfExporterParameter.PROPERTY_FORCE_SVG_SHAPES, jrPropUtils.getBooleanProperty(JRPdfExporterParameter.PROPERTY_FORCE_SVG_SHAPES)));
+        jCheckBoxIsTagged.setSelected( pref.getBoolean(JRPdfExporterParameter.PROPERTY_TAGGED, jrPropUtils.getBooleanProperty(JRPdfExporterParameter.PROPERTY_TAGGED)));
 
         jComboBoxEncryption.setSelectedIndex(0);
-        if (pref.getBoolean(JRPdfExporterParameter.PROPERTY_ENCRYPTED, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_ENCRYPTED)))
+        if (pref.getBoolean(JRPdfExporterParameter.PROPERTY_ENCRYPTED, jrPropUtils.getBooleanProperty(JRPdfExporterParameter.PROPERTY_ENCRYPTED)))
         {
             jComboBoxEncryption.setSelectedIndex(1);
         }
-        if (pref.getBoolean(JRPdfExporterParameter.PROPERTY_128_BIT_KEY, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_128_BIT_KEY)))
+        if (pref.getBoolean(JRPdfExporterParameter.PROPERTY_128_BIT_KEY, jrPropUtils.getBooleanProperty(JRPdfExporterParameter.PROPERTY_128_BIT_KEY)))
         {
             jComboBoxEncryption.setSelectedIndex(2);
         }
@@ -120,8 +124,8 @@ public class PdfExportParametersPanel extends AbstractExportParametersPanel {
         jTextFieldMetadataTitle.setText(pref.get("export.pdf.METADATA_TITLE", ""));
         jTextFieldOwnerPassword.setText(pref.get("export.pdf.OWNER_PASSWORD", ""));
         jTextFieldUserPassword.setText(pref.get("export.pdf.USER_PASSWORD", ""));
-        jTextFieldTagLanguage.setText(pref.get("export.pdf.TAG_LANGUAGE", JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_TAG_LANGUAGE)));
-        jTextAreaPDFJavascript.setText(pref.get("export.pdf.PDF_JAVASCRIPT", JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDF_JAVASCRIPT)));
+        jTextFieldTagLanguage.setText(pref.get("export.pdf.TAG_LANGUAGE", jrPropUtils.getProperty(JRPdfExporterParameter.PROPERTY_TAG_LANGUAGE)));
+        jTextAreaPDFJavascript.setText(pref.get("export.pdf.PDF_JAVASCRIPT", jrPropUtils.getProperty(JRPdfExporterParameter.PROPERTY_PDF_JAVASCRIPT)));
 
         int documentPermissions = pref.getInt("export.pdf.PERMISSIONS",0);
         jCheckBoxAllawDegradedPrinting.setSelected( (documentPermissions & PdfWriter.ALLOW_DEGRADED_PRINTING) > 0);

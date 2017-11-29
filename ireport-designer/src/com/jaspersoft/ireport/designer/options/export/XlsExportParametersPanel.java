@@ -23,17 +23,16 @@
  */
 package com.jaspersoft.ireport.designer.options.export;
 
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.prefs.Preferences;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.export.JExcelApiExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
-import net.sf.jasperreports.engine.util.JRProperties;
-import com.jaspersoft.ireport.designer.sheet.Tag;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporter;
 
 /**
@@ -508,43 +507,45 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
     public void load() {
         setInit(true);
         Preferences pref = IReportManager.getPreferences();
-
-        jCheckBoxCreateCustomPalette.setSelected( pref.getBoolean(JExcelApiExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE, JRProperties.getBooleanProperty(JExcelApiExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE)));
-        jTextFieldPassword.setText(  pref.get(JExcelApiExporterParameter.PROPERTY_PASSWORD, JRProperties.getProperty(JExcelApiExporterParameter.PROPERTY_PASSWORD)));
-
-        jCheckBoxCollapseRowSpan.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
         
-        jCheckBoxAutoDetectCellType.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
-        jCheckBoxFontSizeFixEnabled.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
-        jCheckBoxIgnoreCellBorder.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
-        jCheckBoxIgnoreCellBackground.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND)));
+        JRPropertiesUtil jrPropUtils = IRLocalJasperReportsContext.getUtilities();
+        
+        jCheckBoxCreateCustomPalette.setSelected( pref.getBoolean(JExcelApiExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE, jrPropUtils.getBooleanProperty(JExcelApiExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE)));
+        jTextFieldPassword.setText(  pref.get(JExcelApiExporterParameter.PROPERTY_PASSWORD, jrPropUtils.getProperty(JExcelApiExporterParameter.PROPERTY_PASSWORD)));
 
-        jCheckBoxIgnoreGraphics.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS)));
-        jCheckBoxImageBorderFixEnabled.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED)));
-        jCheckBoxOnePagePerSheet.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET)));
-        jCheckBoxRemoveEmptySpaceBetweenColumns.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS)));
-        jCheckBoxRemoveEmptySpaceBetweenRows.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS)));
-        jCheckBoxWhitePageBackground.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND)));
+        jCheckBoxCollapseRowSpan.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN, jrPropUtils.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
+        
+        jCheckBoxAutoDetectCellType.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE, jrPropUtils.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
+        jCheckBoxFontSizeFixEnabled.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED, jrPropUtils.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
+        jCheckBoxIgnoreCellBorder.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER, jrPropUtils.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN)));
+        jCheckBoxIgnoreCellBackground.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND, jrPropUtils.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND)));
+
+        jCheckBoxIgnoreGraphics.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS, jrPropUtils.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS)));
+        jCheckBoxImageBorderFixEnabled.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED, jrPropUtils.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED)));
+        jCheckBoxOnePagePerSheet.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET, jrPropUtils.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET)));
+        jCheckBoxRemoveEmptySpaceBetweenColumns.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, jrPropUtils.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS)));
+        jCheckBoxRemoveEmptySpaceBetweenRows.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, jrPropUtils.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS)));
+        jCheckBoxWhitePageBackground.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND, jrPropUtils.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND)));
 
         SpinnerNumberModel model = (SpinnerNumberModel)jSpinnerMaximumRowsPerSheet.getModel();
-        model.setValue( pref.getInt(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET, JRProperties.getIntegerProperty(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET)));
+        model.setValue( pref.getInt(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET, jrPropUtils.getIntegerProperty(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET)));
 
-        jCheckBoxUseSheetNames.setSelected( pref.getBoolean(JRProperties.PROPERTY_PREFIX + "export.xls.useSheetNames", false));
+        jCheckBoxUseSheetNames.setSelected( pref.getBoolean(JRPropertiesUtil.PROPERTY_PREFIX + "export.xls.useSheetNames", false));
 
         // freeze pane...
-        String columnIndex = JRProperties.getProperty(JRXlsAbstractExporter.PROPERTY_FREEZE_COLUMN);
+        String columnIndex = jrPropUtils.getProperty(JRXlsAbstractExporter.PROPERTY_FREEZE_COLUMN);
         if (columnIndex == null) columnIndex = "";
         jTextFieldColumn.setText( pref.get(JRXlsAbstractExporter.PROPERTY_FREEZE_COLUMN, columnIndex));
-        ((SpinnerNumberModel)jSpinnerFreezeRow.getModel()).setValue( pref.getInt(JRXlsAbstractExporter.PROPERTY_FREEZE_ROW, JRProperties.getIntegerProperty(JRXlsAbstractExporter.PROPERTY_FREEZE_ROW,0)));
+        ((SpinnerNumberModel)jSpinnerFreezeRow.getModel()).setValue( pref.getInt(JRXlsAbstractExporter.PROPERTY_FREEZE_ROW, jrPropUtils.getIntegerProperty(JRXlsAbstractExporter.PROPERTY_FREEZE_ROW,0)));
 
-        //com.jaspersoft.ireport.designer.utils.Misc.setComboBoxTag(true, pref.get(JRXlsAbstractExporter.PROPERTY_FREEZE_COLUMN_EDGE, JRProperties.getProperty(JRXlsAbstractExporter.PROPERTY_FREEZE_COLUMN_EDGE)), jComboBoxColumnEdge);
-        //com.jaspersoft.ireport.designer.utils.Misc.setComboBoxTag(true, pref.get(JRXlsAbstractExporter.PROPERTY_FREEZE_ROW_EDGE, JRProperties.getProperty(JRXlsAbstractExporter.PROPERTY_FREEZE_ROW_EDGE)), jComboBoxRowEdge);
-
-        
-        jTextArea1.setText(pref.get(JRProperties.PROPERTY_PREFIX + "export.xls.sheetNames", JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET)));
+        //com.jaspersoft.ireport.designer.utils.Misc.setComboBoxTag(true, pref.get(JRXlsAbstractExporter.PROPERTY_FREEZE_COLUMN_EDGE, jrPropUtils.getProperty(JRXlsAbstractExporter.PROPERTY_FREEZE_COLUMN_EDGE)), jComboBoxColumnEdge);
+        //com.jaspersoft.ireport.designer.utils.Misc.setComboBoxTag(true, pref.get(JRXlsAbstractExporter.PROPERTY_FREEZE_ROW_EDGE, jrPropUtils.getProperty(JRXlsAbstractExporter.PROPERTY_FREEZE_ROW_EDGE)), jComboBoxRowEdge);
 
         
-        jCheckBoxFixFontSize.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED, JRProperties.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED)));
+        jTextArea1.setText(pref.get(JRPropertiesUtil.PROPERTY_PREFIX + "export.xls.sheetNames", jrPropUtils.getProperty(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET)));
+
+        
+        jCheckBoxFixFontSize.setSelected( pref.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED, jrPropUtils.getBooleanProperty(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED)));
 
         
         setInit(false);
@@ -572,8 +573,8 @@ public class XlsExportParametersPanel extends AbstractExportParametersPanel {
         SpinnerNumberModel model = (SpinnerNumberModel)jSpinnerMaximumRowsPerSheet.getModel();
         pref.putInt(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET, model.getNumber().intValue());
 
-        pref.putBoolean(JRProperties.PROPERTY_PREFIX + "export.xls.useSheetNames",  jCheckBoxUseSheetNames.isSelected() );
-        pref.put(JRProperties.PROPERTY_PREFIX + "export.xls.sheetNames", jTextArea1.getText().trim());
+        pref.putBoolean(JRPropertiesUtil.PROPERTY_PREFIX + "export.xls.useSheetNames",  jCheckBoxUseSheetNames.isSelected() );
+        pref.put(JRPropertiesUtil.PROPERTY_PREFIX + "export.xls.sheetNames", jTextArea1.getText().trim());
 
 
         pref.put(JRXlsAbstractExporter.PROPERTY_FREEZE_COLUMN,  jTextFieldColumn.getText() );

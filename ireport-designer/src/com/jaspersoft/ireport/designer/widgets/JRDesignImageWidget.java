@@ -24,6 +24,7 @@
 package com.jaspersoft.ireport.designer.widgets;
 
 import com.jaspersoft.ireport.designer.AbstractReportObjectScene;
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import com.jaspersoft.ireport.designer.utils.ImageExpressionFileResolver;
@@ -125,7 +126,9 @@ public class JRDesignImageWidget extends JRDesignElementWidget implements Runnab
 
                 fileResolver.addResolver(resolver);
             }
-            JRResourcesUtil.setThreadFileResolver(fileResolver);
+            
+            IRLocalJasperReportsContext.getInstance().setFileResolver(fileResolver);
+            //JRResourcesUtil.setThreadFileResolver(fileResolver);
 
             try
             {

@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.jasperserver.ui.resources;
 
+import com.jaspersoft.ireport.designer.utils.ConfigurablePlainDocument;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
@@ -61,6 +62,7 @@ public class ListOfValuesDialog extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         javax.swing.event.DocumentListener changesListener = new javax.swing.event.DocumentListener() {
             public void changedUpdate(javax.swing.event.DocumentEvent evt) {
+                
                 updateSaveButton();
             }
             public void insertUpdate(javax.swing.event.DocumentEvent evt) {
@@ -75,8 +77,14 @@ public class ListOfValuesDialog extends javax.swing.JDialog {
         lm.setRowCount(0);
         jTableLOV.updateUI();
         
+        this.jTextFieldName.setDocument(new ConfigurablePlainDocument(100));
+        this.jTextFieldLabel.setDocument(new ConfigurablePlainDocument(100));
+        this.jEditorPaneDescription.setDocument(new ConfigurablePlainDocument(250));
+        
         this.jTextFieldLabel.getDocument().addDocumentListener(changesListener);
         this.jTextFieldName.getDocument().addDocumentListener(changesListener);
+        
+        
         jTextFieldName.requestFocusInWindow();
 
         jTableLOV.getSelectionModel().addListSelectionListener(new javax.swing.event.ListSelectionListener() {

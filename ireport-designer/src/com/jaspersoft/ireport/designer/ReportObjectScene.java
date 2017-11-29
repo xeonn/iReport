@@ -147,7 +147,7 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
             updateSectionListeners();
 
             this.drawVisitor = 
-                    new ConfigurableDrawVisitor(new ReportConverter(jasperDesign, true), null);
+                    new ConfigurableDrawVisitor(jasperDesign, null);
             ThreadUtils.invokeInAWTThread(new Runnable() {
 
                 public void run() {

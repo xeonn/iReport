@@ -139,7 +139,7 @@ public class CrosstabObjectScene extends AbstractReportObjectScene implements Pr
                 return;
             }
 
-            this.drawVisitor = new ConfigurableDrawVisitor(jasperDesign, null);
+            this.drawVisitor = new ConfigurableDrawVisitor( jasperDesign, null);
             jasperDesign.getEventSupport().addPropertyChangeListener(this);
             
             // Adding listeners for groups...

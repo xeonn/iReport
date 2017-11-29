@@ -23,11 +23,17 @@
  */
 package com.jaspersoft.ireport.jasperserver.ui;
 
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
+import com.jaspersoft.ireport.designer.IReportManager;
+import com.jaspersoft.ireport.designer.ThreadUtils;
+import com.jaspersoft.ireport.designer.tools.JrxmlPreviewToolbar;
 import java.awt.BorderLayout;
+import java.awt.Graphics2D;
 import java.io.Serializable;
 import java.util.logging.Logger;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.swing.JRViewer;
+import net.sf.jasperreports.swing.JRViewerController;
+import net.sf.jasperreports.swing.JRViewerPanel;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
@@ -43,22 +49,74 @@ final public class JRViewerTopComponent extends TopComponent {
 //    static final String ICON_PATH = "SET/PATH/TO/ICON/HERE";
 
     private static final String PREFERRED_ID = "JRViewerTopComponent";
+    
+    
+    JRViewerController viewerContext = new JRViewerController(IRLocalJasperReportsContext.getInstance(), null, null);
+    JrxmlPreviewToolbar viewerToolbar = new JrxmlPreviewToolbar(viewerContext);
+    
 
     private JRViewerTopComponent() {
         initComponents();
         setName(NbBundle.getMessage(JRViewerTopComponent.class, "CTL_JRViewerTopComponent"));
         setToolTipText(NbBundle.getMessage(JRViewerTopComponent.class, "HINT_JRViewerTopComponent"));
 //        setIcon(Utilities.loadImage(ICON_PATH, true));
+        
     }
     
     
-    public void setJasperPrint(JasperPrint print)
+//    public void setJasperPrint(JasperPrint print)
+//    {
+//        JRViewer viewer = new JRViewer(print);
+//        this.removeAll();
+//        this.add(viewer, BorderLayout.CENTER);
+//        this.updateUI();
+//        
+//    }
+        
+    public void setJasperPrint(final JasperPrint print)
     {
-        JRViewer viewer = new JRViewer(print);
-        this.removeAll();
-        this.add(viewer, BorderLayout.CENTER);
-        this.updateUI();
+        ThreadUtils.invokeInAWTThread( new Runnable()
+        {
+            public void run()
+            {
+                removeAll();
+        
+                if (print != null)
+                {
+                    JRViewerPanel viewerPanel = 
+                        new JRViewerPanel(viewerContext)
+                        {
+                            protected void paintPage(Graphics2D grx) 
+                            {
+                                ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader(); 
+                                try
+                                {
+                                    Thread.currentThread().setContextClassLoader(IReportManager.getJRExtensionsClassLoader());
+                                    super.paintPage(grx);
+                                }
+                                finally
+                                {
+                                    Thread.currentThread().setContextClassLoader(oldClassLoader);
+                                }
+                            }
+                    	};
+
+                    add(viewerPanel, BorderLayout.CENTER);
+                    add(viewerToolbar, BorderLayout.NORTH);
+
+                    viewerContext.loadReport(print);
+                                        
+                    viewerToolbar.init();
+                    viewerContext.refreshPage();
+                    viewerPanel.updateUI();
+                }
+                updateUI();
+                
+            }
+        });
+        
     }
+
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -137,4 +195,8 @@ final public class JRViewerTopComponent extends TopComponent {
             return JRViewerTopComponent.getDefault();
         }
     }
+    
+    
+    
+    
 }

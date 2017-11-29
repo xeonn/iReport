@@ -23,11 +23,13 @@
  */
 package com.jaspersoft.ireport.designer.options.jasperreports;
 
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
 /**
  *
@@ -43,8 +45,10 @@ public class JRPropertyTableCellRenderer extends DefaultTableCellRenderer {
 
         if (column == 0)
         {
-            if (IReportManager.getInstance().getDefaultJasperReportsProperties().containsKey(value))
-            setText("<html><i>" + value );
+            if (IRLocalJasperReportsContext.isJasperReportsDefaultProperty((String)value, null, true))
+            {
+                setText("<html><i>" + value );
+            }
         }
         else if (column == 1)
         {

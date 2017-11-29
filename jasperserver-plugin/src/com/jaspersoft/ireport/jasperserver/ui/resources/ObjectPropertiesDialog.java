@@ -28,6 +28,7 @@ import com.jaspersoft.ireport.JrxmlDataObject;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import com.jaspersoft.ireport.designer.fonts.TTFFontsLoader;
+import com.jaspersoft.ireport.designer.utils.ConfigurablePlainDocument;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
 import com.jaspersoft.ireport.jasperserver.RepositoryFile;
 import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
@@ -50,6 +51,10 @@ public class ObjectPropertiesDialog extends javax.swing.JDialog {
     public ObjectPropertiesDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        this.jTextFieldName.setDocument(new ConfigurablePlainDocument(100));
+        this.jTextFieldLabel.setDocument(new ConfigurablePlainDocument(100));
+        this.jEditorPaneDescription.setDocument(new ConfigurablePlainDocument(250));
         
         this.setLocationRelativeTo(null);
         this.jTextFieldLabel.getDocument().addDocumentListener( new javax.swing.event.DocumentListener() {

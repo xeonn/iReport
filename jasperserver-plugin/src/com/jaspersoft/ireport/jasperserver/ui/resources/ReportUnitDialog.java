@@ -27,6 +27,7 @@ import com.jaspersoft.ireport.JrxmlDataObject;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.JrxmlVisualView;
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.designer.utils.ConfigurablePlainDocument;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
@@ -77,6 +78,11 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         jComboBoxControlsLayout.addItem(new Tag( ""+4, // there is no constant for this one.
                                                   JasperServerManager.getString("reportUnitDialog.controlLayout.inPage", "In page")));
 
+        
+        this.jTextFieldName.setDocument(new ConfigurablePlainDocument(100));
+        this.jTextFieldLabel.setDocument(new ConfigurablePlainDocument(100));
+        this.jEditorPaneDescription.setDocument(new ConfigurablePlainDocument(250));
+        
         setLocationRelativeTo(null);
         this.jTextFieldLabel.getDocument().addDocumentListener( new javax.swing.event.DocumentListener() {
             public void changedUpdate(javax.swing.event.DocumentEvent evt) {
@@ -117,6 +123,8 @@ public class ReportUnitDialog extends javax.swing.JDialog {
         jTextFieldName.requestFocusInWindow();
         jRadioButtonRepo.setSelected(true);
         jRadioButtonLocalDataSource.setSelected(false);
+        
+        
         
         this.setControlsSupportActive(false);
         this.setResourcesSupportActive(false);

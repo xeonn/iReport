@@ -31,6 +31,7 @@ import net.sf.jasperreports.engine.JRExporter;
 import com.jaspersoft.jrx.export.JRTxtExporter;
 import com.jaspersoft.jrx.export.JRTxtExporterParameter;
 import java.util.prefs.Preferences;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 /**
  *
@@ -55,6 +56,9 @@ public class JRTxtExporterFactory implements ExporterFactory {
     }
 
     public JRExporter createExporter() {
+        return createExporter(null);
+    }
+    public JRExporter createExporter(JasperReportsContext context) {
         JRTxtExporter exporter = new JRTxtExporter();
 
         // configuring the exporter...

@@ -283,7 +283,7 @@ public class RepositoryJrxmlFile extends RepositoryFile {
         for (int i=0; i<ruDesc.getChildren().size(); ++i)
         {
             ResourceDescriptor rd = (ResourceDescriptor) ruDesc.getChildren().get(i);
-            if (rd.getName().equals(newName))
+            if (rd.getName() != null && rd.getName().equals(newName))
             {
                 return getValidName( name,  ruDesc, ++k );
             }

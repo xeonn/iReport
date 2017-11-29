@@ -65,7 +65,7 @@ public class CreateDrillDownAction extends PaletteItemAction  {
         {
             if (w instanceof JRDesignElementWidget)
             {
-                System.out.println("check if hit: " + w + " " + p + " " + w.getLocation() + "  " + w.getBounds());
+                //System.out.println("check if hit: " + w + " " + p + " " + w.getLocation() + "  " + w.getBounds());
                 Rectangle r = w.getBounds();
                 r.x = w.getLocation().x;
                 r.y = w.getLocation().y;
@@ -73,10 +73,10 @@ public class CreateDrillDownAction extends PaletteItemAction  {
                 if (r.contains(p))
                 {
                     JRDesignElement element = ((JRDesignElementWidget)w).getElement();
-                    System.out.println("Element hit at: " + element);
+                    //System.out.println("Element hit at: " + element);
                     if (element instanceof JRHyperlink)
                     {
-                        System.out.println("Element JRHyperlink hit at: " + element);
+                        //System.out.println("Element JRHyperlink hit at: " + element);
                         JRHyperlink hl = (JRHyperlink)element;
                         JRDesignHyperlink newHl = new JRDesignHyperlink();
                         newHl.setLinkType("ReportExecution");

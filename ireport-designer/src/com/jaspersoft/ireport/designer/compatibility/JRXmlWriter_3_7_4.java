@@ -464,7 +464,7 @@ public class JRXmlWriter_3_7_4 extends JRXmlWriter
 	}
 
 
-	private void writeProperties(JRPropertiesHolder propertiesHolder) throws IOException
+	public void writeProperties(JRPropertiesHolder propertiesHolder) throws IOException
 	{
 		if (propertiesHolder.hasProperties())
 		{
@@ -807,7 +807,7 @@ public class JRXmlWriter_3_7_4 extends JRXmlWriter
 	}
 
 
-	protected void writePropertyExpressions(
+	public void writePropertyExpressions(
 			JRPropertyExpression[] propertyExpressions) throws IOException
 	{
 		if (propertyExpressions != null)
@@ -948,7 +948,7 @@ public class JRXmlWriter_3_7_4 extends JRXmlWriter
 	/**
 	 *
 	 */
-	private void writeFont(JRFont font) throws IOException
+	public void writeFont(JRFont font) throws IOException
 	{
 		if (font != null)
 		{

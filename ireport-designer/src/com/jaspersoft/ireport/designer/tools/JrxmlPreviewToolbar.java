@@ -28,7 +28,6 @@ import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.JrxmlPreviewView;
 import com.jaspersoft.ireport.designer.templates.TemplateRenderer;
 import com.jaspersoft.ireport.designer.utils.Misc;
-import com.keypoint.PngEncoder;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -61,7 +60,6 @@ import net.sf.jasperreports.swing.JRViewerEvent;
 import net.sf.jasperreports.swing.JRViewerListener;
 import net.sf.jasperreports.view.JRSaveContributor;
 import net.sf.jasperreports.view.save.JRPrintSaveContributor;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -83,6 +81,13 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
     protected DecimalFormat zoomDecimalFormat = new DecimalFormat("#.##");
 
 
+    /** Creates new form JrxmlEditorToolbar */
+    public JrxmlPreviewToolbar(JRViewerController viewerContext)
+    {
+        this(null, viewerContext);
+    }
+    
+    
     /** Creates new form JrxmlEditorToolbar */
     public JrxmlPreviewToolbar(JrxmlPreviewView view, JRViewerController viewerContext)
     {
@@ -107,6 +112,11 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
         btnZoomIn.setToolTipText(I18n.getString("JrxmlPreviewToolbar.btnZoomIn.toolTipText")); // NOI18N
         btnZoomOut.setText(I18n.getString("JrxmlPreviewToolbar.btnZoomOut.text")); // NOI18N
         btnZoomOut.setToolTipText(I18n.getString("JrxmlPreviewToolbar.btnZoomOut.toolTipText")); // NOI18N
+        
+        if (view == null)
+        {
+            this.remove(btnRefresh);
+        }
     }
 
 
@@ -366,8 +376,12 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
     }
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        getView().setNeedRefresh(true);
-        getView().componentShowing();
+        
+        if (getView() != null)
+        {
+            getView().setNeedRefresh(true);
+            getView().componentShowing();
+        }
 }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnZoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomInActionPerformed
@@ -531,8 +545,8 @@ public class JrxmlPreviewToolbar extends JToolBar implements JRViewerListener
 						}
 						catch (Exception ex)
 						{
-							ex.printStackTrace();
-							JOptionPane.showMessageDialog(getView(), getViewerContext().getBundleString(I18n.getString("JrxmlPreviewToolbar.Message.Warning2")));
+							//ex.printStackTrace();
+							JOptionPane.showMessageDialog(Misc.getMainFrame(), getViewerContext().getBundleString(I18n.getString("JrxmlPreviewToolbar.Message.Warning2")));
 						}
 					}
 				}

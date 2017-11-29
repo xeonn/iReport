@@ -84,6 +84,9 @@ final public class RepositoryTopComponent extends TopComponent implements Explor
         
         jToolBar1.add(SystemAction.get(PublishReportUnitAction.class));
         jToolBar1.add(SystemAction.get(RunReportUnitButton.class).createContextAwareInstance(Utilities.actionsGlobalContext()));
+    
+        
+    
     }
 
     /** This method is called from within the constructor to

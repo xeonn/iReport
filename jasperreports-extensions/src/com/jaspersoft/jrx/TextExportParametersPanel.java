@@ -25,13 +25,11 @@ package com.jaspersoft.jrx;
 
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.options.export.AbstractExportParametersPanel;
-import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.prefs.Preferences;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import net.sf.jasperreports.engine.util.JRProperties;
 
 /**
  *

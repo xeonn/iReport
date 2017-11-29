@@ -81,7 +81,7 @@ public class ProxySettings {
             httpsPort           = System.getProperty("https.proxyPort",    "");                                             // NOI18N           
         }
         
-        System.out.println(this);
+        
     }
    
     public boolean isDirect() {

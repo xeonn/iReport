@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer.options;
 
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import com.jaspersoft.ireport.designer.fonts.SimpleFontFamilyEx;
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.IReportManager;
@@ -75,10 +76,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.charts.ChartThemeBundle;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
+import net.sf.jasperreports.engine.design.JRCompiler;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fonts.SimpleFontFamily;
 import net.sf.jasperreports.engine.util.JRFontUtil;
-import net.sf.jasperreports.engine.util.JRProperties;
 import net.sf.jasperreports.extensions.ExtensionsEnvironment;
 
 final class IReportPanel extends javax.swing.JPanel {
@@ -246,7 +248,8 @@ final class IReportPanel extends javax.swing.JPanel {
         //jTabbedPane1.remove(5);
 
         jComboBoxCompatibility.addItem(new Tag("", "Last version"));
-        jComboBoxCompatibility.addItem(new Tag("4_0_1", "JasperReports 4_0_1"));
+        jComboBoxCompatibility.addItem(new Tag("4_5_0", "JasperReports 4.5.0"));
+        jComboBoxCompatibility.addItem(new Tag("4_0_1", "JasperReports 4.0.1"));
         jComboBoxCompatibility.addItem(new Tag("3_7_4", "JasperReports 3.7.4"));
         jComboBoxCompatibility.addItem(new Tag("3_7_3", "JasperReports 3.7.3"));
         jComboBoxCompatibility.addItem(new Tag("3_7_1", "JasperReports 3.7.1-3.7.2"));
@@ -3146,7 +3149,9 @@ private void jSpinnerEditorFontSizeStateChanged(javax.swing.event.ChangeEvent ev
         jTextFieldLanguage.setText(pref.get("oracle_language", ""));
         jTextFieldTerritory.setText(pref.get("oracle_territory", ""));
 
-        this.jTextFieldVirtualizerDir.setText( pref.get("ReportVirtualizerDirectory", Misc.nvl(JRProperties.getProperty(JRProperties.COMPILER_TEMP_DIR),"")));
+        JRPropertiesUtil jrPropUtils = IRLocalJasperReportsContext.getUtilities();
+        
+        this.jTextFieldVirtualizerDir.setText( pref.get("ReportVirtualizerDirectory", Misc.nvl(jrPropUtils.getProperty(JRCompiler.COMPILER_TEMP_DIR),"")));
         this.jSpinnerVirtualizerSize.setValue(pref.getInt("ReportVirtualizerSize",100));
         Misc.setComboboxSelectedTagValue(jComboBoxVirtualizer, pref.get("ReportVirtualizer", "JRFileVirtualizer") );
         this.jSpinnerVirtualizerBlockSize.setValue(pref.getInt("ReportVirtualizerBlockSize",100));

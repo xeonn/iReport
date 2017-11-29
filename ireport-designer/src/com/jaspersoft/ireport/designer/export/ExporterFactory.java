@@ -24,6 +24,7 @@
 package com.jaspersoft.ireport.designer.export;
 
 import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 /**
  *
@@ -61,6 +62,16 @@ public interface ExporterFactory {
     public String getViewer();
 
     /**
+     * 
+     *
+     * @return
+     * @deprecated Use createExporter(JasperReportsContext context);
+     */
+    public JRExporter createExporter();
+    
+    
+    /**
+     * 
      * This function creates and configures the exporter. Extra parameters
      * can be set or replaced by the IReportCompiler class. In particular this
      * class will set these parameters:
@@ -77,9 +88,10 @@ public interface ExporterFactory {
      * JRExporterParameter.OFFSET_Y
      *
      * if propertly requested by the user with the general export options panel.
-     *
-     * @return
+     * 
+     * @param context
+     * @return 
      */
-    public JRExporter createExporter();
+    public JRExporter createExporter(JasperReportsContext context);
 
 }

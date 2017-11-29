@@ -66,13 +66,12 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoableEdit;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.FileResolver;
-import net.sf.jasperreports.engine.util.JRProperties;
-import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
 import org.apache.xerces.parsers.DOMParser;
 import org.netbeans.api.db.explorer.JDBCDriver;
 import org.netbeans.api.db.explorer.JDBCDriverManager;
@@ -125,82 +124,83 @@ public class IReportManager {
     private boolean noNetwork = false;
 
 
-    /**
-     * The jasperReports properties are stored in the JRProperties class.
-     * Anyway the set of properties stored here may change at run time when
-     * a report is compiled or executed. This methods returns the properties
-     * has they are stored in iReport. If you need to set a JRProperty,
-     * make sure you use the method setPersistentJRPRoperty().
-     * The reloadJasperReportsProperties method relies on this one to
-     * reload the properties. Please note that changes made to the JRProperties
-     * that are not done using setPersistentJRPRoperty may be lost during the
-     * use of iReport.
-     * @return
-     */
-    public Properties getPersistentJRProperties()
-    {
-        Properties persistentProperties = new Properties();
+//    /**
+//     * The jasperReports properties are stored in the JRProperties class.
+//     * Anyway the set of properties stored here may change at run time when
+//     * a report is compiled or executed. This methods returns the properties
+//     * has they are stored in iReport. If you need to set a JRProperty,
+//     * make sure you use the method setPersistentJRPRoperty().
+//     * The reloadJasperReportsProperties method relies on this one to
+//     * reload the properties. Please note that changes made to the JRProperties
+//     * that are not done using setPersistentJRPRoperty may be lost during the
+//     * use of iReport.
+//     * 
+//     * @return
+//     */
+//    public Properties getPersistentJRProperties()
+//    {
+//        Properties persistentProperties = new Properties();
+//
+//        Properties props = getDefaultJasperReportsProperties();
+//        Enumeration en = props.keys();
+//        while (en.hasMoreElements())
+//        {
+//            String key = (String) en.nextElement();
+//            persistentProperties.setProperty(key, props.getProperty(key));
+//        }
+//
+//        // Setting JR properties saved in iReport....
+//        String[] keys = null;
+//        try {
+//            keys = getPreferences().keys();
+//        } catch (BackingStoreException ex) {
+//            //Exceptions.printStackTrace(ex);
+//        }
+//        for (int i=0; keys != null && i<keys.length; ++i)
+//        {
+//            if (keys[i].startsWith(PROPERTY_JRPROPERTY_PREFIX))
+//            {
+//                String name = keys[i].substring(PROPERTY_JRPROPERTY_PREFIX.length());
+//                String value = getPreferences().get(keys[i], null);
+//                if (value == null || name.length() == 0)
+//                {
+//                    getPreferences().remove(keys[i]);
+//                }
+//                else
+//                {
+//                    persistentProperties.setProperty(name, value);
+//                }
+//            }
+//        }
+//
+//        return persistentProperties;
+//    }
 
-        Properties props = getDefaultJasperReportsProperties();
-        Enumeration en = props.keys();
-        while (en.hasMoreElements())
-        {
-            String key = (String) en.nextElement();
-            persistentProperties.setProperty(key, props.getProperty(key));
-        }
-
-        // Setting JR properties saved in iReport....
-        String[] keys = null;
-        try {
-            keys = getPreferences().keys();
-        } catch (BackingStoreException ex) {
-            //Exceptions.printStackTrace(ex);
-        }
-        for (int i=0; keys != null && i<keys.length; ++i)
-        {
-            if (keys[i].startsWith(PROPERTY_JRPROPERTY_PREFIX))
-            {
-                String name = keys[i].substring(PROPERTY_JRPROPERTY_PREFIX.length());
-                String value = getPreferences().get(keys[i], null);
-                if (value == null || name.length() == 0)
-                {
-                    getPreferences().remove(keys[i]);
-                }
-                else
-                {
-                    persistentProperties.setProperty(name, value);
-                }
-            }
-        }
-
-        return persistentProperties;
-    }
-
-    /**
-     * This method reset the JRProperties to the set of persisten properties
-     * set in iReport.
-     */
-    public void reloadJasperReportsProperties() {
-        
-        Properties props = getPersistentJRProperties();
-        Enumeration en = props.keys();
-        while (en.hasMoreElements())
-        {
-            String key = (String) en.nextElement();
-            JRProperties.setProperty(key, props.getProperty(key));
-        }
-
-        // remove other keys...
-        List keys = JRProperties.getProperties("");
-        for (int i=0; i<keys.size(); ++i)
-        {
-            PropertySuffix k = (JRProperties.PropertySuffix)keys.get(i);
-            if (!props.containsKey(k.getKey()))
-            {
-                JRProperties.removePropertyValue(k.getKey());
-            }
-        }
-    }
+//    /**
+//     * This method reset the JRProperties to the set of persisten properties
+//     * set in iReport.
+//     */
+//    public void reloadJasperReportsProperties() {
+//        
+//        Properties props = getPersistentJRProperties();
+//        Enumeration en = props.keys();
+//        while (en.hasMoreElements())
+//        {
+//            String key = (String) en.nextElement();
+//            JRProperties.setProperty(key, props.getProperty(key));
+//        }
+//
+//        // remove other keys...
+//        List keys = JRProperties.getProperties("");
+//        for (int i=0; i<keys.size(); ++i)
+//        {
+//            PropertySuffix k = (JRProperties.PropertySuffix)keys.get(i);
+//            if (!props.containsKey(k.getKey()))
+//            {
+//                JRProperties.removePropertyValue(k.getKey());
+//            }
+//        }
+//    }
 
     /**
      * This is the most clean way to set a JRProperties property.
@@ -209,22 +209,26 @@ public class IReportManager {
      * (i.e. after a report execution).
      * 
      * @param key - If null does nothing
-     * @param value - If null, remove the property
+     * @param value - If null, set the property to null (which means like remove it)
      */
     public void setJRProperty(String key, String value)
     {
         if (key == null) return;
-        if (value == null)
+        
+        Preferences prefs = getPreferences();
+        
+        if (value != null)
         {
-            JRProperties.removePropertyValue(key);
-            getDefaultJasperReportsProperties().remove(key);
+            prefs.put( PROPERTY_JRPROPERTY_PREFIX + key, value);
         }
         else
         {
-            JRProperties.setProperty(key, value);
-            getDefaultJasperReportsProperties().setProperty(key, value);
+            prefs.remove( PROPERTY_JRPROPERTY_PREFIX + key);
         }
     }
+    
+    
+    
 
     private java.util.ArrayList<IReportConnection> connections = null;
     private java.util.ArrayList<QueryExecuterDef> queryExecuters = null;
@@ -245,7 +249,7 @@ public class IReportManager {
     private UndoableEdit lastUndoableEdit = null;
     private long lastUndoableEditTime = 0;
     private java.util.List<ExporterFactory> exporterFactories = null;
-    private Properties defaultJasperReportsProperties = null;
+//    private Properties defaultJasperReportsProperties = null;
 
 
     public static ElementNode getComponentNode(JasperDesign jd, JRDesignComponentElement componentElement, Lookup lkp) {
@@ -413,45 +417,49 @@ public class IReportManager {
 
         queryExecuters.clear();
 
+        
+        JRPropertiesUtil jrPropUtils = IRLocalJasperReportsContext.getUtilities();
+        
+        
         // Adding defaults....
         addQueryExecuterDef(new QueryExecuterDef("sql",
-                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.sql"),
+                    jrPropUtils.getProperty("net.sf.jasperreports.query.executer.factory.sql"),
                     "com.jaspersoft.ireport.designer.data.fieldsproviders.SQLFieldsProvider", true), true);
 
         addQueryExecuterDef(new QueryExecuterDef("SQL",
-                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.SQL"),
+                    jrPropUtils.getProperty("net.sf.jasperreports.query.executer.factory.SQL"),
                     "com.jaspersoft.ireport.designer.data.fieldsproviders.SQLFieldsProvider", true), true);
 
         addQueryExecuterDef(new QueryExecuterDef("xPath",
-                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.xPath"),
+                    jrPropUtils.getProperty("net.sf.jasperreports.query.executer.factory.xPath"),
                     "com.jaspersoft.ireport.designer.data.fieldsproviders.XMLFieldsProvider", true), true);
 
         addQueryExecuterDef(new QueryExecuterDef("XPath",
-                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.XPath"),
+                    jrPropUtils.getProperty("net.sf.jasperreports.query.executer.factory.XPath"),
                     "com.jaspersoft.ireport.designer.data.fieldsproviders.XMLFieldsProvider", true), true);
 
         addQueryExecuterDef(new QueryExecuterDef("hql",
-                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.hql"),
+                    jrPropUtils.getProperty("net.sf.jasperreports.query.executer.factory.hql"),
                     "com.jaspersoft.ireport.designer.data.fieldsproviders.HQLFieldsProvider", true), true);
 
         addQueryExecuterDef(new QueryExecuterDef("mdx",
-                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.mdx"),
+                    jrPropUtils.getProperty("net.sf.jasperreports.query.executer.factory.mdx"),
                     "com.jaspersoft.ireport.designer.data.fieldsproviders.MDXFieldsProvider", true), true);
 
         addQueryExecuterDef(new QueryExecuterDef("MDX",
-                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.MDX"),
+                    jrPropUtils.getProperty("net.sf.jasperreports.query.executer.factory.MDX"),
                     "com.jaspersoft.ireport.designer.data.fieldsproviders.MDXFieldsProvider", true), true);
 
         addQueryExecuterDef(new QueryExecuterDef("ejbql",
-                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.ejbql"),
+                    jrPropUtils.getProperty("net.sf.jasperreports.query.executer.factory.ejbql"),
                     "com.jaspersoft.ireport.designer.data.fieldsproviders.EJBQLFieldsProvider", true), true);
 
         addQueryExecuterDef(new QueryExecuterDef("EJBQL",
-                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.EJBQL"),
+                    jrPropUtils.getProperty("net.sf.jasperreports.query.executer.factory.EJBQL"),
                     "com.jaspersoft.ireport.designer.data.fieldsproviders.EJBQLFieldsProvider", true), true);
 
         addQueryExecuterDef(new QueryExecuterDef("xmla-mdx",
-                    JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.xmla-mdx"),
+                    jrPropUtils.getProperty("net.sf.jasperreports.query.executer.factory.xmla-mdx"),
                     "com.jaspersoft.ireport.designer.data.fieldsproviders.CincomMDXFieldsProvider", true), true);
 
         // Reload all the qe from the preferences...
@@ -512,7 +520,7 @@ public class IReportManager {
               while (names.hasMoreElements())
               {
                   String name = names.nextElement();
-                  JRProperties.setProperty(name, ireportProps.getProperty(name));
+                  setJRProperty(name, ireportProps.getProperty(name));
               }
               
         } catch (Exception ex)
@@ -520,14 +528,14 @@ public class IReportManager {
             ex.printStackTrace();
         }
         
-        List props = JRProperties.getProperties("");
-
-        for (int i=0; i<props.size(); ++i)
-        {
-            JRProperties.PropertySuffix prop = (JRProperties.PropertySuffix)props.get(i);
-            if (prop.getKey() == null || prop.getValue() == null) continue;
-            getDefaultJasperReportsProperties().setProperty(prop.getKey(), prop.getValue());
-        }
+//        List props = IRLocalJasperReportsContext.getUtilities();
+//
+//        for (int i=0; i<props.size(); ++i)
+//        {
+//            JRProperties.PropertySuffix prop = (JRProperties.PropertySuffix)props.get(i);
+//            if (prop.getKey() == null || prop.getValue() == null) continue;
+//            getDefaultJasperReportsProperties().setProperty(prop.getKey(), prop.getValue());
+//        }
 
         try {
             setJRProperty("net.sf.jasperreports.query.executer.factory.xmla-mdx",
@@ -551,7 +559,7 @@ public class IReportManager {
         // This initialize the query executers.
         getQueryExecuters();
 
-        reloadJasperReportsProperties();
+        //reloadJasperReportsProperties();
         
 
         // Loading fonts...
@@ -1709,23 +1717,23 @@ public class IReportManager {
         return exporterFactories;
     }
 
-    /**
-     * @return the defaultJasperReportsProperties
-     */
-    public Properties getDefaultJasperReportsProperties() {
-        if (defaultJasperReportsProperties == null)
-        {
-            defaultJasperReportsProperties = new Properties();
-        }
-        return defaultJasperReportsProperties;
-    }
-
-    /**
-     * @param defaultJasperReportsProperties the defaultJasperReportsProperties to set
-     */
-    public void setDefaultJasperReportsProperties(Properties defaultJasperReportsProperties) {
-        this.defaultJasperReportsProperties = defaultJasperReportsProperties;
-    }
+//    /**
+//     * @return the defaultJasperReportsProperties
+//     */
+//    public Properties getDefaultJasperReportsProperties() {
+//        if (defaultJasperReportsProperties == null)
+//        {
+//            defaultJasperReportsProperties = new Properties();
+//        }
+//        return defaultJasperReportsProperties;
+//    }
+//
+//    /**
+//     * @param defaultJasperReportsProperties the defaultJasperReportsProperties to set
+//     */
+//    public void setDefaultJasperReportsProperties(Properties defaultJasperReportsProperties) {
+//        this.defaultJasperReportsProperties = defaultJasperReportsProperties;
+//    }
 
     public void addPathToClasspath(String path, boolean reloadable)
     {

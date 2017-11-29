@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer.widgets.visitor;
 
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import java.awt.Graphics2D;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRFrame;
@@ -51,7 +52,7 @@ public class ConfigurableDrawVisitor extends DrawVisitor {
 	 */
 	public ConfigurableDrawVisitor(JRReport report, Graphics2D grx)
 	{
-		this(new ReportConverter(report, true), grx);
+		this(new ReportConverter(IRLocalJasperReportsContext.getInstance(), report, true), grx);
 	}
 
 	/**

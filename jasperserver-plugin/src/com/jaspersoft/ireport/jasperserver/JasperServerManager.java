@@ -24,11 +24,8 @@
 package com.jaspersoft.ireport.jasperserver;
 
 import com.jaspersoft.ireport.designer.IReportManager;
-import com.jaspersoft.ireport.designer.compiler.CompilationStatusEvent;
-import com.jaspersoft.ireport.designer.compiler.CompilationStatusListener;
 import com.jaspersoft.ireport.designer.compiler.IReportCompiler;
 import com.jaspersoft.ireport.designer.sheet.Tag;
-import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -42,10 +39,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.JRProperties;
 import org.openide.filesystems.FileUtil;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;

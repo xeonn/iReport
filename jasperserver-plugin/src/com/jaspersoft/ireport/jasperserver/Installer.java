@@ -4,10 +4,10 @@
  */
 package com.jaspersoft.ireport.jasperserver;
 
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.jasperserver.ws.IReportSSLSocketFactory;
 import com.jaspersoft.ireport.jasperserver.ws.IReportTrustManager;
-import net.sf.jasperreports.engine.util.JRProperties;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.openide.modules.ModuleInstall;
 
@@ -24,13 +24,13 @@ public class Installer extends ModuleInstall {
         IReportManager.getInstance().addCustomLinkType("ReportExecution", "ReportExecution");
 
         // Set a fake query executer for sl languages...
-        if (JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.sl") == null)
+        if (IRLocalJasperReportsContext.getUtilities().getProperty("net.sf.jasperreports.query.executer.factory.sl") == null)
         {
             IReportManager.getInstance().setJRProperty("net.sf.jasperreports.query.executer.factory.sl", "net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory");
         }
 
 
-        if (JRProperties.getProperty("net.sf.jasperreports.query.executer.factory.domain") == null)
+        if (IRLocalJasperReportsContext.getUtilities().getProperty("net.sf.jasperreports.query.executer.factory.domain") == null)
         {
             IReportManager.getInstance().setJRProperty("net.sf.jasperreports.query.executer.factory.domain", "net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory");
         }

@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer.palette.actions;
 
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -35,6 +36,7 @@ import java.util.Map;
 import javax.swing.SwingUtilities;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.engine.JRCommonText;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignTextElement;
 import net.sf.jasperreports.engine.fill.JRMeasuredText;
@@ -174,8 +176,10 @@ public class DefaultCellElementsLayout {
                                     Locale.getDefault()
 				);
 
+                                JasperReportsContext context = IRLocalJasperReportsContext.getInstance();
                                 
-                                JRTextMeasurer measurer = JRTextMeasurerUtil.createTextMeasurer(dte);
+                                JRTextMeasurerUtil measurerUtil = JRTextMeasurerUtil.getInstance(context);
+                                JRTextMeasurer measurer = measurerUtil.createTextMeasurer(dte);
                                 JRMeasuredText measuredText = measurer.measure(  styledText, 0, dte.getHeight(), true);
                                 
                                 if  (measuredText.getTextHeight() > dte.getHeight())

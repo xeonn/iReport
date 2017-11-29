@@ -161,6 +161,9 @@ public class InputControlsUpdater implements Runnable {
             } catch (InvocationTargetException ex) {
             }
         }
+        
+        System.out.println("Update of ic " + ic.getInputControl().getName() + " finished!");
+        System.out.flush();
 
     }
 

@@ -1,3 +1,31 @@
+
+2012-05-21 Version 4.6.0 released
+_______________________________________________________________________________
+- Fixed Bug 23027 [Case #19817] Remove advanced options button for JFreeCharts in iReport
+- Fixed Bug 24264 No validation for list of values name length - mismatch with JasperServer validation rules
+- Fixed Bug 24290 PostgreSQL - Make PostgreSQL default JDBC Driver and JDBC URL
+- Fixed Bug 24499 Available domains drop-down: UI issue on SentOS
+- Fixed Bug 24554 "Time Period" setting in time series charts not working
+- Fixed Bug 24726 MAC OS: UI Issue in Add Datasources dialog
+- Fixed Bug 24906 [case 22065, 22064 +1] iReport does not load last cascading input control parameter correctly
+- Fixed Bug 25855 Add iReport option to prevent "chunked" requests
+- Fixed Bug 25937 [case #23795,+1]Reference to embeded subreport in main report deployment using JS-plugin no longer auto change "repo:"
+- Fixed Bug 26295 Domain Plugin - cannot create filter for domain report in domain plugin
+- Fixed Bug 26663 iReport: 3rd cascading control which depend on 1st master control doesn't get results from query.
+- Fixed Bug 27013 [case #25478] Ability to view resources by ID in repository navigator
+- Fixed Bug 27037 Cannot "get source from current opened report" when in XML mode
+- Fixed Bug 27432 iReport 4.5.0 has duplicated copies of jars. slf4j has old copy of api and impl
+- Fixed Bug 27734 Error loading the report template when editing a report in iReport 4.6.0-pre
+- Fixed Bug 27757 [case 25996] Name attribute in <jasperReports> tag is not changed on "Save as" 
+- Fixed Bug 22171 misspelling of 'succesfully' when replace with current document 
+- Fixed Bug 17591 iReport web service connection doesn't play nicely with proxies 
+- New ability to view resources by ID in repository navigator
+- Fixed Bug 22171 - misspelling of 'succesfully' when replace with current document
+- Fixed Bug 24906 - iReport does not load last cascading input control parameter correctly 
+- Fixed Bug 24554 - "Time Period" setting in time series charts not working
+
+
+
 2012-03-06 Version 4.5.1 released
 _______________________________________________________________________________
 - New MongoDB connection support

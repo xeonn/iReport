@@ -30,9 +30,8 @@ import java.util.prefs.Preferences;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import net.sf.jasperreports.engine.export.JRTextExporter;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.export.JRTextExporterParameter;
-import net.sf.jasperreports.engine.util.JRProperties;
 
 /**
  *
@@ -335,7 +334,7 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
     public void load() {
         setInit(true);
         Preferences pref = IReportManager.getPreferences();
-
+        
         SpinnerNumberModel model = (SpinnerNumberModel)jSpinnerCharacterHeight.getModel();
         model.setValue( pref.getFloat(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT, 0));
 
@@ -348,10 +347,10 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
         model = (SpinnerNumberModel)jSpinnerPageWidth.getModel();
         model.setValue( pref.getInt(JRTextExporterParameter.PROPERTY_PAGE_WIDTH, 0));
 
-        jTextAreaBetweenPagesText.setText(Misc.addSlashesString(pref.get(JRProperties.PROPERTY_PREFIX + "export.txt.betweenPagesText", "")));
-        jCheckBoxNothingBetweenPages.setSelected(pref.getBoolean(JRProperties.PROPERTY_PREFIX + "export.txt.nothingBetweenPages", false)); // This is an iReport specific option!
+        jTextAreaBetweenPagesText.setText(Misc.addSlashesString(pref.get(JRPropertiesUtil.PROPERTY_PREFIX + "export.txt.betweenPagesText", "")));
+        jCheckBoxNothingBetweenPages.setSelected(pref.getBoolean(JRPropertiesUtil.PROPERTY_PREFIX + "export.txt.nothingBetweenPages", false)); // This is an iReport specific option!
 
-        jTextFieldLineSeparator.setText( Misc.addSlashesString(pref.get(JRProperties.PROPERTY_PREFIX + "export.txt.lineSeparator", System.getProperty("line.separator"))));
+        jTextFieldLineSeparator.setText( Misc.addSlashesString(pref.get(JRPropertiesUtil.PROPERTY_PREFIX + "export.txt.lineSeparator", System.getProperty("line.separator"))));
         setInit(false);
     }
 
@@ -372,10 +371,10 @@ public class TextExportParametersPanel extends AbstractExportParametersPanel {
         pref.putInt(JRTextExporterParameter.PROPERTY_PAGE_WIDTH, model.getNumber().intValue());
 
         
-        pref.put(JRProperties.PROPERTY_PREFIX + "export.txt.betweenPagesText", Misc.removeSlashesString(jTextAreaBetweenPagesText.getText()));
-        pref.put(JRProperties.PROPERTY_PREFIX + "export.txt.lineSeparator", Misc.removeSlashesString(jTextFieldLineSeparator.getText()));
+        pref.put(JRPropertiesUtil.PROPERTY_PREFIX + "export.txt.betweenPagesText", Misc.removeSlashesString(jTextAreaBetweenPagesText.getText()));
+        pref.put(JRPropertiesUtil.PROPERTY_PREFIX + "export.txt.lineSeparator", Misc.removeSlashesString(jTextFieldLineSeparator.getText()));
 
-        pref.putBoolean(JRProperties.PROPERTY_PREFIX + "export.txt.nothingBetweenPages", jCheckBoxNothingBetweenPages.isSelected());
+        pref.putBoolean(JRPropertiesUtil.PROPERTY_PREFIX + "export.txt.nothingBetweenPages", jCheckBoxNothingBetweenPages.isSelected());
  
     }
 

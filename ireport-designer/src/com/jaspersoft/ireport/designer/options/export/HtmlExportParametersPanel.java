@@ -23,12 +23,14 @@
  */
 package com.jaspersoft.ireport.designer.options.export;
 
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.prefs.Preferences;
 import javax.swing.JFileChooser;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
-import net.sf.jasperreports.engine.util.JRProperties;
 
 /**
  *
@@ -427,21 +429,23 @@ public class HtmlExportParametersPanel extends AbstractExportParametersPanel {
     public void load() {
         setInit(true);
         Preferences pref = IReportManager.getPreferences();
+        JRPropertiesUtil jrPropUtils = IRLocalJasperReportsContext.getUtilities();
+        JasperReportsContext context = IRLocalJasperReportsContext.getInstance();
+        
+        jCheckBoxFrameAsNestedTables.setSelected( pref.getBoolean(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES, jrPropUtils.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES)));
+        jCheckBoxRemoveEmptySpace.setSelected( pref.getBoolean(JRHtmlExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, jrPropUtils.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS)));
+        jCheckBoxSaveImages.setSelected( pref.getBoolean(JRPropertiesUtil.PROPERTY_PREFIX + "export.html.saveImages", true));
+        jCheckBoxUseImagesToAlign.setSelected( pref.getBoolean(JRHtmlExporterParameter.PROPERTY_USING_IMAGES_TO_ALIGN, jrPropUtils.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_USING_IMAGES_TO_ALIGN)));
+        jCheckBoxWhiteBackground.setSelected( pref.getBoolean(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND, jrPropUtils.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND)));
+        jCheckBoxWrapBreakWord.setSelected( pref.getBoolean(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD, jrPropUtils.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD)));
 
-        jCheckBoxFrameAsNestedTables.setSelected( pref.getBoolean(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES, JRProperties.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES)));
-        jCheckBoxRemoveEmptySpace.setSelected( pref.getBoolean(JRHtmlExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, JRProperties.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS)));
-        jCheckBoxSaveImages.setSelected( pref.getBoolean(JRProperties.PROPERTY_PREFIX + "export.html.saveImages", true));
-        jCheckBoxUseImagesToAlign.setSelected( pref.getBoolean(JRHtmlExporterParameter.PROPERTY_USING_IMAGES_TO_ALIGN, JRProperties.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_USING_IMAGES_TO_ALIGN)));
-        jCheckBoxWhiteBackground.setSelected( pref.getBoolean(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND, JRProperties.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND)));
-        jCheckBoxWrapBreakWord.setSelected( pref.getBoolean(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD, JRProperties.getBooleanProperty(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD)));
+        jTextFieldImagesDirectory.setText(  pref.get(JRPropertiesUtil.PROPERTY_PREFIX + "export.html.imagesDirectory",""));
+        jTextFieldImagesDirectory1.setText(  pref.get(JRPropertiesUtil.PROPERTY_PREFIX + "export.html.imagesUri",""));
 
-        jTextFieldImagesDirectory.setText(  pref.get(JRProperties.PROPERTY_PREFIX + "export.html.imagesDirectory",""));
-        jTextFieldImagesDirectory1.setText(  pref.get(JRProperties.PROPERTY_PREFIX + "export.html.imagesUri",""));
-
-        jTextAreaHtmlBetweenPages.setText(  pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlBetweenPages",""));
-        jTextAreaHtmlFooter.setText(  pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlFooter",""));
-        jTextAreaHtmlHeader.setText(  pref.get(JRProperties.PROPERTY_PREFIX + "export.html.htmlHeader",""));
-        jComboBox1.setSelectedItem(  pref.get(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT, JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT)));
+        jTextAreaHtmlBetweenPages.setText(  pref.get(JRPropertiesUtil.PROPERTY_PREFIX + "export.html.htmlBetweenPages",""));
+        jTextAreaHtmlFooter.setText(  pref.get(JRPropertiesUtil.PROPERTY_PREFIX + "export.html.htmlFooter",""));
+        jTextAreaHtmlHeader.setText(  pref.get(JRPropertiesUtil.PROPERTY_PREFIX + "export.html.htmlHeader",""));
+        jComboBox1.setSelectedItem(  pref.get(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT, jrPropUtils.getProperty(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT)));
         setInit(false);
     }
 
@@ -451,16 +455,16 @@ public class HtmlExportParametersPanel extends AbstractExportParametersPanel {
 
         pref.putBoolean(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES,  jCheckBoxFrameAsNestedTables.isSelected() );
         pref.putBoolean(JRHtmlExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,  jCheckBoxRemoveEmptySpace.isSelected() );
-        pref.putBoolean(JRProperties.PROPERTY_PREFIX + "export.html.saveImages",  jCheckBoxSaveImages.isSelected() );
+        pref.putBoolean(JRPropertiesUtil.PROPERTY_PREFIX + "export.html.saveImages",  jCheckBoxSaveImages.isSelected() );
         pref.putBoolean(JRHtmlExporterParameter.PROPERTY_USING_IMAGES_TO_ALIGN,  jCheckBoxUseImagesToAlign.isSelected() );
         pref.putBoolean(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND,  jCheckBoxWhiteBackground.isSelected() );
         pref.putBoolean(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD,  jCheckBoxWrapBreakWord.isSelected() );
 
-        pref.put(JRProperties.PROPERTY_PREFIX + "export.html.imagesDirectory", jTextFieldImagesDirectory.getText());
-        pref.put(JRProperties.PROPERTY_PREFIX + "export.html.imagesUri", jTextFieldImagesDirectory1.getText());
-        pref.put(JRProperties.PROPERTY_PREFIX + "export.html.htmlBetweenPages", jTextAreaHtmlBetweenPages.getText());
-        pref.put(JRProperties.PROPERTY_PREFIX + "export.html.htmlFooter", jTextAreaHtmlFooter.getText());
-        pref.put(JRProperties.PROPERTY_PREFIX + "export.html.htmlHeader", jTextAreaHtmlHeader.getText());
+        pref.put(JRPropertiesUtil.PROPERTY_PREFIX + "export.html.imagesDirectory", jTextFieldImagesDirectory.getText());
+        pref.put(JRPropertiesUtil.PROPERTY_PREFIX + "export.html.imagesUri", jTextFieldImagesDirectory1.getText());
+        pref.put(JRPropertiesUtil.PROPERTY_PREFIX + "export.html.htmlBetweenPages", jTextAreaHtmlBetweenPages.getText());
+        pref.put(JRPropertiesUtil.PROPERTY_PREFIX + "export.html.htmlFooter", jTextAreaHtmlFooter.getText());
+        pref.put(JRPropertiesUtil.PROPERTY_PREFIX + "export.html.htmlHeader", jTextAreaHtmlHeader.getText());
         pref.put(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT, jComboBox1.getSelectedItem()+"");
 
       }

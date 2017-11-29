@@ -63,7 +63,7 @@ public class JrxmlPreviewView extends TopComponent
 
     MultiViewElementCallback multiViewCallback = null;
     
-    JRViewerController viewerContext = new JRViewerController(null, null);
+    JRViewerController viewerContext = new JRViewerController(IRLocalJasperReportsContext.getInstance(), null, null);
     JrxmlPreviewToolbar viewerToolbar = new JrxmlPreviewToolbar(this, viewerContext);
     
     private JrxmlEditorSupport support;

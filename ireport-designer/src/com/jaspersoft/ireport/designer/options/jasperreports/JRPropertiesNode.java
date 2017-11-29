@@ -23,13 +23,11 @@
  */
 package com.jaspersoft.ireport.designer.options.jasperreports;
 
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import java.util.List;
-import net.sf.jasperreports.engine.util.JRProperties;
-import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
+import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
-import org.openide.nodes.Node;
-import org.openide.nodes.Node.PropertySet;
 import org.openide.nodes.Sheet;
 
 /**
@@ -49,7 +47,7 @@ public class JRPropertiesNode extends AbstractNode {
 
         Sheet.Set set = createSet("JasperReports properties",null);
 
-        List props = JRProperties.getProperties("");
+        List props =  IRLocalJasperReportsContext.getUtilities().getProperties("");
         
         for (int i=0; i<props.size(); ++i)
         {

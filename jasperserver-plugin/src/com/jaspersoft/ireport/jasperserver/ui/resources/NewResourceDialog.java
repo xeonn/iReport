@@ -25,6 +25,7 @@ package com.jaspersoft.ireport.jasperserver.ui.resources;
 
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.designer.utils.ConfigurablePlainDocument;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.jasperserver.JServer;
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
@@ -52,6 +53,11 @@ public class NewResourceDialog extends javax.swing.JDialog {
     public NewResourceDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        
+        this.jTextFieldName.setDocument(new ConfigurablePlainDocument(100));
+        this.jTextFieldLabel.setDocument(new ConfigurablePlainDocument(100));
+        this.jEditorPaneDescription.setDocument(new ConfigurablePlainDocument(250));
         
         setLocationRelativeTo(null);
         this.jTextFieldLabel.getDocument().addDocumentListener( new javax.swing.event.DocumentListener() {
