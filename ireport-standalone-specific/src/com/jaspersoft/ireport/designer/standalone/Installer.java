@@ -29,6 +29,7 @@ import com.jaspersoft.ireport.designer.standalone.actions.ImportSettingsUtilitie
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.openide.modules.ModuleInstall;
+import org.openide.util.Utilities;
 import org.openide.util.actions.SystemAction;
 import org.openide.windows.TopComponent.Registry;
 import org.openide.windows.WindowManager;
@@ -39,8 +40,18 @@ import org.openide.windows.WindowManager;
  */
 public class Installer extends ModuleInstall {
 
+    ModuleInstall subInstaller = null;
+    
     @Override
     public void restored() {
+        
+        
+        if (Utilities.isMac())
+        {
+            subInstaller = new org.netbeans.modules.applemenu.Install();
+            subInstaller.restored();
+            
+        }
         // By default, do nothing.
         // Put your startup code here.
         WindowManager.getDefault().getRegistry().addPropertyChangeListener(new PropertyChangeListener() {
@@ -69,4 +80,15 @@ public class Installer extends ModuleInstall {
             }
         });
     }
+    
+    
+    @Override
+    public void uninstalled()
+    {
+        if (Utilities.isMac() && subInstaller != null)
+        {
+            subInstaller.uninstalled();
+        }
+    }
+    
 }

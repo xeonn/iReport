@@ -74,7 +74,7 @@ public class JrxmlSourceEditor extends CloneableEditor implements MultiViewEleme
                     String content = JRXmlWriter.writeReport(jd,"UTF-8"); // IReportManager.getInstance().getProperty("jrxmlEncoding", System.getProperty("file.encoding") ));
                     getEditorPane().setText(content);
                     getEditorPane().setCaretPosition(0);
-                    ((JrxmlVisualView)((JrxmlEditorSupport)cloneableEditorSupport()).descriptions[0]).setNeedModelRefresh(false);
+                    ((JrxmlVisualView)((JrxmlEditorSupport)cloneableEditorSupport()).getDescriptions()[0]).setNeedModelRefresh(false);
             } catch (Exception ex)
             {
                 ex.printStackTrace();

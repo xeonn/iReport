@@ -1122,18 +1122,18 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-5.2.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-5.2.0.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-5.5.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-5.5.0.jar</binary-origin>
             </class-path-extension>
             
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-functions-5.2.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-functions-5.2.0.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-functions-5.5.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-functions-5.5.0.jar</binary-origin>
             </class-path-extension>
             
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-fonts-5.0.4.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-fonts-5.0.4.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-fonts-5.5.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-fonts-5.5.0.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jasperreports-chart-themes-5.2.0.jar</runtime-relative-path>
@@ -1430,6 +1430,10 @@
                 <binary-origin>release/modules/ext/stock-data-adapter.jar</binary-origin>
             </class-path-extension>
             -->
+            <class-path-extension>
+                <runtime-relative-path>ext/servlet-api-2.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/servlet-api-2.4.jar</binary-origin>
+            </class-path-extension>
         </data>
     </configuration>
 </project>

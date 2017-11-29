@@ -27,9 +27,11 @@ import com.jaspersoft.ireport.JrxmlDataObject;
 import com.jaspersoft.ireport.designer.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
@@ -73,7 +75,7 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
         };
 
 
-    final MultiViewDescription[] descriptions;
+    private MultiViewDescription[] descriptions = null;
     
     private JasperDesign currentModel = null;
 
@@ -81,24 +83,26 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
     protected Task reloadDocument() {
         
         // Force a document refresh...
-        ((JrxmlVisualView)descriptions[0]).refreshModel();
+        ((JrxmlVisualView)getDescriptions()[0]).refreshModel();
         return super.reloadDocument();
     }
     
     public MultiViewDescription[] getDescriptions()
     {
+        if (descriptions == null)
+        {
+            JrxmlVisualView visualview = new JrxmlVisualView(this);
+            descriptions = new MultiViewDescription[]{
+                visualview,
+                new JrxmlTextView(this),
+                new JrxmlPreviewView(this,visualview)
+            };
+        }
         return descriptions;
     }
     
     private JrxmlEditorSupport(JrxmlDataObject obj) {
         super(obj, new JrxmlEnv(obj));
-        
-        JrxmlVisualView visualview = new JrxmlVisualView(this);
-        descriptions = new MultiViewDescription[]{
-            visualview,
-            new JrxmlTextView(this),
-            new JrxmlPreviewView(this,visualview)
-        };
         
         specialNodeLookupIC = new InstanceContent();
         specialNodeLookup = new AbstractLookup(specialNodeLookupIC);
@@ -115,7 +119,7 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
 
     protected CloneableEditorSupport.Pane createPane() {
         return (CloneableEditorSupport.Pane)MultiViewFactory.
-                createCloneableMultiView(descriptions, descriptions[0], new GenericCloseOperationHandler(this));
+                createCloneableMultiView(getDescriptions(), getDescriptions()[0], new GenericCloseOperationHandler(this));
     }
     
     public boolean notifyModified() {
@@ -129,7 +133,7 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
                 obj.setModified(true);
                 //((JrxmlDataNode)obj.getNodeDelegate()).cookieSetChanged();
             }
-            ((JrxmlPreviewView)descriptions[2]).setNeedRefresh(true);
+            ((JrxmlPreviewView)getDescriptions()[2]).setNeedRefresh(true);
             //((JrxmlVisualView)descriptions[0]).fireModelChange();
         }
         return retValue;
@@ -255,13 +259,26 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
 
                 if (content != null)
                 {
-                    try {
-                        getDocument().remove(0, getDocument().getLength());
-                        getDocument().insertString(0, content, null);
-                        ((JrxmlVisualView) descriptions[0]).setNeedModelRefresh(false);
-                    } catch (BadLocationException ex) {
-                        Exceptions.printStackTrace(ex);
-                    }
+                    final String theContent = content;
+                    Mutex.EVENT.writeAccess(new Runnable() {
+
+                        public void run() {
+                            try {
+                                getDocument().remove(0, getDocument().getLength());
+                                getDocument().insertString(0, theContent, null);
+                                ((JrxmlVisualView) getDescriptions()[0]).setNeedModelRefresh(false);
+                            } catch (BadLocationException ex) {
+                                Exceptions.printStackTrace(ex);
+                            }
+                        }
+                    });
+                    
+                    
+                    
+                    
+                    
+                    //280
+                    
                 }
             }
 
