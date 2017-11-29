@@ -138,6 +138,18 @@ public class HyperlinkPanel extends javax.swing.JPanel {
             }
         });
         
+        this.jRTextExpressionAreaWhenExpression.getExpressionEditorPane().getDocument().addDocumentListener( new javax.swing.event.DocumentListener() {
+            public void changedUpdate(javax.swing.event.DocumentEvent evt) {
+                jRTextExpressionAreaWhenExpressionChanged();
+            }
+            public void insertUpdate(javax.swing.event.DocumentEvent evt) {
+                jRTextExpressionAreaWhenExpressionChanged();
+            }
+            public void removeUpdate(javax.swing.event.DocumentEvent evt) {
+                jRTextExpressionAreaWhenExpressionChanged();
+            }
+        });
+        
         this.jRTextExpressionAreaAnchorName.getExpressionEditorPane().getDocument().addDocumentListener( new javax.swing.event.DocumentListener() {
             public void changedUpdate(javax.swing.event.DocumentEvent evt) {
                 jRTextExpressionAreaAnchorNameChanged();
@@ -186,6 +198,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         jRTextExpressionAreaAnchor.setExpressionContext(ec);
         jRTextExpressionAreaPage.setExpressionContext(ec);
         jRTextExpressionAreaTooltip.setExpressionContext(ec);
+        jRTextExpressionAreaWhenExpression.setExpressionContext(ec);
 
     }
 
@@ -224,6 +237,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
                 jRTextExpressionAreaAnchor.setText( Misc.getExpressionText( hyperlink.getHyperlinkAnchorExpression()) );
                 jRTextExpressionAreaPage.setText( Misc.getExpressionText( hyperlink.getHyperlinkPageExpression()) );
                 jRTextExpressionAreaTooltip.setText( Misc.getExpressionText( hyperlink.getHyperlinkTooltipExpression()) );
+                jRTextExpressionAreaWhenExpression.setText( Misc.getExpressionText( hyperlink.getHyperlinkWhenExpression()) );
             }
             else
             {
@@ -330,6 +344,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
             }
             
             jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Tooltip"), this.jPanelTooltip);
+            jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.WhenExpression"), this.jPanelWhenExpression);
             
             // Adding parameters...  
             java.util.Iterator enum_parameters = getParametersList().iterator();
@@ -410,6 +425,9 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         jPanelTooltip = new javax.swing.JPanel();
         jLabelReference1 = new javax.swing.JLabel();
         jRTextExpressionAreaTooltip = new com.jaspersoft.ireport.designer.editor.ExpressionEditorArea();
+        jPanelWhenExpression = new javax.swing.JPanel();
+        jLabelReference2 = new javax.swing.JLabel();
+        jRTextExpressionAreaWhenExpression = new com.jaspersoft.ireport.designer.editor.ExpressionEditorArea();
         jPanelClose = new javax.swing.JPanel();
         jButtonClose = new javax.swing.JButton();
 
@@ -730,6 +748,31 @@ public class HyperlinkPanel extends javax.swing.JPanel {
 
         jTabbedPane2.addTab("Tooltip", jPanelTooltip);
 
+        jPanelWhenExpression.setLayout(new java.awt.GridBagLayout());
+
+        jLabelReference2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabelReference2.setText("When Expression");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanelWhenExpression.add(jLabelReference2, gridBagConstraints);
+        jLabelReference2.getAccessibleContext().setAccessibleName("When Expression");
+
+        jRTextExpressionAreaWhenExpression.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jRTextExpressionAreaWhenExpression.setMinimumSize(new java.awt.Dimension(300, 50));
+        jRTextExpressionAreaWhenExpression.setPreferredSize(new java.awt.Dimension(300, 50));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        jPanelWhenExpression.add(jRTextExpressionAreaWhenExpression, gridBagConstraints);
+
+        jTabbedPane2.addTab("When Exp.", jPanelWhenExpression);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -1018,6 +1061,8 @@ public class HyperlinkPanel extends javax.swing.JPanel {
         }
         
         jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.Tooltip"), this.jPanelTooltip);
+        jTabbedPane2.addTab(I18n.getString("HyperlinkPanel.Pane.WhenExpression"), this.jPanelWhenExpression);
+        
         fireHyperlinkChanged();
     }//GEN-LAST:event_jComboBoxLinkTypeActionPerformed1
 
@@ -1080,6 +1125,7 @@ public class HyperlinkPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabelPage;
     private javax.swing.JLabel jLabelReference;
     private javax.swing.JLabel jLabelReference1;
+    private javax.swing.JLabel jLabelReference2;
     private javax.swing.JLabel jLabelTarget;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
@@ -1091,11 +1137,13 @@ public class HyperlinkPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanelPage;
     private javax.swing.JPanel jPanelReference;
     private javax.swing.JPanel jPanelTooltip;
+    private javax.swing.JPanel jPanelWhenExpression;
     private com.jaspersoft.ireport.designer.editor.ExpressionEditorArea jRTextExpressionAreaAnchor;
     private com.jaspersoft.ireport.designer.editor.ExpressionEditorArea jRTextExpressionAreaAnchorName;
     private com.jaspersoft.ireport.designer.editor.ExpressionEditorArea jRTextExpressionAreaPage;
     private com.jaspersoft.ireport.designer.editor.ExpressionEditorArea jRTextExpressionAreaReference;
     private com.jaspersoft.ireport.designer.editor.ExpressionEditorArea jRTextExpressionAreaTooltip;
+    private com.jaspersoft.ireport.designer.editor.ExpressionEditorArea jRTextExpressionAreaWhenExpression;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSpinner jSpinnerBookmarkLevel;
@@ -1133,6 +1181,13 @@ public class HyperlinkPanel extends javax.swing.JPanel {
             setHyperlinkAttribute("HyperlinkPageExpression", JRExpression.class, Misc.createExpression("java.lang.String", jRTextExpressionAreaPage.getText()) );
             fireHyperlinkChanged();
     }
+    
+    public void jRTextExpressionAreaWhenExpressionChanged() {
+        if (this.isInit()) return;
+        setHyperlinkAttribute("HyperlinkWhenExpression", JRExpression.class, Misc.createExpression("java.lang.String", jRTextExpressionAreaWhenExpression.getText()) );
+        fireHyperlinkChanged();
+    }
+    
     /*
     public void applyI18n(){
             

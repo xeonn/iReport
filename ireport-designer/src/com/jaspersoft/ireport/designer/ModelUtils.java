@@ -1990,6 +1990,7 @@ public class ModelUtils {
     {
         // Update names.
         String[] propertyNames = source.getPropertyNames();
+        
         if (propertyNames != null && propertyNames.length > 0)
         {
                 for(int i = 0; i < propertyNames.length; i++)
@@ -2018,11 +2019,11 @@ public class ModelUtils {
         // Update names.
         
         List usedProps = new ArrayList();
-        List propertyExpressions = element.getPropertyExpressionsList();
+//        List propertyExpressions = element.getPropertyExpressionsList();
         
-        for(int i = 0; i < propertyExpressions.size(); i++)
+        while(element.getPropertyExpressionsList().size() > 0)
         {
-            element.removePropertyExpression((JRPropertyExpression)propertyExpressions.get(i));
+            element.removePropertyExpression((JRPropertyExpression)element.getPropertyExpressionsList().get(0));
         }
         
         if (newExpressionProperties == null) return;
@@ -2601,7 +2602,10 @@ public class ModelUtils {
             setHyperlinkAttribute(to, "HyperlinkTarget", Byte.TYPE, from.getHyperlinkTarget() );
             setHyperlinkAttribute(to, "HyperlinkTooltipExpression", JRExpression.class, (from.getHyperlinkTooltipExpression() == null) ? null : from.getHyperlinkTooltipExpression().clone() );
             setHyperlinkAttribute(to, "LinkType", String.class, (from.getLinkType() == null) ? null : from.getLinkType() );
+            setHyperlinkAttribute(to, "HyperlinkWhenExpression", JRExpression.class, (from.getHyperlinkWhenExpression()== null) ? null : from.getHyperlinkWhenExpression().clone() );
 
+            
+            
             // remove all the old params...
             JRHyperlinkParameter[] params = from.getHyperlinkParameters();
             List parameters = getHyperlinkParametersList(to);

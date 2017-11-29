@@ -57,7 +57,7 @@ public class DefaultExporterFactory implements ExporterFactory {
     }
 
     public String getExporterFileExtension() {
-        if (format.equals("xhtml")) return "html";
+        if (format.equals("xhtml") || format.equals("layered_html")) return "html";
         if (format.equals("xml")) return "jrpxml";
         if (format.equals("xls")) return "xls";
         if (format.equals("xls2")) return "xls";
@@ -99,6 +99,13 @@ public class DefaultExporterFactory implements ExporterFactory {
        else if (format.equalsIgnoreCase("html"))
        {
           exporter = new  net.sf.jasperreports.engine.export.JRHtmlExporter(context);
+          //exporter = new net.sf.jasperreports.engine.export.HtmlExporter(context);
+          configureHtmlExporter(exporter, context);
+       }
+       else if (format.equalsIgnoreCase("layered_html"))
+       {
+          //exporter = new  net.sf.jasperreports.engine.export.JRHtmlExporter(context);
+          exporter = new net.sf.jasperreports.engine.export.HtmlExporter(context);
           configureHtmlExporter(exporter, context);
        }
        else if (format.equalsIgnoreCase("xhtml"))
@@ -178,7 +185,7 @@ public class DefaultExporterFactory implements ExporterFactory {
        {
           return Misc.nvl( IReportManager.getInstance().getProperty("ExternalCSVViewer"), "");
        }
-       else if (format.equalsIgnoreCase("html") || format.equalsIgnoreCase("xhtml") )
+       else if (format.equalsIgnoreCase("html") || format.equalsIgnoreCase("xhtml") || format.equals("layered_html"))
        {
           return Misc.nvl( IReportManager.getInstance().getProperty("ExternalHTMLViewer"), "");
        }

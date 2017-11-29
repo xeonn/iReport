@@ -29,8 +29,8 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import net.sf.jasperreports.components.map.Marker;
-import net.sf.jasperreports.components.map.MarkerProperty;
+import net.sf.jasperreports.components.map.Item;
+import net.sf.jasperreports.components.map.ItemProperty;
 
 /**
  *
@@ -52,25 +52,24 @@ public class MarkerListCellRenderer extends DefaultListCellRenderer {
          JLabel label = (JLabel)super.getListCellRendererComponent(list,value,index,isSelected, cellHasFocus);
          label.setIcon(markerIcon);
          
-         if (value instanceof Marker)
+         if (value instanceof Item)
          {
-             Marker marker = (Marker)value;
+             Item marker = (Item)value;
              
              String displayName = "";
              String latitude = "";
              String longitude = "";
              // Find propertiess...
-             for (MarkerProperty p : marker.getProperties())
+             for (ItemProperty p : marker.getProperties())
              {
-                 if (p.getName().equals(Marker.PROPERTY_latitude))
+                 if (p.getName().equals("latitude"))
                  {
                      latitude = "" + (p.getValue() == null ? Misc.getExpressionText( p.getValueExpression() ) : p.getValue());
                  }
-                 if (p.getName().equals(Marker.PROPERTY_longitude))
+                 if (p.getName().equals("longitude"))
                  {
                      longitude = "" + (p.getValue() == null ? Misc.getExpressionText( p.getValueExpression() ) : p.getValue());
                  }
-                 
              }
              
              label.setText( "Lat: " + latitude + ", Lon: " + longitude);

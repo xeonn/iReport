@@ -1701,6 +1701,7 @@ public class IReportManager {
             exporterFactories.add(new DefaultExporterFactory("csv"));
             exporterFactories.add(new DefaultExporterFactory("html"));
             exporterFactories.add(new DefaultExporterFactory("xhtml"));
+            exporterFactories.add(new DefaultExporterFactory("layered_html"));
             exporterFactories.add(new DefaultExporterFactory("xls"));
             exporterFactories.add(new DefaultExporterFactory("xls2"));
             exporterFactories.add(new DefaultExporterFactory("xlsx"));

@@ -108,7 +108,7 @@ public class SQLFieldsProvider implements FieldsProvider {
         
             // JasperReports query executer instances requires
             // REPORT_PARAMETERS_MAP parameter to be defined and not null
-            Map<String, JRValueParameter> tmpMap = convertMap(parameters);
+            Map<String, JRValueParameter> tmpMap = convertMap(reportDataset, parameters);
             
             
             con = irConn.getConnection();
@@ -166,6 +166,14 @@ public class SQLFieldsProvider implements FieldsProvider {
             error_msg = "SQL problems:\n"+ex.getMessage();
             throw new JRException( error_msg );
         } catch (Exception ex) {
+            
+            
+            if (ex.getCause() != null && ex.getCause() instanceof SQLException)
+            {
+                ex.getCause().printStackTrace();
+                throw new JRException( ex.getCause()  );
+            }
+            
             ex.printStackTrace();
             error_msg = "General problem:\n"+ex.getMessage()+
                 "\n\nCheck username and password; is the DBMS active ?!";
@@ -322,11 +330,23 @@ public class SQLFieldsProvider implements FieldsProvider {
     }
     
     
-    public static Map<String, JRValueParameter> convertMap(Map<String, ?> inmap) {
+    public static Map<String, JRValueParameter> convertMap(JRDataset dataset, Map<String, ?> inmap) {
             Map<String, JRValueParameter> outmap = new HashMap<String, JRValueParameter>();
             for (String key : inmap.keySet())
-                    outmap.put(key, new SimpleValueParameter(inmap.get(key)));
-
+            {
+                    SimpleValueParameter svp = new SimpleValueParameter(inmap.get(key));
+                    
+                    // Let's set the correct class name for this parameter...
+                    for (JRParameter p : dataset.getParameters() )
+                    {
+                        if (p.getName() != null && p.getName().equals(key))
+                        {
+                            svp.setValueClassName( p.getValueClassName());
+                            break;
+                        }
+                    }
+                    outmap.put(key, svp);
+            }
             return outmap;
     }
     

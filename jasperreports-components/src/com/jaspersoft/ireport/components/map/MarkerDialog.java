@@ -9,10 +9,9 @@ package com.jaspersoft.ireport.components.map;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
 import javax.swing.JOptionPane;
-import net.sf.jasperreports.components.map.Marker;
-import net.sf.jasperreports.components.map.MarkerProperty;
-import net.sf.jasperreports.components.map.StandardMarker;
-import net.sf.jasperreports.components.map.StandardMarkerProperty;
+import net.sf.jasperreports.components.map.ItemProperty;
+import net.sf.jasperreports.components.map.StandardItem;
+import net.sf.jasperreports.components.map.StandardItemProperty;
 
 /**
  *
@@ -23,7 +22,7 @@ import net.sf.jasperreports.components.map.StandardMarkerProperty;
 public class MarkerDialog extends javax.swing.JDialog {
 
     
-    private StandardMarker marker = null;
+    private StandardItem marker = null;
     private int dialogResult = JOptionPane.CANCEL_OPTION;
     
     /** Creates new form MarkerDialog */
@@ -31,8 +30,8 @@ public class MarkerDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        markerPropertyPanelLatitude.setMarkerProperty(new StandardMarkerProperty(Marker.PROPERTY_latitude, null, Misc.createExpression(null, "0")));
-        markerPropertyPanelLongitude.setMarkerProperty(new StandardMarkerProperty(Marker.PROPERTY_longitude, null, Misc.createExpression(null, "0")));
+        markerPropertyPanelLatitude.setMarkerProperty(new StandardItemProperty("latitude", null, Misc.createExpression(null, "0")));
+        markerPropertyPanelLongitude.setMarkerProperty(new StandardItemProperty("longitude", null, Misc.createExpression(null, "0")));
         
         
         setLocationRelativeTo(null);
@@ -177,18 +176,18 @@ public class MarkerDialog extends javax.swing.JDialog {
     /**
      * @return the marker
      */
-    public StandardMarker getMarker() {
+    public StandardItem getMarker() {
         
         
 
         //if (marker == null)
         {
-            marker = new StandardMarker();
+            marker = new StandardItem();
         }
         
        
-        marker.addMarkerProperty(markerPropertyPanelLatitude.getMarkerProperty() );
-        marker.addMarkerProperty(markerPropertyPanelLongitude.getMarkerProperty() );
+        marker.addItemProperty(markerPropertyPanelLatitude.getMarkerProperty() );
+        marker.addItemProperty(markerPropertyPanelLongitude.getMarkerProperty() );
         
         return marker;
     }
@@ -196,18 +195,18 @@ public class MarkerDialog extends javax.swing.JDialog {
     /**
      * @param marker the marker to set
      */
-    public void setMarker(StandardMarker marker) {
-        this.marker = (StandardMarker) marker.clone();
+    public void setMarker(StandardItem marker) {
+        this.marker = (StandardItem) marker.clone();
         
-        for (MarkerProperty p : this.marker.getProperties())
+        for (ItemProperty p : this.marker.getProperties())
         {
-            StandardMarkerProperty sp = (StandardMarkerProperty)p;
+            StandardItemProperty sp = (StandardItemProperty)p;
             
-            if (p.getName().equals( Marker.PROPERTY_latitude))
+            if (p.getName().equals( "latitude"))
             {
                 markerPropertyPanelLatitude.setMarkerProperty(sp);
             }
-            else if (p.getName().equals( Marker.PROPERTY_longitude))
+            else if (p.getName().equals( "longitude"))
             {
                 markerPropertyPanelLongitude.setMarkerProperty(sp);
             }

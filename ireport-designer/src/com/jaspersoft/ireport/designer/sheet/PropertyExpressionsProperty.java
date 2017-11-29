@@ -112,6 +112,7 @@ public class PropertyExpressionsProperty  extends PropertySupport {
         
         ModelUtils.replacePropertiesMap(map, element.getPropertiesMap());
         ModelUtils.replaceExpressionProperties(element, values);
+        
         com.jaspersoft.ireport.designer.IReportManager.getInstance().notifyReportChange();
     }
     

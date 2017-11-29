@@ -11,7 +11,7 @@ import com.jaspersoft.ireport.designer.editor.ExpressionEditorArea;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.awt.BorderLayout;
 import javax.swing.border.TitledBorder;
-import net.sf.jasperreports.components.map.StandardMarkerProperty;
+import net.sf.jasperreports.components.map.StandardItemProperty;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 /**
@@ -23,7 +23,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 public class MarkerPropertyPanel extends javax.swing.JPanel {
 
     private boolean init = false;
-    private StandardMarkerProperty markerProperty = new StandardMarkerProperty();
+    private StandardItemProperty markerProperty = new StandardItemProperty();
     private ExpressionEditorArea jrExpressionArea = new ExpressionEditorArea();
     
     /** Creates new form MarkerPropertyPanel */
@@ -159,7 +159,7 @@ public class MarkerPropertyPanel extends javax.swing.JPanel {
     /**
      * @return the markerProperty
      */
-    public StandardMarkerProperty getMarkerProperty() {
+    public StandardItemProperty getMarkerProperty() {
         
         
         
@@ -169,7 +169,7 @@ public class MarkerPropertyPanel extends javax.swing.JPanel {
     /**
      * @param markerProperty the markerProperty to set
      */
-    public void setMarkerProperty(StandardMarkerProperty markerProperty) {
+    public void setMarkerProperty(StandardItemProperty markerProperty) {
 
         
         setInit(true);

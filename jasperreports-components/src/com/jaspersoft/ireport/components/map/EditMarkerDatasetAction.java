@@ -36,7 +36,9 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.components.map.ItemData;
 import net.sf.jasperreports.components.map.MarkerDataset;
+import net.sf.jasperreports.components.map.StandardItemData;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
 import net.sf.jasperreports.components.map.StandardMapComponent;
@@ -107,66 +109,52 @@ public final class EditMarkerDatasetAction extends NodeAction {
             }
             */
             MapMarkersPanel panel = new MapMarkersPanel();
-            panel.setShowRemoveDatasetRun(true);
+            //panel.setShowRemoveDatasetRun(true);
             panel.setJasperDesign( node.getJasperDesign() );
             StandardMapComponent component = (StandardMapComponent)((JRDesignComponentElement)node.getElement()).getComponent();
             
             
-            StandardMarkerDataset markerDataset = (StandardMarkerDataset)component.getMarkerDataset();
+            
+            StandardItemData originalItemData = (StandardItemData)component.getMarkerData();
+            StandardItemData editingItemData = (originalItemData == null) ? null : (StandardItemData)originalItemData.clone();
             
             // Just in case... but we assume JR always set a marker dataset...
-            if (markerDataset == null)
+            if (editingItemData == null)
             {
-                markerDataset = new StandardMarkerDataset();
+                editingItemData = new StandardItemData();
             }
             
-            JRDesignDatasetRun datasetRun = (JRDesignDatasetRun)markerDataset.getDatasetRun();
+            // temporarily set the editingItemData to the component...
+            component.setMarkerData(editingItemData);
             
-            /*
-            if (datasetRun == null)
-            {
-                datasetRun = new JRDesignDatasetRun();
-
-                // Let's use the just created dataset...
-                if (newDataset != null)
-                {
-                    datasetRun.setDatasetName(  newDataset.getName() );
-                }
-                else
-                {
-                    datasetRun.setDatasetName(  IReportManager.getInstance().getActiveReport().getDatasetsList().get(0).getName() );
-                }
-
-                datasetRun.setDataSourceExpression(Misc.createExpression(null, "new net.sf.jasperreports.engine.JREmptyDataSource(1)"));
-                
-                markerDataset.setDatasetRun(datasetRun);
-            }
-            */
-            
-            
-            
-           
-            panel.setMarkerDataset(markerDataset);
+            panel.setCurrentSelectedComponent(component, IReportManager.getInstance().getActiveReport() );
             
             int res = panel.showDialog(Misc.getMainFrame(), true);
+            
             if (res == JOptionPane.OK_OPTION ||
                 res == JOptionPane.NO_OPTION)
             {
                 
-                MarkerDataset oldValue = component.getMarkerDataset();
-                MarkerDataset newValue = panel.getMarkerDataset();
+                StandardItemData newValue = (StandardItemData)component.getMarkerData();
                 
-                component.setMarkerDataset( panel.getMarkerDataset() );
+                if (res == JOptionPane.NO_OPTION)
+                {
+                    newValue = null;
+                }
                 
                 ObjectPropertyUndoableEdit urob =
                         new ObjectPropertyUndoableEdit(
                             component,
-                            "MarkerDataset", 
-                            MarkerDataset.class,
-                            oldValue,newValue);
+                            "MarkerData", 
+                            ItemData.class,
+                            originalItemData,editingItemData);
                 
                 
                 IReportManager.getInstance().addUndoableEdit(urob);
+            }
+            else
+            {
+                component.setMarkerData( originalItemData );
             }
             
         }

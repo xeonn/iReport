@@ -1049,16 +1049,16 @@ public class SpiderChartPanel extends javax.swing.JPanel {
             }
 
             if (groups.size() == 0) {
-                ResetTypeEnum val = (ResetTypeEnum)((Tag)jComboBoxIncrementType.getSelectedItem()).getValue();
-                if (val == ResetTypeEnum.GROUP) {
+                IncrementTypeEnum val = (IncrementTypeEnum)((Tag)jComboBoxIncrementType.getSelectedItem()).getValue();
+                if (val == IncrementTypeEnum.GROUP) {
                     setInit(true);
                     //((StandardSpiderDataset)currentSelectedChartComponent.getDataset()).setIncrementType(JRVariable.RESET_TYPE_REPORT);
                     //((StandardSpiderDataset)currentSelectedChartComponent.getDataset()).setIncrementGroup(null);
                     Misc.setComboboxSelectedTagValue(jComboBoxIncrementType, ResetTypeEnum.NONE);
                     setInit(false);
                 }
-                val = (ResetTypeEnum)((Tag)jComboBoxResetType.getSelectedItem()).getValue();
-                if (val == ResetTypeEnum.GROUP) {
+                ResetTypeEnum resetVal = (ResetTypeEnum)((Tag)jComboBoxResetType.getSelectedItem()).getValue();
+                if (resetVal == ResetTypeEnum.GROUP) {
                     setInit(true);
                     //((StandardSpiderDataset)currentSelectedChartComponent.getDataset()).setResetType(JRVariable.RESET_TYPE_REPORT);
                     //((StandardSpiderDataset)currentSelectedChartComponent.getDataset()).setResetGroup(null);

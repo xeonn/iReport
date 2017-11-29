@@ -1098,8 +1098,8 @@
                 <binary-origin>release/modules/ext/jakarta-bcel-20050813.jar</binary-origin>
             </class-path-extension> -->
             <class-path-extension>
-                <runtime-relative-path>ext/groovy-all-1.7.5.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/groovy-all-1.7.5.jar</binary-origin>
+                <runtime-relative-path>ext/groovy-all-2.0.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/groovy-all-2.0.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jcommon-1.0.15.jar</runtime-relative-path>
@@ -1118,12 +1118,12 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-5.0.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-5.0.1.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-5.0.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-5.0.4.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-fonts-5.0.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-fonts-5.0.1.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-fonts-5.0.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-fonts-5.0.4.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jasperreports-chart-themes-5.0.0.jar</runtime-relative-path>

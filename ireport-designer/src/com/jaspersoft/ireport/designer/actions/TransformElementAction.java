@@ -354,6 +354,7 @@ public final class TransformElementAction extends NodeAction {
       newElement.setEvaluationGroup( element.getEvaluationGroup());
       newElement.setEvaluationTime( element.getEvaluationTimeValue());
       newElement.setHyperlinkAnchorExpression( cloneExpression( element.getHyperlinkAnchorExpression()));
+      newElement.setHyperlinkWhenExpression( cloneExpression( element.getHyperlinkWhenExpression()));
       newElement.setHyperlinkPageExpression( cloneExpression(element.getHyperlinkPageExpression()));
       newElement.setHyperlinkReferenceExpression( cloneExpression(element.getHyperlinkReferenceExpression()));
       newElement.setHyperlinkTarget( element.getHyperlinkTarget());
