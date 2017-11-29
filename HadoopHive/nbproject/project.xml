@@ -58,8 +58,8 @@
                 <binary-origin>release/modules/ext/hive-service-0.8.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/js-hive-datasource-1.0.2.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/js-hive-datasource-1.0.2.jar</binary-origin>
+                <runtime-relative-path>ext/js-hive-datasource-1.0.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/js-hive-datasource-1.0.4.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/libfb303-0.7.0.jar</runtime-relative-path>

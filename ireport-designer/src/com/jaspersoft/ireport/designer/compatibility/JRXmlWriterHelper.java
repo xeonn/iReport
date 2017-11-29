@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.ireport.designer.compatibility;
 
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import java.lang.reflect.InvocationTargetException;
@@ -71,9 +72,16 @@ public class JRXmlWriterHelper {
 
     private static VersionWarningDialog dialog = null;
 
+    public static String writeReport(JRReport report, String encoding) throws Exception
+    {
+        JRXmlWriter writer = new JRXmlWriter(IRLocalJasperReportsContext.getInstance());
+        return writer.write(report, encoding);
+    }
+    
+    
     public static String writeReport(JRReport report, String encoding, String version) throws Exception
     {
-
+        JRXmlWriter writer = new JRXmlWriter(IRLocalJasperReportsContext.getInstance());
         if (IReportManager.getPreferences().getBoolean("show_compatibility_warning", true))
         {
             setDialog(null); // force the instance of a new dialog...
@@ -114,7 +122,7 @@ public class JRXmlWriterHelper {
         }
         else if (version.length() == 0)
         {
-            return JRXmlWriter.writeReport(report, encoding);
+            return writer.writeReport(report, encoding);
         }
 
         throw new Exception("XML writer for version " +version + " not found.");

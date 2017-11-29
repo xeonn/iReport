@@ -31,6 +31,7 @@ import com.jaspersoft.ireport.components.table.actions.AddTableColumnGroupAction
 import com.jaspersoft.ireport.components.table.actions.AddTableColumnStartAction;
 import com.jaspersoft.ireport.components.table.actions.DeleteTableColumnAction;
 import com.jaspersoft.ireport.components.table.nodes.properties.ColumnPrintWhenExpressionProperty;
+import com.jaspersoft.ireport.components.table.nodes.properties.ColumnPropertyExpressionsProperty;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.outline.nodes.IRAbstractNode;
@@ -141,8 +142,11 @@ public class TableColumnGroupNode extends IRAbstractNode implements PropertyChan
         }
 
         set.put(new ColumnPrintWhenExpressionProperty((StandardBaseColumn) getColumnGroup(), dataset));
-         sheet.put(set);
+        set.put(new ColumnPropertyExpressionsProperty((StandardBaseColumn) getColumnGroup(), dataset));
         
+        sheet.put(set);
+        
+         
          return sheet;
     }
     

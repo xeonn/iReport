@@ -1,3 +1,10 @@
+2012-07-29 Version 4.7.0 released
+_______________________________________________________________________________
+- Updated to JasperReports 4.7.0
+- Added support for column properties in tables
+- Updated MDX query designer to REX 0.8.1
+- Changed max length of id and label of JasperReports server resource editors.
+- Fixed XML mapping tool to correctly work with JasperReports Context
 
 2012-05-21 Version 4.6.0 released
 _______________________________________________________________________________

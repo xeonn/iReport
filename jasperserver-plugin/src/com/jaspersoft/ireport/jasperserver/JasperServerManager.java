@@ -51,6 +51,11 @@ import org.openide.util.NbPreferences;
  */
     public class JasperServerManager {
 
+        
+        public static final int MAX_ID_LENGHT = 30;
+        public static final int MAX_NAME_LENGHT = 30;
+        
+        
     private List<FileResourceUpdatingListener> resourceReplacingListeners = new ArrayList<FileResourceUpdatingListener>();
 
     public void addFileResourceUpdatingListener(FileResourceUpdatingListener listener)

@@ -1100,16 +1100,16 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-4.6.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-4.6.0.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-4.7.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-4.7.0.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jasperreports-fonts-4.5.0.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/jasperreports-fonts-4.5.0.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-chart-themes-4.5.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-chart-themes-4.5.0.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-chart-themes-4.7.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-chart-themes-4.7.0.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jaxen-1.1.1.jar</runtime-relative-path>
@@ -1346,8 +1346,8 @@
             <!-- end Spring -->
             <!-- REX -->
             <class-path-extension>
-                <runtime-relative-path>ext/rex-20080421.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/rex-20080421.jar</binary-origin>
+                <runtime-relative-path>ext/rex-0.8.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/rex-0.8.1.jar</binary-origin>
             </class-path-extension>
             <!-- end REX -->
             <!-- sqleonardo-2007.03.jar -->

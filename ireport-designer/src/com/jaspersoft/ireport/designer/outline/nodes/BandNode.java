@@ -973,7 +973,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
                 Thread.dumpStack();
             }
             
-            if (val == null || val instanceof Byte) {
+            if (val == null || val instanceof SplitTypeEnum) {
 
                 SplitTypeEnum oldValue = band.getSplitTypeValue();
                 SplitTypeEnum newValue = (SplitTypeEnum) val;

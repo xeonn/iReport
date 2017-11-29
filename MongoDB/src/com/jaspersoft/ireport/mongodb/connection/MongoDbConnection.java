@@ -150,7 +150,7 @@ public class MongoDbConnection extends JDBCConnection implements WizardFieldsPro
 		com.jaspersoft.mongodb.connection.MongoDbConnection connection = null;
 		String errorMessage = null;
 		try {
-			connection = (com.jaspersoft.mongodb.connection.MongoDbConnection) createConnection();
+			connection = createConnection();
 			if (connection != null) {
 				JOptionPane.showMessageDialog(Misc.getMainWindow(), connection.test(), "",
 						JOptionPane.INFORMATION_MESSAGE);

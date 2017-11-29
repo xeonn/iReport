@@ -72,8 +72,8 @@ public class QueryDialog extends javax.swing.JDialog {
             }
         };
         
-        this.jTextFieldName.setDocument(new ConfigurablePlainDocument(100));
-        this.jTextFieldLabel.setDocument(new ConfigurablePlainDocument(100));
+        this.jTextFieldName.setDocument(new ConfigurablePlainDocument(JasperServerManager.MAX_ID_LENGHT));
+        this.jTextFieldLabel.setDocument(new ConfigurablePlainDocument(JasperServerManager.MAX_NAME_LENGHT));
         this.jEditorPaneDescription.setDocument(new ConfigurablePlainDocument(250));
         
         this.jTextFieldLabel.getDocument().addDocumentListener(changesListener);

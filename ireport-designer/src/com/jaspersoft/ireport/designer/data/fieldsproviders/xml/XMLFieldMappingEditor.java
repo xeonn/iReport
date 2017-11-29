@@ -25,6 +25,7 @@ package com.jaspersoft.ireport.designer.data.fieldsproviders.xml;
 
 import com.jaspersoft.ireport.locale.I18n;
 import com.jaspersoft.ireport.designer.FieldsProviderEditor;
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.data.ReportQueryDialog;
@@ -115,7 +116,7 @@ public class XMLFieldMappingEditor extends javax.swing.JPanel  implements Fields
         initComponents();
         try {
             Thread.currentThread().setContextClassLoader( IReportManager.getReportClassLoader());
-            xpathExecuter = JRXPathExecuterUtils.getXPathExecuter();
+            xpathExecuter = JRXPathExecuterUtils.getXPathExecuter(IRLocalJasperReportsContext.getInstance());
         } catch (JRException ex) {
            ex.printStackTrace();
         }

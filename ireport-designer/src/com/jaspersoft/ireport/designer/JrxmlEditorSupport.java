@@ -233,7 +233,7 @@ public class JrxmlEditorSupport extends DataEditorSupport implements OpenCookie,
 
                     if (compatibility.length() == 0)
                     {
-                        content = JRXmlWriter.writeReport(jd, "UTF-8"); // IReportManager.getInstance().getProperty("jrxmlEncoding", System.getProperty("file.encoding") ));
+                        content = JRXmlWriterHelper.writeReport(jd, "UTF-8"); // IReportManager.getInstance().getProperty("jrxmlEncoding", System.getProperty("file.encoding") ));
                     }
                     else
                     {

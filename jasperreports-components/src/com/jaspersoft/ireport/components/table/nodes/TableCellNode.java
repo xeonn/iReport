@@ -40,6 +40,7 @@ import com.jaspersoft.ireport.components.table.actions.TableCellDoVerticalLayout
 import com.jaspersoft.ireport.components.table.nodes.properties.CellHeightProperty;
 import com.jaspersoft.ireport.components.table.nodes.properties.CellPaddingAndBordersProperty;
 import com.jaspersoft.ireport.components.table.nodes.properties.ColumnPrintWhenExpressionProperty;
+import com.jaspersoft.ireport.components.table.nodes.properties.ColumnPropertyExpressionsProperty;
 import com.jaspersoft.ireport.components.table.nodes.properties.ColumnWidthProperty;
 import com.jaspersoft.ireport.components.table.nodes.properties.RowSpanProperty;
 import com.jaspersoft.ireport.designer.ModelUtils;
@@ -209,6 +210,7 @@ public class TableCellNode extends IRIndexedNode implements PropertyChangeListen
         }
 
         set.put(new ColumnPrintWhenExpressionProperty((StandardBaseColumn) getColumn(), dataset));
+        set.put(new ColumnPropertyExpressionsProperty((StandardBaseColumn) getColumn(), dataset));
 
         sheet.put(set);
 
