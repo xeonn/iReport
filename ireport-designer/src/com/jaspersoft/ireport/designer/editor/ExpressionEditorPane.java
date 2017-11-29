@@ -84,7 +84,7 @@ public class ExpressionEditorPane extends javax.swing.JEditorPane {
             setEditorKit(kit);
         }
 
-        Font font = new Font(Font.MONOSPACED, Font.PLAIN, IReportManager.getPreferences().getInt("editorFontSize", 12));
+        Font font = new Font("Monospaced", Font.PLAIN, IReportManager.getPreferences().getInt("editorFontSize", 12));
         setFont(font);
 
         // List all listeners...

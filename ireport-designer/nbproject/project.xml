@@ -424,7 +424,6 @@
                 <package>net.sf.jasperreports.engine.scriptlets</package>
                 <package>net.sf.jasperreports.engine.type</package>
                 <package>net.sf.jasperreports.engine.util</package>
-                <package>net.sf.jasperreports.engine.util.sample</package>
                 <package>net.sf.jasperreports.engine.util.xml</package>
                 <package>net.sf.jasperreports.engine.xml</package>
                 <package>net.sf.jasperreports.extensions</package>
@@ -436,6 +435,7 @@
                 <package>net.sf.jasperreports.olap.result</package>
                 <package>net.sf.jasperreports.olap.xmla</package>
                 <package>net.sf.jasperreports.renderers</package>
+                <package>net.sf.jasperreports.repo</package>
                 <package>net.sf.jasperreports.swing</package>
                 <package>net.sf.jasperreports.view</package>
                 <package>net.sf.jasperreports.view.save</package>
@@ -774,16 +774,16 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-4.1.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-4.1.1.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-4.1.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-4.1.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-fonts-4.1.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-fonts-4.1.1.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-fonts-4.1.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-fonts-4.1.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-chart-themes-4.1.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-chart-themes-4.1.1.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-chart-themes-4.1.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-chart-themes-4.1.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jaxen-1.1.1.jar</runtime-relative-path>
@@ -1036,7 +1036,6 @@
                 <binary-origin>release/modules/ext/swingx-2007_10_07.jar</binary-origin>
             </class-path-extension>
             <!-- end swingx-2007_10_07.jar -->
-
             <class-path-extension>
                 <runtime-relative-path>ext/poi-ooxml-3.6-20091214.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/poi-ooxml-3.6-20091214.jar</binary-origin>
@@ -1053,8 +1052,6 @@
                 <runtime-relative-path>ext/xbean.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/xbean.jar</binary-origin>
             </class-path-extension>
-
-
         </data>
     </configuration>
 </project>

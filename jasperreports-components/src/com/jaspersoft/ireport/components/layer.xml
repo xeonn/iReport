@@ -93,6 +93,10 @@
                  <file name="JRSpiderChart.irpitem" url="spiderchart/jrspiderchart.irpitem"/>
                  <file name="JRMap.irpitem" url="map/jrmap.irpitem"/>
                  <file name="JRHtml.irpitem" url="html/jrhtml.irpitem"/>
+                 <file name="JRSort.irpitem" url="sort/jrsort.irpitem"/>
+            </folder>
+            <folder name="Web Framework">
+                 <file name="JRSort.irpitem" url="sort/jrsort.irpitem"/>
             </folder>
         </folder>
 
@@ -163,6 +167,9 @@
                </file>
                <file name="net-sf-jasperreports-components-html-HtmlComponent.instance">
                    <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.html.HtmlElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-sort-SortComponent.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.sort.SortElementNodeFactory"/>
                </file>
             </folder>
             <folder name="designers">

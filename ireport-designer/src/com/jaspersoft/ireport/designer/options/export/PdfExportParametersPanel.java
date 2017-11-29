@@ -29,6 +29,7 @@ import com.jaspersoft.ireport.locale.I18n;
 import java.util.prefs.Preferences;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.lowagie.text.pdf.PdfWriter;
+import javax.swing.JFileChooser;
 import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
 import net.sf.jasperreports.engine.util.JRProperties;
 
@@ -73,12 +74,19 @@ public class PdfExportParametersPanel extends AbstractExportParametersPanel {
          jComboBoxEncryption.addItem(I18n.getString("export.pdf.encryption.Standard"));
          jComboBoxEncryption.addItem(I18n.getString("export.pdf.encryption.128bitKey"));
 
+
+
          jComboBoxPDFVersion.addItem(new Tag(null, I18n.getString("Global.Button.Default"))); //NOI18N
          jComboBoxPDFVersion.addItem(new Tag(""+JRPdfExporterParameter.PDF_VERSION_1_2, "1.2")); //NOI18N
          jComboBoxPDFVersion.addItem(new Tag(""+JRPdfExporterParameter.PDF_VERSION_1_3, "1.3")); //NOI18N
          jComboBoxPDFVersion.addItem(new Tag(""+JRPdfExporterParameter.PDF_VERSION_1_4, "1.4")); //NOI18N
          jComboBoxPDFVersion.addItem(new Tag(""+JRPdfExporterParameter.PDF_VERSION_1_5, "1.5")); //NOI18N
          jComboBoxPDFVersion.addItem(new Tag(""+JRPdfExporterParameter.PDF_VERSION_1_6, "1.6")); //NOI18N
+
+         jComboBoxPdfA.addItem(new Tag(""+JRPdfExporterParameter.PDFA_CONFORMANCE_NONE, "None")); //NOI18N
+         jComboBoxPdfA.addItem(new Tag(""+JRPdfExporterParameter.PDFA_CONFORMANCE_1A, "PDF/A-1A")); //NOI18N
+         jComboBoxPdfA.addItem(new Tag(""+JRPdfExporterParameter.PDFA_CONFORMANCE_1B, "PDF/A-1B")); //NOI18N
+         
     }
 
     public void load() {
@@ -86,7 +94,10 @@ public class PdfExportParametersPanel extends AbstractExportParametersPanel {
         Preferences pref = IReportManager.getPreferences();
 
         Misc.setComboboxSelectedTagValue(jComboBoxPDFVersion, pref.get(JRPdfExporterParameter.PROPERTY_PDF_VERSION, JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDF_VERSION)));
-        
+        Misc.setComboboxSelectedTagValue(jComboBoxPdfA, pref.get(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE, JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE)));
+
+        jTextFieldICC.setText(pref.get(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH, Misc.nvl(JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH),"")));
+
         jCheckBoxCreatingBatchModeBookmarks.setSelected( pref.getBoolean(JRPdfExporterParameter.PROPERTY_CREATE_BATCH_MODE_BOOKMARKS, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_CREATE_BATCH_MODE_BOOKMARKS)));
         jCheckBoxCompressed.setSelected( pref.getBoolean(JRPdfExporterParameter.PROPERTY_COMPRESSED, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_COMPRESSED)));
         jCheckBoxForceLinebreakPolicy.setSelected( pref.getBoolean(JRPdfExporterParameter.PROPERTY_FORCE_LINEBREAK_POLICY, JRProperties.getBooleanProperty(JRPdfExporterParameter.PROPERTY_FORCE_LINEBREAK_POLICY)));
@@ -155,6 +166,16 @@ public class PdfExportParametersPanel extends AbstractExportParametersPanel {
         pref.put("export.pdf.USER_PASSWORD" , jTextFieldUserPassword.getText());
         pref.put("export.pdf.TAG_LANGUAGE" , jTextFieldTagLanguage.getText());
         pref.put("export.pdf.PDF_JAVASCRIPT" , jTextAreaPDFJavascript.getText());
+        
+        t = (Tag) jComboBoxPdfA.getSelectedItem();
+        if (t.getValue() == null) {
+            pref.remove(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE);
+        } else {
+            pref.put(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE,""+t.getValue());
+        }
+
+        pref.put(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH , jTextFieldICC.getText());
+
 
         int documentPermissions = 0;
         if (jCheckBoxAllawDegradedPrinting.isSelected()) documentPermissions |= PdfWriter.ALLOW_DEGRADED_PRINTING;
@@ -225,6 +246,12 @@ public class PdfExportParametersPanel extends AbstractExportParametersPanel {
         jCheckBoxIsTagged = new javax.swing.JCheckBox();
         jLabelTagLanguage = new javax.swing.JLabel();
         jTextFieldTagLanguage = new javax.swing.JTextField();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jComboBoxPdfA = new javax.swing.JComboBox();
+        jLabel3 = new javax.swing.JLabel();
+        jTextFieldICC = new javax.swing.JTextField();
+        jButtonPDFViewer1 = new javax.swing.JButton();
 
         jLabelTitle.setFont(new java.awt.Font("Tahoma", 1, 12));
         jLabelTitle.setText("PDF Export parameters");
@@ -532,6 +559,53 @@ public class PdfExportParametersPanel extends AbstractExportParametersPanel {
 
         jTabbedPane1.addTab("Other options", jPanel4);
 
+        jLabel1.setText("PDF/A conformance");
+
+        jLabel3.setText("PDF/A sRGB profile");
+
+        jButtonPDFViewer1.setText(org.openide.util.NbBundle.getMessage(PdfExportParametersPanel.class, "ReportViewer.jButtonPDFViewer.text")); // NOI18N
+        jButtonPDFViewer1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPDFViewer1ActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .add(jLabel1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jComboBoxPdfA, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jPanel5Layout.createSequentialGroup()
+                        .add(jLabel3)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jTextFieldICC, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButtonPDFViewer1)))
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel1)
+                    .add(jComboBoxPdfA, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(18, 18, 18)
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel3)
+                    .add(jTextFieldICC, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jButtonPDFViewer1))
+                .addContainerGap(175, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("PDF/A", jPanel5);
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -540,7 +614,7 @@ public class PdfExportParametersPanel extends AbstractExportParametersPanel {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
                         .add(jLabelPDFVersion)
-                        .add(18, 18, 18)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jComboBoxPDFVersion, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(layout.createSequentialGroup()
                         .add(jCheckBoxCreatingBatchModeBookmarks)
@@ -635,8 +709,21 @@ public class PdfExportParametersPanel extends AbstractExportParametersPanel {
         notifyChange();
     }//GEN-LAST:event_jCheckBoxAllawDegradedPrintingActionPerformed
 
+    private void jButtonPDFViewer1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPDFViewer1ActionPerformed
+
+        javax.swing.JFileChooser jfc = new javax.swing.JFileChooser();
+
+        jfc.setDialogTitle("Choose an ICC profile");
+        jfc.setMultiSelectionEnabled(false);
+        if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            jTextFieldICC.setText( jfc.getSelectedFile().getPath());
+        }
+}//GEN-LAST:event_jButtonPDFViewer1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonPDFViewer;
+    private javax.swing.JButton jButtonPDFViewer1;
     private javax.swing.JCheckBox jCheckBoxAllawDegradedPrinting;
     private javax.swing.JCheckBox jCheckBoxAllowAssembly;
     private javax.swing.JCheckBox jCheckBoxAllowCopy;
@@ -652,6 +739,9 @@ public class PdfExportParametersPanel extends AbstractExportParametersPanel {
     private javax.swing.JCheckBox jCheckBoxIsTagged;
     private javax.swing.JComboBox jComboBoxEncryption;
     private javax.swing.JComboBox jComboBoxPDFVersion;
+    private javax.swing.JComboBox jComboBoxPdfA;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelEncryption;
     private javax.swing.JLabel jLabelMetadataAuthor;
     private javax.swing.JLabel jLabelMetadataCreator;
@@ -668,10 +758,12 @@ public class PdfExportParametersPanel extends AbstractExportParametersPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea jTextAreaPDFJavascript;
+    private javax.swing.JTextField jTextFieldICC;
     private javax.swing.JTextField jTextFieldMetadataAuthor;
     private javax.swing.JTextField jTextFieldMetadataCreator;
     private javax.swing.JTextField jTextFieldMetadataKeywords;

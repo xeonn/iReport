@@ -326,6 +326,19 @@ public class DefaultExporterFactory implements ExporterFactory {
         {
             exporter.setParameter( JRPdfExporterParameter.PERMISSIONS ,pref.getInt("export.pdf.PERMISSIONS",0));
         }
+
+
+        String pdfa = pref.get(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE,JRProperties.getProperty(JRPdfExporterParameter.PDFA_CONFORMANCE_NONE));
+        if (pdfa != null)
+        {
+            exporter.setParameter( JRPdfExporterParameter.PDFA_CONFORMANCE ,pdfa);
+        }
+
+        String pdfaICC = pref.get(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH,JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH));
+        if (pdfaICC != null && !pdfaICC.equals(""))
+        {
+            exporter.setParameter( JRPdfExporterParameter.PDFA_ICC_PROFILE_PATH ,pdfaICC);
+        }
     }
 
 
