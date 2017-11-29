@@ -1,3 +1,10 @@
+2011-12-08 Version 4.5.0 released
+_______________________________________________________________________________
+- Updated to JasperReports 4.5.0
+- Support for crosstab borders
+- Support for Hadoop Hive data source
+
+
 2011-10-28 Version 4.1.3 released
 _______________________________________________________________________________
 - Updated to JasperReports 4.1.3

@@ -149,6 +149,8 @@ public class FileNode extends IRAbstractNode implements ResourceNode {
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_QUERY)) return queryIcon;
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE)) return styleTemplateIcon;
         else if (resource.getWsType().equals("ReportOptionsResource")) return reportOptionsResourceIcon;
+        else if (resource.getWsType().equals("custom") && RepositoryFolder.isDataSource(resource)) return datasourceIcon;
+        
         return unknowIcon;
         
     }

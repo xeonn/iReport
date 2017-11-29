@@ -194,6 +194,7 @@
                 <include name="jasperreports-components/**"/>
                 <include name="jasperreports-extensions/**"/>
                 <include name="jasperserver-plugin/**"/>
+                <include name="HadoopHive/**"/>
                 <include name="heartbeat/**"/>
                 <include name="branding/**"/>
                 <include name="etc/**"/>

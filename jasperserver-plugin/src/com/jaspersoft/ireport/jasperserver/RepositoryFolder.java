@@ -202,7 +202,12 @@ public class RepositoryFolder {
           rd.getWsType().equals( rd.TYPE_DATASOURCE_JDBC) ||
           rd.getWsType().equals( rd.TYPE_DATASOURCE_JNDI) ||
           rd.getWsType().equals( rd.TYPE_DATASOURCE_BEAN) ||
-          rd.getWsType().equals( "Domain")) return true;
+          rd.getWsType().equals("Domain") ||
+          (rd.getWsType().equals("custom") && rd.getResourcePropertyValue("PROP_RESOURCE_TYPE") != null && rd.getResourcePropertyValue("PROP_RESOURCE_TYPE").equals("com.jaspersoft.jasperserver.api.metadata.jasperreports.domain.CustomReportDataSource")))
+      {
+          return true;
+      }
+      
       return false;
     }
     

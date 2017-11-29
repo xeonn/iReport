@@ -24,6 +24,7 @@
 package com.jaspersoft.ireport.jasperserver.ui;
 
 import com.jaspersoft.ireport.jasperserver.JasperServerManager;
+import com.jaspersoft.ireport.jasperserver.RepositoryFolder;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -149,6 +150,7 @@ public class RepositoryListCellRenderer extends DefaultListCellRenderer  {
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_LOV)) return lovIcon;
         else if (resource.getWsType().equals(ResourceDescriptor.TYPE_QUERY)) return queryIcon;
         else if (resource.getWsType().equals("ReportOptionsResource")) return reportOptionsResourceIcon;
+        else if (resource.getWsType().equals("custom") && RepositoryFolder.isDataSource(resource)) return datasourceIcon;
         return unknowIcon;
     }
 }

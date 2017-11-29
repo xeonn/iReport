@@ -348,7 +348,7 @@ public class ReportUnitRunDialog extends javax.swing.JDialog {
                         SimpleDateFormat format = new SimpleDateFormat(IReportManager.getInstance().getProperty("dateformat", "d/M/y"));
                         formattedValue = format.format(date);
                     }
-                    else if (rdDataType != null && rdDataType.getDataType() == rdDataType.DT_TYPE_DATE)
+                    else if (rdDataType != null && rdDataType.getDataType() == rdDataType.DT_TYPE_DATE_TIME)
                     {
                         java.util.Date date = new java.util.Date(Long.parseLong(""+defaultValue));
                         SimpleDateFormat format = new SimpleDateFormat(IReportManager.getInstance().getProperty("timeformat", "d/M/y H:m:s"));
