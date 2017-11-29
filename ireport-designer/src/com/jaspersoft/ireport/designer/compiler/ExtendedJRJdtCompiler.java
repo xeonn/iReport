@@ -23,19 +23,23 @@
  */
 package com.jaspersoft.ireport.designer.compiler;
 
-import com.jaspersoft.ireport.designer.compiler.xml.SourceLocation;
-import com.jaspersoft.ireport.designer.compiler.xml.SourceTraceDigester;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JRCompilationSourceCode;
 import net.sf.jasperreports.engine.design.JRCompilationUnit;
 import net.sf.jasperreports.engine.design.JRJdtCompiler;
+
 import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.internal.compiler.CompilationResult;
-import org.eclipse.jdt.internal.compiler.ICompilerRequestor;
+
+import com.jaspersoft.ireport.designer.compiler.xml.SourceLocation;
+import com.jaspersoft.ireport.designer.compiler.xml.SourceTraceDigester;
 
 /**
  *
@@ -45,30 +49,36 @@ public class ExtendedJRJdtCompiler extends JRJdtCompiler {
     
     private JasperReportErrorHandler errorHandler = null;
     private SourceTraceDigester digester = null;
-    private ICompilerRequestor superCompilerRequestor = null;
+    private JasperReportsContext jasperReportsContext = DefaultJasperReportsContext.getInstance();//FIXME pass a context to the constructor, if we have one
+    
+    
+    public ExtendedJRJdtCompiler(JasperReportsContext context)
+    {
+        super(context);
+        this.jasperReportsContext = context;
+    }
     
     @Override
-    protected ICompilerRequestor getCompilerRequestor(JRCompilationUnit[] units, StringBuffer problemBuffer)
+    protected CompilerRequestor getCompilerRequestor(JRCompilationUnit[] units)
     {
-            return new CompilerRequestor(super.getCompilerRequestor(units, problemBuffer), units);
+            return new CompilerRequestor(jasperReportsContext, this, units);
     }
     
     
-    protected class CompilerRequestor implements ICompilerRequestor
+    protected class CompilerRequestor extends JRJdtCompiler.CompilerRequestor
 	{
-                private ICompilerRequestor superCompilerRequestor = null;
 		private final Map expressionErrors = new HashMap();
 		private final JRCompilationUnit[] units;
 
-		protected CompilerRequestor(ICompilerRequestor superCompilerRequestor, JRCompilationUnit[] units)
+		protected CompilerRequestor(JasperReportsContext jasperReportsContext, final JRJdtCompiler compiler, final JRCompilationUnit[] units)
 		{
-                        this.superCompilerRequestor = superCompilerRequestor;
+			super(jasperReportsContext, compiler, units);
 			this.units = units;
 		}
 
 		public void acceptResult(CompilationResult result)
 		{
-                        if (superCompilerRequestor != null) superCompilerRequestor.acceptResult(result);
+			super.acceptResult(result);
 			if (result.hasErrors())
 			{
 				String className = String.valueOf(result.getCompilationUnit().getMainTypeName());

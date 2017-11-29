@@ -34,8 +34,8 @@
             </module-dependencies>
             <public-packages/>
             <class-path-extension>
-                <runtime-relative-path>ext/js-mongodb-datasource-1.0.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/js-mongodb-datasource-1.0.0.jar</binary-origin>
+                <runtime-relative-path>ext/js-mongodb-datasource-1.0.0a.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/js-mongodb-datasource-1.0.0a.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/mongo-java-driver-2.7.3.jar</runtime-relative-path>

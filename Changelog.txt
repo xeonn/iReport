@@ -1,3 +1,10 @@
+2013-07-01 Version 5.2.0 released
+_______________________________________________________________________________
+- Updated to JasperReports 5.2.0
+- Added support for built-in JasperReports functions
+- Fixed MongoDB authentication
+
+
 2013-04-29 Version 5.1.0 released
 _______________________________________________________________________________
 - Updated to JasperReports 5.1.0

@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.jaspersoft.ireport.designer.FieldsProvider;
 import com.jaspersoft.ireport.designer.FieldsProviderEditor;
+import com.jaspersoft.ireport.designer.IRLocalJasperReportsContext;
 import com.jaspersoft.ireport.designer.IReportConnection;
 import com.jaspersoft.ireport.designer.data.ReportQueryDialog;
 import com.jaspersoft.ireport.mongodb.connection.MongoDbConnection;
@@ -52,7 +53,7 @@ public class MongoDbFieldsProvider implements FieldsProvider {
 		}
 		MongoDbConnection connection = (MongoDbConnection) ireportConnection;
 		return com.jaspersoft.mongodb.MongoDbFieldsProvider.getInstance()
-				.getFields(dataset, parameters, (com.jaspersoft.mongodb.connection.MongoDbConnection) connection.getConnection())
+				.getFields(IRLocalJasperReportsContext.getInstance(),  dataset, parameters, (com.jaspersoft.mongodb.connection.MongoDbConnection) connection.getConnection())
 				.toArray(new JRField[0]);
 	}
 

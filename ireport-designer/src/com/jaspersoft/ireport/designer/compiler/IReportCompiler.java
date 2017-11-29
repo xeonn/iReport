@@ -495,7 +495,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                 {
                      //Force to use the jdtCompiler compiler....
                      //net.sf.jasperreports.engine.util.JRProperties.setProperty(net.sf.jasperreports.engine.design.JRCompiler.COMPILER_PREFIX + "java", "it.businesslogic.ireport.compiler.ExtendedJRJdtCompiler" );
-                     jdtCompiler = new ExtendedJRJdtCompiler();
+                     jdtCompiler = new ExtendedJRJdtCompiler(context);
                 }
 
                 
