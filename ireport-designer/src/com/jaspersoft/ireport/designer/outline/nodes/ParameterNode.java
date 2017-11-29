@@ -26,8 +26,6 @@ package com.jaspersoft.ireport.designer.outline.nodes;
 import com.jaspersoft.ireport.designer.sheet.properties.DefaultValueExpressionProperty;
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.dnd.ReportObjectPaletteTransferable;
-import com.jaspersoft.ireport.designer.editor.ExpressionContext;
-import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.JRPropertiesMapProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
@@ -43,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
-import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -200,11 +198,12 @@ public class ParameterNode extends IRAbstractNode implements PropertyChangeListe
             throw new IllegalArgumentException("Parameter name not valid.");
         }
         
-        List<JRDesignParameter> currentParameters = null;
+        List<JRParameter> currentParameters = null;
         JRDesignDataset dataset = getParentNode().getLookup().lookup(JRDesignDataset.class);
-        currentParameters = (List<JRDesignParameter>)dataset.getParametersList();
-        for (JRDesignParameter p : currentParameters)
+        currentParameters = (List<JRParameter>)dataset.getParametersList();
+        for (JRParameter pa : currentParameters)
         {
+            JRDesignParameter p = (JRDesignParameter)pa;
             if (p != getParameter() && p.getName().equals(s))
             {
                 throw new IllegalArgumentException("Parameter name already in use.");
@@ -307,10 +306,11 @@ public class ParameterNode extends IRAbstractNode implements PropertyChangeListe
 
             String s = val+"";
 
-            List<JRDesignParameter> currentParameters = null;
-            currentParameters = (List<JRDesignParameter>)getDataset().getParametersList();
-            for (JRDesignParameter p : currentParameters)
+            List<JRParameter> currentParameters = null;
+            currentParameters = (List<JRParameter>)getDataset().getParametersList();
+            for (JRParameter pa : currentParameters)
             {
+                JRDesignParameter p = (JRDesignParameter)pa;
                 if (p != getParameter() && p.getName().equals(s))
                 {
                     IllegalArgumentException iae = annotateException(I18n.getString("ParameterNode.Property.NameInUse")); 

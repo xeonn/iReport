@@ -23,74 +23,79 @@
  */
 package com.jaspersoft.ireport.designer.sheet.properties.style;
 
-import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
-import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
-import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
+import com.jaspersoft.ireport.designer.sheet.properties.EnumProperty;
 import com.jaspersoft.ireport.locale.I18n;
-import java.beans.PropertyEditor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
+import java.util.List;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignImage;
-import org.openide.nodes.PropertySupport;
+import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 
 /**
  * Class to manage the JRDesignElement.PROPERTY_POSITION_TYPE property
  */
-public final class VerticalAlignmentProperty extends PropertySupport {
+public final class VerticalAlignmentProperty extends EnumProperty {
 
     private final JRBaseStyle style;
-    private ComboBoxPropertyEditor editor;
 
     @SuppressWarnings(value = "unchecked")
     public VerticalAlignmentProperty(JRBaseStyle style) {
-        super(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, Byte.class, I18n.getString("AbstractStyleNode.Property.Vertical_Alignment"), I18n.getString("AbstractStyleNode.Property.VerticalDetail"), true, true);
+
+        super(VerticalAlignEnum.class, style);
         this.style = style;
         setValue("suppressCustomEditor", Boolean.TRUE);
     }
 
+
+
     @Override
-    @SuppressWarnings(value = "unchecked")
-    public PropertyEditor getPropertyEditor() {
-        if (editor == null) {
-            ArrayList l = new ArrayList();
-            l.add(new Tag(null, "<Default>"));
-            l.add(new Tag(new Byte(JRDesignImage.VERTICAL_ALIGN_TOP), I18n.getString("Global.Property.Top")));
-            l.add(new Tag(new Byte(JRDesignImage.VERTICAL_ALIGN_MIDDLE), I18n.getString("Global.Property.Middle")));
-            l.add(new Tag(new Byte(JRDesignImage.VERTICAL_ALIGN_BOTTOM), I18n.getString("Global.Property.Bottom")));
-            //l.add(new Tag(new Byte(JRDesignImage.VERTICAL_ALIGN_JUSTIFIED), I18n.getString("AbstractStyleNode.Property.Justified")));
-            editor = new ComboBoxPropertyEditor(false, l);
-        }
-        return editor;
-    }
-
-    public Object getValue() throws IllegalAccessException, InvocationTargetException {
-        return style.getVerticalAlignment();
-    }
-
-    public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        if (val == null || val instanceof Byte) {
-            Byte oldValue = style.getOwnVerticalAlignment();
-            Byte newValue = (Byte) val;
-            style.setVerticalAlignment(newValue);
-            ObjectPropertyUndoableEdit urob = new ObjectPropertyUndoableEdit(style, "VerticalAlignment", Byte.class, oldValue, newValue);
-            IReportManager.getInstance().addUndoableEdit(urob);
-        }
+    public String getName()
+    {
+        return JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT;
     }
 
     @Override
-    public boolean isDefaultValue() {
-        return style.getOwnVerticalAlignment() == null;
+    public String getDisplayName()
+    {
+        return I18n.getString("AbstractStyleNode.Property.Vertical_Alignment");
     }
 
     @Override
-    public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
-        setValue(null);
+    public String getShortDescription()
+    {
+        return I18n.getString("AbstractStyleNode.Property.VerticalDetail");
     }
 
     @Override
-    public boolean supportsDefaultValue() {
-        return true;
+    public Object getPropertyValue()
+    {
+        return style.getVerticalAlignmentValue();
+    }
+
+    @Override
+    public Object getOwnPropertyValue()
+    {
+        return getPropertyValue();
+    }
+
+    @Override
+    public Object getDefaultValue()
+    {
+        return null;
+    }
+
+    @Override
+    public void setPropertyValue(Object newValue)
+    {
+        style.setVerticalAlignment((VerticalAlignEnum)newValue);
+    }
+
+    @Override
+    public List getTagList()
+    {
+        List tags = new java.util.ArrayList();
+        tags.add(new Tag(VerticalAlignEnum.TOP, I18n.getString("Global.Property.Top")));
+        tags.add(new Tag(VerticalAlignEnum.MIDDLE, I18n.getString("Global.Property.Middle")));
+        tags.add(new Tag(VerticalAlignEnum.BOTTOM, I18n.getString("Global.Property.Bottom")));
+        return tags;
     }
 }

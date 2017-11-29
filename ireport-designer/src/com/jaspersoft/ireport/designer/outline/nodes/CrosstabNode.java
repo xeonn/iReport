@@ -26,6 +26,8 @@ package com.jaspersoft.ireport.designer.outline.nodes;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.crosstab.CrosstabDataAction;
 import com.jaspersoft.ireport.designer.sheet.Tag;
+import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
+import com.jaspersoft.ireport.designer.sheet.properties.AbstractProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.CrosstabParametersMapExpressionProperty;
@@ -41,6 +43,7 @@ import javax.swing.Action;
 import net.sf.jasperreports.crosstabs.base.JRBaseCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.RunDirectionEnum;
 import org.openide.nodes.NodeEvent;
 import org.openide.nodes.NodeListener;
 import org.openide.nodes.NodeMemberEvent;
@@ -437,15 +440,17 @@ public class CrosstabNode extends ElementNode {
     }
     
     
-    public static final class RunDirectionProperty extends ByteProperty {
+    public static final class RunDirectionProperty extends AbstractProperty {
 
         private final JRDesignCrosstab crosstab;
+        private ComboBoxPropertyEditor editor;
 
         @SuppressWarnings("unchecked")
         public RunDirectionProperty(JRDesignCrosstab crosstab)
         {
-            super(crosstab);
+            super(RunDirectionEnum.class, crosstab);
             this.crosstab = crosstab;
+            setValue("suppressCustomEditor", Boolean.TRUE);
         }
         
         @Override
@@ -467,33 +472,36 @@ public class CrosstabNode extends ElementNode {
         }
 
         
-        @Override
         public List getTagList() {
             List list = new ArrayList();
-            list.add(new Tag(new Byte(JRBaseCrosstab.RUN_DIRECTION_LTR), "Left to Right"));
-            list.add(new Tag(new Byte(JRBaseCrosstab.RUN_DIRECTION_RTL), "Right to Left"));
+            list.add(new Tag(RunDirectionEnum.LTR, "Left to Right"));
+            list.add(new Tag(RunDirectionEnum.RTL, "Right to Left"));
             return list;
 
         }
 
         @Override
-        public Byte getByte() {
+        public Object getPropertyValue() {
             return crosstab.getRunDirectionValue() == null ? null : crosstab.getRunDirectionValue().getValueByte();
         }
 
         @Override
-        public Byte getOwnByte() {
-            return getByte();
+        public Object getOwnPropertyValue() {
+            return getPropertyValue();
         }
 
         @Override
-        public Byte getDefaultByte() {
-            return JRBaseCrosstab.RUN_DIRECTION_LTR;
+        public Object getDefaultValue() {
+            return RunDirectionEnum.LTR;
         }
 
         @Override
-        public void setByte(Byte value) {
-            crosstab.setRunDirection(value);
+        public void setPropertyValue(Object value) {
+            crosstab.setRunDirection((RunDirectionEnum)value);
+        }
+
+        @Override
+        public void validate(Object value) {
         }
 
     }

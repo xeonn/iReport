@@ -32,6 +32,7 @@ import java.awt.Frame;
 import java.util.List;
 import net.sf.jasperreports.engine.design.JRDesignSubreportReturnValue;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
+import net.sf.jasperreports.engine.type.CalculationEnum;
 
 /**
  * @author Administrator
@@ -91,18 +92,18 @@ public class JRSubreportReturnValueDialog
      */
     public void setTypes()
     {
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_NOTHING ),I18n.getString("JRSubreportReturnValueDialog.ComboBox.Nothing")));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_COUNT ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.Count")));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_DISTINCT_COUNT ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.DistinctCount")));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_SUM ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.Sum")));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_AVERAGE ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.Average")));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_LOWEST ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.Lowest")));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_HIGHEST ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.Highest")));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_STANDARD_DEVIATION ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.StandardDeviation")));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_VARIANCE ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.Variance")));
+        this.jComboBoxCalculationType.addItem(new Tag( CalculationEnum.NOTHING,I18n.getString("JRSubreportReturnValueDialog.ComboBox.Nothing")));
+        this.jComboBoxCalculationType.addItem(new Tag( CalculationEnum.COUNT, I18n.getString("JRSubreportReturnValueDialog.ComboBox.Count")));
+        this.jComboBoxCalculationType.addItem(new Tag( CalculationEnum.DISTINCT_COUNT, I18n.getString("JRSubreportReturnValueDialog.ComboBox.DistinctCount")));
+        this.jComboBoxCalculationType.addItem(new Tag( CalculationEnum.SUM, I18n.getString("JRSubreportReturnValueDialog.ComboBox.Sum")));
+        this.jComboBoxCalculationType.addItem(new Tag( CalculationEnum.AVERAGE, I18n.getString("JRSubreportReturnValueDialog.ComboBox.Average")));
+        this.jComboBoxCalculationType.addItem(new Tag( CalculationEnum.LOWEST, I18n.getString("JRSubreportReturnValueDialog.ComboBox.Lowest")));
+        this.jComboBoxCalculationType.addItem(new Tag( CalculationEnum.HIGHEST, I18n.getString("JRSubreportReturnValueDialog.ComboBox.Highest")));
+        this.jComboBoxCalculationType.addItem(new Tag( CalculationEnum.STANDARD_DEVIATION, I18n.getString("JRSubreportReturnValueDialog.ComboBox.StandardDeviation")));
+        this.jComboBoxCalculationType.addItem(new Tag( CalculationEnum.VARIANCE, I18n.getString("JRSubreportReturnValueDialog.ComboBox.Variance")));
         // CALCULATION_SYSTEM Not allowed as calc type for return values... [bug 0004349]
         // this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_SYSTEM ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.System")));
-        this.jComboBoxCalculationType.addItem(new Tag( new Byte( JRDesignVariable.CALCULATION_FIRST ), I18n.getString("JRSubreportReturnValueDialog.ComboBox.First")));
+        this.jComboBoxCalculationType.addItem(new Tag( CalculationEnum.FIRST, I18n.getString("JRSubreportReturnValueDialog.ComboBox.First")));
     }
 
     /**
@@ -302,7 +303,7 @@ public class JRSubreportReturnValueDialog
         subreportReturnValue.setToVariable( jComboBoxVariable.getSelectedItem()+"");
 
         Object t = this.jComboBoxCalculationType.getSelectedItem();
-        if (t != null && t instanceof Tag) subreportReturnValue.setCalculation(  (Byte)((Tag)t).getValue() );
+        if (t != null && t instanceof Tag) subreportReturnValue.setCalculation(  (CalculationEnum)((Tag)t).getValue() );
         
         if (this.jTextFieldNameIncrementerFactoryClass.getText().length() == 0)
         {
@@ -358,7 +359,7 @@ public class JRSubreportReturnValueDialog
             }
         }
         
-        Misc.setComboboxSelectedTagValue( jComboBoxCalculationType, tmpSubreportReturnValue.getCalculation() );
+        Misc.setComboboxSelectedTagValue( jComboBoxCalculationType, tmpSubreportReturnValue.getCalculationValue() );
         this.jTextFieldNameIncrementerFactoryClass.setText(tmpSubreportReturnValue.getIncrementerFactoryClassName());
     }
 

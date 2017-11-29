@@ -44,6 +44,7 @@ import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.fill.calculation.BucketDefinition;
+import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
@@ -154,7 +155,7 @@ final class CrosstabDebugConsoleTopComponent extends TopComponent {
             {
                 JRCrosstabColumnGroup group = col_groups[i];
                 size.x++;
-                if (group.getTotalPosition() != BucketDefinition.TOTAL_POSITION_NONE)
+                if (group.getTotalPositionValue() !=  CrosstabTotalPositionEnum.NONE)
                 {
                     size.x++;
                 }
@@ -185,7 +186,7 @@ final class CrosstabDebugConsoleTopComponent extends TopComponent {
             {
                 JRCrosstabColumnGroup group = col_groups[i];
 
-                if (group.getTotalPosition() == BucketDefinition.TOTAL_POSITION_START)
+                if (group.getTotalPositionValue() !=  CrosstabTotalPositionEnum.START)
                 {
                     CellInfo ci = new CellInfo(x, y, 1, h, group.getTotalHeader());
                     cellInfos.add(ci);
@@ -196,7 +197,7 @@ final class CrosstabDebugConsoleTopComponent extends TopComponent {
                 cellInfos.add(ci2);
 
 
-                if (group.getTotalPosition() == BucketDefinition.TOTAL_POSITION_END)
+                if (group.getTotalPositionValue() !=  CrosstabTotalPositionEnum.END)
                 {
                      CellInfo ci = new CellInfo(x+w, y, 1, h, group.getTotalHeader());
                      cellInfos.add(ci);
@@ -219,7 +220,7 @@ final class CrosstabDebugConsoleTopComponent extends TopComponent {
             {
                 JRCrosstabRowGroup group = row_groups[i];
 
-                if (group.getTotalPosition() == BucketDefinition.TOTAL_POSITION_START)
+                if (group.getTotalPositionValue() !=  CrosstabTotalPositionEnum.START)
                 {
                     CellInfo ci = new CellInfo(x, y, w, 1, group.getTotalHeader());
                     cellInfos.add(ci);
@@ -229,7 +230,7 @@ final class CrosstabDebugConsoleTopComponent extends TopComponent {
                 CellInfo ci2 = new CellInfo(x, y, 1, h, group.getHeader());
                 cellInfos.add(ci2);
 
-                if (group.getTotalPosition() == BucketDefinition.TOTAL_POSITION_END)
+                if (group.getTotalPositionValue() !=  CrosstabTotalPositionEnum.END)
                 {
                     CellInfo ci = new CellInfo(x, y+h, w, 1, group.getTotalHeader());
                     cellInfos.add(ci);

@@ -43,6 +43,7 @@ import net.sf.jasperreports.engine.JRTextField;
 import net.sf.jasperreports.engine.JRVisitable;
 import net.sf.jasperreports.engine.JRVisitor;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BreakTypeEnum;
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
@@ -97,7 +98,7 @@ public class ElementNameVisitor implements JRVisitor {
      */
     public void visitBreak(JRBreak breakElement)
     {
-        if (breakElement.getType() == JRBreak.TYPE_PAGE)
+        if (breakElement.getTypeValue() == BreakTypeEnum.PAGE)
             name = "Page Break";
         else
            name = "Column Break";

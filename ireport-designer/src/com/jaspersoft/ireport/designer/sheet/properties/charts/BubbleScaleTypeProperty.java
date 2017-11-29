@@ -31,6 +31,7 @@ import com.jaspersoft.ireport.locale.I18n;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.charts.design.JRDesignBubblePlot;
+import net.sf.jasperreports.charts.type.ScaleTypeEnum;
 import org.openide.nodes.PropertySupport;
     
     
@@ -46,7 +47,7 @@ public final class BubbleScaleTypeProperty extends PropertySupport//FIXMETD
         public BubbleScaleTypeProperty(JRDesignBubblePlot element)
         {
             // TODO: Replace WhenNoDataType with the right constant
-            super(JRDesignBubblePlot.PROPERTY_SCALE_TYPE,Integer.class, I18n.getString("Global.Property.ScaleType"), I18n.getString("Global.Property.ScaleType"), true, true);
+            super(JRDesignBubblePlot.PROPERTY_SCALE_TYPE,ScaleTypeEnum.class, I18n.getString("Global.Property.ScaleType"), I18n.getString("Global.Property.ScaleType"), true, true);
             this.element = element;
             setValue("suppressCustomEditor", Boolean.TRUE);
         }
@@ -58,16 +59,16 @@ public final class BubbleScaleTypeProperty extends PropertySupport//FIXMETD
             if (editor == null)
             {
                 java.util.ArrayList l = new java.util.ArrayList();
-                l.add(new Tag(new Integer(org.jfree.chart.renderer.xy.XYBubbleRenderer.SCALE_ON_BOTH_AXES), I18n.getString("Global.Property.BothAxes")));
-                l.add(new Tag(new Integer(org.jfree.chart.renderer.xy.XYBubbleRenderer.SCALE_ON_DOMAIN_AXIS), I18n.getString("Global.Property.DomainAxis")));
-                l.add(new Tag(new Integer(org.jfree.chart.renderer.xy.XYBubbleRenderer.SCALE_ON_RANGE_AXIS), I18n.getString("Global.Property.RangeAxis")));
+                l.add(new Tag(ScaleTypeEnum.ON_BOTH_AXES, I18n.getString("Global.Property.BothAxes")));
+                l.add(new Tag(ScaleTypeEnum.ON_DOMAIN_AXIS, I18n.getString("Global.Property.DomainAxis")));
+                l.add(new Tag(ScaleTypeEnum.ON_RANGE_AXIS, I18n.getString("Global.Property.RangeAxis")));
                 editor = new ComboBoxPropertyEditor(false, l);
             }
             return editor;
         }
         
         public Object getValue() throws IllegalAccessException, InvocationTargetException {
-            return new Integer(element.getScaleType());
+            return element.getScaleTypeValue();
         }
 
         public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -77,17 +78,17 @@ public final class BubbleScaleTypeProperty extends PropertySupport//FIXMETD
     
         private void setPropertyValue(Object val)
         {
-            if (val instanceof Integer)
+            if (val instanceof ScaleTypeEnum)
             {
-                int oldValue = element.getScaleType();
-                int newValue = ((Integer)val).intValue();
+                ScaleTypeEnum oldValue = element.getScaleTypeValue();
+                ScaleTypeEnum newValue = (ScaleTypeEnum)val;
                 element.setScaleType(newValue);
 
                 ObjectPropertyUndoableEdit urob =
                         new ObjectPropertyUndoableEdit(
                             element,
                             "ScaleType", 
-                            Integer.TYPE,
+                            ScaleTypeEnum.class,
                             oldValue,newValue);
                 // Find the undoRedo manager...
                 IReportManager.getInstance().addUndoableEdit(urob);
@@ -96,12 +97,12 @@ public final class BubbleScaleTypeProperty extends PropertySupport//FIXMETD
         
         @Override
         public boolean isDefaultValue() {
-            return element.getScaleType() == org.jfree.chart.renderer.xy.XYBubbleRenderer.SCALE_ON_RANGE_AXIS;
+            return element.getScaleTypeValue() == ScaleTypeEnum.ON_RANGE_AXIS;
         }
 
         @Override
         public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
-            setValue(new Integer( org.jfree.chart.renderer.xy.XYBubbleRenderer.SCALE_ON_RANGE_AXIS) );
+            setValue(ScaleTypeEnum.ON_RANGE_AXIS );
         }
 
         @Override

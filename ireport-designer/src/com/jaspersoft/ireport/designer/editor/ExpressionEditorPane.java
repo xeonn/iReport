@@ -23,6 +23,8 @@
  */
 package com.jaspersoft.ireport.designer.editor;
 
+import com.jaspersoft.ireport.designer.IReportManager;
+import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyListener;
@@ -75,8 +77,16 @@ public class ExpressionEditorPane extends javax.swing.JEditorPane {
     {
         super();
         this.expressionContext = context;
-        EditorKit kit = CloneableEditorSupport.getEditorKit("text/jrxml-expression");
-        setEditorKit(kit);
+
+        if (IReportManager.getPreferences().getBoolean("useSyntaxHighlighting", true))
+        {
+            EditorKit kit = CloneableEditorSupport.getEditorKit("text/jrxml-expression");
+            setEditorKit(kit);
+        }
+
+        Font font = new Font(Font.MONOSPACED, Font.PLAIN, IReportManager.getPreferences().getInt("editorFontSize", 12));
+        setFont(font);
+
         // List all listeners...
         removeHyperlinkEditorKitListeners();
 

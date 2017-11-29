@@ -607,7 +607,8 @@ public class MeterIntervalsPanel extends javax.swing.JPanel {
     {
         DecimalFormat dnf = new DecimalFormat("0.00");
         jTable1.setValueAt(mi, row, 0);
-        jTable1.setValueAt(dnf.format(mi.getAlpha()) , row, 1);
+        
+        jTable1.setValueAt(mi.getAlphaDouble() == null ? null : dnf.format(mi.getAlphaDouble()) , row, 1);
         jTable1.setValueAt(mi.getDataRange().getLowExpression(), row, 2);
         jTable1.setValueAt(mi.getDataRange().getHighExpression(), row, 3);
         jTable1.updateUI();
@@ -617,7 +618,7 @@ public class MeterIntervalsPanel extends javax.swing.JPanel {
     {
         DecimalFormat dnf = new DecimalFormat("0.00");
         DefaultTableModel dtm = (DefaultTableModel)jTable1.getModel();
-        dtm.addRow(new Object[]{mi, dnf.format(mi.getAlpha()), mi.getDataRange().getLowExpression(), mi.getDataRange().getHighExpression()} );
+        dtm.addRow(new Object[]{mi, mi.getAlphaDouble() == null ? null : dnf.format(mi.getAlphaDouble()), mi.getDataRange().getLowExpression(), mi.getDataRange().getHighExpression()} );
         jTable1.updateUI();
     }
 

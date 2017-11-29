@@ -47,7 +47,7 @@ public class DeleteBackgroundImageAction extends NodeAction {
                             scene.validate();
                             scene.revalidate(true);
                         }
-                        ((ShowBackgroundImageAction)SystemAction.get(ShowBackgroundImageAction.class)).resultChanged(null);
+                        (SystemAction.get(ShowBackgroundImageAction.class)).resultChanged(null);
                         firePropertyChange(NodeAction.PROP_ENABLED,true ,false);
                         IReportManager.getInstance().notifyReportChange();
 

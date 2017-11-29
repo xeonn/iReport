@@ -26,6 +26,7 @@ package com.jaspersoft.ireport.designer.palette.actions;
 import com.jaspersoft.ireport.designer.crosstab.CrosstabObjectScene;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.text.AttributedCharacterIterator.Attribute;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -155,7 +156,7 @@ public class DefaultCellElementsLayout {
                     // Calculate the best font height...
                     if (element instanceof JRDesignTextElement)
                     {
-                        JRStyledTextParser styledTextParser = new JRStyledTextParser();
+                        JRStyledTextParser styledTextParser = JRStyledTextParser.getInstance();
                         JRDesignTextElement dte = (JRDesignTextElement)element;
                         dte.setFontSize(null);
                         for (int i=dte.getFontSize()-1; i>1 ; --i)
@@ -163,13 +164,14 @@ public class DefaultCellElementsLayout {
                                 String text = "test";
                                 
                                 // Convert the element in a print element...
-                                Map attributes = JRFontUtil.getAttributes(new HashMap(), dte, Locale.getDefault());
+                                Map<Attribute, Object> attributes = JRFontUtil.getAttributes(new HashMap(), dte, Locale.getDefault());
                                 
                                 JRStyledText styledText = 
                                     styledTextParser.getStyledText(
                                     attributes, 
                                     text, 
-                                    JRCommonText.MARKUP_STYLED_TEXT.equals(dte.getMarkup())//FIXMEMARKUP only static styled text appears on preview. no other markup
+                                    JRCommonText.MARKUP_STYLED_TEXT.equals(dte.getMarkup()),//FIXMEMARKUP only static styled text appears on preview. no other markup
+                                    Locale.getDefault()
 				);
 
                                 

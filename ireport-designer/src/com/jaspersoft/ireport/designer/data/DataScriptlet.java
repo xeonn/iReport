@@ -25,6 +25,7 @@
 package com.jaspersoft.ireport.designer.data;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,25 @@ public class DataScriptlet extends JRDefaultScriptlet {
         if (fieldNames == null)
         {
 
+            fieldNames = (List<String>)getParameterValue("ireport.data.columns");
+
+            for (Object obj : fieldNames)
+            {
+                final String fName = obj+"";
+                //fieldNames.add(fName);
+                try {
+                    SwingUtilities.invokeAndWait(new Runnable() {
+
+                        public void run() {
+                            model.addColumn(fName);
+                        }
+                    });
+                } catch (Exception ex) {
+                }
+
+            }
+
+            /*
             model.setRowCount(0);
             model.setColumnCount(0);
             fieldNames = new ArrayList<String>();
@@ -85,6 +105,7 @@ public class DataScriptlet extends JRDefaultScriptlet {
                 }
                 
             }
+            */
         }
 
         
@@ -100,9 +121,6 @@ public class DataScriptlet extends JRDefaultScriptlet {
         }
         try {
 
-            
-
-            
             SwingUtilities.invokeAndWait(new Runnable() {
 
                 public void run() {

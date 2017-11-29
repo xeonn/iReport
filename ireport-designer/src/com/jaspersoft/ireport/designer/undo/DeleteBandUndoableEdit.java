@@ -54,38 +54,38 @@ public class DeleteBandUndoableEdit extends AggregatedUndoableEdit {
         JROrigin origin = getBand().getOrigin();
         if (origin != null)
         {
-            switch (origin.getBandType())
+            switch (origin.getBandTypeValue())
             {
-                case JROrigin.BACKGROUND: 
+                case BACKGROUND:
                     jasperDesign.setBackground(band); break;
-                case JROrigin.TITLE: 
+                case TITLE:
                     jasperDesign.setTitle(band); break;
-                case JROrigin.PAGE_HEADER: 
+                case PAGE_HEADER:
                     jasperDesign.setPageHeader(band); break;
-                case JROrigin.COLUMN_HEADER: 
+                case COLUMN_HEADER:
                     jasperDesign.setColumnHeader(band); break;
-                case JROrigin.DETAIL: 
+                case DETAIL:
                 {
                     ((JRDesignSection)jasperDesign.getDetailSection()).addBand(band);
                     break;
                 }
-                case JROrigin.COLUMN_FOOTER: 
+                case COLUMN_FOOTER:
                     jasperDesign.setColumnFooter(band); break;
-                case JROrigin.PAGE_FOOTER: 
+                case PAGE_FOOTER:
                     jasperDesign.setPageFooter(band); break;
-                case JROrigin.LAST_PAGE_FOOTER: 
+                case LAST_PAGE_FOOTER:
                     jasperDesign.setLastPageFooter(band); break;
-                case JROrigin.SUMMARY: 
+                case SUMMARY:
                     jasperDesign.setSummary(band); break;
-                case JROrigin.NO_DATA: 
+                case NO_DATA:
                     jasperDesign.setNoData(band); break;
-                case JROrigin.GROUP_HEADER:
+                case GROUP_HEADER:
                 {
                     JRDesignGroup group = (JRDesignGroup)jasperDesign.getGroupsMap().get(origin.getGroupName());
                     ((JRDesignSection)group.getGroupHeaderSection()).addBand(band);
                     break;
                 }
-                case JROrigin.GROUP_FOOTER:
+                case GROUP_FOOTER:
                 {
                     JRDesignGroup group = (JRDesignGroup)jasperDesign.getGroupsMap().get(origin.getGroupName());
                     ((JRDesignSection)group.getGroupFooterSection()).addBand(band);
@@ -105,34 +105,34 @@ public class DeleteBandUndoableEdit extends AggregatedUndoableEdit {
 
         if (origin != null)
         {
-            switch (origin.getBandType())
+            switch (origin.getBandTypeValue())
             {
-                case JROrigin.BACKGROUND: 
+                case BACKGROUND:
                     jasperDesign.setBackground(null); break;
-                case JROrigin.TITLE: 
+                case TITLE:
                     jasperDesign.setTitle(null); break;
-                case JROrigin.PAGE_HEADER: 
+                case PAGE_HEADER:
                     jasperDesign.setPageHeader(null); break;
-                case JROrigin.COLUMN_HEADER: 
+                case COLUMN_HEADER:
                     jasperDesign.setColumnHeader(null); break;
-                case JROrigin.DETAIL:
+                case DETAIL:
                 {
                     JRDesignSection section = (JRDesignSection)jasperDesign.getDetailSection();
                     section.removeBand(band);
                     break;
                     //jasperDesign.setDetail(null); break;
                 }
-                case JROrigin.COLUMN_FOOTER: 
+                case COLUMN_FOOTER:
                     jasperDesign.setColumnFooter(null); break;
-                case JROrigin.PAGE_FOOTER: 
+                case PAGE_FOOTER:
                     jasperDesign.setPageFooter(null); break;
-                case JROrigin.LAST_PAGE_FOOTER: 
+                case LAST_PAGE_FOOTER:
                     jasperDesign.setLastPageFooter(null); break;
-                case JROrigin.SUMMARY: 
+                case SUMMARY:
                     jasperDesign.setSummary(null); break;
-                case JROrigin.NO_DATA: 
+                case NO_DATA:
                     jasperDesign.setNoData(null); break;
-                case JROrigin.GROUP_HEADER:
+                case GROUP_HEADER:
                 {
                     JRDesignGroup group = ((JRDesignGroup)jasperDesign.getGroupsMap().get(origin.getGroupName()));
                     JRDesignSection section = (JRDesignSection)group.getGroupHeaderSection();
@@ -140,7 +140,7 @@ public class DeleteBandUndoableEdit extends AggregatedUndoableEdit {
                     break;
                     //((JRDesignGroup)jasperDesign.getGroupsMap().get(origin.getGroupName())).setGroupHeader(null); break;
                 }
-                case JROrigin.GROUP_FOOTER:
+                case GROUP_FOOTER:
                 {
                     JRDesignGroup group = ((JRDesignGroup)jasperDesign.getGroupsMap().get(origin.getGroupName()));
                     JRDesignSection section = (JRDesignSection)group.getGroupFooterSection();

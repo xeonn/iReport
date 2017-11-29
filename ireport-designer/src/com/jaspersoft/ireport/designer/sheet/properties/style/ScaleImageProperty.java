@@ -32,7 +32,7 @@ import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignImage;
+import net.sf.jasperreports.engine.type.ScaleImageEnum;
 import org.openide.nodes.PropertySupport;
 
 /**
@@ -45,7 +45,7 @@ public final class ScaleImageProperty extends PropertySupport {
 
     @SuppressWarnings(value = "unchecked")
     public ScaleImageProperty(JRBaseStyle style) {
-        super(JRBaseStyle.PROPERTY_SCALE_IMAGE, Byte.class, I18n.getString("AbstractStyleNode.Property.Scale"), I18n.getString("AbstractStyleNode.Property.Scaledetail"), true, true);
+        super(JRBaseStyle.PROPERTY_SCALE_IMAGE, ScaleImageEnum.class, I18n.getString("AbstractStyleNode.Property.Scale"), I18n.getString("AbstractStyleNode.Property.Scaledetail"), true, true);
         this.style = style;
         setValue("suppressCustomEditor", Boolean.TRUE);
     }
@@ -56,24 +56,24 @@ public final class ScaleImageProperty extends PropertySupport {
         if (editor == null) {
             ArrayList l = new ArrayList();
             l.add(new Tag(null, "<Default>"));
-            l.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_CLIP), I18n.getString("AbstractStyleNode.Property.Clip")));
-            l.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_FILL_FRAME), I18n.getString("AbstractStyleNode.Property.Fill_Frame")));
-            l.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_RETAIN_SHAPE), I18n.getString("AbstractStyleNode.Property.Retain_Shape")));
+            l.add(new Tag(ScaleImageEnum.CLIP, I18n.getString("AbstractStyleNode.Property.Clip")));
+            l.add(new Tag(ScaleImageEnum.FILL_FRAME, I18n.getString("AbstractStyleNode.Property.Fill_Frame")));
+            l.add(new Tag(ScaleImageEnum.RETAIN_SHAPE, I18n.getString("AbstractStyleNode.Property.Retain_Shape")));
             editor = new ComboBoxPropertyEditor(false, l);
         }
         return editor;
     }
 
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
-        return style.getScaleImageValue() == null ? null : style.getOwnScaleImage();
+        return style.getScaleImageValue() == null ? null : style.getOwnScaleImageValue();
     }
 
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        if (val == null || val instanceof Byte) {
-            Byte oldValue = style.getOwnScaleImageValue() == null ? null : style.getOwnScaleImage();
-            Byte newValue = (Byte) val;
+        if (val == null || val instanceof ScaleImageEnum) {
+            ScaleImageEnum oldValue = style.getOwnScaleImageValue() == null ? null : style.getOwnScaleImageValue();
+            ScaleImageEnum newValue = (ScaleImageEnum) val;
             style.setScaleImage(newValue);
-            ObjectPropertyUndoableEdit urob = new ObjectPropertyUndoableEdit(style, "ScaleImage", Byte.class, oldValue, newValue);
+            ObjectPropertyUndoableEdit urob = new ObjectPropertyUndoableEdit(style, "ScaleImage", ScaleImageEnum.class, oldValue, newValue);
             IReportManager.getInstance().addUndoableEdit(urob);
         }
     }

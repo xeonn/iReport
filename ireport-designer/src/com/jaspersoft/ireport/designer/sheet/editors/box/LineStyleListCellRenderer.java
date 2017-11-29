@@ -35,6 +35,7 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.UIManager;
 import net.sf.jasperreports.engine.JRPen;
+import net.sf.jasperreports.engine.type.LineStyleEnum;
 
 /**
  *
@@ -47,7 +48,7 @@ public class LineStyleListCellRenderer extends JComponent implements ListCellRen
     private Color  selectionForeground = null;
     private Color  foreground = null;
     
-    private Byte styleName = null;
+    private LineStyleEnum styleName = null;
     
     public LineStyleListCellRenderer()
     {
@@ -75,9 +76,9 @@ public class LineStyleListCellRenderer extends JComponent implements ListCellRen
             setForeground(foreground);
             setBackground(background);
         }
-        if (value instanceof Byte)
+        if (value instanceof LineStyleEnum)
         {
-            styleName = (Byte)value;
+            styleName = (LineStyleEnum)value;
         }
         else
         {
@@ -100,25 +101,26 @@ public class LineStyleListCellRenderer extends JComponent implements ListCellRen
             
             Stroke stroke = null;
             float penWidth = 1f;
-            if (styleName == JRPen.LINE_STYLE_SOLID)
+
+            if (styleName == LineStyleEnum.SOLID)
             {
                 stroke = (Stroke) new BasicStroke(penWidth);
             }
-            else if (styleName == JRPen.LINE_STYLE_DASHED)
+            else if (styleName == LineStyleEnum.DASHED)
             {
                 stroke =  (Stroke) new BasicStroke(penWidth, 
                                             BasicStroke.CAP_BUTT, 
                                             BasicStroke.JOIN_BEVEL, 0f, 
                                             new float[] { 5f, 3f }, 0f);
             }
-            else if (styleName == JRPen.LINE_STYLE_DOTTED)
+            else if (styleName == LineStyleEnum.DOTTED)
             {
                 stroke =  (Stroke) new BasicStroke(penWidth, 
                                             BasicStroke.CAP_BUTT, 
                                             BasicStroke.JOIN_BEVEL, 0f, 
                                             new float[] { 1f*penWidth, 1f*penWidth }, 0f);
             }
-            else if (styleName == JRPen.LINE_STYLE_DOUBLE)
+            else if (styleName == LineStyleEnum.DOUBLE)
             {
                 stroke =  (Stroke) new BasicStroke((penWidth/3f));
             }
@@ -129,7 +131,7 @@ public class LineStyleListCellRenderer extends JComponent implements ListCellRen
 
                 g.setColor(getForeground());
                 
-                if (styleName != JRPen.LINE_STYLE_DOUBLE)
+                if (styleName != LineStyleEnum.DOUBLE)
                 {
                     ((Graphics2D)g).drawLine(5, getHeight()/2, getWidth()-5, getHeight()/2);
                 }

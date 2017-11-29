@@ -32,7 +32,7 @@ import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
+import net.sf.jasperreports.engine.type.FillEnum;
 import org.openide.nodes.PropertySupport;
 
 /**
@@ -45,7 +45,7 @@ public final class FillProperty extends PropertySupport {
 
     @SuppressWarnings(value = "unchecked")
     public FillProperty(JRBaseStyle style) {
-        super(JRBaseStyle.PROPERTY_FILL, Byte.class, I18n.getString("AbstractStyleNode.Property.Fill"), I18n.getString("AbstractStyleNode.Property.Fill"), true, true);
+        super(JRBaseStyle.PROPERTY_FILL, FillEnum.class, I18n.getString("AbstractStyleNode.Property.Fill"), I18n.getString("AbstractStyleNode.Property.Fill"), true, true);
         this.style = style;
         setValue("suppressCustomEditor", Boolean.TRUE);
     }
@@ -55,7 +55,7 @@ public final class FillProperty extends PropertySupport {
     public PropertyEditor getPropertyEditor() {
         if (editor == null) {
             ArrayList l = new ArrayList();
-            l.add(new Tag(new Byte(JRDesignGraphicElement.FILL_SOLID), I18n.getString("AbstractStyleNode.Property.Solid")));
+            l.add(new Tag(FillEnum.SOLID, I18n.getString("AbstractStyleNode.Property.Solid")));
             editor = new ComboBoxPropertyEditor(false, l);
         }
         return editor;
@@ -70,9 +70,9 @@ public final class FillProperty extends PropertySupport {
     }
 
     private void setPropertyValue(Object val) {
-        if (val == null || val instanceof Byte) {
-            Byte oldValue = style.getOwnFillValue() == null ? null : style.getOwnFill();
-            Byte newValue = (Byte) val;
+        if (val == null || val instanceof FillEnum) {
+            FillEnum oldValue = style.getOwnFillValue() == null ? null : style.getOwnFillValue();
+            FillEnum newValue = (FillEnum) val;
             style.setFill(newValue);
             ObjectPropertyUndoableEdit urob = new ObjectPropertyUndoableEdit(style, "Fill", Byte.class, oldValue, newValue);
             IReportManager.getInstance().addUndoableEdit(urob);

@@ -36,6 +36,7 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
+import net.sf.jasperreports.engine.type.SortOrderEnum;
 /**
  *
  * @author  Administrator
@@ -52,8 +53,8 @@ public class SortFieldDialog extends javax.swing.JDialog {
         initComponents();
         jComboBoxSortBy.setEditable(false);
 
-        jComboBoxSortType.addItem(new Tag(JRDesignSortField.SORT_ORDER_ASCENDING,"Ascending"));
-        jComboBoxSortType.addItem(new Tag(JRDesignSortField.SORT_ORDER_DESCENDING,"Descending"));
+        jComboBoxSortType.addItem(new Tag(SortOrderEnum.ASCENDING,"Ascending"));
+        jComboBoxSortType.addItem(new Tag(SortOrderEnum.DESCENDING,"Descending"));
 
         ExpObjectCellRenderer renderer = new ExpObjectCellRenderer();
         renderer.setShowObjectType(true);
@@ -298,7 +299,7 @@ public class SortFieldDialog extends javax.swing.JDialog {
         
         tmpSortField.setName(fieldName);
         tmpSortField.setOrder( (jComboBoxSortType.getSelectedIndex() == 1) ? 
-                    JRDesignSortField.SORT_ORDER_DESCENDING : JRDesignSortField.SORT_ORDER_ASCENDING);
+                    SortOrderEnum.DESCENDING : SortOrderEnum.ASCENDING);
 
         setVisible(false);
         this.setDialogResult( javax.swing.JOptionPane.OK_OPTION);
@@ -359,7 +360,7 @@ public class SortFieldDialog extends javax.swing.JDialog {
     public void setSortField(JRDesignSortField sortField) {
         this.tmpSortField = new JRDesignSortField();
         this.tmpSortField.setName(  sortField.getName() );
-        this.tmpSortField.setOrder(  sortField.getOrder() );
+        this.tmpSortField.setOrder(  sortField.getOrderValue() );
         this.tmpSortField.setType( sortField.getType() );
         this.tmpSortField.setName( sortField.getName());
 
@@ -383,7 +384,7 @@ public class SortFieldDialog extends javax.swing.JDialog {
             }
         }
 
-        this.jComboBoxSortType.setSelectedIndex( ((tmpSortField.getOrder() == JRDesignSortField.SORT_ORDER_DESCENDING) ? 1 : 0) );
+        this.jComboBoxSortType.setSelectedIndex( ((tmpSortField.getOrderValue() == SortOrderEnum.DESCENDING) ? 1 : 0) );
     }
     
 }

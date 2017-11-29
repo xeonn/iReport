@@ -1167,6 +1167,7 @@ public class IReportManager {
         addConnectionImplementation("com.jaspersoft.ireport.designer.connection.MondrianConnection");
         addConnectionImplementation("com.jaspersoft.ireport.designer.connection.QueryExecuterConnection");
         addConnectionImplementation("com.jaspersoft.ireport.designer.connection.JRXlsDataSourceConnection");
+        addConnectionImplementation("com.jaspersoft.ireport.designer.connection.JRXlsxDataSourceConnection");
     }
     
     /**
@@ -1682,6 +1683,7 @@ public class IReportManager {
             exporterFactories.add(new DefaultExporterFactory("xls"));
             exporterFactories.add(new DefaultExporterFactory("xls2"));
             exporterFactories.add(new DefaultExporterFactory("xlsx"));
+            exporterFactories.add(new DefaultExporterFactory("xls3"));
             exporterFactories.add(new DefaultExporterFactory("java2D"));
             exporterFactories.add(new DefaultExporterFactory("txt"));
             exporterFactories.add(new DefaultExporterFactory("rtf"));

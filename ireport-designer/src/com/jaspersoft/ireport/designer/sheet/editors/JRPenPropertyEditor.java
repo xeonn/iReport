@@ -86,7 +86,7 @@ public class JRPenPropertyEditor extends PropertyEditorSupport implements ExProp
             line.setWidth(box.width - 8);
             line.setHeight(1);
             line.getLinePen().setLineColor(pen.getLineColor());
-            line.getLinePen().setLineStyle(pen.getLineStyle());
+            line.getLinePen().setLineStyle(pen.getLineStyleValue());
             line.getLinePen().setLineWidth(pen.getLineWidth());
             new LineDrawer().draw((Graphics2D)grx, line, 0, 0);
         }

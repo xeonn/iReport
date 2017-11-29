@@ -38,13 +38,12 @@ import java.awt.dnd.DropTargetDropEvent;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.charts.design.JRDesignCategoryDataset;
 import net.sf.jasperreports.charts.design.JRDesignPieDataset;
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignChart;
-import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
+import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import org.netbeans.api.visual.widget.Scene;
 import org.openide.util.Mutex;
 import org.openide.util.actions.SystemAction;
@@ -135,9 +134,9 @@ public class CreateChartAction extends CreateReportElementAction
             {
 
                 // if the band is not a detail, propose to aggregate the value...
-                if (b.getOrigin().getBandType() == JROrigin.TITLE)
+                if (b.getOrigin().getBandTypeValue() == BandTypeEnum.TITLE)
                 {
-                    element.setEvaluationTime(JRExpression.EVALUATION_TIME_REPORT);
+                    element.setEvaluationTime( EvaluationTimeEnum.REPORT);
                 }
             }
 

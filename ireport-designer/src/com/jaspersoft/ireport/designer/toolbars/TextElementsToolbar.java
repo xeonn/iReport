@@ -45,6 +45,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JToggleButton;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextElement;
+import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
+import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 import net.sf.jasperreports.engine.util.JRFontUtil;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
@@ -714,15 +716,15 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
         if (getSelectedTextElements().size() > 0)
         {
             boolean isFirstUndo = true;
-            Byte newValue = getSelectedHorizontalAlignment();
+            HorizontalAlignEnum newValue = getSelectedHorizontalAlignment();
             for (JRDesignTextElement element : getSelectedTextElements())
             {
                 // TODO: add undo operation...
-                if ((newValue == null && element.getOwnHorizontalAlignment() != null) || (newValue != null && newValue.byteValue() != element.getHorizontalAlignment()))
+                if ((newValue == null && element.getOwnHorizontalAlignmentValue() != null) || (newValue != null && newValue != element.getHorizontalAlignmentValue()))
                 {
-                    Byte oldValue = element.getOwnHorizontalAlignment();
+                    HorizontalAlignEnum oldValue = element.getOwnHorizontalAlignmentValue();
                     element.setHorizontalAlignment(newValue);
-                    ObjectPropertyUndoableEdit opUndo = new ObjectPropertyUndoableEdit(element, "HorizontalAlignment",Byte.class, oldValue , newValue);
+                    ObjectPropertyUndoableEdit opUndo = new ObjectPropertyUndoableEdit(element, "HorizontalAlignment",HorizontalAlignEnum.class, oldValue , newValue);
                     IReportManager.getInstance().addUndoableEdit(opUndo, !isFirstUndo);
                     isFirstUndo = false;
                 }
@@ -741,17 +743,17 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
         if (getSelectedTextElements().size() > 0)
         {
             boolean isFirstUndo = true;
-            Byte newValue = getSelectedVerticalAlignment();
+            VerticalAlignEnum newValue = getSelectedVerticalAlignment();
             for (JRDesignTextElement element : getSelectedTextElements())
             {
                 // if newValue is null does not do anything 
                 // since the vertical alignment could be justified for which we do not
                 // provide an icon...
-                if (newValue != null && newValue.byteValue() != element.getVerticalAlignment())
+                if (newValue != null && newValue != element.getVerticalAlignmentValue())
                 {
-                    Byte oldValue = element.getOwnVerticalAlignment();
+                    VerticalAlignEnum oldValue = element.getOwnVerticalAlignmentValue();
                     element.setVerticalAlignment(newValue);
-                    ObjectPropertyUndoableEdit opUndo = new ObjectPropertyUndoableEdit(element, "VerticalAlignment",Byte.class, oldValue , newValue);
+                    ObjectPropertyUndoableEdit opUndo = new ObjectPropertyUndoableEdit(element, "VerticalAlignment",VerticalAlignEnum.class, oldValue , newValue);
                     IReportManager.getInstance().addUndoableEdit(opUndo, !isFirstUndo);
                     isFirstUndo = false;
                 }
@@ -898,8 +900,8 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
                     if (sameUnderline) sameUnderline = setToggleButton(isFirstElement, element.isUnderline(), jToggleButtonUnderline);
                     if (sameStriketrough) sameStriketrough = setToggleButton(isFirstElement, element.isStrikeThrough(), jToggleButtonStriketrought);
 
-                    if (sameHorizontalAlignment) sameHorizontalAlignment = setHorizontalAlignment(isFirstElement, element.getHorizontalAlignment());
-                    if (sameVerticalAlignment) sameVerticalAlignment = setVerticalAlignment(isFirstElement, element.getVerticalAlignment());
+                    if (sameHorizontalAlignment) sameHorizontalAlignment = setHorizontalAlignment(isFirstElement, element.getHorizontalAlignmentValue());
+                    if (sameVerticalAlignment) sameVerticalAlignment = setVerticalAlignment(isFirstElement, element.getVerticalAlignmentValue());
                     
                     
                     isFirstElement = false;
@@ -935,47 +937,47 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
         }
     }
 
-    private Byte getSelectedHorizontalAlignment()
+    private HorizontalAlignEnum getSelectedHorizontalAlignment()
     {
-        if (jToggleButtonAlignLeft.isSelected()) return JRDesignTextElement.HORIZONTAL_ALIGN_LEFT;
-        if (jToggleButtonAlignRight.isSelected()) return JRDesignTextElement.HORIZONTAL_ALIGN_RIGHT;
-        if (jToggleButtonAlignJustify.isSelected()) return JRDesignTextElement.HORIZONTAL_ALIGN_JUSTIFIED;
-        if (jToggleButtonAlignCenter.isSelected()) return JRDesignTextElement.HORIZONTAL_ALIGN_CENTER;
+        if (jToggleButtonAlignLeft.isSelected()) return HorizontalAlignEnum.LEFT;
+        if (jToggleButtonAlignRight.isSelected()) return HorizontalAlignEnum.RIGHT;
+        if (jToggleButtonAlignJustify.isSelected()) return HorizontalAlignEnum.JUSTIFIED;
+        if (jToggleButtonAlignCenter.isSelected()) return HorizontalAlignEnum.CENTER;
         return null;
     }
 
     
     
-    private void setSelectedHorizontalAlignment(Byte b)
+    private void setSelectedHorizontalAlignment(HorizontalAlignEnum b)
     {
-        jToggleButtonAlignLeft.setSelected(b != null && b.byteValue() == JRDesignTextElement.HORIZONTAL_ALIGN_LEFT);
-        jToggleButtonAlignRight.setSelected(b != null && b.byteValue() == JRDesignTextElement.HORIZONTAL_ALIGN_RIGHT);
-        jToggleButtonAlignJustify.setSelected(b != null && b.byteValue() == JRDesignTextElement.HORIZONTAL_ALIGN_JUSTIFIED);
-        jToggleButtonAlignCenter.setSelected(b != null && b.byteValue() == JRDesignTextElement.HORIZONTAL_ALIGN_CENTER);
+        jToggleButtonAlignLeft.setSelected(b != null && b == HorizontalAlignEnum.LEFT);
+        jToggleButtonAlignRight.setSelected(b != null && b == HorizontalAlignEnum.RIGHT);
+        jToggleButtonAlignJustify.setSelected(b != null && b == HorizontalAlignEnum.JUSTIFIED);
+        jToggleButtonAlignCenter.setSelected(b != null && b == HorizontalAlignEnum.CENTER);
     }
     
     
-    private Byte getSelectedVerticalAlignment()
+    private VerticalAlignEnum getSelectedVerticalAlignment()
     {
-        if (jToggleButtonAlignTop.isSelected()) return JRDesignTextElement.VERTICAL_ALIGN_TOP;
-        if (jToggleButtonAlignMiddle.isSelected()) return JRDesignTextElement.VERTICAL_ALIGN_MIDDLE;
-        if (jToggleButtonAlignBottom.isSelected()) return JRDesignTextElement.VERTICAL_ALIGN_BOTTOM;
+        if (jToggleButtonAlignTop.isSelected()) return VerticalAlignEnum.TOP;
+        if (jToggleButtonAlignMiddle.isSelected()) return VerticalAlignEnum.MIDDLE;
+        if (jToggleButtonAlignBottom.isSelected()) return VerticalAlignEnum.BOTTOM;
         return null;
     }
     
-    private void setSelectedVerticalAlignment(Byte b)
+    private void setSelectedVerticalAlignment(VerticalAlignEnum b)
     {
-        jToggleButtonAlignTop.setSelected(b != null && b.byteValue() == JRDesignTextElement.VERTICAL_ALIGN_TOP);
-        jToggleButtonAlignMiddle.setSelected(b != null && b.byteValue() == JRDesignTextElement.VERTICAL_ALIGN_MIDDLE);
-        jToggleButtonAlignBottom.setSelected(b != null && b.byteValue() == JRDesignTextElement.VERTICAL_ALIGN_BOTTOM);
+        jToggleButtonAlignTop.setSelected(b != null && b == VerticalAlignEnum.TOP);
+        jToggleButtonAlignMiddle.setSelected(b != null && b == VerticalAlignEnum.MIDDLE);
+        jToggleButtonAlignBottom.setSelected(b != null && b == VerticalAlignEnum.BOTTOM);
     }
     
-    private boolean setHorizontalAlignment(boolean firstElement, byte horizontalAlignment) {
+    private boolean setHorizontalAlignment(boolean firstElement, HorizontalAlignEnum horizontalAlignment) {
         
         if (!firstElement)
         {
-            Byte selectedValue = getSelectedHorizontalAlignment();
-            if (selectedValue != null && selectedValue.byteValue() != horizontalAlignment)
+            HorizontalAlignEnum selectedValue = getSelectedHorizontalAlignment();
+            if (selectedValue != null && selectedValue != horizontalAlignment)
             {
                 setSelectedHorizontalAlignment(null);
             }
@@ -984,12 +986,12 @@ public class TextElementsToolbar extends javax.swing.JPanel implements LookupLis
         return true;
     }
     
-    private boolean setVerticalAlignment(boolean firstElement, byte verticalAlignment) {
+    private boolean setVerticalAlignment(boolean firstElement, VerticalAlignEnum verticalAlignment) {
         
         if (!firstElement)
         {
-            Byte selectedValue = getSelectedVerticalAlignment();
-            if (selectedValue != null && selectedValue.byteValue() != verticalAlignment)
+            VerticalAlignEnum selectedValue = getSelectedVerticalAlignment();
+            if (selectedValue != null && selectedValue != verticalAlignment)
             {
                 setSelectedVerticalAlignment(null);
             }

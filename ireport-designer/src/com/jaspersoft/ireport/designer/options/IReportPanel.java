@@ -329,6 +329,9 @@ final class IReportPanel extends javax.swing.JPanel {
         jButtonModifyExpression = new javax.swing.JButton();
         jButtonRemoveExpression = new javax.swing.JButton();
         jButtonRestoreExpressions = new javax.swing.JButton();
+        jCheckBoxUseSyntaxHighlighting = new javax.swing.JCheckBox();
+        jLabel5 = new javax.swing.JLabel();
+        jSpinnerEditorFontSize = new javax.swing.JSpinner();
         jPanelCompatibility = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jComboBoxCompatibility = new javax.swing.JComboBox();
@@ -716,6 +719,22 @@ final class IReportPanel extends javax.swing.JPanel {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBoxUseSyntaxHighlighting, "Use Syntax Highlighting");
+        jCheckBoxUseSyntaxHighlighting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxUseSyntaxHighlightingActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, "Editor font size:");
+
+        jSpinnerEditorFontSize.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(12), Integer.valueOf(6), null, Integer.valueOf(1)));
+        jSpinnerEditorFontSize.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinnerEditorFontSizeStateChanged(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout jPanel22Layout = new org.jdesktop.layout.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
         jPanel22Layout.setHorizontalGroup(
@@ -731,13 +750,24 @@ final class IReportPanel extends javax.swing.JPanel {
                             .add(jButtonAddExpression, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .add(jButtonModifyExpression, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .add(jButtonRemoveExpression, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .add(jButtonRestoreExpressions, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .add(jButtonRestoreExpressions, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .add(jPanel22Layout.createSequentialGroup()
+                        .add(jCheckBoxUseSyntaxHighlighting)
+                        .add(18, 18, 18)
+                        .add(jLabel5)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jSpinnerEditorFontSize, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 65, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel22Layout.setVerticalGroup(
             jPanel22Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel22Layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel22Layout.createSequentialGroup()
                 .addContainerGap()
+                .add(jPanel22Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jCheckBoxUseSyntaxHighlighting)
+                    .add(jLabel5)
+                    .add(jSpinnerEditorFontSize, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jLabelExpressions)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel22Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -749,7 +779,7 @@ final class IReportPanel extends javax.swing.JPanel {
                         .add(jButtonRemoveExpression, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButtonRestoreExpressions))
-                    .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE))
+                    .add(jScrollPane6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -2985,6 +3015,14 @@ private void jButtonPPTXViewerActionPerformed(java.awt.event.ActionEvent evt) {/
 private void jCheckBoxLabelForFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxLabelForFieldActionPerformed
    notifyChange();
 }//GEN-LAST:event_jCheckBoxLabelForFieldActionPerformed
+
+private void jCheckBoxUseSyntaxHighlightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxUseSyntaxHighlightingActionPerformed
+    notifyChange();
+}//GEN-LAST:event_jCheckBoxUseSyntaxHighlightingActionPerformed
+
+private void jSpinnerEditorFontSizeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerEditorFontSizeStateChanged
+    notifyChange();
+}//GEN-LAST:event_jSpinnerEditorFontSizeStateChanged
     
             
     void load() {
@@ -3013,7 +3051,9 @@ private void jCheckBoxLabelForFieldActionPerformed(java.awt.event.ActionEvent ev
 
         jCheckBoxLabelForField.setSelected( pref.getBoolean("createLabelForField", true) ); // NOI18N
 
+        jCheckBoxUseSyntaxHighlighting.setSelected( pref.getBoolean("useSyntaxHighlighting", true) ); // NOI18N
 
+        ((SpinnerNumberModel)jSpinnerEditorFontSize.getModel()).setValue(pref.getInt("editorFontSize", 12) ); // NOI18N
 
 
         jCheckBoxKeyInReportInspector.setSelected( pref.getBoolean("showKeyInReportInspector", false)  );  // NOI18N
@@ -3291,6 +3331,11 @@ private void jCheckBoxLabelForFieldActionPerformed(java.awt.event.ActionEvent ev
 
         pref.putBoolean("createLabelForField", jCheckBoxLabelForField.isSelected());// NOI18N
 
+        pref.putBoolean("useSyntaxHighlighting", jCheckBoxUseSyntaxHighlighting.isSelected());// NOI18N
+
+        int fontsize = ((Integer)((SpinnerNumberModel)jSpinnerEditorFontSize.getModel()).getValue()).intValue();
+        pref.putInt("editorFontSize", fontsize);// NOI18N
+                
         if (getCurrentReportLocale() != null) pref.put("reportLocale", getCurrentReportLocale().toString());
         else pref.remove("reportLocale");
         
@@ -3508,6 +3553,7 @@ private void jCheckBoxLabelForFieldActionPerformed(java.awt.event.ActionEvent ev
     private javax.swing.JCheckBox jCheckBoxShowCompatibilityWarning;
     private javax.swing.JCheckBox jCheckBoxShowPositionErrors;
     private javax.swing.JCheckBox jCheckBoxUseReportDirectoryToCompile;
+    private javax.swing.JCheckBox jCheckBoxUseSyntaxHighlighting;
     private javax.swing.JCheckBox jCheckBoxVirtualizer;
     private javax.swing.JComboBox jComboBoxCompatibility;
     private javax.swing.JComboBox jComboBoxLanguage;
@@ -3518,6 +3564,7 @@ private void jCheckBoxLabelForFieldActionPerformed(java.awt.event.ActionEvent ev
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelCSVViewer;
     private javax.swing.JLabel jLabelClasspath;
     private javax.swing.JLabel jLabelClasspath1;
@@ -3582,6 +3629,7 @@ private void jCheckBoxLabelForFieldActionPerformed(java.awt.event.ActionEvent ev
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JSpinner jSpinnerEditorFontSize;
     private javax.swing.JSpinner jSpinnerMaxRecordNumber;
     private javax.swing.JSpinner jSpinnerVirtualizerBlockSize;
     private javax.swing.JSpinner jSpinnerVirtualizerGrownCount;

@@ -36,6 +36,7 @@ import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
 import org.openide.nodes.Children;
 import org.openide.nodes.Sheet;
 import org.openide.util.Lookup;
@@ -58,11 +59,11 @@ public class NullBandNode extends IRAbstractNode implements GroupNode {
         this.band = band;
         setDisplayName ( ModelUtils.nameOf(band.getOrigin()));
         
-        if (band.getOrigin().getBandType() == JROrigin.GROUP_FOOTER)
+        if (band.getOrigin().getBandTypeValue() == BandTypeEnum.GROUP_FOOTER)
         {
             setIconBaseWithExtension("com/jaspersoft/ireport/designer/resources/groupfooter-16.png");
         }
-        else if (band.getOrigin().getBandType() == JROrigin.GROUP_HEADER)
+        else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.GROUP_HEADER)
         {
             setIconBaseWithExtension("com/jaspersoft/ireport/designer/resources/groupheader-16.png");
         }
@@ -101,7 +102,7 @@ public class NullBandNode extends IRAbstractNode implements GroupNode {
         java.util.List<Action> list = new ArrayList<Action>();
         list.add( SystemAction.get(AddBandAction.class));
 
-        if (band.getOrigin().getBandType() == JROrigin.BACKGROUND)
+        if (band.getOrigin().getBandTypeValue() == BandTypeEnum.BACKGROUND)
         {
             list.add(SystemAction.get(MaximizeBackgroundAction.class));
         }

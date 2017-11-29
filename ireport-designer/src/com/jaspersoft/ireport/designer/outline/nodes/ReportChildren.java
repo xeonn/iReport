@@ -30,8 +30,8 @@ import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.JRSection;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
@@ -110,9 +110,9 @@ public class ReportChildren extends Children.Keys {
         children.add("scriptlets");
         children.addAll( jd.getDatasetsList() );
         //children.addAll( ModelUtils.getBands(jd) );
-        children.add( ( jd.getTitle() != null) ? jd.getTitle() : new NullBand(new JROrigin(jd.getName(), JROrigin.TITLE )) );
-        children.add( ( jd.getPageHeader() != null) ? jd.getPageHeader() : new NullBand(new JROrigin(jd.getName(), JROrigin.PAGE_HEADER )) );
-        children.add( ( jd.getColumnHeader() != null) ? jd.getColumnHeader() : new NullBand(new JROrigin(jd.getName(), JROrigin.COLUMN_HEADER )) );
+        children.add( ( jd.getTitle() != null) ? jd.getTitle() : new NullBand(new JROrigin(jd.getName(), BandTypeEnum.TITLE )) );
+        children.add( ( jd.getPageHeader() != null) ? jd.getPageHeader() : new NullBand(new JROrigin(jd.getName(), BandTypeEnum.PAGE_HEADER )) );
+        children.add( ( jd.getColumnHeader() != null) ? jd.getColumnHeader() : new NullBand(new JROrigin(jd.getName(), BandTypeEnum.COLUMN_HEADER )) );
         // Group headers...
         JRGroup[] groups = jd.getGroups();
         for (int i=0 ;i<groups.length; ++i)
@@ -120,7 +120,7 @@ public class ReportChildren extends Children.Keys {
             if (groups[i].getGroupHeaderSection() == null ||
                 groups[i].getGroupHeaderSection().getBands().length == 0)
             {
-                children.add( new NullBand(new JROrigin(jd.getName(),groups[i].getName(), JROrigin.GROUP_HEADER )));
+                children.add( new NullBand(new JROrigin(jd.getName(),groups[i].getName(), BandTypeEnum.GROUP_HEADER )));
             }
             else
             {
@@ -135,7 +135,7 @@ public class ReportChildren extends Children.Keys {
         if (jd.getDetailSection() == null ||
             jd.getDetailSection().getBands().length == 0)
         {
-            children.add(new NullBand(new JROrigin(jd.getName(),JROrigin.DETAIL )));
+            children.add(new NullBand(new JROrigin(jd.getName(),BandTypeEnum.DETAIL )));
         }
         else
         {
@@ -154,7 +154,7 @@ public class ReportChildren extends Children.Keys {
             if (groups[i].getGroupFooterSection() == null ||
                 groups[i].getGroupFooterSection().getBands().length == 0)
             {
-                children.add( new NullBand(new JROrigin(jd.getName(),groups[i].getName(), JROrigin.GROUP_FOOTER )));
+                children.add( new NullBand(new JROrigin(jd.getName(),groups[i].getName(), BandTypeEnum.GROUP_FOOTER )));
             }
             else
             {
@@ -166,12 +166,12 @@ public class ReportChildren extends Children.Keys {
                 }
             }
         }
-        children.add( ( jd.getColumnFooter() != null) ? jd.getColumnFooter() : new NullBand(new JROrigin(jd.getName(), JROrigin.COLUMN_FOOTER )) );
-        children.add( ( jd.getPageFooter() != null) ? jd.getPageFooter() : new NullBand(new JROrigin(jd.getName(), JROrigin.PAGE_FOOTER )) );
-        children.add( ( jd.getLastPageFooter() != null) ? jd.getLastPageFooter() : new NullBand(new JROrigin(jd.getName(), JROrigin.LAST_PAGE_FOOTER )) );
-        children.add( ( jd.getSummary() != null) ? jd.getSummary() : new NullBand(new JROrigin(jd.getName(), JROrigin.SUMMARY )) );
-        children.add( ( jd.getNoData() != null) ? jd.getNoData() : new NullBand(new JROrigin(jd.getName(), JROrigin.NO_DATA )) );
-        children.add( ( jd.getBackground() != null) ? jd.getBackground() : new NullBand(new JROrigin(jd.getName(), JROrigin.BACKGROUND )) );
+        children.add( ( jd.getColumnFooter() != null) ? jd.getColumnFooter() : new NullBand(new JROrigin(jd.getName(), BandTypeEnum.COLUMN_FOOTER )) );
+        children.add( ( jd.getPageFooter() != null) ? jd.getPageFooter() : new NullBand(new JROrigin(jd.getName(), BandTypeEnum.PAGE_FOOTER )) );
+        children.add( ( jd.getLastPageFooter() != null) ? jd.getLastPageFooter() : new NullBand(new JROrigin(jd.getName(), BandTypeEnum.LAST_PAGE_FOOTER )) );
+        children.add( ( jd.getSummary() != null) ? jd.getSummary() : new NullBand(new JROrigin(jd.getName(), BandTypeEnum.SUMMARY )) );
+        children.add( ( jd.getNoData() != null) ? jd.getNoData() : new NullBand(new JROrigin(jd.getName(), BandTypeEnum.NO_DATA )) );
+        children.add( ( jd.getBackground() != null) ? jd.getBackground() : new NullBand(new JROrigin(jd.getName(), BandTypeEnum.BACKGROUND )) );
         
         setKeys(children);
     }

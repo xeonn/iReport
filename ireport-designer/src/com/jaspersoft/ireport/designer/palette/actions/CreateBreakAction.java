@@ -57,7 +57,7 @@ public class CreateBreakAction extends CreateReportElementAction
         dialog.setVisible(true);
 
         element.setWidth(100);
-        element.setType(  dialog.getBreakType()  );
+        element.setType(  dialog.getBreakTypeValue()  );
         return element;
     }
     

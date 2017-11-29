@@ -60,7 +60,7 @@ public class JRPenProperty extends AbstractProperty {
         {
             pen.setLineColor( mpen.getOwnLineColor());
             pen.setLineWidth( mpen.getOwnLineWidth());
-            pen.setLineStyle( mpen.getOwnLineStyle());
+            pen.setLineStyle( mpen.getOwnLineStyleValue());
         }
         else
         {
@@ -77,7 +77,7 @@ public class JRPenProperty extends AbstractProperty {
         
         if (pen.getOwnLineColor() != null) return false;
         if (pen.getOwnLineWidth() != null) return false;
-        if (pen.getOwnLineStyle() != null) return false;
+        if (pen.getOwnLineStyleValue() != null) return false;
         
         return true;
     }

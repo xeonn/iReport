@@ -23,7 +23,6 @@
  */
 package com.jaspersoft.ireport.designer.outline.nodes;
 
-import com.jaspersoft.ireport.designer.sheet.properties.style.StyledTextProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.RadiusProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.StrikeThroughProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.ScaleImageProperty;
@@ -207,8 +206,7 @@ public class AbstractStyleNode extends IRIndexedNode implements PropertyChangeLi
 
         set.put(new LineSpacingProperty( getStyle() ));
         set.put(new LineSpacingSizeProperty( getStyle() ));
-        set.put(new StyledTextProperty( getStyle() ));
-
+        //set.put(new StyledTextProperty( getStyle() ));
 
         set.put(new FirstLineIndentProperty( getStyle()  ));
         set.put(new LeftIndentProperty( getStyle()  ));

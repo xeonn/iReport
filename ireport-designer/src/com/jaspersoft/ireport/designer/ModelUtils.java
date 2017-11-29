@@ -84,8 +84,11 @@ import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
+import net.sf.jasperreports.engine.type.CalculationEnum;
+import net.sf.jasperreports.engine.type.IncrementTypeEnum;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
 import net.sf.jasperreports.engine.type.PrintOrderEnum;
+import net.sf.jasperreports.engine.type.ResetTypeEnum;
 import net.sf.jasperreports.engine.type.RunDirectionEnum;
 import org.netbeans.api.visual.widget.Widget;
 import org.openide.nodes.Children;
@@ -627,7 +630,7 @@ public class ModelUtils {
             for (int i=0; i<row_groups.length; ++i)
             {
                 JRCrosstabRowGroup group = row_groups[i];
-                if (group.getTotalPosition() != BucketDefinition.TOTAL_POSITION_NONE)
+                if (group.getTotalPositionValue() != CrosstabTotalPositionEnum.NONE)
                 {
                     h++;
                 }
@@ -1369,7 +1372,7 @@ public class ModelUtils {
     public static boolean isGroupHeader(JRBand b, JasperDesign jd) {
         
         if (b == null) return false;
-        return ((JRDesignBand)b).getOrigin().getBandType() == JROrigin.GROUP_HEADER;
+        return ((JRDesignBand)b).getOrigin().getBandTypeValue() == BandTypeEnum.GROUP_HEADER;
 //        JRGroup[] groups = jd.getGroups();
 //        for (int i=0; i<groups.length; ++i)
 //        {
@@ -1381,7 +1384,7 @@ public class ModelUtils {
     public static boolean isGroupFooter(JRBand b, JasperDesign jd) {
         
         if (b == null) return false;
-        return ((JRDesignBand)b).getOrigin().getBandType() == JROrigin.GROUP_FOOTER;
+        return ((JRDesignBand)b).getOrigin().getBandTypeValue() == BandTypeEnum.GROUP_FOOTER;
 //        JRGroup[] groups = jd.getGroups();
 //        for (int i=0; i<groups.length; ++i)
 //        {
@@ -1393,24 +1396,24 @@ public class ModelUtils {
     public static String nameOf(JROrigin origin) {
         if (origin != null)
         {
-            switch (origin.getBandType())
+            switch (origin.getBandTypeValue())
             {
-                case JROrigin.BACKGROUND: return I18n.getString("band.name.background");
-                case JROrigin.TITLE: return I18n.getString("band.name.title");
-                case JROrigin.PAGE_HEADER: return I18n.getString("band.name.pageHeader");
-                case JROrigin.COLUMN_HEADER: return I18n.getString("band.name.columnHeader");
-                case JROrigin.DETAIL: return I18n.getString("band.name.detail");
-                case JROrigin.COLUMN_FOOTER: return I18n.getString("band.name.columnFooter");
-                case JROrigin.PAGE_FOOTER: return I18n.getString("band.name.pageFooter");
-                case JROrigin.LAST_PAGE_FOOTER: return I18n.getString("band.name.lastPageFooter");
-                case JROrigin.SUMMARY: return I18n.getString("band.name.summary");
-                case JROrigin.NO_DATA: return I18n.getString("band.name.noData");
-                case JROrigin.GROUP_HEADER:
+                case BACKGROUND: return I18n.getString("band.name.background");
+                case TITLE: return I18n.getString("band.name.title");
+                case PAGE_HEADER: return I18n.getString("band.name.pageHeader");
+                case COLUMN_HEADER: return I18n.getString("band.name.columnHeader");
+                case DETAIL: return I18n.getString("band.name.detail");
+                case COLUMN_FOOTER: return I18n.getString("band.name.columnFooter");
+                case PAGE_FOOTER: return I18n.getString("band.name.pageFooter");
+                case LAST_PAGE_FOOTER: return I18n.getString("band.name.lastPageFooter");
+                case SUMMARY: return I18n.getString("band.name.summary");
+                case NO_DATA: return I18n.getString("band.name.noData");
+                case GROUP_HEADER:
                 {
                     // Find the section number
                     return  I18n.getString("band.name.GroupHeader", origin.getGroupName());
                 }
-                case JROrigin.GROUP_FOOTER:
+                case GROUP_FOOTER:
                 {
                     return  I18n.getString("band.name.GroupFooter", origin.getGroupName());
                 }
@@ -1442,19 +1445,19 @@ public class ModelUtils {
         }
         */
         JROrigin origin = ((JRDesignBand)b).getOrigin();
-        if (origin.getBandType() == JROrigin.GROUP_HEADER)
+        if (origin.getBandTypeValue() == BandTypeEnum.GROUP_HEADER)
         {
 
                 JRGroup group = (JRGroup)jd.getGroupsMap().get(origin.getGroupName());
                 int index = getBandIndex(group.getGroupHeaderSection(), b);
                 return  I18n.getString("band.name.GroupHeaderSection", origin.getGroupName(),index+1);
         }
-        else if (origin.getBandType() == JROrigin.DETAIL)
+        else if (origin.getBandTypeValue() == BandTypeEnum.DETAIL)
         {
                 int index = getBandIndex(jd.getDetailSection(), b);
                 return  I18n.getString("band.name.detailSection", index+1);
         }
-        else if (origin.getBandType() == JROrigin.GROUP_FOOTER)
+        else if (origin.getBandTypeValue() == BandTypeEnum.GROUP_FOOTER)
         {
                 JRGroup group = (JRGroup)jd.getGroupsMap().get(origin.getGroupName());
                 int index = getBandIndex(group.getGroupFooterSection(), b);
@@ -1513,7 +1516,7 @@ public class ModelUtils {
             // Detached background...
             if (tmpBand instanceof JRDesignBand)
             {
-                if (((JRDesignBand)tmpBand).getOrigin().getBandType() == JROrigin.BACKGROUND)
+                if (((JRDesignBand)tmpBand).getOrigin().getBandTypeValue() == BandTypeEnum.BACKGROUND)
                 {
                     if (IReportManager.getInstance().isBackgroundSeparated())
                     {
@@ -1552,10 +1555,10 @@ public class ModelUtils {
         
         int topBottomMargins = jd.getTopMargin() + jd.getBottomMargin();
         
-        if ( (origin.getBandType() == JROrigin.TITLE && jd.isTitleNewPage()) ||
-             (origin.getBandType() == JROrigin.SUMMARY) ||  // && jd.isSummaryNewPage()
-             origin.getBandType() == JROrigin.BACKGROUND ||
-             origin.getBandType() == JROrigin.NO_DATA)
+        if ( (origin.getBandTypeValue() == BandTypeEnum.TITLE && jd.isTitleNewPage()) ||
+             (origin.getBandTypeValue() == BandTypeEnum.SUMMARY) ||  // && jd.isSummaryNewPage()
+             origin.getBandTypeValue() == BandTypeEnum.BACKGROUND ||
+             origin.getBandTypeValue() == BandTypeEnum.NO_DATA)
         {
             return jd.getPageHeight() - topBottomMargins;
         }
@@ -1567,7 +1570,7 @@ public class ModelUtils {
         basicBandsHeight += jd.getColumnHeader() != null ? jd.getColumnHeader().getHeight() : 0;
         basicBandsHeight += jd.getColumnFooter() != null ? jd.getColumnFooter().getHeight() : 0;
 
-        if (b.getOrigin().getBandType() == JROrigin.LAST_PAGE_FOOTER)
+        if (b.getOrigin().getBandTypeValue() == BandTypeEnum.LAST_PAGE_FOOTER)
         {
             return  jd.getPageHeight() - basicBandsHeight;
         }
@@ -1592,12 +1595,12 @@ public class ModelUtils {
             }
         }
 
-        if (b.getOrigin().getBandType() == JROrigin.TITLE)
+        if (b.getOrigin().getBandTypeValue() == BandTypeEnum.TITLE)
         {
             return  jd.getPageHeight() - basicBandsHeight - Math.max(heighestGroupFooter, heighestGroupHeader);
         }
 
-        if (b.getOrigin().getBandType() == JROrigin.DETAIL)
+        if (b.getOrigin().getBandTypeValue() == BandTypeEnum.DETAIL)
         {
             return jd.getPageHeight() - basicBandsHeight;
         }
@@ -1605,8 +1608,8 @@ public class ModelUtils {
         int titleHeight = jd.getTitle() != null ? jd.getTitle().getHeight() : 0;
         if (jd.isTitleNewPage()) titleHeight = 0;
 
-        if (origin.getBandType() == JROrigin.GROUP_FOOTER ||
-            origin.getBandType() == JROrigin.GROUP_HEADER)
+        if (origin.getBandTypeValue() == BandTypeEnum.GROUP_FOOTER ||
+            origin.getBandTypeValue() == BandTypeEnum.GROUP_HEADER)
         {
             return jd.getPageHeight() - basicBandsHeight - titleHeight;
         }
@@ -2345,13 +2348,13 @@ public class ModelUtils {
         JRDesignVariable newVariable = new JRDesignVariable();
         newVariable.setName( variable.getName() );
         newVariable.setValueClassName( variable.getValueClassName() );
-        newVariable.setCalculation( variable.getCalculation() );
+        newVariable.setCalculation( variable.getCalculationValue() );
         newVariable.setExpression( cloneExpression( variable.getExpression()) );
         newVariable.setIncrementGroup( variable.getIncrementGroup() );
-        newVariable.setIncrementType( variable.getIncrementType() );
+        newVariable.setIncrementType( variable.getIncrementTypeValue() );
         newVariable.setIncrementerFactoryClassName( variable.getIncrementerFactoryClassName() );
         newVariable.setInitialValueExpression( cloneExpression( variable.getInitialValueExpression() ));
-        newVariable.setResetType( variable.getResetType());
+        newVariable.setResetType( variable.getResetTypeValue());
         
         JRGroup group = variable.getIncrementGroup();
         if (group != null && ds != null)
@@ -2362,9 +2365,9 @@ public class ModelUtils {
             }
             else
             {
-                if (newVariable.getIncrementType() == JRVariable.RESET_TYPE_GROUP)
+                if (newVariable.getIncrementTypeValue() == IncrementTypeEnum.GROUP)
                 {
-                    newVariable.setIncrementType(JRVariable.RESET_TYPE_REPORT);
+                    newVariable.setIncrementType(IncrementTypeEnum.REPORT);
                     newVariable.setIncrementGroup(null);
                 }
             }
@@ -2384,9 +2387,9 @@ public class ModelUtils {
             }
             else
             {
-                if (newVariable.getResetType() == JRVariable.RESET_TYPE_GROUP)
+                if (newVariable.getResetTypeValue() == ResetTypeEnum.GROUP)
                 {
-                    newVariable.setResetType(JRVariable.RESET_TYPE_REPORT);
+                    newVariable.setResetType(ResetTypeEnum.REPORT);
                     newVariable.setResetGroup(null);
                 }
             }
@@ -2535,7 +2538,7 @@ public class ModelUtils {
         {
             if (tmpBand instanceof JRDesignBand)
             {
-                if (((JRDesignBand)tmpBand).getOrigin().getBandType() == JROrigin.BACKGROUND &&
+                if (((JRDesignBand)tmpBand).getOrigin().getBandTypeValue() == BandTypeEnum.BACKGROUND &&
                     IReportManager.getInstance().isBackgroundSeparated())
                 {
                     continue;
@@ -2697,7 +2700,7 @@ public class ModelUtils {
         // Paddings...
         to.setLineColor( from.getOwnLineColor() );
         to.setLineWidth( from.getOwnLineWidth() );
-        to.setLineStyle( from.getOwnLineStyle() );
+        to.setLineStyle( from.getOwnLineStyleValue() );
      }
 
      public static void applyDiff(JRLineBox main, JRLineBox box) {

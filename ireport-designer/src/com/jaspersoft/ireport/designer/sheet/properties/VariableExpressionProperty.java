@@ -23,12 +23,11 @@
  */
 package com.jaspersoft.ireport.designer.sheet.properties;
 
-import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
-import net.sf.jasperreports.engine.design.JRDesignVariable;
+import net.sf.jasperreports.engine.type.CalculationEnum;
 
 
 /**
@@ -83,8 +82,8 @@ public final class VariableExpressionProperty extends ExpressionProperty
         // variable...
         if (expression != null)
         {
-            if (variable.getCalculation() == JRDesignVariable.CALCULATION_COUNT ||
-                variable.getCalculation() == JRDesignVariable.CALCULATION_DISTINCT_COUNT)
+            if (variable.getCalculationValue() == CalculationEnum.COUNT ||
+                variable.getCalculationValue() == CalculationEnum.DISTINCT_COUNT)
             {
                 expression.setValueClassName("java.lang.Object");
             }

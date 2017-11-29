@@ -27,18 +27,19 @@ import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.WhenNoDataTypeEnum;
 
 /**
  *  Class to manage the WhenNoDataType property
  */
-public final class WhenNoDataTypeProperty extends ByteProperty
+public final class WhenNoDataTypeProperty extends EnumProperty
 {
     private final JasperDesign jasperDesign;
 
     @SuppressWarnings("unchecked")
     public WhenNoDataTypeProperty(JasperDesign jasperDesign)
     {
-        super(jasperDesign);
+        super(WhenNoDataTypeEnum.class, jasperDesign);
         this.jasperDesign = jasperDesign;
     }
 
@@ -64,35 +65,35 @@ public final class WhenNoDataTypeProperty extends ByteProperty
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JasperDesign.WHEN_NO_DATA_TYPE_ALL_SECTIONS_NO_DETAIL), I18n.getString("WhenNoDataTypeProperty.Property.All")));
-        tags.add(new Tag(new Byte(JasperDesign.WHEN_NO_DATA_TYPE_BLANK_PAGE), I18n.getString("WhenNoDataTypeProperty.Property.Blank")));
-        tags.add(new Tag(new Byte(JasperDesign.WHEN_NO_DATA_TYPE_NO_DATA_SECTION), I18n.getString("WhenNoDataTypeProperty.Property.Section")));
-        tags.add(new Tag(new Byte(JasperDesign.WHEN_NO_DATA_TYPE_NO_PAGES), I18n.getString("WhenNoDataTypeProperty.Property.Pages")));
+        tags.add(new Tag(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL, I18n.getString("WhenNoDataTypeProperty.Property.All")));
+        tags.add(new Tag(WhenNoDataTypeEnum.BLANK_PAGE, I18n.getString("WhenNoDataTypeProperty.Property.Blank")));
+        tags.add(new Tag(WhenNoDataTypeEnum.NO_DATA_SECTION, I18n.getString("WhenNoDataTypeProperty.Property.Section")));
+        tags.add(new Tag(WhenNoDataTypeEnum.NO_PAGES, I18n.getString("WhenNoDataTypeProperty.Property.Pages")));
         return tags;
     }
 
     @Override
-    public Byte getByte()
+    public Object getPropertyValue()
     {
-        return jasperDesign.getWhenNoDataType();
+        return jasperDesign.getWhenNoDataTypeValue();
     }
 
     @Override
-    public Byte getOwnByte()
+    public Object getOwnPropertyValue()
     {
-        return jasperDesign.getWhenNoDataType();
+        return getPropertyValue();
     }
 
     @Override
-    public Byte getDefaultByte()
+    public Object getDefaultValue()
     {
-        return JasperDesign.WHEN_NO_DATA_TYPE_NO_PAGES;
+        return WhenNoDataTypeEnum.NO_PAGES;
     }
 
     @Override
-    public void setByte(Byte type)
+    public void setPropertyValue(Object type)
     {
-        jasperDesign.setWhenNoDataType(type);
+        jasperDesign.setWhenNoDataType((WhenNoDataTypeEnum)type);
     }
 
 }

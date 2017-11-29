@@ -37,6 +37,7 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import org.openide.nodes.PropertySupport;
 import org.openide.util.WeakListeners;
 
@@ -64,7 +65,7 @@ public final class Barcode4JEvaluationGroupProperty extends PropertySupport impl
 
         @Override
         public boolean canWrite() {
-            return component.getEvaluationTime() == JRExpression.EVALUATION_TIME_GROUP;
+            return component.getEvaluationTimeValue() == EvaluationTimeEnum.GROUP;
         }
 
 

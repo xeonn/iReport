@@ -36,6 +36,9 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.CalculationEnum;
+import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
+import net.sf.jasperreports.engine.type.ResetTypeEnum;
 import org.openide.util.Exceptions;
 
 /**
@@ -56,9 +59,9 @@ public class CreatePercentageTextfieldAction extends CreateTextFieldAction {
         if (dialog.getDialogResult() == JOptionPane.OK_OPTION)
         {
             JRField f = dialog.getSelectedField();
-            Byte resetType = dialog.getSelectedResetType();
+            ResetTypeEnum resetType = dialog.getSelectedResetTypeValue();
             JRGroup group = null;
-            if (resetType == JRVariable.RESET_TYPE_GROUP)
+            if (resetType == ResetTypeEnum.GROUP)
             {
                 group = dialog.getSelectedGroup();
             }
@@ -82,9 +85,9 @@ public class CreatePercentageTextfieldAction extends CreateTextFieldAction {
 
             variable.setExpression( Misc.createExpression( f.getValueClassName(), "$F{" + f.getName() + "}" ));
             variable.setValueClassName( f.getValueClassName() );
-            variable.setCalculation( JRVariable.CALCULATION_SUM);
+            variable.setCalculation( CalculationEnum.SUM);
             variable.setResetType(resetType);
-            if (resetType == JRVariable.RESET_TYPE_GROUP)
+            if (resetType == ResetTypeEnum.GROUP)
             {
                 variable.setResetGroup(group);
             }
@@ -102,7 +105,7 @@ public class CreatePercentageTextfieldAction extends CreateTextFieldAction {
             ((JRDesignExpression)element.getExpression()),
             ((JRDesignExpression)element.getExpression()).getValueClassName(),true);
 
-            element.setEvaluationTime(JRExpression.EVALUATION_TIME_AUTO);
+            element.setEvaluationTime(EvaluationTimeEnum.AUTO);
 
             return element;
         }

@@ -1,20 +1,37 @@
+2011-08-11 Version 4.1.1 released
+_______________________________________________________________________________
+- Support for XLS medatada exporter
+- Support for Pattern expression in textfields
+- New data source for Xslx documents
+- Fixed Bug 0005318: xml cannot be modified when locale is changed
+- Fixed Bug 0005370: Preview Data displays columns in random order
+- removed all the deprecated code no longer supported by JasperReports
+- support for JasperReports 4.1.1
+- New map component based on Google Maps (requires internet connection)
+- New html component to display html content
+- Added support for When no data type in table
+- Fixed Bug 22040 - [case #18654] Barcode4J-Property 'widthtoheightratio' of 2D-Barcode PDF417 is not labeled and has no effect
+- New option to set the expression editor font size
+- New option to disable syntax highlighting in the expression editor (to allow the use of Japanese IME)
+
 2011-04-19 Version 4.0.2 released
+_______________________________________________________________________________
 - support for Line Indent in text elements
 - support for new line spacing options in text elements
 - support for left and right spacing in text elements
 - support for after and before spacing for paragraphs in textfields
 - support for tab spaces in textfields
-- Fixed Bug 18666 - mac version preview doesn't work => Done
-- Fixed Bug 21775 - [Case #17829] Upgrade notice dialog => Done
-- Fixed Bug 19790 - hiding built-in parameter and variables in expression editor (built-in objects will be actually just put at the bottom of the list)  => Done
+- Fixed Bug 18666 - mac version preview doesn't work
+- Fixed Bug 21775 - [Case #17829] Upgrade notice dialog
+- Fixed Bug 19790 - hiding built-in parameter and variables in expression editor (built-in objects will be actually just put at the bottom of the list)
 - Fixed Bug 21143 - add field label when dropping a field into a report (already implemented in part) => Done
-- Fixed Bug 21818 - [Case #18024] Evaluate template expression => Done
-- Fixed Bug 21845 - [Case #18036] Cannot move field in tree => Done
-- Fixed Bug 21932 - export jar returns 'permission denied '=> Done
-- Fixed Bug 21335 => Done
-- Fixed Bug prevenyin Show Labels in Pie and Pie3D => Done
-- Fixed Bug 22765 - ic display options incomplete => Done
-- Fixed Bug 22766 - improve working with jrtx files => Done
+- Fixed Bug 21818 - [Case #18024] Evaluate template expression
+- Fixed Bug 21845 - [Case #18036] Cannot move field in tree
+- Fixed Bug 21932 - export jar returns 'permission denied '
+- Fixed Bug 21335
+- Fixed Bug prevenyin Show Labels in Pie and Pie3D
+- Fixed Bug 22765 - ic display options incomplete
+- Fixed Bug 22766 - improve working with jrtx files
 
 
 

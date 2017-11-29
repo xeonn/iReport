@@ -28,6 +28,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import net.sf.jasperreports.engine.type.ColorEnum;
 
 /**
  *
@@ -133,9 +134,9 @@ public class ColorSchemaGenerator {
         }
         else
         {
-                if (net.sf.jasperreports.engine.xml.JRXmlConstants.getColorMap().containsKey(colorString))
+                if (ColorEnum.getByName(colorString) != null)
                 {
-                        color = (java.awt.Color)net.sf.jasperreports.engine.xml.JRXmlConstants.getColorMap().get(colorString);
+                        color = ColorEnum.getByName(colorString).getColor();
                 }
                 else
                 {

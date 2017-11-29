@@ -34,6 +34,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import net.sf.jasperreports.engine.JRPen;
+import net.sf.jasperreports.engine.type.LineStyleEnum;
 
 /**
  *
@@ -83,17 +84,17 @@ public class PenEditorPanel extends javax.swing.JPanel  {
         jList1.setModel(styleListModel);
 
         //styleListModel.addElement("");
-        styleListModel.addElement( new Byte(JRPen.LINE_STYLE_SOLID));
-        styleListModel.addElement( new Byte(JRPen.LINE_STYLE_DASHED));
-        styleListModel.addElement( new Byte(JRPen.LINE_STYLE_DOTTED));
-        styleListModel.addElement( new Byte(JRPen.LINE_STYLE_DOUBLE));
+        styleListModel.addElement( LineStyleEnum.SOLID );
+        styleListModel.addElement( LineStyleEnum.DASHED );
+        styleListModel.addElement( LineStyleEnum.DOTTED );
+        styleListModel.addElement( LineStyleEnum.DOUBLE );
         
         jList1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             public void valueChanged(ListSelectionEvent e) {
                 if (!isInit() && pen != null)
                 {
-                    pen.setLineStyle( (Byte)jList1.getSelectedValue() );
+                    pen.setLineStyle( (LineStyleEnum)jList1.getSelectedValue() );
                 }
                 
             }
@@ -227,9 +228,9 @@ public class PenEditorPanel extends javax.swing.JPanel  {
                 jSpinnerLineWidth.setValue(pen.getLineWidth().doubleValue());
             }
             
-            if (pen.getLineStyle() != null)
+            if (pen.getLineStyleValue() != null)
             {
-                jList1.setSelectedValue(pen.getLineStyle(), true);
+                jList1.setSelectedValue(pen.getLineStyleValue(), true);
             }
             
             if (pen.getLineColor() != null)

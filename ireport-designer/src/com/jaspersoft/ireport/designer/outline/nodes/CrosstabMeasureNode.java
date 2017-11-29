@@ -30,6 +30,7 @@ import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.EnumProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.StringListProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.StringProperty;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
@@ -45,6 +46,7 @@ import javax.swing.Action;
 import net.sf.jasperreports.crosstabs.JRCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
+import net.sf.jasperreports.crosstabs.type.CrosstabPercentageEnum;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpressionChunk;
 import net.sf.jasperreports.engine.JRExpressionCollector;
@@ -349,7 +351,7 @@ public class CrosstabMeasureNode extends IRAbstractNode implements PropertyChang
     /**
      *  Class to manage the JRDesignElement.PROPERTY_POSITION_TYPE property
      */
-    public static final class CalculationProperty extends ByteProperty
+    public static final class CalculationProperty extends EnumProperty
     {
         private final JRDesignCrosstabMeasure measure;
         private final JRDesignCrosstab crosstab;
@@ -357,66 +359,77 @@ public class CrosstabMeasureNode extends IRAbstractNode implements PropertyChang
         @SuppressWarnings("unchecked")
         public CalculationProperty(JRDesignCrosstabMeasure measure, JRDesignCrosstab crosstab)
         {
-            super(measure);
-            setName( JRDesignCrosstabMeasure.PROPERTY_CALCULATION);
-            setDisplayName("Calculation");
-            setShortDescription("The calculation type which will be performed on the measure values");
+            super(CalculationEnum.class,  measure);
             this.crosstab = crosstab;
             this.measure = measure;
         }
 
+
         @Override
-        public List getTagList() 
+        public String getName()
+        {
+            return JRDesignCrosstabMeasure.PROPERTY_CALCULATION;
+        }
+
+        @Override
+        public String getDisplayName()
+        {
+            return "Calculation";
+        }
+
+        @Override
+        public String getShortDescription()
+        {
+            return "The calculation type which will be performed on the measure values";
+        }
+
+        @Override
+        public List getTagList()
         {
             List tags = new java.util.ArrayList();
-            tags.add(new Tag(new Byte(JRDesignVariable.CALCULATION_NOTHING), "Nothing"));
-            tags.add(new Tag(new Byte(JRDesignVariable.CALCULATION_COUNT), "Count"));
-            tags.add(new Tag(new Byte(JRDesignVariable.CALCULATION_DISTINCT_COUNT), "Distinct Count"));
-            tags.add(new Tag(new Byte(JRDesignVariable.CALCULATION_SUM), "Sum"));
-            tags.add(new Tag(new Byte(JRDesignVariable.CALCULATION_AVERAGE), "Average"));
-            tags.add(new Tag(new Byte(JRDesignVariable.CALCULATION_LOWEST), "Lowest"));
-            tags.add(new Tag(new Byte(JRDesignVariable.CALCULATION_HIGHEST), "Highest"));
-            tags.add(new Tag(new Byte(JRDesignVariable.CALCULATION_STANDARD_DEVIATION), "Standard Deviation"));
-            tags.add(new Tag(new Byte(JRDesignVariable.CALCULATION_VARIANCE), "Variance"));
-            tags.add(new Tag(new Byte(JRDesignVariable.CALCULATION_FIRST), "First"));
-            return tags;
+                tags.add(new Tag(CalculationEnum.NOTHING, "Nothing"));
+                tags.add(new Tag(CalculationEnum.COUNT, "Count"));
+                tags.add(new Tag(CalculationEnum.DISTINCT_COUNT, "Distinct Count"));
+                tags.add(new Tag(CalculationEnum.SUM, "Sum"));
+                tags.add(new Tag(CalculationEnum.AVERAGE, "Average"));
+                tags.add(new Tag(CalculationEnum.LOWEST, "Lowest"));
+                tags.add(new Tag(CalculationEnum.HIGHEST, "Highest"));
+                tags.add(new Tag(CalculationEnum.STANDARD_DEVIATION, "Standard Deviation"));
+                tags.add(new Tag(CalculationEnum.VARIANCE, "Variance"));
+                tags.add(new Tag(CalculationEnum.FIRST, "First"));
+                return tags;
         }
 
         @Override
-        public Byte getByte()
+        public Object getPropertyValue()
         {
-            return measure.getCalculation();
+            return measure.getCalculationValue();
         }
 
         @Override
-        public Byte getOwnByte()
+        public Object getOwnPropertyValue()
         {
-            return measure.getCalculation();
+            return getPropertyValue();
         }
 
         @Override
-        public Byte getDefaultByte()
+        public Object getDefaultValue()
         {
-            return JRDesignVariable.CALCULATION_COUNT;
+            return CalculationEnum.COUNT;
         }
 
         @Override
-        public void setByte(Byte b)
+        public void setPropertyValue(Object val)
         {
-            measure.setCalculation(b);
+            measure.setCalculation((CalculationEnum)val);
 
-            if (b == JRDesignVariable.CALCULATION_COUNT ||
-                b == JRDesignVariable.CALCULATION_DISTINCT_COUNT)
-            {
-                measure.setValueClassName( "java.lang.Integer");
-            }
-            //else if (measure.getValueExpression() != null &&
-            //         measure.getValueExpression().getValueClassName() != null)
-            //{
-            //    measure.setValueClassName( measure.getValueExpression().getValueClassName() );
-            //}
+                if (val == CalculationEnum.COUNT ||
+                    val == CalculationEnum.DISTINCT_COUNT)
+                {
+                    measure.setValueClassName( "java.lang.Integer");
+                }
         }
-        
+
         public JRDesignCrosstab getCrosstab() {
             return crosstab;
         }
@@ -621,7 +634,7 @@ public class CrosstabMeasureNode extends IRAbstractNode implements PropertyChang
     /**
      *  Class to manage the JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE property
      */
-    public static final class PercentageOfTypeProperty extends ByteProperty
+    public static final class PercentageOfTypeProperty extends EnumProperty
     {
         private final JRDesignCrosstabMeasure measure;
             
@@ -632,45 +645,63 @@ public class CrosstabMeasureNode extends IRAbstractNode implements PropertyChang
         @SuppressWarnings("unchecked")
         public PercentageOfTypeProperty(JRDesignCrosstabMeasure measure)
         {
-            super(measure);
-            setName( JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE );
-            setDisplayName("Percentage of type");
-            setShortDescription("The percentage calculation type performed on this measure");
+            super(CrosstabPercentageEnum.class, measure);
             this.measure = measure;
+        }
+        @Override
+        public String getName()
+        {
+            return JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE;
         }
 
         @Override
-        public List getTagList() 
+        public String getDisplayName()
+        {
+            return "Percentage of type";
+        }
+
+        @Override
+        public String getShortDescription()
+        {
+            return "The percentage calculation type performed on this measure";
+        }
+
+        @Override
+        public List getTagList()
         {
             List tags = new java.util.ArrayList();
-            tags.add(new Tag(new Byte(JRDesignCrosstabMeasure.PERCENTAGE_TYPE_NONE), "None"));
-            tags.add(new Tag(new Byte(JRDesignCrosstabMeasure.PERCENTAGE_TYPE_GRAND_TOTAL), "Grand Total"));
+            tags.add(new Tag(CrosstabPercentageEnum.NONE, "None"));
+            tags.add(new Tag(CrosstabPercentageEnum.GRAND_TOTAL, "Grand Total"));
             return tags;
         }
 
         @Override
-        public Byte getByte()
+        public Object getPropertyValue()
         {
-            return measure.getPercentageOfType();
+            return measure.getPercentageType();
         }
 
         @Override
-        public Byte getOwnByte()
+        public Object getOwnPropertyValue()
         {
-            return measure.getPercentageOfType();
+            return getPropertyValue();
         }
 
         @Override
-        public Byte getDefaultByte()
+        public Object getDefaultValue()
         {
-            return JRDesignCrosstabMeasure.PERCENTAGE_TYPE_NONE;
+            return CrosstabPercentageEnum.NONE;
         }
 
         @Override
-        public void setByte(Byte b)
+        public void setPropertyValue(Object val)
         {
-            measure.setPercentageOfType(b);
+            measure.setPercentageType((CrosstabPercentageEnum)val);
+
         }
+
+
+        
 
     }
     

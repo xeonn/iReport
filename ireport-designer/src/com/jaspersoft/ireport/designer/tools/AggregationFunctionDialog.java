@@ -27,6 +27,7 @@ import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.utils.Misc;
 import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
+import net.sf.jasperreports.engine.type.CalculationEnum;
 
 /**
  *
@@ -65,23 +66,23 @@ public class AggregationFunctionDialog extends java.awt.Dialog {
     {
         jComboBox1.removeAllItems();
 
-        jComboBox1.addItem(new Tag(new Byte(JRDesignVariable.CALCULATION_COUNT), I18n.getString("VariableNode.Property.Count")));
-        jComboBox1.addItem(new Tag(new Byte(JRDesignVariable.CALCULATION_DISTINCT_COUNT), I18n.getString("VariableNode.Property.DistinctCount")));
+        jComboBox1.addItem(new Tag(CalculationEnum.COUNT, I18n.getString("VariableNode.Property.Count")));
+        jComboBox1.addItem(new Tag(CalculationEnum.DISTINCT_COUNT, I18n.getString("VariableNode.Property.DistinctCount")));
 
         jComboBox1.setSelectedIndex(0);
 
         if (set == NUMERIC_SET)
         {
             //jComboBox1.addItem(new Tag(new Byte(JRDesignVariable.CALCULATION_NOTHING), I18n.getString("VariableNode.Property.Nothing")));
-            jComboBox1.addItem(new Tag(new Byte(JRDesignVariable.CALCULATION_SUM), I18n.getString("VariableNode.Property.Sum")));
-            jComboBox1.addItem(new Tag(new Byte(JRDesignVariable.CALCULATION_AVERAGE), I18n.getString("VariableNode.Property.Average")));
-            jComboBox1.addItem(new Tag(new Byte(JRDesignVariable.CALCULATION_LOWEST), I18n.getString("VariableNode.Property.Lowest")));
-            jComboBox1.addItem(new Tag(new Byte(JRDesignVariable.CALCULATION_HIGHEST), I18n.getString("VariableNode.Property.Highest")));
-            jComboBox1.addItem(new Tag(new Byte(JRDesignVariable.CALCULATION_STANDARD_DEVIATION), I18n.getString("VariableNode.Property.StandardDeviation")));
-            jComboBox1.addItem(new Tag(new Byte(JRDesignVariable.CALCULATION_VARIANCE), I18n.getString("VariableNode.Property.Variance")));
-            jComboBox1.addItem(new Tag(new Byte(JRDesignVariable.CALCULATION_SYSTEM), I18n.getString("VariableNode.Property.System")));
-            jComboBox1.addItem(new Tag(new Byte(JRDesignVariable.CALCULATION_FIRST), I18n.getString("VariableNode.Property.First")));
-            setSelectedFunction(JRDesignVariable.CALCULATION_SUM);
+            jComboBox1.addItem(new Tag(CalculationEnum.SUM, I18n.getString("VariableNode.Property.Sum")));
+            jComboBox1.addItem(new Tag(CalculationEnum.AVERAGE, I18n.getString("VariableNode.Property.Average")));
+            jComboBox1.addItem(new Tag(CalculationEnum.LOWEST, I18n.getString("VariableNode.Property.Lowest")));
+            jComboBox1.addItem(new Tag(CalculationEnum.HIGHEST, I18n.getString("VariableNode.Property.Highest")));
+            jComboBox1.addItem(new Tag(CalculationEnum.STANDARD_DEVIATION, I18n.getString("VariableNode.Property.StandardDeviation")));
+            jComboBox1.addItem(new Tag(CalculationEnum.VARIANCE, I18n.getString("VariableNode.Property.Variance")));
+            jComboBox1.addItem(new Tag(CalculationEnum.SYSTEM, I18n.getString("VariableNode.Property.System")));
+            jComboBox1.addItem(new Tag(CalculationEnum.FIRST, I18n.getString("VariableNode.Property.First")));
+            setSelectedFunction(CalculationEnum.SUM);
         }
 
     }
@@ -89,26 +90,26 @@ public class AggregationFunctionDialog extends java.awt.Dialog {
     public void setSelectedFunction(String function)
     {
         if (function == null) return;
-        if (function.equals("Count")) setSelectedFunction(JRDesignVariable.CALCULATION_COUNT);
-        if (function.equals("DistinctCount")) setSelectedFunction(JRDesignVariable.CALCULATION_COUNT);
-        if (function.equals("Sum")) setSelectedFunction(JRDesignVariable.CALCULATION_SUM);
-        if (function.equals("Average")) setSelectedFunction(JRDesignVariable.CALCULATION_AVERAGE);
-        if (function.equals("Lowest")) setSelectedFunction(JRDesignVariable.CALCULATION_LOWEST);
-        if (function.equals("Highest")) setSelectedFunction(JRDesignVariable.CALCULATION_HIGHEST);
-        if (function.equals("standardDeviation")) setSelectedFunction(JRDesignVariable.CALCULATION_STANDARD_DEVIATION);
-        if (function.equals("variance")) setSelectedFunction(JRDesignVariable.CALCULATION_VARIANCE);
-        if (function.equals("first")) setSelectedFunction(JRDesignVariable.CALCULATION_FIRST);
+        if (function.equals("Count")) setSelectedFunction( CalculationEnum.COUNT );
+        if (function.equals("DistinctCount")) setSelectedFunction(CalculationEnum.DISTINCT_COUNT);
+        if (function.equals("Sum")) setSelectedFunction(CalculationEnum.SUM);
+        if (function.equals("Average")) setSelectedFunction(CalculationEnum.AVERAGE);
+        if (function.equals("Lowest")) setSelectedFunction(CalculationEnum.LOWEST);
+        if (function.equals("Highest")) setSelectedFunction(CalculationEnum.HIGHEST);
+        if (function.equals("standardDeviation")) setSelectedFunction(CalculationEnum.STANDARD_DEVIATION);
+        if (function.equals("variance")) setSelectedFunction(CalculationEnum.VARIANCE);
+        if (function.equals("first")) setSelectedFunction(CalculationEnum.FIRST);
 
         // No function found...
         return;
     }
-    public void setSelectedFunction(Byte function)
+    public void setSelectedFunction(CalculationEnum function)
     {
         if (function == null) return;
         Misc.setComboboxSelectedTagValue(jComboBox1, function);
     }
 
-    public Byte getSelectedFunction()
+    public CalculationEnum getSelectedFunction()
     {
         if (jRadioButtonAggregation.isSelected())
         {
@@ -116,7 +117,7 @@ public class AggregationFunctionDialog extends java.awt.Dialog {
             if (obj != null)
             {
                 Tag t = (Tag)obj;
-                return (Byte)t.getValue();
+                return (CalculationEnum)t.getValue();
             }
         }
 

@@ -42,11 +42,15 @@ import java.util.List;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.CalculationEnum;
+import net.sf.jasperreports.engine.type.IncrementTypeEnum;
+import net.sf.jasperreports.engine.type.ResetTypeEnum;
 import org.openide.ErrorManager;
 import org.openide.actions.CopyAction;
 import org.openide.actions.CutAction;
@@ -194,11 +198,12 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
             throw new IllegalArgumentException("Variable name not valid.");
         }
         
-        List<JRDesignVariable> currentVariables = null;
+        List<JRVariable> currentVariables = null;
         JRDesignDataset dataset = getParentNode().getLookup().lookup(JRDesignDataset.class);
-        currentVariables = (List<JRDesignVariable>)dataset.getVariablesList();
-        for (JRDesignVariable p : currentVariables)
+        currentVariables = (List<JRVariable>)dataset.getVariablesList();
+        for (JRVariable pa : currentVariables)
         {
+            JRDesignVariable p = (JRDesignVariable)pa;
             if (p != getVariable() && p.getName().equals(s))
             {
                 throw new IllegalArgumentException("Variable name already in use.");
@@ -300,10 +305,11 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
 
             String s = val+"";
 
-            List<JRDesignVariable> currentVariables = null;
-            currentVariables = (List<JRDesignVariable>)getDataset().getVariablesList();
-            for (JRDesignVariable p : currentVariables)
+            List<JRVariable> currentVariables = null;
+            currentVariables = (List<JRVariable>)getDataset().getVariablesList();
+            for (JRVariable pa : currentVariables)
             {
+                JRDesignVariable p = (JRDesignVariable)pa;
                 if (p != getVariable() && p.getName().equals(s))
                 {
                     IllegalArgumentException iae = annotateException(I18n.getString("VariableNode.Property.VariableInUse")); 
@@ -493,7 +499,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
             public CalculationProperty(JRDesignVariable variable)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super( JRDesignVariable.PROPERTY_CALCULATION,Byte.class, I18n.getString("VariableNode.Property.Calculation"), I18n.getString("VariableNode.Property.Calculationdetail"), true, true);
+                super( JRDesignVariable.PROPERTY_CALCULATION,CalculationEnum.class, I18n.getString("VariableNode.Property.Calculation"), I18n.getString("VariableNode.Property.Calculationdetail"), true, true);
                 //this.dataset = dataset;
                 this.variable = variable;
                 setValue("suppressCustomEditor", Boolean.TRUE);
@@ -501,24 +507,13 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
 
             @Override
             public boolean isDefaultValue() {
-                return variable.getCalculation() == JRDesignVariable.CALCULATION_NOTHING;
+                return variable.getCalculationValue() == CalculationEnum.NOTHING;
             }
 
             @Override
             public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
 
-                Byte oldValue = variable.getCalculation();
-                Byte newValue = JRDesignVariable.CALCULATION_NOTHING;
-                variable.setCalculation(newValue);
-
-                ObjectPropertyUndoableEdit urob =
-                                new ObjectPropertyUndoableEdit(
-                                    variable,
-                                    "Calculation", 
-                                    Byte.TYPE,
-                                    oldValue,newValue);
-               // Find the undoRedo manager...
-               IReportManager.getInstance().addUndoableEdit(urob);         
+                setValue(CalculationEnum.NOTHING);
             }
 
             @Override
@@ -534,17 +529,17 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
                 {
                     java.util.ArrayList l = new java.util.ArrayList();
                     
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_NOTHING), I18n.getString("VariableNode.Property.Nothing")));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_COUNT), I18n.getString("VariableNode.Property.Count")));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_DISTINCT_COUNT), I18n.getString("VariableNode.Property.DistinctCount")));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_SUM), I18n.getString("VariableNode.Property.Sum")));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_AVERAGE), I18n.getString("VariableNode.Property.Average")));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_LOWEST), I18n.getString("VariableNode.Property.Lowest")));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_HIGHEST), I18n.getString("VariableNode.Property.Highest")));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_STANDARD_DEVIATION), I18n.getString("VariableNode.Property.StandardDeviation")));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_VARIANCE), I18n.getString("VariableNode.Property.Variance")));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_SYSTEM), I18n.getString("VariableNode.Property.System")));
-                    l.add(new Tag(new Byte(JRDesignVariable.CALCULATION_FIRST), I18n.getString("VariableNode.Property.First")));
+                    l.add(new Tag(CalculationEnum.NOTHING, I18n.getString("VariableNode.Property.Nothing")));
+                    l.add(new Tag(CalculationEnum.COUNT, I18n.getString("VariableNode.Property.Count")));
+                    l.add(new Tag(CalculationEnum.DISTINCT_COUNT, I18n.getString("VariableNode.Property.DistinctCount")));
+                    l.add(new Tag(CalculationEnum.SUM, I18n.getString("VariableNode.Property.Sum")));
+                    l.add(new Tag(CalculationEnum.AVERAGE, I18n.getString("VariableNode.Property.Average")));
+                    l.add(new Tag(CalculationEnum.LOWEST, I18n.getString("VariableNode.Property.Lowest")));
+                    l.add(new Tag(CalculationEnum.HIGHEST, I18n.getString("VariableNode.Property.Highest")));
+                    l.add(new Tag(CalculationEnum.STANDARD_DEVIATION, I18n.getString("VariableNode.Property.StandardDeviation")));
+                    l.add(new Tag(CalculationEnum.VARIANCE, I18n.getString("VariableNode.Property.Variance")));
+                    l.add(new Tag(CalculationEnum.SYSTEM, I18n.getString("VariableNode.Property.System")));
+                    l.add(new Tag(CalculationEnum.FIRST, I18n.getString("VariableNode.Property.First")));
                     
                     editor = new ComboBoxPropertyEditor(false, l);
                 }
@@ -552,21 +547,21 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
             }
             
             public Object getValue() throws IllegalAccessException, InvocationTargetException {
-                return new Byte(variable.getCalculation());
+                return variable.getCalculationValue();
             }
 
             public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                if (val instanceof Byte)
+                if (val instanceof CalculationEnum)
                 {
-                    Byte oldValue = variable.getCalculation();
-                    Byte newValue = (Byte)val;
+                    CalculationEnum oldValue = variable.getCalculationValue();
+                    CalculationEnum newValue = (CalculationEnum)val;
                     variable.setCalculation(newValue);
                 
                     ObjectPropertyUndoableEdit urob =
                             new ObjectPropertyUndoableEdit(
                                 variable,
                                 "Calculation", 
-                                Byte.TYPE,
+                                CalculationEnum.class,
                                 oldValue,newValue);
                     // Find the undoRedo manager...
                     IReportManager.getInstance().addUndoableEdit(urob);
@@ -587,7 +582,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
             public ResetTypeProperty(JRDesignVariable variable, JRDesignDataset dataset)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super( JRDesignVariable.PROPERTY_RESET_TYPE,Byte.class, I18n.getString("VariableNode.Property.Resettype"), I18n.getString("VariableNode.Property.Resettypedetail"), true, true);
+                super( JRDesignVariable.PROPERTY_RESET_TYPE,ResetTypeEnum.class, I18n.getString("VariableNode.Property.Resettype"), I18n.getString("VariableNode.Property.Resettypedetail"), true, true);
                 this.variable = variable;
                 this.dataset = dataset;
                 setValue("suppressCustomEditor", Boolean.TRUE);
@@ -595,12 +590,12 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
 
             @Override
             public boolean isDefaultValue() {
-                return variable.getResetType() == JRDesignVariable.RESET_TYPE_REPORT;
+                return variable.getResetTypeValue() == ResetTypeEnum.REPORT;
             }
 
             @Override
             public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
-                setPropertyValue(JRDesignVariable.RESET_TYPE_REPORT);
+                setPropertyValue(ResetTypeEnum.REPORT);
             }
 
             @Override
@@ -616,11 +611,11 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
                 {
                     java.util.ArrayList l = new java.util.ArrayList();
                     
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_REPORT), I18n.getString("VariableNode.Property.Report")));
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_COLUMN), I18n.getString("VariableNode.Property.Column")));
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_GROUP), I18n.getString("VariableNode.Property.Group")));
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_NONE), I18n.getString("VariableNode.Property.None")));
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_PAGE), I18n.getString("VariableNode.Property.Page")));
+                    l.add(new Tag(ResetTypeEnum.REPORT, I18n.getString("VariableNode.Property.Report")));
+                    l.add(new Tag(ResetTypeEnum.COLUMN, I18n.getString("VariableNode.Property.Column")));
+                    l.add(new Tag(ResetTypeEnum.GROUP, I18n.getString("VariableNode.Property.Group")));
+                    l.add(new Tag(ResetTypeEnum.NONE, I18n.getString("VariableNode.Property.None")));
+                    l.add(new Tag(ResetTypeEnum.PAGE, I18n.getString("VariableNode.Property.Page")));
                     
                     editor = new ComboBoxPropertyEditor(false, l);
                 }
@@ -628,20 +623,20 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
             }
             
             public Object getValue() throws IllegalAccessException, InvocationTargetException {
-                return new Byte(variable.getResetType());
+                return variable.getResetTypeValue();
             }
 
             public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                if (val instanceof Byte)
+                if (val instanceof ResetTypeEnum)
                 {
-                    setPropertyValue((Byte)val);
+                    setPropertyValue((ResetTypeEnum)val);
                 }
             }
             
-            private void setPropertyValue(Byte val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException 
+            private void setPropertyValue(ResetTypeEnum val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
             {
-                    Byte oldValue = variable.getResetType();
-                    Byte newValue = val;
+                    ResetTypeEnum oldValue = variable.getResetTypeValue();
+                    ResetTypeEnum newValue = val;
                     
                     variable.setResetType(newValue);
                     
@@ -654,7 +649,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
                     
                     JRGroup oldGroupValue = variable.getResetGroup();
                     JRGroup newGroupValue = null;
-                    if ( (val).byteValue() == JRDesignVariable.RESET_TYPE_GROUP )
+                    if ( val == ResetTypeEnum.GROUP )
                     {
                         if (dataset.getGroupsList().size() == 0)
                         {
@@ -714,7 +709,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
 
             @Override
             public boolean canWrite() {
-                return !variable.isSystemDefined() && variable.getResetType() == JRDesignVariable.RESET_TYPE_GROUP;
+                return !variable.isSystemDefined() && variable.getResetTypeValue() == ResetTypeEnum.GROUP;
             }
 
             
@@ -791,7 +786,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
             public IncrementTypeProperty(JRDesignVariable variable, JRDesignDataset dataset)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super( JRDesignVariable.PROPERTY_INCREMENT_TYPE,Byte.class, I18n.getString("VariableNode.Property.Incrementtype"), I18n.getString("VariableNode.Property.Incrementtypedetail"), true, true);
+                super( JRDesignVariable.PROPERTY_INCREMENT_TYPE,IncrementTypeEnum.class, I18n.getString("VariableNode.Property.Incrementtype"), I18n.getString("VariableNode.Property.Incrementtypedetail"), true, true);
                 this.variable = variable;
                 this.dataset = dataset;
                 setValue("suppressCustomEditor", Boolean.TRUE);
@@ -799,12 +794,12 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
 
             @Override
             public boolean isDefaultValue() {
-                return variable.getIncrementType() == JRDesignVariable.RESET_TYPE_NONE;
+                return variable.getIncrementTypeValue() == IncrementTypeEnum.NONE;
             }
 
             @Override
             public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
-                setPropertyValue(JRDesignVariable.RESET_TYPE_NONE);
+                setPropertyValue(IncrementTypeEnum.NONE);
             }
 
             @Override
@@ -820,11 +815,11 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
                 {
                     java.util.ArrayList l = new java.util.ArrayList();
                     
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_REPORT), I18n.getString("VariableNode.Property.Report")));
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_COLUMN), I18n.getString("VariableNode.Property.Column")));
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_GROUP), I18n.getString("VariableNode.Property.Group")));
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_NONE), I18n.getString("VariableNode.Property.None")));
-                    l.add(new Tag(new Byte(JRDesignVariable.RESET_TYPE_PAGE), I18n.getString("VariableNode.Property.Page")));
+                    l.add(new Tag(IncrementTypeEnum.REPORT, I18n.getString("VariableNode.Property.Report")));
+                    l.add(new Tag(IncrementTypeEnum.COLUMN, I18n.getString("VariableNode.Property.Column")));
+                    l.add(new Tag(IncrementTypeEnum.GROUP, I18n.getString("VariableNode.Property.Group")));
+                    l.add(new Tag(IncrementTypeEnum.NONE, I18n.getString("VariableNode.Property.None")));
+                    l.add(new Tag(IncrementTypeEnum.PAGE, I18n.getString("VariableNode.Property.Page")));
                     
                     editor = new ComboBoxPropertyEditor(false, l);
                 }
@@ -832,20 +827,20 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
             }
             
             public Object getValue() throws IllegalAccessException, InvocationTargetException {
-                return new Byte(variable.getIncrementType());
+                return variable.getIncrementTypeValue();
             }
 
             public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                if (val instanceof Byte)
+                if (val instanceof IncrementTypeEnum)
                 {
-                     setPropertyValue((Byte)val);
+                     setPropertyValue((IncrementTypeEnum)val);
                 }
             }
             
-            private void setPropertyValue(Byte val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException 
+            private void setPropertyValue(IncrementTypeEnum val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
             {
-                    Byte oldValue = variable.getIncrementType();
-                    Byte newValue = val;
+                    IncrementTypeEnum oldValue = variable.getIncrementTypeValue();
+                    IncrementTypeEnum newValue = val;
                     
                     variable.setIncrementType(newValue);
                     
@@ -853,14 +848,14 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
                             new ObjectPropertyUndoableEdit(
                                 variable,
                                 "IncrementType", 
-                                Byte.TYPE,
+                                IncrementTypeEnum.class,
                                 oldValue,newValue);
                     
                     JRGroup oldGroupValue = variable.getIncrementGroup();
                     JRGroup newGroupValue = null;
-                    if ( (val).byteValue() == JRDesignVariable.RESET_TYPE_GROUP )
+                    if ( val == IncrementTypeEnum.GROUP )
                     {
-                        if (dataset.getGroupsList().size() == 0)
+                        if (dataset.getGroupsList().isEmpty())
                         {
                             IllegalArgumentException iae = annotateException(I18n.getString("VariableNode.Property.Message")); 
                             throw iae; 
@@ -918,7 +913,7 @@ public class VariableNode extends IRAbstractNode implements PropertyChangeListen
 
             @Override
             public boolean canWrite() {
-                return !variable.isSystemDefined() && variable.getIncrementType() == JRDesignVariable.RESET_TYPE_GROUP;
+                return !variable.isSystemDefined() && variable.getIncrementTypeValue() == IncrementTypeEnum.GROUP;
             }
 
             

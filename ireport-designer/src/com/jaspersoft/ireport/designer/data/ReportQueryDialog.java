@@ -47,6 +47,7 @@ import com.jaspersoft.ireport.designer.connection.JRCSVDataSourceConnection;
 import com.jaspersoft.ireport.designer.connection.JRDataSourceProviderConnection;
 import com.jaspersoft.ireport.designer.connection.JRHibernateConnection;
 import com.jaspersoft.ireport.designer.connection.JRXlsDataSourceConnection;
+import com.jaspersoft.ireport.designer.connection.JRXlsxDataSourceConnection;
 import com.jaspersoft.ireport.designer.connection.MondrianConnection;
 import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.editor.ExpressionEditor;
@@ -78,7 +79,6 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.base.JRBaseObjectFactory;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -374,7 +374,17 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
           }
         });
         */
-        
+
+
+        jTableData.setModel(new DefaultTableModel() {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+
+
+        });
     } 
     
     /**
@@ -1089,7 +1099,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
         jScrollPane1.setPreferredSize(new java.awt.Dimension(661, 340));
 
         jEditorPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jEditorPane1.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        jEditorPane1.setFont(new java.awt.Font("Monospaced", 0, 12));
         jEditorPane1.setMinimumSize(new java.awt.Dimension(50, 200));
         jEditorPane1.setPreferredSize(new java.awt.Dimension(661, 340));
         jScrollPane1.setViewportView(jEditorPane1);
@@ -1428,6 +1438,7 @@ public class ReportQueryDialog extends javax.swing.JDialog implements ClipboardO
 
             }
         ));
+        jTableData.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jScrollPane2.setViewportView(jTableData);
 
         jPanelPreview.add(jScrollPane2, java.awt.BorderLayout.CENTER);
@@ -1977,36 +1988,67 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
 
     private void jButton5jButton2ActionPerformed1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5jButton2ActionPerformed1
         IReportConnection conn = IReportManager.getInstance().getDefaultConnection();
-        if (conn == null || !(conn instanceof JRXlsDataSourceConnection)) {
+        if (conn == null || !((conn instanceof JRXlsDataSourceConnection) || conn instanceof JRXlsxDataSourceConnection)) {
             setColumnsError( I18n.getString("ReportQueryDialog.Message.Error.NoXlsConnection") );
             return;
         }
         else
         {
-            JRXlsDataSourceConnection ic = (JRXlsDataSourceConnection)conn;
-            try {
-                List<String> names = ic.getColumnNames();
-                DefaultTableModel dtm = (DefaultTableModel)jTableFields.getModel();
-                dtm.setRowCount(0);
-
-                for (int nd =0; nd < names.size(); ++nd) {
-                    String fieldName = ""+names.get(nd);
-                    JRDesignField field = new JRDesignField();
-                    field.setName(fieldName);
-                    field.setValueClassName("java.lang.String");
-                    //field.setDescription(""); //Field returned by " +methods[i].getName() + " (real type: "+ returnType +")");
-
-                    Vector row = new Vector();
-                    row.addElement(field);
-                    row.addElement(field.getValueClassName());
-                    row.addElement(field.getDescription());
-                    dtm.addRow(row);
-                }
-                jTableFields.setRowSelectionInterval(0, names.size()-1);
-            } catch (Exception ex)
+            if (conn instanceof JRXlsDataSourceConnection)
             {
-                setColumnsError( "" + ex.getMessage() );
+                JRXlsDataSourceConnection ic = (JRXlsDataSourceConnection)conn;
+                try {
+                    List<String> names = ic.getColumnNames();
+                    DefaultTableModel dtm = (DefaultTableModel)jTableFields.getModel();
+                    dtm.setRowCount(0);
 
+                    for (int nd =0; nd < names.size(); ++nd) {
+                        String fieldName = ""+names.get(nd);
+                        JRDesignField field = new JRDesignField();
+                        field.setName(fieldName);
+                        field.setValueClassName("java.lang.String");
+                        //field.setDescription(""); //Field returned by " +methods[i].getName() + " (real type: "+ returnType +")");
+
+                        Vector row = new Vector();
+                        row.addElement(field);
+                        row.addElement(field.getValueClassName());
+                        row.addElement(field.getDescription());
+                        dtm.addRow(row);
+                    }
+                    jTableFields.setRowSelectionInterval(0, names.size()-1);
+                } catch (Exception ex)
+                {
+                    setColumnsError( "" + ex.getMessage() );
+
+                }
+            }
+            else if(conn instanceof JRXlsxDataSourceConnection)
+            {
+                JRXlsxDataSourceConnection ic = (JRXlsxDataSourceConnection)conn;
+                try {
+                    List<String> names = ic.getColumnNames();
+                    DefaultTableModel dtm = (DefaultTableModel)jTableFields.getModel();
+                    dtm.setRowCount(0);
+
+                    for (int nd =0; nd < names.size(); ++nd) {
+                        String fieldName = ""+names.get(nd);
+                        JRDesignField field = new JRDesignField();
+                        field.setName(fieldName);
+                        field.setValueClassName("java.lang.String");
+                        //field.setDescription(""); //Field returned by " +methods[i].getName() + " (real type: "+ returnType +")");
+
+                        Vector row = new Vector();
+                        row.addElement(field);
+                        row.addElement(field.getValueClassName());
+                        row.addElement(field.getDescription());
+                        dtm.addRow(row);
+                    }
+                    jTableFields.setRowSelectionInterval(0, names.size()-1);
+                } catch (Exception ex)
+                {
+                    setColumnsError( "" + ex.getMessage() );
+
+                }
             }
         }
     }//GEN-LAST:event_jButton5jButton2ActionPerformed1
@@ -2177,7 +2219,16 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
 
         dataJd.addParameter(param);
 
+        JRDesignParameter paramColumns = new JRDesignParameter();
+        paramColumns.setName("ireport.data.columns");
+        paramColumns.setValueClass(Collection.class);
+
+        dataJd.addParameter(paramColumns);
+
+
         // Add the fields...
+        List<String> columnNames = new ArrayList<String>();
+
         if ( jTableFields.getRowCount() > 0)
         {
             // Clear all the existing fields.
@@ -2188,6 +2239,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
             {
                 JRDesignField field = (JRDesignField)this.jTableFields.getValueAt(i, 0);
                 dataJd.addField(field);
+                columnNames.add(field.getName());
             }
         }
 
@@ -2195,6 +2247,9 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
         
         HashMap hm = new HashMap();
         hm.put("ireport.data.tabelmodel", jTableData.getModel());
+        
+        hm.put("ireport.data.columns", columnNames);
+
         int max_records = Integer.valueOf( "" + ((Tag)jComboBoxMaxPreviewData.getSelectedItem()).getValue());
 
         if (max_records > 0)
@@ -2526,7 +2581,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
                     }
                 }
                 
-                String param_name_literal = "param_" + net.sf.jasperreports.engine.util.JRStringUtil.getLiteral(param_name); 
+                String param_name_literal = "param_" + net.sf.jasperreports.engine.util.JRStringUtil.getJavaIdentifier(param_name);
                 
                 expression = Misc.string_replace( param_name_literal, "$P{"+param_name+"}", expression);
                 //interpreter.set( param_name_literal, recursiveInterpreter(interpreter, param_expression, parameters, recursion_level));
@@ -2544,7 +2599,7 @@ private void jTableFieldsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
             
             if (this_param_name!= null) 
             {
-                this_param_name_literal = "param_" + net.sf.jasperreports.engine.util.JRStringUtil.getLiteral(this_param_name);
+                this_param_name_literal = "param_" + net.sf.jasperreports.engine.util.JRStringUtil.getJavaIdentifier(this_param_name);
             } 
             //System.out.println("interpreto ["+ recursion_level +"]: " + expression);
             //System.out.flush();

@@ -28,6 +28,7 @@ import com.jaspersoft.ireport.locale.I18n;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.type.ModeEnum;
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
@@ -63,7 +64,7 @@ public final class CellModeProperty extends BooleanProperty
     @Override
     public Boolean getBoolean()
     {
-        return cellContents.getMode() != null && cellContents.getMode() == JRElement.MODE_OPAQUE;
+        return cellContents.getModeValue() != null && cellContents.getModeValue() == ModeEnum.OPAQUE;
     }
 
     @Override
@@ -81,7 +82,7 @@ public final class CellModeProperty extends BooleanProperty
     @Override
     public void setBoolean(Boolean isPrint)
     {
-        cellContents.setMode(isPrint == null ? null : (isPrint ? JRElement.MODE_OPAQUE : JRElement.MODE_TRANSPARENT));
+        cellContents.setMode(isPrint == null ? null : (isPrint ?  ModeEnum.OPAQUE :  ModeEnum.TRANSPARENT));
     }
 
 }

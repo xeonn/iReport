@@ -28,19 +28,20 @@ import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.charts.design.JRDesignChartAxis;
+import net.sf.jasperreports.charts.type.AxisPositionEnum;
 
     
 /**
  *  Class to manage the JRDesignElement.PROPERTY_POSITION_TYPE property
  */
-public final class AxisPositionTypeProperty extends ByteProperty
+public final class AxisPositionTypeProperty extends EnumProperty
 {
     private final JRDesignChartAxis element;
 
     @SuppressWarnings("unchecked")
     public AxisPositionTypeProperty(JRDesignChartAxis element)
     {
-        super(element);
+        super(AxisPositionEnum.class, element);
         this.element = element;
     }
 
@@ -66,33 +67,34 @@ public final class AxisPositionTypeProperty extends ByteProperty
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRDesignChartAxis.POSITION_LEFT_OR_TOP), I18n.getString("Global.Property.AxisPositionType.LeftTop")));
-        tags.add(new Tag(new Byte(JRDesignChartAxis.POSITION_RIGHT_OR_BOTTOM), I18n.getString("Global.Property.AxisPositionType.RightBottom")));
+        tags.add(new Tag(AxisPositionEnum.LEFT_OR_TOP, I18n.getString("Global.Property.AxisPositionType.LeftTop")));
+        tags.add(new Tag(AxisPositionEnum.RIGHT_OR_BOTTOM, I18n.getString("Global.Property.AxisPositionType.RightBottom")));
         return tags;
     }
 
     @Override
-    public Byte getByte()
+    public Object getPropertyValue()
     {
-        return element.getPosition();
+        return element.getPositionValue();
     }
 
     @Override
-    public Byte getOwnByte()
+    public Object getOwnPropertyValue()
     {
-        return element.getPosition();
+        return getPropertyValue();
     }
 
     @Override
-    public Byte getDefaultByte()
+    public Object getDefaultValue()
     {
-        return JRDesignChartAxis.POSITION_LEFT_OR_TOP;
+        return AxisPositionEnum.LEFT_OR_TOP;
     }
 
     @Override
-    public void setByte(Byte positionType)
+    public void setPropertyValue(Object positionType)
     {
-        element.setPosition(positionType);
+        element.setPosition((AxisPositionEnum)positionType);
     }
 
+    
 }

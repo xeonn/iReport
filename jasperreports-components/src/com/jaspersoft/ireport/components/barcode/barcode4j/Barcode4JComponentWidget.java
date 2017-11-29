@@ -31,9 +31,11 @@ import net.sf.jasperreports.components.barcode4j.CodabarComponent;
 import net.sf.jasperreports.components.barcode4j.Code39Component;
 import net.sf.jasperreports.components.barcode4j.DataMatrixComponent;
 import net.sf.jasperreports.components.barcode4j.FourStateBarcodeComponent;
+import net.sf.jasperreports.components.barcode4j.PDF417Component;
 import net.sf.jasperreports.components.barcode4j.POSTNETComponent;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sourceforge.barbecue.twod.pdf417.PDF417Barcode;
 
 /**
  *
@@ -69,7 +71,14 @@ public class Barcode4JComponentWidget extends JRDesignElementWidget {
             evt.getPropertyName().equals(Code39Component.PROPERTY_DISPLAY_CHECKSUM) ||
             evt.getPropertyName().equals(Code39Component.PROPERTY_DISPLAY_START_STOP) ||
             evt.getPropertyName().equals(POSTNETComponent.PROPERTY_BASELINE_POSITION) ||
-            evt.getPropertyName().equals(POSTNETComponent.PROPERTY_SHORT_BAR_HEIGHT))
+            evt.getPropertyName().equals(POSTNETComponent.PROPERTY_SHORT_BAR_HEIGHT) ||
+            evt.getPropertyName().equals(PDF417Component.PROPERTY_WIDTH_TO_HEIGHT_RATIO) ||
+            evt.getPropertyName().equals(PDF417Component.PROPERTY_ERROR_CORRECTION_LEVEL) ||
+            evt.getPropertyName().equals(PDF417Component.PROPERTY_MAX_COLUMNS) ||
+            evt.getPropertyName().equals(PDF417Component.PROPERTY_MIN_COLUMNS) ||
+            evt.getPropertyName().equals(PDF417Component.PROPERTY_MAX_ROWS) ||
+            evt.getPropertyName().equals(PDF417Component.PROPERTY_MIN_ROWS)
+            )
         {
             updateBounds();
             this.repaint();

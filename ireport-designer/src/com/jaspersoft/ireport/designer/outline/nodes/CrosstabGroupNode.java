@@ -28,6 +28,7 @@ import com.jaspersoft.ireport.designer.editor.ExpressionContext;
 import com.jaspersoft.ireport.designer.sheet.properties.ExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.EnumProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.StringListProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.StringProperty;
 import java.awt.datatransfer.Transferable;
@@ -55,6 +56,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.SortOrderEnum;
 import net.sf.jasperreports.engine.util.Pair;
 import org.openide.actions.CopyAction;
 import org.openide.actions.CutAction;
@@ -421,7 +423,7 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
                         
                         if (updateCell)
                         {
-                            Object cellKey = new Pair(rowName_old, columnName_old);
+                            Pair cellKey = new Pair(rowName_old, columnName_old);
                             // Remove the cell mapping
                             getCrosstab().getCellsMap().remove(cellKey);
                             cellKey = new Pair(rowName_new, columnName_new);
@@ -475,7 +477,7 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
     /**
      *  Class to manage the JRDesignElement.PROPERTY_POSITION_TYPE property
      */
-    public static final class TotalPositionProperty extends ByteProperty
+    public static final class TotalPositionProperty extends EnumProperty
     {
         private final JRDesignCrosstabGroup group;
         private final JRDesignCrosstab crosstab;
@@ -483,10 +485,7 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
         @SuppressWarnings("unchecked")
         public TotalPositionProperty(JRDesignCrosstabGroup group, JRDesignCrosstab crosstab)
         {
-            super(group);
-            setName( JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION );
-            setDisplayName("Total Position");
-            setShortDescription("This property set the position of the total column or row for this group. If no total is required, set the position type to None");
+            super(CrosstabTotalPositionEnum.class,  group);
             this.crosstab = crosstab;
             this.group = group;
         }
@@ -495,36 +494,55 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
         public List getTagList() 
         {
             List tags = new java.util.ArrayList();
-            tags.add(new Tag(new Byte(BucketDefinition.TOTAL_POSITION_END), "End"));
-            tags.add(new Tag(new Byte(BucketDefinition.TOTAL_POSITION_START), "Start"));
-            tags.add(new Tag(new Byte(BucketDefinition.TOTAL_POSITION_NONE), "None"));
+            tags.add(new Tag(CrosstabTotalPositionEnum.END, "End"));
+            tags.add(new Tag(CrosstabTotalPositionEnum.START, "Start"));
+            tags.add(new Tag(CrosstabTotalPositionEnum.NONE, "None"));
             return tags;
         }
 
         @Override
-        public Byte getByte()
+        public String getName()
         {
-            return group.getTotalPositionValue() == null ? null : group.getTotalPositionValue().getValueByte();
+            return JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION;
         }
 
         @Override
-        public Byte getOwnByte()
+        public String getDisplayName()
         {
-            return getByte();
+            return "Total Position";
         }
 
         @Override
-        public Byte getDefaultByte()
+        public String getShortDescription()
         {
-            return CrosstabTotalPositionEnum.NONE.getValueByte();
+            return "This property set the position of the total column or row for this group. If no total is required, set the position type to None";
+        }
+
+       
+
+        @Override
+        public Object getPropertyValue()
+        {
+            return group.getTotalPositionValue();
         }
 
         @Override
-        public void setByte(Byte positionType)
+        public Object getOwnPropertyValue()
         {
-            group.setTotalPosition(positionType);
+            return getPropertyValue();
         }
 
+        @Override
+        public Object getDefaultValue()
+        {
+            return CrosstabTotalPositionEnum.NONE;
+        }
+
+        @Override
+        public void setPropertyValue(Object alignment)
+        {
+            group.setTotalPosition((CrosstabTotalPositionEnum)alignment);
+        }
     }
     
     /**
@@ -873,7 +891,7 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
     /**
      *  Class to manage the JRDesignElement.PROPERTY_POSITION_TYPE property
      */
-    public static final class BucketOrderProperty extends ByteProperty
+    public static final class BucketOrderProperty extends EnumProperty
     {
         private final JRDesignCrosstabBucket bucket;
         private final JRDesignCrosstab crosstab;
@@ -881,10 +899,7 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
         @SuppressWarnings("unchecked")
         public BucketOrderProperty(JRDesignCrosstabBucket bucket, JRDesignCrosstab crosstab)
         {
-            super(bucket);
-            setName( JRDesignCrosstabBucket.PROPERTY_ORDER );
-            setDisplayName("Order");
-            setShortDescription("The sorting type");
+            super(SortOrderEnum.class,  bucket);
             this.crosstab = crosstab;
             this.bucket = bucket;
         }
@@ -893,33 +908,51 @@ public abstract class CrosstabGroupNode extends IRAbstractNode implements Proper
         public List getTagList() 
         {
             List tags = new java.util.ArrayList();
-            tags.add(new Tag(new Byte(BucketDefinition.ORDER_ASCENDING), "Ascending"));
-            tags.add(new Tag(new Byte(BucketDefinition.ORDER_DESCENDING), "Descending"));
+            tags.add(new Tag(SortOrderEnum.ASCENDING, "Ascending"));
+            tags.add(new Tag(SortOrderEnum.DESCENDING, "Descending"));
             return tags;
         }
 
         @Override
-        public Byte getByte()
+        public String getName()
         {
-            return bucket.getOrder();
+            return JRDesignCrosstabBucket.PROPERTY_ORDER;
         }
 
         @Override
-        public Byte getOwnByte()
+        public String getDisplayName()
         {
-            return bucket.getOrder();
+            return "Order";
         }
 
         @Override
-        public Byte getDefaultByte()
+        public String getShortDescription()
         {
-            return BucketDefinition.ORDER_ASCENDING;
+            return "The sorting type";
         }
 
         @Override
-        public void setByte(Byte b)
+        public Object getPropertyValue()
         {
-            bucket.setOrder(b);
+            return bucket.getOrderValue();
+        }
+
+        @Override
+        public Object getOwnPropertyValue()
+        {
+            return getPropertyValue();
+        }
+
+        @Override
+        public Object getDefaultValue()
+        {
+            return SortOrderEnum.ASCENDING;
+        }
+
+        @Override
+        public void setPropertyValue(Object order)
+        {
+            bucket.setOrder((SortOrderEnum)order);
         }
 
     }

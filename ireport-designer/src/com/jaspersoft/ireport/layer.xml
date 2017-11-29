@@ -119,6 +119,7 @@
             <file name="com-jaspersoft-ireport-designer-menu-preview-XLSPreviewAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-preview-XLS2PreviewAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-preview-XLSXPreviewAction.instance"/>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-XLS3PreviewAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-preview-TXTPreviewAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-preview-RTFPreviewAction.instance"/>
             <file name="com-jaspersoft-ireport-designer-menu-preview-CSVPreviewAction.instance"/>
@@ -632,6 +633,10 @@
             <file name="com-jaspersoft-ireport-designer-menu-preview-XLSXPreviewAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-XLSXPreviewAction.instance"/>
                 <attr name="position" intvalue="523"/>
+            </file>
+            <file name="com-jaspersoft-ireport-designer-menu-preview-XLS3PreviewAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-XLS3PreviewAction.instance"/>
+                <attr name="position" intvalue="524"/>
             </file>
             <file name="com-jaspersoft-ireport-designer-menu-preview-RTFPreviewAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/Report_preview/com-jaspersoft-ireport-designer-menu-preview-RTFPreviewAction.instance"/>

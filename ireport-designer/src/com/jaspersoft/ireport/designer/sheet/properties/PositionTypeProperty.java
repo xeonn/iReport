@@ -27,19 +27,20 @@ import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.type.PositionTypeEnum;
 
     
 /**
  *  Class to manage the JRDesignElement.PROPERTY_POSITION_TYPE property
  */
-public final class PositionTypeProperty extends ByteProperty
+public final class PositionTypeProperty extends EnumProperty
 {
     private final JRDesignElement element;
 
     @SuppressWarnings("unchecked")
     public PositionTypeProperty(JRDesignElement element)
     {
-        super(element);
+        super(PositionTypeEnum.class, element);
         this.element = element;
     }
 
@@ -65,34 +66,34 @@ public final class PositionTypeProperty extends ByteProperty
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRDesignElement.POSITION_TYPE_FIX_RELATIVE_TO_TOP), I18n.getString("Global.Property.FixTop")));
-        tags.add(new Tag(new Byte(JRDesignElement.POSITION_TYPE_FLOAT), I18n.getString("Global.Property.PositionFloat")));
-        tags.add(new Tag(new Byte(JRDesignElement.POSITION_TYPE_FIX_RELATIVE_TO_BOTTOM), I18n.getString("Global.Property.FixBottom")));
+        tags.add(new Tag(PositionTypeEnum.FIX_RELATIVE_TO_TOP, I18n.getString("Global.Property.FixTop")));
+        tags.add(new Tag(PositionTypeEnum.FLOAT, I18n.getString("Global.Property.PositionFloat")));
+        tags.add(new Tag(PositionTypeEnum.FIX_RELATIVE_TO_BOTTOM, I18n.getString("Global.Property.FixBottom")));
         return tags;
     }
 
     @Override
-    public Byte getByte()
+    public Object getPropertyValue()
     {
-        return element.getPositionType();
+        return element.getPositionTypeValue();
     }
 
     @Override
-    public Byte getOwnByte()
+    public Object getOwnPropertyValue()
     {
-        return element.getPositionType();
+        return element.getPositionTypeValue();
     }
 
     @Override
-    public Byte getDefaultByte()
+    public Object getDefaultValue()
     {
-        return JRDesignElement.POSITION_TYPE_FIX_RELATIVE_TO_TOP;
+        return PositionTypeEnum.FIX_RELATIVE_TO_TOP;
     }
 
     @Override
-    public void setByte(Byte positionType)
+    public void setPropertyValue(Object positionType)
     {
-        element.setPositionType(positionType);
+        element.setPositionType((PositionTypeEnum)positionType);
     }
 
 }

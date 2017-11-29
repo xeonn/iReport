@@ -39,6 +39,7 @@ import javax.swing.Action;
 import net.sf.jasperreports.crosstabs.JRCrosstabParameter;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabParameter;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -148,11 +149,11 @@ public class CrosstabParameterNode extends ParameterNode implements PropertyChan
             throw new IllegalArgumentException("Parameter name not valid.");
         }
         
-        List<JRDesignParameter> currentParameters = null;
-        
-        currentParameters = (List<JRDesignParameter>)crosstab.getParametersList();
-        for (JRDesignParameter p : currentParameters)
+        List<JRCrosstabParameter> currentParameters = null;
+        currentParameters = crosstab.getParametersList();
+        for (JRCrosstabParameter pa : currentParameters)
         {
+            JRDesignCrosstabParameter p = (JRDesignCrosstabParameter)pa;
             if (p != getParameter() && p.getName().equals(s))
             {
                 throw new IllegalArgumentException("Parameter name already in use.");
@@ -165,7 +166,7 @@ public class CrosstabParameterNode extends ParameterNode implements PropertyChan
 
         // We need to update the parameters map too...
         crosstab.getParametersMap().remove(oldName);
-        crosstab.getParametersMap().put(s,getParameter());
+        crosstab.getParametersMap().put(s,(JRCrosstabParameter)getParameter());
         
         ObjectPropertyUndoableEdit opue = new ObjectPropertyUndoableEdit(
                     getParameter(), "Name", String.class, oldName, s);
@@ -218,10 +219,11 @@ public class CrosstabParameterNode extends ParameterNode implements PropertyChan
 
             String s = val+"";
 
-            List<JRDesignParameter> currentParameters = null;
-            currentParameters = (List<JRDesignParameter>)crosstab.getParametersList();
-            for (JRDesignParameter p : currentParameters)
+            List<JRCrosstabParameter> currentParameters = null;
+            currentParameters = (List<JRCrosstabParameter>)crosstab.getParametersList();
+            for (JRCrosstabParameter pa : currentParameters)
             {
+                JRDesignCrosstabParameter p = (JRDesignCrosstabParameter)pa;
                 if (p != getParameter() && p.getName().equals(s))
                 {
                     IllegalArgumentException iae = annotateException("Parameter name already in use."); 
@@ -233,7 +235,7 @@ public class CrosstabParameterNode extends ParameterNode implements PropertyChan
 
             // We need to update the parameters map too...
             crosstab.getParametersMap().remove(oldName);
-            crosstab.getParametersMap().put(s,getParameter());
+            crosstab.getParametersMap().put(s,(JRCrosstabParameter)getParameter());
 
             ObjectPropertyUndoableEdit opue = new ObjectPropertyUndoableEdit(
                     getParameter(), "Name", String.class, oldName, getParameter().getName());

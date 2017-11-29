@@ -56,6 +56,7 @@ import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
 import org.netbeans.api.visual.widget.Scene.SceneListener;
 
 /**
@@ -272,7 +273,7 @@ public class RulerPanel extends javax.swing.JPanel implements MouseListener, Mou
                     if (b == null || b.getHeight() == 0) continue;
 
                     if (b instanceof JRDesignBand &&
-                        ((JRDesignBand)b).getOrigin().getBandType() == JROrigin.BACKGROUND &&
+                        ((JRDesignBand)b).getOrigin().getBandTypeValue() == BandTypeEnum.BACKGROUND &&
                         IReportManager.getInstance().isBackgroundSeparated())
                     {
                         // Print some extra gray stuff...
@@ -368,7 +369,7 @@ public class RulerPanel extends javax.swing.JPanel implements MouseListener, Mou
 
                     int y1 = 0;
                   if (b instanceof JRDesignBand &&
-                        ((JRDesignBand)b).getOrigin().getBandType() == JROrigin.BACKGROUND &&
+                        ((JRDesignBand)b).getOrigin().getBandTypeValue() == BandTypeEnum.BACKGROUND &&
                         IReportManager.getInstance().isBackgroundSeparated())
                     {
                         // Print some extra gray stuff...

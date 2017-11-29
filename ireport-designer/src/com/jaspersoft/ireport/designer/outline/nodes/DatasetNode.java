@@ -29,6 +29,7 @@ import com.jaspersoft.ireport.designer.data.queryexecuters.QueryExecuterDef;
 import com.jaspersoft.ireport.designer.menu.EditQueryAction;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
+import com.jaspersoft.ireport.designer.sheet.properties.EnumProperty;
 import com.jaspersoft.ireport.designer.undo.DeleteDatasetUndoableEdit;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import com.jaspersoft.ireport.locale.I18n;
@@ -45,6 +46,7 @@ import javax.swing.Action;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.WhenResourceMissingTypeEnum;
 import org.openide.actions.CopyAction;
 import org.openide.actions.DeleteAction;
 import org.openide.nodes.PropertySupport;
@@ -256,57 +258,71 @@ public class DatasetNode extends IRAbstractNode implements PropertyChangeListene
     /**
      *  Class to manage the WhenResourceMissingType property
      */
-    private static final class WhenResourceMissingTypeProperty extends PropertySupport
+    private static final class WhenResourceMissingTypeProperty extends EnumProperty
     {
             private final JRDesignDataset dataset;
-            private ComboBoxPropertyEditor editor;
             
             @SuppressWarnings("unchecked")
             public WhenResourceMissingTypeProperty(JRDesignDataset dataset)
             {
                 // TODO: Replace WhenNoDataType with the right constant
-                super("WhenResourceMissingType",Byte.class, I18n.getString("DatasetNode.Property.ResourceMissig"), I18n.getString("DatasetNode.Property.ResourceMissigdetail"), true, true);
+                super(WhenResourceMissingTypeEnum.class, dataset);
                 this.dataset = dataset;
                 setValue("suppressCustomEditor", Boolean.TRUE);
             }
 
             @Override
-            @SuppressWarnings("unchecked")
-            public PropertyEditor getPropertyEditor() {
+        public String getName()
+        {
+            return JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE;
+        }
 
-                if (editor == null)
-                {
-                    java.util.ArrayList l = new java.util.ArrayList();
-                    l.add(new Tag(new Byte(JRDesignDataset.WHEN_RESOURCE_MISSING_TYPE_EMPTY), I18n.getString("DatasetNode.Property.Empty")));
-                    l.add(new Tag(new Byte(JRDesignDataset.WHEN_RESOURCE_MISSING_TYPE_ERROR), I18n.getString("DatasetNode.Property.Error")));
-                    l.add(new Tag(new Byte(JRDesignDataset.WHEN_RESOURCE_MISSING_TYPE_KEY), I18n.getString("DatasetNode.Property.Key")));
-                    l.add(new Tag(new Byte(JRDesignDataset.WHEN_RESOURCE_MISSING_TYPE_NULL), I18n.getString("DatasetNode.Property.Null")));
-                    editor = new ComboBoxPropertyEditor(false, l);
-                }
-                return editor;
-            }
-            
-            public Object getValue() throws IllegalAccessException, InvocationTargetException {
-                return new Byte(dataset.getWhenResourceMissingType());
-            }
+        @Override
+        public String getDisplayName()
+        {
+            return I18n.getString("DatasetNode.Property.ResourceMissig");
+        }
 
-            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                if (val instanceof Byte)
-                {
-                    Byte oldValue = dataset.getWhenResourceMissingType();
-                    Byte newValue = (Byte)val;
-                    dataset.setWhenResourceMissingType(newValue);
-                
-                    ObjectPropertyUndoableEdit urob =
-                            new ObjectPropertyUndoableEdit(
-                                dataset,
-                                "WhenResourceMissingType", 
-                                Byte.TYPE,
-                                oldValue,newValue);
-                    // Find the undoRedo manager...
-                    IReportManager.getInstance().addUndoableEdit(urob);
-                }
-            }
+        @Override
+        public String getShortDescription()
+        {
+            return I18n.getString("DatasetNode.Property.ResourceMissigdetail");
+        }
+
+        @Override
+        public List getTagList()
+        {
+            List tags = new java.util.ArrayList();
+            tags.add(new Tag(WhenResourceMissingTypeEnum.EMPTY, I18n.getString("DatasetNode.Property.Empty")));
+            tags.add(new Tag(WhenResourceMissingTypeEnum.ERROR, I18n.getString("DatasetNode.Property.Error")));
+            tags.add(new Tag(WhenResourceMissingTypeEnum.KEY, I18n.getString("DatasetNode.Property.Key")));
+            tags.add(new Tag(WhenResourceMissingTypeEnum.NULL, I18n.getString("DatasetNode.Property.Null")));
+            return tags;
+        }
+
+        @Override
+        public Object getPropertyValue()
+        {
+            return dataset.getWhenResourceMissingTypeValue();
+        }
+
+        @Override
+        public Object getOwnPropertyValue()
+        {
+            return getPropertyValue();
+        }
+
+        @Override
+        public Object getDefaultValue()
+        {
+            return WhenResourceMissingTypeEnum.NULL;
+        }
+
+        @Override
+        public void setPropertyValue(Object val)
+        {
+            dataset.setWhenResourceMissingType((WhenResourceMissingTypeEnum)val);
+        }
     }
 
     /**

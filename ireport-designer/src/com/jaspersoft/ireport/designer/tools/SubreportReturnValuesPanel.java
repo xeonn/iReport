@@ -76,7 +76,7 @@ public class SubreportReturnValuesPanel extends javax.swing.JPanel {
             JRDesignSubreportReturnValue oldReturnValue = (JRDesignSubreportReturnValue)iterator.next();
             JRDesignSubreportReturnValue returnValue = new JRDesignSubreportReturnValue();
             returnValue.setSubreportVariable(oldReturnValue.getSubreportVariable() );
-            returnValue.setCalculation(oldReturnValue.getCalculation() );
+            returnValue.setCalculation(oldReturnValue.getCalculationValue() );
             returnValue.setIncrementerFactoryClassName(oldReturnValue.getIncrementerFactoryClassName() );
             returnValue.setToVariable(oldReturnValue.getToVariable() );
             returnValues.add(returnValue);

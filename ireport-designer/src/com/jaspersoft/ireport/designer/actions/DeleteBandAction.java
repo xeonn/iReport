@@ -32,6 +32,7 @@ import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
 
@@ -88,22 +89,22 @@ public final class DeleteBandAction extends NodeAction {
                 if (jd != null && band !=null)
                 {
                     
-                    if (band.getOrigin().getBandType() == JROrigin.BACKGROUND) jd.setBackground(null);
-                    else if (band.getOrigin().getBandType() == JROrigin.TITLE) jd.setTitle(null);
-                    else if (band.getOrigin().getBandType() == JROrigin.PAGE_HEADER) jd.setPageHeader(null);
-                    else if (band.getOrigin().getBandType() == JROrigin.COLUMN_HEADER) jd.setColumnHeader(null);
-                    else if (band.getOrigin().getBandType() == JROrigin.DETAIL)
+                    if (band.getOrigin().getBandTypeValue() == BandTypeEnum.BACKGROUND) jd.setBackground(null);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.TITLE) jd.setTitle(null);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.PAGE_HEADER) jd.setPageHeader(null);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.COLUMN_HEADER) jd.setColumnHeader(null);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.DETAIL)
                     {
                         JRDesignSection section = (JRDesignSection)jd.getDetailSection();
                         section.removeBand(band);
                         //jasperDesign.setDetail(null);
                     }
-                    else if (band.getOrigin().getBandType() == JROrigin.COLUMN_FOOTER) jd.setColumnFooter(null);
-                    else if (band.getOrigin().getBandType() == JROrigin.PAGE_FOOTER) jd.setPageFooter(null);
-                    else if (band.getOrigin().getBandType() == JROrigin.LAST_PAGE_FOOTER) jd.setLastPageFooter(null);
-                    else if (band.getOrigin().getBandType() == JROrigin.SUMMARY) jd.setSummary(null);
-                    else if (band.getOrigin().getBandType() == JROrigin.NO_DATA) jd.setNoData(null);
-                    else if (band.getOrigin().getBandType() == JROrigin.GROUP_HEADER)
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.COLUMN_FOOTER) jd.setColumnFooter(null);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.PAGE_FOOTER) jd.setPageFooter(null);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.LAST_PAGE_FOOTER) jd.setLastPageFooter(null);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.SUMMARY) jd.setSummary(null);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.NO_DATA) jd.setNoData(null);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.GROUP_HEADER)
                     {
                         JRDesignGroup group = ((JRDesignGroup)jd.getGroupsMap().get(band.getOrigin().getGroupName()));
                         JRDesignSection section = (JRDesignSection)group.getGroupHeaderSection();
@@ -112,7 +113,7 @@ public final class DeleteBandAction extends NodeAction {
                         //  g.setGroupHeader(null);
 
                     }
-                    else if (band.getOrigin().getBandType() == JROrigin.GROUP_FOOTER)
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.GROUP_FOOTER)
                     {
                         JRDesignGroup group = ((JRDesignGroup)jd.getGroupsMap().get(band.getOrigin().getGroupName()));
                         JRDesignSection section = (JRDesignSection)group.getGroupFooterSection();

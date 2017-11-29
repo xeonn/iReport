@@ -39,6 +39,7 @@ import com.jaspersoft.ireport.designer.actions.MoveGroupUpAction;
 import com.jaspersoft.ireport.designer.dnd.DnDUtilities;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
+import com.jaspersoft.ireport.designer.sheet.properties.AbstractProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.BandPrintWhenExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
@@ -54,6 +55,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Action;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.base.JRBaseBand;
 import net.sf.jasperreports.engine.design.JRDesignBand;
@@ -64,6 +66,9 @@ import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
+import net.sf.jasperreports.engine.type.FooterPositionEnum;
+import net.sf.jasperreports.engine.type.SplitTypeEnum;
 import net.sf.jasperreports.engine.xml.JRXmlConstants;
 import org.openide.ErrorManager;
 import org.openide.actions.PasteAction;
@@ -117,7 +122,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
         
         this.band.getEventSupport().addPropertyChangeListener(this);
         
-        if (band.getOrigin().getBandType() == JROrigin.DETAIL)
+        if (band.getOrigin().getBandTypeValue() == BandTypeEnum.DETAIL)
         {
             ((JRDesignSection)jd.getDetailSection()).getEventSupport().addPropertyChangeListener(this);
         }
@@ -215,7 +220,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
         bandPropertiesSet.put(new HeightProperty(band, jd));
         bandPropertiesSet.put(new BandPrintWhenExpressionProperty(band, jd.getMainDesignDataset()));
         bandPropertiesSet.put(new SplitTypeProperty(band));
-        bandPropertiesSet.put(new SplitAllowedProperty(band));
+        //bandPropertiesSet.put(new SplitAllowedProperty(band));
         
 
         sheet.put(bandPropertiesSet);
@@ -270,10 +275,10 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
         
         if (ModelUtils.containsProperty(  this.getPropertySets(), evt.getPropertyName()))
         {
-            if (evt.getPropertyName().equals(JRBaseBand.PROPERTY_SPLIT_TYPE))
-            {
-                this.firePropertyChange(JRBaseBand.PROPERTY_SPLIT_ALLOWED, evt.getOldValue(), evt.getNewValue() );
-            }
+            //if (evt.getPropertyName().equals(JRBaseBand.PROPERTY_SPLIT_TYPE))
+            //{
+            //    this.firePropertyChange(JRBaseBand.PROPERTY_SPLIT_ALLOWED, evt.getOldValue(), evt.getNewValue() );
+            //}
             this.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue() );
         }
         
@@ -306,7 +311,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
         list.add( SystemAction.get(PasteAction.class));
         list.add( SystemAction.get(RefreshNodes.class));
         
-        if (getBand().getOrigin().getBandType() == JROrigin.BACKGROUND)
+        if (getBand().getOrigin().getBandTypeValue() == BandTypeEnum.BACKGROUND)
         {
             list.add(SystemAction.get(MaximizeBackgroundAction.class));
         }
@@ -315,7 +320,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
             list.add(SystemAction.get(MaximizeBandAction.class));
         }
 
-        if (getBand().getOrigin().getBandType() == JROrigin.DETAIL)
+        if (getBand().getOrigin().getBandTypeValue() == BandTypeEnum.DETAIL)
         {
             list.add(SystemAction.get(AddAnotherDetailBandAction.class));
         }
@@ -479,7 +484,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
     
     /**
      *  Class to manage the JasperDesign.PROPERTY_IGNORE_PAGINATION property
-     */
+     
     @SuppressWarnings("deprecation")
     private final class SplitAllowedProperty extends PropertySupport
     {
@@ -541,7 +546,7 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
                 IReportManager.getInstance().addUndoableEdit(urob);
             }
     }
-    
+    */
     
     
     /**
@@ -578,10 +583,11 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
 
             String s = val+"";
 
-            List<JRDesignGroup> currentGroups = null;
-            currentGroups = (List<JRDesignGroup>)dataset.getGroupsList();
-            for (JRDesignGroup g : currentGroups)
+            List<JRGroup> currentGroups = dataset.getGroupsList();
+
+            for (JRGroup gr : currentGroups)
             {
+                JRDesignGroup g = (JRDesignGroup)gr;
                 if (g != group && g.getName().equals(s))
                 {
                     IllegalArgumentException iae = annotateException(I18n.getString("BandNode.Property.Nameexist")); 
@@ -947,16 +953,16 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
             if (editor == null) {
                 ArrayList l = new ArrayList();
                 l.add(new Tag(null, "<Default>"));
-                l.add(new Tag(new Byte(JRDesignBand.SPLIT_TYPE_IMMEDIATE), I18n.getString("band.property.splitType.immediate")));
-                l.add(new Tag(new Byte(JRDesignBand.SPLIT_TYPE_PREVENT), I18n.getString("band.property.splitType.prevent")));
-                l.add(new Tag(new Byte(JRDesignBand.SPLIT_TYPE_STRETCH), I18n.getString("band.property.splitType.stretch")));
+                l.add(new Tag(SplitTypeEnum.IMMEDIATE, I18n.getString("band.property.splitType.immediate")));
+                l.add(new Tag(SplitTypeEnum.PREVENT, I18n.getString("band.property.splitType.prevent")));
+                l.add(new Tag(SplitTypeEnum.STRETCH, I18n.getString("band.property.splitType.stretch")));
                 editor = new ComboBoxPropertyEditor(false, l);
             }
             return editor;
         }
 
         public Object getValue() throws IllegalAccessException, InvocationTargetException {
-            return band.getSplitType();
+            return band.getSplitTypeValue();
         }
 
         public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -969,17 +975,17 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
             
             if (val == null || val instanceof Byte) {
 
-                Byte oldValue = band.getSplitType();
-                Byte newValue = (Byte) val;
+                SplitTypeEnum oldValue = band.getSplitTypeValue();
+                SplitTypeEnum newValue = (SplitTypeEnum) val;
                 band.setSplitType(newValue);
-                ObjectPropertyUndoableEdit urob = new ObjectPropertyUndoableEdit(band, "SplitType", Byte.class, oldValue, newValue);
+                ObjectPropertyUndoableEdit urob = new ObjectPropertyUndoableEdit(band, "SplitType", SplitTypeEnum.class, oldValue, newValue);
                 IReportManager.getInstance().addUndoableEdit(urob);
             }
         }
 
         @Override
         public boolean isDefaultValue() {
-            return band.getSplitType() == null;
+            return band.getSplitTypeValue() == null;
         }
 
         @Override
@@ -993,16 +999,31 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
         }
     }
     
-    private static final class FooterPositionProperty extends ByteProperty
+    private static final class FooterPositionProperty extends AbstractProperty
     {
         private final JRDesignGroup group;
+        private ComboBoxPropertyEditor editor;
 
         @SuppressWarnings("unchecked")
         public FooterPositionProperty(JRDesignGroup group)
         {
-            super(group);
+            super(FooterPositionEnum.class, group);
             this.group = group;
+            setValue("suppressCustomEditor", Boolean.TRUE);
         }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public PropertyEditor getPropertyEditor()
+        {
+            if (editor == null)
+            {
+                editor = new ComboBoxPropertyEditor(false, getTagList());
+            }
+            return editor;
+        }
+
+
         @Override
         public String getName()
         {
@@ -1021,40 +1042,43 @@ public class BandNode  extends IRIndexedNode implements PropertyChangeListener, 
             return I18n.getString("Global.Property.FooterPosition.description");
         }
 
-        @Override
+    
         public List getTagList()
         {
             List tags = new java.util.ArrayList();
-            tags.add(new Tag(new Byte(JRDesignGroup.FOOTER_POSITION_NORMAL), I18n.getString("Global.Property.FooterPosition.normal")));
-            tags.add(new Tag(new Byte(JRDesignGroup.FOOTER_POSITION_STACK_AT_BOTTOM), I18n.getString("Global.Property.FooterPosition.stackAtBottom")));
-            tags.add(new Tag(new Byte(JRDesignGroup.FOOTER_POSITION_FORCE_AT_BOTTOM), I18n.getString("Global.Property.FooterPosition.forceAtBottom")));
-            tags.add(new Tag(new Byte(JRDesignGroup.FOOTER_POSITION_COLLATE_AT_BOTTOM), I18n.getString("Global.Property.FooterPosition.collateAtBottom")));
+            tags.add(new Tag(FooterPositionEnum.NORMAL, I18n.getString("Global.Property.FooterPosition.normal")));
+            tags.add(new Tag(FooterPositionEnum.STACK_AT_BOTTOM, I18n.getString("Global.Property.FooterPosition.stackAtBottom")));
+            tags.add(new Tag(FooterPositionEnum.FORCE_AT_BOTTOM, I18n.getString("Global.Property.FooterPosition.forceAtBottom")));
+            tags.add(new Tag(FooterPositionEnum.COLLATE_AT_BOTTOM, I18n.getString("Global.Property.FooterPosition.collateAtBottom")));
             
             return tags;
         }
 
+
         @Override
-        public Byte getByte()
-        {
-            return group.getFooterPosition();
+        public Object getPropertyValue() {
+            return group.getFooterPositionValue();
         }
 
         @Override
-        public Byte getOwnByte()
-        {
-            return group.getFooterPosition();
+        public Object getOwnPropertyValue() {
+            return getPropertyValue();
         }
 
         @Override
-        public Byte getDefaultByte()
-        {
-            return JRDesignGroup.FOOTER_POSITION_NORMAL;
+        public Object getDefaultValue() {
+            return FooterPositionEnum.NORMAL;
         }
 
         @Override
-        public void setByte(Byte position)
-        {
-            group.setFooterPosition(position);
+        public void validate(Object value) {
+        }
+
+        @Override
+        public void setPropertyValue(Object value) {
+
+            group.setFooterPosition((FooterPositionEnum)value);
+
         }
 
     }

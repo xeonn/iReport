@@ -35,6 +35,7 @@ import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.type.CalculationEnum;
 
 /**
  *
@@ -250,7 +251,7 @@ public class GroupPanel extends javax.swing.JPanel {
         String classtype = "java.lang.String";
         List functions = new ArrayList();
         
-        functions.add(new Tag(new Byte(JRVariable.CALCULATION_COUNT),I18n.getString("GroupPanel.Label.Count")));
+        functions.add(new Tag(CalculationEnum.COUNT,I18n.getString("GroupPanel.Label.Count")));
         
         Object obj = jComboBoxGroup.getSelectedItem();
         
@@ -272,27 +273,27 @@ public class GroupPanel extends javax.swing.JPanel {
             
             if (java.lang.Number.class.isAssignableFrom( clazz ))
             {
-                functions.add(new Tag(new Byte(JRVariable.CALCULATION_SUM),I18n.getString("GroupPanel.Function.Sum")));
-                functions.add(new Tag(new Byte(JRVariable.CALCULATION_COUNT),I18n.getString("GroupPanel.Function.Count")));
-                functions.add(new Tag(new Byte(JRVariable.CALCULATION_DISTINCT_COUNT),I18n.getString("GroupPanel.Function.DistinctCount")));
-                functions.add(new Tag(new Byte(JRVariable.CALCULATION_AVERAGE),I18n.getString("GroupPanel.Function.Average")));
-                functions.add(new Tag(new Byte(JRVariable.CALCULATION_STANDARD_DEVIATION),I18n.getString("GroupPanel.Function.StandardDeviation")));
-                functions.add(new Tag(new Byte(JRVariable.CALCULATION_VARIANCE),I18n.getString("GroupPanel.Function.Variance")));
+                functions.add(new Tag(CalculationEnum.SUM,I18n.getString("GroupPanel.Function.Sum")));
+                functions.add(new Tag(CalculationEnum.COUNT,I18n.getString("GroupPanel.Function.Count")));
+                functions.add(new Tag(CalculationEnum.DISTINCT_COUNT,I18n.getString("GroupPanel.Function.DistinctCount")));
+                functions.add(new Tag(CalculationEnum.AVERAGE,I18n.getString("GroupPanel.Function.Average")));
+                functions.add(new Tag(CalculationEnum.STANDARD_DEVIATION,I18n.getString("GroupPanel.Function.StandardDeviation")));
+                functions.add(new Tag(CalculationEnum.VARIANCE,I18n.getString("GroupPanel.Function.Variance")));
             }
             
             if ( java.util.Date.class.isAssignableFrom( clazz ) || 
                  java.lang.Number.class.isAssignableFrom( clazz ))
             {
-                functions.add(new Tag(new Byte(JRVariable.CALCULATION_LOWEST),I18n.getString("GroupPanel.Function.Lowest")));
-                functions.add(new Tag(new Byte(JRVariable.CALCULATION_HIGHEST),I18n.getString("GroupPanel.Function.Highest")));
+                functions.add(new Tag(CalculationEnum.LOWEST,I18n.getString("GroupPanel.Function.Lowest")));
+                functions.add(new Tag(CalculationEnum.HIGHEST,I18n.getString("GroupPanel.Function.Highest")));
             }
             
             
         } catch (Exception ex)
         {}
         
-        functions.add(new Tag(new Byte(JRVariable.CALCULATION_FIRST),I18n.getString("GroupPanel.Function.First")));
-        functions.add(new Tag(new Byte(JRVariable.CALCULATION_NOTHING),I18n.getString("GroupPanel.Function.Nothing")));
+        functions.add(new Tag(CalculationEnum.FIRST,I18n.getString("GroupPanel.Function.First")));
+        functions.add(new Tag(CalculationEnum.NOTHING,I18n.getString("GroupPanel.Function.Nothing")));
         
       return functions;
     }
@@ -397,13 +398,13 @@ public class GroupPanel extends javax.swing.JPanel {
         return Misc.createExpression(getExpressionClass(groupByType), getExpression(groupByType));
     }
     
-    public byte getCalculationType()
+    public CalculationEnum getCalculationType()
     {
-       byte b = JRVariable.CALCULATION_COUNT;
+       CalculationEnum b = CalculationEnum.COUNT;
        Object gb = jComboBoxGroupBy.getSelectedItem();
        if (gb != null && gb instanceof Tag)
        {
-           b = (Byte)((Tag)gb).getValue(); //(Byte)((Tag)gb).getValue();
+           b = (CalculationEnum)((Tag)gb).getValue(); //(Byte)((Tag)gb).getValue();
        }
        return b;
     }

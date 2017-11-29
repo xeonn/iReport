@@ -45,7 +45,7 @@ public class JRXmlWriterHelper {
 
     static {
 
-        writers.put("4_0_1", JRXmlWriter_2_0_2.class);
+        writers.put("4_0_1", JRXmlWriter_4_0_1.class);
         writers.put("3_7_4", JRXmlWriter_3_7_4.class);
         writers.put("3_7_3", JRXmlWriter_3_7_3.class);
         writers.put("3_7_1", JRXmlWriter_3_7_1.class);
@@ -55,6 +55,7 @@ public class JRXmlWriterHelper {
         writers.put("3_5_2", JRXmlWriter_3_5_2.class);
         writers.put("3_5_1", JRXmlWriter_3_5_1.class);
         writers.put("3_5_0", JRXmlWriter_3_5_0.class);
+        /*
         writers.put("3_1_4", JRXmlWriter_3_1_4.class);
         writers.put("3_1_3", JRXmlWriter_3_1_3.class);
         writers.put("3_1_2", JRXmlWriter_3_1_2.class);
@@ -65,6 +66,7 @@ public class JRXmlWriterHelper {
         writers.put("2_0_4", JRXmlWriter_2_0_4.class);
         writers.put("2_0_3", JRXmlWriter_2_0_3.class);
         writers.put("2_0_2", JRXmlWriter_2_0_2.class);
+        */
     }
 
     private static VersionWarningDialog dialog = null;

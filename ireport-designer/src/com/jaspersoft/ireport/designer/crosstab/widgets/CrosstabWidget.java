@@ -193,19 +193,19 @@ public class CrosstabWidget extends Widget implements PropertyChangeListener {
         // paint row cells...
         for (int i=0; i<row_groups.length; ++i)
         {
-            switch (row_groups[i].getTotalPosition())
+            switch (row_groups[i].getTotalPositionValue())
             {
-                case BucketDefinition.TOTAL_POSITION_START:
+                case START:
                     paintCell(g, row_groups[i].getName() + " total header", x, y, row_groups[i].getTotalHeader());
                     data_height -= row_groups[i].getTotalHeader().getHeight();
                     y += row_groups[i].getTotalHeader().getHeight();
                     break;
-                case BucketDefinition.TOTAL_POSITION_END:
+                case END:
                     int y_loc = y + data_height - row_groups[i].getTotalHeader().getHeight();
                     paintCell(g, row_groups[i].getName() + " total header", x, y_loc, row_groups[i].getTotalHeader());
                     data_height -= row_groups[i].getTotalHeader().getHeight();
                     break;
-                case BucketDefinition.TOTAL_POSITION_NONE:
+                case NONE:
                     break;
             }
             
@@ -220,19 +220,19 @@ public class CrosstabWidget extends Widget implements PropertyChangeListener {
         // paint col cells...
         for (int i=0; i<col_groups.length; ++i)
         {
-            switch (col_groups[i].getTotalPosition())
+            switch (col_groups[i].getTotalPositionValue())
             {
-                case BucketDefinition.TOTAL_POSITION_START:
+                case START:
                     paintCell(g, col_groups[i].getName() + " total header", x, y, col_groups[i].getTotalHeader());
                     data_width -= col_groups[i].getTotalHeader().getWidth();
                     x += col_groups[i].getTotalHeader().getWidth();
                     break;
-                case BucketDefinition.TOTAL_POSITION_END:
+                case END:
                     int x_loc = x + data_width - col_groups[i].getTotalHeader().getWidth();
                     paintCell(g, col_groups[i].getName() + " total header", x_loc, y, col_groups[i].getTotalHeader());
                     data_width -= col_groups[i].getTotalHeader().getWidth();
                     break;
-                case BucketDefinition.TOTAL_POSITION_NONE:
+                case NONE:
                     break;
             }
             
@@ -328,7 +328,7 @@ public class CrosstabWidget extends Widget implements PropertyChangeListener {
             frame.setWidth(cell.getWidth());
             frame.setHeight(cell.getHeight());
 
-            frame.setMode(cell.getMode());
+            frame.setMode(cell.getModeValue());
             frame.setBackcolor(cell.getBackcolor());
             //frame.setStyle(reportConverter.resolveStyle(cell));
 

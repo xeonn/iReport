@@ -46,6 +46,7 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
 /**
  *
@@ -99,7 +100,7 @@ public class BarcodeChooserDialog extends javax.swing.JDialog {
             StandardBarbecueComponent componentImpl = new StandardBarbecueComponent();
 
             componentImpl.setType(barcodeName);
-            componentImpl.setEvaluationTime( JRDesignExpression.EVALUATION_TIME_NOW);
+            componentImpl.setEvaluationTimeValue( EvaluationTimeEnum.NOW);
 
             JRDesignExpression exp = Misc.createExpression("java.lang.String", "\"1234\"");
 
@@ -227,7 +228,7 @@ public class BarcodeChooserDialog extends javax.swing.JDialog {
 
             }
 
-            componentImpl.setEvaluationTime( JRExpression.EVALUATION_TIME_NOW);
+            componentImpl.setEvaluationTimeValue( EvaluationTimeEnum.NOW);
             componentImpl.setTextPosition("bottom");
             JRDesignExpression exp = new JRDesignExpression();
             exp.setValueClassName("java.lang.String");

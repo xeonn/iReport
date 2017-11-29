@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Action;
+import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
@@ -182,11 +183,12 @@ public class GroupNodeImpl extends IRAbstractNode implements PropertyChangeListe
             throw new IllegalArgumentException(I18n.getString("GroupNode.Property.GroupInvalid"));
         }
         
-        List<JRDesignGroup> currentGroups = null;
+        List<JRGroup> currentGroups = null;
         JRDesignDataset dataset = getParentNode().getLookup().lookup(JRDesignDataset.class);
-        currentGroups = (List<JRDesignGroup>)dataset.getGroupsList();
-        for (JRDesignGroup p : currentGroups)
+        currentGroups = (List<JRGroup>)dataset.getGroupsList();
+        for (JRGroup pg : currentGroups)
         {
+            JRDesignGroup p = (JRDesignGroup)pg;
             if (p != getGroup() && p.getName().equals(s))
             {
                 throw new IllegalArgumentException(I18n.getString("GroupNode.Property.GroupInUse"));

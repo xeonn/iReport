@@ -51,6 +51,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.fill.calculation.BucketDefinition;
+import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRAlignment;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRElement;
@@ -66,6 +67,11 @@ import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextElement;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
+import net.sf.jasperreports.engine.type.LineStyleEnum;
+import net.sf.jasperreports.engine.type.ModeEnum;
+import net.sf.jasperreports.engine.type.PenEnum;
+import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 import org.netbeans.api.visual.animator.SceneAnimator;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
@@ -292,10 +298,10 @@ public class CreateCrosstabAction extends CreateReportElementAction
                 
                 if (addRowTotal)
                 {
-                    row1.setTotalPosition( BucketDefinition.TOTAL_POSITION_END );
+                    row1.setTotalPosition( CrosstabTotalPositionEnum.END );
                     if (row2 != null)
                     {
-                        row2.setTotalPosition( BucketDefinition.TOTAL_POSITION_END );
+                        row2.setTotalPosition( CrosstabTotalPositionEnum.END );
                     }
                 }
                 
@@ -307,10 +313,10 @@ public class CreateCrosstabAction extends CreateReportElementAction
                 
                 if (addColumnTotal)
                 {
-                    col1.setTotalPosition( BucketDefinition.TOTAL_POSITION_END );
+                    col1.setTotalPosition( CrosstabTotalPositionEnum.END );
                     if (col2 != null)
                     {
-                        col2.setTotalPosition( BucketDefinition.TOTAL_POSITION_END );
+                        col2.setTotalPosition( CrosstabTotalPositionEnum.END );
                     }
                 }
                 
@@ -373,7 +379,7 @@ public class CreateCrosstabAction extends CreateReportElementAction
                     {
                         content.getLineBox().getPen().setLineColor((whiteGrid) ? Color.WHITE : Color.BLACK);
                         content.getLineBox().getPen().setLineWidth(0.5f);
-                        content.getLineBox().getPen().setLineStyle( JRPen.LINE_STYLE_SOLID);
+                        content.getLineBox().getPen().setLineStyle( LineStyleEnum.SOLID);
                     }
                     
                     if (baseColor != null)
@@ -382,7 +388,7 @@ public class CreateCrosstabAction extends CreateReportElementAction
                         if (c != null)
                         {
                             content.setBackcolor(c);
-                            content.setMode( JRElement.MODE_OPAQUE);
+                            content.setMode( ModeEnum.OPAQUE);
                             int luminance = (30*c.getRed() + 59*c.getGreen() + 11*c.getBlue())/255;
                             
                             if (luminance < 50 ) 
@@ -425,8 +431,8 @@ public class CreateCrosstabAction extends CreateReportElementAction
         element.setWidth(w);
         element.setHeight(h);
         element.setText(text);
-        element.setHorizontalAlignment( JRAlignment.HORIZONTAL_ALIGN_CENTER );
-        element.setVerticalAlignment( JRAlignment.VERTICAL_ALIGN_MIDDLE);
+        element.setHorizontalAlignment( HorizontalAlignEnum.CENTER );
+        element.setVerticalAlignment( VerticalAlignEnum.MIDDLE);
         return element;
     }
     
@@ -440,7 +446,7 @@ public class CreateCrosstabAction extends CreateReportElementAction
             try {
                 dataTextfieldStyle = new JRDesignStyle();
                 dataTextfieldStyle.setName(styleName);
-                dataTextfieldStyle.setHorizontalAlignment(JRBaseTextElement.HORIZONTAL_ALIGN_CENTER);
+                dataTextfieldStyle.setHorizontalAlignment(HorizontalAlignEnum.CENTER);
                 getJasperDesign().addStyle(dataTextfieldStyle);
             } catch (JRException ex) {
                 Exceptions.printStackTrace(ex);

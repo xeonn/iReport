@@ -57,6 +57,7 @@ public class DefaultExporterFactory implements ExporterFactory {
         if (format.equals("xhtml")) return "html";
         if (format.equals("xml")) return "jrpxml";
         if (format.equals("xls2")) return "xls";
+        if (format.equals("xls3")) return "xls";
         return format;
     }
 
@@ -92,6 +93,11 @@ public class DefaultExporterFactory implements ExporterFactory {
        else if (format.equalsIgnoreCase("xls2"))
        {
           exporter = new  net.sf.jasperreports.engine.export.JExcelApiExporter();
+          configureXlsExporter(exporter);
+       }
+       else if (format.equalsIgnoreCase("xls3"))
+       {
+          exporter = new  net.sf.jasperreports.engine.export.JExcelApiMetadataExporter();
           configureXlsExporter(exporter);
        }
        else if (format.equalsIgnoreCase("xlsx"))
@@ -157,6 +163,7 @@ public class DefaultExporterFactory implements ExporterFactory {
        }
        else if (format.equalsIgnoreCase("xls") ||
                 format.equalsIgnoreCase("xls2") ||
+                format.equalsIgnoreCase("xls3") ||
                 format.equalsIgnoreCase("xlsx"))
        {
             return Misc.nvl( IReportManager.getInstance().getProperty("ExternalXLSViewer"), "");

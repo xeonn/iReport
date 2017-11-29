@@ -24,17 +24,16 @@
 package com.jaspersoft.ireport.components.barcode.barcode4j;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
-import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.EnumProperty;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.components.barcode4j.BarcodeComponent;
-import net.sf.jasperreports.engine.design.JRDesignTextElement;
 
 
 /**
  *  Class to manage the JRDesignChart.PROPERTY_TITLE_POSITION property
  */
-public final class Barcode4JOrientationProperty extends ByteProperty
+public final class Barcode4JOrientationProperty extends EnumProperty
 {
 
     private final BarcodeComponent component;
@@ -42,71 +41,45 @@ public final class Barcode4JOrientationProperty extends ByteProperty
     
     public Barcode4JOrientationProperty(BarcodeComponent component)
     {
-        super(component);
+        super(String.class, component);
         this.component = component;
         setName(BarcodeComponent.PROPERTY_ORIENTATION);
         setDisplayName(I18n.getString("barcode4j.property.orientation.name"));
         setShortDescription(I18n.getString("barcode4j.property.orientation.description"));
     }
 
-
     @Override
     public List getTagList()
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRDesignTextElement.ROTATION_NONE), I18n.getString("Global.Property.None")));
-        tags.add(new Tag(new Byte(JRDesignTextElement.ROTATION_LEFT), I18n.getString("Global.Property.Left")));
-        tags.add(new Tag(new Byte(JRDesignTextElement.ROTATION_RIGHT), I18n.getString("Global.Property.Right")));
-        tags.add(new Tag(new Byte(JRDesignTextElement.ROTATION_UPSIDE_DOWN), I18n.getString("Global.Property.UpsideDown")));
+        tags.add(new Tag(""+BarcodeComponent.ORIENTATION_UP, I18n.getString("Global.Property.None")));
+        tags.add(new Tag(""+BarcodeComponent.ORIENTATION_LEFT, I18n.getString("Global.Property.Left")));
+        tags.add(new Tag(""+BarcodeComponent.ORIENTATION_RIGHT, I18n.getString("Global.Property.Right")));
+        tags.add(new Tag(""+BarcodeComponent.ORIENTATION_DOWN, I18n.getString("Global.Property.UpsideDown")));
         return tags;
     }
 
+    
     @Override
-    public Byte getByte()
-    {
-        return getOwnByte();
+    public Object getPropertyValue() {
+        return ""+component.getOrientation();
     }
 
     @Override
-    public Byte getOwnByte()
-    {
-        if (component.getOrientation() == 0) return JRDesignTextElement.ROTATION_NONE;
-        if (component.getOrientation() == 90) return JRDesignTextElement.ROTATION_LEFT;
-        if (component.getOrientation() == 180) return JRDesignTextElement.ROTATION_UPSIDE_DOWN;
-        if (component.getOrientation() == 270) return JRDesignTextElement.ROTATION_RIGHT;
-
-        return 0;
+    public Object getOwnPropertyValue() {
+        return component.getOrientation();
     }
 
     @Override
-    public Byte getDefaultByte()
-    {
-        return 0;
+    public Object getDefaultValue() {
+        return ""+BarcodeComponent.ORIENTATION_UP;
     }
 
     @Override
-    public void setByte(Byte position)
-    {
-        if (position == null)
-        {
-            component.setOrientation(0);
-        }
-        else if (position.equals(JRDesignTextElement.ROTATION_NONE))
-        {
-            component.setOrientation(0);
-        }
-        else if (position.equals(JRDesignTextElement.ROTATION_LEFT))
-        {
-            component.setOrientation(90);
-        }
-        else if (position.equals(JRDesignTextElement.ROTATION_UPSIDE_DOWN))
-        {
-            component.setOrientation(180);
-        }
-        else if (position.equals(JRDesignTextElement.ROTATION_RIGHT))
-        {
-            component.setOrientation(270);
-        }
+    public void setPropertyValue(Object value) {
+        if (value == null) component.setOrientation(0);
+        else if(value instanceof Integer) component.setOrientation(((Integer) value).intValue());
+        else if(value instanceof String) component.setOrientation( Integer.parseInt(""+value));
     }
 
 }

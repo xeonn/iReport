@@ -26,21 +26,21 @@ package com.jaspersoft.ireport.designer.sheet.properties;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignImage;
+import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
     
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  */
-public final class EvaluationTimeProperty extends ByteProperty
+public final class EvaluationTimeProperty extends EnumProperty
 {
     private final JRDesignImage image;
 
     @SuppressWarnings("unchecked")
     public EvaluationTimeProperty(JRDesignImage image)
     {
-        super(image);
+        super(EvaluationTimeEnum.class, image);
         this.image = image;
     }
 
@@ -66,38 +66,38 @@ public final class EvaluationTimeProperty extends ByteProperty
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_NOW), I18n.getString("Global.Property.Now")));
-        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_REPORT), I18n.getString("Global.Property.Report")));
-        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_PAGE), I18n.getString("Global.Property.Page")));
-        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_COLUMN), I18n.getString("Global.Property.Column")));
-        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_GROUP), I18n.getString("Global.Property.Group")));
-        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_BAND), I18n.getString("Global.Property.Band")));
-        tags.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_AUTO), I18n.getString("Global.Property.Auto")));
+        tags.add(new Tag(EvaluationTimeEnum.NOW, I18n.getString("Global.Property.Now")));
+        tags.add(new Tag(EvaluationTimeEnum.REPORT, I18n.getString("Global.Property.Report")));
+        tags.add(new Tag(EvaluationTimeEnum.PAGE, I18n.getString("Global.Property.Page")));
+        tags.add(new Tag(EvaluationTimeEnum.COLUMN, I18n.getString("Global.Property.Column")));
+        tags.add(new Tag(EvaluationTimeEnum.GROUP, I18n.getString("Global.Property.Group")));
+        tags.add(new Tag(EvaluationTimeEnum.BAND, I18n.getString("Global.Property.Band")));
+        tags.add(new Tag(EvaluationTimeEnum.AUTO, I18n.getString("Global.Property.Auto")));
         return tags;
     }
 
     @Override
-    public Byte getByte()
+    public Object getPropertyValue()
     {
-        return image.getEvaluationTime();
+        return image.getEvaluationTimeValue();
     }
 
     @Override
-    public Byte getOwnByte()
+    public Object getOwnPropertyValue()
     {
-        return image.getEvaluationTime();
+        return getPropertyValue();
     }
 
     @Override
-    public Byte getDefaultByte()
+    public Object getDefaultValue()
     {
-        return JRExpression.EVALUATION_TIME_NOW;
+        return EvaluationTimeEnum.NOW;
     }
 
     @Override
-    public void setByte(Byte evaluationTime)
+    public void setPropertyValue(Object evaluationTime)
     {
-        image.setEvaluationTime(evaluationTime);
+        image.setEvaluationTime((EvaluationTimeEnum)evaluationTime);
     }
 
 }

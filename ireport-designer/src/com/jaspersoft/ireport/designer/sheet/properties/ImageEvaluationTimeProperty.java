@@ -25,47 +25,55 @@ package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
-import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import com.jaspersoft.ireport.locale.I18n;
-import java.beans.PropertyEditor;
-import java.lang.reflect.InvocationTargetException;
-import net.sf.jasperreports.engine.JRExpression;
+import java.util.List;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignImage;
-import org.openide.ErrorManager;
-import org.openide.nodes.PropertySupport;
+import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
 /**
  *
  * Class to manage the JRDesignImage.PROPERTY_EVALUATION_TIME property
  */
-public class ImageEvaluationTimeProperty extends PropertySupport {
+public class ImageEvaluationTimeProperty extends EnumProperty {
     
     // FIXME: refactorize this
     private final JRDesignDataset dataset;
     private final JRDesignImage element;
-    private ComboBoxPropertyEditor editor;
 
     @SuppressWarnings("unchecked")
     public ImageEvaluationTimeProperty(JRDesignImage element, JRDesignDataset dataset)
     {
-        // TODO: Replace WhenNoDataType with the right constant
-        super( JRDesignImage.PROPERTY_EVALUATION_TIME,Byte.class, I18n.getString("Global.Property.EvaluationTime"), I18n.getString("Global.Property.EvaluationTimedetail"), true, true);
+        super(EvaluationTimeEnum.class, element);
         this.element = element;
         this.dataset = dataset;
         setValue("suppressCustomEditor", Boolean.TRUE);
     }
 
     @Override
-    public boolean isDefaultValue() {
-        return element.getEvaluationTime() == JRExpression.EVALUATION_TIME_NOW;
+    public String getName()
+    {
+        return JRDesignImage.PROPERTY_EVALUATION_TIME;
     }
 
     @Override
-    public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
-        setPropertyValue(JRExpression.EVALUATION_TIME_NOW);
+    public String getDisplayName()
+    {
+        return I18n.getString("Global.Property.EvaluationTime");
+    }
+
+    @Override
+    public String getShortDescription()
+    {
+        return I18n.getString("Global.Property.EvaluationTimedetail");
+    }
+
+
+    @Override
+    public Object getDefaultValue() {
+        return EvaluationTimeEnum.NOW;
     }
 
     @Override
@@ -74,87 +82,70 @@ public class ImageEvaluationTimeProperty extends PropertySupport {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public PropertyEditor getPropertyEditor() {
-
-        if (editor == null)
-        {
-            java.util.ArrayList l = new java.util.ArrayList();
-
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_NOW), I18n.getString("Global.Property.Now")));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_REPORT), I18n.getString("Global.Property.Report")));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_PAGE), I18n.getString("Global.Property.Page")));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_COLUMN), I18n.getString("Global.Property.Column")));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_GROUP), I18n.getString("Global.Property.Group")));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_BAND), I18n.getString("Global.Property.Band")));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_AUTO), I18n.getString("Global.Property.Auto")));
-
-            editor = new ComboBoxPropertyEditor(false, l);
-        }
-        return editor;
-    }
-
-    public Object getValue() throws IllegalAccessException, InvocationTargetException {
-        return new Byte(element.getEvaluationTime());
-    }
-
-    public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        if (val instanceof Byte)
-        {
-             setPropertyValue((Byte)val);
-        }
-    }
-
-    private void setPropertyValue(Byte val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException 
+    public List getTagList()
     {
-            Byte oldValue = element.getEvaluationTime();
-            Byte newValue = val;
+        List tags = new java.util.ArrayList();
+        tags.add(new Tag(EvaluationTimeEnum.NOW, I18n.getString("Global.Property.Now")));
+        tags.add(new Tag(EvaluationTimeEnum.REPORT, I18n.getString("Global.Property.Report")));
+        tags.add(new Tag(EvaluationTimeEnum.PAGE, I18n.getString("Global.Property.Page")));
+        tags.add(new Tag(EvaluationTimeEnum.COLUMN, I18n.getString("Global.Property.Column")));
+        tags.add(new Tag(EvaluationTimeEnum.GROUP, I18n.getString("Global.Property.Group")));
+        tags.add(new Tag(EvaluationTimeEnum.BAND, I18n.getString("Global.Property.Band")));
+        tags.add(new Tag(EvaluationTimeEnum.AUTO, I18n.getString("Global.Property.Auto")));
+        return tags;
+    }
 
-            ObjectPropertyUndoableEdit urob =
-                    new ObjectPropertyUndoableEdit(
-                        element,
-                        "EvaluationTime", 
-                        Byte.TYPE,
-                        oldValue,newValue);
 
-            JRGroup oldGroupValue = element.getEvaluationGroup();
-            JRGroup newGroupValue = null;
-            if ( (val).byteValue() == JRExpression.EVALUATION_TIME_GROUP )
+    @Override
+    public void setPropertyValue(Object val)
+    {
+            element.setEvaluationTime((EvaluationTimeEnum)val);
+
+            // We need to select a group here....
+            if (val == EvaluationTimeEnum.GROUP)
             {
-                if (dataset.getGroupsList().size() == 0)
+                JRGroup newGroupValue = ((JRGroup)dataset.getGroupsList().get(0));
+                JRGroup oldGroupValue = element.getEvaluationGroup();
+
+                if ( ((newGroupValue == null || oldGroupValue == null) && (newGroupValue != oldGroupValue)) ||
+                     (oldGroupValue != null && newGroupValue != null && !oldGroupValue.getName().equals(newGroupValue.getName())))
                 {
-                    IllegalArgumentException iae = annotateException(I18n.getString("Global.Property.NogroupsTextFielddetail")); 
-                    throw iae; 
+                    ObjectPropertyUndoableEdit urobGroup =
+                            new ObjectPropertyUndoableEdit(
+                                element,
+                                "EvaluationGroupName",
+                                String.class,
+                                oldGroupValue,newGroupValue);
+
+                    element.setEvaluationGroup(newGroupValue);
+                    IReportManager.getInstance().addUndoableEdit(urobGroup, true);
                 }
-
-                newGroupValue = (JRGroup)dataset.getGroupsList().get(0);
             }
-            element.setEvaluationTime(newValue);
-
-            if (oldGroupValue != newGroupValue)
-            {
-                ObjectPropertyUndoableEdit urobGroup =
-                        new ObjectPropertyUndoableEdit(
-                            element,
-                            "EvaluationGroup", 
-                            JRGroup.class,
-                            oldGroupValue,newGroupValue);
-                element.setEvaluationGroup(newGroupValue);
-                urob.concatenate(urobGroup);
-            }
-
-            // Find the undoRedo manager...
-            IReportManager.getInstance().addUndoableEdit(urob);
     }
 
-    public IllegalArgumentException annotateException(String msg)
+    @Override
+    public Object getPropertyValue()
     {
-        IllegalArgumentException iae = new IllegalArgumentException(msg); 
-        ErrorManager.getDefault().annotate(iae, 
-                                ErrorManager.EXCEPTION,
-                                msg,
-                                msg, null, null); 
-        return iae;
+        return element.getEvaluationTimeValue();
+    }
+
+    @Override
+    public Object getOwnPropertyValue()
+    {
+        return getPropertyValue();
+    }
+
+    @Override
+    public void validate(Object value)
+    {
+            if ( value == EvaluationTimeEnum.GROUP )
+            {
+                if (dataset.getGroupsList().isEmpty())
+                {
+                    IllegalArgumentException iae = annotateException(I18n.getString("Global.Property.NogroupsTextFielddetail"));
+                    throw iae;
+                }
+            }
     }
 
 }

@@ -37,6 +37,7 @@ import javax.swing.JList;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JRTemplateReference;
+import net.sf.jasperreports.engine.type.ModeEnum;
 import org.openide.explorer.view.Visualizer;
 import org.openide.nodes.Node;
 
@@ -77,7 +78,7 @@ public class StyleListCellRenderer extends DefaultListCellRenderer {
             if (!isSelected)
             {
                 label.setForeground(style.getForecolor());
-                if (style.getMode() != null && style.getMode().byteValue() == JRElement.MODE_OPAQUE)
+                if (style.getModeValue() != null && style.getModeValue() == ModeEnum.OPAQUE)
                 {
                     label.setBackground(style.getBackcolor());
                     label.setOpaque(true);

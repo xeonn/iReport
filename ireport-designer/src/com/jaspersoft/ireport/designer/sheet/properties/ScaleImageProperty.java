@@ -28,19 +28,20 @@ import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignImage;
+import net.sf.jasperreports.engine.type.ScaleImageEnum;
 
     
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  */
-public final class ScaleImageProperty extends ByteProperty
+public final class ScaleImageProperty extends EnumProperty
 {
     private final JRDesignImage image;
 
     @SuppressWarnings("unchecked")
     public ScaleImageProperty(JRDesignImage image)
     {
-        super(image);
+        super(ScaleImageEnum.class,  image);
         this.image = image;
     }
 
@@ -66,36 +67,36 @@ public final class ScaleImageProperty extends ByteProperty
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_CLIP), I18n.getString("Global.Property.Clip")));
-        tags.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_FILL_FRAME), I18n.getString("Global.Property.FillFrame")));
-        tags.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_RETAIN_SHAPE), I18n.getString("Global.Property.RetainShape")));
-        tags.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_REAL_SIZE), I18n.getString("Global.Property.RealSize")));
-        tags.add(new Tag(new Byte(JRDesignImage.SCALE_IMAGE_REAL_HEIGHT), I18n.getString("Global.Property.RealHeight")));
+        tags.add(new Tag(ScaleImageEnum.CLIP, I18n.getString("Global.Property.Clip")));
+        tags.add(new Tag(ScaleImageEnum.FILL_FRAME, I18n.getString("Global.Property.FillFrame")));
+        tags.add(new Tag(ScaleImageEnum.RETAIN_SHAPE, I18n.getString("Global.Property.RetainShape")));
+        tags.add(new Tag(ScaleImageEnum.REAL_SIZE, I18n.getString("Global.Property.RealSize")));
+        tags.add(new Tag(ScaleImageEnum.REAL_HEIGHT, I18n.getString("Global.Property.RealHeight")));
         return tags;
     }
 
     @Override
-    public Byte getByte()
+    public Object getPropertyValue()
     {
-        return image.getScaleImage();
+        return image.getScaleImageValue();
     }
 
     @Override
-    public Byte getOwnByte()
+    public Object getOwnPropertyValue()
     {
-        return image.getOwnScaleImage();
+        return getPropertyValue();
     }
 
     @Override
-    public Byte getDefaultByte()
+    public Object getDefaultValue()
     {
         return null;
     }
 
     @Override
-    public void setByte(Byte scaleImage)
+    public void setPropertyValue(Object scaleImage)
     {
-        image.setScaleImage(scaleImage);
+        image.setScaleImage((ScaleImageEnum)scaleImage);
     }
 
 }

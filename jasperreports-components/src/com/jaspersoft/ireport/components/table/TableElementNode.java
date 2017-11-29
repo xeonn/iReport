@@ -31,6 +31,7 @@ import com.jaspersoft.ireport.components.table.nodes.TableChildren;
 import com.jaspersoft.ireport.components.table.nodes.TableColumnGroupNode;
 import com.jaspersoft.ireport.components.table.nodes.TableNullCellNode;
 import com.jaspersoft.ireport.components.table.nodes.TableSectionNode;
+import com.jaspersoft.ireport.components.table.nodes.properties.WhenNoDataTypeProperty;
 import com.jaspersoft.ireport.components.table.undo.AddTableCellUndoableEdit;
 import com.jaspersoft.ireport.components.table.undo.DeleteTableCellUndoableEdit;
 import com.jaspersoft.ireport.components.table.undo.DeleteTableColumnUndoableEdit;
@@ -149,6 +150,7 @@ public class TableElementNode extends ElementNode {
         //DesignListContents contents = (DesignListContents) ((StandardListComponent)((JRDesignComponentElement)this.getElement()).getComponent()).getContents();
         //set.put(new PrintOrderProperty((StandardListComponent)((JRDesignComponentElement)this.getElement()).getComponent()));
 
+        set.put(new WhenNoDataTypeProperty((StandardTable)((JRDesignComponentElement)this.getElement()).getComponent()));
         sheet.put( set);
         
         return sheet;

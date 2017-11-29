@@ -42,6 +42,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.OrientationEnum;
 
 /**
  *
@@ -214,8 +215,8 @@ public class PageFormatPanel extends javax.swing.JPanel {
         multiUnitNumberEditorColumnWidth.setValue( jd.getColumnWidth() );
         multiUnitNumberEditorcolumnSpace.setValue(jd.getColumnSpacing());
 
-        jRadioLandscape.setSelected(  jd.getOrientation() == jd.ORIENTATION_LANDSCAPE );
-        jRadioPortrait.setSelected(  jd.getOrientation() == jd.ORIENTATION_PORTRAIT );
+        jRadioLandscape.setSelected(  jd.getOrientationValue() == OrientationEnum.LANDSCAPE );
+        jRadioPortrait.setSelected(  jd.getOrientationValue() == OrientationEnum.PORTRAIT );
 
         Misc.setComboboxSelectedTagValue(jComboBoxFormat, PageSize.deductPageFormat(jd.getPageWidth(), jd.getPageHeight()));
         setUpdating(old);
@@ -253,7 +254,7 @@ public class PageFormatPanel extends javax.swing.JPanel {
         jd.setColumnCount(cols);
         jd.setColumnSpacing(multiUnitNumberEditorcolumnSpace.getValue());
         jd.setColumnWidth(multiUnitNumberEditorColumnWidth.getValue());
-        jd.setOrientation( jRadioLandscape.isSelected() ? JasperDesign.ORIENTATION_LANDSCAPE : JasperDesign.ORIENTATION_PORTRAIT  );
+        jd.setOrientation( jRadioLandscape.isSelected() ? OrientationEnum.LANDSCAPE : OrientationEnum.PORTRAIT  );
     }
     
 

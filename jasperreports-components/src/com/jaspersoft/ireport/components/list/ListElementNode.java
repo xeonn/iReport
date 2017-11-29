@@ -28,7 +28,7 @@ import com.jaspersoft.ireport.designer.outline.nodes.ElementNode;
 import com.jaspersoft.ireport.designer.outline.nodes.ElementPasteType;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.properties.BooleanProperty;
-import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.EnumProperty;
 import com.jaspersoft.ireport.locale.I18n;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
@@ -41,6 +41,7 @@ import net.sf.jasperreports.components.list.StandardListComponent;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.PrintOrderEnum;
 import org.openide.nodes.Children;
 import org.openide.nodes.Index;
 import org.openide.nodes.Node;
@@ -166,14 +167,14 @@ public class ListElementNode extends ElementNode {
 /**
  *  Class to manage the JasperDesign.PROPERTY_ORIENTATION property
  */
-class PrintOrderProperty extends ByteProperty
+class PrintOrderProperty extends EnumProperty
 {
         private final StandardListComponent element;
 
         @SuppressWarnings("unchecked")
         public PrintOrderProperty(StandardListComponent element)
         {
-            super(element);
+            super(PrintOrderEnum.class, element);
             this.element = element;
         }
 
@@ -199,34 +200,34 @@ class PrintOrderProperty extends ByteProperty
         public List getTagList()
         {
             List tags = new java.util.ArrayList();
-            tags.add(new Tag(new Byte(JasperDesign.PRINT_ORDER_VERTICAL), I18n.getString("ReportNode.Property.Vertical")));
-            tags.add(new Tag(new Byte(JasperDesign.PRINT_ORDER_HORIZONTAL), I18n.getString("ReportNode.Property.Horizontal")));
+            tags.add(new Tag(PrintOrderEnum.VERTICAL, I18n.getString("ReportNode.Property.Vertical")));
+            tags.add(new Tag(PrintOrderEnum.HORIZONTAL, I18n.getString("ReportNode.Property.Horizontal")));
 
             return tags;
         }
 
         @Override
-        public Byte getByte()
+        public Object getPropertyValue()
         {
-            return element.getPrintOrder();
+            return element.getPrintOrderValue();
         }
 
         @Override
-        public Byte getOwnByte()
+        public Object getOwnPropertyValue()
         {
-            return element.getPrintOrder();
+            return element.getPrintOrderValue();
         }
 
         @Override
-        public Byte getDefaultByte()
+        public Object getDefaultValue()
         {
-            return null;
+            return PrintOrderEnum.VERTICAL;
         }
 
         @Override
-        public void setByte(Byte orderType)
+        public void setPropertyValue(Object orderType)
         {
-            element.setPrintOrder(orderType);
+            element.setPrintOrderValue((PrintOrderEnum)orderType);
         }
 
 }

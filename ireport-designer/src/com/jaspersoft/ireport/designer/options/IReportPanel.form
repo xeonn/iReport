@@ -356,6 +356,13 @@
                                           <Component id="jButtonRestoreExpressions" alignment="1" max="32767" attributes="1"/>
                                       </Group>
                                   </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jCheckBoxUseSyntaxHighlighting" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jSpinnerEditorFontSize" min="-2" pref="65" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
@@ -363,12 +370,18 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jCheckBoxUseSyntaxHighlighting" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jSpinnerEditorFontSize" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabelExpressions" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
                                       <Component id="jButtonAddExpression" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jButtonModifyExpression" min="-2" max="-2" attributes="0"/>
@@ -377,7 +390,7 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jButtonRestoreExpressions" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="jScrollPane6" alignment="0" pref="281" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane6" pref="255" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
@@ -471,6 +484,29 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRestoreExpressionsActionPerformed"/>
                       </Events>
                     </Component>
+                    <Component class="javax.swing.JCheckBox" name="jCheckBoxUseSyntaxHighlighting">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Use Syntax Highlighting"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxUseSyntaxHighlightingActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="jLabel5">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Editor font size:"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JSpinner" name="jSpinnerEditorFontSize">
+                      <Properties>
+                        <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                          <SpinnerModel initial="12" minimum="6" numberType="java.lang.Integer" stepSize="1" type="number"/>
+                        </Property>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jSpinnerEditorFontSizeStateChanged"/>
+                      </Events>
+                    </Component>
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="jPanelCompatibility">
@@ -505,7 +541,7 @@
                               <Component id="jComboBoxCompatibility" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jCheckBoxShowCompatibilityWarning" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="226" max="32767" attributes="0"/>
+                              <EmptySpace pref="212" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>

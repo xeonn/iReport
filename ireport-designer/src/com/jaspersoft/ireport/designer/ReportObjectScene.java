@@ -66,6 +66,7 @@ import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
 import org.netbeans.api.visual.action.ActionFactory;
 import org.netbeans.api.visual.widget.EventProcessingType;
 import org.netbeans.api.visual.widget.LayerWidget;
@@ -186,7 +187,7 @@ public class ReportObjectScene extends AbstractReportObjectScene implements Prop
         if (b == null) return;
 
         if (b instanceof JRDesignBand &&
-            ((JRDesignBand)b).getOrigin().getBandType() == JROrigin.BACKGROUND)
+            ((JRDesignBand)b).getOrigin().getBandTypeValue() == BandTypeEnum.BACKGROUND)
         {
             ((JRDesignBand)b).getEventSupport().removePropertyChangeListener(JRDesignBand.PROPERTY_HEIGHT, this);
             if (IReportManager.getInstance().isBackgroundSeparated() && b.getHeight() == 0)

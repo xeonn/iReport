@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import javax.swing.Action;
+import net.sf.jasperreports.engine.JRScriptlet;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignScriptlet;
@@ -180,11 +181,12 @@ public class ScriptletNode extends IRAbstractNode implements PropertyChangeListe
             throw new IllegalArgumentException("Scriptlet name not valid.");
         }
         
-        List<JRDesignScriptlet> currentScriptlets = null;
+        List<JRScriptlet> currentScriptlets = null;
         JRDesignDataset dataset = getParentNode().getLookup().lookup(JRDesignDataset.class);
-        currentScriptlets = (List<JRDesignScriptlet>)dataset.getScriptletsList();
-        for (JRDesignScriptlet p : currentScriptlets)
+        currentScriptlets = (List<JRScriptlet>)dataset.getScriptletsList();
+        for (JRScriptlet pa : currentScriptlets)
         {
+            JRDesignScriptlet p = (JRDesignScriptlet)pa;
             if (p != getScriptlet() && p.getName().equals(s))
             {
                 throw new IllegalArgumentException("Scriptlet name already in use.");
@@ -268,10 +270,11 @@ public class ScriptletNode extends IRAbstractNode implements PropertyChangeListe
 
             String s = val+"";
 
-            List<JRDesignScriptlet> currentScriptlets = null;
-            currentScriptlets = (List<JRDesignScriptlet>)getDataset().getScriptletsList();
-            for (JRDesignScriptlet p : currentScriptlets)
+            List<JRScriptlet> currentScriptlets = null;
+            currentScriptlets = (List<JRScriptlet>)getDataset().getScriptletsList();
+            for (JRScriptlet pa : currentScriptlets)
             {
+                JRDesignScriptlet p = (JRDesignScriptlet)pa;
                 if (p != getScriptlet() && p.getName().equals(s))
                 {
                     IllegalArgumentException iae = annotateException(I18n.getString("ScriptletNode.Property.NameInUse"));

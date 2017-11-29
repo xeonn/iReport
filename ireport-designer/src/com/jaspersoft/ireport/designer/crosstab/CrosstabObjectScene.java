@@ -386,7 +386,7 @@ public class CrosstabObjectScene extends AbstractReportObjectScene implements Pr
             getVerticalSeparators().add(current_x);
             
             cellContents.add( (JRDesignCellContents)row_groups[i].getHeader());
-            if (row_groups[i].getTotalPosition() != BucketDefinition.TOTAL_POSITION_NONE )
+            if (row_groups[i].getTotalPositionValue() !=  CrosstabTotalPositionEnum.NONE )
             {
                 cellContents.add( (JRDesignCellContents)row_groups[i].getTotalHeader());
             }
@@ -404,7 +404,7 @@ public class CrosstabObjectScene extends AbstractReportObjectScene implements Pr
             getHorizontalSeparators().add(current_y);
         
             cellContents.add( (JRDesignCellContents)col_groups[i].getHeader());
-            if (col_groups[i].getTotalPosition() != BucketDefinition.TOTAL_POSITION_NONE )
+            if (col_groups[i].getTotalPositionValue() !=  CrosstabTotalPositionEnum.NONE )
             {
                 cellContents.add( (JRDesignCellContents)col_groups[i].getTotalHeader());
             }

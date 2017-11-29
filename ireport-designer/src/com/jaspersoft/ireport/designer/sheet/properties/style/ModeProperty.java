@@ -47,17 +47,17 @@ public final class ModeProperty extends PropertySupport.ReadWrite {
     @Override
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         if (val == null || val instanceof Boolean) {
-            Byte oldValue = style.getOwnMode();
-            Byte newValue = val == null ? null : (((Boolean) val).booleanValue() ? JRDesignElement.MODE_OPAQUE : JRDesignElement.MODE_TRANSPARENT);
+            ModeEnum oldValue = style.getOwnModeValue();
+            ModeEnum newValue = val == null ? null : (((Boolean) val).booleanValue() ? ModeEnum.OPAQUE : ModeEnum.TRANSPARENT);
             style.setMode(newValue);
-            ObjectPropertyUndoableEdit urob = new ObjectPropertyUndoableEdit(style, "Mode", Byte.TYPE, oldValue, newValue);
+            ObjectPropertyUndoableEdit urob = new ObjectPropertyUndoableEdit(style, "Mode", ModeEnum.class, oldValue, newValue);
             IReportManager.getInstance().addUndoableEdit(urob);
         }
     }
 
     @Override
     public boolean isDefaultValue() {
-        return style.getOwnMode() == null;
+        return style.getOwnModeValue() == null;
     }
 
     @Override

@@ -24,24 +24,24 @@
 package com.jaspersoft.ireport.designer.sheet.properties;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
-import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.base.JRBaseImage;
 import net.sf.jasperreports.engine.design.JRDesignImage;
+import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
 
     
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  */
-public final class OnErrorTypeProperty extends ByteProperty
+public final class OnErrorTypeProperty extends EnumProperty
 {
     private final JRDesignImage image;
 
     @SuppressWarnings("unchecked")
     public OnErrorTypeProperty(JRDesignImage image)
     {
-        super(image);
+        super(OnErrorTypeEnum.class, image);
         this.image = image;
     }
 
@@ -67,34 +67,34 @@ public final class OnErrorTypeProperty extends ByteProperty
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRDesignImage.ON_ERROR_TYPE_ERROR), I18n.getString("Global.Property.Error")));
-        tags.add(new Tag(new Byte(JRDesignImage.ON_ERROR_TYPE_BLANK), I18n.getString("Global.Property.Blank")));
-        tags.add(new Tag(new Byte(JRDesignImage.ON_ERROR_TYPE_ICON), I18n.getString("Global.Property.Icon")));
+        tags.add(new Tag(OnErrorTypeEnum.ERROR, I18n.getString("Global.Property.Error")));
+        tags.add(new Tag(OnErrorTypeEnum.BLANK, I18n.getString("Global.Property.Blank")));
+        tags.add(new Tag(OnErrorTypeEnum.ICON, I18n.getString("Global.Property.Icon")));
         return tags;
     }
 
     @Override
-    public Byte getByte()
+    public Object getPropertyValue()
     {
-        return image.getOnErrorType();
+        return image.getOnErrorTypeValue();
     }
 
     @Override
-    public Byte getOwnByte()
+    public Object getOwnPropertyValue()
     {
-        return image.getOnErrorType();
+        return getPropertyValue();
     }
 
     @Override
-    public Byte getDefaultByte()
+    public Object getDefaultValue()
     {
-        return JRDesignImage.ON_ERROR_TYPE_ERROR;
+        return OnErrorTypeEnum.ERROR;
     }
 
     @Override
-    public void setByte(Byte onErrorType)
+    public void setPropertyValue(Object onErrorType)
     {
-        image.setOnErrorType(onErrorType);
+        image.setOnErrorType((OnErrorTypeEnum)onErrorType);
     }
 
 }

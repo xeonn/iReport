@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
 /**
  *
@@ -44,7 +45,7 @@ public class CreateTotalPagesTextfieldAction extends CreateTextFieldAction {
         ((JRDesignExpression)element.getExpression()).setText("$V{PAGE_NUMBER}");
         ((JRDesignExpression)element.getExpression()).setValueClassName("java.lang.Integer");
 
-        element.setEvaluationTime( JRExpression.EVALUATION_TIME_REPORT);
+        element.setEvaluationTime( EvaluationTimeEnum.REPORT);
         setMatchingClassExpression(
             ((JRDesignExpression)element.getExpression()),
             "java.lang.Integer",

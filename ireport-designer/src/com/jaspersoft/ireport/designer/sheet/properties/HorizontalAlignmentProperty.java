@@ -23,26 +23,25 @@
  */
 package com.jaspersoft.ireport.designer.sheet.properties;
 
-import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.JRAlignment;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.xml.JRXmlConstants;
+import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
 
     
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  */
-public final class HorizontalAlignmentProperty extends ByteProperty
+public final class HorizontalAlignmentProperty extends EnumProperty
 {
     private final JRAlignment element;
 
     @SuppressWarnings("unchecked")
     public HorizontalAlignmentProperty(JRAlignment element)
     {
-        super(element);
+        super(HorizontalAlignEnum.class,  element);
         this.element = element;
     }
 
@@ -68,41 +67,35 @@ public final class HorizontalAlignmentProperty extends ByteProperty
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRAlignment.HORIZONTAL_ALIGN_LEFT), I18n.getString("Global.Property.Left")));
-        tags.add(new Tag(new Byte(JRAlignment.HORIZONTAL_ALIGN_CENTER), I18n.getString("Global.Property.Center")));
-        tags.add(new Tag(new Byte(JRAlignment.HORIZONTAL_ALIGN_RIGHT), I18n.getString("Global.Property.Right")));
-        tags.add(new Tag(new Byte(JRAlignment.HORIZONTAL_ALIGN_JUSTIFIED), I18n.getString("Global.Property.Justified")));
+        tags.add(new Tag(HorizontalAlignEnum.LEFT, I18n.getString("Global.Property.Left")));
+        tags.add(new Tag(HorizontalAlignEnum.CENTER, I18n.getString("Global.Property.Center")));
+        tags.add(new Tag(HorizontalAlignEnum.RIGHT, I18n.getString("Global.Property.Right")));
+        tags.add(new Tag(HorizontalAlignEnum.JUSTIFIED, I18n.getString("Global.Property.Justified")));
         return tags;
     }
 
     @Override
-    public Byte getByte()
+    public Object getPropertyValue()
     {
-        return element.getHorizontalAlignment();
+        return element.getHorizontalAlignmentValue();
     }
 
     @Override
-    public Byte getOwnByte()
+    public Object getOwnPropertyValue()
     {
-        return element.getOwnHorizontalAlignment();
+        return element.getOwnHorizontalAlignmentValue();
     }
 
     @Override
-    public Byte getDefaultByte()
+    public Object getDefaultValue()
     {
         return null;
     }
 
     @Override
-    public void setByte(Byte alignment)
+    public void setPropertyValue(Object alignment)
     {
-        element.setHorizontalAlignment(alignment);
-
-        if (IReportManager.getPreferences().getBoolean("designer_debug_mode", false))
-        {
-            System.out.println(new java.util.Date() + ": setting HorizontalAlignment to: " + alignment + ". If the value is unattended or null, please report this notification to http://jasperforge.org/plugins/mantis/view.php?id=4139");
-            Thread.dumpStack();
-        }
+        element.setHorizontalAlignment((HorizontalAlignEnum)alignment);
     }
 
 }

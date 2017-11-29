@@ -39,6 +39,7 @@ import net.sf.jasperreports.charts.design.JRDesignPieDataset;
 import net.sf.jasperreports.charts.design.JRDesignPieSeries;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
+import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 
 /**
  *
@@ -155,7 +156,7 @@ public class PieDatasetPanel extends javax.swing.JPanel  implements ChartDataset
         if (pieDataset.getOtherSectionHyperlink() == null)
         {
             JRDesignHyperlink hl = new JRDesignHyperlink();
-            hl.setHyperlinkType( hl.HYPERLINK_TYPE_NONE );
+            hl.setHyperlinkType( HyperlinkTypeEnum.NONE );
             pieDataset.setOtherSectionHyperlink(hl);
         }
         sectionItemHyperlinkPanel2.setHyperlink( pieDataset.getOtherSectionHyperlink() );

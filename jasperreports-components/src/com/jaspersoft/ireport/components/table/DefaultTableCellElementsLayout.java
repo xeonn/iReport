@@ -187,7 +187,7 @@ public class DefaultTableCellElementsLayout {
                     // Calculate the best font height...
                     if (element instanceof JRDesignTextElement)
                     {
-                        JRStyledTextParser styledTextParser = new JRStyledTextParser();
+                        JRStyledTextParser styledTextParser = JRStyledTextParser.getInstance();
                         JRDesignTextElement dte = (JRDesignTextElement)element;
                         dte.setFontSize(null);
                         for (int i=dte.getFontSize()-1; i>1 ; --i)
@@ -201,8 +201,9 @@ public class DefaultTableCellElementsLayout {
                                     styledTextParser.getStyledText(
                                     attributes,
                                     text,
-                                    JRCommonText.MARKUP_STYLED_TEXT.equals(dte.getMarkup())//FIXMEMARKUP only static styled text appears on preview. no other markup
-				);
+                                    JRCommonText.MARKUP_STYLED_TEXT.equals(dte.getMarkup()),//FIXMEMARKUP only static styled text appears on preview. no other markup
+                                    Locale.getDefault()
+                                    );
 
 
                                 JRTextMeasurer measurer = JRTextMeasurerUtil.createTextMeasurer(dte);

@@ -26,21 +26,21 @@ package com.jaspersoft.ireport.designer.sheet.properties;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
-import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.type.StretchTypeEnum;
 
     
 /**
  *  Class to manage the JRDesignElement.PROPERTY_POSITION_TYPE property
  */
-public final class StretchTypeProperty extends ByteProperty
+public final class StretchTypeProperty extends EnumProperty
 {
     private final JRDesignElement element;
 
     @SuppressWarnings("unchecked")
     public StretchTypeProperty(JRDesignElement element)
     {
-        super(element);
+        super(StretchTypeEnum.class, element);
         this.element = element;
     }
 
@@ -66,34 +66,34 @@ public final class StretchTypeProperty extends ByteProperty
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRDesignElement.STRETCH_TYPE_NO_STRETCH), I18n.getString("Global.Property.Nostretch")));
-        tags.add(new Tag(new Byte(JRDesignElement.STRETCH_TYPE_RELATIVE_TO_BAND_HEIGHT), I18n.getString("Global.Property.RelativeBandHeight")));
-        tags.add(new Tag(new Byte(JRDesignElement.STRETCH_TYPE_RELATIVE_TO_TALLEST_OBJECT), I18n.getString("Global.Property.RBHdetail")));
+        tags.add(new Tag(StretchTypeEnum.NO_STRETCH, I18n.getString("Global.Property.Nostretch")));
+        tags.add(new Tag(StretchTypeEnum.RELATIVE_TO_BAND_HEIGHT, I18n.getString("Global.Property.RelativeBandHeight")));
+        tags.add(new Tag(StretchTypeEnum.RELATIVE_TO_TALLEST_OBJECT, I18n.getString("Global.Property.RBHdetail")));
         return tags;
     }
 
     @Override
-    public Byte getByte()
+    public Object getPropertyValue()
     {
-        return element.getStretchType();
+        return element.getStretchTypeValue();
     }
 
     @Override
-    public Byte getOwnByte()
+    public Object getOwnPropertyValue()
     {
-        return element.getStretchType();
+        return getPropertyValue();
     }
 
     @Override
-    public Byte getDefaultByte()
+    public Object getDefaultValue()
     {
-        return JRElement.STRETCH_TYPE_NO_STRETCH;
+        return StretchTypeEnum.NO_STRETCH;
     }
 
     @Override
-    public void setByte(Byte stretchType)
+    public void setPropertyValue(Object stretchType)
     {
-        element.setStretchType(stretchType);
+        element.setStretchType((StretchTypeEnum)stretchType);
     }
 
 }

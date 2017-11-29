@@ -222,10 +222,11 @@ public class StyleNode extends AbstractStyleNode  {
             throw new IllegalArgumentException(I18n.getString("StyleNode.Exception.NameNotValid"));
         }
         
-        List<JRDesignStyle> currentStyles = null;
-        currentStyles = (List<JRDesignStyle>)jd.getStylesList();
-        for (JRDesignStyle p : currentStyles)
+        List<JRStyle> currentStyles = null;
+        currentStyles = (List<JRStyle>)jd.getStylesList();
+        for (JRStyle ps : currentStyles)
         {
+            JRDesignStyle p = (JRDesignStyle)ps;
             if (p != getStyle() && p.getName().equals(s))
             {
                 throw new IllegalArgumentException(I18n.getString("StyleNode.Exception.NameInUse"));
@@ -399,10 +400,11 @@ public class StyleNode extends AbstractStyleNode  {
 
             String s = val+"";
 
-            List<JRDesignStyle> currentStyles = null;
-            currentStyles = (List<JRDesignStyle>)getJasperDesign().getStylesList();
-            for (JRDesignStyle st : currentStyles)
+            List<JRStyle> currentStyles = null;
+            currentStyles = (List<JRStyle>)getJasperDesign().getStylesList();
+            for (JRStyle ps : currentStyles)
             {
+                JRDesignStyle st = (JRDesignStyle)ps;
                 if (st != getStyle() && st.getName().equals(s))
                 {
                     IllegalArgumentException iae = annotateException(I18n.getString("StyleNode.Exception.NameInUse")); 
@@ -476,9 +478,11 @@ public class StyleNode extends AbstractStyleNode  {
                 // Find if there is another default style...
                 if (newValue.booleanValue())
                 {
-                    List<JRDesignStyle> list = (List<JRDesignStyle>)getJasperDesign().getStylesList();
-                    for (JRDesignStyle st : list)
+                    List<JRStyle> currentStyles = null;
+                    currentStyles = (List<JRStyle>)getJasperDesign().getStylesList();
+                    for (JRStyle ps : currentStyles)
                     {
+                        JRDesignStyle st = (JRDesignStyle)ps;
                         if (st.isDefault())
                         {
                             st.setDefault(false);

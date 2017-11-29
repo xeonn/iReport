@@ -143,7 +143,7 @@ public class BarcodeTransformer extends DefaultTransformer {
     public JRDesignElement transformImageToBarcode(JRDesignImage element) {
 
             StandardBarbecueComponent componentImpl = new StandardBarbecueComponent();
-            componentImpl.setEvaluationTime( element.getEvaluationTime() );
+            componentImpl.setEvaluationTimeValue( element.getEvaluationTimeValue() );
             if (element.getEvaluationGroup() != null)
             componentImpl.setEvaluationGroup( element.getEvaluationGroup().getName() );
 
@@ -190,8 +190,8 @@ public class BarcodeTransformer extends DefaultTransformer {
             component.setBackcolor( element.getOwnBackcolor());
             component.setForecolor( element.getOwnForecolor());
             component.setKey( element.getKey());
-            component.setMode( element.getOwnMode());
-            component.setPositionType( element.getPositionType());
+            component.setMode( element.getOwnModeValue());
+            component.setPositionType( element.getPositionTypeValue());
             component.setPrintWhenDetailOverflows( element.isPrintWhenDetailOverflows());
             if (element.getPrintWhenExpression() != null)
             {
@@ -201,7 +201,7 @@ public class BarcodeTransformer extends DefaultTransformer {
             component.setPrintInFirstWholeBand( element.isPrintInFirstWholeBand());
             component.setPrintWhenGroupChanges( element.getPrintWhenGroupChanges());
             component.setRemoveLineWhenBlank(element.isRemoveLineWhenBlank());
-            component.setStretchType(element.getStretchType());
+            component.setStretchType(element.getStretchTypeValue());
             component.setStyle(element.getStyle());
             component.setStyleNameReference(element.getStyleNameReference());
 

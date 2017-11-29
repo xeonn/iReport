@@ -37,6 +37,7 @@ import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.JRPenContainer;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBasePen;
+import net.sf.jasperreports.engine.type.LineStyleEnum;
 import net.sf.jasperreports.engine.util.JRPenUtil;
 
 /**
@@ -175,18 +176,18 @@ public abstract class AbstractPenProperty extends AbstractProperty implements JR
                         && dashArray[0] == 0 && dashArray[1] == 2 * lineWidth
                         )
                     {
-                        pen.setLineStyle(JRPen.LINE_STYLE_DOTTED);
+                        pen.setLineStyle(LineStyleEnum.DOTTED);
                     }
                     else if (
                         dashArray != null && dashArray.length == 2 
                         && dashArray[0] == 4 * lineWidth && dashArray[1] == 4 * lineWidth
                         )
                     {
-                        pen.setLineStyle(JRPen.LINE_STYLE_DASHED);
+                        pen.setLineStyle(LineStyleEnum.DASHED);
                     }
                     else
                     {
-                        pen.setLineStyle(JRPen.LINE_STYLE_SOLID);
+                        pen.setLineStyle(LineStyleEnum.SOLID);
                     }
                     break;
                 }
@@ -197,18 +198,18 @@ public abstract class AbstractPenProperty extends AbstractProperty implements JR
                         && dashArray[0] == lineWidth && dashArray[1] == lineWidth
                         )
                     {
-                        pen.setLineStyle(JRPen.LINE_STYLE_DOTTED);
+                        pen.setLineStyle(LineStyleEnum.DOTTED);
                     }
                     else if (
                         dashArray != null && dashArray.length == 2 
                         && dashArray[0] == 5 * lineWidth && dashArray[1] == 3 * lineWidth
                         )
                     {
-                        pen.setLineStyle(JRPen.LINE_STYLE_DASHED);
+                        pen.setLineStyle(LineStyleEnum.DASHED);
                     }
                     else
                     {
-                        pen.setLineStyle(JRPen.LINE_STYLE_SOLID);
+                        pen.setLineStyle(LineStyleEnum.SOLID);
                     }
                     break;
                 }

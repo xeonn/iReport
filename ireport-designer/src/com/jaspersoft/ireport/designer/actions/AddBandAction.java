@@ -33,6 +33,7 @@ import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
 
@@ -90,27 +91,27 @@ public final class AddBandAction extends NodeAction {
                 {
                     JRDesignBand b = new JRDesignBand();
                     b.setHeight(50);
-                    if (band.getOrigin().getBandType() == JROrigin.BACKGROUND) jd.setBackground(b);
-                    else if (band.getOrigin().getBandType() == JROrigin.TITLE) jd.setTitle(b);
-                    else if (band.getOrigin().getBandType() == JROrigin.PAGE_HEADER) jd.setPageHeader(b);
-                    else if (band.getOrigin().getBandType() == JROrigin.COLUMN_HEADER) jd.setColumnHeader(b);
-                    else if (band.getOrigin().getBandType() == JROrigin.DETAIL)
+                    if (band.getOrigin().getBandTypeValue() == BandTypeEnum.BACKGROUND) jd.setBackground(b);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.TITLE) jd.setTitle(b);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.PAGE_HEADER) jd.setPageHeader(b);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.COLUMN_HEADER) jd.setColumnHeader(b);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.DETAIL)
                     {
                         ((JRDesignSection)jd.getDetailSection()).addBand(b);
                         //jd.setDetail(b);
                     }
-                    else if (band.getOrigin().getBandType() == JROrigin.COLUMN_FOOTER) jd.setColumnFooter(b);
-                    else if (band.getOrigin().getBandType() == JROrigin.PAGE_FOOTER) jd.setPageFooter(b);
-                    else if (band.getOrigin().getBandType() == JROrigin.LAST_PAGE_FOOTER) jd.setLastPageFooter(b);
-                    else if (band.getOrigin().getBandType() == JROrigin.SUMMARY) jd.setSummary(b);
-                    else if (band.getOrigin().getBandType() == JROrigin.NO_DATA) jd.setNoData(b);
-                    else if (band.getOrigin().getBandType() == JROrigin.GROUP_HEADER)
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.COLUMN_FOOTER) jd.setColumnFooter(b);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.PAGE_FOOTER) jd.setPageFooter(b);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.LAST_PAGE_FOOTER) jd.setLastPageFooter(b);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.SUMMARY) jd.setSummary(b);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.NO_DATA) jd.setNoData(b);
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.GROUP_HEADER)
                     {
                         JRDesignGroup g = (JRDesignGroup)jd.getGroupsMap().get( band.getOrigin().getGroupName());
                         ((JRDesignSection)g.getGroupHeaderSection()).addBand(b);
                         //g.setGroupHeader(b);
                     }
-                    else if (band.getOrigin().getBandType() == JROrigin.GROUP_FOOTER)
+                    else if (band.getOrigin().getBandTypeValue() == BandTypeEnum.GROUP_FOOTER)
                     {
                         JRDesignGroup g = (JRDesignGroup)jd.getGroupsMap().get( band.getOrigin().getGroupName());
                         ((JRDesignSection)g.getGroupFooterSection()).addBand(b);

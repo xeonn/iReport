@@ -139,7 +139,7 @@ import net.sf.jasperreports.engine.JRPropertyExpression;
 import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.JRRectangle;
 import net.sf.jasperreports.engine.JRReport;
-import net.sf.jasperreports.engine.JRReportFont;
+//import net.sf.jasperreports.engine.JRReportFont;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.JRScriptlet;
@@ -353,7 +353,7 @@ public class JRXmlWriter_3_7_3 extends JRXmlWriter {
 
 		writeTemplates();
 
-		/*   */
+		/*   
 		JRReportFont[] fonts = report.getFonts();
 		if (fonts != null && fonts.length > 0)
 		{
@@ -363,6 +363,8 @@ public class JRXmlWriter_3_7_3 extends JRXmlWriter {
 				writeReportFont(fonts[i]);
 			}
 		}
+                 * 
+                 */
 
 		/*   */
 		JRStyle[] styles = report.getStyles();
@@ -509,7 +511,7 @@ public class JRXmlWriter_3_7_3 extends JRXmlWriter {
 
 	/**
 	 *
-	 */
+	 
 	private void writeReportFont(JRReportFont font) throws IOException
 	{
 		writer.startElement(JRXmlConstants.ELEMENT_reportFont);
@@ -526,6 +528,7 @@ public class JRXmlWriter_3_7_3 extends JRXmlWriter {
 		writer.addAttribute(JRXmlConstants.ATTRIBUTE_isPdfEmbedded, font.isOwnPdfEmbedded());
 		writer.closeElement();
 	}
+         */
 
 
 	/**
@@ -950,25 +953,25 @@ public class JRXmlWriter_3_7_3 extends JRXmlWriter {
 		if (font != null)
 		{
 			writer.startElement(JRXmlConstants.ELEMENT_font);
-			if (font.getReportFont() != null)
-			{
-				JRFont baseFont =
-					(JRFont)fontsMap.get(
-						font.getReportFont().getName()
-						);
-				if(baseFont != null)
-				{
-					writer.addEncodedAttribute(JRXmlConstants.ATTRIBUTE_reportFont, font.getReportFont().getName());
-				}
-				else
-				{
-					throw
-						new JRRuntimeException(
-							"Referenced report font not found : "
-							+ font.getReportFont().getName()
-							);
-				}
-			}
+//			if (font.getReportFont() != null)
+//			{
+//				JRFont baseFont =
+//					(JRFont)fontsMap.get(
+//						font.getReportFont().getName()
+//						);
+//				if(baseFont != null)
+//				{
+//					writer.addEncodedAttribute(JRXmlConstants.ATTRIBUTE_reportFont, font.getReportFont().getName());
+//				}
+//				else
+//				{
+//					throw
+//						new JRRuntimeException(
+//							"Referenced report font not found : "
+//							+ font.getReportFont().getName()
+//							);
+//				}
+//			}
 
 			writer.addEncodedAttribute(JRXmlConstants.ATTRIBUTE_fontName, font.getOwnFontName());
 			writer.addAttribute(JRXmlConstants.ATTRIBUTE_size, font.getOwnFontSize());

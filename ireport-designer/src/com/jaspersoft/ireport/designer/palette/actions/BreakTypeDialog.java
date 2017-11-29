@@ -23,7 +23,7 @@
  */
 package com.jaspersoft.ireport.designer.palette.actions;
 
-import net.sf.jasperreports.engine.JRBreak;
+import net.sf.jasperreports.engine.type.BreakTypeEnum;
 
 /**
  *
@@ -38,9 +38,9 @@ public class BreakTypeDialog extends java.awt.Dialog {
         setLocationRelativeTo(null);
     }
 
-    public byte getBreakType() {
+    public BreakTypeEnum getBreakTypeValue() {
 
-        return (jRadioButtonPage.isSelected()) ? JRBreak.TYPE_PAGE :  JRBreak.TYPE_COLUMN;
+        return (jRadioButtonPage.isSelected()) ? BreakTypeEnum.PAGE :  BreakTypeEnum.COLUMN;
     }
     /** This method is called from within the constructor to
      * initialize the form.

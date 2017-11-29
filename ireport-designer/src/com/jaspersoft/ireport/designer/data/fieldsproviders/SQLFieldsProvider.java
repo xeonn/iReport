@@ -198,7 +198,7 @@ public class SQLFieldsProvider implements FieldsProvider {
                                     if (iter.hasNext())
                                     {
                                         Object itemVal = iter.next();
-                                        queryBuf.append("?");
+                                        clauseText +=  "?";
                                         queryParams.add(itemVal);
                                         queryParamsClass.add(null);
 
@@ -235,6 +235,9 @@ public class SQLFieldsProvider implements FieldsProvider {
             }
 
             query = queryBuf.toString();
+
+            System.out.println("Query buffer: " + queryBuf);
+            System.out.println("Parameters: " + queryParams);
 
 
             con = irConn.getConnection();

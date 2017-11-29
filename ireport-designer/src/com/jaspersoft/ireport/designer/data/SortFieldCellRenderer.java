@@ -29,6 +29,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
+import net.sf.jasperreports.engine.type.SortOrderEnum;
 import org.springframework.ui.jasperreports.JasperReportsUtils;
 
 /**
@@ -69,7 +70,7 @@ public class SortFieldCellRenderer extends DefaultListCellRenderer {
 
             label.setText( text);
             
-            label.setIcon( sf.getOrder() == JRDesignSortField.SORT_ORDER_DESCENDING ? descIcon : ascIcon );
+            label.setIcon( sf.getOrderValue() == SortOrderEnum.DESCENDING ? descIcon : ascIcon );
         }
         
         return retValue;

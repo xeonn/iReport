@@ -44,7 +44,7 @@ import com.jaspersoft.ireport.designer.sheet.properties.LineSpacingSizeProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.PdfEmbeddedProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.PdfEncodingProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.PdfFontNameProperty;
-import com.jaspersoft.ireport.designer.sheet.properties.ReportFontProperty;
+//import com.jaspersoft.ireport.designer.sheet.properties.ReportFontProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.RightIndentProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.SpacingAfterProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.SpacingBeforeProperty;
@@ -54,6 +54,7 @@ import com.jaspersoft.ireport.designer.sheet.properties.TabStopsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.TextFieldEvaluationGroupProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.TextFieldEvaluationTimeProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.TextFieldExpressionClassNameProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.TextfieldPatternExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.UnderlineProperty;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +111,7 @@ public class TextElementPropertiesFactory {
         propertySet.put(new PdfEmbeddedProperty( element ));
         propertySet.put(new PdfEncodingProperty( element ));
 
-        propertySet.put(new ReportFontProperty( element, jd ));
+        //propertySet.put(new ReportFontProperty( element, jd ));
 
 
         
@@ -149,6 +150,7 @@ public class TextElementPropertiesFactory {
         propertySet.put(new TextFieldExpressionClassNameProperty(element));
         propertySet.put(new BlankWhenNullProperty(element));
         propertySet.put(new TextFieldPatternProperty(element));
+        propertySet.put(new TextfieldPatternExpressionProperty(element,dataset));
         propertySet.put(new StretchWithOverflowProperty( element ));
         propertySet.put(new TextFieldEvaluationTimeProperty(element, dataset));
         propertySet.put(new TextFieldEvaluationGroupProperty(element, dataset));

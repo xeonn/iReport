@@ -50,7 +50,8 @@ public class Installer extends ModuleInstall {
         I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/table/Bundle"));
         I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/genericelement/Bundle"));
         I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/spiderchart/Bundle"));
-
+        I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/map/Bundle"));
+        I18n.addBundleLocation(ResourceBundle.getBundle("/com/jaspersoft/ireport/components/html/Bundle"));
 
         // Adding the fusion maps jar to the iReport classpath...
         List<String> classpath = IReportManager.getInstance().getClasspath();
@@ -62,7 +63,7 @@ public class Installer extends ModuleInstall {
             File[] jars = libDir.listFiles(new FilenameFilter() {
 
                 public boolean accept(File dir, String name) {
-                    if (name.toLowerCase().startsWith("jasperreports-spiderchart") &&
+                    if (name.toLowerCase().startsWith("jasperreports-") &&
                         name.toLowerCase().endsWith(".jar"))
                     {
                         return true;

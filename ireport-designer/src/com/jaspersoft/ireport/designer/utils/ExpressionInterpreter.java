@@ -127,7 +127,7 @@ public class ExpressionInterpreter {
                         String before = expression.substring(0, ip1);
                         String after = expression.substring(ip1+p1.length());
                         
-                        String param_name_literal = "param_" + net.sf.jasperreports.engine.util.JRStringUtil.getLiteral(parameter.getName()); 
+                        String param_name_literal = "param_" + net.sf.jasperreports.engine.util.JRStringUtil.getJavaIdentifier(parameter.getName());
 
                         expression = before + param_name_literal + after;
                         // set the value...
@@ -257,7 +257,7 @@ public class ExpressionInterpreter {
                     }
                 }
                 
-                String param_name_literal = "param_" + net.sf.jasperreports.engine.util.JRStringUtil.getLiteral(param_name); 
+                String param_name_literal = "param_" + net.sf.jasperreports.engine.util.JRStringUtil.getJavaIdentifier(param_name);
                 
                 expression = Misc.string_replace( param_name_literal, "$P{"+param_name+"}", expression);
                 //interpreter.set( param_name_literal, recursiveInterpreter(interpreter, param_expression, parameters, recursion_level));
@@ -275,7 +275,7 @@ public class ExpressionInterpreter {
             
             if (this_param_name!= null) 
             {
-                this_param_name_literal = "param_" + net.sf.jasperreports.engine.util.JRStringUtil.getLiteral(this_param_name);
+                this_param_name_literal = "param_" + net.sf.jasperreports.engine.util.JRStringUtil.getJavaIdentifier(this_param_name);
             } 
             //System.out.println("interpreto ["+ recursion_level +"]: " + expression);
             //System.out.flush();

@@ -135,10 +135,10 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
         jList1.setModel(styleListModel);
 
         //styleListModel.addElement("");
-        styleListModel.addElement( new Byte(JRPen.LINE_STYLE_SOLID));
-        styleListModel.addElement( new Byte(JRPen.LINE_STYLE_DASHED));
-        styleListModel.addElement( new Byte(JRPen.LINE_STYLE_DOTTED));
-        styleListModel.addElement( new Byte(JRPen.LINE_STYLE_DOUBLE));
+        styleListModel.addElement( LineStyleEnum.SOLID);
+        styleListModel.addElement( LineStyleEnum.DASHED);
+        styleListModel.addElement( LineStyleEnum.DOTTED);
+        styleListModel.addElement( LineStyleEnum.DOUBLE);
         
         jList1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
@@ -594,9 +594,9 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
                   JRPen pen = getLineBox().getPen();
                   spinnedModel.setValue(pen.getLineWidth().doubleValue());
                   colorSelector.setColor( pen.getLineColor() ); 
-                  if (pen.getLineStyle() != null)
+                  if (pen.getLineStyleValue() != null)
                   {
-                    jList1.setSelectedValue( pen.getLineStyle(), true);
+                    jList1.setSelectedValue( pen.getLineStyleValue(), true);
                   }
                  
               }
@@ -621,9 +621,9 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
                         {
                             spinnedModel.setValue(pen.getLineWidth().doubleValue());
                             colorSelector.setColor( pen.getLineColor() ); 
-                            if (pen.getLineStyle() != null)
+                            if (pen.getLineStyleValue() != null)
                             {
-                                jList1.setSelectedValue( pen.getLineStyle(), true);
+                                jList1.setSelectedValue( pen.getLineStyleValue(), true);
                             }
                         }
                         else 
@@ -650,8 +650,8 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
                             
                             if (sameStyle)
                             {
-                                Byte b = (Byte)jList1.getSelectedValue();
-                                if (b != pen.getLineStyle() )
+                                LineStyleEnum b = (LineStyleEnum)jList1.getSelectedValue();
+                                if (b != pen.getLineStyleValue() )
                                 {
                                     sameStyle = false;
                                     jList1.clearSelection();
@@ -879,16 +879,16 @@ public class BoxPanel extends javax.swing.JPanel implements ActionListener, Bord
         
         if (isInit() || lineBox == null) return;
                 
-        Byte style = null;
+        LineStyleEnum style = null;
         if (jList1.getSelectedIndex() >= 0)
         {
-            style = (Byte)jList1.getSelectedValue();
+            style = (LineStyleEnum)jList1.getSelectedValue();
         }
         
         List<Side> borders =  new ArrayList<Side>();
         borders.addAll(selectionPanel.getSelectedBorders());
         
-        if (borders.size() == 0)
+        if (borders.isEmpty())
         {
             JRPen pen = lineBox.getPen();
             pen.setLineStyle( style );

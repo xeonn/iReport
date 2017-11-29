@@ -26,22 +26,22 @@ package com.jaspersoft.ireport.designer.sheet.properties;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
-import net.sf.jasperreports.engine.JRGraphicElement;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
+import net.sf.jasperreports.engine.type.FillEnum;
 
     
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  */
-public final class FillProperty extends ByteProperty
+public final class FillProperty extends EnumProperty
 {
     private final JRDesignGraphicElement element;
 
     @SuppressWarnings("unchecked")
     public FillProperty(JRDesignGraphicElement element)
     {
-        super(element);
+        super(FillEnum.class, element);
         this.element = element;
     }
 
@@ -67,32 +67,32 @@ public final class FillProperty extends ByteProperty
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRGraphicElement.FILL_SOLID), I18n.getString("Global.Property.Solid")));
+        tags.add(new Tag(FillEnum.SOLID, I18n.getString("Global.Property.Solid")));
         return tags;
     }
 
     @Override
-    public Byte getByte()
+    public Object getPropertyValue()
     {
-        return element.getFill();
+        return element.getFillValue();
     }
 
     @Override
-    public Byte getOwnByte()
+    public Object getOwnPropertyValue()
     {
-        return element.getOwnFill();
+        return getPropertyValue();
     }
 
     @Override
-    public Byte getDefaultByte()
+    public Object getDefaultValue()
     {
         return null;
     }
 
     @Override
-    public void setByte(Byte fill)
+    public void setPropertyValue(Object fill)
     {
-        element.setFill(fill);
+        element.setFill((FillEnum)fill);
     }
 
 }

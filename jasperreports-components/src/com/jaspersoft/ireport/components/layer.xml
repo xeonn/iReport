@@ -91,6 +91,8 @@
                  <file name="JRTable.irpitem" url="table/jrtable.irpitem"/>
                  <file name="JRGenericElement.irpitem" url="genericelement/jrgenericelement.irpitem"/>
                  <file name="JRSpiderChart.irpitem" url="spiderchart/jrspiderchart.irpitem"/>
+                 <file name="JRMap.irpitem" url="map/jrmap.irpitem"/>
+                 <file name="JRHtml.irpitem" url="html/jrhtml.irpitem"/>
             </folder>
         </folder>
 
@@ -155,6 +157,12 @@
                </file>
                <file name="net-sf-jasperreports-components-spiderchart-SpiderChartComponent.instance">
                    <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.spiderchart.SpiderChartElementNodeFactory"/>
+               </file>
+                <file name="net-sf-jasperreports-components-map-StandardMapComponent.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.map.MapElementNodeFactory"/>
+               </file>
+               <file name="net-sf-jasperreports-components-html-HtmlComponent.instance">
+                   <attr name="instanceClass" stringvalue="com.jaspersoft.ireport.components.html.HtmlElementNodeFactory"/>
                </file>
             </folder>
             <folder name="designers">

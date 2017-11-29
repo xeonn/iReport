@@ -45,7 +45,6 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabParameter;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
-import net.sf.jasperreports.engine.JRAlignment;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
@@ -61,6 +60,8 @@ import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
+import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 import net.sf.jasperreports.engine.util.Pair;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
@@ -667,8 +668,8 @@ class NewObjectType extends NewType {
         element.setWidth(w);
         element.setHeight(h);
         element.setText(text);
-        element.setHorizontalAlignment( JRAlignment.HORIZONTAL_ALIGN_CENTER );
-        element.setVerticalAlignment( JRAlignment.VERTICAL_ALIGN_MIDDLE);
+        element.setHorizontalAlignment( HorizontalAlignEnum.CENTER );
+        element.setVerticalAlignment( VerticalAlignEnum.MIDDLE);
         
         if (styleName != null && jd.getStylesMap().containsKey(styleName))
         {

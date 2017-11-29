@@ -34,6 +34,7 @@ import net.sf.jasperreports.components.barcode4j.BarcodeComponent;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import org.openide.ErrorManager;
 import org.openide.nodes.PropertySupport;
 
@@ -51,7 +52,7 @@ public class Barcode4JEvaluationTimeProperty extends PropertySupport {
     public Barcode4JEvaluationTimeProperty(BarcodeComponent component, JRDesignDataset dataset)
     {
         // TODO: Replace WhenNoDataType with the right constant
-        super( BarcodeComponent.PROPERTY_EVALUATION_TIME,Byte.class, I18n.getString("Global.Property.EvaluationTime"), I18n.getString("Global.Property.EvaluationTimedetail"), true, true);
+        super( BarcodeComponent.PROPERTY_EVALUATION_TIME,EvaluationTimeEnum.class, I18n.getString("Global.Property.EvaluationTime"), I18n.getString("Global.Property.EvaluationTimedetail"), true, true);
         this.component = component;
         this.dataset = dataset;
         setValue("suppressCustomEditor", Boolean.TRUE);
@@ -59,12 +60,12 @@ public class Barcode4JEvaluationTimeProperty extends PropertySupport {
 
     @Override
     public boolean isDefaultValue() {
-        return component.getEvaluationTime() == JRExpression.EVALUATION_TIME_NOW;
+        return component.getEvaluationTimeValue() == EvaluationTimeEnum.NOW;
     }
 
     @Override
     public void restoreDefaultValue() throws IllegalAccessException, InvocationTargetException {
-        setPropertyValue(JRExpression.EVALUATION_TIME_NOW);
+        setPropertyValue(EvaluationTimeEnum.NOW);
     }
 
     @Override
@@ -80,12 +81,12 @@ public class Barcode4JEvaluationTimeProperty extends PropertySupport {
         {
             java.util.ArrayList l = new java.util.ArrayList();
 
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_NOW), I18n.getString("Global.Property.Now")));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_REPORT), I18n.getString("Global.Property.Report")));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_PAGE), I18n.getString("Global.Property.Page")));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_COLUMN), I18n.getString("Global.Property.Column")));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_GROUP), I18n.getString("Global.Property.Group")));
-            l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_BAND), I18n.getString("Global.Property.Band")));
+            l.add(new Tag(EvaluationTimeEnum.NOW, I18n.getString("Global.Property.Now")));
+            l.add(new Tag(EvaluationTimeEnum.REPORT, I18n.getString("Global.Property.Report")));
+            l.add(new Tag(EvaluationTimeEnum.PAGE, I18n.getString("Global.Property.Page")));
+            l.add(new Tag(EvaluationTimeEnum.COLUMN, I18n.getString("Global.Property.Column")));
+            l.add(new Tag(EvaluationTimeEnum.GROUP, I18n.getString("Global.Property.Group")));
+            l.add(new Tag(EvaluationTimeEnum.BAND, I18n.getString("Global.Property.Band")));
            // l.add(new Tag(new Byte(JRExpression.EVALUATION_TIME_AUTO), I18n.getString("Global.Property.Auto")));
 
             editor = new ComboBoxPropertyEditor(false, l);
@@ -94,31 +95,31 @@ public class Barcode4JEvaluationTimeProperty extends PropertySupport {
     }
 
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
-        return new Byte(component.getEvaluationTime());
+        return component.getEvaluationTimeValue();
     }
 
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        if (val instanceof Byte)
+        if (val instanceof EvaluationTimeEnum)
         {
-             setPropertyValue((Byte)val);
+             setPropertyValue((EvaluationTimeEnum)val);
         }
     }
 
-    private void setPropertyValue(Byte val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException 
+    private void setPropertyValue(EvaluationTimeEnum val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
     {
-            Byte oldValue = component.getEvaluationTime();
-            Byte newValue = val;
+            EvaluationTimeEnum oldValue = component.getEvaluationTimeValue();
+            EvaluationTimeEnum newValue = val;
 
             ObjectPropertyUndoableEdit urob =
                     new ObjectPropertyUndoableEdit(
                         component,
-                        "EvaluationTime", 
+                        "EvaluationTimeValue",
                         Byte.TYPE,
                         oldValue,newValue);
 
             String oldGroupValue = component.getEvaluationGroup();
             String newGroupValue = null;
-            if ( (val).byteValue() == JRExpression.EVALUATION_TIME_GROUP )
+            if ( val == EvaluationTimeEnum.GROUP )
             {
                 if (dataset.getGroupsList().size() == 0)
                 {
@@ -128,7 +129,7 @@ public class Barcode4JEvaluationTimeProperty extends PropertySupport {
 
                 newGroupValue = ((JRGroup)dataset.getGroupsList().get(0)).getName();
             }
-            component.setEvaluationTime(newValue);
+            component.setEvaluationTimeValue(newValue);
 
             boolean sameGroup = ((oldGroupValue == null) ? "" : oldGroupValue).equals( ((newGroupValue == null) ? "" : newGroupValue) );
             if (!sameGroup)

@@ -24,24 +24,25 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
-import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.EnumProperty;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
+import net.sf.jasperreports.charts.type.ValueLocationEnum;
     
     
 /**
  *  Class to manage the JRDesignThermometerPlot.PROPERTY_VALUE_LOCATION property
  */
-public final class ThermometerValueLocationProperty extends ByteProperty
+public final class ThermometerValueLocationProperty extends EnumProperty
 {
     private final JRDesignThermometerPlot plot;
 
     
     public ThermometerValueLocationProperty(JRDesignThermometerPlot plot)
     {
-        super(plot);
+        super(ValueLocationEnum.class, plot);
         this.plot = plot;
     }
 
@@ -67,35 +68,35 @@ public final class ThermometerValueLocationProperty extends ByteProperty
     public List getTagList() 
     {
         List tags = new ArrayList();
-        tags.add(new Tag(new Byte(JRDesignThermometerPlot.LOCATION_BULB), I18n.getString("Global.Property.Bulb")));
-        tags.add(new Tag(new Byte(JRDesignThermometerPlot.LOCATION_LEFT), I18n.getString("Global.Property.Left")));
-        tags.add(new Tag(new Byte(JRDesignThermometerPlot.LOCATION_RIGHT), I18n.getString("Global.Property.Right")));
-        tags.add(new Tag(new Byte(JRDesignThermometerPlot.LOCATION_NONE), I18n.getString("Global.Property.None")));
+        tags.add(new Tag(ValueLocationEnum.BULB, I18n.getString("Global.Property.Bulb")));
+        tags.add(new Tag(ValueLocationEnum.LEFT, I18n.getString("Global.Property.Left")));
+        tags.add(new Tag(ValueLocationEnum.RIGHT, I18n.getString("Global.Property.Right")));
+        tags.add(new Tag(ValueLocationEnum.NONE, I18n.getString("Global.Property.None")));
         return tags;
     }
 
     @Override
-    public Byte getByte()
+    public Object getPropertyValue()
     {
-        return plot.getValueLocationByte();
+        return plot.getValueLocationValue();
     }
 
     @Override
-    public Byte getOwnByte()
+    public Object getOwnPropertyValue()
     {
-        return plot.getValueLocationByte();
+        return getPropertyValue();
     }
 
     @Override
-    public Byte getDefaultByte()
+    public Object getDefaultValue()
     {
         return null;
     }
 
     @Override
-    public void setByte(Byte position)
+    public void setPropertyValue(Object position)
     {
-        plot.setValueLocation(position);
+        plot.setValueLocation((ValueLocationEnum)position);
     }
     
 }

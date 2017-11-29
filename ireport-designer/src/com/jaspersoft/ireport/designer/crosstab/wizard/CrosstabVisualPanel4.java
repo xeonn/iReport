@@ -27,9 +27,8 @@ import com.jaspersoft.ireport.locale.I18n;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
-import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.type.CalculationEnum;
 
 public final class CrosstabVisualPanel4 extends JPanel {
 
@@ -65,7 +64,7 @@ public final class CrosstabVisualPanel4 extends JPanel {
         measure.setName( groupPanel1.getGroupMeasureName()+I18n.getString("CrosstabVisualPanel4.Label.Measure") );
         measure.setValueExpression( groupPanel1.getDesignExpression() );
         measure.setCalculation( groupPanel1.getCalculationType() );
-        if (groupPanel1.getCalculationType() == JRVariable.CALCULATION_COUNT)
+        if (groupPanel1.getCalculationType() == CalculationEnum.COUNT)
         {
             measure.setValueClassName( "java.lang.Integer");
         }

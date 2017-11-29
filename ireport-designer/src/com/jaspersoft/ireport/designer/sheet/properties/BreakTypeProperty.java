@@ -23,25 +23,25 @@
  */
 package com.jaspersoft.ireport.designer.sheet.properties;
 
-import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.base.JRBaseBreak;
 import net.sf.jasperreports.engine.design.JRDesignBreak;
+import net.sf.jasperreports.engine.type.BreakTypeEnum;
 
     
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  */
-public final class BreakTypeProperty extends ByteProperty
+public final class BreakTypeProperty extends EnumProperty
 {
     private final JRDesignBreak breakElement;
 
     @SuppressWarnings("unchecked")
     public BreakTypeProperty(JRDesignBreak breakElement)
     {
-        super(breakElement);
+        super( BreakTypeEnum.class, breakElement);
         this.breakElement = breakElement;
     }
 
@@ -67,41 +67,35 @@ public final class BreakTypeProperty extends ByteProperty
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRBaseBreak.TYPE_PAGE), I18n.getString("Global.Property.BreakTypePage")));
-        tags.add(new Tag(new Byte(JRBaseBreak.TYPE_COLUMN), I18n.getString("Global.Property.BreakTypeColumn")));
+
+        tags.add(new Tag(BreakTypeEnum.PAGE, I18n.getString("Global.Property.BreakTypePage")));
+        tags.add(new Tag(BreakTypeEnum.COLUMN, I18n.getString("Global.Property.BreakTypeColumn")));
         return tags;
     }
 
     @Override
-    public Byte getByte()
+    public Object getPropertyValue()
     {
-        return breakElement.getType();
+        return breakElement.getTypeValue();
     }
 
     @Override
-    public Byte getOwnByte()
+    public Object getOwnPropertyValue()
     {
-        return breakElement.getType();
+        return breakElement.getTypeValue();
     }
 
     @Override
-    public Byte getDefaultByte()
+    public Object getDefaultValue()
     {
-        return JRBaseBreak.TYPE_PAGE;
+        return BreakTypeEnum.PAGE;
     }
 
     @Override
-    public void setByte(Byte type)
+    public void setPropertyValue(Object type)
     {
-        breakElement.setType(type);
-
-        if (IReportManager.getPreferences().getBoolean("designer_debug_mode", false))
-        {
-            System.out.println(new java.util.Date() + ": setting break type to: " + type + ". If the value is unattended or null, please report this notification to http://jasperforge.org/plugins/mantis/view.php?id=4139");
-            Thread.dumpStack();
-        }
-
-        
+        breakElement.setType((BreakTypeEnum)type);
     }
 
+  
 }

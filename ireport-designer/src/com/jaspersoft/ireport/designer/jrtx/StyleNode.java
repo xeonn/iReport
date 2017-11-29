@@ -53,7 +53,6 @@ import com.jaspersoft.ireport.designer.sheet.properties.style.ScaleImageProperty
 import com.jaspersoft.ireport.designer.sheet.properties.style.SpacingAfterProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.SpacingBeforeProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.StrikeThroughProperty;
-import com.jaspersoft.ireport.designer.sheet.properties.style.StyledTextProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.TabStopWidthProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.TabStopsProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.style.UnderlineProperty;
@@ -199,7 +198,7 @@ public class StyleNode extends AbstractNode implements PropertyChangeListener
 
         set.put(new LineSpacingProperty( getStyle() ));
         set.put(new LineSpacingSizeProperty( getStyle() ));
-        set.put(new StyledTextProperty( getStyle() ));
+        //set.put(new StyledTextProperty( getStyle() ));
 
 
         set.put(new FirstLineIndentProperty( getStyle()  ));

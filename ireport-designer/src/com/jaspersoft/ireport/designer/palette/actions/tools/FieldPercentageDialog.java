@@ -30,9 +30,8 @@ import com.jaspersoft.ireport.locale.I18n;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRGroup;
-import net.sf.jasperreports.engine.JRVariable;
-import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
 /**
  *
@@ -65,13 +64,13 @@ public class FieldPercentageDialog extends javax.swing.JDialog {
         return (JRField)jComboBoxFields.getSelectedItem();
     }
 
-    public Byte getSelectedResetType()
+    public ResetTypeEnum getSelectedResetTypeValue()
     {
         Tag selectedTag = (Tag)jComboBoxResetType.getSelectedItem();
         if (selectedTag != null &&
-            selectedTag.getValue() instanceof Byte) return (Byte)selectedTag.getValue();
+            selectedTag.getValue() instanceof ResetTypeEnum) return (ResetTypeEnum)selectedTag.getValue();
         if (selectedTag != null &&
-            selectedTag.getValue() instanceof JRGroup) return JRVariable.RESET_TYPE_GROUP;
+            selectedTag.getValue() instanceof JRGroup) return ResetTypeEnum.GROUP;
         return null;
     }
 
@@ -233,8 +232,8 @@ public class FieldPercentageDialog extends javax.swing.JDialog {
 
         jComboBoxResetType.removeAllItems();
 
-        jComboBoxResetType.addItem(new Tag(new Byte(JRDesignVariable.RESET_TYPE_REPORT), I18n.getString("VariableNode.Property.Report")));
-        jComboBoxResetType.addItem(new Tag(new Byte(JRDesignVariable.RESET_TYPE_COLUMN), I18n.getString("VariableNode.Property.Column")));
+        jComboBoxResetType.addItem(new Tag(ResetTypeEnum.REPORT, I18n.getString("VariableNode.Property.Report")));
+        jComboBoxResetType.addItem(new Tag(ResetTypeEnum.COLUMN, I18n.getString("VariableNode.Property.Column")));
 
         // for each group...
         JRGroup[] groups = jasperDesign.getGroups();
@@ -243,7 +242,7 @@ public class FieldPercentageDialog extends javax.swing.JDialog {
             jComboBoxResetType.addItem(new Tag(groups[i], I18n.getString("FieldPercentageDialog.group.label",groups[i].getName())));
         }
 
-        jComboBoxResetType.addItem(new Tag(new Byte(JRDesignVariable.RESET_TYPE_PAGE), I18n.getString("VariableNode.Property.Page")));
+        jComboBoxResetType.addItem(new Tag(ResetTypeEnum.PAGE, I18n.getString("VariableNode.Property.Page")));
 
         jComboBoxResetType.setSelectedIndex(0);
 

@@ -28,6 +28,7 @@ import com.jaspersoft.ireport.designer.utils.Misc;
 import net.sf.jasperreports.charts.design.JRDesignPieSeries;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
+import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 
 /**
  *
@@ -261,7 +262,7 @@ public class PieSeriesPanel extends javax.swing.JPanel {
         if (pieSeries.getSectionHyperlink() == null)
         {
             JRDesignHyperlink hl = new JRDesignHyperlink();
-            hl.setHyperlinkType( JRDesignHyperlink.HYPERLINK_TYPE_NONE );
+            hl.setHyperlinkType( HyperlinkTypeEnum.NONE);
             pieSeries.setSectionHyperlink(hl);
         }
         sectionItemHyperlinkPanel1.setHyperlink( pieSeries.getSectionHyperlink() );

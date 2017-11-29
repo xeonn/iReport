@@ -66,7 +66,7 @@ public class JRFontPanel extends javax.swing.JPanel implements PreferenceChangeL
         {
             // TODO: fill the list of JRReportFont...
             @SuppressWarnings("deprecation")
-            List reportFonts = jasperDesign.getFontsList();
+            List reportFonts = new ArrayList(); //jasperDesign.getFontsList();
             for (int i=0;i<reportFonts.size(); ++i)
             {
                  Misc.updateComboBox( jComboBoxReportFonts, reportFonts, true);

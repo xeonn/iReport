@@ -28,19 +28,20 @@ import com.jaspersoft.ireport.locale.I18n;
 import java.util.List;
 import net.sf.jasperreports.engine.JRAlignment;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 
     
 /**
  *  Class to manage the JRDesignElement.PROPERTY_POSITION_TYPE property
  */
-public final class VerticalAlignmentProperty extends ByteProperty
+public final class VerticalAlignmentProperty extends EnumProperty
 {
     private final JRAlignment element;
 
     @SuppressWarnings("unchecked")
     public VerticalAlignmentProperty(JRAlignment element)
     {
-        super(element);
+        super(VerticalAlignEnum.class, element);
         this.element = element;
     }
 
@@ -66,35 +67,35 @@ public final class VerticalAlignmentProperty extends ByteProperty
     public List getTagList() 
     {
         List tags = new java.util.ArrayList();
-        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_TOP), I18n.getString("Global.Property.Top")));
-        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_MIDDLE), I18n.getString("Global.Property.Middle")));
-        tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_BOTTOM), I18n.getString("Global.Property.Bottom")));
+        tags.add(new Tag(VerticalAlignEnum.TOP, I18n.getString("Global.Property.Top")));
+        tags.add(new Tag(VerticalAlignEnum.MIDDLE, I18n.getString("Global.Property.Middle")));
+        tags.add(new Tag(VerticalAlignEnum.BOTTOM, I18n.getString("Global.Property.Bottom")));
         //tags.add(new Tag(new Byte(JRAlignment.VERTICAL_ALIGN_JUSTIFIED), I18n.getString("Global.Property.Justified")));
         return tags;
     }
 
     @Override
-    public Byte getByte()
+    public Object getPropertyValue()
     {
-        return element.getVerticalAlignment();
+        return element.getVerticalAlignmentValue();
     }
 
     @Override
-    public Byte getOwnByte()
+    public Object getOwnPropertyValue()
     {
-        return element.getOwnVerticalAlignment();
+        return element.getOwnVerticalAlignmentValue();
     }
 
     @Override
-    public Byte getDefaultByte()
+    public Object getDefaultValue()
     {
         return null;
     }
 
     @Override
-    public void setByte(Byte alignment)
+    public void setPropertyValue(Object alignment)
     {
-        element.setVerticalAlignment(alignment);
+        element.setVerticalAlignment((VerticalAlignEnum)alignment);
     }
 
 }

@@ -370,11 +370,11 @@ public class BoxBorderSelectionPanel extends javax.swing.JPanel {
         
         Stroke theStroke = new BasicStroke(penWidth);
         
-        if (pen.getLineStyle() != null)
+        if (pen.getLineStyleValue() != null)
         {
-            switch (pen.getLineStyle())
+            switch (pen.getLineStyleValue())
             {
-                case JRPen.LINE_STYLE_DASHED:
+                case DASHED:
                 {
                     theStroke = new BasicStroke(penWidth, 
                                                 BasicStroke.CAP_BUTT, 
@@ -383,7 +383,7 @@ public class BoxBorderSelectionPanel extends javax.swing.JPanel {
                     
                     break;
                 }
-                case JRPen.LINE_STYLE_DOTTED:
+                case DOTTED:
                 {
                     theStroke = new BasicStroke(penWidth, 
                                                 BasicStroke.CAP_BUTT, 
@@ -391,7 +391,7 @@ public class BoxBorderSelectionPanel extends javax.swing.JPanel {
                                                 new float[] { Math.max(1f, 1f*penWidth), Math.max(1f, 1f*penWidth) }, 0f);
                     break;
                 }
-                case JRPen.LINE_STYLE_DOUBLE:
+                case DOUBLE:
                 {
                     
                     Stroke s1 = (Stroke) new ShapeStroke( new Rectangle2D.Float(0,0,penWidth,penWidth) , 1f*penWidth );
@@ -400,7 +400,7 @@ public class BoxBorderSelectionPanel extends javax.swing.JPanel {
                     
                     break;
                 }
-                case JRPen.LINE_STYLE_SOLID:
+                case SOLID:
                 {
                     // do nothing, let's keep the default...
                 }

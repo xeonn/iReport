@@ -50,6 +50,9 @@ import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
+import net.sf.jasperreports.engine.type.CalculationEnum;
+import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
+import net.sf.jasperreports.engine.type.ResetTypeEnum;
 import org.netbeans.api.visual.widget.Scene;
 import org.openide.util.Exceptions;
 
@@ -122,14 +125,14 @@ public class CreateTextFieldFromFieldAction extends CreateTextFieldAction {
             {
 
                 // if the band is not a detail, propose to aggregate the value...
-                if (b.getOrigin().getBandType() == JROrigin.GROUP_FOOTER ||
-                    b.getOrigin().getBandType() == JROrigin.GROUP_HEADER ||
-                    b.getOrigin().getBandType() == JROrigin.COLUMN_FOOTER ||
-                    b.getOrigin().getBandType() == JROrigin.COLUMN_HEADER ||
-                    b.getOrigin().getBandType() == JROrigin.PAGE_FOOTER ||
-                    b.getOrigin().getBandType() == JROrigin.PAGE_HEADER ||
-                    b.getOrigin().getBandType() == JROrigin.TITLE ||
-                    b.getOrigin().getBandType() == JROrigin.SUMMARY)
+                if (b.getOrigin().getBandTypeValue() == BandTypeEnum.GROUP_FOOTER ||
+                    b.getOrigin().getBandTypeValue() == BandTypeEnum.GROUP_HEADER ||
+                    b.getOrigin().getBandTypeValue() == BandTypeEnum.COLUMN_FOOTER ||
+                    b.getOrigin().getBandTypeValue() == BandTypeEnum.COLUMN_HEADER ||
+                    b.getOrigin().getBandTypeValue() == BandTypeEnum.PAGE_FOOTER ||
+                    b.getOrigin().getBandTypeValue() == BandTypeEnum.PAGE_HEADER ||
+                    b.getOrigin().getBandTypeValue() == BandTypeEnum.TITLE ||
+                    b.getOrigin().getBandTypeValue() == BandTypeEnum.SUMMARY)
                 {
                     AggregationFunctionDialog dialog = new AggregationFunctionDialog(Misc.getMainFrame(), true);
                     dialog.setFunctionSet( ( isNumeric( newField.getValueClassName())) ? AggregationFunctionDialog.NUMERIC_SET : AggregationFunctionDialog.STRING_SET );
@@ -137,7 +140,7 @@ public class CreateTextFieldFromFieldAction extends CreateTextFieldAction {
                     dialog.setDefaultSelection(AggregationFunctionDialog.DEFAULT_AS_VALUE);
                     dialog.setVisible(true);
 
-                    Byte aggFunc = dialog.getSelectedFunction();
+                    CalculationEnum aggFunc = dialog.getSelectedFunction();
                     if (aggFunc != null)
                     {
                         // create the variable...
@@ -146,8 +149,8 @@ public class CreateTextFieldFromFieldAction extends CreateTextFieldAction {
                         var.setCalculation(aggFunc);
                         var.setExpression(Misc.createExpression( newField.getValueClassName() , "$F{" + newField.getName() + "}"));
 
-                        if (aggFunc.equals(JRVariable.CALCULATION_COUNT) ||
-                            aggFunc.equals(JRVariable.CALCULATION_DISTINCT_COUNT))
+                        if (aggFunc.equals(CalculationEnum.COUNT) ||
+                            aggFunc.equals(CalculationEnum.DISTINCT_COUNT))
                         {
                             var.setValueClassName("java.lang.Integer");
                             element.setPattern(null);
@@ -157,26 +160,26 @@ public class CreateTextFieldFromFieldAction extends CreateTextFieldAction {
                             var.setValueClassName(newField.getValueClassName());
                         }
 
-                        if (b.getOrigin().getBandType() == JROrigin.SUMMARY ||
-                            b.getOrigin().getBandType() == JROrigin.TITLE)
+                        if (b.getOrigin().getBandTypeValue() == BandTypeEnum.SUMMARY ||
+                            b.getOrigin().getBandTypeValue() == BandTypeEnum.TITLE)
                         {
-                            var.setResetType(JRVariable.RESET_TYPE_REPORT);
+                            var.setResetType(ResetTypeEnum.REPORT);
                         }
-                        else if (b.getOrigin().getBandType() == JROrigin.GROUP_FOOTER ||
-                            b.getOrigin().getBandType() == JROrigin.GROUP_HEADER)
+                        else if (b.getOrigin().getBandTypeValue() == BandTypeEnum.GROUP_FOOTER ||
+                            b.getOrigin().getBandTypeValue() == BandTypeEnum.GROUP_HEADER)
                         {
-                            var.setResetType(JRVariable.RESET_TYPE_GROUP);
+                            var.setResetType(ResetTypeEnum.GROUP);
                             var.setResetGroup( (JRGroup) jasperDesign.getGroupsMap().get( b.getOrigin().getGroupName() ) );
                         }
-                        else if (b.getOrigin().getBandType() == JROrigin.COLUMN_FOOTER ||
-                                 b.getOrigin().getBandType() == JROrigin.COLUMN_HEADER)
+                        else if (b.getOrigin().getBandTypeValue() == BandTypeEnum.COLUMN_FOOTER ||
+                                 b.getOrigin().getBandTypeValue() == BandTypeEnum.COLUMN_HEADER)
                         {
-                            var.setResetType(JRVariable.RESET_TYPE_COLUMN);
+                            var.setResetType(ResetTypeEnum.COLUMN);
                         }
-                        else if (b.getOrigin().getBandType() == JROrigin.PAGE_HEADER ||
-                                 b.getOrigin().getBandType() == JROrigin.PAGE_FOOTER)
+                        else if (b.getOrigin().getBandTypeValue() == BandTypeEnum.PAGE_HEADER ||
+                                 b.getOrigin().getBandTypeValue() == BandTypeEnum.PAGE_FOOTER)
                         {
-                            var.setResetType(JRVariable.RESET_TYPE_PAGE);
+                            var.setResetType(ResetTypeEnum.PAGE);
                         }
 
                         try {
@@ -200,26 +203,26 @@ public class CreateTextFieldFromFieldAction extends CreateTextFieldAction {
                         var.getValueClassName(),
                         true);
 
-                        if (b.getOrigin().getBandType() == JROrigin.GROUP_HEADER)
+                        if (b.getOrigin().getBandTypeValue() == BandTypeEnum.GROUP_HEADER)
                         {
-                            element.setEvaluationTime(JRExpression.EVALUATION_TIME_GROUP);
+                            element.setEvaluationTime(EvaluationTimeEnum.GROUP);
                             element.setEvaluationGroup( (JRGroup) jasperDesign.getGroupsMap().get( b.getOrigin().getGroupName() ) );
                         }
-                        else if (b.getOrigin().getBandType() == JROrigin.COLUMN_HEADER)
+                        else if (b.getOrigin().getBandTypeValue() == BandTypeEnum.COLUMN_HEADER)
                         {
-                            element.setEvaluationTime(JRExpression.EVALUATION_TIME_COLUMN);
+                            element.setEvaluationTime(EvaluationTimeEnum.COLUMN);
                         }
-                        else if (b.getOrigin().getBandType() == JROrigin.PAGE_HEADER)
+                        else if (b.getOrigin().getBandTypeValue() == BandTypeEnum.PAGE_HEADER)
                         {
-                            element.setEvaluationTime(JRExpression.EVALUATION_TIME_PAGE);
+                            element.setEvaluationTime(EvaluationTimeEnum.PAGE);
                         }
-                        else if (b.getOrigin().getBandType() == JROrigin.TITLE)
+                        else if (b.getOrigin().getBandTypeValue() == BandTypeEnum.TITLE)
                         {
-                            element.setEvaluationTime(JRExpression.EVALUATION_TIME_REPORT);
+                            element.setEvaluationTime(EvaluationTimeEnum.REPORT);
                         }
                     }
                 }
-                else if (b.getOrigin().getBandType() == JROrigin.DETAIL)
+                else if (b.getOrigin().getBandTypeValue() == BandTypeEnum.DETAIL)
                 {
                     // Check if the column band exists and it is not zero height...
                     if (IReportManager.getPreferences().getBoolean("createLabelForField", true))

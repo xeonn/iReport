@@ -31,6 +31,8 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
+import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
 import org.netbeans.api.visual.widget.Scene;
 
 /**
@@ -48,7 +50,7 @@ public class CreatePageXOfYAction extends CreateTextFieldAction {
         ((JRDesignExpression)elements[0].getExpression()).setText("\"" + I18n.getString("Page_X_Of_Y.page", "\"+$V{PAGE_NUMBER}+\"") + "\"");
         ((JRDesignExpression)elements[0].getExpression()).setValueClassName("java.lang.String");
 
-        elements[0].setHorizontalAlignment( JRDesignTextField.HORIZONTAL_ALIGN_RIGHT);
+        elements[0].setHorizontalAlignment( HorizontalAlignEnum.RIGHT);
         setMatchingClassExpression(
             ((JRDesignExpression)elements[0].getExpression()),
             "java.lang.String",
@@ -67,7 +69,7 @@ public class CreatePageXOfYAction extends CreateTextFieldAction {
             true
             );
 
-        elements[1].setEvaluationTime( JRExpression.EVALUATION_TIME_REPORT);
+        elements[1].setEvaluationTime( EvaluationTimeEnum.REPORT);
 
         return elements;
     }

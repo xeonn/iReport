@@ -32,7 +32,7 @@ import com.jaspersoft.ireport.designer.sheet.properties.ScaleImageProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.FillProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.ImageExpressionProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.RadiusProperty;
-import com.jaspersoft.ireport.designer.sheet.properties.DirectionProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.LineDirectionProperty;
 import com.jaspersoft.ireport.designer.ModelUtils;
 import com.jaspersoft.ireport.designer.sheet.JRPenProperty;
 import com.jaspersoft.ireport.designer.sheet.properties.ImageEvaluationTimeProperty;
@@ -92,7 +92,7 @@ public class GraphicElementPropertiesFactory {
             Sheet.Set linePropertySet = Sheet.createPropertiesSet();
             linePropertySet.setName("LINE_ELEMENT_PROPERTIES");
             linePropertySet.setDisplayName("Line properties");
-            linePropertySet.put(new DirectionProperty( (JRDesignLine)element ));
+            linePropertySet.put(new LineDirectionProperty( (JRDesignLine)element ));
             list.add(linePropertySet);
         }
         else if (element instanceof JRDesignRectangle)

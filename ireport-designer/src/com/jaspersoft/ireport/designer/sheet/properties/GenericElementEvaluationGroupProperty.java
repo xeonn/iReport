@@ -38,6 +38,7 @@ import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGenericElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import org.openide.nodes.PropertySupport;
 import org.openide.util.WeakListeners;
 
@@ -66,7 +67,7 @@ public class GenericElementEvaluationGroupProperty  extends PropertySupport impl
 
     @Override
     public boolean canWrite() {
-        return element.getEvaluationTime() == JRExpression.EVALUATION_TIME_GROUP;
+        return element.getEvaluationTimeValue() == EvaluationTimeEnum.GROUP;
     }
 
 

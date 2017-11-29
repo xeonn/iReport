@@ -24,11 +24,12 @@
 package com.jaspersoft.ireport.designer.sheet.properties.charts;
 
 import com.jaspersoft.ireport.designer.sheet.Tag;
-import com.jaspersoft.ireport.designer.sheet.properties.ByteProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.EnumProperty;
 import com.jaspersoft.ireport.locale.I18n;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
+import net.sf.jasperreports.charts.type.MeterShapeEnum;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRRuntimeException;
     
@@ -36,14 +37,14 @@ import net.sf.jasperreports.engine.JRRuntimeException;
 /**
  *  Class to manage the JRDesignMeterPlot.PROPERTY_SHAPE property
  */
-public final class MeterShapeProperty extends ByteProperty
+public final class MeterShapeProperty extends EnumProperty
 {
     private final JRDesignMeterPlot element;
 
     
     public MeterShapeProperty(JRDesignMeterPlot element)
     {
-        super(element);
+        super(MeterShapeEnum.class, element);
         this.element = element;
     }
 
@@ -69,37 +70,37 @@ public final class MeterShapeProperty extends ByteProperty
     public List getTagList() 
     {
         List tags = new ArrayList();
-        tags.add(new Tag(new Byte(JRDesignMeterPlot.SHAPE_PIE), I18n.getString("Pie")));
-        tags.add(new Tag(new Byte(JRDesignMeterPlot.SHAPE_CIRCLE), I18n.getString("Circle")));
-        tags.add(new Tag(new Byte(JRDesignMeterPlot.SHAPE_CHORD), I18n.getString("Chord")));
-        tags.add(new Tag(new Byte(JRDesignMeterPlot.SHAPE_DIAL), I18n.getString("Dial")));
+        tags.add(new Tag(MeterShapeEnum.PIE, I18n.getString("Pie")));
+        tags.add(new Tag(MeterShapeEnum.CIRCLE, I18n.getString("Circle")));
+        tags.add(new Tag(MeterShapeEnum.CHORD, I18n.getString("Chord")));
+        tags.add(new Tag(MeterShapeEnum.DIAL, I18n.getString("Dial")));
         return tags;
     }
 
     @Override
-    public Byte getByte()
+    public Object getPropertyValue()
     {
-        return element.getShapeByte();
+        return element.getShapeValue();
     }
 
     @Override
-    public Byte getOwnByte()
+    public Object getOwnPropertyValue()
     {
-        return element.getShapeByte();
+        return element.getShapeValue();
     }
 
     @Override
-    public Byte getDefaultByte()
+    public Object getDefaultValue()
     {
         return null;
     }
 
     @Override
-    public void setByte(Byte position)
+    public void setPropertyValue(Object position)
     {
         try
         {
-            element.setShape(position);
+            element.setShape((MeterShapeEnum)position);
         }
         catch(JRException e)
         {

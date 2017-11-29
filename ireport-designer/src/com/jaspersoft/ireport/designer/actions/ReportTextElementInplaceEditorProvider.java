@@ -113,13 +113,13 @@ public class ReportTextElementInplaceEditorProvider implements InplaceEditorProv
         JRDesignTextElement element = getTextElement(widget);
         if (element != null)
         {
-            switch (element.getHorizontalAlignment())
+            switch (element.getHorizontalAlignmentValue())
             {
-                    case JRAlignment.HORIZONTAL_ALIGN_CENTER:
+                    case CENTER:
                         return JTextArea.CENTER_ALIGNMENT;
-                    case JRAlignment.HORIZONTAL_ALIGN_LEFT:
+                    case LEFT:
                         return JTextArea.LEFT_ALIGNMENT;
-                    case JRAlignment.HORIZONTAL_ALIGN_RIGHT:
+                    case RIGHT:
                         return JTextArea.RIGHT_ALIGNMENT;
                     //case JRAlignment.HORIZONTAL_ALIGN_JUSTIFIED:
                     //    return JTextArea.;
@@ -133,13 +133,13 @@ public class ReportTextElementInplaceEditorProvider implements InplaceEditorProv
         JRDesignTextElement element = getTextElement(widget);
         if (element != null)
         {
-            switch (element.getHorizontalAlignment())
+            switch (element.getVerticalAlignmentValue())
             {
-                    case JRAlignment.VERTICAL_ALIGN_MIDDLE:
+                    case MIDDLE:
                         return JTextArea.CENTER_ALIGNMENT;
-                    case JRAlignment.VERTICAL_ALIGN_TOP:
+                    case TOP:
                         return JTextArea.TOP_ALIGNMENT;
-                    case JRAlignment.VERTICAL_ALIGN_BOTTOM:
+                    case BOTTOM:
                         return JTextArea.BOTTOM_ALIGNMENT;
                     //case JRAlignment.VERTICAL_ALIGN_JUSTIFIED:
                     //    return JTextArea.;

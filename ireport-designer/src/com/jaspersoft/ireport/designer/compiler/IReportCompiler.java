@@ -937,7 +937,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                            } finally
                            {
                                 if (transaction != null) try {  transaction.rollback(); } catch (Exception ex) { }
-                                if (transaction != null) try {  session.close(); } catch (Exception ex) { }
+                                if (session != null) try {  session.close(); } catch (Exception ex) { }
                            }
                        }
                        else if (connection instanceof EJBQLConnection)

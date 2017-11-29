@@ -40,6 +40,7 @@ import com.jaspersoft.ireport.designer.sheet.JRPropertiesMapProperty;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
 import com.jaspersoft.ireport.designer.sheet.properties.AbstractProperty;
+import com.jaspersoft.ireport.designer.sheet.properties.EnumProperty;
 import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import com.jaspersoft.ireport.designer.wizards.ReportGroupWizardAction;
 import com.jaspersoft.ireport.locale.I18n;
@@ -58,6 +59,8 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.OrientationEnum;
+import net.sf.jasperreports.engine.type.PrintOrderEnum;
 import net.sf.jasperreports.engine.type.RunDirectionEnum;
 import org.openide.ErrorManager;
 import org.openide.actions.PasteAction;
@@ -89,7 +92,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
                 jd.setName("test name");
                 jd.setPageWidth(700);
                 jd.setPageHeight(400);
-                jd.setOrientation( JasperDesign.ORIENTATION_LANDSCAPE);
+                jd.setOrientation( OrientationEnum.LANDSCAPE);
                 jd.setTopMargin(10);
                 jd.setBottomMargin(20);
                 jd.setLeftMargin(35);
@@ -799,7 +802,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
     /**
      *  Class to manage the JasperDesign.PROPERTY_ORIENTATION property
      */
-    private static final class OrientationProperty extends PropertySupport
+    private static final class OrientationProperty extends EnumProperty
     {
             private final JasperDesign jasperDesign;
             private ComboBoxPropertyEditor editor;
@@ -807,73 +810,86 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public OrientationProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_ORIENTATION,Byte.class, I18n.getString("ReportNode.Property.Orientation"),  I18n.getString("ReportNode.Property.Orientationdetails"), true, true);
+                super(OrientationEnum.class, jd);
                 this.jasperDesign = jd;
                 setValue("suppressCustomEditor", Boolean.TRUE);
             }
 
-            @Override
-            @SuppressWarnings("unchecked")
-            public PropertyEditor getPropertyEditor() {
+    @Override
+    public String getName()
+    {
+        return JasperDesign.PROPERTY_ORIENTATION;
+    }
 
-                if (editor == null)
-                {
-                    java.util.ArrayList l = new java.util.ArrayList();
-                    l.add(new Tag(new Byte(JasperDesign.ORIENTATION_PORTRAIT), I18n.getString("ReportNode.Orientation.Portrait")));
-                    l.add(new Tag(new Byte(JasperDesign.ORIENTATION_LANDSCAPE), I18n.getString("ReportNode.Orientation.Landscape")));
-                    editor = new ComboBoxPropertyEditor(false, l);
-                }
-                return editor;
-            }
-            
-            public Object getValue() throws IllegalAccessException, InvocationTargetException {
-                return new Byte(jasperDesign.getOrientation());
-            }
+    @Override
+    public String getDisplayName()
+    {
+        return I18n.getString("ReportNode.Property.Orientation");
+    }
 
-            // TODO: what to do with page width/height ?
-            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                if (val instanceof Byte)
-                {
-                    Byte oldValue = jasperDesign.getOrientation();
-                    Byte newValue = (Byte)val;
-                    jasperDesign.setOrientation(newValue);
-                
-                    ObjectPropertyUndoableEdit urob =
-                            new ObjectPropertyUndoableEdit(
-                                jasperDesign,
-                                "Orientation", 
-                                Byte.TYPE,
-                                oldValue,newValue);
-                    
-                    // Find the undoRedo manager...
-                    IReportManager.getInstance().addUndoableEdit(urob);
-                    // When changing orientation, we want to rotate the
-                    // document too...
-                    int pWidth = jasperDesign.getPageWidth();
+    @Override
+    public String getShortDescription()
+    {
+        return I18n.getString("ReportNode.Property.Orientationdetails");
+    }
+
+    @Override
+    public List getTagList()
+    {
+        List tags = new java.util.ArrayList();
+        tags.add(new Tag(OrientationEnum.PORTRAIT, I18n.getString("ReportNode.Orientation.Portrait")));
+        tags.add(new Tag(OrientationEnum.LANDSCAPE, I18n.getString("ReportNode.Orientation.Landscape")));
+        return tags;
+    }
+
+    @Override
+    public Object getPropertyValue()
+    {
+        return jasperDesign.getOrientationValue();
+    }
+
+    @Override
+    public Object getOwnPropertyValue()
+    {
+        return getPropertyValue();
+    }
+
+    @Override
+    public Object getDefaultValue()
+    {
+        return OrientationEnum.PORTRAIT;
+    }
+
+    @Override
+    public void setPropertyValue(Object alignment)
+    {
+        jasperDesign.setOrientation((OrientationEnum)alignment);
+
+        int pWidth = jasperDesign.getPageWidth();
                     int pHeight = jasperDesign.getPageHeight();
-                    
-                    if ((jasperDesign.getOrientation() == jasperDesign.ORIENTATION_LANDSCAPE && pWidth < pHeight) ||
-                        (jasperDesign.getOrientation() == jasperDesign.ORIENTATION_PORTRAIT && pWidth > pHeight)) 
+
+                    if ((jasperDesign.getOrientationValue() == OrientationEnum.LANDSCAPE && pWidth < pHeight) ||
+                        (jasperDesign.getOrientationValue() == OrientationEnum.PORTRAIT && pWidth > pHeight))
                     {
                         jasperDesign.setPageWidth(pHeight);
                         jasperDesign.setPageHeight(pWidth);
-                        
+
                         // switch height and width...
                         ObjectPropertyUndoableEdit urob1 =
                             new ObjectPropertyUndoableEdit(
                                 jasperDesign,
-                                "PageWidth", 
+                                "PageWidth",
                                 Integer.TYPE,
                                 pWidth,pHeight);
                         IReportManager.getInstance().addUndoableEdit(urob1, true);
                         ObjectPropertyUndoableEdit urob2 =
                             new ObjectPropertyUndoableEdit(
                                 jasperDesign,
-                                "PageHeight", 
+                                "PageHeight",
                                 Integer.TYPE,
                                 pHeight,pWidth);
                         IReportManager.getInstance().addUndoableEdit(urob2, true);
-                        
+
                         // Adjust the columns width...
                         if (jasperDesign.getColumnCount() > 0) // Do it always...
                         {
@@ -886,21 +902,14 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
                             ObjectPropertyUndoableEdit urob3 =
                             new ObjectPropertyUndoableEdit(
                                 jasperDesign,
-                                "ColumnWidth", 
+                                "ColumnWidth",
                                 Integer.TYPE,
                                 oldColumnWidth,columnWidth);
                             IReportManager.getInstance().addUndoableEdit(urob3, true);
                         }
-                    }
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+
                 }
-            }
+        }
     }
     
     
@@ -1099,7 +1108,7 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
     /**
      *  Class to manage the JasperDesign.PROPERTY_ORIENTATION property
      */
-    private static final class PrintOrderProperty extends PropertySupport
+    private static final class PrintOrderProperty extends EnumProperty
     {
             private final JasperDesign jasperDesign;
             private ComboBoxPropertyEditor editor;
@@ -1107,45 +1116,60 @@ public class ReportNode extends IRAbstractNode implements PropertyChangeListener
             @SuppressWarnings("unchecked")
             public PrintOrderProperty(JasperDesign jd)
             {
-                super(JasperDesign.PROPERTY_PRINT_ORDER,Byte.class, I18n.getString("ReportNode.Property.Print"),I18n.getString("ReportNode.Property.Printdetail"), true, true);
+                super(PrintOrderEnum.class, jd);
                 this.jasperDesign = jd;
                 setValue("suppressCustomEditor", Boolean.TRUE);
             }
 
             @Override
-            @SuppressWarnings("unchecked")
-            public PropertyEditor getPropertyEditor() {
-
-                if (editor == null)
-                {
-                    java.util.ArrayList l = new java.util.ArrayList();
-                    l.add(new Tag(new Byte(JasperDesign.PRINT_ORDER_VERTICAL), I18n.getString("ReportNode.Property.Vertical")));
-                    l.add(new Tag(new Byte(JasperDesign.PRINT_ORDER_HORIZONTAL), I18n.getString("ReportNode.Property.Horizontal")));
-                    editor = new ComboBoxPropertyEditor(false, l);
-                }
-                return editor;
-            }
-            
-            public Object getValue() throws IllegalAccessException, InvocationTargetException {
-                return new Byte(jasperDesign.getPrintOrder());
+            public String getName()
+            {
+                return JasperDesign.PROPERTY_PRINT_ORDER;
             }
 
-            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-                if (val instanceof Byte)
-                {
-                    Byte oldValue = jasperDesign.getPrintOrder();
-                    Byte newValue = (Byte)val;
-                    jasperDesign.setPrintOrder(newValue);
-                
-                    ObjectPropertyUndoableEdit urob =
-                            new ObjectPropertyUndoableEdit(
-                                jasperDesign,
-                                "PrintOrder", 
-                                Byte.TYPE,
-                                oldValue,newValue);
-                    // Find the undoRedo manager...
-                    IReportManager.getInstance().addUndoableEdit(urob);
-                }
+            @Override
+            public String getDisplayName()
+            {
+                return I18n.getString("ReportNode.Property.Print");
+            }
+
+            @Override
+            public String getShortDescription()
+            {
+                return I18n.getString("ReportNode.Property.Printdetail");
+            }
+
+            @Override
+            public List getTagList()
+            {
+                List tags = new java.util.ArrayList();
+                tags.add(new Tag(PrintOrderEnum.VERTICAL, I18n.getString("ReportNode.Property.Vertical")));
+                tags.add(new Tag(PrintOrderEnum.HORIZONTAL, I18n.getString("ReportNode.Property.Horizontal")));
+                return tags;
+            }
+
+            @Override
+            public Object getPropertyValue()
+            {
+                return jasperDesign.getPrintOrderValue();
+            }
+
+            @Override
+            public Object getOwnPropertyValue()
+            {
+                return getPropertyValue();
+            }
+
+            @Override
+            public Object getDefaultValue()
+            {
+                return PrintOrderEnum.VERTICAL;
+            }
+
+            @Override
+            public void setPropertyValue(Object val)
+            {
+                jasperDesign.setPrintOrder((PrintOrderEnum)val);
             }
     }
     

@@ -337,8 +337,6 @@
                 <package>com.lowagie.text.xml.simpleparser</package>
                 <package>com.lowagie.text.xml.xmp</package>
                 <package>com.lowagie.tools</package>
-                <package>common</package>
-                <package>common.log</package>
                 <package>mondrian.calc</package>
                 <package>mondrian.calc.impl</package>
                 <package>mondrian.i18n</package>
@@ -379,10 +377,13 @@
                 <package>net.sf.jasperreports.components.barcode4j</package>
                 <package>net.sf.jasperreports.components.charts</package>
                 <package>net.sf.jasperreports.components.list</package>
+                <package>net.sf.jasperreports.components.map</package>
+                <package>net.sf.jasperreports.components.sort</package>
                 <package>net.sf.jasperreports.components.spiderchart</package>
                 <package>net.sf.jasperreports.components.spiderchart.type</package>
                 <package>net.sf.jasperreports.components.table</package>
                 <package>net.sf.jasperreports.components.table.fill</package>
+                <package>net.sf.jasperreports.components.table.util</package>
                 <package>net.sf.jasperreports.crosstabs</package>
                 <package>net.sf.jasperreports.crosstabs.base</package>
                 <package>net.sf.jasperreports.crosstabs.design</package>
@@ -390,6 +391,18 @@
                 <package>net.sf.jasperreports.crosstabs.fill.calculation</package>
                 <package>net.sf.jasperreports.crosstabs.type</package>
                 <package>net.sf.jasperreports.crosstabs.xml</package>
+                <package>net.sf.jasperreports.data</package>
+                <package>net.sf.jasperreports.data.bean</package>
+                <package>net.sf.jasperreports.data.csv</package>
+                <package>net.sf.jasperreports.data.ds</package>
+                <package>net.sf.jasperreports.data.empty</package>
+                <package>net.sf.jasperreports.data.jdbc</package>
+                <package>net.sf.jasperreports.data.jndi</package>
+                <package>net.sf.jasperreports.data.provider</package>
+                <package>net.sf.jasperreports.data.qe</package>
+                <package>net.sf.jasperreports.data.xls</package>
+                <package>net.sf.jasperreports.data.xlsx</package>
+                <package>net.sf.jasperreports.data.xml</package>
                 <package>net.sf.jasperreports.engine</package>
                 <package>net.sf.jasperreports.engine.base</package>
                 <package>net.sf.jasperreports.engine.component</package>
@@ -411,6 +424,7 @@
                 <package>net.sf.jasperreports.engine.scriptlets</package>
                 <package>net.sf.jasperreports.engine.type</package>
                 <package>net.sf.jasperreports.engine.util</package>
+                <package>net.sf.jasperreports.engine.util.sample</package>
                 <package>net.sf.jasperreports.engine.util.xml</package>
                 <package>net.sf.jasperreports.engine.xml</package>
                 <package>net.sf.jasperreports.extensions</package>
@@ -425,6 +439,9 @@
                 <package>net.sf.jasperreports.swing</package>
                 <package>net.sf.jasperreports.view</package>
                 <package>net.sf.jasperreports.view.save</package>
+                <package>net.sf.jasperreports.web</package>
+                <package>net.sf.jasperreports.web.servlets</package>
+                <package>net.sf.jasperreports.web.util</package>
                 <package>net.sourceforge.barbecue</package>
                 <package>net.sourceforge.barbecue.env</package>
                 <package>net.sourceforge.barbecue.formatter</package>
@@ -757,16 +774,16 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-4.0.2.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-4.0.2.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-4.1.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-4.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-fonts-4.0.2.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-fonts-4.0.2.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-fonts-4.1.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-fonts-4.1.1.jar</binary-origin>
             </class-path-extension>
-             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-chart-themes-4.0.2.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-chart-themes-4.0.2.jar</binary-origin>
+            <class-path-extension>
+                <runtime-relative-path>ext/jasperreports-chart-themes-4.1.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-chart-themes-4.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jaxen-1.1.1.jar</runtime-relative-path>
@@ -937,8 +954,8 @@
                 <binary-origin>release/modules/ext/mondrian-2.3.2.8944.jar</binary-origin>
             </class-path-extension> -->
             <class-path-extension>
-                <runtime-relative-path>ext/mondrian-3.1.1.12687-Jaspersoft.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/mondrian-3.1.1.12687-Jaspersoft.jar</binary-origin>
+                <runtime-relative-path>ext/mondrian-3.2.0-13661-JS.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/mondrian-3.2.0-13661-JS.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/bcel-5.2.jar</runtime-relative-path>
@@ -961,8 +978,8 @@
                 <binary-origin>release/modules/ext/commons-dbcp-1.2.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/olap4j-0.9.7.145.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/olap4j-0.9.7.145.jar</binary-origin>
+                <runtime-relative-path>ext/olap4j-0.9.7.309-JS.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/olap4j-0.9.7.309-JS.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/eigenbase-resgen-1.3.0.11873.jar</runtime-relative-path>
@@ -1019,6 +1036,25 @@
                 <binary-origin>release/modules/ext/swingx-2007_10_07.jar</binary-origin>
             </class-path-extension>
             <!-- end swingx-2007_10_07.jar -->
+
+            <class-path-extension>
+                <runtime-relative-path>ext/poi-ooxml-3.6-20091214.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/poi-ooxml-3.6-20091214.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/poi-ooxml-schemas-3.6-20091214.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/poi-ooxml-schemas-3.6-20091214.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/velocity-1.7-dep.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/velocity-1.7-dep.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/xbean.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/xbean.jar</binary-origin>
+            </class-path-extension>
+
+
         </data>
     </configuration>
 </project>

@@ -32,7 +32,7 @@ import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.design.JRDesignTextElement;
+import net.sf.jasperreports.engine.type.RotationEnum;
 import org.openide.nodes.PropertySupport;
 
 /**
@@ -45,7 +45,7 @@ final public class RotationProperty extends PropertySupport {
 
     @SuppressWarnings(value = "unchecked")
     public RotationProperty(JRBaseStyle style) {
-        super(JRBaseStyle.PROPERTY_ROTATION, Byte.class, I18n.getString("AbstractStyleNode.Property.Rotation"), I18n.getString("AbstractStyleNode.Property.RotationDetail"), true, true);
+        super(JRBaseStyle.PROPERTY_ROTATION, RotationEnum.class, I18n.getString("AbstractStyleNode.Property.Rotation"), I18n.getString("AbstractStyleNode.Property.RotationDetail"), true, true);
         this.style = style;
         setValue("suppressCustomEditor", Boolean.TRUE);
     }
@@ -56,17 +56,17 @@ final public class RotationProperty extends PropertySupport {
         if (editor == null) {
             ArrayList l = new ArrayList();
             l.add(new Tag(null, "<Default>"));
-            l.add(new Tag(new Byte(JRDesignTextElement.ROTATION_NONE), I18n.getString("AbstractStyleNode.Property.None")));
-            l.add(new Tag(new Byte(JRDesignTextElement.ROTATION_LEFT), I18n.getString("AbstractStyleNode.Property.Left")));
-            l.add(new Tag(new Byte(JRDesignTextElement.ROTATION_RIGHT), I18n.getString("AbstractStyleNode.Property.Right")));
-            l.add(new Tag(new Byte(JRDesignTextElement.ROTATION_UPSIDE_DOWN), I18n.getString("AbstractStyleNode.Property.Upside_Down")));
+            l.add(new Tag(RotationEnum.NONE, I18n.getString("AbstractStyleNode.Property.None")));
+            l.add(new Tag(RotationEnum.LEFT, I18n.getString("AbstractStyleNode.Property.Left")));
+            l.add(new Tag(RotationEnum.RIGHT, I18n.getString("AbstractStyleNode.Property.Right")));
+            l.add(new Tag(RotationEnum.UPSIDE_DOWN, I18n.getString("AbstractStyleNode.Property.Upside_Down")));
             editor = new ComboBoxPropertyEditor(false, l);
         }
         return editor;
     }
 
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
-        return style.getRotation();
+        return style.getRotationValue();
     }
 
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -74,18 +74,18 @@ final public class RotationProperty extends PropertySupport {
     }
 
     private void setPropertyValue(Object val) {
-        if (val == null || val instanceof Byte) {
-            Byte oldValue = style.getOwnRotation();
-            Byte newValue = (Byte) val;
+        if (val == null || val instanceof RotationEnum) {
+            RotationEnum oldValue = style.getOwnRotationValue();
+            RotationEnum newValue = (RotationEnum) val;
             style.setRotation(newValue);
-            ObjectPropertyUndoableEdit urob = new ObjectPropertyUndoableEdit(style, "Rotation", Byte.class, oldValue, newValue);
+            ObjectPropertyUndoableEdit urob = new ObjectPropertyUndoableEdit(style, "Rotation", RotationEnum.class, oldValue, newValue);
             IReportManager.getInstance().addUndoableEdit(urob);
         }
     }
 
     @Override
     public boolean isDefaultValue() {
-        return style.getOwnRotation() == null;
+        return style.getOwnRotationValue() == null;
     }
 
     @Override

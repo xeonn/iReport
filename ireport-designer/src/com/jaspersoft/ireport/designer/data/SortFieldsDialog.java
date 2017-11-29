@@ -31,6 +31,7 @@ import javax.swing.DefaultListModel;
 import java.util.*;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
+import net.sf.jasperreports.engine.type.SortOrderEnum;
 /**
  *
  * @author  Administrator
@@ -321,13 +322,13 @@ public class SortFieldsDialog extends javax.swing.JDialog {
         for (int i=0; i<items.length; ++i)
         {
             JRDesignSortField field = (JRDesignSortField)jList1.getModel().getElementAt(items[i]);
-            if (field.getOrder() == JRDesignSortField.SORT_ORDER_ASCENDING)
+            if (field.getOrderValue() == SortOrderEnum.ASCENDING)
             {
-                field.setOrder( JRDesignSortField.SORT_ORDER_DESCENDING);
+                field.setOrder( SortOrderEnum.DESCENDING);
             }
             else
             {
-                field.setOrder( JRDesignSortField.SORT_ORDER_ASCENDING);
+                field.setOrder( SortOrderEnum.ASCENDING);
             }
         }
         updateDatasetSortFieldList();
@@ -370,7 +371,7 @@ public class SortFieldsDialog extends javax.swing.JDialog {
             if (sfd.getDialogResult() == javax.swing.JOptionPane.OK_OPTION)
             {
                 field.setName( sfd.getSortField().getName() );
-                field.setOrder( sfd.getSortField().getOrder() );
+                field.setOrder( sfd.getSortField().getOrderValue() );
                 jList1.updateUI();
             }
             updateDatasetSortFieldList();

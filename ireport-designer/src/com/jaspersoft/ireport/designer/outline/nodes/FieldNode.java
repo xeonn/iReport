@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
+import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -174,11 +175,12 @@ public class FieldNode extends IRAbstractNode implements PropertyChangeListener 
             throw new IllegalArgumentException(I18n.getString("FieldNode.Property.FieldInvalid"));
         }
         
-        List<JRDesignField> currentFields = null;
+        List<JRField> currentFields = null;
         JRDesignDataset dataset = getParentNode().getLookup().lookup(JRDesignDataset.class);
-        currentFields = (List<JRDesignField>)dataset.getFieldsList();
-        for (JRDesignField p : currentFields)
+        currentFields = (List<JRField>)dataset.getFieldsList();
+        for (JRField fi : currentFields)
         {
+            JRDesignField p = (JRDesignField)fi;
             if (p != getField() && p.getName().equals(s))
             {
                 throw new IllegalArgumentException(I18n.getString("FieldNode.Property.FieldInUse"));
@@ -282,10 +284,12 @@ public class FieldNode extends IRAbstractNode implements PropertyChangeListener 
 
             String s = val+"";
 
-            List<JRDesignField> currentFields = null;
-            currentFields = (List<JRDesignField>)getDataset().getFieldsList();
-            for (JRDesignField p : currentFields)
+            List<JRField> currentFields = null;
+            currentFields = (List<JRField>)getDataset().getFieldsList();
+
+            for (JRField fi : currentFields)
             {
+                JRDesignField p = (JRDesignField)fi;
                 if (p != getField() && p.getName().equals(s))
                 {
                     IllegalArgumentException iae = annotateException(I18n.getString("FieldNode.Property.FieldInUse")); 

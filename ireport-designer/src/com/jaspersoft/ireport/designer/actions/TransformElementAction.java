@@ -352,7 +352,7 @@ public final class TransformElementAction extends NodeAction {
       newElement.setBookmarkLevel( element.getBookmarkLevel());
       newElement.setCustomizerClass( element.getCustomizerClass());
       newElement.setEvaluationGroup( element.getEvaluationGroup());
-      newElement.setEvaluationTime( element.getEvaluationTime());
+      newElement.setEvaluationTime( element.getEvaluationTimeValue());
       newElement.setHyperlinkAnchorExpression( cloneExpression( element.getHyperlinkAnchorExpression()));
       newElement.setHyperlinkPageExpression( cloneExpression(element.getHyperlinkPageExpression()));
       newElement.setHyperlinkReferenceExpression( cloneExpression(element.getHyperlinkReferenceExpression()));
@@ -363,7 +363,7 @@ public final class TransformElementAction extends NodeAction {
       newElement.setLegendBackgroundColor( element.getOwnLegendBackgroundColor());
       newElement.setLegendColor( element.getOwnLegendColor());
       newElement.setLegendFont( element.getLegendFont());
-      newElement.setLegendPosition( element.getLegendPositionByte());
+      newElement.setLegendPosition( element.getLegendPositionValue());
       newElement.setLinkTarget( element.getLinkTarget());
       newElement.setLinkType( element.getLinkType());
       newElement.setRenderType( element.getRenderType());
@@ -373,7 +373,7 @@ public final class TransformElementAction extends NodeAction {
       newElement.setSubtitleFont( element.getSubtitleFont());
       newElement.setTheme( element.getTheme());
       newElement.setTitleFont( element.getTitleFont());
-      newElement.setTitlePosition( element.getTitlePositionByte());
+      newElement.setTitlePosition( element.getTitlePositionValue());
       newElement.setTitleColor( element.getOwnTitleColor());
       newElement.setTitleExpression( cloneExpression(element.getTitleExpression()));
 
@@ -393,15 +393,15 @@ public final class TransformElementAction extends NodeAction {
         newElement.setBackcolor( element.getOwnBackcolor());
         newElement.setForecolor( element.getOwnForecolor());
         newElement.setKey( element.getKey());
-        newElement.setMode( element.getOwnMode());
-        newElement.setPositionType( element.getPositionType());
+        newElement.setMode( element.getOwnModeValue());
+        newElement.setPositionType( element.getPositionTypeValue());
         newElement.setPrintWhenDetailOverflows( element.isPrintWhenDetailOverflows());
         newElement.setPrintWhenExpression(cloneExpression(element.getPrintWhenExpression()));
         newElement.setPrintRepeatedValues( element.isPrintRepeatedValues());
         newElement.setPrintInFirstWholeBand( element.isPrintInFirstWholeBand());
         newElement.setPrintWhenGroupChanges( element.getPrintWhenGroupChanges());
         newElement.setRemoveLineWhenBlank(element.isRemoveLineWhenBlank());
-        newElement.setStretchType(element.getStretchType());
+        newElement.setStretchType(element.getStretchTypeValue());
         newElement.setStyle(element.getStyle());
         newElement.setStyleNameReference(element.getStyleNameReference());
 
@@ -413,15 +413,15 @@ public final class TransformElementAction extends NodeAction {
         newElement.setItalic( element.isOwnItalic());
         newElement.setFontName( element.getOwnFontName());
         newElement.setFontSize( element.getOwnFontSize());
-        newElement.setHorizontalAlignment( element.getOwnHorizontalAlignment());
-        newElement.setLineSpacing( element.getOwnLineSpacing());
+        newElement.setHorizontalAlignment( element.getOwnHorizontalAlignmentValue());
+        newElement.setLineSpacing( element.getOwnLineSpacingValue());
         newElement.setMarkup(element.getMarkup());
         newElement.setPdfEmbedded( element.isOwnPdfEmbedded());
         newElement.setPdfEncoding( element.getOwnPdfEncoding());
         newElement.setPdfFontName( element.getOwnPdfFontName());
-        newElement.setRotation( element.getOwnRotation());
+        newElement.setRotation( element.getOwnRotationValue());
         newElement.setStrikeThrough( element.isOwnStrikeThrough());
-        newElement.setVerticalAlignment( element.getOwnVerticalAlignment());
+        newElement.setVerticalAlignment( element.getOwnVerticalAlignmentValue());
         newElement.setUnderline(element.isOwnUnderline());
     }
 

@@ -36,6 +36,7 @@ import java.awt.datatransfer.Transferable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.JRCloneable;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -178,7 +179,7 @@ public class ElementPasteType extends PasteType {
                         ((JRDesignElementGroup)element).setElementGroup(newContainer);
                     }
                     
-                    newContainer.getChildren().add(newIndex, element );
+                    newContainer.getChildren().add(newIndex, (JRChild)element );
                     // Fire an event...
                     getEventSupport(newContainer).fireCollectionElementAddedEvent(JRDesignElementGroup.PROPERTY_CHILDREN, 
                             element, newContainer.getChildren().size() - 1);

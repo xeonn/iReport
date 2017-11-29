@@ -29,6 +29,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.BadLocationException;
 import net.sf.jasperreports.crosstabs.JRCrosstabParameter;
@@ -46,6 +47,7 @@ import org.netbeans.api.languages.Context;
 import org.netbeans.api.lexer.Token;
 import org.netbeans.api.lexer.TokenHierarchy;
 import org.netbeans.api.lexer.TokenSequence;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -68,6 +70,8 @@ public class JRSyntaxSupport {
         this.context = context;
         AbstractDocument document = (AbstractDocument) context.getDocument();
             document.readLock();
+        
+
             try {
 
 
@@ -190,6 +194,9 @@ public class JRSyntaxSupport {
 
             AbstractDocument document = (AbstractDocument) context.getDocument();
             document.readLock();
+
+            
+
             try {
 
                   JRSyntaxSupport s = new JRSyntaxSupport(context);

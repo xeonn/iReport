@@ -41,11 +41,10 @@ import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.fill.calculation.BucketDefinition;
 import net.sf.jasperreports.engine.JRBand;
-import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
 import org.netbeans.api.visual.action.AlignWithWidgetCollector;
 import org.netbeans.api.visual.widget.Widget;
 
@@ -179,7 +178,7 @@ public class ReportAlignWithWidgetCollector implements AlignWithWidgetCollector 
                 if (band.getHeight() > 0)
                 {
                     if (band instanceof JRDesignBand &&
-                        ((JRDesignBand)band).getOrigin().getBandType() == JROrigin.BACKGROUND &&
+                        ((JRDesignBand)band).getOrigin().getBandTypeValue() == BandTypeEnum.BACKGROUND &&
                         IReportManager.getInstance().isBackgroundSeparated())
                     {
                         bandLocation += 40 + jd.getTopMargin() + jd.getBottomMargin();
@@ -237,14 +236,14 @@ public class ReportAlignWithWidgetCollector implements AlignWithWidgetCollector 
             // paint row cells...
             for (int i=0; i<row_groups.length; ++i)
             {
-                switch (row_groups[i].getTotalPosition())
+                switch (row_groups[i].getTotalPositionValue())
                 {
-                    case BucketDefinition.TOTAL_POSITION_START:
+                    case START:
                         regions.add(new Rectangle(x,y,row_groups[i].getTotalHeader().getWidth(),row_groups[i].getTotalHeader().getHeight()));
                         data_height -= row_groups[i].getTotalHeader().getHeight();
                         y += row_groups[i].getTotalHeader().getHeight();
                         break;
-                    case BucketDefinition.TOTAL_POSITION_END:
+                    case END:
                         int y_loc = y + data_height - row_groups[i].getTotalHeader().getHeight();
                         regions.add(new Rectangle(x,y_loc,row_groups[i].getTotalHeader().getWidth(),row_groups[i].getTotalHeader().getHeight()));
                         data_height -= row_groups[i].getTotalHeader().getHeight();
@@ -262,19 +261,19 @@ public class ReportAlignWithWidgetCollector implements AlignWithWidgetCollector 
             // paint col cells...
             for (int i=0; i<col_groups.length; ++i)
             {
-                switch (col_groups[i].getTotalPosition())
+                switch (col_groups[i].getTotalPositionValue())
                 {
-                    case BucketDefinition.TOTAL_POSITION_START:
+                    case START:
                         regions.add(new Rectangle(x,y,col_groups[i].getTotalHeader().getWidth(),col_groups[i].getTotalHeader().getHeight()));
                         data_width -= col_groups[i].getTotalHeader().getWidth();
                         x += col_groups[i].getTotalHeader().getWidth();
                         break;
-                    case BucketDefinition.TOTAL_POSITION_END:
+                    case END:
                         int x_loc = x + data_width - col_groups[i].getTotalHeader().getWidth();
                         regions.add(new Rectangle(x_loc,y,col_groups[i].getTotalHeader().getWidth(),col_groups[i].getTotalHeader().getHeight()));
                         data_width -= col_groups[i].getTotalHeader().getWidth();
                         break;
-                    case BucketDefinition.TOTAL_POSITION_NONE:
+                    case NONE:
                         break;
                 }
 

@@ -81,6 +81,8 @@ import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.type.IncrementTypeEnum;
+import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
 
 /**
@@ -130,16 +132,16 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
                 
                 // Set general dataset data...
                 
-                Misc.setComboboxSelectedTagValue(jComboBoxIncrementType, new Byte(currentSelectedChartElement.getDataset().getIncrementType()) );
-                jComboBoxIncrementGroup.setEnabled(currentSelectedChartElement.getDataset().getIncrementType() == JRVariable.RESET_TYPE_GROUP);
-                if (currentSelectedChartElement.getDataset().getIncrementType() == JRVariable.RESET_TYPE_GROUP)
+                Misc.setComboboxSelectedTagValue(jComboBoxIncrementType, currentSelectedChartElement.getDataset().getIncrementTypeValue() );
+                jComboBoxIncrementGroup.setEnabled(currentSelectedChartElement.getDataset().getIncrementTypeValue() == IncrementTypeEnum.GROUP);
+                if (currentSelectedChartElement.getDataset().getIncrementTypeValue() == IncrementTypeEnum.GROUP)
                 {
                     jComboBoxIncrementGroup.setSelectedItem( currentSelectedChartElement.getDataset().getIncrementGroup().getName() );
                 }
                 
-                Misc.setComboboxSelectedTagValue(jComboBoxResetType, new Byte( currentSelectedChartElement.getDataset().getResetType() ));
-                jComboBoxResetGroup.setEnabled(currentSelectedChartElement.getDataset().getResetType() == JRVariable.RESET_TYPE_GROUP);
-                if (currentSelectedChartElement.getDataset().getResetType() == JRVariable.RESET_TYPE_GROUP)
+                Misc.setComboboxSelectedTagValue(jComboBoxResetType, currentSelectedChartElement.getDataset().getResetTypeValue() );
+                jComboBoxResetGroup.setEnabled(currentSelectedChartElement.getDataset().getResetTypeValue() == ResetTypeEnum.GROUP);
+                if (currentSelectedChartElement.getDataset().getResetTypeValue() == ResetTypeEnum.GROUP)
                 {
                     jComboBoxResetGroup.setSelectedItem( currentSelectedChartElement.getDataset().getResetGroup().getName() );
                 }
@@ -340,17 +342,17 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         
         //applyI18n();
         
-        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_NONE),I18n.getString("ChartPropertiesDialog.ComboBoxReset.none")));
-        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_REPORT),I18n.getString("ChartPropertiesDialog.ComboBoxReset.report")));
-        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_PAGE),I18n.getString("ChartPropertiesDialog.ComboBoxReset.page")));
-        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_COLUMN),I18n.getString("ChartPropertiesDialog.ComboBoxReset.column")));
-        this.jComboBoxResetType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_GROUP),I18n.getString("ChartPropertiesDialog.ComboBoxReset.group")));
+        this.jComboBoxResetType.addItem(new Tag(ResetTypeEnum.NONE,I18n.getString("ChartPropertiesDialog.ComboBoxReset.none")));
+        this.jComboBoxResetType.addItem(new Tag(ResetTypeEnum.REPORT,I18n.getString("ChartPropertiesDialog.ComboBoxReset.report")));
+        this.jComboBoxResetType.addItem(new Tag(ResetTypeEnum.PAGE,I18n.getString("ChartPropertiesDialog.ComboBoxReset.page")));
+        this.jComboBoxResetType.addItem(new Tag(ResetTypeEnum.COLUMN,I18n.getString("ChartPropertiesDialog.ComboBoxReset.column")));
+        this.jComboBoxResetType.addItem(new Tag(ResetTypeEnum.GROUP,I18n.getString("ChartPropertiesDialog.ComboBoxReset.group")));
         
-        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_NONE),I18n.getString("ChartPropertiesDialog.ComboBoxIncrementType.none")));
-        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_REPORT),I18n.getString("ChartPropertiesDialog.ComboBoxIncrementType.report")));
-        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_PAGE),I18n.getString("ChartPropertiesDialog.ComboBoxIncrementType.page")));
-        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_COLUMN),I18n.getString("ChartPropertiesDialog.ComboBoxIncrementType.column")));
-        this.jComboBoxIncrementType.addItem(new Tag(new Byte(JRVariable.RESET_TYPE_GROUP),I18n.getString("ChartPropertiesDialog.ComboBoxIncrementType.group")));
+        this.jComboBoxIncrementType.addItem(new Tag(IncrementTypeEnum.NONE,I18n.getString("ChartPropertiesDialog.ComboBoxIncrementType.none")));
+        this.jComboBoxIncrementType.addItem(new Tag(IncrementTypeEnum.REPORT,I18n.getString("ChartPropertiesDialog.ComboBoxIncrementType.report")));
+        this.jComboBoxIncrementType.addItem(new Tag(IncrementTypeEnum.PAGE,I18n.getString("ChartPropertiesDialog.ComboBoxIncrementType.page")));
+        this.jComboBoxIncrementType.addItem(new Tag(IncrementTypeEnum.COLUMN,I18n.getString("ChartPropertiesDialog.ComboBoxIncrementType.column")));
+        this.jComboBoxIncrementType.addItem(new Tag(IncrementTypeEnum.GROUP,I18n.getString("ChartPropertiesDialog.ComboBoxIncrementType.group")));
          
         jComboBoxDatasetConnectionType.addItem(new Tag(I18n.getString("ChartPropertiesDialog.ComboBoxConnectionType.noConnectionNoDatasource"),I18n.getString("ChartPropertiesDialog.ComboBoxConnectionType.noConnectionNoDatasource")));
         jComboBoxDatasetConnectionType.addItem(new Tag(I18n.getString("ChartPropertiesDialog.ComboBoxConnectionType.connExpression"),I18n.getString("ChartPropertiesDialog.ComboBoxConnectionType.connExpression")));
@@ -1199,22 +1201,22 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
 
             if (groups.size() == 0)
             {
-                byte val = ((Byte)((Tag)jComboBoxIncrementType.getSelectedItem()).getValue()).byteValue();
-                if (val == JRVariable.RESET_TYPE_GROUP)
+                IncrementTypeEnum val = (IncrementTypeEnum)((Tag)jComboBoxIncrementType.getSelectedItem()).getValue();
+                if (val == IncrementTypeEnum.GROUP)
                 {
                     setInit(true);
                     //((JRDesignChartDataset)currentSelectedChartElement.getDataset()).setIncrementType(JRVariable.RESET_TYPE_REPORT);
                     //((JRDesignChartDataset)currentSelectedChartElement.getDataset()).setIncrementGroup(null);
-                    Misc.setComboboxSelectedTagValue(jComboBoxIncrementType, new Byte(JRVariable.RESET_TYPE_NONE));
+                    Misc.setComboboxSelectedTagValue(jComboBoxIncrementType, IncrementTypeEnum.NONE);
                     setInit(false);
                 }
-                val = ((Byte)((Tag)jComboBoxResetType.getSelectedItem()).getValue()).byteValue();
-                if (val == JRVariable.RESET_TYPE_GROUP)
+                ResetTypeEnum val2 = (ResetTypeEnum)((Tag)jComboBoxResetType.getSelectedItem()).getValue();
+                if (val2 == ResetTypeEnum.GROUP)
                 {
                     setInit(true);
                     //((JRDesignChartDataset)currentSelectedChartElement.getDataset()).setResetType(JRVariable.RESET_TYPE_REPORT);
                     //((JRDesignChartDataset)currentSelectedChartElement.getDataset()).setResetGroup(null);
-                    Misc.setComboboxSelectedTagValue(jComboBoxResetType, new Byte(JRVariable.RESET_TYPE_REPORT));
+                    Misc.setComboboxSelectedTagValue(jComboBoxResetType, ResetTypeEnum.REPORT);
                     setInit(false);
                 }
             }
@@ -1347,17 +1349,17 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         
         if (isInit() || currentSelectedChartElement == null) return;
         
-        byte val = ((Byte)((Tag)jComboBoxIncrementType.getSelectedItem()).getValue()).byteValue();
+        IncrementTypeEnum val = (IncrementTypeEnum)((Tag)jComboBoxIncrementType.getSelectedItem()).getValue();
         
-        if (val == JRVariable.RESET_TYPE_GROUP)
+        if (val == IncrementTypeEnum.GROUP)
         {
             // Currently selected dataset...
             List groups = getChartDataset().getGroupsList();
 
-            if (groups.size() == 0)
+            if (groups.isEmpty())
             {
                 setInit(true);
-                Misc.setComboboxSelectedTagValue(jComboBoxIncrementType, new Byte(currentSelectedChartElement.getDataset().getIncrementType()));
+                Misc.setComboboxSelectedTagValue(jComboBoxIncrementType, currentSelectedChartElement.getDataset().getIncrementTypeValue());
                 SwingUtilities.invokeLater(new Runnable(){
                     public void run()
                     {
@@ -1405,16 +1407,16 @@ public class ChartPropertiesDialog extends javax.swing.JDialog {
         
         if (isInit() || currentSelectedChartElement == null) return;
         
-        byte val = ((Byte)((Tag)jComboBoxResetType.getSelectedItem()).getValue()).byteValue();
+        ResetTypeEnum val = (ResetTypeEnum)((Tag)jComboBoxResetType.getSelectedItem()).getValue();
         
-        if (val == JRVariable.RESET_TYPE_GROUP)
+        if (val == ResetTypeEnum.GROUP)
         {
             List groups = getChartDataset().getGroupsList();
             
-            if (groups.size() == 0)
+            if (groups.isEmpty())
             {
                 setInit(true);
-                Misc.setComboboxSelectedTagValue(jComboBoxResetType, new Byte(currentSelectedChartElement.getDataset().getResetType()));
+                Misc.setComboboxSelectedTagValue(jComboBoxResetType, currentSelectedChartElement.getDataset().getResetTypeValue());
                 SwingUtilities.invokeLater(new Runnable(){
                     public void run()
                     {

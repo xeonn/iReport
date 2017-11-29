@@ -23,14 +23,12 @@
  */
 package com.jaspersoft.ireport.designer.outline.nodes.properties;
 
-import com.jaspersoft.ireport.designer.IReportManager;
 import com.jaspersoft.ireport.designer.sheet.Tag;
 import com.jaspersoft.ireport.designer.sheet.editors.ComboBoxPropertyEditor;
-import com.jaspersoft.ireport.designer.undo.ObjectPropertyUndoableEdit;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import net.sf.jasperreports.engine.JRBox;
-import net.sf.jasperreports.engine.JRGraphicElement;
+import net.sf.jasperreports.engine.type.PenEnum;
 import org.openide.nodes.PropertySupport;
 
     
@@ -54,6 +52,7 @@ public final class BoxBorderProperty  extends PropertySupport {
               propertyDesc, true, true);
         this.box = box;
 
+
         //setValue("canEditAsText", Boolean.FALSE);
         setValue("suppressCustomEditor", Boolean.TRUE);
     }
@@ -66,12 +65,14 @@ public final class BoxBorderProperty  extends PropertySupport {
         {
             java.util.ArrayList l = new java.util.ArrayList();
             //l.add(new Tag( null , "Default"));
-            l.add(new Tag( new Byte(JRGraphicElement.PEN_NONE) , "None"));
-            l.add(new Tag( new Byte(JRGraphicElement.PEN_THIN) , "Thin"));
-            l.add(new Tag( new Byte(JRGraphicElement.PEN_1_POINT) , "1 Point"));
-            l.add(new Tag( new Byte(JRGraphicElement.PEN_2_POINT) , "2 Points"));
-            l.add(new Tag( new Byte(JRGraphicElement.PEN_4_POINT) , "4 Points"));
-            l.add(new Tag( new Byte(JRGraphicElement.PEN_DOTTED) , "Dotted"));
+            
+
+            l.add(new Tag(PenEnum.NONE , "None"));
+            l.add(new Tag(PenEnum.THIN , "Thin"));
+            l.add(new Tag(PenEnum.ONE_POINT , "1 Point"));
+            l.add(new Tag(PenEnum.TWO_POINT , "2 Points"));
+            l.add(new Tag(PenEnum.DOTTED.FOUR_POINT , "4 Points"));
+            l.add(new Tag(PenEnum.DOTTED , "Dotted"));
 
             editor = new ComboBoxPropertyEditor( false, l);
         }
@@ -92,13 +93,13 @@ public final class BoxBorderProperty  extends PropertySupport {
     @Override
     public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
-        if (val == null || val instanceof Byte)
+        if (val == null || val instanceof PenEnum)
         {
+            PenEnum newValue = (PenEnum)val;
+            PenEnum oldValue = PenEnum.getByValue( box.getOwnBorder() );
 
-            Byte newValue = (Byte)val;
-            Byte oldValue = box.getOwnBorder();
 
-            String methodName = "Border";
+            String methodName = "BorderValue";
 //FIXME
 //                if (this.getName().equals( JRBaseStyle.PROPERTY_BORDER))
 //                {
@@ -127,14 +128,15 @@ public final class BoxBorderProperty  extends PropertySupport {
 //                    box.setBottomBorder(newValue);
 //                }
 
-            ObjectPropertyUndoableEdit urob =
-                    new ObjectPropertyUndoableEdit(
-                        box,
-                        methodName, 
-                        Byte.class,
-                        oldValue,newValue);
-            // Find the undoRedo manager...
-            IReportManager.getInstance().addUndoableEdit(urob);
+            
+//            ObjectPropertyUndoableEdit urob =
+//                    new ObjectPropertyUndoableEdit(
+//                        box,
+//                        methodName,
+//                        PenEnum.class,
+//                        oldValue,newValue);
+//            // Find the undoRedo manager...
+//            IReportManager.getInstance().addUndoableEdit(urob);
         }
     }
 

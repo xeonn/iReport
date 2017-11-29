@@ -30,6 +30,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import javax.swing.SwingUtilities;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import org.openide.util.Exceptions;
@@ -55,10 +56,12 @@ public class Prompter
 
             public void run() {
                 if (report == null) return;
-                List<JRDesignParameter> params = (List<JRDesignParameter>)report.getParametersList();
-        for (JRDesignParameter param : params)
+                List<JRParameter> params = report.getParametersList();
+                
+        for (JRParameter theParam : params)
         {
-
+            JRDesignParameter param = (JRDesignParameter)theParam;
+            
             if (param.isForPrompting() && param.getValueClassName() != null && 
                 !param.isSystemDefined())
             {

@@ -48,6 +48,7 @@ import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
 import net.sf.jasperreports.engine.type.PrintOrderEnum;
 import net.sf.jasperreports.engine.type.RunDirectionEnum;
 import org.netbeans.api.visual.widget.Widget;
@@ -272,7 +273,7 @@ public class PageWidget extends Widget {
                 {
                     // Detached background...
                     if (b instanceof JRDesignBand &&
-                        ((JRDesignBand)b).getOrigin().getBandType() == JROrigin.BACKGROUND &&
+                        ((JRDesignBand)b).getOrigin().getBandTypeValue() == BandTypeEnum.BACKGROUND &&
                         IReportManager.getInstance().isBackgroundSeparated())
                     {
                         continue;
