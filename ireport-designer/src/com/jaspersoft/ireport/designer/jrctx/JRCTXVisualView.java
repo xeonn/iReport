@@ -32,6 +32,7 @@ import com.jaspersoft.ireport.locale.I18n;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.beans.BeanInfo;
+import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
@@ -128,7 +129,7 @@ final class JRCTXVisualView extends TopComponent
         {
             for(int i = 0; i < chartTypeReportFiles.length; i++)
             {
-                chartTypeReports[i] = (JasperReport)JRLoader.loadObjectFromLocation(chartTypeReportFiles[i]);
+                chartTypeReports[i] = (JasperReport)JRLoader.loadObject(new File(chartTypeReportFiles[i]));
                 chartTypeReports[i].setProperty("net.sf.jasperreports.chart.theme", "ireport.preview.chart.theme");
             }
         }

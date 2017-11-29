@@ -208,7 +208,7 @@ public class ConvertJasperJrxmlDialog extends javax.swing.JDialog {
                     }
             }
 
-            JasperReport report = (JasperReport)JRLoader.loadObject(jasperFile);
+            JasperReport report = (JasperReport)JRLoader.loadObject(new File(jasperFile));
             JRXmlWriter.writeReport(report, new FileOutputStream(newFile), "UTF-8");
 
             if (jCheckBoxAtTheEnd.isSelected())

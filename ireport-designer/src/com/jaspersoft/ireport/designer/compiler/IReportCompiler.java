@@ -906,7 +906,7 @@ public class IReportCompiler implements Runnable, JRExportProgressMonitor
                    {
 
                        JRDataSource ds = null;
-                       JasperReport jasper_report_obj =  (JasperReport)JRLoader.loadObject(fileName);
+                       JasperReport jasper_report_obj =  (JasperReport)JRLoader.loadObject(new File(fileName));
                        if (connection instanceof JRDataSourceProviderConnection)
                        {
                             ds = ((JRDataSourceProviderConnection) connection).getJRDataSource(jasper_report_obj);

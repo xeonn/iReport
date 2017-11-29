@@ -10,6 +10,7 @@ import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.ParameterContributor;
 import net.sf.jasperreports.engine.ParameterContributorContext;
 import net.sf.jasperreports.engine.ParameterContributorFactory;
+import net.sf.jasperreports.repo.DataAdapterResource;
 import net.sf.jasperreports.repo.RepositoryUtil;
 
 /**
@@ -48,16 +49,16 @@ public class IRDataAdapterParameterContributorFactory implements ParameterContri
                     if (dataAdapterUri != null)
                     {
 
-                            DataAdapter dataAdapter = null;
+                            DataAdapterResource dataAdapterResource = null;
                             
                             
                             try {
 
-                                dataAdapter = RepositoryUtil.getInstance(context.getJasperReportsContext()).getResourceFromLocation(dataAdapterUri, DataAdapter.class);
+                                dataAdapterResource = RepositoryUtil.getInstance(context.getJasperReportsContext()).getResourceFromLocation(dataAdapterUri, DataAdapterResource.class);
                                 
-                                if (dataAdapter != null)
+                                if (dataAdapterResource != null && dataAdapterResource.getValue() != null)
                                 {
-                                    ParameterContributor dataAdapterService = DataAdapterServiceUtil.getInstance(context.getJasperReportsContext()).getService(dataAdapter);
+                                    ParameterContributor dataAdapterService = DataAdapterServiceUtil.getInstance(context.getJasperReportsContext()).getService(dataAdapterResource.getValue());
                                    return Collections.singletonList(dataAdapterService);
                                 }
                             } catch (Throwable ex)

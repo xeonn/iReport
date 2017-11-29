@@ -1122,22 +1122,22 @@
                 <binary-origin>release/modules/ext/jdt-compiler-3.1.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-5.5.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-5.5.1.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-5.5.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-5.5.2.jar</binary-origin>
             </class-path-extension>
             
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-functions-5.5.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-functions-5.5.1.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-functions-5.5.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-functions-5.5.2.jar</binary-origin>
             </class-path-extension>
             
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-fonts-5.5.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-fonts-5.5.1.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-fonts-5.5.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-fonts-5.5.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jasperreports-chart-themes-5.5.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jasperreports-chart-themes-5.5.1.jar</binary-origin>
+                <runtime-relative-path>ext/jasperreports-chart-themes-5.5.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jasperreports-chart-themes-5.5.2.jar</binary-origin>
             </class-path-extension>
             
             <class-path-extension>

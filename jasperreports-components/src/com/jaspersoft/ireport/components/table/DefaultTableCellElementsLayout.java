@@ -190,7 +190,7 @@ public class DefaultTableCellElementsLayout {
                     {
                         JRStyledTextParser styledTextParser = JRStyledTextParser.getInstance();
                         JRDesignTextElement dte = (JRDesignTextElement)element;
-                        dte.setFontSize(null);
+                        dte.setFontSize((Integer)null);
                         for (int i=dte.getFontSize()-1; i>1 ; --i)
                         {
                                 String text = "test";

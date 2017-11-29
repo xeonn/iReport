@@ -184,7 +184,7 @@ public class SubreportSelectionWizardPanel implements WizardDescriptor.Finishabl
                 }
                 else if (filename.toLowerCase().endsWith(".jasper"))
                 {
-                    JasperReport report = (JasperReport)JRLoader.loadObject(filename);
+                    JasperReport report = (JasperReport)JRLoader.loadObject(new File(filename));
                     params = report.getParameters();
                 }
 
